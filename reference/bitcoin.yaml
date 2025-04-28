@@ -1,0 +1,1856 @@
+openapi: 3.1.0
+info:
+  title: bitcoin
+  version: 1.2.6
+servers:
+  - url: https://web3.nodit.io/v1
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /{protocol}/{network}/native/getNativeTokenBalanceByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Native Token API
+      description: >+
+        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다.
+        (e.g., Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
+
+      summary: Get Native Token Balance by Account
+      operationId: bitcoin-getNativeTokenBalanceByAccount
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    accountAddress:
+                      type: string
+                      description: >-
+                        조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열
+                        형태로 입력할 수 있습니다.
+                      pattern: >-
+                        ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                      example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+                      default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                  required:
+                    - accountAddress
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: &ref_0
+                type: object
+                required:
+                  - ownerAddress
+                  - balance
+                properties:
+                  ownerAddress:
+                    type: string
+                    description: 소유자 주소를 나타내는 필드입니다.
+                    pattern: >-
+                      ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                  balance:
+                    type: string
+                    description: 잔고 나타내는 필드입니다.
+                    pattern: ^[0-9]+$
+              example:
+                ownerAddress: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                balance: '100.29008559'
+        '400': &ref_1
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: INVALID_PARAMETER
+                  message: >-
+                    Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE,
+                    PARAMETER2_NAME = PARAMETER2_VALUE, ... }
+        '401': &ref_2
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: AUTHENTICATION_FAILED
+                  message: Authentication failed
+        '403': &ref_3
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: PERMISSION_DENIED
+                  message: Permission denied
+        '404': &ref_4
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: RESOURCE_NOT_FOUND
+                  message: >-
+                    Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE,
+                    RESOURCE2_NAME = RESOURCE2_VALUE, ... }
+        '429': &ref_5
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: TOO_MANY_REQUESTS
+                  message: Too many requests
+  /{protocol}/{network}/native/getNativeTokenTransfersByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Native Token API
+      description: >+
+        특정 주소와 관련된 네이티브 토큰 전송 내역을 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다. (e.g.,
+        Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
+
+      summary: Get Native Token Transfers By Account
+      operationId: bitcoin-getNativeTokenTransfersByAccount
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    accountAddress:
+                      type: string
+                      description: >-
+                        조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열
+                        형태로 입력할 수 있습니다.
+                      pattern: >-
+                        ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                      example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+                      default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                    relation: &ref_6
+                      type: string
+                      description: |-
+                        조회 대상 계정 주소가 송신자 또는 수신자에 속한 트랜잭션만 필터링하기 위한 파라미터입니다.  
+                        - from: 송신자로만 필터링.  
+                        - to: 수신자로만 필터링.  
+                        - both(기본값): from과 to에 하나라도 포함된 모든 트랜잭션이 조회됩니다.
+                      enum:
+                        - from
+                        - to
+                        - both
+                    fromBlock: &ref_7
+                      type: string
+                      description: >
+                        조회 시작 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
+
+                        - block number: 10진수 문자열로 블록 번호를 입력.  
+
+                        - block hash: 64자리 16진수("0x"를 제외).  
+
+                        - block tag: "earliest" 또는 "latest"를 사용하여 첫 번째 블록 또는 최신
+                        블록을 지정.
+
+
+                        유의사항: 
+
+                        - toBlock 없이 제공하면, 해당 블록부터 최신 블록까지 결과를 조회합니다.  
+
+                        - fromBlock 값은 toBlock 값보다 클 수 없습니다.  
+
+                        - fromBlock과 toBlock에 동일한 값을 입력하면, 해당 블록만 조회됩니다.  
+
+                        - fromBlock에 "latest"는 toBlock이 "latest"일 때만 허용됩니다.
+                      pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
+                    toBlock: &ref_8
+                      type: string
+                      description: >
+                        조회 종료 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
+
+                        - block number: 10진수 문자열로 블록 번호를 입력.  
+
+                        - block hash: 64자리 16진수("0x"를 제외).  
+
+                        - block tag: "earliest" 또는 "latest"를 사용하여 첫 번째 블록 또는 최신
+                        블록을 지정.
+
+
+                        유의사항:  
+
+                        - fromBlock 없이 제공하면, genesis block부터 해당 블록까지 결과를
+                        조회합니다.  
+
+                        - toBlock 값은 fromBlock 값보다 작을 수 없습니다.  
+
+                        - fromBlock과 toBlock에 동일한 값을 입력하면, 해당 블록만 조회됩니다.  
+
+                        - toBlock에 "earliest"는 fromBlock이 "earliest"일 때만 허용됩니다.
+                      pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
+                    fromDate: &ref_9
+                      type: string
+                      description: >-
+                        조회 시작 날짜를 지정하는 파라미터입니다. 날짜는 ISO 8601
+                        형식(YYYY-MM-DDThh:mm:ss{time zone})을 따라야 하며, 초 단위까지 입력해야
+                        합니다.  
+
+
+                        유의사항:  
+
+                        - toDate 없이 제공하면, 해당 날짜부터 최신 블록까지 결과를 조회합니다.  
+
+                        - fromDate 값은 toDate 값과 같거나 더 과거의 값을 가져야 합니다.
+
+                        - fromDate와 toDate에 동일한 값을 입력하면, 해당 날짜에서 발생한 블록만 조회됩니다.
+
+                        - 이 필드는 fromBlock, toBlock과 함께 사용할 수 없습니다.
+                      pattern: >-
+                        ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      default: '2025-01-01T00:00:00+00:00'
+                    toDate: &ref_10
+                      type: string
+                      description: >-
+                        조회 종료 날짜를 지정하는 파라미터입니다. 날짜는 ISO 8601
+                        형식(YYYY-MM-DDThh:mm:ss{time zone})을 따라야 하며, 초 단위까지 입력해야
+                        합니다.  
+
+
+                        유의사항:  
+
+                        - fromDate 없이 제공하면, genesis block부터 해당 날짜까지 결과를 조회합니다.  
+
+                        - toDate 값은 fromDate 값과 같거나 더 미래의 값을 가져야 합니다.
+
+                        - fromDate와 toDate에 동일한 값을 입력하면, 해당 날짜에서 발생한 블록만 조회됩니다.
+
+                        - 이 필드는 fromBlock, toBlock과 함께 사용할 수 없습니다.
+                      pattern: >-
+                        ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      default: '2025-01-31T00:00:00+00:00'
+                  required:
+                    - accountAddress
+                - &ref_14
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                      description: >-
+                        page 파라미터는 조회하려는 데이터 페이지를 지정하는 데 사용됩니다. 이 파라미터는 100 이하의
+                        값을 받으며, 100을 초과하는 페이지가 필요한 경우 cursor 페이지네이션 방식을 사용해야
+                        합니다.
+
+
+
+                        page 파라미터와 cursor 파라미터는 동시에 사용할 수 없습니다. page와 cursor에 모두
+                        빈 값을 입력한 경우, cursor 페이지네이션을 사용하는 것으로 간주합니다.
+                      pattern: ^(?:[1-9][0-9]?|100)$
+                    rpp:
+                      type: integer
+                      description: >-
+                        rpp는 results per page의 약자로, 한 페이지의 사이즈를 지정하는 파라미터입니다.
+                        0보다 크고 1000 이하의 숫자를 지정할 수 있습니다.
+                      pattern: ^(?:[1-9][0-9]{0,2}?|1000)$
+                    cursor:
+                      type: string
+                      description: "cursor 파라미터는 페이지네이션을 위한 파라미터로, 이전 페이지와 다음 페이지 간의 데이터 이동을 지원합니다. 이전 페이지에서 얻은 cursor 값을 다음 요청에 제공하면 다음 페이지의 데이터를 로드할 수 있습니다.\n\t\t\t\n\npage 파라미터와 cursor 파라미터는 동시에 사용할 수 없습니다. page와 cursor에 모두 빈 값을 입력한 경우, cursor 페이지네이션을 사용하는 것으로 간주합니다."
+                    withCount:
+                      type: boolean
+                      description: >-
+                        응답에 count 필드의 포함 여부를 지정하는 파라미터이며, count 필드는 요청한 데이터의 총
+                        개수를 나타냅니다. 이 파라미터에 true를 입력한 경우, 응답에 count 필드가 포함되며
+                        응답속도가 느려질 수 있습니다.
+                      default: false
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: *ref_0
+              example:
+                rpp: 20
+                cursor: eyJibG9ja0hlaWdodCI6ODc1NDc1LCJ0cmFuc2FjdGlvbkluZGV4IjowfQ==
+                items:
+                  - fee: '0'
+                    transactionHash: >-
+                      cdad01a2a9e197896919b987d8d4ee43734636443ebc901a05db61071b62bb02
+                    transactionId: >-
+                      ac78646241847c5bc8d93ebb4b921769dc4bb7b976a5276df48359310dca810d
+                    blockHeight: 875532
+                    blockHash: >-
+                      0000000000000000000291eef57b14c4e1e8d44285ece9c42b4eaf50ced01a12
+                    blockTimestamp: 1734667463
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.21086617'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      efb24a9bdddc243ac3e3d5e7e14f5e3dcd2fb3f88409cde60aa87da2c7224da1
+                    transactionId: >-
+                      2353989c711c627e6872e04cc4bb26772eb19b569f9ae5f68cc0d486768894d1
+                    blockHeight: 875526
+                    blockHash: >-
+                      000000000000000000019c36f57ccf9a9f77d2661ce3b97fd35baa71b9eb1f23
+                    blockTimestamp: 1734662728
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.21991034'
+                  - fee: '0'
+                    transactionHash: >-
+                      5a7cf0aca115a9069b80a09451dcc8abbaf549483fe3633dc220ba57ee51dc99
+                    transactionId: >-
+                      14390a7447dbe8f5b6d78c56673ba8b07b2960c3824a746cda81ea9535525c80
+                    blockHeight: 875522
+                    blockHash: >-
+                      00000000000000000001ce4f2368b4244ae41d133baf4487ee0290c4ef6e45d4
+                    blockTimestamp: 1734659409
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.18987567'
+                  - fee: '0'
+                    transactionHash: >-
+                      ec7fe4cc16d7f51bbb5b64e56295e721bc2baef3ce767523d79af61fe23f3327
+                    transactionId: >-
+                      3ca7ee88a8fabdb73a0758d2e568cb5ac7e1e02d98a9414b642da36eb82553ff
+                    blockHeight: 875521
+                    blockHash: >-
+                      00000000000000000000985d0f3dfef4e816c29d5fd394198d26c258522025f3
+                    blockTimestamp: 1734658645
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.18733741'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      624c9ce653e5adc93dd149c1c2b47bf2f3affa91a631256c394e5c524cf0b4e8
+                    transactionId: >-
+                      4d2a1961d76534f9a7d9fcf6797f8f630e100a68936edaf872c1817a1ac7ab1b
+                    blockHeight: 875520
+                    blockHash: >-
+                      0000000000000000000216eb920f00c66930d44c1cbd5baf266178f7b57cba54
+                    blockTimestamp: 1734658077
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.16472041'
+                  - fee: '0'
+                    transactionHash: >-
+                      36524f6aad35983d5d4af26dc87c69766f2336ddb90e7bb7cc53c11897f28d16
+                    transactionId: >-
+                      9b7df57e207f9d2a4d4368bd7d809ea601b30903371d9cad11980b9281b2c2fd
+                    blockHeight: 875519
+                    blockHash: >-
+                      00000000000000000001fcb75fc1bf3e1b4a4223f2dade091406c3650bbc6405
+                    blockTimestamp: 1734657926
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.16614471'
+                  - fee: '0'
+                    transactionHash: >-
+                      7cb6938df3f75a8793dfad84bacbcb2e5d7f2cb5a27030cbc8695b599623c8c7
+                    transactionId: >-
+                      57a663b554236bf772112aac4776c3241da8981bbfad797d09b14c2cc87772cb
+                    blockHeight: 875515
+                    blockHash: >-
+                      000000000000000000018c14cff0a9d0c96293fbb785cf2a9e61fc0303e39f28
+                    blockTimestamp: 1734657480
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.20429324'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      4cab7301f9dd1cf23fb6e40f0086413132f142bae04aed5c195a20faa02231ca
+                    transactionId: >-
+                      7168143fc1c91f65dbb036b3e364bd12f37901bc0ae97ff01d76ec01f6d563b1
+                    blockHeight: 875510
+                    blockHash: >-
+                      000000000000000000008711b58028f6029e9224b4e5ebe20ea2b743c7846d59
+                    blockTimestamp: 1734653583
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.17161145'
+                  - fee: '0'
+                    transactionHash: >-
+                      f831c69f60a9d2eb11e62f6360fad9175e0decb84996f7e0c4691bc8b8221e62
+                    transactionId: >-
+                      f3df0c185627f58d1152e2ec55cb239a6c456725b8f2ef8522e03def869c6fbe
+                    blockHeight: 875504
+                    blockHash: >-
+                      00000000000000000000eb886b69ff1c6d40297aa2918974bff6d657ef01d5a6
+                    blockTimestamp: 1734650434
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.23608845'
+                  - fee: '0'
+                    transactionHash: >-
+                      80032443cca813f31209617d5c3ee1a88909400896fbe007acb1cae338906256
+                    transactionId: >-
+                      6d4fc7ae0dd71db8fd46280b2ac44165d734a389aa59a9942b2daa11e6298148
+                    blockHeight: 875503
+                    blockHash: >-
+                      00000000000000000000c28fa5d714a405f47608b95a8d345effb437446b0fd2
+                    blockTimestamp: 1734649087
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.23158491'
+                  - fee: '0'
+                    transactionHash: >-
+                      a374cad02ab4e7e824bbcdcf9d4bb7d145dbd63d73cb77c9216736ac1167707e
+                    transactionId: >-
+                      120d8188379de59a8efe91f54b182efcee75f011f7d56161ef648495346c1bc4
+                    blockHeight: 875501
+                    blockHash: >-
+                      000000000000000000012b983647fab4d0f0606445ad0e5cdf511c5bc724ed22
+                    blockTimestamp: 1734647763
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.25389699'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      20d9cd383916e39c1f4cb9ccd6660157fda73d8bdfa5ab9bddd0a1abae7b68a4
+                    transactionId: >-
+                      da89d9779c7a4ac079b1e3c67afb7a2b95f3b99010b3f13603614aeb54702911
+                    blockHeight: 875491
+                    blockHash: >-
+                      0000000000000000000047e8d7c6f260381a0e5bf7c2fbca98bd7642aa34c1e8
+                    blockTimestamp: 1734643636
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.20454587'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      2da661bfd748c4b4081e38903da95ffbff795849369d96a6f1d5e6d06d73f1e5
+                    transactionId: >-
+                      2d4961f701fe4b91f3a933498b8d49a64bc230ced3318c5c82810f81b3b223cc
+                    blockHeight: 875490
+                    blockHash: >-
+                      00000000000000000001e116104b2f26e57220fcc731719c45ff91c14a39dc77
+                    blockTimestamp: 1734643285
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.23499187'
+                  - fee: '0'
+                    transactionHash: >-
+                      a455f0ef7a5d5eb9c15d7e3daaca51f252b2489ed3cdd5f701b382e2c9fbcfb9
+                    transactionId: >-
+                      0fa042ee9af26f94187f81a5f9dc7349d4b744f6f5a99353afe7e44563a1f088
+                    blockHeight: 875489
+                    blockHash: >-
+                      000000000000000000018e04889edc1f3355a19023df576dab9798e6dea657c4
+                    blockTimestamp: 1734642240
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.2036537'
+                  - fee: '0'
+                    transactionHash: >-
+                      8c1cb692f3fcf4b617c052561db4ec1d11ce1e6384476604b0d02a6320fee543
+                    transactionId: >-
+                      87143b7fb7930c1c52cf6b27e0627b8bf91506fdc08058a63a8d38ccc3153e0a
+                    blockHeight: 875488
+                    blockHash: >-
+                      000000000000000000027ad69848789a71f3b36cf2601993d3098ffe0cc4f18e
+                    blockTimestamp: 1734641873
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.19797304'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      8aa015199be6af252b05f83a6c99be93a94e09972a468c7845741f897eacebcd
+                    transactionId: >-
+                      06c9e9d97b9cf975f363df938df14b2d9027fe0b6e5c45e6c79239450e547eb5
+                    blockHeight: 875487
+                    blockHash: >-
+                      000000000000000000015d90169ddf552c52850670a4124e1b0a75e9a600e6df
+                    blockTimestamp: 1734641593
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.23297624'
+                  - fee: '0'
+                    transactionHash: >-
+                      49f8b852628a8b1d2734ee51e8c1303f1cc9dd4e0b4a2b8650233a3aaddaf91c
+                    transactionId: >-
+                      bde056213b471913b02592264b68fd89d126cae8034053cffed34747414e9e17
+                    blockHeight: 875485
+                    blockHash: >-
+                      000000000000000000015de17f1aaa54a5b9fe3095cca092ccdebefd4eb6b7ee
+                    blockTimestamp: 1734640392
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.20353636'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      0446b4ffbd0dd2a9615e7ba31638ec86997c6d977b131360856a02f1807526ab
+                    transactionId: >-
+                      df5d684ce883ac08d728610f8b448f0b882b40304ad810fed3f8b4aca07f05f1
+                    blockHeight: 875482
+                    blockHash: >-
+                      0000000000000000000259bcdd2e2af2a82bf566445fdc231699805d64fbbb6a
+                    blockTimestamp: 1734639692
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.23624194'
+                  - fee: '0'
+                    transactionHash: >-
+                      6f82ab98e5e43bb0308643209ea1eaf1944f15d9dc1719cc1afb5eec729f4c8f
+                    transactionId: >-
+                      594be2f7651d5150f87f2d18e971f57a2355208f97a855de9cade5ed4cfae56a
+                    blockHeight: 875479
+                    blockHash: >-
+                      000000000000000000001e1b8214ae0dab7b40c2b786c684a80b6cb9aef7c470
+                    blockTimestamp: 1734638476
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '3.23247272'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+                  - fee: '0'
+                    transactionHash: >-
+                      573ac0e0fa37352d6544ab36b92249a6d8d0974f1100fbe19e06049fa615a564
+                    transactionId: >-
+                      6ff2a6d5ddc962d734563b0718c776c60e39170ed1a966bbccbc64d10cf1e9e6
+                    blockHeight: 875475
+                    blockHash: >-
+                      0000000000000000000039848db13649df25e64c877d889a331d569d7e198d76
+                    blockTimestamp: 1734636430
+                    senders: []
+                    recipients:
+                      - address: >-
+                          bc1qwzrryqr3ja8w7hnja2spmkgfdcgvqwp5swz4af4ngsjecfz0w0pqud7k38
+                        value: '11.45881641'
+                      - address: >-
+                          bc1p8k4v4xuz55dv49svzjg43qjxq2whur7ync9tm0xgl5t4wjl9ca9snxgmlt
+                        value: '0.00000546'
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
+  /{protocol}/{network}/blockchain/getBlockByHashOrNumber:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        블록 해시 혹은 블록넘버로 조회한 블록의 특정 정보를 반환합니다.
+
+      summary: Get Block by Hash or Number
+      operationId: bitcoin-getBlockByHashOrNumber
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                block:
+                  type: string
+                  description: >-
+                    잔고 조회 시점을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:
+
+                    - block hash: 64자리 16진수 문자열 (256비트). 해당 블록 해시를 기준으로 조회됩니다.
+
+                    - block number: 10진수 문자열. 해당 블록 높이를 기준으로 조회됩니다.
+
+                    - block tag: "earliest" 또는 "latest"를 입력하여 첫 번째 블록 또는 최신 블록을
+                    조회합니다.
+                  pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
+                  default: >-
+                    00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af
+              required:
+                - block
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - hash
+                  - height
+                  - version
+                  - timestamp
+                  - nonce
+                  - bits
+                  - difficulty
+                  - merkleRoot
+                  - transactionCount
+                  - size
+                  - weight
+                  - previousBlockHash
+                  - nextBlockHash
+                  - medianTime
+                  - strippedSize
+                  - transactions
+                properties:
+                  hash:
+                    type: string
+                    description: >-
+                      블록을 고유하게 식별하는 SHA-256 해시 값입니다. 블록 헤더의 정보를 조합하여 생성되며, 블록체인
+                      내에서 중복되지 않는 식별자입니다.
+                    example: >-
+                      00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af
+                  height:
+                    type: integer
+                    description: >-
+                      블록체인에서 블록의 위치를 나타내는 번호입니다. 제네시스 블록은 0번으로 시작하며, 이후 블록들은 1씩
+                      증가합니다.
+                    example: 844237
+                  version:
+                    type: integer
+                    description: >-
+                      블록의 버전 번호로, 네트워크에서 사용되는 블록 검증 규칙을 식별하는 데 사용됩니다. 새로운 기능이
+                      추가되면 버전이 업데이트됩니다.
+                    example: 541065216
+                  timestamp:
+                    type: integer
+                    description: 블록 생성 시간을 나타내며, UNIX 타임스탬프로 표시됩니다.
+                    example: 1716177005
+                  nonce:
+                    type: integer
+                    description: >-
+                      작업증명(Proof-of-Work) 알고리즘에서 사용되는 값으로, 유효한 블록 해시를 찾기 위해 여러 번
+                      변경되는 변수입니다.
+                    example: 890911130
+                  bits:
+                    type: string
+                    description: >-
+                      블록 해시가 만족해야 하는 난이도 목표 값으로, 압축된 32비트 16진수로 표현됩니다. 이 값은
+                      네트워크의 채굴 난이도에 따라 변합니다.
+                    example: '386097818'
+                  difficulty:
+                    type: string
+                    description: >-
+                      블록의 난이도를 나타내며, 초기 목표 값과 현재 목표 값의 비율로 계산됩니다. 이 값은 채굴의 상대적인
+                      난이도를 반영합니다.
+                    example: '8.314835518923977E13'
+                  merkleRoot:
+                    type: string
+                    description: >-
+                      블록에 포함된 모든 트랜잭션의 해시를 머클 트리로 계산한 루트 해시 값입니다. 데이터 무결성을 확인하기
+                      위해 사용됩니다.
+                    example: >-
+                      ea1cc8f8e626dd317a96c13c9b53451c4fd33e88edf33f327fc063be669e174c
+                  transactionCount:
+                    type: integer
+                    description: 블록에 포함된 트랜잭션의 총 개수를 나타냅니다. 채굴된 블록 내 트랜잭션의 양을 확인하는 데 사용됩니다.
+                    example: 2948
+                  size:
+                    type: integer
+                    description: >-
+                      블록의 전체 크기로, 헤더와 트랜잭션 데이터를 포함한 바이트 단위 값입니다. 이 값은 블록 데이터를
+                      저장하는 데 필요한 실제 디스크 공간을 나타냅니다.
+                    example: 2106825
+                  weight:
+                    type: integer
+                    description: SegWit 데이터를 고려하여 BIP-141에 정의된 방식으로 계산된 블록의 가중치입니다.
+                    example: 3993132
+                  previousBlockHash:
+                    type: string
+                    description: >-
+                      이전 블록의 해시 값으로, 블록체인 내에서 블록 간의 연결을 유지합니다. 제네시스 블록의 경우 이 값은
+                      null입니다.
+                    example: >-
+                      00000000000000000002732fa80041196753bcb6aea0938d9a682665ccd52385
+                  nextBlockHash:
+                    type: string
+                    description: 다음 블록의 해시 값으로, 가장 최신 블록의 경우 이 값은 null입니다. 이는 체인의 끝을 나타냅니다.
+                    example: >-
+                      00000000000000000002732fa80041196753bcb6aea0938d9a682665ccd52385
+                  medianTime:
+                    type: integer
+                    description: >-
+                      최근 11개의 블록 타임스탬프의 중간값입니다. 시간의 변동성을 줄이고 보다 안정적인 블록 시간을 제공하기
+                      위해 사용됩니다.
+                    example: 1716175427
+                  strippedSize:
+                    type: integer
+                    description: >-
+                      SegWit 데이터를 제외한 블록의 크기입니다. 바이트 단위로 측정되며, 순수한 트랜잭션 데이터와 헤더
+                      크기를 나타냅니다.
+                    example: 2106825
+                  transactions:
+                    type: array
+                    description: 블록에 포함된 트랜잭션의 해시 값 배열입니다. 각 트랜잭션은 고유한 해시 값으로 식별됩니다.
+                    items:
+                      type: string
+                      description: 각 트랜잭션을 고유하게 식별하는 SHA-256 해시 값입니다.
+                      example: >-
+                        3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                example:
+                  hash: >-
+                    00000000770ebe897270ca5f6d539d8afb4ea4f4e757761a34ca82e17207d886
+                  height: 20000
+                  version: 1
+                  timestamp: 1248291739
+                  nonce: 2406314246
+                  bits: 1d00ffff
+                  difficulty: '1'
+                  merkleRoot: >-
+                    01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+                  transactionCount: 1
+                  size: 215
+                  weight: 860
+                  previousBlockHash: >-
+                    00000000ba36eb929dc90170a96ee3efb76cbebee0e0e5c4da9eb0b6e74d9124
+                  nextBlockHash: >-
+                    000000002434a3edf8dee4fe506d306c59d3bf41f73d979f30ed3f7b7c34d06c
+                  medianTime: 1248287332
+                  strippedSize: 215
+                  transactions:
+                    - >-
+                      01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
+  /{protocol}/{network}/blockchain/getTotalTransactionCountByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        이 API는 특정 계정 주소가 송신자나 수신자로 포함된 트랜잭션의 총 개수를 반환합니다.
+
+      summary: Get Total Transaction Count By Account
+      operationId: bitcoin-getTotalTransactionCountByAccount
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                accountAddress:
+                  type: string
+                  description: >-
+                    조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로
+                    입력할 수 있습니다.
+                  pattern: >-
+                    ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                  example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+                  default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+              required:
+                - accountAddress
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionCount:
+                    type: integer
+                    description: 특정 계정이 송신 또는 수신에 관여한 트랜잭션의 총 개수를 나타냅니다.
+              example:
+                transactionCount: 8124
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
+  /{protocol}/{network}/blockchain/getTransactionByTransactionId:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        특정 트랜잭션의 정보를 조회합니다.
+
+      summary: Get Transaction By Transaction ID
+      operationId: bitcoin-getTransactionByTransactionId
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    transactionIds:
+                      type: array
+                      items:
+                        type: string
+                        description: >-
+                          조회하고자 하는 트랜잭션의 ID를 지정하는 파라미터입니다. 0x를 제외한 64자리 16진수 문자열
+                          형태로 입력할 수 있습니다.
+                        pattern: ^[0-9a-fA-F]{64}$
+                      minItems: 1
+                      maxItems: 1000
+                      description: 조회할 트랜잭션 ID를 배열로 입력합니다.
+                      default:
+                        - >-
+                          b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef
+                  required:
+                    - transactionIds
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - &ref_11
+                      type: object
+                      required:
+                        - id
+                        - index
+                        - hash
+                        - version
+                        - lockTime
+                        - size
+                        - vsize
+                        - weight
+                        - fee
+                        - vinCount
+                        - voutCount
+                        - blockHeight
+                        - blockHash
+                        - blockTimestamp
+                      properties:
+                        id:
+                          type: string
+                          description: 트랜잭션의 고유 식별자로, 각 트랜잭션을 유일하게 식별할 수 있는 값입니다.
+                          example: >-
+                            3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                        index:
+                          type: integer
+                          description: >-
+                            블록 내 트랜잭션의 인덱스를 나타냅니다. 0부터 시작하며, 블록에 포함된 트랜잭션의 순서를
+                            의미합니다.
+                          example: 0
+                        hash:
+                          type: string
+                          description: >-
+                            트랜잭션의 해시 값으로, 트랜잭션 데이터를 기반으로 계산된 고유한 식별자입니다. SegWit
+                            데이터를 포함하여 계산됩니다.
+                          example: >-
+                            3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                        version:
+                          type: integer
+                          description: 트랜잭션의 버전을 나타내는 값으로, 트랜잭션 형식을 정의합니다.
+                          example: 2
+                        lockTime:
+                          type: integer
+                          description: >-
+                            트랜잭션의 락타임으로, 트랜잭션이 유효해지는 조건(블록 높이 또는 UNIX 타임스탬프)을
+                            나타냅니다. 값이 `0`이면 트랜잭션은 즉시 유효합니다.
+                          example: 0
+                        size:
+                          type: integer
+                          description: 트랜잭션의 실제 크기(바이트)로, 트랜잭션의 데이터 길이를 나타냅니다.
+                          example: 223
+                        vsize:
+                          type: integer
+                          description: >-
+                            트랜잭션의 가상 크기(바이트)로, SegWit 데이터를 포함하여 블록에 포함되는 트랜잭션의
+                            유효 크기를 나타냅니다. BIP-141에 따라 가중치(weight)를 4로 나눈 후 올림
+                            처리한 값입니다.
+                          example: 300
+                        weight:
+                          type: integer
+                          description: >-
+                            트랜잭션의 가중치로, BIP-141에 따라 계산된 트랜잭션의 네트워크 비용을 나타냅니다.
+                            `(non-witness 크기 * 3) + total 크기`로 계산됩니다.
+                          example: 565
+                        fee:
+                          type: integer
+                          description: 트랜잭션의 수수료(BTC 단위)로, 입력 값에서 출력 값을 뺀 나머지 값입니다.
+                          example: 1840
+                        vinCount:
+                          type: integer
+                          description: 입력(Vin) 트랜잭션의 개수를 나타냅니다.
+                          example: 1
+                        voutCount:
+                          type: integer
+                          description: 출력(Vout) 트랜잭션의 개수를 나타냅니다.
+                          example: 1
+                        blockHeight:
+                          type: integer
+                          description: 트랜잭션이 포함된 블록의 높이를 나타냅니다.
+                          example: 844237
+                        blockHash:
+                          type: string
+                          description: 트랜잭션이 포함된 블록의 해시 값입니다.
+                          example: >-
+                            00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af
+                        blockTimestamp:
+                          type: integer
+                          description: 트랜잭션이 포함된 블록의 생성 시간을 나타내며, UNIX 타임스탬프 형식으로 표시됩니다.
+                          example: 1716177005
+                    - type: object
+                      properties:
+                        vin: &ref_12
+                          type: object
+                          required:
+                            - index
+                            - address
+                            - value
+                            - coinbase
+                            - voutTransactionId
+                            - voutIndex
+                            - scriptSig
+                            - sequence
+                            - witness
+                          properties:
+                            index:
+                              type: integer
+                              description: 포함된 트랜잭션에서 Vin(입력)의 인덱스를 나타냅니다.
+                              example: 0
+                            address:
+                              type: string
+                              description: >-
+                                Vin(입력)이 참조하는 이전 Vout(출력)의 주소로, 비트코인을 전송한 발송자의
+                                주소를 나타냅니다.
+                              example: bc1q0a7h7sa94e8svscf8sxmhyj8fujgy423fzjjfr
+                            value:
+                              type: string
+                              description: >-
+                                Vin(입력)에서 참조된 이전 Vout(출력)의 출력 값으로, 전송되는 비트코인의 양을
+                                나타냅니다 (BTC 단위).
+                              example: '0.00506140'
+                            coinbase:
+                              type: string
+                              description: >-
+                                Coinbase 트랜잭션(채굴 보상 트랜잭션)에서 사용되며, 채굴자가 정의한 임의의
+                                데이터를 포함합니다. 일반 트랜잭션에서는 null로 설정됩니다.
+                              example: null
+                            voutTransactionId:
+                              type: string
+                              description: >-
+                                Vin(입력)이 참조하는 이전 트랜잭션(Vout)의 ID를 나타냅니다. Coinbase
+                                트랜잭션의 경우 이 필드는 null로 표기됩니다.
+                              example: >-
+                                c2976d591a92cc39f2bb1f367afbc2d6ae6e3c940b640eb245dfbeef75d340db
+                            voutIndex:
+                              type: string
+                              description: >-
+                                Vin(입력)이 참조하는 이전 Vout(출력)의 인덱스를 나타냅니다. Coinbase
+                                트랜잭션의 경우 null로 표기됩니다.
+                              example: '0'
+                            scriptSig:
+                              type: object
+                              required:
+                                - hex
+                                - asm
+                                - type
+                              description: >-
+                                Vin(입력)의 서명 스크립트로, 참조된 이전 Vout(출력)의 잠금 스크립트를
+                                해제하는 데 사용됩니다.
+                              properties:
+                                hex:
+                                  type: string
+                                  description: >-
+                                    16진수 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit
+                                    트랜잭션에서는 빈 문자열로 제공됩니다.
+                                  example: 3045022100b228e33e8b62f825...
+                                asm:
+                                  type: string
+                                  description: >-
+                                    어셈블리 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit
+                                    트랜잭션에서는 빈 문자열로 제공됩니다.
+                                  example: OP_HASH160 OP_PUSHBYTES_20 000000...
+                                type:
+                                  type: string
+                                  description: >-
+                                    Vin(입력)의 서명 스크립트 유형을 나타냅니다 (예: `p2pkh`,
+                                    `p2sh` 등).
+                                  example: witness_v0_keyhash
+                            sequence:
+                              type: integer
+                              description: >-
+                                Vin(입력)의 시퀀스 번호로, 트랜잭션의 유효성을 제어하거나 `locktime`과
+                                함께 작동합니다. RBF 기능 제어에도 사용됩니다.
+                              example: 4294967295
+                            witness:
+                              type: array
+                              description: SegWit 트랜잭션의 경우 포함되는 Vin(입력)의 스크립트 서명 데이터 배열입니다.
+                              items:
+                                type: string
+                                example: 3045022100b228e33e8b62f825...
+                        vout: &ref_13
+                          type: object
+                          required:
+                            - index
+                            - address
+                            - value
+                            - scriptPubKey
+                          properties:
+                            index:
+                              type: integer
+                              description: 포함된 트랜잭션에서 Vout(출력)의 인덱스를 나타냅니다.
+                              example: 0
+                            address:
+                              type: string
+                              description: Vout(출력)에서 비트코인을 수신할 수신자의 주소를 나타냅니다.
+                              example: D5Vz9PwaMdPfFCxXPCbBt84s3ZJQ5wd2Gw
+                            value:
+                              type: string
+                              description: Vout(출력)에서 전송된 비트코인의 양을 나타냅니다 (BTC 단위).
+                              example: '0.00016400'
+                            scriptPubKey:
+                              type: object
+                              required:
+                                - hex
+                                - asm
+                                - type
+                              description: >-
+                                Vout(출력) 스크립트로, 비트코인을 사용하기 위한 조건(잠금 스크립트)을
+                                정의합니다.
+                              properties:
+                                hex:
+                                  type: string
+                                  description: 16진수 형식으로 표현된 Vout(출력)의 스크립트입니다.
+                                  example: >-
+                                    21025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75ac
+                                asm:
+                                  type: string
+                                  description: 어셈블리 형식으로 표현된 Vout(출력)의 스크립트입니다.
+                                  example: >-
+                                    025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75
+                                    OP_CHECKSIG
+                                type:
+                                  type: string
+                                  description: >-
+                                    Vout(출력) 스크립트의 유형을 나타냅니다 (예: pubkey, p2sh,
+                                    p2pkh 등).
+                                  example: pubkey
+              example:
+                id: >-
+                  01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+                index: 0
+                hash: >-
+                  01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+                version: 1
+                lockTime: 0
+                size: 134
+                vsize: 134
+                weight: 536
+                fee: '0'
+                vinCount: 1
+                voutCount: 1
+                blockHeight: 20000
+                blockHash: >-
+                  00000000770ebe897270ca5f6d539d8afb4ea4f4e757761a34ca82e17207d886
+                blockTimestamp: 1248291739
+                vin:
+                  - index: 0
+                    address: coinbase
+                    value: '0'
+                    coinbase: 04ffff001d016b
+                    voutTransactionId: null
+                    voutIndex: null
+                    scriptSig:
+                      asm: ''
+                      hex: ''
+                      type: coinbase
+                    sequence: 4294967295
+                    witness: []
+                vout:
+                  - index: 0
+                    address: 1Gtj5h1u8yZJe32neQZB5C7efP9XeMd9SW
+                    value: '50'
+                    scriptPubKey:
+                      asm: >-
+                        04370295d27dc032142af46515c4251ac7053f947546ada27b530bb11ffc65ea9b81be8758d6218d24448d2f9293620e43cf6e8220da09819d52f85474bc29238a
+                        OP_CHECKSIG
+                      hex: >-
+                        4104370295d27dc032142af46515c4251ac7053f947546ada27b530bb11ffc65ea9b81be8758d6218d24448d2f9293620e43cf6e8220da09819d52f85474bc29238aac
+                      type: pubkey
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
+  /{protocol}/{network}/blockchain/getTransactionsByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: >
+        특정 계정이 전송 혹은 수신한 트랜잭션 목록을 조회합니다.
+
+
+
+        > 🚧 decodeInput 사용 시 주의사항
+
+        >
+
+        > decodeInput 필드는 트랜잭션의 input 필드를 해석하여 결과를 제공합니다. 그러나 서로 다른 함수가 같은 함수
+        선택자(function selector)를 사용할 수 있기 때문에, 제공된 결과가 실제로 호출된 함수와 일치하지 않을 가능성이
+        있습니다. 따라서, ERC 표준 규격과 다른 함수의 경우 추가적인 검증 과정을 거치는 것을 권장 드립니다.
+      summary: Get Transactions By Account
+      operationId: bitcoin-getTransactionsByAccount
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                accountAddress:
+                  type: string
+                  description: >-
+                    조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로
+                    입력할 수 있습니다.
+                  pattern: >-
+                    ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                  example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+                  default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                relation: *ref_6
+                fromBlock: *ref_7
+                toBlock: *ref_8
+                fromDate: *ref_9
+                toDate: *ref_10
+              required:
+                - accountAddress
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  page:
+                    type: integer
+                    description: >-
+                      page 파라미터에 지정된 페이지 번호를 나타내는 필드입니다. 이 필드는 page 파라미터에 0보다 큰
+                      값을 입력한 경우에만 응답에 포함됩니다.
+                  rpp:
+                    type: integer
+                    description: rpp 파라미터에 지정된 페이지당 결과 수를 나타내는 필드입니다.
+                  cursor:
+                    type: string
+                    description: >-
+                      cursor 페이지네이션을 위한 필드로, 다음 페이지의 데이터를 로드하기 위해 다음 요청에 제공해야 하는
+                      값입니다.
+                  count:
+                    type: integer
+                    description: >-
+                      요청한 데이터의 총 개수를 나타내는 필드입니다. 이 필드는 withCount 파라미터에 true를 입력한
+                      경우에만 응답에 포함됩니다.
+                  items:
+                    type: array
+                    description: 조회된 데이터의 목록을 나타내는 필드입니다.
+                    items:
+                      allOf:
+                        - *ref_11
+                        - type: object
+                          properties:
+                            vin: *ref_12
+                            vout: *ref_13
+              example:
+                rpp: 10
+                page: 1
+                count: 2
+                items:
+                  - id: >-
+                      d158de2ae82689682cfb9e72fe1ac3b401b608339c24dd330f8fa66bfded1399
+                    index: 3
+                    hash: >-
+                      6e1e6ea969aa55ae64c008c83565e3d31093e7f8d917590ce5ff6670ab605ab5
+                    version: 2
+                    lockTime: 0
+                    size: 223
+                    vsize: 142
+                    weight: 565
+                    fee: '0.00067983'
+                    vinCount: 1
+                    voutCount: 2
+                    blockHeight: 654466
+                    blockHash: >-
+                      00000000000000000004b068247d3ed457cbfad99d253f31c3b5589514b47a7b
+                    blockTimestamp: 1603816660
+                    vin:
+                      - index: 0
+                        address: bc1qxw4ra06yagsznqpkdxs9d8rzmk5mq6j2rwh2yz
+                        value: '5.0866198'
+                        coinbase: null
+                        voutTransactionId: >-
+                          b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef
+                        voutIndex: 1
+                        scriptSig:
+                          asm: ''
+                          hex: ''
+                          type: witness_v0_keyhash
+                        sequence: 4294967295
+                        witness:
+                          - >-
+                            304402205f02aad1565ce058b9ff5061b10b4b987135b524584d3b85fc307e6708b59cbe0220542f033268ddc15a8851f2beacb3ba530a843a33eb0e0949efe2a3bb63f14dbd01
+                          - >-
+                            02465ba8589e28ad2cc47789f633b72c3f0fb5c8066c8971512b311d5a609f099e
+                    vout:
+                      - index: 0
+                        address: 3GHvkJsSqZ2dBtdXqFkbhAZCW4v4JxCuzS
+                        value: '0.00031093'
+                        scriptPubKey:
+                          asm: >-
+                            OP_HASH160 a02bffa073735a2628e60aa0422e0f16cecd422c
+                            OP_EQUAL
+                          hex: a914a02bffa073735a2628e60aa0422e0f16cecd422c87
+                          type: scripthash
+                      - index: 1
+                        address: bc1qlpwawqflzvpeh0dku5jgrt4ftzr9c6kae7z96j
+                        value: '5.08562904'
+                        scriptPubKey:
+                          asm: 0 f85dd7013f13039bbdb6e52481aea958865c6add
+                          hex: 0014f85dd7013f13039bbdb6e52481aea958865c6add
+                          type: witness_v0_keyhash
+                  - id: >-
+                      b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef
+                    index: 95
+                    hash: >-
+                      3a3636840bb24404b0921b544fedf8776c2560511df9d0033f0cb0734ae921ae
+                    version: 2
+                    lockTime: 0
+                    size: 223
+                    vsize: 142
+                    weight: 565
+                    fee: '0.00068012'
+                    vinCount: 1
+                    voutCount: 2
+                    blockHeight: 654465
+                    blockHash: >-
+                      0000000000000000000dcb1d1592c0bf70090090ad7303ee74942bc5210e9762
+                    blockTimestamp: 1603816345
+                    vin:
+                      - index: 0
+                        address: bc1qx42aezagmurl8ckq5t5pc9m0ka8k26fth5u2kh
+                        value: '5.35029992'
+                        coinbase: null
+                        voutTransactionId: >-
+                          02d782d14edd74e655dc272a40fbb0dfbb73d612f2ce3bc13a08db10c9122659
+                        voutIndex: 1
+                        scriptSig:
+                          asm: ''
+                          hex: ''
+                          type: witness_v0_keyhash
+                        sequence: 4294967295
+                        witness:
+                          - >-
+                            304402203d7743dcaab864ccc45440cfaa158c3afd74340a8b7127af52bbaa96ca19302a0220696e564280fd52b46592a93a9b657547ba92420a8f0a56dbc30690ee4bde326201
+                          - >-
+                            029f25728c407d721aee4db065405e22b747a6acbeb52b05e0eea8f00808a5e523
+                    vout:
+                      - index: 0
+                        address: 397xd2gtg3s2zpmof2vX8t4i5VfiQfLvft
+                        value: '0.263'
+                        scriptPubKey:
+                          asm: >-
+                            OP_HASH160 518085efe0edb908bf9626d0fa41337b5e5c949d
+                            OP_EQUAL
+                          hex: a914518085efe0edb908bf9626d0fa41337b5e5c949d87
+                          type: scripthash
+                      - index: 1
+                        address: bc1qxw4ra06yagsznqpkdxs9d8rzmk5mq6j2rwh2yz
+                        value: '5.0866198'
+                        scriptPubKey:
+                          asm: 0 33aa3ebf44ea2029803669a0569c62dda9b06a4a
+                          hex: 001433aa3ebf44ea2029803669a0569c62dda9b06a4a
+                          type: witness_v0_keyhash
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
+  /{protocol}/{network}/blockchain/getTransactionsByTransactionIds:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        여러 트랜잭션의 정보를 조회합니다. 최대 1000개의 트랜잭션을 조회할 수 있습니다.
+
+      summary: Get Transactions By Transaction IDs
+      operationId: bitcoin-getTransactionsByTransactionIds
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    transactionIds:
+                      type: array
+                      items:
+                        type: string
+                        description: >-
+                          조회하고자 하는 트랜잭션의 ID를 지정하는 파라미터입니다. 0x를 제외한 64자리 16진수 문자열
+                          형태로 입력할 수 있습니다.
+                        pattern: ^[0-9a-fA-F]{64}$
+                      minItems: 1
+                      maxItems: 1000
+                      description: 조회할 트랜잭션 ID를 배열로 입력합니다.
+                      default:
+                        - >-
+                          b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef
+                  required:
+                    - transactionIds
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - *ref_11
+                    - type: object
+                      properties:
+                        vin: *ref_12
+                        vout: *ref_13
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
+  /{protocol}/{network}/blockchain/getUnspentTransactionOutputsByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        특정 계정의 UTXO(Unspent Transaction Output) 목록을 조회합니다.
+
+      summary: Get Unspent Transaction Outputs By Account
+      operationId: bitcoin-getUnspentTransactionOutputsByAccount
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    accountAddress:
+                      type: string
+                      description: >-
+                        조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열
+                        형태로 입력할 수 있습니다.
+                      pattern: >-
+                        ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                      example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+                      default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                  required:
+                    - accountAddress
+                - *ref_14
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  page:
+                    type: integer
+                    description: >-
+                      page 파라미터에 지정된 페이지 번호를 나타내는 필드입니다. 이 필드는 page 파라미터에 0보다 큰
+                      값을 입력한 경우에만 응답에 포함됩니다.
+                  rpp:
+                    type: integer
+                    description: rpp 파라미터에 지정된 페이지당 결과 수를 나타내는 필드입니다.
+                  cursor:
+                    type: string
+                    description: >-
+                      cursor 페이지네이션을 위한 필드로, 다음 페이지의 데이터를 로드하기 위해 다음 요청에 제공해야 하는
+                      값입니다.
+                  count:
+                    type: integer
+                    description: >-
+                      요청한 데이터의 총 개수를 나타내는 필드입니다. 이 필드는 withCount 파라미터에 true를 입력한
+                      경우에만 응답에 포함됩니다.
+                  items:
+                    type: array
+                    description: 조회된 데이터의 목록을 나타내는 필드입니다.
+                    items:
+                      type: object
+                      required:
+                        - transactionId
+                        - voutIndex
+                        - address
+                        - value
+                        - blockHeight
+                        - blockHash
+                        - blockTimestamp
+                      properties:
+                        transactionId:
+                          type: string
+                          description: >-
+                            UTXO가 생성된 트랜잭션의 고유 식별자입니다. 트랜잭션 데이터를 기반으로 계산된 고유한 해시
+                            값으로, 트랜잭션을 고유하게 식별합니다.
+                          example: 6b1e04c59a1e42d30af4cdac20e1a9e4d22e947b
+                        voutIndex:
+                          type: integer
+                          description: >-
+                            UTXO가 생성된 트랜잭션의 출력(Vout) 인덱스입니다. 트랜잭션 출력 배열에서 몇 번째
+                            출력인지 나타내며, 0부터 시작합니다.
+                          example: 1
+                        address:
+                          type: string
+                          description: >-
+                            트랜잭션의 출력을 수신한 주소입니다. 수신자는 이 주소를 사용하여 UTXO를 소유하며,
+                            P2PKH, P2SH, Bech32, 또는 Bech32m 형식을 따릅니다.
+                          example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                        value:
+                          type: integer
+                          description: >-
+                            UTXO의 값으로, 트랜잭션 출력의 잔액을 나타냅니다. 값은 Satoshi 단위로 표현되며,
+                            1 BTC = 100,000,000 Satoshi입니다.
+                          example: 5000000000
+                        blockHeight:
+                          type: integer
+                          description: >-
+                            UTXO가 포함된 블록의 높이를 나타냅니다. 블록체인에서 이 블록의 순서를 나타내는 정수
+                            값입니다.
+                          example: 100000
+                        blockHash:
+                          type: string
+                          description: >-
+                            UTXO가 포함된 블록의 해시 값입니다. SHA-256 알고리즘으로 생성된 고유한 64자리
+                            16진수 값으로, 블록을 고유하게 식별합니다.
+                          example: 0000000000000000000a8ed7f3e6c1c2d21cbb5f
+                        blockTimestamp:
+                          type: integer
+                          description: >-
+                            UTXO가 포함된 블록의 생성 시간을 나타냅니다. 값은 UNIX 타임스탬프 형식(초
+                            단위)으로, 블록의 생성 시점을 나타냅니다.
+                          example: 1400000000
+              example:
+                rpp: 100
+                page: 1
+                count: 13
+                items:
+                  - transactionId: >-
+                      c5e7d8b67aed2f702511fe26ed341d079b284e6f4bb7722cd56b0d87513efd45
+                    voutIndex: 1
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '3.17200746'
+                    blockHeight: 875541
+                    blockHash: >-
+                      000000000000000000014c741dda4f876473d7de7ee725d08179d51d9572d44d
+                    blockTimestamp: 1734671987
+                  - transactionId: >-
+                      a0a9ba6bfd413ecd7d7dfb4ea6b8ff5a00d3daa9922d40c304bc7c11be0689a4
+                    voutIndex: 0
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00000546'
+                    blockHeight: 853991
+                    blockHash: >-
+                      00000000000000000001eea8c2aa87715186734f2ef8c2e2c99a404709b17218
+                    blockTimestamp: 1721977141
+                  - transactionId: >-
+                      05aff8ba52f1a48ad9a195faf8127de0c0273243a7b8e7097bd03951a459df55
+                    voutIndex: 1044
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00000546'
+                    blockHeight: 843282
+                    blockHash: >-
+                      000000000000000000018168ff83c3712171c5a91b330a777025a430ef1b8acb
+                    blockTimestamp: 1715603851
+                  - transactionId: >-
+                      fabcaf519a0e570eb89dc1347db02b17a42031b0e004d1472c5d2f39b6dbadae
+                    voutIndex: 7
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00000888'
+                    blockHeight: 840221
+                    blockHash: >-
+                      000000000000000000016829df4e8415ac018d9eec0d32492a2b90c441be8579
+                    blockTimestamp: 1713709281
+                  - transactionId: >-
+                      9e2f78fde4376bf1d7e0522f5f01960975766916ba308f5b7f9d65de15ceb9f3
+                    voutIndex: 5
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00000888'
+                    blockHeight: 840221
+                    blockHash: >-
+                      000000000000000000016829df4e8415ac018d9eec0d32492a2b90c441be8579
+                    blockTimestamp: 1713709281
+                  - transactionId: >-
+                      67e4653630d504f0de858a7f9302070431ad71fb07576cbb1721a89a17601a26
+                    voutIndex: 5
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00000888'
+                    blockHeight: 840221
+                    blockHash: >-
+                      000000000000000000016829df4e8415ac018d9eec0d32492a2b90c441be8579
+                    blockTimestamp: 1713709281
+                  - transactionId: >-
+                      0c06237d983b8d71e5f03bc005ee4a707e58f788fb04c18234206f3c7cb74929
+                    voutIndex: 92
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00019131'
+                    blockHeight: 831143
+                    blockHash: >-
+                      000000000000000000020fe971a6b058738b2c3dd42dc403dc3df1168224b509
+                    blockTimestamp: 1708356881
+                  - transactionId: >-
+                      70dd35579962bd1d08a4fc36e2b188a76244e6ef2d8141b2340ca40211aaf203
+                    voutIndex: 0
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00005391'
+                    blockHeight: 829910
+                    blockHash: >-
+                      00000000000000000000c669f7ff14cc794c6106a9764d36b9ce4442aa27fd7d
+                    blockTimestamp: 1707620437
+                  - transactionId: >-
+                      9d8b39942f50d0601c7c6fda53ea13ff3320816154be35f73d8151aea5c94504
+                    voutIndex: 0
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.000006'
+                    blockHeight: 826291
+                    blockHash: >-
+                      000000000000000000004136149706cf1f1190eb7ff382c7a953d1515b7f7f00
+                    blockTimestamp: 1705601585
+                  - transactionId: >-
+                      c9084e4787c1b2da1f27f0d4f7080a2a4de1400b0919fa69cfb3cbff5b93bba9
+                    voutIndex: 3
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.000006'
+                    blockHeight: 794212
+                    blockHash: >-
+                      000000000000000000015e1b02f05eda238ad44c69a54bf9ee75c308aeac9384
+                    blockTimestamp: 1686673241
+                  - transactionId: >-
+                      32e1f9c02070d8a551c9bdeb407e37af04691794846fc216ad67db3a3e57e696
+                    voutIndex: 0
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00001781'
+                    blockHeight: 762519
+                    blockHash: >-
+                      000000000000000000039f0f8e7b3cfb9ed96ff312caaebd1809b622b89df42d
+                    blockTimestamp: 1668053832
+                  - transactionId: >-
+                      31bdd75fa3ec38934ff96043389bb28d475920fc9adeeb44700c0fad989b416c
+                    voutIndex: 10
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.0001'
+                    blockHeight: 755499
+                    blockHash: >-
+                      00000000000000000002d251e132a6a45ffe40b2da4ef41379e4acb15f514df5
+                    blockTimestamp: 1664029423
+                  - transactionId: >-
+                      b5ad7e1ff976f0be3bb2e1aaf4fb6d2f3ca5081afce24dfde112f847ee7ce6f1
+                    voutIndex: 4
+                    address: 36cWgjEtxQSFgbHTJDw5AB96ZX7fJk1URd
+                    value: '0.00011'
+                    blockHeight: 747847
+                    blockHash: >-
+                      00000000000000000004351b4139d244dc27b9bce5d8efaa500243dd7160f056
+                    blockTimestamp: 1659555289
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5

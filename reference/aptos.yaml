@@ -1,0 +1,651 @@
+openapi: 3.1.0
+info:
+  title: aptos
+  version: 1.2.6
+servers:
+  - url: https://web3.nodit.io/v1
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /{protocol}/{network}/blockchain/getTransactionByHash:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: >
+        특정 트랜잭션의 정보를 조회합니다.
+
+
+
+        > 🚧 decodeInput 사용 시 주의사항
+
+        >
+
+        > decodeInput 필드는 트랜잭션의 input 필드를 해석하여 결과를 제공합니다. 그러나 서로 다른 함수가 같은 함수
+        선택자(function selector)를 사용할 수 있기 때문에, 제공된 결과가 실제로 호출된 함수와 일치하지 않을 가능성이
+        있습니다. 따라서, ERC 표준 규격과 다른 함수의 경우 추가적인 검증 과정을 거치는 것을 권장 드립니다.
+      summary: Get Transaction By Hash
+      operationId: aptos-getTransactionByHash
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+              - testnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    transactionHash:
+                      type: string
+                      description: >-
+                        조회하고자 하는 트랜잭션의 해시를 지정하는 파라미터입니다. 0x로 시작하는 64자리 16진수 문자열
+                        형태로 입력할 수 있습니다.
+                      pattern: ^0[xX][0-9a-fA-F]{64}$
+                      default: >-
+                        0x1632ac1627903e586c8ea0b1c134908c34ee95e84face9a303abd63686eb2022
+                    withLogs:
+                      type: boolean
+                      description: >-
+                        응답에 logs 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한 경우,
+                        응답속도가 느려질 수 있습니다.
+                      default: false
+                    withDecode:
+                      type: boolean
+                      description: >-
+                        응답에 decodedInput, decodedLog 필드의 포함 여부를 지정하는 파라미터입니다. 이
+                        파라미터에 true를 입력한 경우, 응답속도가 느려질 수 있습니다.
+
+
+                        decodedLog는 logs에 포함되어 있기 때문에 withDecode가 true라도
+                        withLogs가 false인 경우 decodedLog는 응답에 포함되지 않습니다.
+                      default: false
+                  required:
+                    - transactionHash
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - transactionHash
+                      - transactionIndex
+                      - blockHash
+                      - blockNumber
+                      - from
+                      - to
+                      - value
+                      - input
+                      - functionSelector
+                      - nonce
+                      - gas
+                      - gasPrice
+                      - gasUsed
+                      - cumulativeGasUsed
+                      - effectiveGasPrice
+                      - contractAddress
+                      - logsBloom
+                      - timestamp
+                    properties:
+                      transactionHash:
+                        type: string
+                        description: >-
+                          트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로
+                          제공됩니다.
+                        pattern: ^0[xX][0-9a-fA-F]{64}$
+                      transactionIndex:
+                        type: string
+                        description: >-
+                          트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를 나타냅니다. 10진수 문자열 형태로
+                          제공됩니다.
+                        pattern: ^[0-9]+$
+                      blockHash:
+                        type: string
+                        description: 블록의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+                        pattern: ^0[xX][0-9a-fA-F]{64}
+                      blockNumber:
+                        type: integer
+                        description: 블록 번호를 나타내는 필드입니다.
+                        pattern: ^[0-9]+$
+                      from:
+                        type: string
+                        description: >-
+                          트랜잭션을 발생시킨 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로
+                          제공됩니다.
+                        pattern: ^0[xX][0-9a-fA-F]{40}$
+                      to:
+                        type: string
+                        description: >-
+                          트랜잭션의 수신 주소를 나타내는 필드입니다. 컨트랙트 생성 트랜잭션의 경우 이 필드는 null을
+                          반환합니다.0x로 시작하는 40자리의 16진수 문자열 형태로 제공됩니다.
+                        pattern: ^0[xX][0-9a-fA-F]{40}$
+                      value:
+                        type: string
+                        description: 트랜잭션에서 전송한 토큰의 수량을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+                        pattern: ^[0-9]+$
+                      input:
+                        type: string
+                        description: >-
+                          트랜잭션의 데이터를 나타내는 필드입니다. Native Token(ETH, MATIC 등) 전송의
+                          경우 이 필드는 비어 있습니다. 0x로 시작하는 16진수 문자열 형태로 제공됩니다. 
+                        pattern: ^0[xX][0-9a-fA-F]+$
+                      decodedInput:
+                        type: object
+                        description: >-
+                          트랜잭션의 데이터를 디코딩한 결과를 나타내는 필드입니다. withDecodedInput 파라미터에
+                          true를 입력한 경우에만 응답에 포함됩니다.
+                        properties:
+                          type:
+                            type: string
+                            description: 트랜잭션의 함수 타입을 나타내는 필드입니다.
+                          name:
+                            type: string
+                            description: 트랜잭션의 함수 이름을 나타내는 필드입니다.
+                          signature:
+                            type: string
+                            description: 트랜잭션의 함수 시그니처를 나타내는 필드입니다.
+                          args:
+                            type: array
+                            items: &ref_0
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                  description: 인자의 이름을 나타내는 필드입니다.
+                                type:
+                                  type: string
+                                  description: 인자의 타입을 나타내는 필드입니다.
+                                value:
+                                  type: string
+                                  description: 인자의 값을 나타내는 필드입니다.
+                      functionSelector:
+                        type: string
+                        description: >-
+                          트랜잭션에서 호출한 함수의 selector를 나타내는 필드입니다. 0x로 시작하는 8자리 16진수
+                          문자열 형태로 제공됩니다.
+                        pattern: ^0[xX][0-9a-fA-F]{8}
+                      nonce:
+                        type: string
+                        description: >-
+                          트랜잭션의 nonce 값을 나타내는 필드입니다. 트랜잭션의 중복 방지 및 순서를 결정하는 데
+                          사용됩니다. 10진수 문자열 형태로 제공됩니다.
+                        pattern: ^[0-9]+$
+                      gas:
+                        type: string
+                        description: >-
+                          트랜잭션 실행을 위해 사용자가 할당하고자 하는 가스의 최대 양을 나타내는 필드입니다. 10진수
+                          문자열 형태로 제공됩니다.
+                        pattern: ^[0-9]+$
+                      gasPrice:
+                        type: string
+                        description: >-
+                          사용자가 단위 가스당 지불할 의향이 있는 금액을 나타내는 필드입니다. EIP-1559(London
+                          Hard fork) 적용 이전의 트랜잭션 모델(고정된 수수료)에서 사용되는 필드이며, 네트워크
+                          혼잡도에 따라 사용자가 수동으로 가격을 설정할 수 있습니다. 10진수 문자열 형태로 제공됩니다.
+                        pattern: ^[0-9]+$
+                      maxFeePerGas:
+                        type: string
+                        description: >-
+                          사용자가 단위 가스당 지불할 의향이 있는 최대 수수료를 나타내는 필드입니다. 이는
+                          baseFeePerGas와 MaxPriorityFeePerGas의 합보다 크거나 같아야 합니다.
+                          EIP-1559(London Hard fork)에서 도입된 변동적인 수수료 모델의 일부입니다.
+                          따라서 도입 이전 트랜잭션에서는 해당 필드가 제공되지 않습니다. 10진수 문자열 형태로
+                          제공됩니다.
+                        pattern: ^[0-9]+$
+                      maxPriorityFeePerGas:
+                        type: string
+                        description: >-
+                          사용자가 블록 생성자에게 직접 지불하길 원하는 단위 가스당 최대 수수료입니다. 이 값이 클수록
+                          블록 생성자는 해당 트랜잭션을 우선적으로 처리하게 됩니다. EIP-1559(London Hard
+                          fork)에서 도입된 변동적인 수수료 모델의 일부입니다. 따라서 도입 이전 트랜잭션에서는 해당
+                          필드가 제공되지 않습니다. 10진수 문자열 형태로 제공됩니다.
+                        pattern: ^[0-9]+$
+                      gasUsed:
+                        type: string
+                        description: >-
+                          트랜잭션 실행에서 실제로 사용된 가스의 양을 나타내는 필드입니다. 10진수 문자열 형태로
+                          제공됩니다.
+                        pattern: ^[0-9]+$
+                      cumulativeGasUsed:
+                        type: string
+                        description: >-
+                          현재 트랜잭션까지 포함하여, 블록 내에서 처리된 모든 트랜잭션들에 사용된 가스의 총합을 나타내는
+                          필드입니다. 10진수 문자열 형태로 제공됩니다.
+                        pattern: ^[0-9]+$
+                      effectGasPrice:
+                        type: string
+                        description: >-
+                          트랜잭션이 실제로 단위 가스당 지불한 평균 가격을 나타내는 필드입니다.
+                          EIP-1559(London Hard fork)에서 도입된 변동적인 수수료 모델의 일부입니다.
+                          따라서 도입 이전 트랜잭션에서는 해당 필드가 제공되지 않습니다. 10진수 문자열 형태로
+                          제공됩니다.
+                        pattern: ^[0-9]+$
+                      contractAddress:
+                        type: string
+                        description: >-
+                          트랜잭션이 컨트랙트 생성 트랜잭션인 경우, 생성된 컨트랙트 주소를 나타내는 필드입니다. 0x로
+                          시작하는 40자리의 16진수 문자열 형태로 제공됩니다.
+                        pattern: ^0[xX][0-9a-fA-F]{40}$
+                      type:
+                        type: string
+                        description: >-
+                          트랜잭션의 타입을 나타내는 필드이며, 블록 시점에 따라 이 필드가 제공되지 않을 수 있습니다.
+                          10진수 문자열 형태로 제공됩니다.
+
+                          0: Legacy transaction, EIP-1559 이전의 트랜잭션
+
+                          1: Access List transaction, EIP-2930에 의해 도입된 접근 목록
+                          트랜잭션
+
+                          2: Fee market transaction, EIP-1559에 의해 도입된 수수료 시장
+                          트랜잭션
+                        pattern: ^[0-9]+$
+                      status:
+                        type: string
+                        description: >-
+                          트랜잭션의 상태를 나타내는 필드입니다. 1이면 성공, 0이면 실패를 나타냅니다. Byzantium
+                          Hard Fork 이전의 트랜잭션에서는 해당 필드가 제공되지 않습니다. 10진수 문자열 형태로
+                          제공됩니다.
+                        pattern: ^[0-9]+$
+                      logsBloom:
+                        type: string
+                        description: >-
+                          트랜잭션에 포함된 모든 로그 블룸을 나타내는 필드입니다. 0x로 시작하는 512자리 16진수
+                          문자열 형태로 제공됩니다.
+                        pattern: ^0[xX][0-9a-fA-F]{512}
+                      accessList:
+                        type: array
+                        description: 트랜잭션의 접근 목록을 나타내는 필드입니다.
+                        items:
+                          type: object
+                          required:
+                            - address
+                            - storageKeys
+                          properties:
+                            address:
+                              type: string
+                              description: >-
+                                트랜잭션에서 접근한 컨트랙트 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의
+                                16진수 문자열 형태로 제공됩니다.
+                              pattern: ^0[xX][0-9a-fA-F]{40}$
+                            storageKeys:
+                              type: array
+                              description: 트랜잭션에서 접근한 컨트랙트의 storage key 목록을 나타내는 필드입니다.
+                              items:
+                                type: string
+                                description: >-
+                                  트랜잭션에서 접근한 컨트랙트의 storage key를 나타내는 필드입니다. 0x로
+                                  시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+                                pattern: ^0[xX][0-9a-fA-F]{64}
+                      timeStamp:
+                        type: integer
+                        description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
+                  - type: object
+                    properties:
+                      logs:
+                        type: object
+                        required:
+                          - contractAddress
+                          - transactionHash
+                          - transactionIndex
+                          - blockHash
+                          - blockNumber
+                          - data
+                          - logIndex
+                          - removed
+                          - topics
+                        properties:
+                          contractAddress:
+                            type: string
+                            description: >-
+                              로그를 생성한 컨트랙트 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수
+                              문자열 형태로 제공됩니다.
+                            pattern: ^0[xX][0-9a-fA-F]{40}$
+                          transactionHash:
+                            type: string
+                            description: >-
+                              로그를 생성한 트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수
+                              문자열 형태로 제공됩니다.
+                            pattern: ^0[xX][0-9a-fA-F]{64}$
+                          transactionIndex:
+                            type: string
+                            description: >-
+                              로그를 생성한 트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를 나타냅니다.
+                              10진수 문자열 형태로 제공됩니다.
+                            pattern: ^[0-9]+$
+                          blockHash:
+                            type: string
+                            description: >-
+                              로그를 생성한 블록의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열
+                              형태로 제공됩니다.
+                            pattern: ^0[xX][0-9a-fA-F]{64}
+                          blockNumber:
+                            type: integer
+                            description: 로그를 생성한 블록 번호를 나타내는 필드입니다.
+                            pattern: ^[0-9]+$
+                          data:
+                            type: string
+                            description: >-
+                              로그의 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열 형태로 제공됩니다.
+                              이 필드는 로그의 이벤트 데이터를 나타냅니다.
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                          logIndex:
+                            type: string
+                            description: >-
+                              로그의 인덱스를 나타내는 필드입니다. 트랜잭션에서 발생한 이벤트의 순서를 의미합니다.
+                              10진수 문자열 형태로 제공됩니다.
+                            pattern: ^[0-9]+$
+                          removed:
+                            type: boolean
+                            description: >-
+                              로그가 제거되었는지 여부를 나타내는 필드입니다. 체인의 재구성(Reorg)으로 인해 로그가
+                              제거된 경우 true를 반환합니다.
+                          topics:
+                            type: array
+                            description: 인덱스된 로그의 인자를 나타내는 필드입니다. 최대 4개의 토픽을 가질 수 있습니다.
+                            items:
+                              type: string
+                              description: >-
+                                로그의 토픽을 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로
+                                제공됩니다.
+                              pattern: ^0[xX][0-9a-fA-F]{64}
+                          decodedLog:
+                            type: object
+                            required:
+                              - name
+                              - eventFragment
+                              - signature
+                              - eventHash
+                              - args
+                            properties:
+                              name:
+                                type: string
+                                description: 로그의 이벤트 이름을 나타내는 필드입니다.
+                              eventFragment:
+                                type: string
+                                description: 로그의 이벤트 프래그먼트를 나타내는 필드입니다.
+                              signature:
+                                type: string
+                                description: 로그의 이벤트 시그니처를 나타내는 필드입니다.
+                              eventHash:
+                                type: string
+                                description: 로그의 이벤트 해시를 나타내는 필드입니다.
+                              args:
+                                type: array
+                                items: *ref_0
+              example:
+                transactionHash: >-
+                  0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                transactionIndex: '6'
+                blockHash: >-
+                  0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8
+                blockNumber: 21309845
+                from: '0xae2Fc483527B8EF99EB5D9B44875F005ba1FaE13'
+                to: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                value: '25809147711'
+                input: >-
+                  0x59fba26c3f9c8ecef989def3c5c8ad037487462d83c0410ba900b1f1ee126e9c96231cc3d3fad7c08b4cf873b1f10bb8
+                functionSelector: '0x59fba26c'
+                nonce: '3908954'
+                gas: '136930'
+                gasPrice: '17716724232'
+                maxFeePerGas: '17716724232'
+                maxPriorityFeePerGas: '1'
+                gasUsed: '95851'
+                cumulativeGasUsed: '1602350'
+                effectiveGasPrice: '17716724232'
+                contractAddress: null
+                type: '2'
+                status: '1'
+                logsBloom: >-
+                  0x00040000000000000000000000000000000000000000000800000000000000000000000000000000000010000000000002000000080020000000000000000000000000000000000800000008000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000010000800000000000000000001000040000000000000000000000010000000000000000000040000000000000000000000000000000000000000000040000000000000000000000002000000000000000000000000000000000000000000000000080000000000202000000000000000000000008000000000000000000000000000000000
+                accessList:
+                  - storageKeys:
+                      - >-
+                        0x0000000000000000000000000000000000000000000000000000000000000002
+                      - >-
+                        0x9c04773acff4c5c42718bd0120c72761f458e43068a3961eb935577d1ed4effb
+                      - >-
+                        0x000000000000000000000000000000000000000000000000000000000000004c
+                      - >-
+                        0x000000000000000000000000000000000000000000000000000000000000004d
+                      - >-
+                        0x0000000000000000000000000000000000000000000000000000000000000000
+                      - >-
+                        0x0000000000000000000000000000000000000000000000000000000000000004
+                    address: '0xfba26c3f9c8ecef989def3c5c8ad037487462d83'
+                  - storageKeys:
+                      - >-
+                        0xa5533e53a8bb0cc43dd0fcc3460eba5629e7373d9977a4dc5094a3f36e1dfa3a
+                      - >-
+                        0xe2eb0e48c234efbf3a46eecd032658a631dc8c81678d34452f2bc4e36fa35c88
+                    address: '0xb1f1ee126e9c96231cc3d3fad7c08b4cf873b1f1'
+                  - storageKeys:
+                      - >-
+                        0xbd5af5151dcb9feb2c4ef23509c863dd4415e4d2c27b5c08786933a8ed41acc7
+                      - >-
+                        0x29a02af4bc820597ed371018254b6b3519f55009a450e372cca58ead735350fd
+                    address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+                timestamp: 1733082431
+                logs:
+                  - contractAddress: '0xB1F1ee126e9c96231Cc3d3fAD7C08b4cf873b1f1'
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: 6
+                    blockHash: >-
+                      0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8
+                    blockNumber: 21309845
+                    data: >-
+                      0x000000000000000000000000000000000000000000000000410ba9e7b561fe8e
+                    logIndex: 72
+                    removed: false
+                    topics:
+                      - >-
+                        0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                      - >-
+                        0x000000000000000000000000fba26c3f9c8ecef989def3c5c8ad037487462d83
+                      - >-
+                        0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387
+                    decodedLog:
+                      name: Transfer
+                      eventFragment: Transfer
+                      signature: Transfer(address,address,uint256)
+                      eventHash: >-
+                        0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                      args:
+                        - name: from
+                          type: address
+                          value: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                        - name: to
+                          type: address
+                          value: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                        - name: value
+                          type: uint256
+                          value: '4687026649854770830'
+                  - contractAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: 6
+                    blockHash: >-
+                      0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8
+                    blockNumber: 21309845
+                    data: >-
+                      0x000000000000000000000000000000000000000000000000060258573f000000
+                    logIndex: 73
+                    removed: false
+                    topics:
+                      - >-
+                        0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                      - >-
+                        0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387
+                      - >-
+                        0x000000000000000000000000fba26c3f9c8ecef989def3c5c8ad037487462d83
+                    decodedLog:
+                      name: Transfer
+                      eventFragment: Transfer
+                      signature: Transfer(address,address,uint256)
+                      eventHash: >-
+                        0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                      args:
+                        - name: from
+                          type: address
+                          value: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                        - name: to
+                          type: address
+                          value: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                        - name: value
+                          type: uint256
+                          value: '433005645923352576'
+                  - contractAddress: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: 6
+                    blockHash: >-
+                      0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8
+                    blockNumber: 21309845
+                    data: >-
+                      0xffffffffffffffffffffffffffffffffffffffffffffffffbef456184a9e0172000000000000000000000000000000000000000000000000060258573f00000000000000000000000000000000000000000000004ddaa276e10f69992f50c7ab000000000000000000000000000000000000000000000012b29af6787d922533ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa2ff
+                    logIndex: 74
+                    removed: false
+                    topics:
+                      - >-
+                        0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67
+                      - >-
+                        0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387
+                      - >-
+                        0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387
+                    decodedLog:
+                      name: Swap
+                      eventFragment: Swap
+                      signature: >-
+                        Swap(address,address,int256,int256,uint160,uint128,int24)
+                      eventHash: >-
+                        0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67
+                      args:
+                        - name: sender
+                          type: address
+                          value: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                        - name: recipient
+                          type: address
+                          value: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                        - name: deltaQty0
+                          type: int256
+                          value: '-4687026649854770830'
+                        - name: deltaQty1
+                          type: int256
+                          value: '433005645923352576'
+                        - name: sqrtP
+                          type: uint160
+                          value: '24094658801222881921974978475'
+                        - name: liquidity
+                          type: uint128
+                          value: '344911263209299780915'
+                        - name: currentTick
+                          type: int24
+                          value: '-23809'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: INVALID_PARAMETER
+                  message: >-
+                    Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE,
+                    PARAMETER2_NAME = PARAMETER2_VALUE, ... }
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: AUTHENTICATION_FAILED
+                  message: Authentication failed
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: PERMISSION_DENIED
+                  message: Permission denied
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: RESOURCE_NOT_FOUND
+                  message: >-
+                    Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE,
+                    RESOURCE2_NAME = RESOURCE2_VALUE, ... }
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: TOO_MANY_REQUESTS
+                  message: Too many requests

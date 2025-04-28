@@ -1,0 +1,149 @@
+openapi: 3.1.0
+info:
+  title: evm-kaia-klay_getTransactionByBlockNumberAndIndex
+  version: 1.2.6
+servers:
+  - url: https://{kaia-network}.nodit.io
+    variables:
+      kaia-network:
+        default: kaia-mainnet
+        enum:
+          - kaia-mainnet
+          - kaia-kairos
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-kaia-klay_getTransactionByBlockNumberAndIndex
+      description: 블록 넘버와 트랜잭션 인덱스를 입력하여 해당 블록의 트랜잭션 정보를 조회합니다.
+      summary: klay_getTransactionByBlockNumberAndIndex
+      operationId: kaia-klay_getTransactionByBlockNumberAndIndex
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: klay_getTransactionByBlockNumberAndIndex
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Number or Tag
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 넘버 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                      - title: Transaction Index
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]+$
+                        default: '0x0'
+                        description: >-
+                          트랜잭션 인덱스는 블록 내 특정 트랜잭션의 순서를 나타내는 숫자입니다. 트랜잭션 인덱스는 16진수
+                          문자열로 표현됩니다.
+                  minItems: 2
+                  maxItems: 2
+                  default:
+                    - '0x1076B5A'
+                    - '0x0'
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `block number or block tag`: 조회하고자 하는 블록 넘버를 16진수 문자열
+                    형식으로 입력합니다. "earliest", "latest", "pending" 등의 블록 태그를 입력할 수도
+                    있습니다.
+
+                    2. `transaction index`: 조회하고자 하는 트랜잭션의 index를 16진수 문자열 형식으로
+                    입력합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

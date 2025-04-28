@@ -1,0 +1,202 @@
+openapi: 3.1.0
+info:
+  title: evm-ethereum-trace_replayBlockTransactions
+  version: 1.2.6
+servers:
+  - url: https://{ethereum-network}.nodit.io
+    variables:
+      ethereum-network:
+        default: ethereum-mainnet
+        enum:
+          - ethereum-mainnet
+          - ethereum-sepolia
+          - ethereum-holesky
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-ethereum-trace_replayBlockTransactions
+      description: >-
+        지정된 블록에 포함된 모든 트랜잭션의 실행을 추적합니다. 이 메소드는 해당 블록에서 실행된 모든 트랜잭션에 대한 상세한 추적
+        정보를 제공하며, 블록 수준에서의 트랜잭션 처리 과정을 분석하는 데 사용됩니다.
+      summary: trace_replayBlockTransactions
+      operationId: trace_replayBlockTransactions
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: trace_replayBlockTransactions
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Number or Tag
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 넘버 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                      - title: Trace Type
+                        type: array
+                        items:
+                          type: string
+                          enum:
+                            - vmTrace
+                            - trace
+                            - stateDiff
+                          default: trace
+                        minItems: 1
+                        maximum: 3
+                        description: >-
+                          Trace type는 이더리움 블록체인에서 특정 트랜잭션이나 블록의 실행 상세 정보를 조회할 때
+                          사용되는 데이터 유형을 명시합니다. 이 배열은 다음 세 가지 문자열 값을 포함할 수 있습니다:
+
+                          - `vmTrace`: 가상 머신의 단계별 실행을 상세하게 추적합니다. 이는 메모리 상태, 스택
+                          상태, 그리고 각 실행 명령의 결과를 포함합니다.
+
+                          - `trace`: 트랜잭션 실행에 대한 단계별 로그를 제공합니다. 이 로그에는 호출 흐름과
+                          발생한 내부 트랜잭션들의 세부 정보가 포함됩니다.
+
+                          - `stateDiff`: 트랜잭션이 실행되기 전후의 계정 상태의 차이를 보여줍니다. 이는 변경된
+                          스토리지 키와 값, 계정의 잔액 및 계약 코드의 변화들을 포함합니다.
+
+
+                          이 정보는 개발자가 트랜잭션 처리 과정을 더 잘 이해하고 디버깅을 할 수 있게 도와줍니다. 각
+                          유형은 블록체인의 특정 측면에 대한 상세 정보를 제공하여 트랜잭션의 영향을 명확하게 파악할 수
+                          있게 합니다.
+                  minItems: 2
+                  maxItems: 2
+                  default:
+                    - latest
+                    - - trace
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+
+                    1. `block number or block tag`: 조회하고자 하는 블록 넘버를 16진수 문자열
+                    형식으로 입력합니다. "earliest", "latest", "pending" 등의 블록 태그를 입력할 수도
+                    있습니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  - output: 0x
+                    stateDiff: null
+                    trace:
+                      - action:
+                          from: '0xab40228a9d8659103de421fd77dbe192cf0e948f'
+                          callType: call
+                          gas: '0x0'
+                          input: >-
+                            0x008257ab785e1e1ee0e780fc7c2d04f99700000000017578dadae1cff0c367815b575353fa9d9b7c012b2cd7f4bb67ad927af0f169fa83df0ff8d6789cd7f823b9b639a0e3de024feb8fd5d991bb2fa76cf3bf9865b7e2b1a66bd9d6e4ec2f45c60f56c8245a077e6c493dcd3def00c4c04bb7a33efe52b4edf62de8dfae5fc7c07848c820c0edd4e5f0928551ef5a371e9724dac0055003779e14b1c9e57c6a60f0abf1834a67c2b18c4507a59e17ff8bd53edab0b8238349b539a0e3fe82f4e2147ef63ddaab3f15794e66bf99bef5ceeca5f5a91aeb4f852e573b536ea99d01327011d440991fa6850ef55ba5e77feee26a2ffebf6fdde97cff77d3d2437556bf774af7aa5b44b4814ba0069e0f93f9cec9d11a6750f4ec8decc3558efe31820b7982d6ef1499c2e5b938ab969b680397410ddc56e630e58d97fcc990af6b0d25d6b85a2c7b7443dd3cb372e93a2919d11bed96b2441bb8026ae06f9ed3afe71d64e148575e609fb07bf3b4486e4513b6ea26a384b29def99cd784e136de0aa0380000000ffffbfa413b601
+                          to: '0xff00000000000000000000000000000000001432'
+                          value: '0x0'
+                        result:
+                          gasUsed: '0x0'
+                          output: 0x
+                        subtraces: 0
+                        traceAddress: []
+                        type: call
+                    vmTrace: null
+                    transactionHash: >-
+                      0x63c4a9145bb1b89cbd43ec178b91ee94ca3508e247be025ba162dad625b78759
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

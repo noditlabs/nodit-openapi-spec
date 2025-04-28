@@ -1,0 +1,156 @@
+openapi: 3.1.0
+info:
+  title: evm-polygon-eth_estimateGas
+  version: 1.2.6
+servers:
+  - url: https://{polygon-network}.nodit.io
+    variables:
+      polygon-network:
+        default: polygon-mainnet
+        enum:
+          - polygon-mainnet
+          - polygon-amoy
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-polygon-eth_estimateGas
+      description: 트랜잭션을 실행할 때 필요한 가스량을 추정합니다. 실제로 트랜잭션을 발행하지 않고 가스량만 추정합니다.
+      summary: eth_estimateGas
+      operationId: polygon-eth_estimateGas
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_estimateGas
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    oneOf:
+                      - title: Call Object
+                        type: object
+                        properties:
+                          from:
+                            type: string
+                            description: 트랜잭션의 from 주소를 문자열 형식으로 입력합니다.
+                          to:
+                            type: string
+                            description: 트랜잭션의 to 주소를 문자열 형식으로 입력합니다.
+                            default: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                          gas:
+                            type: string
+                            description: >-
+                              해당 트랜잭션을 처리하기 위해 필요한 가스의 소모량을 hex형식의 문자열로 입력합니다.
+                              스마트 컨트랙트 call을 수행하는 경우 소모되는 가스가 없으므로 0x0로 입력할 수
+                              있습니다.
+                          gasPrice:
+                            type: string
+                            description: 설정하고자 하는 가스당 비용을 hex 형식의 문자열로 입력합니다.
+                          value:
+                            type: string
+                            description: 트랜잭션의 value 값입니다.
+                          data:
+                            type: string
+                            description: >-
+                              실행하고자 하는 트랜잭션의 method signature 해시값입니다. ABI에서 참고할
+                              수 있습니다.
+                            default: >-
+                              0x70a08231000000000000000000000000d8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+                        description: >-
+                          트랜잭션을 시뮬레이션하기 위한 call object입니다. 다음 필드를 포함할 수 있습니다.
+
+                          * `from`: 트랜잭션의 from 주소를 문자열 형식으로 입력합니다.
+
+                          * `to` : 트랜잭션의 to 주소를 문자열 형식으로 입력합니다.
+
+                          * `gas` : 해당 트랜잭션을 처리하기 위해 필요한 가스의 소모량을 hex형식의 문자열로
+                          입력합니다. 스마트 컨트랙트 call을 수행하는 경우 소모되는 가스가 없으므로 0x0로 입력할 수
+                          있습니다.
+
+                          * `gasPrice` : 설정하고자 하는 가스당 비용을 hex 형식의 문자열로 입력합니다.
+
+                          * `value` : 트랜잭션의 value 값입니다.
+
+                          * `data` : 실행하고자 하는 트랜잭션의 method signature 해시값입니다.
+                          ABI에서 참고할 수 있습니다.
+                  default:
+                    - from: '0xc90d3Ac75D1D36dF0b0a229E73D8409FB7F3c4ab'
+                      to: '0xd3CdA913deB6f67967B99D67aCDFa1712C293601'
+                      value: '0x186a0'
+                  description: |-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+                    1. `call object` - 호출할 컨트랙트의 주소와 호출할 함수의 데이터를 입력합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result: '0x5208'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

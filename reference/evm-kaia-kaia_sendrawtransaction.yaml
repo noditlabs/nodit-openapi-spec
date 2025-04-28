@@ -1,0 +1,126 @@
+openapi: 3.1.0
+info:
+  title: evm-kaia-kaia_sendRawTransaction
+  version: 1.2.6
+servers:
+  - url: https://{kaia-network}.nodit.io
+    variables:
+      kaia-network:
+        default: kaia-mainnet
+        enum:
+          - kaia-mainnet
+          - kaia-kairos
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-kaia-kaia_sendRawTransaction
+      description: >-
+        서명된 트랜잭션 데이터를 네트워크에 전송합니다. 트랜잭션이 정상적으로 처리되는 경우, 트랜잭션의 해시 값이 반환됩니다. 트랜잭션
+        서명은 개인키에 의해 client에서 이루어져야 합니다. 노드에서는 해당 트랜잭션의 유효성만 검증합니다.
+      summary: kaia_sendRawTransaction
+      operationId: kaia-kaia_sendRawTransaction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: kaia_sendRawTransaction
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Signed Transaction Hash
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]+$
+                        default: >-
+                          0x59f63e3840e0f4a1659074c1a4021e881a268a52d31958688da1d66bfbf6d2ca
+                        description: >-
+                          서명된 트랜잭션 해시는 서명된 트랜잭션의 해시값을 나타냅니다. 서명된 트랜잭션 해시는 0x로
+                          시작하는 16진수 문자열로 표현됩니다.
+
+                          서명된 트랜잭션 해시를 얻기 위해서는 아래의 단계를 따라야 합니다.
+
+                          1. 트랜잭션 데이터 생성합니다. 이 데이터에는 보낸이, 받는이, 가스 가격, 가스 한도,
+                          이더리움의 양 등이 포함됩니다.
+
+                          2. 트랜잭션 데이터를 RLP(Recursive Length Prefix) 인코딩합니다.
+
+                          3. RLP 인코딩된 데이터를 Keccak-256 해시 함수에 넣어 해시값을 생성합니다.
+
+                          4. 생성된 해시값을 서명합니다. 서명된 해시값은 서명된 트랜잭션 해시입니다.
+                  minItems: 1
+                  maxItems: 1
+                  default:
+                    - >-
+                      0x02f8688080808080943f39cfbaff46cb736a603269d14a7e9adf5158b488016345785d8a000080c001a005599173ee4483fa38044e8d7bf592b58a9ab598f7d4a510702d193c60af15a0a00f2d39e8202dc9d7d66a51fc67fcf1d893b20e080c6acf2b25610f5e926cfa21
+                  description: |-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+                    1. `signed transaction hash`: 
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

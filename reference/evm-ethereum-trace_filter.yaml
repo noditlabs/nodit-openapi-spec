@@ -1,0 +1,167 @@
+openapi: 3.1.0
+info:
+  title: evm-ethereum-trace_filter
+  version: 1.2.6
+servers:
+  - url: https://{ethereum-network}.nodit.io
+    variables:
+      ethereum-network:
+        default: ethereum-mainnet
+        enum:
+          - ethereum-mainnet
+          - ethereum-sepolia
+          - ethereum-holesky
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-ethereum-trace_filter
+      description: >-
+        지정된 조건에 맞는 트랜잭션들의 실행 과정을 필터링하여 추적합니다. 사용자는 블록 번호의 범위, 사용된 주소, 사용된 토큰 등
+        다양한 조건을 설정할 수 있으며, 이에 해당하는 트랜잭션들의 추적 정보를 얻을 수 있습니다.
+      summary: trace_filter
+      operationId: trace_filter
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: trace_filter
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Trace Object
+                        type: object
+                        properties:
+                          fromBlock: &ref_0
+                            title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          toBlock: *ref_0
+                          fromAddress:
+                            type: array
+                            items: &ref_1
+                              title: Address
+                              type: string
+                              pattern: ^0[xX][0-9a-fA-F]{40}$
+                              default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                              description: >-
+                                주소는 20바이트 길이의 16진수 문자열로 표현되며, EVM 계열의 블록체인에서
+                                사용되는 주소 형식입니다.
+                            description: 필터링하고자 하는 from 주소를 배열 형식으로 입력합니다.
+                          toAddress:
+                            type: array
+                            items: *ref_1
+                            description: 필터링하고자 하는 to 주소를 배열 형식으로 입력합니다.
+                          after:
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            description: trace하고자 하는 offset 크기입니다.
+                          count:
+                            type: integer
+                            description: trace batch에 표기하고자 하는 해당 trace의 수입니다.
+                        description: Trace할 필터 옵션을 Object 형식으로 입력합니다.
+                  minItems: 1
+                  maxItems: 1
+                  default:
+                    - fromBlock: '0x1253B3F'
+                      toBlock: '0x1253B5F'
+                      fromAddress:
+                        - '0xB287eaC48aB21c5FB1d3723830d60b4c797555B0'
+                  description: |-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `trace object`: Trace할 필터 옵션을 Object 형식으로 입력합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  - action:
+                      callType: call
+                      from: '0xb287eac48ab21c5fb1d3723830d60b4c797555b0'
+                      gas: '0x0'
+                      input: 0x
+                      to: '0x6a78a5f8a7839a234dee4de29c26c5f6ebad5caa'
+                      value: '0x521153de4fc000'
+                    blockHash: >-
+                      0x7a1e8b72cbb07cae9c4b1d4fa32593ff2446c8a0a8e65ee9dadd6fb2f04862eb
+                    blockNumber: 19217231
+                    result:
+                      gasUsed: '0x0'
+                      output: 0x
+                    subtraces: 0
+                    traceAddress: []
+                    transactionHash: >-
+                      0x3b60b4393fbc01b2ec6a0a24c0c39b42ee49c0dded76f1eb5af623004d2ddc6e
+                    transactionPosition: 62
+                    type: call
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

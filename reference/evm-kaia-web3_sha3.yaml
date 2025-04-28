@@ -1,0 +1,122 @@
+openapi: 3.1.0
+info:
+  title: evm-kaia-web3_sha3
+  version: 1.2.6
+servers:
+  - url: https://{kaia-network}.nodit.io
+    variables:
+      kaia-network:
+        default: kaia-mainnet
+        enum:
+          - kaia-mainnet
+          - kaia-kairos
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-kaia-web3_sha3
+      description: >-
+        입력된 데이터에 대해 SHA3 (Keccak-256) 해시 함수를 적용하고, 그 결과를 반환합니다. 이 메소드는 주로 데이터의
+        무결성을 검증하거나, 특정 데이터에 대한 고유한 식별자를 생성하는 데 사용됩니다. 예를 들어, 입력 데이터를 해싱하여 블록체인에서
+        관리하거나, 고유한 해시 값을 계산하는 데 활용할 수 있습니다.
+      summary: web3_sha3
+      operationId: kaia-web3_sha3
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: web3_sha3
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: 입력 데이터
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]+$
+                        default: '0x68656c6c6f204e4f444954'
+                        description: >-
+                          SHA3 해시를 적용할 데이터입니다. 이 값은 16진수로 인코딩된 문자열이어야 하며, '0x'
+                          접두사를 포함해야 합니다. 예를 들어, "0x68656c6c6f204e4f444954"는
+                          "hello NODIT"를 나타냅니다.
+                  minItems: 1
+                  maxItems: 1
+                  default:
+                    - '0x68656c6c6f204e4f444954'
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+
+                    1. data in hex: SHA3 해시를 적용할 데이터입니다. 이 값은 16진수로 인코딩된 문자열이어야
+                    하며, '0x' 접두사를 포함해야 합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result: >-
+                  0x274020d2b9b210b079f3898f94123f710f5ab65525f23c7ad9e04e425d3648bd
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

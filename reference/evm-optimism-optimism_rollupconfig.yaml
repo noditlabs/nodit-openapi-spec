@@ -1,0 +1,125 @@
+openapi: 3.1.0
+info:
+  title: evm-optimism-optimism_rollupConfig
+  version: 1.2.6
+servers:
+  - url: https://{optimism-network}.nodit.io
+    variables:
+      optimism-network:
+        default: optimism-mainnet
+        enum:
+          - optimism-mainnet
+          - optimism-sepolia
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-optimism-optimism_rollupConfig
+      description: >-
+        이 메서드는 롤업 구성 매개변수를 조회하는 데 사용됩니다. 호출 결과로는 롤업의 다양한 구성 옵션을 포함한 정보가 반환됩니다. 이
+        정보에는 제네시스 블록 정보, 배치 크기, 시퀀서 윈도우 크기, 채널 타임아웃 등 롤업 운영에 필요한 다양한 설정 값이 포함될 수
+        있습니다. 이를 통해 개발자는 롤업의 현재 구성 상태를 이해하고, 필요에 따라 최적화할 수 있습니다.
+      summary: optimism_rollupConfig
+      operationId: optimism-optimism_rollupConfig
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: optimism_rollupConfig
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                genesis:
+                  l1:
+                    hash: >-
+                      0x48f520cf4ddaf34c8336e6e490632ea3cf1e5e93b0b2bc6e917557e31845371b
+                    number: 4071408
+                  l2:
+                    hash: >-
+                      0x102de6ffb001480cc9b8b548fd05c34cd4f46ae4aa91759393db90ea0409887d
+                    number: 0
+                  l2_time: 1691802540
+                  system_config:
+                    batcherAddr: '0x8f23bb38f531600e5d8fddaaec41f13fab46e98c'
+                    overhead: >-
+                      0x00000000000000000000000000000000000000000000000000000000000000bc
+                    scalar: >-
+                      0x00000000000000000000000000000000000000000000000000000000000a6fe0
+                    gasLimit: 30000000
+                block_time: 2
+                max_sequencer_drift: 600
+                seq_window_size: 3600
+                channel_timeout: 300
+                l1_chain_id: 11155111
+                l2_chain_id: 11155420
+                regolith_time: 0
+                canyon_time: 1699981200
+                batch_inbox_address: '0xff00000000000000000000000000000011155420'
+                deposit_contract_address: '0x16fc5058f25648194471939df75cf27a2fdc48bc'
+                l1_system_config_address: '0x034edd2a225f7f429a63e0f1d2084b9e0a93b538'
+                protocol_versions_address: '0x79add5713b383daa0a138d3c4780c7a1804a8090'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

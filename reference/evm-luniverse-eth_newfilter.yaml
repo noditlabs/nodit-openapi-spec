@@ -1,0 +1,187 @@
+openapi: 3.1.0
+info:
+  title: evm-luniverse-eth_newFilter
+  version: 1.2.6
+servers:
+  - url: https://{luniverse-network}.nodit.io
+    variables:
+      luniverse-network:
+        default: luniverse-mainnet
+        enum:
+          - luniverse-mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-luniverse-eth_newFilter
+      description: >-
+        입력한 필터 조건에 부합하는 Log들을 조회하기 위한 필터를 생성하고 필터 ID를 반환합니다. 필터 ID는
+        eth_getFilterLogs, eth_uninstallFilter 메서드에서 사용됩니다.
+      summary: eth_newFilter
+      operationId: luniverse-eth_newFilter
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_newFilter
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    title: Log Object
+                    type: object
+                    properties:
+                      fromBlock: &ref_0
+                        title: Block Number or Tag
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 넘버 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                      toBlock: *ref_0
+                      address:
+                        type: array
+                        items:
+                          title: Address
+                          type: string
+                          pattern: ^0[xX][0-9a-fA-F]{40}$
+                          default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                          description: >-
+                            주소는 20바이트 길이의 16진수 문자열로 표현되며, EVM 계열의 블록체인에서 사용되는 주소
+                            형식입니다.
+                        description: 필터링하고자 하는 주소를 배열 형식으로 입력합니다.
+                      topics:
+                        title: Topics
+                        type: array
+                        minimum: 1
+                        maximum: 4
+                        items:
+                          type: string
+                          description: 트랜잭션 로그의 토픽 필터링을 위한 토픽을 32바이트 길이의 16진수 문자열로 입력합니다.
+                        default:
+                          - >-
+                            0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                          - >-
+                            0x000000000000000000000000d8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+                        description: >-
+                          Topics는 트랜잭션 로그의 토픽 필터링을 위한 토픽 배열입니다. 각 토픽은 32바이트 길이의
+                          16진수 문자열로 표현됩니다.
+                    description: Log를 필터링하기 위한 Object입니다.
+                  default:
+                    - fromBlock: latest
+                  example:
+                    - address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                      blockHash: >-
+                        0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                      fromBlock: '0x12C1A00'
+                      toBlock: latest
+                      topics:
+                        - >-
+                          0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                        - >-
+                          0x000000000000000000000000d8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result: '0x0100000000000000ee32c7a8d24aac1f'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

@@ -1,0 +1,153 @@
+openapi: 3.1.0
+info:
+  title: evm-arbitrum-eth_getUncleByBlockHashAndIndex
+  version: 1.2.6
+servers:
+  - url: https://{arbitrum-network}.nodit.io
+    variables:
+      arbitrum-network:
+        default: arbitrum-mainnet
+        enum:
+          - arbitrum-mainnet
+          - arbitrum-sepolia
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-arbitrum-eth_getUncleByBlockHashAndIndex
+      description: 블록 해시와 트랜잭션 인덱스를 입력하여 해당 블록의 Uncle을 조회합니다.
+      summary: eth_getUncleByBlockHashAndIndex
+      operationId: arbitrum-eth_getUncleByBlockHashAndIndex
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_getUncleByBlockHashAndIndex
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Hash
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]{64}
+                        default: >-
+                          0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                        description: 블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로 표현됩니다.
+                      - title: Transaction Index
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]+$
+                        default: '0x0'
+                        description: >-
+                          트랜잭션 인덱스는 블록 내 특정 트랜잭션의 순서를 나타내는 숫자입니다. 트랜잭션 인덱스는 16진수
+                          문자열로 표현됩니다.
+                  minItems: 2
+                  maxItems: 2
+                  default:
+                    - >-
+                      0x59f63e3840e0f4a1659074c1a4021e881a268a52d31958688da1d66bfbf6d2ca
+                    - '0x0'
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `block hash`: 조회하고자 하는 블록 해시를 64자리 16진수 문자열 형식으로 입력합니다.
+
+                    2. `transaction index`: 조회하고자 하는 트랜잭션의 index를 16진수 문자열 형식으로
+                    입력합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  difficulty: '0xbf93d9424b943'
+                  extraData: '0x73656f33'
+                  gasLimit: '0x7a121d'
+                  gasUsed: '0x7936f4'
+                  hash: >-
+                    0x407116a0f58ad370ac6c45813665988903f4c60ecc2f112d55cbf43a8c33f48e
+                  logsBloom: >-
+                    0x804e00000660061481081001000002000804080b1012106100a001010248430040000008104c0200200003020070104a00008404000000c2c00010010304410000148c2019288401020881090040243240312000b80c2084a111c2010221081042004400028c2880a000104810004a1000208001240000000088011002200000048024000140004894689004026980000588001040a02000828400480302010020008060208084084e20020054428d20800245122410000040000000020004000420000204101200620000010050080c1540000080008114210003cc0200610400801c0300640000630500880a40820400241010441000420a504001048008a5
+                  miner: '0xb2930b35844a230f00e51431acae96fe543a0347'
+                  mixHash: >-
+                    0xb1266ba0d3c68a5561e6f62a819d214d9eaa293312f674f3a44ad7fae5e6740d
+                  nonce: '0x6b5afb9416a32721'
+                  number: '0x5bad53'
+                  parentHash: >-
+                    0xd2f7edf95b79d2a7e994f698d1ea1737642de0bd49138d183bcc3d1ecf9792e4
+                  receiptsRoot: >-
+                    0xc2798ebd620a7dee020ba272d4396a60a68de6ce5f52b22770e9fee2e14ff15a
+                  sha3Uncles: >-
+                    0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347
+                  size: '0x20d'
+                  stateRoot: >-
+                    0x9a57583eeb63556158cdda05f188ff1dffa1a1cfde194d026f2719e69edf2a9d
+                  timestamp: '0x5b541431'
+                  transactionsRoot: >-
+                    0x11447f3cc960e33ecca21d2b1ca08b6b5a7e478c35920ad1159c9332c0f9332c
+                  uncles: []
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

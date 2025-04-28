@@ -1,0 +1,94 @@
+openapi: 3.1.0
+info:
+  title: evm-kaia-kaia_newBlockFilter
+  version: 1.2.6
+servers:
+  - url: https://{kaia-network}.nodit.io
+    variables:
+      kaia-network:
+        default: kaia-mainnet
+        enum:
+          - kaia-mainnet
+          - kaia-kairos
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-kaia-kaia_newBlockFilter
+      description: >-
+        신규 블록이 생성되면 알림을 받기 위한 필터를 생성하고 필터 ID를 반환합니다. 필더 ID는
+        kaia_getFilterChanges 메서드에서 필터 결과를 조회할 때 사용됩니다.
+      summary: kaia_newBlockFilter
+      operationId: kaia-kaia_newBlockFilter
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: kaia_newBlockFilter
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

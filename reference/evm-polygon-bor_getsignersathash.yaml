@@ -1,0 +1,145 @@
+openapi: 3.1.0
+info:
+  title: evm-polygon-bor_getSignersAtHash
+  version: 1.2.6
+servers:
+  - url: https://{polygon-network}.nodit.io
+    variables:
+      polygon-network:
+        default: polygon-mainnet
+        enum:
+          - polygon-mainnet
+          - polygon-amoy
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-polygon-bor_getSignersAtHash
+      description: >-
+        특정 블록 해시에 대해 서명한 검증자들의 목록을 반환합니다. 이 메소드는 주어진 블록 해시에 대한 서명자(검증자)들의 주소를
+        조회하는 데 사용되며, 네트워크의 특정 시점에서 블록의 검증에 참여한 노드들을 식별할 수 있게 해줍니다.
+      summary: bor_getSignersAtHash
+      operationId: polygon-bor_getSignersAtHash
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: bor_getSignersAtHash
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Hash
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]{64}
+                        default: >-
+                          0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                        description: 블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로 표현됩니다.
+                  minItems: 1
+                  maxItems: 1
+                  default:
+                    - >-
+                      0xa70c0bff4de8a59f521920deb8b6f3a4885845f2f418409f5fc8daade7717505
+                  description: |-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `block hash`: 조회하고자 하는 블록 해시를 64자리 16진수 문자열 형식으로 입력합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  - '0x00856730088a5c3191bd26eb482e45229555ce57'
+                  - '0x02f70172f7f490653665c9bfac0666147c8af1f5'
+                  - '0x048cfedf907c4c9ddd11ff882380906e78e84bbe'
+                  - '0x06abe41e26db44ad94fe61db2ce56023347bcf0c'
+                  - '0x127685d6dd6683085da4b6a041efcef1681e5c9c'
+                  - '0x1b0840519a581f3779d0a10b77593d6d3894a76a'
+                  - '0x1efecb61a2f80aa34d3b9218b564a64d05946290'
+                  - '0x2c74ca71679cf1299936d6104d825c965448907b'
+                  - '0x5fe93ddf4490a02257bef079f2498650c97c44de'
+                  - '0x60e274b09f701107a4b3226fcc1376ebda3cdd92'
+                  - '0x67b94473d81d0cd00849d563c94d0432ac988b49'
+                  - '0x69f5c4d08f6bc8cd29fe5f004d46fb566270868d'
+                  - '0x794e44d1334a56fea7f4df12633b88820d0c5888'
+                  - '0x7c7379531b2aee82e4ca06d4175d13b9cbeafd49'
+                  - '0x959c65b72147faf3450d8b50a0de57e72ffc5e0d'
+                  - '0x9ead03f7136fc6b4bdb0780b00a1c14ae5a8b6d0'
+                  - '0xa8b52f02108aa5f4b675bdcc973760022d7c6020'
+                  - '0xaa6ac02fddaaf6f120f5bb98ce30809d19cd5d1b'
+                  - '0xb2dd091ea6e591d62f565d7a18ce2a7640add227'
+                  - '0xb95d435df3f8b2a8d8b9c2b7c8766c9ae6ed8cc9'
+                  - '0xb9ede6f94d192073d8eaf85f8db677133d483249'
+                  - '0xc35649ae99be820c7b200a0add09b96d7032d232'
+                  - '0xc6869257205e20c2a43cb31345db534aecb49f6e'
+                  - '0xe63727cb2b3a8d6e3a2d1df4990f441938b67a34'
+                  - '0xec20607aa654d823dd01beb8780a44863c57ed07'
+                  - '0xeedba2484aaf940f37cd3cd21a5d7c4a7dafbfc0'
+                  - '0xef46d5fe753c988606e6f703260d816af53b03eb'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

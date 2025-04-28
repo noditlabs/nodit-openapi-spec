@@ -1,0 +1,3 @@
+export const BITCOIN_ACCOUNTS = {
+	SATOSHI: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+};

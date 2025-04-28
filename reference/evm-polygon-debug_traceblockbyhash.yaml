@@ -1,0 +1,198 @@
+openapi: 3.1.0
+info:
+  title: evm-polygon-debug_traceBlockByHash
+  version: 1.2.6
+servers:
+  - url: https://{polygon-network}.nodit.io
+    variables:
+      polygon-network:
+        default: polygon-mainnet
+        enum:
+          - polygon-mainnet
+          - polygon-amoy
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-polygon-debug_traceBlockByHash
+      description: >
+        특정 블록에 대해 tracer를 설정하여 해당 tracer가 제공하는 정보들을 통해 트랜잭션으로 인한 체인의 상태 변화 및 실제
+        call의 발생 이력들을 Debug할 수 있는 도구입니다.
+
+
+
+        > 🚧 429 에러가 발생했나요? 구독 중인 플랜을 확인하세요!
+
+        > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
+
+        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
+        호출하면 429 오류가 발생할 수 있습니다.
+
+        > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
+        필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
+
+        > 👉 [Compute Unit Costs 페이지로
+        이동하기](https://developer.nodit.io/docs/usage-measuringcu)
+      summary: debug_traceBlockByHash
+      operationId: polygon-debug_traceBlockByHash
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: debug_traceBlockByHash
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Hash
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]{64}
+                        default: >-
+                          0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                        description: 블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로 표현됩니다.
+                      - title: Trace Option Object
+                        type: object
+                        properties:
+                          tracer:
+                            type: string
+                            enum:
+                              - callTracer
+                              - prestateTracer
+                            default: callTracer
+                            description: >-
+                              tracer의 타입을 지정하는 필드로, "callTracer" 또는
+                              "prestateTracer" 값 중 하나로 지정합니다.
+
+                              1. `callTracer` : callTracer는 실행된 트랜잭션의 실행 경로와 결과를
+                              확인하는 데 사용됩니다. 트랜잭션의 호출 스택, 반환 값, 가스 소비량, Revert 사유
+                              등의 정보를 제공하며, 스마트 계약의 함수 호출과 상호작용하는 과정을 추적할 수 있습니다.
+                              실행 옵션(onlyTopCall)에 따라 특정 call의 nested call들을 모두
+                              조회하여 추적할 수 있습니다.
+
+                              2. `prestateTracer`: prestateTracer는 특정 트랜잭션이나 블록이
+                              실행되기 전의 상태(pre-state)를 추적하는 도구입니다. 트랜잭션이 실행되기 전의
+                              계정 상태와 계약 코드를 기록하며, 트랜잭션의 실행 전과 후의 상태 변화를 분석할 수
+                              있습니다. prestateTracer는 스마트 계약의 상태 변경 및 계정 간 상호작용을
+                              추적하는 데 사용됩니다.
+                          tracerConfig:
+                            type: object
+                            properties:
+                              onlyTopCall:
+                                type: boolean
+                                default: true
+                            description: >-
+                              tracer 설정을 위한 Object입니다. Boolean 타입의 "onlyTopCall"
+                              옵션을 사용할 수 있으며, true로 설정하는 경우 main call에 대한 이력만
+                              trace합니다. false로 설정하는 경우 sub-call 레벨까지 trace합니다.
+                        description: 'trace 옵션 설정을 위한 object입니다. '
+                  minItems: 1
+                  maxItems: 1
+                  default:
+                    - >-
+                      0x8e38b4dbf6b11fcc3b9dee84fb7986e29ca0a02cecd8977c161ff7333329681e
+                    - tracer: callTracer
+                      tracerConfig:
+                        onlyTopCall: true
+                  description: |-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `block hash`: 조회하고자 하는 블록 해시를 64자리 16진수 문자열 형식으로 입력합니다.
+                    2. `traceOption`: trace 옵션 설정을 위한 object입니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: '1'
+                result:
+                  - result:
+                      from: '0x39fa8c5f2793459d6622857e7d9fbb4bd91766d3'
+                      gas: '0x1a6d4'
+                      gasUsed: '0x723c'
+                      to: '0xc083e9947cf02b8ffc7d3090ae9aea72df98fd47'
+                      input: 0x
+                      output: >-
+                        0x0000000000000000000000000000000000000000000000000000000000000000
+                      calls:
+                        - from: '0xc083e9947cf02b8ffc7d3090ae9aea72df98fd47'
+                          gas: '0x18c56'
+                          gasUsed: '0x5a4'
+                          to: '0x273930d21e01ee25e4c219b63259d214872220a2'
+                          input: 0x
+                          value: '0x56bc75e2d63100000'
+                          type: CALLCODE
+                      value: '0x56bc75e2d63100000'
+                      type: CALL
+                  - result:
+                      from: '0x32be343b94f860124dc4fee278fdcbd38c102d88'
+                      gas: '0x7148'
+                      gasUsed: '0x5208'
+                      to: '0xdf190dc7190dfba737d7777a163445b7fff16133'
+                      input: 0x
+                      value: '0x6113a84987be800'
+                      type: CALL
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

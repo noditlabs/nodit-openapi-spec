@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: evm-polygon-bor_getCurrentProposer
+  version: 1.2.6
+servers:
+  - url: https://{polygon-network}.nodit.io
+    variables:
+      polygon-network:
+        default: polygon-mainnet
+        enum:
+          - polygon-mainnet
+          - polygon-amoy
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-polygon-bor_getCurrentProposer
+      description: >-
+        현재 블록을 제안할 검증자(또는 제안자)의 주소를 반환합니다. 이 메소드는 네트워크에서 다음 블록의 생성을 담당할 노드를 식별하는
+        데 사용됩니다. PoA 네트워크에서는 블록 생성 권한이 순환하거나 특정 알고리즘에 따라 할당되며, 이 메소드를 통해 현재 블록
+        생성을 담당하는 노드의 주소를 확인할 수 있습니다.
+      summary: bor_getCurrentProposer
+      operationId: polygon-bor_getCurrentProposer
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: bor_getCurrentProposer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result: '0xf0245f6251bef9447a08766b9da2b07b28ad80b0'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: evm-kaia-eth_getCode
+  version: 1.2.6
+servers:
+  - url: https://{kaia-network}.nodit.io
+    variables:
+      kaia-network:
+        default: kaia-mainnet
+        enum:
+          - kaia-mainnet
+          - kaia-kairos
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-kaia-eth_getCode
+      description: 입력한 주소에 대한 스마트 컨트랙트 코드를 조회합니다. 코드가 존재하지 않는 경우에는 `0x`를 반환합니다.
+      summary: eth_getCode
+      operationId: kaia-eth_getCode
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_getCode
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Address
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]{40}$
+                        default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                        description: >-
+                          주소는 20바이트 길이의 16진수 문자열로 표현되며, EVM 계열의 블록체인에서 사용되는 주소
+                          형식입니다.
+                      - title: Block Identifier
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Hash
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]{64}
+                            default: >-
+                              0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                            description: >-
+                              블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로
+                              표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: latest
+                        description: >-
+                          블록 지정을 위해 블록 해시, 블록 넘버, 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 해시: 64자리 16진수 문자열 (ex.
+                          "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                  minItems: 2
+                  maxItems: 2
+                  default:
+                    - '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                    - latest
+                  description: "다음 파라미터들을 타입에 맞게 배열로 입력합니다.\n1. `address` - 조회 대상 주소를 40자리 16진수 문자열로 입력합니다.\n2. `block identifier` - 조회 대상 블록 식별자로 블록 넘버, 블록 해시, 블록 태그 중 하나를 입력할 수 있습니다. \n\t- 블록 넘버: 16진수 문자열 (ex. \"0x1\")\n\t- 블록 해시: 64자리 16진수 문자열 (ex. \"0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48\")]\n\t- 블록 태그: enum 문자열 (ex. \"latest\", \"earliest\", \"pending\")"
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result: 0x
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.
