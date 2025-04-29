@@ -93,7 +93,7 @@ export const Patterns = {
 
 	// Tron
 	tron: {
-		address: new RegExp(`^T[a-zA-Z0-9_]{34}$`),
+		address: new RegExp(`^T[1-9A-HJ-NP-Za-km-z]{33}$`),
 		transactionHash: new RegExp(`${HEXA}{64}$`),
 	},
 

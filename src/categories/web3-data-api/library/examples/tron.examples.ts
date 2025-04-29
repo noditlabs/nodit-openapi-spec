@@ -126,6 +126,9 @@ const Examples = {
 			},
 		],
 	},
+	getTotalTransactionCountByAccount: {
+		transactionCount: 8124,
+	},
 	getTransactionsByAccount: {
 		rpp: 5,
 		page: 1,

@@ -60,7 +60,7 @@ paths:
                       description: >-
                         조회할 컨트랙트 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
                     ownerAddress:
                       type: string
@@ -219,7 +219,7 @@ paths:
                         description: >-
                           조회할 컨트랙트 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                           문자열 형식을 가집니다.
-                        pattern: ^T[a-zA-Z0-9_]{34}$
+                        pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default:
                         - TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
                         - TLZSucJRjnqBKwvQz6n5hd29gbS4P7u7w8
@@ -374,7 +374,7 @@ paths:
                       description: >-
                         조회할 컨트랙트 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
                   required:
                     - contractAddress
@@ -521,7 +521,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                     relation: &ref_18
                       type: string
@@ -913,7 +913,7 @@ paths:
                       description: >-
                         조회할 컨트랙트 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
                     fromBlock: *ref_9
                     toBlock: *ref_10
@@ -1333,7 +1333,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                     contractAddresses: *ref_15
                   required:
@@ -1829,7 +1829,7 @@ paths:
                   description: >-
                     조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58 문자열
                     형식을 가집니다.
-                  pattern: ^T[a-zA-Z0-9_]{34}$
+                  pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                   default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
               required:
                 - accountAddress
@@ -1981,7 +1981,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                     relation: *ref_18
                     fromBlock: *ref_9
@@ -2269,7 +2269,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                     relation: *ref_18
                     fromBlock: *ref_9
@@ -2619,6 +2619,71 @@ paths:
         '403': *ref_2
         '404': *ref_3
         '429': *ref_4
+  /{protocol}/{network}/blockchain/getTotalTransactionCountByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        이 API는 특정 계정 주소가 송신자나 수신자로 포함된 트랜잭션의 총 개수를 반환합니다.
+
+      summary: Get Total Transaction Count By Account
+      operationId: tron-getTotalTransactionCountByAccount
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - tron
+            default: tron
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                accountAddress:
+                  type: string
+                  description: >-
+                    조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58 문자열
+                    형식을 가집니다.
+                  pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
+                  default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
+              required:
+                - accountAddress
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionCount:
+                    type: integer
+                    description: 특정 계정이 송신 또는 수신에 관여한 트랜잭션의 총 개수를 나타냅니다.
+              example:
+                transactionCount: 8124
+        '400': *ref_0
+        '401': *ref_1
+        '403': *ref_2
+        '404': *ref_3
+        '429': *ref_4
   /{protocol}/{network}/blockchain/getTransactionsByAccount:
     post:
       security:
@@ -2673,7 +2738,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                     relation: *ref_18
                     fromBlock: *ref_9
@@ -4258,7 +4323,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                   required:
                     - address
@@ -4335,7 +4400,7 @@ paths:
                   description: >-
                     조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58 문자열
                     형식을 가집니다.
-                  pattern: ^T[a-zA-Z0-9_]{34}$
+                  pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                   default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
               required:
                 - address
@@ -4832,7 +4897,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                     assetIds: &ref_28
                       type: array
@@ -5572,7 +5637,7 @@ paths:
                       description: >-
                         조회할 계정의 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리 base58
                         문자열 형식을 가집니다.
-                      pattern: ^T[a-zA-Z0-9_]{34}$
+                      pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
                     assetIds: *ref_28
                 - *ref_6

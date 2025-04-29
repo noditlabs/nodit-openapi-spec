@@ -2,7 +2,7 @@ import { OpenAPIV3 } from "openapi-types";
 import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Examples from "../../library/examples";
-import { BITCOIN_ACCOUNTS, getChainInfo, XRPL_ACCOUNTS } from "../../../../constants";
+import { BITCOIN_ACCOUNTS, ETHEREUM_ACCOUNTS, getChainInfo, TRON_ACCOUNTS, XRPL_ACCOUNTS } from "../../../../constants";
 
 const summary = "Get Total Transaction Count By Account";
 const endpoint = "getTotalTransactionCountByAccount";
@@ -13,7 +13,7 @@ const tags = ["Blockchain API"];
 function getDescription(protocol: string): string {
 	switch (protocol) {
 		case "xrpl":
-			return `이  API는 특정 계정이 생성한 트랜잭션 총 개수를 반환합니다.`;
+			return `이 API는 특정 계정이 생성한 트랜잭션 총 개수를 반환합니다.`;
 		default:
 			return `이 API는 특정 계정 주소가 송신자나 수신자로 포함된 트랜잭션의 총 개수를 반환합니다.`;
 	}
@@ -75,8 +75,20 @@ function getOpIdAndParams(protocol: string): {
 		return {
 			operationId: endpoint,
 			parameters: [
-				Requests.protocol("bitcoin", ["bitcoin", "dogecoin", "xrpl"]),
-				Requests.network("mainnet", ["mainnet", "testnet"]),
+				Requests.protocol("ethereum", [
+					"arbitrum",
+					"base",
+					"ethereum",
+					"kaia",
+					"optimism",
+					"polygon",
+					"luniverse",
+					"tron",
+					"bitcoin",
+					"dogecoin",
+					"xrpl",
+				]),
+				Requests.network("mainnet", ["mainnet", "sepolia", "holesky", "amoy", "testnet"]),
 			],
 		};
 	} else {
@@ -109,14 +121,22 @@ function getRequestAndResponse(protocol: string): {
 						accountAddress: {
 							oneOf: [
 								{
+									title: "EVM (Ethereum, Optimism, ...)",
+									...Requests.Ethereum.accountAddress,
+									default: ETHEREUM_ACCOUNTS.VITALIK_BUTERIN,
+								},
+								{
+									title: "Tron",
+									...Requests.Tron.accountAddress,
+									default: TRON_ACCOUNTS.JUSTIN_SUN,
+								},
+								{
 									title: "Bitcoin, Dogecoin",
-									description: "Bitcoin, Dogecoin",
 									...Requests.Bitcoin.accountAddress,
 									default: BITCOIN_ACCOUNTS.SATOSHI,
 								},
 								{
-									title: "XRPL",
-									description: "XRP Ledger (XRPL)",
+									title: "XRP Ledger (XRPL)",
 									...Requests.XRPL.accountAddress,
 									default: XRPL_ACCOUNTS.ACCOUNT_1,
 								},
@@ -127,30 +147,14 @@ function getRequestAndResponse(protocol: string): {
 				},
 				successResponse: {
 					schema: {
-						oneOf: [
-							{
-								title: "Bitcoin, Dogecoin",
-								type: "object",
-								properties: {
-									transactionCount: {
-										type: "integer",
-										description: "특정 계정이 송신 또는 수신에 관여한 트랜잭션의 총 개수를 나타냅니다.",
-									},
-								},
-								example: Examples.Bitcoin[endpoint],
+						type: "object",
+						properties: {
+							transactionCount: {
+								type: "integer",
+								description: "특정 계정이 송신 또는 수신에 관여한 트랜잭션의 총 개수를 나타냅니다.",
 							},
-							{
-								title: "XRPL",
-								type: "object",
-								properties: {
-									transactionCount: {
-										type: "integer",
-										description: "특정 계정이 송신 또는 수신에 관여한 트랜잭션의 총 개수를 나타냅니다.",
-									},
-								},
-								example: Examples.XRPL[endpoint],
-							},
-						],
+						},
+						example: Examples.Ethereum[endpoint],
 					},
 				},
 			};
@@ -178,7 +182,6 @@ function getRequestAndResponse(protocol: string): {
 			};
 		case "bitcoin":
 		case "dogecoin":
-		default:
 			return {
 				requestBody: {
 					additionalProperties: false,
@@ -202,6 +205,58 @@ function getRequestAndResponse(protocol: string): {
 						},
 					},
 					example: Examples.Bitcoin[endpoint],
+				},
+			};
+		case "tron":
+			return {
+				requestBody: {
+					additionalProperties: false,
+					type: "object",
+					properties: {
+						accountAddress: {
+							...Requests.Tron.accountAddress,
+							default: TRON_ACCOUNTS.JUSTIN_SUN,
+						},
+					},
+					required: ["accountAddress"],
+				},
+				successResponse: {
+					schema: {
+						type: "object",
+						properties: {
+							transactionCount: {
+								type: "integer",
+								description: "특정 계정이 송신 또는 수신에 관여한 트랜잭션의 총 개수를 나타냅니다.",
+							},
+						},
+					},
+					example: Examples.Tron[endpoint],
+				},
+			};
+		default:
+			return {
+				requestBody: {
+					additionalProperties: false,
+					type: "object",
+					properties: {
+						accountAddress: {
+							...Requests.Ethereum.accountAddress,
+							default: ETHEREUM_ACCOUNTS.VITALIK_BUTERIN,
+						},
+					},
+					required: ["accountAddress"],
+				},
+				successResponse: {
+					schema: {
+						type: "object",
+						properties: {
+							transactionCount: {
+								type: "integer",
+								description: "특정 계정이 송신 또는 수신에 관여한 트랜잭션의 총 개수를 나타냅니다.",
+							},
+						},
+					},
+					example: Examples.Ethereum[endpoint],
 				},
 			};
 	}
