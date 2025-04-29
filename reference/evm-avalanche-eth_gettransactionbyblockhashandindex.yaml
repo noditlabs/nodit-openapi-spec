@@ -1,0 +1,212 @@
+openapi: 3.1.0
+info:
+  title: evm-avalanche-eth_getTransactionByBlockHashAndIndex
+  version: 1.2.6
+servers:
+  - url: https://{avalanche-network}.nodit.io
+    variables:
+      avalanche-network:
+        default: avalanche-mainnet
+        enum:
+          - avalanche-mainnet
+          - avalanche-fuji
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-avalanche-eth_getTransactionByBlockHashAndIndex
+      description: 블록 해시와 트랜잭션 인덱스를 입력하여 해당 트랜잭션의 정보를 조회합니다.
+      summary: eth_getTransactionByBlockHashAndIndex
+      operationId: avalanche-eth_getTransactionByBlockHashAndIndex
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_getTransactionByBlockHashAndIndex
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Hash
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]{64}
+                        default: >-
+                          0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                        description: 블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로 표현됩니다.
+                      - title: Transaction Index
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]+$
+                        default: '0x0'
+                        description: >-
+                          트랜잭션 인덱스는 블록 내 특정 트랜잭션의 순서를 나타내는 숫자입니다. 트랜잭션 인덱스는 16진수
+                          문자열로 표현됩니다.
+                  minItems: 2
+                  maxItems: 2
+                  default:
+                    - >-
+                      0x59f63e3840e0f4a1659074c1a4021e881a268a52d31958688da1d66bfbf6d2ca
+                    - '0x0'
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `block hash`: 조회하고자 하는 블록 해시를 64자리 16진수 문자열 형식으로 입력합니다.
+
+                    2. `transaction index`: 조회하고자 하는 트랜잭션의 index를 16진수 문자열 형식으로
+                    입력합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  blockHash: >-
+                    0x59f63e3840e0f4a1659074c1a4021e881a268a52d31958688da1d66bfbf6d2ca
+                  blockNumber: '0x1076b5a'
+                  from: '0xae2fc483527b8ef99eb5d9b44875f005ba1fae13'
+                  gas: '0x2d6b9'
+                  gasPrice: '0xb25ce488f'
+                  maxPriorityFeePerGas: '0x0'
+                  maxFeePerGas: '0xb25ce488f'
+                  hash: >-
+                    0xf3b9303a4149fed1a61438c737264d7d2ca9c33a94c2174506b84192998d9000
+                  input: '0x5a2f17a6ebc9dd3285a0d49a485c2e6d9a0134fc5707d47a95ff9b'
+                  nonce: '0x70934'
+                  to: '0x6b75d8af000000e20b7a7ddf000ba900b4009a80'
+                  transactionIndex: '0x0'
+                  value: '0x11b7bad5'
+                  type: '0x2'
+                  accessList:
+                    - address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+                      storageKeys:
+                        - >-
+                          0x12231cd4c753cb5530a43a74c45106c24765e6f81dc8927d4f4be7e53315d5a8
+                        - >-
+                          0xae2b03699e4c0a0df0d8fda1e23931ec61addf4b43f27bbf0032f998d9d327c5
+                    - address: '0xa6ebc9dd3285a0d49a485c2e6d9a0134fc5707d4'
+                      storageKeys:
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000006
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000007
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000009
+                        - >-
+                          0x000000000000000000000000000000000000000000000000000000000000000a
+                        - >-
+                          0x000000000000000000000000000000000000000000000000000000000000000c
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000008
+                    - address: '0x2680961ba5f113d55e2b412701732da13bb42a11'
+                      storageKeys:
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000010
+                        - >-
+                          0x0ae5bc8a4cd96bdb8f9b7f69d654287bfb6d0e9babce74e79c552b054dca2254
+                        - >-
+                          0xebb137c40e65d8055f7de06af99f99871d2f30fca8f82278c470ceed130ee48f
+                        - >-
+                          0x69c6fb2c184647f028ae0f0da5e6cb3e57cf1e1704e92b75d5c93d7690832ef2
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000011
+                        - >-
+                          0x5b07b4616e979c247a9ea22cc5aa9007ab779de1a0152b002690105a64c3052b
+                        - >-
+                          0x699cf97972fa99b01ba01fdf5fd459644663c0582d960c4bda3936ef6d1f25bf
+                        - >-
+                          0x000000000000000000000000000000000000000000000000000000000000000b
+                        - >-
+                          0x000000000000000000000000000000000000000000000000000000000000000d
+                        - >-
+                          0xb39e9ba92c3c47c76d4f70e3bc9c3270ab78d2592718d377c8f5433a34d3470a
+                        - >-
+                          0x3fd59a5ac09fa0b80d9bd9c8d2e28ee4a6b62d0942f28eb8a9d01d35aabb1d61
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000012
+                        - >-
+                          0xc7d07bc7b4b06c606d8bd09d68b5b57a8ae0ff2e1ce65b1f30b9a2e225f724fe
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000005
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000006
+                        - >-
+                          0x000000000000000000000000000000000000000000000000000000000000000c
+                        - >-
+                          0xdab1effe970e90ce1e3c191e4588741c0605cac2617996daad79eada3d9f5e40
+                        - >-
+                          0x000000000000000000000000000000000000000000000000000000000000000e
+                        - >-
+                          0x4e195366bb42075d59d4f2807bdaf03e5435edde6d946f677ac5cada5642c529
+                        - >-
+                          0x0000000000000000000000000000000000000000000000000000000000000014
+                  chainId: '0x1'
+                  v: '0x0'
+                  r: >-
+                    0xedb4d30e030012361075034e35993749f86abe097bfdfa5067e7233c5f1f585b
+                  s: >-
+                    0x26d0db35fcd39cffa14f637e604d367dfdeeaab7e7021f13abcce11dba7e593d
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.
