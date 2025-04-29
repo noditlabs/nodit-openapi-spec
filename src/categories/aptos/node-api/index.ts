@@ -20,7 +20,7 @@ function oasDocs({ version }: OasParams): OpenAPIV3.Document {
 		},
 		servers: [
 			{
-				url: `${BASE_URL.NODE_API("aptos")}${API_VERSION.APTOS}`,
+				url: `${BASE_URL.NODE_API("aptos")}/${API_VERSION.APTOS}`,
 				variables: {
 					"aptos-network": {
 						enum: ["aptos-mainnet", "aptos-testnet"],
