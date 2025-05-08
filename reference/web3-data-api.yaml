@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.6
+  version: 1.2.7
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -63,6 +63,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -321,6 +322,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -524,6 +526,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -718,6 +721,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -874,6 +878,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -1433,6 +1438,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -1590,6 +1596,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -2353,6 +2360,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -2952,6 +2960,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -3147,6 +3156,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -3762,6 +3772,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -4158,6 +4169,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -4484,6 +4496,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -4580,6 +4593,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -5058,6 +5072,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -5290,6 +5305,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -5477,6 +5493,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -5669,6 +5686,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
               - xrpl
             default: ethereum
@@ -6517,6 +6535,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -7179,6 +7198,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
               - xrpl
             default: ethereum
@@ -7733,6 +7753,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -8271,6 +8292,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -8717,6 +8739,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -9961,6 +9984,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - bitcoin
               - dogecoin
             default: ethereum
@@ -10447,6 +10471,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -11136,6 +11161,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -11228,6 +11254,7 @@ paths:
               - kaia
               - luniverse
               - tron
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -11808,6 +11835,7 @@ paths:
               - kaia
               - luniverse
               - tron
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -13364,6 +13392,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -13441,6 +13470,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
               - bitcoin
               - dogecoin
@@ -13577,6 +13607,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - xrpl
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -15340,6 +15371,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
               - bitcoin
               - dogecoin
@@ -17674,6 +17706,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - xrpl
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -18546,6 +18579,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -20326,6 +20360,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -20455,6 +20490,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -21222,6 +21258,7 @@ paths:
               - optimism
               - polygon
               - luniverse
+              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.

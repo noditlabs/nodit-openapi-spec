@@ -84,6 +84,7 @@ function getOpIdAndParams(protocol: string): {
 					"optimism",
 					"polygon",
 					"luniverse",
+					"chiliz",
 					// UTXO
 					"bitcoin",
 					"dogecoin",

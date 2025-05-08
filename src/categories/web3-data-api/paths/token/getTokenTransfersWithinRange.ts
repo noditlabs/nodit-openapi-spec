@@ -90,6 +90,7 @@ function getOpIdAndParams(protocol: string): {
 					"optimism",
 					"polygon",
 					"luniverse",
+					"chiliz",
 					"tron",
 
 					// XRPL

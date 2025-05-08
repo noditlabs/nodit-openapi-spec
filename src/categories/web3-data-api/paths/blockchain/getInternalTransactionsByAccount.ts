@@ -3,7 +3,6 @@ import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
-import { onlyEthereumMainnetInfoMessage } from "../../../../callouts";
 import { ETHEREUM_ACCOUNTS, getChainInfo, TRON_ACCOUNTS } from "../../../../constants";
 
 const summary = "Get Internal Transactions By Account";
@@ -75,7 +74,7 @@ function getOpIdAndParams(protocol: string): {
 		return {
 			operationId: endpoint,
 			parameters: [
-				Requests.protocol("ethereum", ["ethereum", "arbitrum", "base", "kaia", "luniverse", "tron"]),
+				Requests.protocol("ethereum", ["ethereum", "arbitrum", "base", "kaia", "luniverse", "tron", "chiliz"]),
 				Requests.network("mainnet", ["mainnet"]),
 			],
 		};

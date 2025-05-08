@@ -82,6 +82,7 @@ function getOpIdAndParams(protocol: string): {
 					"optimism",
 					"polygon",
 					"luniverse",
+					"chiliz",
 					"tron",
 				]),
 				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "holesky", "amoy"]),

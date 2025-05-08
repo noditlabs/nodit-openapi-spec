@@ -83,6 +83,7 @@ function getOpIdAndParams(protocol: string): {
 					"optimism",
 					"polygon",
 					"luniverse",
+					"chiliz",
 					"tron",
 					"bitcoin",
 					"dogecoin",
