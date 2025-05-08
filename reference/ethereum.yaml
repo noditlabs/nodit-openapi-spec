@@ -6493,6 +6493,12 @@ paths:
                           type: string
                           description: 출금한 수량을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
                           pattern: ^[0-9]+$
+                  requestHash:
+                    type: string
+                    description: >-
+                      블록 헤더에 포함된 필드로, 해당 블록에 있는 모든 request들의 순서와 내용을 암호학적으로
+                      커밋(commit)한 해시값입니다. 이를 통해 전체 데이터를 다운로드하지 않아도 블록 내 request
+                      목록의 무결성을 검증할 수 있습니다.
                 example:
                   hash: >-
                     0x91c90676cab257a59cd956d7cb0bceb9b1a71d79755c23c7277a0697ccfaf8c4
@@ -8253,6 +8259,44 @@ paths:
                       timeStamp:
                         type: integer
                         description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
+                      authorizationList:
+                        type: array
+                        description: >-
+                          이 필드는 트랜잭션의 서명 및 승인 정보를 담은 목록입니다. 각 항목은 서명 검증에 필요한 체인
+                          ID, nonce, 서명값 등을 포함하며, EIP-7702 적용 이후부터 제공됩니다. 네트워크에
+                          따라 지원 여부와 적용 시점이 달라질 수 있으며, 특정 트랜잭션 타입(예: type이 4
+                          이상)에서만 사용되므로 트랜잭션 유형에 따라 해당 필드가 없을 수도 있습니다.
+                        items:
+                          type: object
+                          properties:
+                            chainId:
+                              type: string
+                              description: >-
+                                해당 승인 정보가 유효한 체인의 ID를 나타내며, 서명 검증 및 리플레이 공격 방지에
+                                활용됩니다. 이 필드는 10진수 문자열 형태로 표현합니다.
+                            nonce:
+                              type: string
+                              description: >-
+                                이 승인 항목의 고유성을 보장하고, 리플레이 공격을 방지하기 위한 nonce 값입니다.
+                                이 필드는 10진수 문자열 형태로 표현합니다.
+                            address:
+                              type: string
+                              description: 승인(서명)을 제공하는 계정의 주소입니다.
+                            yParity:
+                              type: string
+                              description: >-
+                                서명된 공개키의 y좌표 선택을 위한 1비트 패리티 값입니다. 보통 0 또는 1이며,
+                                공개키 복원에 사용됩니다. 이 필드는 10진수 문자열 형태로 표현합니다.
+                            r:
+                              type: string
+                              description: >-
+                                ECDSA 서명의 첫 번째 값으로, 서명에 사용된 난수와 곡선 연산을 통해 생성됩니다.
+                                공개키 복원 및 서명 검증에 사용됩니다.
+                            s:
+                              type: string
+                              description: >-
+                                ECDSA 서명의 두 번째 값으로, 메시지 해시와 개인 키를 기반으로 계산됩니다.
+                                서명의 유효성을 검증하는 데 필수입니다.
                   - type: object
                     properties:
                       logs:
