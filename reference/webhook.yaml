@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Webhook
-  version: 1.2.6
+  version: 1.2.7
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -704,7 +704,7 @@ paths:
                       Webhook 수정 시 변경할 수 없습니다.
                   createdAt: &ref_7
                     type: string
-                    description: Webhook이 생성된 시간을 나타내는 필드입니다. ISO 8601 형식으로 표현됩니다.
+                    description: 웹훅 이벤트가 발생하고 로그가 생성된 시점을 나타냅니다. 이 필드는 ISO 8601 형식으로 반환됩니다.
                   condition: &ref_8
                     type: object
                     description: Webhook 구독 조건을 나타내는 필드입니다. 이벤트 타입에 따라 다른 조건을 가질 수 있습니다.
@@ -910,7 +910,10 @@ paths:
                             Webhook으로 알림을 받을 수 없습니다.
                         updatedAt: &ref_25
                           type: string
-                          description: Webhook이 수정된 시간을 나타내는 필드입니다. ISO 8601 형식으로 표현됩니다.
+                          description: >-
+                            웹훅 전송 결과(status)에 변화가 생긴 시점을 나타냅니다. 예를 들어, 실패 후
+                            재시도되어 성공으로 변경된 경우 등이 해당됩니다. 이 필드는 ISO 8601 형식으로
+                            반환됩니다.
                         createdAt: *ref_7
                         condition: *ref_8
               example:
