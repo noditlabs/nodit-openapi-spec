@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: base
-  version: 1.2.6
+  version: 1.2.7
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -10977,17 +10977,6 @@ paths:
       description: >+
         특정 주소의 통계 정보를 조회합니다. 계정 주소의 트랜잭션, 전송 이벤트, 자산 등의 정보를 통해서 계정의 활동을 분석할 수
         있습니다.
-            
-
-        > 🚧 Internal Transaction Count에 null이 표기되나요?
-
-        >
-
-        > transactionCounts.internal 필드는 Ethereum Mainnet, Arbitrum Mainnet,
-        Base Mainnet, Kaia Mainnet, TheBalance Mainnet에서만 지원됩니다. 그 외에 다른 네트워크에서는
-        null로 표기됩니다.
-
-
 
       summary: Get Account Stats
       operationId: base-getAccountStats

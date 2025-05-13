@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: bitcoin
-  version: 1.2.6
+  version: 1.2.7
 servers:
   - url: https://web3.nodit.io/v1
 components:

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: xrpl
-  version: 1.2.6
+  version: 1.2.7
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -2498,7 +2498,7 @@ paths:
       tags:
         - Blockchain API
       description: |+
-        이  API는 특정 계정이 생성한 트랜잭션 총 개수를 반환합니다.
+        이 API는 특정 계정이 생성한 트랜잭션 총 개수를 반환합니다.
 
       summary: Get Total Transaction Count By Account
       operationId: xrpl-getTotalTransactionCountByAccount

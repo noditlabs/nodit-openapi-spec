@@ -15,10 +15,7 @@ const tags = ["Statistics API"];
 function getDescription(protocol: string): string {
 	switch (protocol) {
 		default:
-			return `특정 주소의 통계 정보를 조회합니다. 계정 주소의 트랜잭션, 전송 이벤트, 자산 등의 정보를 통해서 계정의 활동을 분석할 수 있습니다.
-    
-${internalTxSupportedNetworksInfoMessage}
-`;
+			return `특정 주소의 통계 정보를 조회합니다. 계정 주소의 트랜잭션, 전송 이벤트, 자산 등의 정보를 통해서 계정의 활동을 분석할 수 있습니다.`;
 	}
 }
 
@@ -204,6 +201,7 @@ function getRequestAndResponse(protocol: string): {
 function getCallouts(protocol: string): string {
 	switch (protocol) {
 		case "none":
+			return internalTxSupportedNetworksInfoMessage;
 		default:
 			return ``;
 	}
