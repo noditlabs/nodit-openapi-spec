@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.7
+  version: 1.2.8
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -15442,9 +15442,6 @@ paths:
                       required:
                         - accountAddress
                     - *ref_8
-                    - type: object
-                      properties:
-                        withZeroValue: *ref_19
                 - title: Tron
                   type: object
                   allOf:

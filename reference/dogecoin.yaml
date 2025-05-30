@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: dogecoin
-  version: 1.2.7
+  version: 1.2.8
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -313,7 +313,7 @@ paths:
                       default: '2025-01-31T00:00:00+00:00'
                   required:
                     - accountAddress
-                - &ref_14
+                - &ref_11
                   type: object
                   properties:
                     page:
@@ -1031,7 +1031,7 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - &ref_11
+                    - &ref_12
                       type: object
                       required:
                         - id
@@ -1121,7 +1121,7 @@ paths:
                           example: 1716177005
                     - type: object
                       properties:
-                        vin: &ref_12
+                        vin: &ref_13
                           type: object
                           required:
                             - index
@@ -1209,7 +1209,7 @@ paths:
                               items:
                                 type: string
                                 example: 3045022100b228e33e8b62f825...
-                        vout: &ref_13
+                        vout: &ref_14
                           type: object
                           required:
                             - index
@@ -1349,23 +1349,26 @@ paths:
             schema:
               additionalProperties: false
               type: object
-              properties:
-                accountAddress:
-                  type: string
-                  description: >-
-                    조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로
-                    입력할 수 있습니다.
-                  pattern: >-
-                    ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
-                  example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
-                  default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-                relation: *ref_6
-                fromBlock: *ref_7
-                toBlock: *ref_8
-                fromDate: *ref_9
-                toDate: *ref_10
-              required:
-                - accountAddress
+              allOf:
+                - type: object
+                  properties:
+                    accountAddress:
+                      type: string
+                      description: >-
+                        조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열
+                        형태로 입력할 수 있습니다.
+                      pattern: >-
+                        ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                      example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+                      default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                    relation: *ref_6
+                    fromBlock: *ref_7
+                    toBlock: *ref_8
+                    fromDate: *ref_9
+                    toDate: *ref_10
+                  required:
+                    - accountAddress
+                - *ref_11
       responses:
         '200':
           description: Successful Response
@@ -1399,11 +1402,11 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_11
+                        - *ref_12
                         - type: object
                           properties:
-                            vin: *ref_12
-                            vout: *ref_13
+                            vin: *ref_13
+                            vout: *ref_14
               example:
                 rpp: 10
                 page: 1
@@ -1582,11 +1585,11 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - *ref_11
+                    - *ref_12
                     - type: object
                       properties:
-                        vin: *ref_12
-                        vout: *ref_13
+                        vin: *ref_13
+                        vout: *ref_14
         '400': *ref_1
         '401': *ref_2
         '403': *ref_3
@@ -1642,7 +1645,7 @@ paths:
                       default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
                   required:
                     - accountAddress
-                - *ref_14
+                - *ref_11
       responses:
         '200':
           description: Successful Response

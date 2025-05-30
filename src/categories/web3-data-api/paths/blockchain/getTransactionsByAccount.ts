@@ -171,12 +171,6 @@ function getRequestAndResponse(protocol: string): {
 									required: ["accountAddress"],
 								},
 								Requests.PaginationSet,
-								{
-									type: "object",
-									properties: {
-										withZeroValue: Requests.withZeroValue,
-									},
-								},
 							],
 						},
 						{
@@ -303,18 +297,24 @@ function getRequestAndResponse(protocol: string): {
 				requestBody: {
 					additionalProperties: false,
 					type: "object",
-					properties: {
-						accountAddress: {
-							...Requests.Bitcoin.accountAddress,
-							default: BITCOIN_ACCOUNTS.SATOSHI,
+					allOf: [
+						{
+							type: "object",
+							properties: {
+								accountAddress: {
+									...Requests.Bitcoin.accountAddress,
+									default: BITCOIN_ACCOUNTS.SATOSHI,
+								},
+								relation: Requests.relation,
+								fromBlock: Requests.Bitcoin.fromBlock,
+								toBlock: Requests.Bitcoin.toBlock,
+								fromDate: Requests.Bitcoin.fromDate,
+								toDate: Requests.Bitcoin.toDate,
+							},
+							required: ["accountAddress"],
 						},
-						relation: Requests.relation,
-						fromBlock: Requests.Bitcoin.fromBlock,
-						toBlock: Requests.Bitcoin.toBlock,
-						fromDate: Requests.Bitcoin.fromDate,
-						toDate: Requests.Bitcoin.toDate,
-					},
-					required: ["accountAddress"],
+						Requests.PaginationSet,
+					],
 				},
 				successResponse: {
 					schema: Domains.Pagination({
