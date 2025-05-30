@@ -135,6 +135,7 @@ function getRequestAndResponse(protocol: string): {
 									eventType: Responses.eventType,
 									notification: Responses.notification,
 									// signingKey: Responses.signingKey,
+									isInstant: Responses.isInstant,
 									isActive: Responses.isActive,
 									updatedAt: Responses.updatedAt,
 									createdAt: Responses.createdAt,

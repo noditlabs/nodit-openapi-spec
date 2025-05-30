@@ -575,6 +575,12 @@ namespace Requests {
 		description:
 			"Webhook의 활성화 여부를 지정하는 파라미터입니다. 이 값이 true로 지정하면 활성화되며, false로 지정하면 비활성화됩니다. 비활성화된 Webhook은 알림을 받을 수 없지만 삭제되지 않습니다.",
 	};
+
+	export const isInstant: OpenAPIV3.SchemaObject = {
+		type: "boolean",
+		description:
+			"Instant Webhook 옵션 활성화 여부를 지정하는 파라미터입니다. 이 값을 true로 지정하면 Instant Webhook 옵션이 활성화되며, false로 지정하면 비활성화됩니다. 이 옵션을 활성화하면 모니터링 대상 이벤트가 포함된 블록의 확정 여부와 상관 없이 Nodit 노드에서 해당 이벤트가 감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 반면, 이 옵션을 비활성화하면 이벤트 트랜잭션이 포함된 블록이 확정된 이후에만 메시지가 발송됩니다.",
+	};
 }
 
 export default Requests;

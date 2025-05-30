@@ -65,11 +65,20 @@ function getOpIdAndParams(protocol: string): {
 		return {
 			operationId: endpoint,
 			parameters: [
-				Requests.protocol("aptos", [
-					// evm 관련은 사용하지 않음
+				Requests.protocol("ethereum", [
+					// evm
+					"arbitrum",
+					"base",
+					"ethereum",
+					"kaia",
+					"optimism",
+					"polygon",
+					"luniverse",
+
+					// non-evm
 					"aptos",
 				]),
-				Requests.network("mainnet", ["mainnet", "testnet"]),
+				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "hoodi", "amoy"]),
 				{ ...Requests.subscriptionIdQuery, required: true },
 				Requests.pageQuery,
 				Requests.rppQuery,
