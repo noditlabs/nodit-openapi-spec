@@ -194,8 +194,9 @@ namespace Responses {
 
 	export const isInstant: OpenAPIV3.SchemaObject = {
 		type: "boolean",
-		description:
-			"Instant Webhook 옵션 활성화 여부를 지정하는 필드입니다. Instant Webhook 옵션이 활성화되어 있다면 true를, 비활성화되어 있다면 false를 반환합니다. 이 옵션이 활성화 되어있다면 모니터링 대상 이벤트가 포함된 블록의 확정 여부와 상관 없이 Nodit 노드에서 해당 이벤트가 감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 반면, 이 옵션이 비활성화 되어있다면 이벤트 트랜잭션이 포함된 블록이 확정된 이후에만 메시지가 발송됩니다.",
+		description: `Instant Webhook 옵션 활성화 여부를 지정하는 필드입니다. 
+- true: 이 옵션이 활성화 되어있다면 모니터링 대상 이벤트가 포함된 블록의 확정 여부와 상관 없이 해당 이벤트가 감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 
+- false: 이 옵션이 비활성화 되어있다면 이벤트 트랜잭션이 포함된 블록이 확정된 이후에만 메시지가 발송됩니다.`,
 	};
 
 	export const isActive: OpenAPIV3.SchemaObject = {
