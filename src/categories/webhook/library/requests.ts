@@ -33,7 +33,7 @@ namespace Requests {
 - aptos: "mainnet", "testnet"
 - arbitrum: "mainnet", "sepolia"
 - base: "mainnet", "sepolia",
-- ethereum: "mainnet", "sepolia", "holesky"
+- ethereum: "mainnet", "sepolia", "hoodi"
 - kaia: "mainnet", "kairos"
 - optimism: "mainnet", "sepolia"
 - polygon: "mainnet", "amoy"

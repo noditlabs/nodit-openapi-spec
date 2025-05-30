@@ -91,7 +91,7 @@ function getOpIdAndParams(protocol: string): {
 				Requests.network("mainnet", [
 					"mainnet",
 					// "sepolia",
-					// "holesky",
+					// "hoodi",
 					// "amoy",
 					"testnet",
 				]),

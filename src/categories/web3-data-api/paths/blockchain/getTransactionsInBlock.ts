@@ -90,7 +90,7 @@ function getOpIdAndParams(protocol: string): {
 					"chiliz",
 					"tron",
 				]),
-				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "holesky", "amoy", "shasta"]),
+				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "hoodi", "amoy", "shasta"]),
 			],
 		};
 	} else {

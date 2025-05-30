@@ -96,7 +96,7 @@ function getOpIdAndParams(protocol: string): {
 					// XRPL
 					"xrpl",
 				]),
-				Requests.network("mainnet", ["mainnet", "sepolia", "holesky", "amoy", "testnet"]),
+				Requests.network("mainnet", ["mainnet", "sepolia", "hoodi", "amoy", "testnet"]),
 			],
 		};
 	} else {

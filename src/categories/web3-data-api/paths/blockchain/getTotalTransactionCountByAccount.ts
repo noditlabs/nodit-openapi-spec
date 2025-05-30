@@ -89,7 +89,7 @@ function getOpIdAndParams(protocol: string): {
 					"dogecoin",
 					"xrpl",
 				]),
-				Requests.network("mainnet", ["mainnet", "sepolia", "holesky", "amoy", "testnet"]),
+				Requests.network("mainnet", ["mainnet", "sepolia", "hoodi", "amoy", "testnet"]),
 			],
 		};
 	} else {

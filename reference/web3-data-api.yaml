@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.8
+  version: 1.2.9
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -75,7 +75,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -334,7 +334,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -538,7 +538,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -733,7 +733,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -890,7 +890,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -1450,7 +1450,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -1608,7 +1608,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -2372,7 +2372,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -2972,7 +2972,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -3168,7 +3168,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -3784,7 +3784,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -4181,7 +4181,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -4508,7 +4508,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -4606,7 +4606,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -5085,7 +5085,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -5318,7 +5318,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -5700,7 +5700,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -6548,7 +6548,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -7212,7 +7212,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -7766,7 +7766,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -8305,7 +8305,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -8752,7 +8752,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -9999,7 +9999,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -10484,7 +10484,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -11174,7 +11174,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -13405,7 +13405,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -13486,7 +13486,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -13621,7 +13621,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -15388,7 +15388,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -17717,7 +17717,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -18590,7 +18590,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - shasta
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -20371,7 +20371,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -20500,7 +20500,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
@@ -21266,7 +21266,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
               - testnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.

@@ -47,7 +47,7 @@ export const supportedChains: ChainInfo[] = [
 	{
 		protocol: "ethereum",
 		mainnet: "mainnet",
-		testnet: ["sepolia", "holesky"],
+		testnet: ["sepolia", "hoodi"],
 	},
 	{
 		protocol: "polygon",

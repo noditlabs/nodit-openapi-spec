@@ -76,7 +76,7 @@ function getOpIdAndParams(protocol: string): {
 					// non-evm
 					"aptos",
 				]),
-				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "holesky", "amoy"]),
+				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "hoodi", "amoy"]),
 				Requests.subscriptionId,
 			],
 		};

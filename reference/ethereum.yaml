@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: ethereum
-  version: 1.2.7
+  version: 1.2.9
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -47,7 +47,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -276,7 +276,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -450,7 +450,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -615,7 +615,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -742,7 +742,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -1272,7 +1272,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -1400,7 +1400,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -2125,7 +2125,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -2695,7 +2695,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -2859,7 +2859,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -3445,7 +3445,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -3812,7 +3812,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4109,7 +4109,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4197,7 +4197,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4281,7 +4281,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4363,7 +4363,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4504,7 +4504,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4672,7 +4672,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4993,7 +4993,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -5318,7 +5318,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -5628,7 +5628,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6029,7 +6029,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6222,7 +6222,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6285,7 +6285,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6565,7 +6565,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7246,7 +7246,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7331,7 +7331,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7667,7 +7667,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7855,7 +7855,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7924,7 +7924,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -8000,7 +8000,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -8614,7 +8614,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -9485,7 +9485,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -9821,7 +9821,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -10696,7 +10696,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -10780,7 +10780,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11044,7 +11044,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11137,7 +11137,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11212,7 +11212,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11428,7 +11428,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11536,7 +11536,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11670,7 +11670,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11815,7 +11815,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -11938,7 +11938,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -12068,7 +12068,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -12235,7 +12235,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -12397,7 +12397,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -12521,7 +12521,7 @@ paths:
             enum:
               - mainnet
               - sepolia
-              - holesky
+              - hoodi
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
