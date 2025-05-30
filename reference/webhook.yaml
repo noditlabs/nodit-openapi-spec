@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Webhook
-  version: 1.2.7
+  version: 1.2.9
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -58,7 +58,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: |
             조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -66,7 +66,7 @@ paths:
             - aptos: "mainnet", "testnet"
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
-            - ethereum: "mainnet", "sepolia", "holesky"
+            - ethereum: "mainnet", "sepolia", "hoodi"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
@@ -97,10 +97,10 @@ paths:
                     - LOG
                     - EVENT
                     - TRANSACTION
-                description: &ref_15
+                description: &ref_16
                   type: string
                   description: 이벤트의 설명을 지정하는 파라미터입니다.
-                notification: &ref_14
+                notification: &ref_15
                   type: object
                   description: 이벤트 발생 시 알림을 받기 위해 필요한 정보를 지정하는 파라미터입니다.
                   properties:
@@ -109,7 +109,15 @@ paths:
                       description: >-
                         구독한 이벤트 발생 시 알림을 받을 웹훅 URL을 지정하는 파라미터입니다. Public Access가
                         가능한 URL을 지정해야 합니다.
-                condition: &ref_16
+                isInstant:
+                  type: boolean
+                  description: >-
+                    Instant Webhook 옵션 활성화 여부를 지정하는 파라미터로, 지정하지 않을시 false로
+                    설정됩니다. 이 값을 true로 지정하면 Instant Webhook 옵션이 활성화되며, false로
+                    지정하면 비활성화됩니다. 이 옵션을 활성화하면 모니터링 대상 이벤트가 포함된 블록의 확정 여부와 상관 없이
+                    Nodit 노드에서 해당 이벤트가 감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 반면, 이
+                    옵션을 비활성화하면 이벤트 트랜잭션이 포함된 블록이 확정된 이후에만 메시지가 발송됩니다.
+                condition: &ref_17
                   type: object
                   description: >-
                     구독하고자 하는 이벤트 조건의 상제 정의를 위한 필드입니다. 이벤트 타입에 따라 입력 가능한 조건이 다르기
@@ -702,12 +710,20 @@ paths:
                       Webhook 알림의 인증을 위한 서명 키를 나타내는 필드입니다. Webhook 알림을 수신한 후 서명
                       키를 사용하여 알림의 유효성을 검증할 수 있습니다. 서명 키는 Webhook 생성 시 자동으로 생성되며,
                       Webhook 수정 시 변경할 수 없습니다.
-                  createdAt: &ref_7
-                    type: string
-                    description: 웹훅 이벤트가 발생하고 로그가 생성된 시점을 나타냅니다. 이 필드는 ISO 8601 형식으로 반환됩니다.
-                  condition: &ref_8
+                  isInstant: &ref_7
+                    type: boolean
+                    description: >-
+                      Instant Webhook 옵션 활성화 여부를 지정하는 필드입니다. Instant Webhook 옵션이
+                      활성화되어 있다면 true를, 비활성화되어 있다면 false를 반환합니다. 이 옵션이 활성화 되어있다면
+                      모니터링 대상 이벤트가 포함된 블록의 확정 여부와 상관 없이 Nodit 노드에서 해당 이벤트가 감지되는
+                      즉시 Webhook 메시지를 수신할 수 있습니다. 반면, 이 옵션이 비활성화 되어있다면 이벤트 트랜잭션이
+                      포함된 블록이 확정된 이후에만 메시지가 발송됩니다.
+                  condition: &ref_9
                     type: object
                     description: Webhook 구독 조건을 나타내는 필드입니다. 이벤트 타입에 따라 다른 조건을 가질 수 있습니다.
+                  createdAt: &ref_8
+                    type: string
+                    description: 웹훅 이벤트가 발생하고 로그가 생성된 시점을 나타냅니다. 이 필드는 ISO 8601 형식으로 반환됩니다.
               example:
                 subscriptionId: '322'
                 description: test webhook
@@ -716,10 +732,12 @@ paths:
                 eventType: BLOCK_PERIOD
                 notification:
                   webhookUrl: https://webhook.mock.server/blockperiod
+                signingKey: c5a4c...
+                isInstant: true
                 condition:
                   period: 3
                 createdAt: '2023-04-21T05:55:12.084Z'
-        '400': &ref_9
+        '400': &ref_10
           description: Bad Request
           content:
             application/json:
@@ -735,7 +753,7 @@ paths:
                   message: >-
                     Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE,
                     PARAMETER2_NAME = PARAMETER2_VALUE, ... }
-        '401': &ref_10
+        '401': &ref_11
           description: Unauthorized
           content:
             application/json:
@@ -749,7 +767,7 @@ paths:
                 example:
                   code: AUTHENTICATION_FAILED
                   message: Authentication failed
-        '403': &ref_11
+        '403': &ref_12
           description: Forbidden
           content:
             application/json:
@@ -763,7 +781,7 @@ paths:
                 example:
                   code: PERMISSION_DENIED
                   message: Permission denied
-        '404': &ref_12
+        '404': &ref_13
           description: Not Found
           content:
             application/json:
@@ -779,7 +797,7 @@ paths:
                   message: >-
                     Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE,
                     RESOURCE2_NAME = RESOURCE2_VALUE, ... }
-        '429': &ref_13
+        '429': &ref_14
           description: Too Many Requests
           content:
             application/json:
@@ -830,7 +848,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: |
             조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -838,7 +856,7 @@ paths:
             - aptos: "mainnet", "testnet"
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
-            - ethereum: "mainnet", "sepolia", "holesky"
+            - ethereum: "mainnet", "sepolia", "hoodi"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
@@ -846,7 +864,7 @@ paths:
         - name: subscriptionId
           in: query
           required: false
-          schema: &ref_19
+          schema: &ref_20
             type: string
           description: >-
             조회하고자 하는 Webhook에 할당된 subscriptionId를 지정하기 위한 파라미터입니다. Webhook 생성 시
@@ -865,13 +883,13 @@ paths:
                   - rpp
                   - items
                 properties:
-                  total: &ref_20
+                  total: &ref_21
                     type: number
                     description: 조건에 맞는 총 이벤트 개수입니다.
-                  page: &ref_21
+                  page: &ref_22
                     type: number
                     description: 현재 조회된 페이지 번호입니다.
-                  rpp: &ref_22
+                  rpp: &ref_23
                     type: number
                     description: 요청에 따라 반환된 한 페이지당 이벤트 수입니다.
                   items:
@@ -896,26 +914,27 @@ paths:
                         description: *ref_2
                         protocol: *ref_3
                         network: *ref_4
-                        subscriptionType: &ref_23
+                        subscriptionType: &ref_24
                           type: string
                           description: 구독 유형을 식별할 수 있는 필드입니다.
                           example: WEBHOOK
                         eventType: *ref_5
                         notification: *ref_6
-                        isActive: &ref_24
+                        isInstant: *ref_7
+                        isActive: &ref_25
                           type: boolean
                           description: >-
                             Webhook의 활성화 여부를 나타내는 필드입니다. Webhook이 활성화되어 있으면
                             true, 비활성화되어 있으면 false입니다. Webhook이 비활성화되어 있으면 해당
                             Webhook으로 알림을 받을 수 없습니다.
-                        updatedAt: &ref_25
+                        updatedAt: &ref_26
                           type: string
                           description: >-
                             웹훅 전송 결과(status)에 변화가 생긴 시점을 나타냅니다. 예를 들어, 실패 후
                             재시도되어 성공으로 변경된 경우 등이 해당됩니다. 이 필드는 ISO 8601 형식으로
                             반환됩니다.
-                        createdAt: *ref_7
-                        condition: *ref_8
+                        createdAt: *ref_8
+                        condition: *ref_9
               example:
                 total: 1
                 rpp: 10
@@ -930,15 +949,16 @@ paths:
                     notification:
                       webhookUrl: https://webhook.mock.server/blockperiod
                     isActive: true
+                    isInstant: true
                     updatedAt: '2023-04-21T09:40:49.678Z'
                     createdAt: '2023-04-21T09:40:49.678Z'
                     condition:
                       period: 1
-        '400': *ref_9
-        '401': *ref_10
-        '403': *ref_11
-        '404': *ref_12
-        '429': *ref_13
+        '400': *ref_10
+        '401': *ref_11
+        '403': *ref_12
+        '404': *ref_13
+        '429': *ref_14
   /{protocol}/{network}/webhooks/{subscriptionId}:
     patch:
       security:
@@ -977,7 +997,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: |
             조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -985,12 +1005,12 @@ paths:
             - aptos: "mainnet", "testnet"
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
-            - ethereum: "mainnet", "sepolia", "holesky"
+            - ethereum: "mainnet", "sepolia", "hoodi"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
             - luniverse(the balance): "mainnet"
-        - &ref_17
+        - &ref_18
           name: subscriptionId
           in: path
           required: true
@@ -1007,14 +1027,14 @@ paths:
               additionalProperties: false
               type: object
               properties:
-                notification: *ref_14
-                description: *ref_15
+                notification: *ref_15
+                description: *ref_16
                 isActive:
                   type: boolean
                   description: >-
                     Webhook의 활성화 여부를 지정하는 파라미터입니다. 이 값이 true로 지정하면 활성화되며, false로
                     지정하면 비활성화됩니다. 비활성화된 Webhook은 알림을 받을 수 없지만 삭제되지 않습니다.
-                condition: *ref_16
+                condition: *ref_17
       responses:
         '200':
           description: Successful Response
@@ -1023,32 +1043,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  result: &ref_18
+                  result: &ref_19
                     type: boolean
                     description: 호출 결과를 나타내는 필드입니다. 성공 시 true, 실패 시 false를 반환합니다.
               example:
-                total: 1
-                rpp: 10
-                page: 1
-                items:
-                  - subscriptionId: '31'
-                    description: test
-                    protocol: ETHEREUM
-                    network: MAINNET
-                    subscriptionType: WEBHOOK
-                    eventType: BLOCK_PERIOD
-                    notification:
-                      webhookUrl: https://webhook.mock.server/blockperiod
-                    isActive: true
-                    updatedAt: '2023-04-21T09:40:49.678Z'
-                    createdAt: '2023-04-21T09:40:49.678Z'
-                    condition:
-                      period: 1
-        '400': *ref_9
-        '401': *ref_10
-        '403': *ref_11
-        '404': *ref_12
-        '429': *ref_13
+                result: true
+        '400': *ref_10
+        '401': *ref_11
+        '403': *ref_12
+        '404': *ref_13
+        '429': *ref_14
     delete:
       security:
         - api_key: []
@@ -1087,7 +1091,7 @@ paths:
               - mainnet
               - testnet
               - sepolia
-              - holesky
+              - hoodi
               - amoy
           description: |
             조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
@@ -1095,12 +1099,12 @@ paths:
             - aptos: "mainnet", "testnet"
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
-            - ethereum: "mainnet", "sepolia", "holesky"
+            - ethereum: "mainnet", "sepolia", "hoodi"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
             - luniverse(the balance): "mainnet"
-        - *ref_17
+        - *ref_18
       responses:
         '200':
           description: Successful Response
@@ -1109,14 +1113,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  result: *ref_18
+                  result: *ref_19
               example:
                 result: true
-        '400': *ref_9
-        '401': *ref_10
-        '403': *ref_11
-        '404': *ref_12
-        '429': *ref_13
+        '400': *ref_10
+        '401': *ref_11
+        '403': *ref_12
+        '404': *ref_13
+        '429': *ref_14
   /{protocol}/{network}/webhooks/history:
     get:
       security:
@@ -1141,8 +1145,15 @@ paths:
           schema:
             type: string
             enum:
+              - arbitrum
+              - base
+              - ethereum
+              - kaia
+              - optimism
+              - polygon
+              - luniverse
               - aptos
-            default: aptos
+            default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
@@ -1153,13 +1164,16 @@ paths:
             enum:
               - mainnet
               - testnet
+              - sepolia
+              - hoodi
+              - amoy
           description: |
             조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
 
             - aptos: "mainnet", "testnet"
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
-            - ethereum: "mainnet", "sepolia", "holesky"
+            - ethereum: "mainnet", "sepolia", "hoodi"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
@@ -1167,7 +1181,7 @@ paths:
         - name: subscriptionId
           in: query
           required: true
-          schema: *ref_19
+          schema: *ref_20
           description: >-
             조회하고자 하는 Webhook에 할당된 subscriptionId를 지정하기 위한 파라미터입니다. Webhook 생성 시
             반환되는 subscriptionId를 사용하여 Webhook 정보를 조회, 수정 및 삭제할 수 있습니다. 빈 값을 입력하면
@@ -1227,9 +1241,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  total: *ref_20
-                  page: *ref_21
-                  rpp: *ref_22
+                  total: *ref_21
+                  page: *ref_22
+                  rpp: *ref_23
                   items:
                     type: array
                     description: 이벤트 상세 데이터를 포함하는 배열입니다.
@@ -1240,13 +1254,13 @@ paths:
                         description: *ref_2
                         protocol: *ref_3
                         network: *ref_4
-                        subscriptionType: *ref_23
+                        subscriptionType: *ref_24
                         eventType: *ref_5
                         notification: *ref_6
-                        isActive: *ref_24
-                        updatedAt: *ref_25
-                        createdAt: *ref_7
-                        condition: *ref_8
+                        isActive: *ref_25
+                        updatedAt: *ref_26
+                        createdAt: *ref_8
+                        condition: *ref_9
               example:
                 total: 146779
                 rpp: 2
@@ -1320,8 +1334,8 @@ paths:
                                   0x6d00d52f94579e51308ae83841b5133e3a7e93b51fcd8cf338d766e3f0331026
                                 round: '13582'
                                 time_microseconds: '1734048354656343'
-        '400': *ref_9
-        '401': *ref_10
-        '403': *ref_11
-        '404': *ref_12
-        '429': *ref_13
+        '400': *ref_10
+        '401': *ref_11
+        '403': *ref_12
+        '404': *ref_13
+        '429': *ref_14
