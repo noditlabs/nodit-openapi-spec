@@ -69,37 +69,25 @@ function getOpIdAndParams(protocol: string): {
 	operationId: string;
 	parameters: OpenAPIV3.ParameterObject[];
 } {
-	if (protocol === "none") {
-		return {
-			operationId: endpoint,
-			parameters: [
-				Requests.protocol("ethereum", [
-					// evm
-					"arbitrum",
-					"base",
-					"ethereum",
-					"kaia",
-					"optimism",
-					"polygon",
-					"luniverse",
-					// non-evm
-					"aptos",
-				]),
-				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "hoodi", "amoy"]),
-				Requests.subscriptionId,
-			],
-		};
-	} else {
-		const chainInfo = getChainInfo(protocol);
-		return {
-			operationId: `${protocol}-${endpoint}`,
-			parameters: [
-				Requests.protocol(protocol, [protocol]),
-				Requests.network(chainInfo.mainnet, [chainInfo.mainnet, ...chainInfo.testnet]),
-				Requests.subscriptionId,
-			],
-		};
-	}
+	return {
+		operationId: endpoint,
+		parameters: [
+			Requests.protocol("ethereum", [
+				// evm
+				"arbitrum",
+				"base",
+				"ethereum",
+				"kaia",
+				"optimism",
+				"polygon",
+				"luniverse",
+				// non-evm
+				"aptos",
+			]),
+			Requests.networkForEvm("mainnet", ["mainnet", "testnet", "sepolia", "hoodi", "amoy"]),
+			Requests.subscriptionId,
+		],
+	};
 }
 
 // ─────────────────────────────────────

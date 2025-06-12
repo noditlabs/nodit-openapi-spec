@@ -42,6 +42,43 @@ namespace Requests {
 		};
 	}
 
+	export function networkForEvm(example: string, list: string[]): OpenAPIV3.ParameterObject {
+		return {
+			name: "network",
+			in: "path",
+			required: true,
+			schema: {
+				type: "string",
+				default: example,
+				enum: list,
+			},
+			description: `조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+
+- arbitrum: "mainnet", "sepolia"
+- base: "mainnet", "sepolia",
+- ethereum: "mainnet", "sepolia", "hoodi"
+- kaia: "mainnet", "kairos"
+- optimism: "mainnet", "sepolia"
+- polygon: "mainnet", "amoy"
+- luniverse(the balance): "mainnet"
+`,
+		};
+	}
+
+	export function networkForAptos(example: string, list: string[]): OpenAPIV3.ParameterObject {
+		return {
+			name: "network",
+			in: "path",
+			required: true,
+			schema: {
+				type: "string",
+				default: example,
+				enum: list,
+			},
+			description: `조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다.`,
+		};
+	}
+
 	export const subscriptionId: OpenAPIV3.ParameterObject = {
 		name: "subscriptionId",
 		in: "path",

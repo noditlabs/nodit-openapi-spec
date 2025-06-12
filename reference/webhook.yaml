@@ -41,17 +41,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: |
-            조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
-
-            - aptos: "mainnet", "testnet"
-            - arbitrum: "mainnet", "sepolia"
-            - base: "mainnet", "sepolia",
-            - ethereum: "mainnet", "sepolia", "hoodi"
-            - kaia: "mainnet", "kairos"
-            - optimism: "mainnet", "sepolia"
-            - polygon: "mainnet", "amoy"
-            - luniverse(the balance): "mainnet"
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다.
       requestBody:
         required: true
         content:
@@ -513,7 +503,6 @@ paths:
           description: |
             조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
 
-            - aptos: "mainnet", "testnet"
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
             - ethereum: "mainnet", "sepolia", "hoodi"
@@ -1093,17 +1082,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: |
-            조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
-
-            - aptos: "mainnet", "testnet"
-            - arbitrum: "mainnet", "sepolia"
-            - base: "mainnet", "sepolia",
-            - ethereum: "mainnet", "sepolia", "hoodi"
-            - kaia: "mainnet", "kairos"
-            - optimism: "mainnet", "sepolia"
-            - polygon: "mainnet", "amoy"
-            - luniverse(the balance): "mainnet"
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다.
         - &ref_20
           name: subscriptionId
           in: path
@@ -1190,7 +1169,6 @@ paths:
           description: |
             조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
 
-            - aptos: "mainnet", "testnet"
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
             - ethereum: "mainnet", "sepolia", "hoodi"
