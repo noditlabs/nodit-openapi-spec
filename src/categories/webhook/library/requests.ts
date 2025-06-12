@@ -139,7 +139,7 @@ namespace Requests {
 	};
 
 	/** Common **/
-	export const eventType: OpenAPIV3.SchemaObject = {
+	export const eventTypeForEvm: OpenAPIV3.SchemaObject = {
 		type: "string",
 		description:
 			"Webhook으로 구독하고자 하는 이벤트 타입 구분자를 지정하는 파라미터입니다. 지원되는 이벤트 타입에 대한 정보는 Event Types 페이지를 참고하세요.",
@@ -154,9 +154,14 @@ namespace Requests {
 			"BLOCK_LIST_CALLER",
 			"ALLOW_LIST_CALLER",
 			"LOG",
-			"EVENT",
-			"TRANSACTION",
 		],
+	};
+
+	export const eventTypeForAptos: OpenAPIV3.SchemaObject = {
+		type: "string",
+		description:
+			"Webhook으로 구독하고자 하는 이벤트 타입 구분자를 지정하는 파라미터입니다. 지원되는 이벤트 타입에 대한 정보는 Event Types 페이지를 참고하세요.",
+		enum: ["EVENT", "TRANSACTION"],
 	};
 
 	export const description: OpenAPIV3.SchemaObject = {
@@ -176,7 +181,7 @@ namespace Requests {
 		},
 	};
 
-	export const condition: OpenAPIV3.SchemaObject = {
+	export const conditionForEvm: OpenAPIV3.SchemaObject = {
 		type: "object",
 		description:
 			"구독하고자 하는 이벤트 조건의 상제 정의를 위한 필드입니다. 이벤트 타입에 따라 입력 가능한 조건이 다르기 때문에, Webhook Types 페이지를 참고하여 사용하세요.",
@@ -426,8 +431,16 @@ namespace Requests {
 					},
 				},
 			},
+		],
+	};
+
+	export const conditionForAptos: OpenAPIV3.SchemaObject = {
+		type: "object",
+		description:
+			"구독하고자 하는 이벤트 조건의 상제 정의를 위한 필드입니다. 이벤트 타입에 따라 입력 가능한 조건이 다르기 때문에, Webhook Types 페이지를 참고하여 사용하세요.",
+		oneOf: [
 			{
-				title: "EVENT - Aptos only",
+				title: "EVENT",
 				description:
 					"지정한 이벤트가 발생할 때마다 알림을 제공합니다. 사용자는 이를 통해 네트워크 상에서 발생하는 중요한 활동을 빠르게 파악할 수 있습니다.",
 				type: "object",
@@ -464,7 +477,7 @@ namespace Requests {
 				},
 			},
 			{
-				title: "TRANSACTION - Aptos only",
+				title: "TRANSACTION",
 				description:
 					"이 기능은 사용자가 특정 이벤트 유형(eventType)과 해당 이벤트를 발생시킨 계정(eventAccountAddress)을 입력하여 API를 설정하면, 지정된 이벤트 유형이 발생했을 때 해당 이벤트 유형이 포함된 트랜잭션의 모든 세부 내역을 반환하는 API입니다. 이벤트가 발생하면 해당 트랜잭션의 전체 내역, 발신자, 수신자, 금액, 호출된 함수, 관련 데이터 등 모든 세부 정보를 확인할 수 있어 시스템 모니터링에 유용하게 활용될 수 있습니다.",
 				type: "object",

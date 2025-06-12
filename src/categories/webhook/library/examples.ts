@@ -1,7 +1,24 @@
 const Examples = {
+	"aptos-createWebhook": {
+		subscriptionId: "620",
+		description: "Webhook Test",
+		protocol: "aptos",
+		network: "mainnet",
+		eventType: "EVENT",
+		notification: {
+			webhookUrl: "https://example.com/webhook",
+		},
+		signingKey: "eff1e...",
+		isInstant: false,
+		condition: {
+			eventType: "0x1::account::CoinRegisterEvent",
+			eventAccountAddress: "0x0",
+		},
+		createdAt: "2025-06-12T05:52:52.038Z",
+	},
 	createWebhook: {
 		subscriptionId: "322",
-		description: "test webhook",
+		description: "Webhook Test",
 		protocol: "ETHEREUM",
 		network: "MAINNET",
 		eventType: "BLOCK_PERIOD",
@@ -39,6 +56,9 @@ const Examples = {
 				},
 			},
 		],
+	},
+	"aptos-updateWebhook": {
+		result: true,
 	},
 	updateWebhook: {
 		result: true,

@@ -2,37 +2,34 @@ import { OpenAPIV3 } from "openapi-types";
 import Requests from "../library/requests";
 import Responses from "../library/responses";
 import Examples from "../library/examples";
-import { ETHEREUM_ACCOUNTS, getChainInfo } from "../../../constants";
-import { XReadmeObject } from "../../../types";
+import { getChainInfo } from "../../../constants";
 
-const summary = "Create Webhook";
-const endpoint = "createWebhook";
+const summary = "Update Webhook (EVM)";
+const endpoint = "updateWebhook";
 const isPublic = true;
 const tags = ["Webhook API"];
+const description = `Webhook의 구독 조건(condition)을 변경하거나 Webhook을 활성화, 또는 비활성화 할 수 있습니다.`;
 
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
 	switch (protocol) {
 		default:
-			return `Webhook을 생성하기 위한 API입니다. 구독 정보와 Webhook URL을 입력하여 Webhook을 생성합니다. Webhook을 생성하면 해당 Webhook URL로 이벤트가 전송됩니다. Webhook이 생성되면 Webhook의 Subscription ID를 반환하며, 이를 통해 Webhook 정보를 조회, 수정 및 삭제를 할 수 있습니다.`;
+			return description;
 	}
 }
 
-const info = (protocol: string): OpenAPIV3.PathItemObject<{ "x-readme": XReadmeObject }> => {
-	// A. operationId, parameters 설정
+const info = (protocol: string): OpenAPIV3.PathItemObject => {
+	// A. operationId 및 parameters 설정
 	const { operationId, parameters } = getOpIdAndParams(protocol);
 	// B. requestBody, successResponse 설정
 	const { requestBody, successResponse } = getRequestAndResponse(protocol);
 	// C. callouts 설정
 	const callouts = getCallouts(protocol);
-	// D. protocol에 따른 description 설정
+	// D. 프로토콜에 따른 description 설정
 	const protocolDescription = getDescription(protocol);
 
 	return {
-		post: {
-			"x-readme": {
-				"explorer-enabled": false,
-			},
+		patch: {
 			security: [
 				{
 					api_key: [],
@@ -52,8 +49,8 @@ const info = (protocol: string): OpenAPIV3.PathItemObject<{ "x-readme": XReadmeO
 				},
 			},
 			responses: {
-				"201": {
-					...Responses.Success201(successResponse),
+				"200": {
+					...Responses.Success200(successResponse),
 				},
 				"400": Responses.Error400,
 				"401": Responses.Error401,
@@ -66,8 +63,7 @@ const info = (protocol: string): OpenAPIV3.PathItemObject<{ "x-readme": XReadmeO
 };
 
 // ─────────────────────────────────────
-// A. operationId, parameters 설정
-//   - none vs. 그 외
+// A. operationId, parameters 설정 (none vs. 그 외)
 // ─────────────────────────────────────
 function getOpIdAndParams(protocol: string): {
 	operationId: string;
@@ -90,6 +86,7 @@ function getOpIdAndParams(protocol: string): {
 					"aptos",
 				]),
 				Requests.network("mainnet", ["mainnet", "testnet", "sepolia", "hoodi", "amoy"]),
+				Requests.subscriptionId,
 			],
 		};
 	} else {
@@ -99,14 +96,14 @@ function getOpIdAndParams(protocol: string): {
 			parameters: [
 				Requests.protocol(protocol, [protocol]),
 				Requests.network(chainInfo.mainnet, [chainInfo.mainnet, ...chainInfo.testnet]),
+				Requests.subscriptionId,
 			],
 		};
 	}
 }
 
 // ─────────────────────────────────────
-// B. requestBody, successResponse 설정
-//   - 프로토콜별로 모두 다름
+// B. requestBody, successResponse 설정 (프로토콜별로 다름)
 // ─────────────────────────────────────
 function getRequestAndResponse(protocol: string): {
 	requestBody: OpenAPIV3.SchemaObject;
@@ -119,36 +116,17 @@ function getRequestAndResponse(protocol: string): {
 					additionalProperties: false,
 					type: "object",
 					properties: {
-						eventType: Requests.eventType,
-						description: Requests.description,
 						notification: Requests.notification,
-						isInstant: Requests.isInstant,
-						condition: Requests.condition,
-					},
-					required: ["eventType", "notification", "condition"],
-					default: {
-						eventType: "SUCCESSFUL_TRANSACTION",
-						notification: {
-							webhookUrl: "https://example.com/webhook",
-						},
-						description: "Webhook for successful transaction",
-						condition: `{"addresses": ["${ETHEREUM_ACCOUNTS.VITALIK_BUTERIN}"]}`,
+						description: Requests.description,
+						isActive: Requests.isActive,
+						condition: Requests.conditionForEvm,
 					},
 				},
 				successResponse: {
 					schema: {
 						type: "object",
 						properties: {
-							subscriptionId: Responses.subscriptionId,
-							description: Responses.description,
-							protocol: Responses.protocol,
-							network: Responses.network,
-							eventType: Responses.eventType,
-							notification: Responses.notification,
-							signingKey: Responses.signingKey,
-							isInstant: Responses.isInstant,
-							condition: Responses.condition,
-							createdAt: Responses.createdAt,
+							result: Responses.result,
 						},
 					},
 					example: Examples[endpoint],
@@ -158,13 +136,12 @@ function getRequestAndResponse(protocol: string): {
 }
 
 // ─────────────────────────────────────
-// C. callouts 설정
-//   - 프로토콜별로 모두 다름
+// C. callouts 설정 (프로토콜별로 다름)
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
 	switch (protocol) {
 		default:
-			return ""; // 해당 체인에서는 callouts가 없음
+			return ""; // 해당 체인에서는 별도 callouts가 없음
 	}
 }
 

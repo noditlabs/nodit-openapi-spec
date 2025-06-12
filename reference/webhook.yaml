@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Webhook
-  version: 1.2.9
+  version: 1.2.10
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -16,6 +16,457 @@ components:
         documentation. For real applications or services, use the API key
         obtained from the Nodit console.
 paths:
+  /aptos/{network}/webhooks:
+    post:
+      x-readme:
+        explorer-enabled: false
+      security:
+        - api_key: []
+      tags:
+        - Webhook API
+      description: >+
+        Webhook을 생성하기 위한 API입니다. 구독 정보와 Webhook URL을 입력하여 Webhook을 생성합니다.
+        Webhook을 생성하면 해당 Webhook URL로 이벤트가 전송됩니다. Webhook이 생성되면 Webhook의
+        Subscription ID를 반환하며, 이를 통해 Webhook 정보를 조회, 수정 및 삭제를 할 수 있습니다.
+
+      summary: Create Webhook (Aptos)
+      operationId: aptos-createWebhook
+      parameters:
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+              - testnet
+          description: |
+            조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+
+            - aptos: "mainnet", "testnet"
+            - arbitrum: "mainnet", "sepolia"
+            - base: "mainnet", "sepolia",
+            - ethereum: "mainnet", "sepolia", "hoodi"
+            - kaia: "mainnet", "kairos"
+            - optimism: "mainnet", "sepolia"
+            - polygon: "mainnet", "amoy"
+            - luniverse(the balance): "mainnet"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                eventType:
+                  type: string
+                  description: >-
+                    Webhook으로 구독하고자 하는 이벤트 타입 구분자를 지정하는 파라미터입니다. 지원되는 이벤트 타입에 대한
+                    정보는 Event Types 페이지를 참고하세요.
+                  enum:
+                    - EVENT
+                    - TRANSACTION
+                description: &ref_0
+                  type: string
+                  description: 이벤트의 설명을 지정하는 파라미터입니다.
+                notification: &ref_1
+                  type: object
+                  description: 이벤트 발생 시 알림을 받기 위해 필요한 정보를 지정하는 파라미터입니다.
+                  properties:
+                    webhookUrl:
+                      type: string
+                      description: >-
+                        구독한 이벤트 발생 시 알림을 받을 웹훅 URL을 지정하는 파라미터입니다. Public Access가
+                        가능한 URL을 지정해야 합니다.
+                isInstant: &ref_2
+                  type: boolean
+                  description: >-
+                    Instant Webhook 옵션 활성화 여부를 지정하는 파라미터로, 지정하지 않을시 false로
+                    설정됩니다. 
+
+                    - true: Instant Webhook 옵션을 활성화하며, 블록의 확정 여부와 상관 없이 해당 이벤트가
+                    감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 
+
+                    - false: Instant Webhook 옵션을 비활성화하며, 이벤트 트랜잭션이 포함된 블록이 확정된
+                    이후에만 메시지가 발송됩니다.
+                condition: &ref_19
+                  type: object
+                  description: >-
+                    구독하고자 하는 이벤트 조건의 상제 정의를 위한 필드입니다. 이벤트 타입에 따라 입력 가능한 조건이 다르기
+                    때문에, Webhook Types 페이지를 참고하여 사용하세요.
+                  oneOf:
+                    - title: EVENT
+                      description: >-
+                        지정한 이벤트가 발생할 때마다 알림을 제공합니다. 사용자는 이를 통해 네트워크 상에서 발생하는 중요한
+                        활동을 빠르게 파악할 수 있습니다.
+                      type: object
+                      required:
+                        - eventType
+                        - eventAccountAddress
+                      properties:
+                        eventType:
+                          type: string
+                          description: >
+                            모니터링 하고자하는 이벤트 타입. 이벤트 타입은 모듈에서 정의한 event struct의
+                            이름을 의미합니다. 이 필드는
+                            `module_address::module_name::event_name` 형식으로
+                            입력합니다.
+
+                            > 📘 `0x1::transaction_fee::FeeStatement` 는
+                            eventType에 사용할 수 없나요?
+
+                            > 네, 이 이벤트는 가스비를 소모하는 모든 user transaction에 포함됩니다.
+
+                            > 따라서 별도의 이벤트로 구독할 필요가 없으므로, Transaction 이벤트를 구독하는
+                            방식을 권장드립니다.
+                          default: 0x1::account::CoinRegisterEvent
+                          example:
+                            - >-
+                              0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                            - 0x1::coin::CoinDeposit
+                        eventAccountAddress:
+                          type: string
+                          description: >
+                            모니터링 하고자하는 이벤트를 발생시키는 주소. 
+
+                            > 📘 Module Events일 때는 eventAccountAddress를 꼭 0x0으로
+                            입력해야 하나요?
+
+                            > 맞습니다. eventType이 “Module Events”인 경우에는
+                            eventAccountAddress를 반드시 “0x0”으로 입력해 주세요. 만약,
+                            “Event-Handler Events”로 정의된 경우에는 이벤트를 발생한 계정 주소를
+                            입력하시면 됩니다. 이벤트 종류에 대한 자세한 내용은 [Aptos 공식
+                            문서](https://aptos.dev/en/network/blockchain/events)에서
+                            확인하실 수 있습니다.
+                          default: '0x0'
+                          example:
+                            - '0x1'
+                            - >-
+                              0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d
+                        eventData:
+                          type: string
+                          format: json
+                          description: >-
+                            이벤트 데이터 필터링 조건을 지정하는 객체. 이 필드를 활용하면 특정 키와 값을 지정하여
+                            원하는 이벤트만 필터링할 수 있습니다. JSON 객체 형식으로 최대 3단계 중첩된 값까지 입력
+                            가능합니다. 입력한 키와 값이 이벤트 데이터와 정확히 일치하는 경우에만 필터링됩니다.
+                          example:
+                            - >-
+                              { transfer: { sender: "0xcafe", receiver: "0xface"
+                              } }
+                    - title: TRANSACTION
+                      description: >-
+                        이 기능은 사용자가 특정 이벤트 유형(eventType)과 해당 이벤트를 발생시킨
+                        계정(eventAccountAddress)을 입력하여 API를 설정하면, 지정된 이벤트 유형이
+                        발생했을 때 해당 이벤트 유형이 포함된 트랜잭션의 모든 세부 내역을 반환하는 API입니다. 이벤트가
+                        발생하면 해당 트랜잭션의 전체 내역, 발신자, 수신자, 금액, 호출된 함수, 관련 데이터 등 모든
+                        세부 정보를 확인할 수 있어 시스템 모니터링에 유용하게 활용될 수 있습니다.
+                      type: object
+                      oneOf:
+                        - title: function condition set
+                          required:
+                            - payloadFunction
+                          properties:
+                            payloadFunction:
+                              type: string
+                              description: >-
+                                모니터링 하고자하는 함수. 이 필드는
+                                `module_address::module_name::function_name`
+                                형식으로 입력합니다.
+                              default: >-
+                                0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
+                              example:
+                                - 0x1::aptos_account::transfer
+                                - 0x1::aptos_account::transfer_coins
+                                - 0x1::primary_fungible_store::transfer
+                        - title: event condition set
+                          required:
+                            - eventType
+                            - eventAccountAddress
+                          properties:
+                            eventType:
+                              type: string
+                              description: >
+                                모니터링 하고자하는 이벤트 타입. 이벤트 타입은 모듈에서 정의한 event
+                                struct의 이름을 의미합니다. 이 필드는
+                                `module_address::module_name::event_name` 형식으로
+                                입력합니다.
+
+                                > 📘 `0x1::transaction_fee::FeeStatement` 는
+                                eventType에 사용할 수 없나요?
+
+                                > 네, 이 이벤트는 가스비를 소모하는 모든 user transaction에
+                                포함됩니다.
+
+                                > 따라서 별도의 이벤트로 구독할 필요가 없으므로, Transaction 이벤트를
+                                구독하는 방식을 권장드립니다.
+                              default: 0x1::account::CoinRegisterEvent
+                              example:
+                                - >-
+                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                                - 0x1::coin::CoinDeposit
+                            eventAccountAddress:
+                              type: string
+                              description: >
+                                모니터링 하고자하는 이벤트를 발생시키는 주소. 
+
+                                > 📘 Module Events일 때는 eventAccountAddress를 꼭
+                                0x0으로 입력해야 하나요?
+
+                                > 맞습니다. eventType이 “Module Events”인 경우에는
+                                eventAccountAddress를 반드시 “0x0”으로 입력해 주세요. 만약,
+                                “Event-Handler Events”로 정의된 경우에는 이벤트를 발생한 계정 주소를
+                                입력하시면 됩니다. 이벤트 종류에 대한 자세한 내용은 [Aptos 공식
+                                문서](https://aptos.dev/en/network/blockchain/events)에서
+                                확인하실 수 있습니다.
+                              default: '0x0'
+                              example:
+                                - '0x1'
+                                - >-
+                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d
+                            eventData:
+                              type: string
+                              format: json
+                              description: >-
+                                이벤트 데이터 필터링 조건을 지정하는 객체. 이 필드를 활용하면 특정 키와 값을
+                                지정하여 원하는 이벤트만 필터링할 수 있습니다. JSON 객체 형식으로 최대 3단계
+                                중첩된 값까지 입력 가능합니다. 입력한 키와 값이 이벤트 데이터와 정확히 일치하는
+                                경우에만 필터링됩니다.
+                              example:
+                                - >-
+                                  { transfer: { sender: "0xcafe", receiver:
+                                  "0xface" } }
+                        - title: function and event condition set
+                          required:
+                            - payloadFunction
+                            - eventType
+                            - eventAccountAddress
+                          properties:
+                            payloadFunction:
+                              type: string
+                              description: >-
+                                모니터링 하고자하는 함수. 이 필드는
+                                `module_address::module_name::function_name`
+                                형식으로 입력합니다.
+                              default: >-
+                                0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
+                              example:
+                                - 0x1::aptos_account::transfer
+                                - 0x1::aptos_account::transfer_coins
+                                - 0x1::primary_fungible_store::transfer
+                            eventType:
+                              type: string
+                              description: >
+                                모니터링 하고자하는 이벤트 타입. 이벤트 타입은 모듈에서 정의한 event
+                                struct의 이름을 의미합니다. 이 필드는
+                                `module_address::module_name::event_name` 형식으로
+                                입력합니다.
+
+                                > 📘 `0x1::transaction_fee::FeeStatement` 는
+                                eventType에 사용할 수 없나요?
+
+                                > 네, 이 이벤트는 가스비를 소모하는 모든 user transaction에
+                                포함됩니다.
+
+                                > 따라서 별도의 이벤트로 구독할 필요가 없으므로, Transaction 이벤트를
+                                구독하는 방식을 권장드립니다.
+                              default: 0x1::account::CoinRegisterEvent
+                              example:
+                                - >-
+                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                                - 0x1::coin::CoinDeposit
+                            eventAccountAddress:
+                              type: string
+                              description: >
+                                모니터링 하고자하는 이벤트를 발생시키는 주소. 
+
+                                > 📘 Module Events일 때는 eventAccountAddress를 꼭
+                                0x0으로 입력해야 하나요?
+
+                                > 맞습니다. eventType이 “Module Events”인 경우에는
+                                eventAccountAddress를 반드시 “0x0”으로 입력해 주세요. 만약,
+                                “Event-Handler Events”로 정의된 경우에는 이벤트를 발생한 계정 주소를
+                                입력하시면 됩니다. 이벤트 종류에 대한 자세한 내용은 [Aptos 공식
+                                문서](https://aptos.dev/en/network/blockchain/events)에서
+                                확인하실 수 있습니다.
+                              default: '0x0'
+                              example:
+                                - '0x1'
+                                - >-
+                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d
+                            eventData:
+                              type: string
+                              format: json
+                              description: >-
+                                이벤트 데이터 필터링 조건을 지정하는 객체. 이 필드를 활용하면 특정 키와 값을
+                                지정하여 원하는 이벤트만 필터링할 수 있습니다. JSON 객체 형식으로 최대 3단계
+                                중첩된 값까지 입력 가능합니다. 입력한 키와 값이 이벤트 데이터와 정확히 일치하는
+                                경우에만 필터링됩니다.
+                              example:
+                                - >-
+                                  { transfer: { sender: "0xcafe", receiver:
+                                  "0xface" } }
+              required:
+                - eventType
+                - notification
+                - condition
+              default:
+                eventType: EVENT
+                notification:
+                  webhookUrl: https://example.com/webhook
+                description: Webhook Test
+                condition:
+                  eventType: 0x1::account::CoinRegisterEvent
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscriptionId: &ref_4
+                    type: string
+                    description: >-
+                      Webhook에 할당된 subscriptionId를 나타내는 필드입니다. subscriptionId는
+                      Webhook을 식별하는 유니크한 값으로, Webhook을 조회, 수정 또는 삭제할 때 사용됩니다.
+                  description: &ref_5
+                    type: string
+                    description: Webhook의 설명을 나타내는 필드입니다.
+                  protocol: &ref_6
+                    type: string
+                    description: >-
+                      해당 Webhook의 프로토콜을 나타내는 필드입니다. (e.g., ETHEREUM, POLYGON,
+                      OPTIMISM, ...)
+                  network: &ref_7
+                    type: string
+                    description: >-
+                      해당 Webhook의 네트워크를 나타내는 필드입니다. (e.g., MAINNET, SEPOLIA,
+                      MUMBAI, ...)
+                  eventType: &ref_8
+                    type: string
+                    description: 해당 Webhook이 구독하는 이벤트 타입을 나타내는 필드입니다.
+                  notification: &ref_9
+                    type: object
+                    required:
+                      - webhookUrl
+                    description: Webhook으로 알림을 받기 위한 정보를 나타내는 필드입니다.
+                    properties:
+                      webhookUrl:
+                        type: string
+                        description: Webhook으로 알림을 받을 URL을 나타내는 필드입니다.
+                  signingKey: &ref_10
+                    type: string
+                    description: >-
+                      Webhook 알림의 인증을 위한 서명 키를 나타내는 필드입니다. Webhook 알림을 수신한 후 서명
+                      키를 사용하여 알림의 유효성을 검증할 수 있습니다. 서명 키는 Webhook 생성 시 자동으로 생성되며,
+                      Webhook 수정 시 변경할 수 없습니다.
+                  isInstant: &ref_11
+                    type: boolean
+                    description: >-
+                      Instant Webhook 옵션 활성화 여부를 지정하는 필드입니다. 
+
+                      - true: 이 옵션이 활성화 되어있다면 모니터링 대상 이벤트가 포함된 블록의 확정 여부와 상관 없이
+                      해당 이벤트가 감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 
+
+                      - false: 이 옵션이 비활성화 되어있다면 이벤트 트랜잭션이 포함된 블록이 확정된 이후에만 메시지가
+                      발송됩니다.
+                  condition: &ref_12
+                    type: object
+                    description: Webhook 구독 조건을 나타내는 필드입니다. 이벤트 타입에 따라 다른 조건을 가질 수 있습니다.
+                  createdAt: &ref_13
+                    type: string
+                    description: 웹훅 이벤트가 발생하고 로그가 생성된 시점을 나타냅니다. 이 필드는 ISO 8601 형식으로 반환됩니다.
+              example:
+                subscriptionId: '620'
+                description: Webhook Test
+                protocol: aptos
+                network: mainnet
+                eventType: EVENT
+                notification:
+                  webhookUrl: https://example.com/webhook
+                signingKey: eff1e...
+                isInstant: false
+                condition:
+                  eventType: 0x1::account::CoinRegisterEvent
+                  eventAccountAddress: '0x0'
+                createdAt: '2025-06-12T05:52:52.038Z'
+        '400': &ref_14
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: INVALID_PARAMETER
+                  message: >-
+                    Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE,
+                    PARAMETER2_NAME = PARAMETER2_VALUE, ... }
+        '401': &ref_15
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: AUTHENTICATION_FAILED
+                  message: Authentication failed
+        '403': &ref_16
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: PERMISSION_DENIED
+                  message: Permission denied
+        '404': &ref_17
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: RESOURCE_NOT_FOUND
+                  message: >-
+                    Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE,
+                    RESOURCE2_NAME = RESOURCE2_VALUE, ... }
+        '429': &ref_18
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                example:
+                  code: TOO_MANY_REQUESTS
+                  message: Too many requests
   /{protocol}/{network}/webhooks:
     post:
       x-readme:
@@ -29,7 +480,7 @@ paths:
         Webhook을 생성하면 해당 Webhook URL로 이벤트가 전송됩니다. Webhook이 생성되면 Webhook의
         Subscription ID를 반환하며, 이를 통해 Webhook 정보를 조회, 수정 및 삭제를 할 수 있습니다.
 
-      summary: Create Webhook
+      summary: Create Webhook (EVM)
       operationId: createWebhook
       parameters:
         - name: protocol
@@ -45,7 +496,6 @@ paths:
               - optimism
               - polygon
               - luniverse
-              - aptos
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -95,32 +545,10 @@ paths:
                     - BLOCK_LIST_CALLER
                     - ALLOW_LIST_CALLER
                     - LOG
-                    - EVENT
-                    - TRANSACTION
-                description: &ref_16
-                  type: string
-                  description: 이벤트의 설명을 지정하는 파라미터입니다.
-                notification: &ref_15
-                  type: object
-                  description: 이벤트 발생 시 알림을 받기 위해 필요한 정보를 지정하는 파라미터입니다.
-                  properties:
-                    webhookUrl:
-                      type: string
-                      description: >-
-                        구독한 이벤트 발생 시 알림을 받을 웹훅 URL을 지정하는 파라미터입니다. Public Access가
-                        가능한 URL을 지정해야 합니다.
-                isInstant:
-                  type: boolean
-                  description: >-
-                    Instant Webhook 옵션 활성화 여부를 지정하는 파라미터로, 지정하지 않을시 false로
-                    설정됩니다. 
-
-                    - true: Instant Webhook 옵션을 활성화하며, 블록의 확정 여부와 상관 없이 해당 이벤트가
-                    감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 
-
-                    - false: Instant Webhook 옵션을 비활성화하며, 이벤트 트랜잭션이 포함된 블록이 확정된
-                    이후에만 메시지가 발송됩니다.
-                condition: &ref_17
+                description: *ref_0
+                notification: *ref_1
+                isInstant: *ref_2
+                condition: &ref_22
                   type: object
                   description: >-
                     구독하고자 하는 이벤트 조건의 상제 정의를 위한 필드입니다. 이벤트 타입에 따라 입력 가능한 조건이 다르기
@@ -145,7 +573,7 @@ paths:
                             format: ^0[xX][0-9a-fA-F]{40}$
                             default: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97'
                             example:
-                              - &ref_0
+                              - &ref_3
                                 CONTRACT_ADDRESS: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
                                 ABI: >-
                                   [{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[],"name":"Pause","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpause","type":"event"}]
@@ -171,7 +599,7 @@ paths:
                             format: ^0[xX][0-9a-fA-F]{40}$
                             default: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97'
                             example:
-                              - *ref_0
+                              - *ref_3
                               - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                     - title: SUCCESSFUL_TRANSACTION
                       description: >-
@@ -193,7 +621,7 @@ paths:
                             format: ^0[xX][0-9a-fA-F]{40}$
                             default: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97'
                             example:
-                              - *ref_0
+                              - *ref_3
                               - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                     - title: FAILED_TRANSACTION
                       description: >-
@@ -216,7 +644,7 @@ paths:
                             format: ^0[xX][0-9a-fA-F]{40}$
                             default: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97'
                             example:
-                              - *ref_0
+                              - *ref_3
                               - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                     - title: TOKEN_TRANSFER
                       description: >-
@@ -244,7 +672,7 @@ paths:
                                 format: ^0[xX][0-9a-fA-F]{40}$
                                 default: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97'
                                 example:
-                                  - *ref_0
+                                  - *ref_3
                                   - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                               tokenId:
                                 type: string
@@ -271,7 +699,7 @@ paths:
                           description: "잔고 알림을 받고자 하는 대상 주소\t"
                           default: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97'
                           example:
-                            - *ref_0
+                            - *ref_3
                             - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                         belowThresholdBalance:
                           type: string
@@ -448,217 +876,6 @@ paths:
                                 0x000000000000000000000000b7aa2d3c833a6827c4f39bef9622d7cddf66b7e7
                               - >-
                                 0x0000000000000000000000003264039cfaa37a70a0e8ccfbf4b7e60bedce5c9f
-                    - title: EVENT - Aptos only
-                      description: >-
-                        지정한 이벤트가 발생할 때마다 알림을 제공합니다. 사용자는 이를 통해 네트워크 상에서 발생하는 중요한
-                        활동을 빠르게 파악할 수 있습니다.
-                      type: object
-                      required:
-                        - eventType
-                        - eventAccountAddress
-                      properties:
-                        eventType:
-                          type: string
-                          description: >
-                            모니터링 하고자하는 이벤트 타입. 이벤트 타입은 모듈에서 정의한 event struct의
-                            이름을 의미합니다. 이 필드는
-                            `module_address::module_name::event_name` 형식으로
-                            입력합니다.
-
-                            > 📘 `0x1::transaction_fee::FeeStatement` 는
-                            eventType에 사용할 수 없나요?
-
-                            > 네, 이 이벤트는 가스비를 소모하는 모든 user transaction에 포함됩니다.
-
-                            > 따라서 별도의 이벤트로 구독할 필요가 없으므로, Transaction 이벤트를 구독하는
-                            방식을 권장드립니다.
-                          default: 0x1::account::CoinRegisterEvent
-                          example:
-                            - >-
-                              0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
-                            - 0x1::coin::CoinDeposit
-                        eventAccountAddress:
-                          type: string
-                          description: >
-                            모니터링 하고자하는 이벤트를 발생시키는 주소. 
-
-                            > 📘 Module Events일 때는 eventAccountAddress를 꼭 0x0으로
-                            입력해야 하나요?
-
-                            > 맞습니다. eventType이 “Module Events”인 경우에는
-                            eventAccountAddress를 반드시 “0x0”으로 입력해 주세요. 만약,
-                            “Event-Handler Events”로 정의된 경우에는 이벤트를 발생한 계정 주소를
-                            입력하시면 됩니다. 이벤트 종류에 대한 자세한 내용은 [Aptos 공식
-                            문서](https://aptos.dev/en/network/blockchain/events)에서
-                            확인하실 수 있습니다.
-                          default: '0x0'
-                          example:
-                            - '0x1'
-                            - >-
-                              0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d
-                        eventData:
-                          type: string
-                          format: json
-                          description: >-
-                            이벤트 데이터 필터링 조건을 지정하는 객체. 이 필드를 활용하면 특정 키와 값을 지정하여
-                            원하는 이벤트만 필터링할 수 있습니다. JSON 객체 형식으로 최대 3단계 중첩된 값까지 입력
-                            가능합니다. 입력한 키와 값이 이벤트 데이터와 정확히 일치하는 경우에만 필터링됩니다.
-                          example:
-                            - >-
-                              { transfer: { sender: "0xcafe", receiver: "0xface"
-                              } }
-                    - title: TRANSACTION - Aptos only
-                      description: >-
-                        이 기능은 사용자가 특정 이벤트 유형(eventType)과 해당 이벤트를 발생시킨
-                        계정(eventAccountAddress)을 입력하여 API를 설정하면, 지정된 이벤트 유형이
-                        발생했을 때 해당 이벤트 유형이 포함된 트랜잭션의 모든 세부 내역을 반환하는 API입니다. 이벤트가
-                        발생하면 해당 트랜잭션의 전체 내역, 발신자, 수신자, 금액, 호출된 함수, 관련 데이터 등 모든
-                        세부 정보를 확인할 수 있어 시스템 모니터링에 유용하게 활용될 수 있습니다.
-                      type: object
-                      oneOf:
-                        - title: function condition set
-                          required:
-                            - payloadFunction
-                          properties:
-                            payloadFunction:
-                              type: string
-                              description: >-
-                                모니터링 하고자하는 함수. 이 필드는
-                                `module_address::module_name::function_name`
-                                형식으로 입력합니다.
-                              default: >-
-                                0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
-                              example:
-                                - 0x1::aptos_account::transfer
-                                - 0x1::aptos_account::transfer_coins
-                                - 0x1::primary_fungible_store::transfer
-                        - title: event condition set
-                          required:
-                            - eventType
-                            - eventAccountAddress
-                          properties:
-                            eventType:
-                              type: string
-                              description: >
-                                모니터링 하고자하는 이벤트 타입. 이벤트 타입은 모듈에서 정의한 event
-                                struct의 이름을 의미합니다. 이 필드는
-                                `module_address::module_name::event_name` 형식으로
-                                입력합니다.
-
-                                > 📘 `0x1::transaction_fee::FeeStatement` 는
-                                eventType에 사용할 수 없나요?
-
-                                > 네, 이 이벤트는 가스비를 소모하는 모든 user transaction에
-                                포함됩니다.
-
-                                > 따라서 별도의 이벤트로 구독할 필요가 없으므로, Transaction 이벤트를
-                                구독하는 방식을 권장드립니다.
-                              default: 0x1::account::CoinRegisterEvent
-                              example:
-                                - >-
-                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
-                                - 0x1::coin::CoinDeposit
-                            eventAccountAddress:
-                              type: string
-                              description: >
-                                모니터링 하고자하는 이벤트를 발생시키는 주소. 
-
-                                > 📘 Module Events일 때는 eventAccountAddress를 꼭
-                                0x0으로 입력해야 하나요?
-
-                                > 맞습니다. eventType이 “Module Events”인 경우에는
-                                eventAccountAddress를 반드시 “0x0”으로 입력해 주세요. 만약,
-                                “Event-Handler Events”로 정의된 경우에는 이벤트를 발생한 계정 주소를
-                                입력하시면 됩니다. 이벤트 종류에 대한 자세한 내용은 [Aptos 공식
-                                문서](https://aptos.dev/en/network/blockchain/events)에서
-                                확인하실 수 있습니다.
-                              default: '0x0'
-                              example:
-                                - '0x1'
-                                - >-
-                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d
-                            eventData:
-                              type: string
-                              format: json
-                              description: >-
-                                이벤트 데이터 필터링 조건을 지정하는 객체. 이 필드를 활용하면 특정 키와 값을
-                                지정하여 원하는 이벤트만 필터링할 수 있습니다. JSON 객체 형식으로 최대 3단계
-                                중첩된 값까지 입력 가능합니다. 입력한 키와 값이 이벤트 데이터와 정확히 일치하는
-                                경우에만 필터링됩니다.
-                              example:
-                                - >-
-                                  { transfer: { sender: "0xcafe", receiver:
-                                  "0xface" } }
-                        - title: function and event condition set
-                          required:
-                            - payloadFunction
-                            - eventType
-                            - eventAccountAddress
-                          properties:
-                            payloadFunction:
-                              type: string
-                              description: >-
-                                모니터링 하고자하는 함수. 이 필드는
-                                `module_address::module_name::function_name`
-                                형식으로 입력합니다.
-                              default: >-
-                                0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
-                              example:
-                                - 0x1::aptos_account::transfer
-                                - 0x1::aptos_account::transfer_coins
-                                - 0x1::primary_fungible_store::transfer
-                            eventType:
-                              type: string
-                              description: >
-                                모니터링 하고자하는 이벤트 타입. 이벤트 타입은 모듈에서 정의한 event
-                                struct의 이름을 의미합니다. 이 필드는
-                                `module_address::module_name::event_name` 형식으로
-                                입력합니다.
-
-                                > 📘 `0x1::transaction_fee::FeeStatement` 는
-                                eventType에 사용할 수 없나요?
-
-                                > 네, 이 이벤트는 가스비를 소모하는 모든 user transaction에
-                                포함됩니다.
-
-                                > 따라서 별도의 이벤트로 구독할 필요가 없으므로, Transaction 이벤트를
-                                구독하는 방식을 권장드립니다.
-                              default: 0x1::account::CoinRegisterEvent
-                              example:
-                                - >-
-                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
-                                - 0x1::coin::CoinDeposit
-                            eventAccountAddress:
-                              type: string
-                              description: >
-                                모니터링 하고자하는 이벤트를 발생시키는 주소. 
-
-                                > 📘 Module Events일 때는 eventAccountAddress를 꼭
-                                0x0으로 입력해야 하나요?
-
-                                > 맞습니다. eventType이 “Module Events”인 경우에는
-                                eventAccountAddress를 반드시 “0x0”으로 입력해 주세요. 만약,
-                                “Event-Handler Events”로 정의된 경우에는 이벤트를 발생한 계정 주소를
-                                입력하시면 됩니다. 이벤트 종류에 대한 자세한 내용은 [Aptos 공식
-                                문서](https://aptos.dev/en/network/blockchain/events)에서
-                                확인하실 수 있습니다.
-                              default: '0x0'
-                              example:
-                                - '0x1'
-                                - >-
-                                  0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d
-                            eventData:
-                              type: string
-                              format: json
-                              description: >-
-                                이벤트 데이터 필터링 조건을 지정하는 객체. 이 필드를 활용하면 특정 키와 값을
-                                지정하여 원하는 이벤트만 필터링할 수 있습니다. JSON 객체 형식으로 최대 3단계
-                                중첩된 값까지 입력 가능합니다. 입력한 키와 값이 이벤트 데이터와 정확히 일치하는
-                                경우에만 필터링됩니다.
-                              example:
-                                - >-
-                                  { transfer: { sender: "0xcafe", receiver:
-                                  "0xface" } }
               required:
                 - eventType
                 - notification
@@ -667,8 +884,10 @@ paths:
                 eventType: SUCCESSFUL_TRANSACTION
                 notification:
                   webhookUrl: https://example.com/webhook
-                description: Webhook for successful transaction
-                condition: '{"addresses": ["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"]}'
+                description: Webhook Test
+                condition:
+                  addresses:
+                    - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
       responses:
         '201':
           description: Created
@@ -677,61 +896,19 @@ paths:
               schema:
                 type: object
                 properties:
-                  subscriptionId: &ref_1
-                    type: string
-                    description: >-
-                      Webhook에 할당된 subscriptionId를 나타내는 필드입니다. subscriptionId는
-                      Webhook을 식별하는 유니크한 값으로, Webhook을 조회, 수정 또는 삭제할 때 사용됩니다.
-                  description: &ref_2
-                    type: string
-                    description: Webhook의 설명을 나타내는 필드입니다.
-                  protocol: &ref_3
-                    type: string
-                    description: >-
-                      해당 Webhook의 프로토콜을 나타내는 필드입니다. (e.g., ETHEREUM, POLYGON,
-                      OPTIMISM, ...)
-                  network: &ref_4
-                    type: string
-                    description: >-
-                      해당 Webhook의 네트워크를 나타내는 필드입니다. (e.g., MAINNET, SEPOLIA,
-                      MUMBAI, ...)
-                  eventType: &ref_5
-                    type: string
-                    description: 해당 Webhook이 구독하는 이벤트 타입을 나타내는 필드입니다.
-                  notification: &ref_6
-                    type: object
-                    required:
-                      - webhookUrl
-                    description: Webhook으로 알림을 받기 위한 정보를 나타내는 필드입니다.
-                    properties:
-                      webhookUrl:
-                        type: string
-                        description: Webhook으로 알림을 받을 URL을 나타내는 필드입니다.
-                  signingKey:
-                    type: string
-                    description: >-
-                      Webhook 알림의 인증을 위한 서명 키를 나타내는 필드입니다. Webhook 알림을 수신한 후 서명
-                      키를 사용하여 알림의 유효성을 검증할 수 있습니다. 서명 키는 Webhook 생성 시 자동으로 생성되며,
-                      Webhook 수정 시 변경할 수 없습니다.
-                  isInstant: &ref_7
-                    type: boolean
-                    description: >-
-                      Instant Webhook 옵션 활성화 여부를 지정하는 필드입니다. 
-
-                      - true: 이 옵션이 활성화 되어있다면 모니터링 대상 이벤트가 포함된 블록의 확정 여부와 상관 없이
-                      해당 이벤트가 감지되는 즉시 Webhook 메시지를 수신할 수 있습니다. 
-
-                      - false: 이 옵션이 비활성화 되어있다면 이벤트 트랜잭션이 포함된 블록이 확정된 이후에만 메시지가
-                      발송됩니다.
-                  condition: &ref_9
-                    type: object
-                    description: Webhook 구독 조건을 나타내는 필드입니다. 이벤트 타입에 따라 다른 조건을 가질 수 있습니다.
-                  createdAt: &ref_8
-                    type: string
-                    description: 웹훅 이벤트가 발생하고 로그가 생성된 시점을 나타냅니다. 이 필드는 ISO 8601 형식으로 반환됩니다.
+                  subscriptionId: *ref_4
+                  description: *ref_5
+                  protocol: *ref_6
+                  network: *ref_7
+                  eventType: *ref_8
+                  notification: *ref_9
+                  signingKey: *ref_10
+                  isInstant: *ref_11
+                  condition: *ref_12
+                  createdAt: *ref_13
               example:
                 subscriptionId: '322'
-                description: test webhook
+                description: Webhook Test
                 protocol: ETHEREUM
                 network: MAINNET
                 eventType: BLOCK_PERIOD
@@ -742,80 +919,11 @@ paths:
                 condition:
                   period: 3
                 createdAt: '2023-04-21T05:55:12.084Z'
-        '400': &ref_10
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                example:
-                  code: INVALID_PARAMETER
-                  message: >-
-                    Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE,
-                    PARAMETER2_NAME = PARAMETER2_VALUE, ... }
-        '401': &ref_11
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                example:
-                  code: AUTHENTICATION_FAILED
-                  message: Authentication failed
-        '403': &ref_12
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                example:
-                  code: PERMISSION_DENIED
-                  message: Permission denied
-        '404': &ref_13
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                example:
-                  code: RESOURCE_NOT_FOUND
-                  message: >-
-                    Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE,
-                    RESOURCE2_NAME = RESOURCE2_VALUE, ... }
-        '429': &ref_14
-          description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                example:
-                  code: TOO_MANY_REQUESTS
-                  message: Too many requests
+        '400': *ref_14
+        '401': *ref_15
+        '403': *ref_16
+        '404': *ref_17
+        '429': *ref_18
     get:
       security:
         - api_key: []
@@ -869,7 +977,7 @@ paths:
         - name: subscriptionId
           in: query
           required: false
-          schema: &ref_20
+          schema: &ref_24
             type: string
           description: >-
             조회하고자 하는 Webhook에 할당된 subscriptionId를 지정하기 위한 파라미터입니다. Webhook 생성 시
@@ -888,13 +996,13 @@ paths:
                   - rpp
                   - items
                 properties:
-                  total: &ref_21
+                  total: &ref_25
                     type: number
                     description: 조건에 맞는 총 이벤트 개수입니다.
-                  page: &ref_22
+                  page: &ref_26
                     type: number
                     description: 현재 조회된 페이지 번호입니다.
-                  rpp: &ref_23
+                  rpp: &ref_27
                     type: number
                     description: 요청에 따라 반환된 한 페이지당 이벤트 수입니다.
                   items:
@@ -915,31 +1023,31 @@ paths:
                         - createdAt
                         - condition
                       properties:
-                        subscriptionId: *ref_1
-                        description: *ref_2
-                        protocol: *ref_3
-                        network: *ref_4
-                        subscriptionType: &ref_24
+                        subscriptionId: *ref_4
+                        description: *ref_5
+                        protocol: *ref_6
+                        network: *ref_7
+                        subscriptionType: &ref_28
                           type: string
                           description: 구독 유형을 식별할 수 있는 필드입니다.
                           example: WEBHOOK
-                        eventType: *ref_5
-                        notification: *ref_6
-                        isInstant: *ref_7
-                        isActive: &ref_25
+                        eventType: *ref_8
+                        notification: *ref_9
+                        isInstant: *ref_11
+                        isActive: &ref_29
                           type: boolean
                           description: >-
                             Webhook의 활성화 여부를 나타내는 필드입니다. Webhook이 활성화되어 있으면
                             true, 비활성화되어 있으면 false입니다. Webhook이 비활성화되어 있으면 해당
                             Webhook으로 알림을 받을 수 없습니다.
-                        updatedAt: &ref_26
+                        updatedAt: &ref_30
                           type: string
                           description: >-
                             웹훅 전송 결과(status)에 변화가 생긴 시점을 나타냅니다. 예를 들어, 실패 후
                             재시도되어 성공으로 변경된 경우 등이 해당됩니다. 이 필드는 ISO 8601 형식으로
                             반환됩니다.
-                        createdAt: *ref_8
-                        condition: *ref_9
+                        createdAt: *ref_13
+                        condition: *ref_12
               example:
                 total: 1
                 rpp: 10
@@ -959,11 +1067,86 @@ paths:
                     createdAt: '2023-04-21T09:40:49.678Z'
                     condition:
                       period: 1
-        '400': *ref_10
-        '401': *ref_11
-        '403': *ref_12
-        '404': *ref_13
-        '429': *ref_14
+        '400': *ref_14
+        '401': *ref_15
+        '403': *ref_16
+        '404': *ref_17
+        '429': *ref_18
+  /aptos/{network}/webhooks/{subscriptionId}:
+    patch:
+      security:
+        - api_key: []
+      tags:
+        - Webhook API
+      description: |+
+        Webhook의 구독 조건(condition)을 변경하거나 Webhook을 활성화, 또는 비활성화 할 수 있습니다.
+
+      summary: Update Webhook (Aptos)
+      operationId: aptos-updateWebhook
+      parameters:
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+              - testnet
+          description: |
+            조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+
+            - aptos: "mainnet", "testnet"
+            - arbitrum: "mainnet", "sepolia"
+            - base: "mainnet", "sepolia",
+            - ethereum: "mainnet", "sepolia", "hoodi"
+            - kaia: "mainnet", "kairos"
+            - optimism: "mainnet", "sepolia"
+            - polygon: "mainnet", "amoy"
+            - luniverse(the balance): "mainnet"
+        - &ref_20
+          name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: >-
+            조회하고자 하는 Webhook에 할당된 subscriptionId를 지정하기 위한 파라미터입니다. Webhook 생성 시
+            반환되는 subscriptionId를 사용하여 Webhook 정보를 조회, 수정 및 삭제할 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                notification: *ref_1
+                description: *ref_0
+                isActive: &ref_21
+                  type: boolean
+                  description: >-
+                    Webhook의 활성화 여부를 지정하는 파라미터입니다. 이 값이 true로 지정하면 활성화되며, false로
+                    지정하면 비활성화됩니다. 비활성화된 Webhook은 알림을 받을 수 없지만 삭제되지 않습니다.
+                condition: *ref_19
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result: &ref_23
+                    type: boolean
+                    description: 호출 결과를 나타내는 필드입니다. 성공 시 true, 실패 시 false를 반환합니다.
+              example:
+                result: true
+        '400': *ref_14
+        '401': *ref_15
+        '403': *ref_16
+        '404': *ref_17
+        '429': *ref_18
   /{protocol}/{network}/webhooks/{subscriptionId}:
     patch:
       security:
@@ -973,7 +1156,7 @@ paths:
       description: |+
         Webhook의 구독 조건(condition)을 변경하거나 Webhook을 활성화, 또는 비활성화 할 수 있습니다.
 
-      summary: Update Webhook
+      summary: Update Webhook (EVM)
       operationId: updateWebhook
       parameters:
         - name: protocol
@@ -1015,15 +1198,7 @@ paths:
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
             - luniverse(the balance): "mainnet"
-        - &ref_18
-          name: subscriptionId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: >-
-            조회하고자 하는 Webhook에 할당된 subscriptionId를 지정하기 위한 파라미터입니다. Webhook 생성 시
-            반환되는 subscriptionId를 사용하여 Webhook 정보를 조회, 수정 및 삭제할 수 있습니다.
+        - *ref_20
       requestBody:
         required: true
         content:
@@ -1032,14 +1207,10 @@ paths:
               additionalProperties: false
               type: object
               properties:
-                notification: *ref_15
-                description: *ref_16
-                isActive:
-                  type: boolean
-                  description: >-
-                    Webhook의 활성화 여부를 지정하는 파라미터입니다. 이 값이 true로 지정하면 활성화되며, false로
-                    지정하면 비활성화됩니다. 비활성화된 Webhook은 알림을 받을 수 없지만 삭제되지 않습니다.
-                condition: *ref_17
+                notification: *ref_1
+                description: *ref_0
+                isActive: *ref_21
+                condition: *ref_22
       responses:
         '200':
           description: Successful Response
@@ -1048,16 +1219,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  result: &ref_19
-                    type: boolean
-                    description: 호출 결과를 나타내는 필드입니다. 성공 시 true, 실패 시 false를 반환합니다.
+                  result: *ref_23
               example:
                 result: true
-        '400': *ref_10
-        '401': *ref_11
-        '403': *ref_12
-        '404': *ref_13
-        '429': *ref_14
+        '400': *ref_14
+        '401': *ref_15
+        '403': *ref_16
+        '404': *ref_17
+        '429': *ref_18
     delete:
       security:
         - api_key: []
@@ -1109,7 +1278,7 @@ paths:
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
             - luniverse(the balance): "mainnet"
-        - *ref_18
+        - *ref_20
       responses:
         '200':
           description: Successful Response
@@ -1118,14 +1287,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  result: *ref_19
+                  result: *ref_23
               example:
                 result: true
-        '400': *ref_10
-        '401': *ref_11
-        '403': *ref_12
-        '404': *ref_13
-        '429': *ref_14
+        '400': *ref_14
+        '401': *ref_15
+        '403': *ref_16
+        '404': *ref_17
+        '429': *ref_18
   /{protocol}/{network}/webhooks/history:
     get:
       security:
@@ -1186,7 +1355,7 @@ paths:
         - name: subscriptionId
           in: query
           required: true
-          schema: *ref_20
+          schema: *ref_24
           description: >-
             조회하고자 하는 Webhook에 할당된 subscriptionId를 지정하기 위한 파라미터입니다. Webhook 생성 시
             반환되는 subscriptionId를 사용하여 Webhook 정보를 조회, 수정 및 삭제할 수 있습니다. 빈 값을 입력하면
@@ -1246,26 +1415,26 @@ paths:
               schema:
                 type: object
                 properties:
-                  total: *ref_21
-                  page: *ref_22
-                  rpp: *ref_23
+                  total: *ref_25
+                  page: *ref_26
+                  rpp: *ref_27
                   items:
                     type: array
                     description: 이벤트 상세 데이터를 포함하는 배열입니다.
                     items:
                       type: object
                       properties:
-                        subscriptionId: *ref_1
-                        description: *ref_2
-                        protocol: *ref_3
-                        network: *ref_4
-                        subscriptionType: *ref_24
-                        eventType: *ref_5
-                        notification: *ref_6
-                        isActive: *ref_25
-                        updatedAt: *ref_26
-                        createdAt: *ref_8
-                        condition: *ref_9
+                        subscriptionId: *ref_4
+                        description: *ref_5
+                        protocol: *ref_6
+                        network: *ref_7
+                        subscriptionType: *ref_28
+                        eventType: *ref_8
+                        notification: *ref_9
+                        isActive: *ref_29
+                        updatedAt: *ref_30
+                        createdAt: *ref_13
+                        condition: *ref_12
               example:
                 total: 146779
                 rpp: 2
@@ -1339,8 +1508,8 @@ paths:
                                   0x6d00d52f94579e51308ae83841b5133e3a7e93b51fcd8cf338d766e3f0331026
                                 round: '13582'
                                 time_microseconds: '1734048354656343'
-        '400': *ref_10
-        '401': *ref_11
-        '403': *ref_12
-        '404': *ref_13
-        '429': *ref_14
+        '400': *ref_14
+        '401': *ref_15
+        '403': *ref_16
+        '404': *ref_17
+        '429': *ref_18

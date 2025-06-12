@@ -1,7 +1,9 @@
 import { OpenAPIV3 } from "openapi-types";
-import webhookCreate from "./paths/create";
+import webhookCreateEvm from "./paths/createEvm";
+import webhookCreateAptos from "./paths/createAptos";
 import webhookGet from "./paths/get";
-import webhookUpdate from "./paths/update";
+import webhookUpdateAptos from "./paths/updateAptos";
+import webhookUpdateEvm from "./paths/updateEvm";
 import webhookDelete from "./paths/delete";
 import webhookHistory from "./paths/history";
 import { OasParams, ReadmeExtension } from "../../types";
@@ -34,12 +36,18 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 			},
 		},
 		paths: {
+			"/aptos/{network}/webhooks": {
+				post: webhookCreateAptos.info(protocol).post,
+			},
 			"/{protocol}/{network}/webhooks": {
-				post: webhookCreate.info(protocol).post,
+				post: webhookCreateEvm.info(protocol).post,
 				get: webhookGet.info(protocol).get,
 			},
+			"/aptos/{network}/webhooks/{subscriptionId}": {
+				patch: webhookUpdateAptos.info(protocol).patch,
+			},
 			"/{protocol}/{network}/webhooks/{subscriptionId}": {
-				patch: webhookUpdate.info(protocol).patch,
+				patch: webhookUpdateEvm.info(protocol).patch,
 				delete: webhookDelete.info(protocol).delete,
 			},
 			"/{protocol}/{network}/webhooks/history": {
