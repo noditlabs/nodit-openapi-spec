@@ -569,7 +569,7 @@ export const TransactionWithReceipt: OpenAPIV3.SchemaObject = {
 		decodedInput: {
 			type: "object",
 			description:
-				"트랜잭션의 데이터를 디코딩한 결과를 나타내는 필드입니다. withDecodedInput 파라미터에 true를 입력한 경우에만 응답에 포함됩니다.",
+				"트랜잭션의 input을 디코딩한 결과를 나타내는 필드입니다. withDecode 파라미터에 true를 입력한 경우에만 응답에 포함되며, 디코딩된 input을 기반으로 실행된 함수 데이터를 제공합니다. 함수를 식별할 수 없는 경우에는 withDecode가 true여도 이 필드가 제공되지 않습니다.",
 			properties: {
 				type: {
 					type: "string",
@@ -654,7 +654,7 @@ export const TransactionWithReceipt: OpenAPIV3.SchemaObject = {
 0: 이 값은 표준 이더리움 트랜잭션을 나타냅니다. 이는 EIP-2718 적용 이전의 전통적인 트랜잭션 형식입니다.
 1: EIP-2930에서 도입된 'Access List' 트랜잭션을 나타냅니다. 이 유형의 트랜잭션은 가스 비용을 최적화하기 위해 특정 주소와 저장소 슬롯에 대한 접근 목록을 포함합니다.
 2: EIP-1559에서 도입된 'Fee Market' 트랜잭션을 나타냅니다. 이 유형의 트랜잭션은 가변적인 가스 비용 모델을 사용하며, maxFeePerGas와 maxPriorityFeePerGas 필드를 포함합니다.
-3: EIP-4844에서 도입된 ‘Blob Transaction’을 나타냅니다. 이 유형의 트랜잭션은 본문과 별도로 추가적인 blob 데이터를 포함하며, 롤업(Rollup) 등 Layer2 솔루션과 연계하여 데이터 가용성을 개선하고 확장성을 지원합니다.
+3: EIP-4844에서 도입된 'Blob Transaction'을 나타냅니다. 이 유형의 트랜잭션은 본문과 별도로 추가적인 blob 데이터를 포함하며, 롤업(Rollup) 등 Layer2 솔루션과 연계하여 데이터 가용성을 개선하고 확장성을 지원합니다.
 4: EIP-7702에서 도입된 확장된 트랜잭션 유형으로, 서명/승인 정보를 담은 authorizationList 필드를 포함합니다. 이 필드는 다중 서명 또는 추가 인증 절차가 필요한 경우 사용됩니다.
 `,
 			pattern: Patterns.string.decimal().source,
