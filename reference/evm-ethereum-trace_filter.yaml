@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-ethereum-trace_filter
-  version: 1.2.9
+  version: 1.2.10
 servers:
   - url: https://{ethereum-network}.nodit.io
     variables:
@@ -29,9 +29,29 @@ paths:
         - api_key: []
       tags:
         - evm-ethereum-trace_filter
-      description: >-
+      description: >
         지정된 조건에 맞는 트랜잭션들의 실행 과정을 필터링하여 추적합니다. 사용자는 블록 번호의 범위, 사용된 주소, 사용된 토큰 등
         다양한 조건을 설정할 수 있으며, 이에 해당하는 트랜잭션들의 추적 정보를 얻을 수 있습니다.
+
+
+
+        > 🚧 응답 시간이 오래 걸리시나요? 블록 범위에 따라 응답 시간이 길어질 수 있습니다!
+
+        >
+
+        > 넓은 블록 범위를 지정하거나 이벤트가 많은 블록을 포함하면, 응답이 지연되거나 타임아웃이 발생할 수 있습니다.
+
+        >
+
+        > 빠른 응답을 원하신다면 다음 권장사항을 참고하세요:
+
+        >
+
+        > - fromBlock ~ toBlock 범위는 1000 블록 이하로 설정하는 것이 좋습니다.
+
+        > - 특히 blockTag에 latest를 사용하는 경우, 내부적으로 명확한 블록 번호를 알 수 없어 응답 시간이 길어질 수
+        있습니다.
+          이 경우, eth_blockNumber로 최신 블록 번호를 조회한 후 명시적으로 지정하세요.
       summary: trace_filter
       operationId: trace_filter
       parameters: []

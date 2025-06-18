@@ -1151,7 +1151,6 @@ paths:
               - optimism
               - polygon
               - luniverse
-              - aptos
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network

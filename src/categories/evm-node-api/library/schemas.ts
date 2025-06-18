@@ -79,6 +79,7 @@ Allowed values: account_not_found, resource_not_found, module_not_found, struct_
 		oneOf: [Schemas.blockNumber, Schemas.blockTag],
 		default: "0x12C1A00", // 19415000
 		description: `블록 지정을 위해 블록 넘버 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
 * 블록 넘버: 16진수 문자열 (ex. "0x1") 
 * 블록 태그: enum 문자열 (ex. "latest", "earliest", "pending")`,
 	};
@@ -87,7 +88,7 @@ Allowed values: account_not_found, resource_not_found, module_not_found, struct_
 		title: "Block Identifier",
 		type: "string",
 		oneOf: [Schemas.blockNumber, Schemas.blockHash, Schemas.blockTag],
-		default: "latest",
+		default: "0x12C1A00", // 19415000
 		description: `블록 지정을 위해 블록 해시, 블록 넘버, 또는 블록 태그 중 하나를 사용할 수 있습니다.
 * 블록 넘버: 16진수 문자열 (ex. "0x1") 
 * 블록 해시: 64자리 16진수 문자열 (ex. "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
@@ -119,7 +120,7 @@ Allowed values: account_not_found, resource_not_found, module_not_found, struct_
 		title: "Block Identifier",
 		type: "string",
 		oneOf: [Schemas.blockNumber, Schemas.blockHash, Schemas.blockTagKaia],
-		default: "latest",
+		default: "0x12C1A00", // 19415000
 		description: `블록 지정을 위해 블록 해시, 블록 넘버, 또는 블록 태그 중 하나를 사용할 수 있습니다.
 * 블록 넘버: 16진수 문자열 (ex. "0x1") 
 * 블록 해시: 64자리 16진수 문자열 (ex. "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
@@ -223,22 +224,6 @@ Allowed values: account_not_found, resource_not_found, module_not_found, struct_
 4. 생성된 해시값을 서명합니다. 서명된 해시값은 서명된 트랜잭션 해시입니다.`,
 	};
 
-	export const fromBlock: OpenAPIV3.SchemaObject = {
-		title: "From Block",
-		type: "string",
-		description: `블록 조회 범위의 시작 블록 지정을 위해 블록 넘버와 블록 태그 중 하나를 입력할 수 있습니다. ${Schemas.blockTag.description}`,
-		oneOf: [Schemas.blockNumber, Schemas.blockTag],
-		default: "0x12C1A00", // 19415000
-	};
-
-	export const toBlock: OpenAPIV3.SchemaObject = {
-		title: "To Block",
-		type: "string",
-		oneOf: [Schemas.blockNumber, Schemas.blockTag],
-		default: "latest",
-		description: `블록 조회 범위의 종료 블록 지정을 위해 블록 넘버와 블록 태그 중 하나를 입력할 수 있습니다. ${Schemas.blockTag.description}`,
-	};
-
 	export const topics: OpenAPIV3.SchemaObject = {
 		title: "Topics",
 		type: "array",
@@ -269,9 +254,9 @@ Allowed values: account_not_found, resource_not_found, module_not_found, struct_
 		pattern: Patterns.ethereum.eventType.source,
 		default: "newHeads",
 		description: `이벤트 타입은 이벤트를 구독할 때 사용하는 타입을 나타냅니다. 다음 중 하나를 사용할 수 있습니다.
-* \`newHeads\`: 새로운 블록이 생성될 때마다 이벤트를 수신합니다.
-* \`logs\`: "logs"를 구독하는 경우, 두 번째 파라미터로 필터 옵션을 객체 형태로 제공할 수 있습니다. 이 객체는 fromBlock, toBlock, address, topics 필드를 포함할 수 있습니다.
-* \`newPendingTransactions\`: 새로운 Pending 트랜잭션이 생성될 때마다 이벤트를 수신합니다.`,
+* newHeads: 새로운 블록이 생성될 때마다 이벤트를 수신합니다.
+* logs: "logs"를 구독하는 경우, 두 번째 파라미터로 필터 옵션을 객체 형태로 제공할 수 있습니다. 이 객체는 fromBlock, toBlock, address, topics 필드를 포함할 수 있습니다.
+* newPendingTransactions: 새로운 Pending 트랜잭션이 생성될 때마다 이벤트를 수신합니다.`,
 	};
 
 	export const traceType: OpenAPIV3.SchemaObject = {
@@ -285,8 +270,8 @@ Allowed values: account_not_found, resource_not_found, module_not_found, struct_
 		minItems: 1,
 		maximum: 3,
 		description: `Trace type는 이더리움 블록체인에서 특정 트랜잭션이나 블록의 실행 상세 정보를 조회할 때 사용되는 데이터 유형을 명시합니다. 이 배열은 다음 세 가지 문자열 값을 포함할 수 있습니다:
-- \`vmTrace\`: 가상 머신의 단계별 실행을 상세하게 추적합니다. 이는 메모리 상태, 스택 상태, 그리고 각 실행 명령의 결과를 포함합니다.
-- \`trace\`: 트랜잭션 실행에 대한 단계별 로그를 제공합니다. 이 로그에는 호출 흐름과 발생한 내부 트랜잭션들의 세부 정보가 포함됩니다.
+- vmTrace: 가상 머신의 단계별 실행을 상세하게 추적합니다. 이는 메모리 상태, 스택 상태, 그리고 각 실행 명령의 결과를 포함합니다.
+- trace\`: 트랜잭션 실행에 대한 단계별 로그를 제공합니다. 이 로그에는 호출 흐름과 발생한 내부 트랜잭션들의 세부 정보가 포함됩니다.
 - \`stateDiff\`: 트랜잭션이 실행되기 전후의 계정 상태의 차이를 보여줍니다. 이는 변경된 스토리지 키와 값, 계정의 잔액 및 계약 코드의 변화들을 포함합니다.
 
 이 정보는 개발자가 트랜잭션 처리 과정을 더 잘 이해하고 디버깅을 할 수 있게 도와줍니다. 각 유형은 블록체인의 특정 측면에 대한 상세 정보를 제공하여 트랜잭션의 영향을 명확하게 파악할 수 있게 합니다.`,

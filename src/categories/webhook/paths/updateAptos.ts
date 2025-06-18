@@ -2,7 +2,6 @@ import { OpenAPIV3 } from "openapi-types";
 import Requests from "../library/requests";
 import Responses from "../library/responses";
 import Examples from "../library/examples";
-import { getChainInfo } from "../../../constants";
 
 const summary = "Update Webhook (Aptos)";
 const endpoint = "aptos-updateWebhook";

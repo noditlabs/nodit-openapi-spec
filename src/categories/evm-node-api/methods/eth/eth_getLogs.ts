@@ -6,7 +6,7 @@ import Requests from "../../library/requests";
 import { API_KEY, BASE_URL, ETHEREUM_ACCOUNTS, getChainInfo } from "../../../../constants";
 import { OasParams, ReadmeExtension } from "../../../../types";
 import { protocolNetwork } from "../../library/serverVariables";
-import { ethGetLogsInfoMessage } from "../../../../callouts";
+import { fromBlockToBlockInfoMessage } from "../../../../callouts";
 
 function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 	const fileName = __filename.split("/").slice(-1)[0]?.split(".")[0];
@@ -54,7 +54,7 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 					tags: [title],
 					description: `입력한 필터 조건에 부합하는 Log들을 조회합니다. 별도의 필터를 생성하여 필터 ID로 조회하지 않고, 요청에 바로 필터 조건을 입력하여 조회합니다.
 
-${ethGetLogsInfoMessage}`,
+${fromBlockToBlockInfoMessage}`,
 					summary: method,
 					operationId: slug,
 					parameters: [],
@@ -75,18 +75,6 @@ ${ethGetLogsInfoMessage}`,
 											default: [
 												{
 													fromBlock: "latest",
-												},
-											],
-											example: [
-												{
-													address: ETHEREUM_ACCOUNTS.VITALIK_BUTERIN,
-													blockHash: "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48",
-													fromBlock: "0x12C1A00",
-													toBlock: "latest",
-													topics: [
-														"0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-														`0x000000000000000000000000${ETHEREUM_ACCOUNTS.VITALIK_BUTERIN.slice(2)}`,
-													],
 												},
 											],
 										},

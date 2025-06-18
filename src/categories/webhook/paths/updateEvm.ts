@@ -81,8 +81,6 @@ function getOpIdAndParams(protocol: string): {
 				"optimism",
 				"polygon",
 				"luniverse",
-				// non-evm
-				"aptos",
 			]),
 			Requests.networkForEvm("mainnet", ["mainnet", "testnet", "sepolia", "hoodi", "amoy"]),
 			Requests.subscriptionId,

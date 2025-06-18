@@ -3,9 +3,10 @@ import Responses from "../../library/responses";
 import Examples from "../../library/examples";
 import Schemas from "../../library/schemas";
 import Requests from "../../library/requests";
-import { API_KEY, BASE_URL, ETHEREUM_ACCOUNTS, getChainInfo } from "../../../../constants";
+import { API_KEY, BASE_URL, getChainInfo } from "../../../../constants";
 import { OasParams, ReadmeExtension } from "../../../../types";
 import { protocolNetwork } from "../../library/serverVariables";
+import { fromBlockToBlockInfoMessage } from "../../../../callouts";
 
 function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 	const fileName = __filename.split("/").slice(-1)[0]?.split(".")[0];
@@ -51,7 +52,9 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 						},
 					],
 					tags: [title],
-					description: `입력한 필터 조건에 부합하는 Log들을 조회하기 위한 필터를 생성하고 필터 ID를 반환합니다. 필터 ID는 kaia_getFilterLogs, kaia_uninstallFilter 메서드에서 사용됩니다.`,
+					description: `입력한 필터 조건에 부합하는 Log들을 조회하기 위한 필터를 생성하고 필터 ID를 반환합니다. 필터 ID는 kaia_getFilterLogs, kaia_uninstallFilter 메서드에서 사용됩니다.
+
+${fromBlockToBlockInfoMessage}`,
 					summary: method,
 					operationId: slug,
 					parameters: [],
@@ -72,18 +75,6 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 											default: [
 												{
 													fromBlock: "latest",
-												},
-											],
-											example: [
-												{
-													address: ETHEREUM_ACCOUNTS.VITALIK_BUTERIN,
-													blockHash: "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48",
-													fromBlock: "0x12C1A00",
-													toBlock: "latest",
-													topics: [
-														"0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-														`0x000000000000000000000000${ETHEREUM_ACCOUNTS.VITALIK_BUTERIN.slice(2)}`,
-													],
 												},
 											],
 										},

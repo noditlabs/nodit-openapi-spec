@@ -6,6 +6,7 @@ import Requests from "../../library/requests";
 import { API_KEY, BASE_URL, getChainInfo } from "../../../../constants";
 import { OasParams, ReadmeExtension } from "../../../../types";
 import { protocolNetwork } from "../../library/serverVariables";
+import { fromBlockToBlockInfoMessage } from "../../../../callouts";
 
 function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 	const fileName = __filename.split("/").slice(-1)[0]?.split(".")[0];
@@ -51,7 +52,9 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
 						},
 					],
 					tags: [title],
-					description: `지정된 조건에 맞는 트랜잭션들의 실행 과정을 필터링하여 추적합니다. 사용자는 블록 번호의 범위, 사용된 주소, 사용된 토큰 등 다양한 조건을 설정할 수 있으며, 이에 해당하는 트랜잭션들의 추적 정보를 얻을 수 있습니다.`,
+					description: `지정된 조건에 맞는 트랜잭션들의 실행 과정을 필터링하여 추적합니다. 사용자는 블록 번호의 범위, 사용된 주소, 사용된 토큰 등 다양한 조건을 설정할 수 있으며, 이에 해당하는 트랜잭션들의 추적 정보를 얻을 수 있습니다.
+
+${fromBlockToBlockInfoMessage}`,
 					summary: method,
 					operationId: slug,
 					parameters: [],

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-avalanche-eth_newPendingTransactionFilter
-  version: 1.2.6
+  version: 1.2.10
 servers:
   - url: https://{avalanche-network}.nodit.io
     variables:
