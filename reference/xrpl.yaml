@@ -3526,6 +3526,25 @@ paths:
                         항상 "r"로 시작합니다.
                       pattern: ^r[1-9A-HJ-NP-Za-km-z]{25,35}$
                       default: rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah
+                    relation:
+                      type: string
+                      description: >-
+                        잔고 변동을 기준으로 **송신자(잔고 감소)**·**수신자(잔고 증가)** 를 구분하며, 이 파라미터
+                        값에 따라 다음과 같이 트랜잭션을 필터링합니다. 
+
+
+                        - **from**  : 대상 계정이 **balanceOutAccounts**(송신자 목록)에 포함된
+                        트랜잭션만 조회  
+
+                        - **to**    : 대상 계정이 **balanceInAccounts**(수신자 목록)에 포함된
+                        트랜잭션만 조회  
+
+                        - **both** *(기본값)* : 대상 계정이 balanceOutAccounts 또는
+                        balanceInAccounts 어느 한쪽이라도 포함된 모든 트랜잭션 조회
+                      enum:
+                        - from
+                        - to
+                        - both
                     fromLedger: *ref_2
                     toLedger: *ref_3
                     fromDate: *ref_4

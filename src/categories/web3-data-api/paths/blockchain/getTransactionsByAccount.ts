@@ -444,6 +444,7 @@ function getRequestAndResponse(protocol: string): {
 									...Requests.XRPL.accountAddress,
 									default: XRPL_ACCOUNTS.ACCOUNT_1,
 								},
+								relation: Requests.XRPL.relation,
 								fromLedger: Requests.XRPL.fromLedger,
 								toLedger: Requests.XRPL.toLedger,
 								fromDate: Requests.XRPL.fromDate,
