@@ -27,6 +27,24 @@ export const Balance: OpenAPIV3.SchemaObject = {
 	},
 };
 
+export const Args: OpenAPIV3.SchemaObject = {
+	type: "object",
+	properties: {
+		name: {
+			type: "string",
+			description: "인자의 이름을 나타내는 필드입니다.",
+		},
+		type: {
+			type: "string",
+			description: "인자의 타입을 나타내는 필드입니다.",
+		},
+		value: {
+			type: "string",
+			description: "인자의 값을 나타내는 필드입니다.",
+		},
+	},
+};
+
 export const NftBalance: OpenAPIV3.SchemaObject = {
 	type: "object",
 	required: ["totalBalance", "uniqueBalance"],
@@ -238,6 +256,39 @@ export const TokenMarketData: OpenAPIV3.SchemaObject = {
 	},
 };
 
+const selector: OpenAPIV3.SchemaObject = {
+	type: "string",
+	description: "호출된 함수를 식별하는 4바이트 함수 셀렉터 값입니다. 함수 셀렉터는 함수 시그니처를 Keccak-256 해싱한 결과의 앞 4바이트를 의미합니다. 0x로 시작하는 8자리의 16진수 문자열 형태로 제공됩니다.",
+	pattern: Patterns.string.prefixedHexaDecimal8.source,
+};
+
+export const Function: OpenAPIV3.SchemaObject = {
+	type: "object",
+	description: "Transfer가 포함된 트랜잭션에서 호출된 함수의 정보를 나타내는 필드입니다. 이 필드는 withFunction 파라미터에 true를 입력한 경우에만 응답에 포함됩니다.",
+	required: ["selector", "input"],
+	properties: {
+		selector: selector,
+		name: {
+			type: "string",
+			description: "호출 함수의 이름을 나타내는 필드입니다.",
+		},
+		signature: {
+			type: "string",
+			description: "호출 함수의 시그니처를 나타내는 필드입니다. ",
+		},
+		args: {
+			type: "array",
+			description: "호출 함수의 인자를 나타내는 필드입니다.",
+			items: Args,
+		},
+		input: {
+			type: "string",
+			description: "함수의 입력 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열 형태로 제공됩니다.",
+			pattern: Patterns.string.prefixedHexaDecimal.source,
+		},
+	},
+};
+
 export const Transfer: OpenAPIV3.SchemaObject = {
 	type: "object",
 	required: ["from", "to", "value", "timestamp", "blockNumber", "transactionHash", "logIndex"],
@@ -281,6 +332,7 @@ export const Transfer: OpenAPIV3.SchemaObject = {
 			description:
 				"토큰 전송 트랜잭션의 배치 인덱스를 나타내는 필드입니다. 이 필드는 ERC1155 토큰 전송에 대한 응답에만 포함됩니다.",
 		},
+		function: Function,
 	},
 };
 
@@ -481,24 +533,6 @@ export const Block: OpenAPIV3.SchemaObject = {
 	},
 };
 
-export const Args: OpenAPIV3.SchemaObject = {
-	type: "object",
-	properties: {
-		name: {
-			type: "string",
-			description: "인자의 이름을 나타내는 필드입니다.",
-		},
-		type: {
-			type: "string",
-			description: "인자의 타입을 나타내는 필드입니다.",
-		},
-		value: {
-			type: "string",
-			description: "인자의 값을 나타내는 필드입니다.",
-		},
-	},
-};
-
 export const TransactionWithReceipt: OpenAPIV3.SchemaObject = {
 	type: "object",
 	required: [
@@ -589,12 +623,7 @@ export const TransactionWithReceipt: OpenAPIV3.SchemaObject = {
 				},
 			},
 		},
-		functionSelector: {
-			type: "string",
-			description:
-				"트랜잭션에서 호출한 함수의 selector를 나타내는 필드입니다. 0x로 시작하는 8자리 16진수 문자열 형태로 제공됩니다.",
-			pattern: Patterns.string.prefixedHexaDecimal8.source,
-		},
+		functionSelector: selector,
 		nonce: {
 			type: "string",
 			description:
@@ -837,6 +866,7 @@ export const DecodedLog: OpenAPIV3.SchemaObject = {
 		},
 		args: {
 			type: "array",
+			description: "로그의 인자를 나타내는 필드입니다.",
 			items: Args,
 		},
 	},

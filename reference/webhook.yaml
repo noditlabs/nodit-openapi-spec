@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Webhook
-  version: 1.2.10
+  version: 1.2.11
 servers:
   - url: https://web3.nodit.io/v1
 components:

@@ -556,761 +556,698 @@ const Examples = {
 	},
 	getTotalTransactionCountByAccount: { transactionCount: 4103 },
 	getTransactionByHash: {
-		ledgerIndex: 95352729,
-		ledgerTimestamp: 1744250580,
-		transactionIndex: 1,
-		transactionHash: "EB24FF05B3BC614762068B5DC6459AC75CE67073AE0D78DCABA5C7F91A505303",
-		transactionType: "OfferCreate",
-		transactionResult: "tesSUCCESS",
-		account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-		sequence: 67525132,
-		lastLedgerSequence: 95352747,
-		ticketSequence: null,
-		signingPubKey: "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
-		txnSignature:
-			"3044022070504B44B0E96065C070EC2C83D66609F3E591AC23ADA59B859B5C2A84744A53022076DC02CC83677976A82298165E779F3E41FEA84FA5D08F44A3F6E82CCC374254",
-		fee: "0.000012",
-		flags: 655360,
-		accountTxnId: null,
-		sourceTag: null,
-		signers: null,
-		memos: null,
-		transactionCategory: "Offer",
-		transactionDetails: {
-			takerPays: { currency: "SOLO", issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz", value: "788.30533369" },
-			takerGets: { currency: "XRP", issuer: null, value: "100" },
-			expiration: null,
-		},
-	},
+  "ledgerIndex": 95352729,
+  "ledgerTimestamp": 1744250580,
+  "transactionIndex": 1,
+  "transactionHash": "EB24FF05B3BC614762068B5DC6459AC75CE67073AE0D78DCABA5C7F91A505303",
+  "transactionType": "OfferCreate",
+  "transactionResult": "tesSUCCESS",
+  "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+  "sequence": 67525132,
+  "lastLedgerSequence": 95352747,
+  "ticketSequence": null,
+  "signingPubKey": "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
+  "txnSignature": "3044022070504B44B0E96065C070EC2C83D66609F3E591AC23ADA59B859B5C2A84744A53022076DC02CC83677976A82298165E779F3E41FEA84FA5D08F44A3F6E82CCC374254",
+  "fee": "0.000012",
+  "flags": 655360,
+  "accountTxnId": null,
+  "sourceTag": null,
+  "signers": null,
+  "memos": null,
+  "transactionCategory": "Offer",
+  "transactionDetails": {
+    "takerPays": {
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "value": "788.30533369"
+    },
+    "takerGets": {
+      "currency": "XRP",
+      "issuer": "",
+      "value": "100"
+    },
+    "expiration": null
+  },
+  "balanceChanges": [
+    {
+      "affectedNodesIndex": 0,
+      "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "132461.2210886739",
+      "finalBalance": "133408.6859790499",
+      "balanceChange": "947.464890376"
+    },
+    {
+      "affectedNodesIndex": 2,
+      "account": "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+      "currency": "XRP",
+      "issuer": "",
+      "previousBalance": "44503.420453",
+      "finalBalance": "44508.385595",
+      "balanceChange": "4.965142"
+    },
+    {
+      "affectedNodesIndex": 3,
+      "account": "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+      "currency": "XRP",
+      "issuer": "",
+      "previousBalance": "303170.283761",
+      "finalBalance": "303265.318619",
+      "balanceChange": "95.034858"
+    },
+    {
+      "affectedNodesIndex": 5,
+      "account": "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "90656.66155553141",
+      "finalBalance": "90609.37606245491",
+      "balanceChange": "-47.2854930765"
+    },
+    {
+      "affectedNodesIndex": 7,
+      "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "currency": "XRP",
+      "issuer": "",
+      "previousBalance": "6100.839453",
+      "finalBalance": "6000.839441",
+      "balanceChange": "-100.000012"
+    },
+    {
+      "affectedNodesIndex": 8,
+      "account": "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "2894594.629755294",
+      "finalBalance": "2893694.445629918",
+      "balanceChange": "-900.184125376"
+    }
+  ],
+  "tokenTransfers": [
+    {
+      "affectedNodesIndex": 0,
+      "from": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "to": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "currency": "SOLO",
+      "value": "947.464890376"
+    },
+    {
+      "affectedNodesIndex": 5,
+      "from": "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+      "to": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "currency": "SOLO",
+      "value": "47.2854930765"
+    },
+    {
+      "affectedNodesIndex": 8,
+      "from": "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+      "to": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "currency": "SOLO",
+      "value": "900.184125376"
+    }
+  ],
+  "balanceInAccounts": [
+    "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+    "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+    "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54"
+  ],
+  "balanceOutAccounts": [
+    "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+    "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+    "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM"
+  ],
+  "balanceChangedTokens": [
+    "XRP",
+    "SOLO-rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz"
+  ]
+},
 	getTransactionsByAccount: {
-		rpp: 5,
-		page: 1,
-		count: 4103,
-		items: [
-			{
-				ledgerIndex: 95498176,
-				ledgerTimestamp: 1744818572,
-				transactionIndex: 4,
-				transactionHash: "A3F980B6E5794F04F36B112604C3B2156E9970B5678BC7BFA86B92628838FC3C",
-				transactionType: "Payment",
-				transactionResult: "tesSUCCESS",
-				account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-				sequence: 67525456,
-				lastLedgerSequence: null,
-				ticketSequence: null,
-				signingPubKey: "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
-				txnSignature:
-					"30440220279CDFEE2519AE8971B9DEF069E839343C1D79070CD340ABDB3DD1148B5A9B21022032C2409D6B3341228E6DBE4BC1952DA0CBBCF64438C33C770813617F1C0D036E",
-				fee: "0.000012",
-				flags: null,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: [{ memoData: "Xaman Service Fee", memoFormat: null, memoType: null }],
-				transactionCategory: "Payment",
-				transactionDetails: {
-					amount: { currency: "XRP", issuer: null, value: "0.0045" },
-					deliverMax: { currency: "XRP", issuer: null, value: "0.0045" },
-					deliverMin: null,
-					deliveredAmount: { currency: "XRP", issuer: null, value: "0.0045" },
-					destination: "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
-					destinationTag: null,
-					invoiceId: "8E3E8ABB59D7542F16F54888554B199061490F785EE2E3740ECD2DD43AF8FBAF",
-					paths: null,
-					sendMax: null,
-					credentialIds: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 0,
-						account: "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "2296.092214",
-						finalBalance: "2296.096714",
-						balanceChange: "0.0045",
-					},
-					{
-						affectedNodesIndex: 1,
-						account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "9321.954704",
-						finalBalance: "9321.950192",
-						balanceChange: "-0.004512",
-					},
-				],
-				tokenTransfers: [],
+		"rpp": 2,
+		"page": 1,
+		"items": [
+		  {
+			"ledgerIndex": 93817701,
+			"ledgerTimestamp": 1738280032,
+			"transactionIndex": 4,
+			"transactionHash": "47A8862BF7895E5BAA68B84D64B682F8104BBE6980EDF1D990143A66FFEE89A3",
+			"transactionType": "Payment",
+			"transactionResult": "tesSUCCESS",
+			"account": "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
+			"sequence": 0,
+			"lastLedgerSequence": 93817710,
+			"ticketSequence": 80608521,
+			"signingPubKey": "0364865565D2E85ED2D9EB79D276E89D8C89AE950ED995B479BDB6513B1E090B8D",
+			"txnSignature": "3045022100ADDCD184F86B1D73819E7FC20599DE9BCE64F2E99ED630E318DDA031DFC0836D02201B3313C7FD29849C4E1D51217B370E2AC1A326E12E541515D8F179D775D7B328",
+			"fee": "0.000022",
+			"flags": null,
+			"accountTxnId": null,
+			"sourceTag": null,
+			"signers": null,
+			"memos": null,
+			"transactionCategory": "Payment",
+			"transactionDetails": {
+			  "amount": {
+				"currency": "XRP",
+				"issuer": "",
+				"value": "1"
+			  },
+			  "deliverMax": {
+				"currency": "XRP",
+				"issuer": "",
+				"value": "1"
+			  },
+			  "deliverMin": null,
+			  "deliveredAmount": {
+				"currency": "XRP",
+				"issuer": "",
+				"value": "1"
+			  },
+			  "destination": "rDH8aaMbQU8fJgHNumGqeWdcJgAo6uJLHN",
+			  "destinationTag": null,
+			  "invoiceId": null,
+			  "paths": null,
+			  "sendMax": null,
+			  "credentialIds": null
 			},
-			{
-				ledgerIndex: 95498175,
-				ledgerTimestamp: 1744818571,
-				transactionIndex: 43,
-				transactionHash: "8E3E8ABB59D7542F16F54888554B199061490F785EE2E3740ECD2DD43AF8FBAF",
-				transactionType: "OfferCreate",
-				transactionResult: "tesSUCCESS",
-				account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-				sequence: 67525455,
-				lastLedgerSequence: 95498193,
-				ticketSequence: null,
-				signingPubKey: "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
-				txnSignature:
-					"3044022032DB63B2BD1D0C4CB6CA9666C18C371510487D4DEE9C9AFA287F69ACACBCB448022016B6A0609B591391ABD04CA0AEF339FD87165E96B38CB8867E52149FA715BE93",
-				fee: "0.000012",
-				flags: 655360,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: null,
-				transactionCategory: "Offer",
-				transactionDetails: {
-					takerPays: { currency: "SOLO", issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz", value: "76.91692325" },
-					takerGets: { currency: "XRP", issuer: null, value: "10" },
-					expiration: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 1,
-						account: "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "53405.002493",
-						finalBalance: "53415.002493",
-						balanceChange: "10",
-					},
-					{
-						affectedNodesIndex: 4,
-						account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "9331.954716",
-						finalBalance: "9321.954704",
-						balanceChange: "-10.000012",
-					},
-				],
-				tokenTransfers: [
-					{
-						affectedNodesIndex: 0,
-						from: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						to: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-						issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						currency: "SOLO",
-						value: "92.2424125052",
-					},
-					{
-						affectedNodesIndex: 3,
-						from: "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
-						to: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						currency: "SOLO",
-						value: "92.2516367465",
-					},
-				],
+			"balanceInAccounts": [
+			  "rDH8aaMbQU8fJgHNumGqeWdcJgAo6uJLHN"
+			],
+			"balanceOutAccounts": [
+			  "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt"
+			],
+			"balanceChangedTokens": [
+			  "XRP"
+			]
+		  },
+		  {
+			"ledgerIndex": 93805122,
+			"ledgerTimestamp": 1738231161,
+			"transactionIndex": 1,
+			"transactionHash": "63E40CE829B00F06A45E09FE7E210C072D647838DD30B712DCE2C90ADAE90ED2",
+			"transactionType": "Payment",
+			"transactionResult": "tesSUCCESS",
+			"account": "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
+			"sequence": 0,
+			"lastLedgerSequence": 93805130,
+			"ticketSequence": 80608524,
+			"signingPubKey": "0364865565D2E85ED2D9EB79D276E89D8C89AE950ED995B479BDB6513B1E090B8D",
+			"txnSignature": "304502210085D28EBEFD747F4D54EDAF4092DD759CA26B80B9A5AC1F6ADD9E11624697B4A102202D5D18D91B048D1810A316EF613A727A544952672617DD64FD212E0E44B9562C",
+			"fee": "0.000022",
+			"flags": null,
+			"accountTxnId": null,
+			"sourceTag": null,
+			"signers": null,
+			"memos": null,
+			"transactionCategory": "Payment",
+			"transactionDetails": {
+			  "amount": {
+				"currency": "XRP",
+				"issuer": "",
+				"value": "1"
+			  },
+			  "deliverMax": {
+				"currency": "XRP",
+				"issuer": "",
+				"value": "1"
+			  },
+			  "deliverMin": null,
+			  "deliveredAmount": {
+				"currency": "XRP",
+				"issuer": "",
+				"value": "1"
+			  },
+			  "destination": "rMYQWiYiqBTiLGmmpZbZFduMzstG8bCFqR",
+			  "destinationTag": null,
+			  "invoiceId": null,
+			  "paths": null,
+			  "sendMax": null,
+			  "credentialIds": null
 			},
-			{
-				ledgerIndex: 95490756,
-				ledgerTimestamp: 1744789591,
-				transactionIndex: 48,
-				transactionHash: "BD345A8795A190464EB28A61C721048586B547AFC8846A7F813DB4FE4C30A977",
-				transactionType: "Payment",
-				transactionResult: "tesSUCCESS",
-				account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-				sequence: 67525454,
-				lastLedgerSequence: null,
-				ticketSequence: null,
-				signingPubKey: "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
-				txnSignature:
-					"304402206EC88A212D61E0FD9EDA73B8B9F07E4C7F6B36017C95B5B20FB0BBB1F5AE0ADF02202D795E3345BF37758C619C78344F240C52A6B8EF92030B6314FC4002383B51D1",
-				fee: "0.000012",
-				flags: null,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: [{ memoData: "Xaman Service Fee", memoFormat: null, memoType: null }],
-				transactionCategory: "Payment",
-				transactionDetails: {
-					amount: { currency: "XRP", issuer: null, value: "0.0045" },
-					deliverMax: { currency: "XRP", issuer: null, value: "0.0045" },
-					deliverMin: null,
-					deliveredAmount: { currency: "XRP", issuer: null, value: "0.0045" },
-					destination: "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
-					destinationTag: null,
-					invoiceId: "F56440CCD5DE51A3A768990753BB753BC24FF5F2BE46E0AAF433FFF5C9E26FD9",
-					paths: null,
-					sendMax: null,
-					credentialIds: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 0,
-						account: "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "2272.763768",
-						finalBalance: "2272.768268",
-						balanceChange: "0.0045",
-					},
-					{
-						affectedNodesIndex: 1,
-						account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "9331.959228",
-						finalBalance: "9331.954716",
-						balanceChange: "-0.004512",
-					},
-				],
-				tokenTransfers: [],
-			},
-			{
-				ledgerIndex: 95490755,
-				ledgerTimestamp: 1744789590,
-				transactionIndex: 0,
-				transactionHash: "F56440CCD5DE51A3A768990753BB753BC24FF5F2BE46E0AAF433FFF5C9E26FD9",
-				transactionType: "OfferCreate",
-				transactionResult: "tesSUCCESS",
-				account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-				sequence: 67525453,
-				lastLedgerSequence: 95490773,
-				ticketSequence: null,
-				signingPubKey: "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
-				txnSignature:
-					"304402205924DF8294AA7824E9D4419116ED76909E4F3285C9FB42A49486EBD28F20235402207C85233FDC4B35E511EEFBC765EF14110FE0CD288D143F3030187D388508379E",
-				fee: "0.000012",
-				flags: 655360,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: null,
-				transactionCategory: "Offer",
-				transactionDetails: {
-					takerPays: { currency: "SOLO", issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz", value: "76.95061593" },
-					takerGets: { currency: "XRP", issuer: null, value: "10" },
-					expiration: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 2,
-						account: "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "56985.418112",
-						finalBalance: "56995.418112",
-						balanceChange: "10",
-					},
-					{
-						affectedNodesIndex: 6,
-						account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "9341.95924",
-						finalBalance: "9331.959228",
-						balanceChange: "-10.000012",
-					},
-				],
-				tokenTransfers: [
-					{
-						affectedNodesIndex: 0,
-						from: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						to: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-						issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						currency: "SOLO",
-						value: "92.3068872348",
-					},
-					{
-						affectedNodesIndex: 4,
-						from: "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
-						to: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-						currency: "SOLO",
-						value: "92.3161179235",
-					},
-				],
-			},
-			{
-				ledgerIndex: 95490740,
-				ledgerTimestamp: 1744789530,
-				transactionIndex: 19,
-				transactionHash: "F5CB1CEAF296773E0BD06AD3D07A756273BE2EF09CFDCE422CC05B431A318B4B",
-				transactionType: "Payment",
-				transactionResult: "tesSUCCESS",
-				account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-				sequence: 67525452,
-				lastLedgerSequence: null,
-				ticketSequence: null,
-				signingPubKey: "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
-				txnSignature:
-					"3045022100E54C56177BD1318395976A75C0B9B25E120730F9F9B818D8A87BDD4858529B19022035CAC8888BC26778951B2B50FFDC110273FA4F3A4EEB9E2001140EF1CCBB6790",
-				fee: "0.000012",
-				flags: null,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: [{ memoData: "Xaman Service Fee", memoFormat: null, memoType: null }],
-				transactionCategory: "Payment",
-				transactionDetails: {
-					amount: { currency: "XRP", issuer: null, value: "0.02" },
-					deliverMax: { currency: "XRP", issuer: null, value: "0.02" },
-					deliverMin: null,
-					deliveredAmount: { currency: "XRP", issuer: null, value: "0.02" },
-					destination: "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
-					destinationTag: null,
-					invoiceId: "62604C3F2C05A997503D99F7232D19F2F62922B322267164B5D9C844CA83F35B",
-					paths: null,
-					sendMax: null,
-					credentialIds: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 0,
-						account: "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "2272.023768",
-						finalBalance: "2272.043768",
-						balanceChange: "0.02",
-					},
-					{
-						affectedNodesIndex: 1,
-						account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "9341.979252",
-						finalBalance: "9341.95924",
-						balanceChange: "-0.020012",
-					},
-				],
-				tokenTransfers: [],
-			},
-		],
-	},
+			"balanceInAccounts": [
+			  "rMYQWiYiqBTiLGmmpZbZFduMzstG8bCFqR"
+			],
+			"balanceOutAccounts": [
+			  "ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt"
+			],
+			"balanceChangedTokens": [
+			  "XRP"
+			]
+		  }
+		]
+	  },
 	getTransactionsByHashes: [
 		{
-			ledgerIndex: 95352729,
-			ledgerTimestamp: 1744250580,
-			transactionIndex: 1,
-			transactionHash: "EB24FF05B3BC614762068B5DC6459AC75CE67073AE0D78DCABA5C7F91A505303",
-			transactionType: "OfferCreate",
-			transactionResult: "tesSUCCESS",
-			account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-			sequence: 67525132,
-			lastLedgerSequence: 95352747,
-			ticketSequence: null,
-			signingPubKey: "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
-			txnSignature:
-				"3044022070504B44B0E96065C070EC2C83D66609F3E591AC23ADA59B859B5C2A84744A53022076DC02CC83677976A82298165E779F3E41FEA84FA5D08F44A3F6E82CCC374254",
-			fee: "0.000012",
-			flags: 655360,
-			accountTxnId: null,
-			sourceTag: null,
-			signers: null,
-			memos: null,
-			transactionCategory: "Offer",
-			transactionDetails: {
-				takerPays: { currency: "SOLO", issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz", value: "788.30533369" },
-				takerGets: { currency: "XRP", issuer: null, value: "100" },
-				expiration: null,
+		  "ledgerIndex": 95352729,
+		  "ledgerTimestamp": 1744250580,
+		  "transactionIndex": 1,
+		  "transactionHash": "EB24FF05B3BC614762068B5DC6459AC75CE67073AE0D78DCABA5C7F91A505303",
+		  "transactionType": "OfferCreate",
+		  "transactionResult": "tesSUCCESS",
+		  "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+		  "sequence": 67525132,
+		  "lastLedgerSequence": 95352747,
+		  "ticketSequence": null,
+		  "signingPubKey": "03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964",
+		  "txnSignature": "3044022070504B44B0E96065C070EC2C83D66609F3E591AC23ADA59B859B5C2A84744A53022076DC02CC83677976A82298165E779F3E41FEA84FA5D08F44A3F6E82CCC374254",
+		  "fee": "0.000012",
+		  "flags": 655360,
+		  "accountTxnId": null,
+		  "sourceTag": null,
+		  "signers": null,
+		  "memos": null,
+		  "transactionCategory": "Offer",
+		  "transactionDetails": {
+			"takerPays": {
+			  "currency": "SOLO",
+			  "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "value": "788.30533369"
 			},
-			balanceChanges: [
-				{
-					affectedNodesIndex: 2,
-					account: "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
-					currency: "XRP",
-					issuer: "",
-					previousBalance: "44503.420453",
-					finalBalance: "44508.385595",
-					balanceChange: "4.965142",
-				},
-				{
-					affectedNodesIndex: 3,
-					account: "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
-					currency: "XRP",
-					issuer: "",
-					previousBalance: "303170.283761",
-					finalBalance: "303265.318619",
-					balanceChange: "95.034858",
-				},
-				{
-					affectedNodesIndex: 7,
-					account: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-					currency: "XRP",
-					issuer: "",
-					previousBalance: "6100.839453",
-					finalBalance: "6000.839441",
-					balanceChange: "-100.000012",
-				},
-			],
-			tokenTransfers: [
-				{
-					affectedNodesIndex: 0,
-					from: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-					to: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
-					issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-					currency: "SOLO",
-					value: "947.464890376",
-				},
-				{
-					affectedNodesIndex: 5,
-					from: "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
-					to: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-					issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-					currency: "SOLO",
-					value: "47.2854930765",
-				},
-				{
-					affectedNodesIndex: 8,
-					from: "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
-					to: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-					issuer: "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
-					currency: "SOLO",
-					value: "900.184125376",
-				},
-			],
+			"takerGets": {
+			  "currency": "XRP",
+			  "issuer": "",
+			  "value": "100"
+			},
+			"expiration": null
+		  },
+		  "balanceChanges": [
+			{
+			  "affectedNodesIndex": 0,
+			  "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+			  "currency": "SOLO",
+			  "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "previousBalance": "132461.2210886739",
+			  "finalBalance": "133408.6859790499",
+			  "balanceChange": "947.464890376"
+			},
+			{
+			  "affectedNodesIndex": 2,
+			  "account": "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+			  "currency": "XRP",
+			  "issuer": "",
+			  "previousBalance": "44503.420453",
+			  "finalBalance": "44508.385595",
+			  "balanceChange": "4.965142"
+			},
+			{
+			  "affectedNodesIndex": 3,
+			  "account": "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+			  "currency": "XRP",
+			  "issuer": "",
+			  "previousBalance": "303170.283761",
+			  "finalBalance": "303265.318619",
+			  "balanceChange": "95.034858"
+			},
+			{
+			  "affectedNodesIndex": 5,
+			  "account": "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+			  "currency": "SOLO",
+			  "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "previousBalance": "90656.66155553141",
+			  "finalBalance": "90609.37606245491",
+			  "balanceChange": "-47.2854930765"
+			},
+			{
+			  "affectedNodesIndex": 7,
+			  "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+			  "currency": "XRP",
+			  "issuer": "",
+			  "previousBalance": "6100.839453",
+			  "finalBalance": "6000.839441",
+			  "balanceChange": "-100.000012"
+			},
+			{
+			  "affectedNodesIndex": 8,
+			  "account": "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+			  "currency": "SOLO",
+			  "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "previousBalance": "2894594.629755294",
+			  "finalBalance": "2893694.445629918",
+			  "balanceChange": "-900.184125376"
+			}
+		  ],
+		  "tokenTransfers": [
+			{
+			  "affectedNodesIndex": 0,
+			  "from": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "to": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+			  "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "currency": "SOLO",
+			  "value": "947.464890376"
+			},
+			{
+			  "affectedNodesIndex": 5,
+			  "from": "rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+			  "to": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "currency": "SOLO",
+			  "value": "47.2854930765"
+			},
+			{
+			  "affectedNodesIndex": 8,
+			  "from": "rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+			  "to": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+			  "currency": "SOLO",
+			  "value": "900.184125376"
+			}
+		  ],
+		  "balanceInAccounts": [
+			"rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM",
+			"rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+			"rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54"
+		  ],
+		  "balanceOutAccounts": [
+			"rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo",
+			"rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+			"rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM"
+		  ],
+		  "balanceChangedTokens": [
+			"XRP",
+			"SOLO-rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz"
+		  ]
 		},
 		{
-			ledgerIndex: 95337004,
-			ledgerTimestamp: 1744189040,
-			transactionIndex: 0,
-			transactionHash: "09A605CFBB1734F47A74176B962EDB9B37BB99946FBF61D87DC271960C972452",
-			transactionType: "Payment",
-			transactionResult: "tesSUCCESS",
-			account: "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
-			sequence: 95148022,
-			lastLedgerSequence: 95337022,
-			ticketSequence: null,
-			signingPubKey: "EDF3D05D1A1D6719C0A69D2108EFD4E2629C929258201006D1EF676EA3465E44D3",
-			txnSignature:
-				"062A5BA665827646391F3D226FBB1A0B66F88A27C14B44F3C58F5F5D8D95646A0D7D4A44CA9EEBC470DB04ED6A6AC3A3FF5A3745892840EFD2F3C3F0E7AEF10E",
-			fee: "0.00001",
-			flags: 131072,
-			accountTxnId: null,
-			sourceTag: null,
-			signers: null,
-			memos: null,
-			transactionCategory: "Payment",
-			transactionDetails: {
-				amount: { currency: "XRPT", issuer: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN", value: "9591.066919" },
-				deliverMax: { currency: "XRPT", issuer: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN", value: "9591.066919" },
-				deliverMin: { currency: "XRPT", issuer: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN", value: "9399.245581" },
-				deliveredAmount: { currency: "XRPT", issuer: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN", value: "9584.27805979" },
-				destination: "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
-				destinationTag: null,
-				invoiceId: null,
-				paths: null,
-				sendMax: { currency: "XRP", issuer: null, value: "0.710302" },
-				credentialIds: null,
+		  "ledgerIndex": 95337004,
+		  "ledgerTimestamp": 1744189040,
+		  "transactionIndex": 0,
+		  "transactionHash": "09A605CFBB1734F47A74176B962EDB9B37BB99946FBF61D87DC271960C972452",
+		  "transactionType": "Payment",
+		  "transactionResult": "tesSUCCESS",
+		  "account": "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
+		  "sequence": 95148022,
+		  "lastLedgerSequence": 95337022,
+		  "ticketSequence": null,
+		  "signingPubKey": "EDF3D05D1A1D6719C0A69D2108EFD4E2629C929258201006D1EF676EA3465E44D3",
+		  "txnSignature": "062A5BA665827646391F3D226FBB1A0B66F88A27C14B44F3C58F5F5D8D95646A0D7D4A44CA9EEBC470DB04ED6A6AC3A3FF5A3745892840EFD2F3C3F0E7AEF10E",
+		  "fee": "0.00001",
+		  "flags": 131072,
+		  "accountTxnId": null,
+		  "sourceTag": null,
+		  "signers": null,
+		  "memos": null,
+		  "transactionCategory": "Payment",
+		  "transactionDetails": {
+			"amount": {
+			  "currency": "XRPT",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "value": "9591.066919"
 			},
-			balanceChanges: [
-				{
-					affectedNodesIndex: 2,
-					account: "rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB",
-					currency: "XRP",
-					issuer: "",
-					previousBalance: "2870.145734",
-					finalBalance: "2870.856036",
-					balanceChange: "0.710302",
-				},
-				{
-					affectedNodesIndex: 3,
-					account: "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
-					currency: "XRP",
-					issuer: "",
-					previousBalance: "5.833081",
-					finalBalance: "5.122769",
-					balanceChange: "-0.710312",
-				},
-			],
-			tokenTransfers: [
-				{
-					affectedNodesIndex: 0,
-					from: "rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB",
-					to: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
-					issuer: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
-					currency: "XRPT",
-					value: "9584.27805979",
-				},
-				{
-					affectedNodesIndex: 1,
-					from: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
-					to: "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
-					issuer: "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
-					currency: "XRPT",
-					value: "9584.27805979",
-				},
-			],
-		},
-	],
+			"deliverMax": {
+			  "currency": "XRPT",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "value": "9591.066919"
+			},
+			"deliverMin": {
+			  "currency": "XRPT",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "value": "9399.245581"
+			},
+			"deliveredAmount": {
+			  "currency": "XRPT",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "value": "9584.27805979"
+			},
+			"destination": "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
+			"destinationTag": null,
+			"invoiceId": null,
+			"paths": null,
+			"sendMax": {
+			  "currency": "XRP",
+			  "issuer": "",
+			  "value": "0.710302"
+			},
+			"credentialIds": null
+		  },
+		  "balanceChanges": [
+			{
+			  "affectedNodesIndex": 0,
+			  "account": "rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB",
+			  "currency": "XRPT",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "previousBalance": "38754983.30079729",
+			  "finalBalance": "38745399.0227375",
+			  "balanceChange": "-9584.27805979"
+			},
+			{
+			  "affectedNodesIndex": 1,
+			  "account": "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
+			  "currency": "XRPT",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "previousBalance": "40422.49827208704",
+			  "finalBalance": "50006.77633187704",
+			  "balanceChange": "9584.27805979"
+			},
+			{
+			  "affectedNodesIndex": 2,
+			  "account": "rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB",
+			  "currency": "XRP",
+			  "issuer": "",
+			  "previousBalance": "2870.145734",
+			  "finalBalance": "2870.856036",
+			  "balanceChange": "0.710302"
+			},
+			{
+			  "affectedNodesIndex": 3,
+			  "account": "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
+			  "currency": "XRP",
+			  "issuer": "",
+			  "previousBalance": "5.833081",
+			  "finalBalance": "5.122769",
+			  "balanceChange": "-0.710312"
+			}
+		  ],
+		  "tokenTransfers": [
+			{
+			  "affectedNodesIndex": 0,
+			  "from": "rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB",
+			  "to": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "currency": "XRPT",
+			  "value": "9584.27805979"
+			},
+			{
+			  "affectedNodesIndex": 1,
+			  "from": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "to": "rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq",
+			  "issuer": "r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN",
+			  "currency": "XRPT",
+			  "value": "9584.27805979"
+			}
+		  ],
+		  "balanceInAccounts": [
+			"rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB",
+			"rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq"
+		  ],
+		  "balanceOutAccounts": [
+			"rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB",
+			"rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq"
+		  ],
+		  "balanceChangedTokens": [
+			"XRP",
+			"XRPT-r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN"
+		  ]
+		}
+	  ],
 	getTransactionsInLedger: {
-		rpp: 5,
-		page: 1,
-		count: 78,
-		items: [
-			{
-				ledgerIndex: 95352729,
-				ledgerTimestamp: 1744250580,
-				transactionIndex: 77,
-				transactionHash: "3DE2DD0B1E55A634EF1A702B3799EAD8AFB46E8C4F13FDD82F4EB1ED8D6C2437",
-				transactionType: "Payment",
-				transactionResult: "tesSUCCESS",
-				account: "rh4x93J9CDF43LCNYcegc7FKLqVW53uot1",
-				sequence: 95344906,
-				lastLedgerSequence: 95352829,
-				ticketSequence: null,
-				signingPubKey: "ED894E71B14403E0FB0EDB36AA1FF60CFF23077D9AADE5D533940A7CEE15DA333A",
-				txnSignature:
-					"10BC398067C6648715BBF5E3BB32111091BBF5BE9F789FBED5326D4A36D3871C762E38507BF0E37FE89FAE163FF8DBE14E26D54F13AFE6F2A8906EBA1A018308",
-				fee: "0.000011",
-				flags: 0,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: null,
-				transactionCategory: "Payment",
-				transactionDetails: {
-					amount: { currency: "XRP", issuer: null, value: "0.000001" },
-					deliverMax: { currency: "XRP", issuer: null, value: "0.000001" },
-					deliverMin: null,
-					deliveredAmount: { currency: "XRP", issuer: null, value: "0.000001" },
-					destination: "rhoetJYEHuFVvpHsj6tcv9AzHja19915vD",
-					destinationTag: null,
-					invoiceId: null,
-					paths: null,
-					sendMax: null,
-					credentialIds: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 0,
-						account: "rh4x93J9CDF43LCNYcegc7FKLqVW53uot1",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "26.806897",
-						finalBalance: "26.806885",
-						balanceChange: "-0.000012",
-					},
-					{
-						affectedNodesIndex: 1,
-						account: "rhoetJYEHuFVvpHsj6tcv9AzHja19915vD",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "31.45649",
-						finalBalance: "31.456491",
-						balanceChange: "0.000001",
-					},
-				],
-				tokenTransfers: [],
+		"rpp": 2,
+		"page": 1,
+		"count": 51,
+		"items": [
+		  {
+			"ledgerIndex": 97175931,
+			"ledgerTimestamp": 1751361192,
+			"transactionIndex": 50,
+			"transactionHash": "56F58611673C5D4CB8DD9325B708B4FF08559C03EDA0BEC0DD50171AC5E87222",
+			"transactionType": "Payment",
+			"transactionResult": "tecPATH_DRY",
+			"account": "rM5CQeFQd71G5Cs3tdW2GmTBjJevCkiXsj",
+			"sequence": 82878302,
+			"lastLedgerSequence": 97175948,
+			"ticketSequence": null,
+			"signingPubKey": "02148091628A91C55A24DBC461B72BBCDDFC7B43A6F5F8717E935917733739FB7C",
+			"txnSignature": "3045022100E9BA49BFEF8F265B6726EB73CE5E02C16D311A7C5E2ACED7ED6C3EDDA601CE7E02202BF4BF9460198E441C8A6D82953838A22A45F470B8E79DF0ECDB8D13A8B95CC6",
+			"fee": "0.000012",
+			"flags": 0,
+			"accountTxnId": null,
+			"sourceTag": null,
+			"signers": null,
+			"memos": [
+			  {
+				"memoData": "Successfully rewarded RDC from RichDuck soft staking of richducks.club ",
+				"memoFormat": null,
+				"memoType": null
+			  }
+			],
+			"transactionCategory": "Payment",
+			"transactionDetails": {
+			  "amount": {
+				"currency": "RDC",
+				"issuer": "rDuckCoinu8jntxtYoWRhEv4oNvsLYx6EQ",
+				"value": "300"
+			  },
+			  "deliverMax": {
+				"currency": "RDC",
+				"issuer": "rDuckCoinu8jntxtYoWRhEv4oNvsLYx6EQ",
+				"value": "300"
+			  },
+			  "deliverMin": null,
+			  "deliveredAmount": null,
+			  "destination": "rDvMTYwQxRbC4EJX28FYHnnes8BV1ZJyoo",
+			  "destinationTag": null,
+			  "invoiceId": null,
+			  "paths": null,
+			  "sendMax": null,
+			  "credentialIds": null
 			},
-			{
-				ledgerIndex: 95352729,
-				ledgerTimestamp: 1744250580,
-				transactionIndex: 76,
-				transactionHash: "A38F171D9F5D0CA3E8054937C3AF503A1F4F79DE9980A0DC1A972707F908B022",
-				transactionType: "Payment",
-				transactionResult: "tesSUCCESS",
-				account: "rh4x93J9CDF43LCNYcegc7FKLqVW53uot1",
-				sequence: 95344905,
-				lastLedgerSequence: 95352829,
-				ticketSequence: null,
-				signingPubKey: "ED894E71B14403E0FB0EDB36AA1FF60CFF23077D9AADE5D533940A7CEE15DA333A",
-				txnSignature:
-					"BCDB7637CC7989C7C69E5B028A6F72B2EC477E3E791D2BB11C9EBDDD1DD89EECE65A131D0F6BAF5ADF7A425DABA7BEDF81C284FBB996BF29A4E7E47E30D4BF0B",
-				fee: "0.000011",
-				flags: 0,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: null,
-				transactionCategory: "Payment",
-				transactionDetails: {
-					amount: { currency: "XRP", issuer: null, value: "0.000001" },
-					deliverMax: { currency: "XRP", issuer: null, value: "0.000001" },
-					deliverMin: null,
-					deliveredAmount: { currency: "XRP", issuer: null, value: "0.000001" },
-					destination: "rhoetJYEHuFVvpHsj6tcv9AzHja19915vD",
-					destinationTag: null,
-					invoiceId: null,
-					paths: null,
-					sendMax: null,
-					credentialIds: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 0,
-						account: "rh4x93J9CDF43LCNYcegc7FKLqVW53uot1",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "26.806909",
-						finalBalance: "26.806897",
-						balanceChange: "-0.000012",
-					},
-					{
-						affectedNodesIndex: 1,
-						account: "rhoetJYEHuFVvpHsj6tcv9AzHja19915vD",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "31.456489",
-						finalBalance: "31.45649",
-						balanceChange: "0.000001",
-					},
-				],
-				tokenTransfers: [],
+			"balanceChanges": [
+			  {
+				"affectedNodesIndex": 0,
+				"account": "rM5CQeFQd71G5Cs3tdW2GmTBjJevCkiXsj",
+				"currency": "XRP",
+				"issuer": "",
+				"previousBalance": "1.952014",
+				"finalBalance": "1.952002",
+				"balanceChange": "-0.000012"
+			  }
+			],
+			"tokenTransfers": [],
+			"balanceInAccounts": [],
+			"balanceOutAccounts": [
+			  "rM5CQeFQd71G5Cs3tdW2GmTBjJevCkiXsj"
+			],
+			"balanceChangedTokens": [
+			  "XRP"
+			]
+		  },
+		  {
+			"ledgerIndex": 97175931,
+			"ledgerTimestamp": 1751361192,
+			"transactionIndex": 49,
+			"transactionHash": "22938A9610711FA656D9DE37BE0DBC652AE478B89D5E15E14E5EF37AE56FB85E",
+			"transactionType": "Payment",
+			"transactionResult": "tesSUCCESS",
+			"account": "rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w",
+			"sequence": 94978326,
+			"lastLedgerSequence": 97175949,
+			"ticketSequence": null,
+			"signingPubKey": "EDDC4A6AFA966C060106BAB0988FA13F041E167F1B800E915E2F8982005DD3BA1F",
+			"txnSignature": "5922D8B76FD2FFDC9304432A744BAC6E2CA57AB8F268709221E660EC3D9039EC17514770DFCCE314C0F3BFF4E4298F102A941AAF5D3626FA63DECE155509FA08",
+			"fee": "0.00001",
+			"flags": 131072,
+			"accountTxnId": null,
+			"sourceTag": null,
+			"signers": null,
+			"memos": [
+			  {
+				"memoData": "ARMY OG Market Maker v2",
+				"memoFormat": "text/plain",
+				"memoType": "trade"
+			  }
+			],
+			"transactionCategory": "Payment",
+			"transactionDetails": {
+			  "amount": {
+				"currency": "bull",
+				"issuer": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"value": "37.36681"
+			  },
+			  "deliverMax": {
+				"currency": "bull",
+				"issuer": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"value": "37.36681"
+			  },
+			  "deliverMin": null,
+			  "deliveredAmount": {
+				"currency": "bull",
+				"issuer": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"value": "36.8972433"
+			  },
+			  "destination": "rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w",
+			  "destinationTag": null,
+			  "invoiceId": null,
+			  "paths": null,
+			  "sendMax": {
+				"currency": "XRP",
+				"issuer": "",
+				"value": "0.00368"
+			  },
+			  "credentialIds": null
 			},
-			{
-				ledgerIndex: 95352729,
-				ledgerTimestamp: 1744250580,
-				transactionIndex: 75,
-				transactionHash: "E84F69E427DF6895636A3AA3CD921F14387A5D1D64E9D43E5AC2B957B3A71432",
-				transactionType: "OfferCreate",
-				transactionResult: "tesSUCCESS",
-				account: "rhhh49pFH96roGyuC4E5P4CHaNjS1k8gzM",
-				sequence: 29713714,
-				lastLedgerSequence: 95352732,
-				ticketSequence: null,
-				signingPubKey: "03B51A3EDF70E4098DA7FB053A01C5A6A0A163A30ED1445F14F87C7C3295FCB3BE",
-				txnSignature:
-					"3044022043D419B3CFC546369170245ABA6CC2CFCA5B9550FF0CDB3B0A4892B8AEE74E6602201BF50821F48CD95F376004D68AD68DE9958C7272711A5E7166D72E1B83044178",
-				fee: "0.000012",
-				flags: 0,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: null,
-				transactionCategory: "Offer",
-				transactionDetails: {
-					takerPays: { currency: "CNY", issuer: "rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y", value: "1511411.967" },
-					takerGets: { currency: "XRP", issuer: null, value: "100000" },
-					expiration: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 2,
-						account: "rhhh49pFH96roGyuC4E5P4CHaNjS1k8gzM",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "1640.15129",
-						finalBalance: "1640.151278",
-						balanceChange: "-0.000012",
-					},
-				],
-				tokenTransfers: [],
-			},
-			{
-				ledgerIndex: 95352729,
-				ledgerTimestamp: 1744250580,
-				transactionIndex: 74,
-				transactionHash: "055A90BCD7EB13D00C885B924D409100B2ED9205288F6FCC2E044DA51A23E606",
-				transactionType: "Payment",
-				transactionResult: "tesSUCCESS",
-				account: "rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98",
-				sequence: 94432244,
-				lastLedgerSequence: 95352747,
-				ticketSequence: null,
-				signingPubKey: "ED8C90BFC8D8F79C61FE13DF91C1DBC448E6F2818DB6BDBC516AF21F33569E5674",
-				txnSignature:
-					"FA8C33C1AB2A31004C0B469B52808ACFDB254FD2A2C4850DF153CBD1003F8AA0737051E97E4309D61D7BC89BEEF5D0A1DD949D5BEB6CA64DA918AF95270C0B0F",
-				fee: "0.00001",
-				flags: 131072,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: null,
-				transactionCategory: "Payment",
-				transactionDetails: {
-					amount: { currency: "Xoge", issuer: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1", value: "235041040.768995" },
-					deliverMax: { currency: "Xoge", issuer: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1", value: "235041040.768995" },
-					deliverMin: { currency: "Xoge", issuer: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1", value: "230340219.953615" },
-					deliveredAmount: {
-						currency: "Xoge",
-						issuer: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1",
-						value: "235041040.768995",
-					},
-					destination: "rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98",
-					destinationTag: null,
-					invoiceId: null,
-					paths: null,
-					sendMax: { currency: "XRP", issuer: null, value: "0.719543" },
-					credentialIds: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 1,
-						account: "rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "8.688907",
-						finalBalance: "7.9695",
-						balanceChange: "-0.719407",
-					},
-					{
-						affectedNodesIndex: 2,
-						account: "rLikwdZqS14VEqtAB43NAYeCv8uJVYQXzJ",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "29747.343483",
-						finalBalance: "29748.06288",
-						balanceChange: "0.719397",
-					},
-				],
-				tokenTransfers: [
-					{
-						affectedNodesIndex: 0,
-						from: "rLikwdZqS14VEqtAB43NAYeCv8uJVYQXzJ",
-						to: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1",
-						issuer: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1",
-						currency: "Xoge",
-						value: "235041040.769",
-					},
-					{
-						affectedNodesIndex: 3,
-						from: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1",
-						to: "rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98",
-						issuer: "rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1",
-						currency: "Xoge",
-						value: "235041040.768995",
-					},
-				],
-			},
-			{
-				ledgerIndex: 95352729,
-				ledgerTimestamp: 1744250580,
-				transactionIndex: 73,
-				transactionHash: "924CB7A6BBF85E6D25B651D4A0A27BF8FE6DCDCBFA2F12973904D9BCFB54226C",
-				transactionType: "OfferCreate",
-				transactionResult: "tesSUCCESS",
-				account: "rntopA1H9AJoFjpiCueBMFEpXQRBD3ueyG",
-				sequence: 0,
-				lastLedgerSequence: 95352742,
-				ticketSequence: 87883614,
-				signingPubKey: "EDC680BD209E3E1CFE3494D3BEBADB43CC9A15787AA5930B6D6A08003B82BF2C11",
-				txnSignature:
-					"F1F3C8A327E2D6079200B1AB70F4BCC5F9520DFBCDAC6A2F6F7175254B5BC1E27743A94D69728C8BCE2354CDD204F9B1AD47C9F7926337860EDAAADE9A0B0D03",
-				fee: "0.000012",
-				flags: 0,
-				accountTxnId: null,
-				sourceTag: null,
-				signers: null,
-				memos: null,
-				transactionCategory: "Offer",
-				transactionDetails: {
-					takerPays: { currency: "FLR", issuer: "rcxJwVnftZzXqyH9YheB8TgeiZUhNo1Eu", value: "1685.48932781003" },
-					takerGets: { currency: "XRP", issuer: null, value: "10.96195" },
-					expiration: null,
-				},
-				balanceChanges: [
-					{
-						affectedNodesIndex: 1,
-						account: "rntopA1H9AJoFjpiCueBMFEpXQRBD3ueyG",
-						currency: "XRP",
-						issuer: "",
-						previousBalance: "708.028224",
-						finalBalance: "708.028212",
-						balanceChange: "-0.000012",
-					},
-				],
-				tokenTransfers: [],
-			},
-		],
-	},
+			"balanceChanges": [
+			  {
+				"affectedNodesIndex": 0,
+				"account": "rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w",
+				"currency": "XRP",
+				"issuer": "",
+				"previousBalance": "74.15833",
+				"finalBalance": "74.15464",
+				"balanceChange": "-0.00369"
+			  },
+			  {
+				"affectedNodesIndex": 1,
+				"account": "rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG",
+				"currency": "XRP",
+				"issuer": "",
+				"previousBalance": "22955.027716",
+				"finalBalance": "22955.031396",
+				"balanceChange": "0.00368"
+			  },
+			  {
+				"affectedNodesIndex": 2,
+				"account": "rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG",
+				"currency": "bull",
+				"issuer": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"previousBalance": "232439451.4457152",
+				"finalBalance": "232439414.5484719",
+				"balanceChange": "-36.8972433"
+			  },
+			  {
+				"affectedNodesIndex": 3,
+				"account": "rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w",
+				"currency": "bull",
+				"issuer": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"previousBalance": "8930725.522693059",
+				"finalBalance": "8930762.419936359",
+				"balanceChange": "36.8972433"
+			  }
+			],
+			"tokenTransfers": [
+			  {
+				"affectedNodesIndex": 2,
+				"from": "rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG",
+				"to": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"issuer": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"currency": "bull",
+				"value": "36.8972433"
+			  },
+			  {
+				"affectedNodesIndex": 3,
+				"from": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"to": "rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w",
+				"issuer": "rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+				"currency": "bull",
+				"value": "36.8972433"
+			  }
+			],
+			"balanceInAccounts": [
+			  "rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w",
+			  "rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG"
+			],
+			"balanceOutAccounts": [
+			  "rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG",
+			  "rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w"
+			],
+			"balanceChangedTokens": [
+			  "bull-rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ",
+			  "XRP"
+			]
+		  }
+		]
+	  },
 	getNativeTokenBalanceByAccount: { ownerAddress: "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54", balance: "9321.950192" },
 	getNativeTokenBalanceChangesByAccount: {
 		rpp: 5,

@@ -161,3 +161,10 @@ export const withExternalTransaction: OpenAPIV3.SchemaObject = {
 		"응답에 external transaction 포함 여부를 결정하는 파라미터입니다. external transaction은 internal transaction과 동일한 형식으로 반환되며, trace index가 0으로 표기됩니다. 이 파라미터를 true로 입력한 경우, external transaction을 포함하며 응답속도가 느려질 수 있습니다.",
 	default: false,
 };
+
+export const withFunction: OpenAPIV3.SchemaObject = {
+	type: "boolean",
+	description:
+		"응답에 function 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한 경우, 응답속도가 느려질 수 있습니다.",
+	default: false,
+};

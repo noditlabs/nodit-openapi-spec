@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.10
+  version: 1.2.11
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -364,7 +364,7 @@ paths:
                     - accountAddress
                 - &ref_8
                   type: object
-                  properties: &ref_44
+                  properties: &ref_45
                     page:
                       type: integer
                       description: >-
@@ -599,7 +599,7 @@ paths:
                         - totalBalance
                         - uniqueBalance
                       properties:
-                        ownerAddress: &ref_21
+                        ownerAddress: &ref_22
                           type: string
                           description: 소유자 주소를 나타내는 필드입니다.
                           pattern: ^0[xX][0-9a-fA-F]{40}$
@@ -1628,7 +1628,7 @@ paths:
                         형태로 입력할 수 있습니다.
                       pattern: ^0[xX][0-9a-fA-F]{40}$
                       default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                    relation: &ref_24
+                    relation: &ref_25
                       type: string
                       description: |-
                         조회 대상 계정 주소가 송신자 또는 수신자에 속한 트랜잭션만 필터링하기 위한 파라미터입니다.  
@@ -1754,6 +1754,12 @@ paths:
                         응답에 value가 0인 결과를 포함하는지 여부를 지정하는 파라미터입니다. 더 빠른 응답을 원한다면
                         이 파라미터를 true로 설정하세요.
                       default: false
+                    withFunction: &ref_20
+                      type: boolean
+                      description: >-
+                        응답에 function 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한
+                        경우, 응답속도가 느려질 수 있습니다.
+                      default: false
       responses:
         '200':
           description: Successful Response
@@ -1787,7 +1793,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - &ref_20
+                        - &ref_21
                           type: object
                           required:
                             - from
@@ -1837,6 +1843,49 @@ paths:
                               description: >-
                                 토큰 전송 트랜잭션의 배치 인덱스를 나타내는 필드입니다. 이 필드는 ERC1155 토큰
                                 전송에 대한 응답에만 포함됩니다.
+                            function:
+                              type: object
+                              description: >-
+                                Transfer가 포함된 트랜잭션에서 호출된 함수의 정보를 나타내는 필드입니다. 이
+                                필드는 withFunction 파라미터에 true를 입력한 경우에만 응답에 포함됩니다.
+                              required:
+                                - selector
+                                - input
+                              properties:
+                                selector: &ref_58
+                                  type: string
+                                  description: >-
+                                    호출된 함수를 식별하는 4바이트 함수 셀렉터 값입니다. 함수 셀렉터는 함수
+                                    시그니처를 Keccak-256 해싱한 결과의 앞 4바이트를 의미합니다. 0x로
+                                    시작하는 8자리의 16진수 문자열 형태로 제공됩니다.
+                                  pattern: ^0[xX][0-9a-fA-F]{8}
+                                name:
+                                  type: string
+                                  description: 호출 함수의 이름을 나타내는 필드입니다.
+                                signature:
+                                  type: string
+                                  description: '호출 함수의 시그니처를 나타내는 필드입니다. '
+                                args:
+                                  type: array
+                                  description: 호출 함수의 인자를 나타내는 필드입니다.
+                                  items: &ref_57
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: 인자의 이름을 나타내는 필드입니다.
+                                      type:
+                                        type: string
+                                        description: 인자의 타입을 나타내는 필드입니다.
+                                      value:
+                                        type: string
+                                        description: 인자의 값을 나타내는 필드입니다.
+                                input:
+                                  type: string
+                                  description: >-
+                                    함수의 입력 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열
+                                    형태로 제공됩니다.
+                                  pattern: ^0[xX][0-9a-fA-F]+$
                         - type: object
                           properties:
                             contract:
@@ -2403,6 +2452,7 @@ paths:
                   properties:
                     withMetadata: *ref_18
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -2436,7 +2486,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -3012,6 +3062,7 @@ paths:
                   properties:
                     withMetadata: *ref_18
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -3045,7 +3096,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -3190,6 +3241,7 @@ paths:
                   properties:
                     withMetadata: *ref_18
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -3223,7 +3275,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -3844,13 +3896,13 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - &ref_41
+                        - &ref_42
                           type: object
-                          required: &ref_22
+                          required: &ref_23
                             - ownerAddress
                             - balance
-                          properties: &ref_23
-                            ownerAddress: *ref_21
+                          properties: &ref_24
+                            ownerAddress: *ref_22
                             balance:
                               type: string
                               description: 잔고 나타내는 필드입니다.
@@ -4739,19 +4791,19 @@ paths:
                         항상 "r"로 시작합니다.
                       pattern: ^r[1-9A-HJ-NP-Za-km-z]{25,35}$
                       default: rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah
-                    currency: &ref_26
+                    currency: &ref_27
                       type: string
                       description: >-
                         조회하고자 하는 화폐의 심볼을 지정하는 파라미터로, 예를 들어 "USD"나 "EUR"처럼
                         ISO-4217 형식의 문자열을 입력할 수 있습니다.
                       default: USD
-                    issuer: &ref_27
+                    issuer: &ref_28
                       type: string
                       description: >-
                         조회하고자 하는 화폐의 발행자를 지정하는 파라미터로, 25~35자리 길이의 Base58 인코딩
                         문자열("r"로 시작)을 사용해 발행자 계정 주소를 입력합니다.
                       default: rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq
-                    fromLedger: &ref_28
+                    fromLedger: &ref_29
                       type: string
                       description: >-
                         조회 시작 원장을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
@@ -4774,7 +4826,7 @@ paths:
 
                         - fromLedger에 "latest"는 toLedger가 "latest"일 때만 허용됩니다.
                       pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
-                    toLedger: &ref_29
+                    toLedger: &ref_30
                       type: string
                       description: >-
                         조회 종료 원장을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
@@ -4798,13 +4850,13 @@ paths:
                         - toLedger에 "earliest"는 fromLedger가 "earliest"일 때만
                         허용됩니다.
                       pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
-                    fromDate: &ref_30
+                    fromDate: &ref_31
                       type: string
                       description: "조회 시작 날짜를 지정하는 파라미터입니다. 날짜는 ISO\_8601 형식(YYYY-MM-DDThh:mm:ss{time zone})을 따라야 하며, 초 단위까지 입력해야 합니다.\n\n유의사항:  \n- toDate 없이 제공하면, 해당 날짜부터 최신 원장까지 결과를 조회합니다.  \n- fromDate 값은 toDate 값과 같거나 더 과거여야 합니다.  \n- fromDate와 toDate가 동일하면, 해당 날짜에 발생한 원장만 조회합니다.  \n- 이 필드는 fromLedger, toLedger와 함께 사용할 수 없습니다."
                       pattern: >-
                         ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
                       default: '2025-01-01T00:00:00+00:00'
-                    toDate: &ref_31
+                    toDate: &ref_32
                       type: string
                       description: "조회 종료 날짜를 지정하는 파라미터입니다. 날짜는 ISO\_8601 형식(YYYY-MM-DDThh:mm:ss{time zone})을 따라야 하며, 초 단위까지 입력해야 합니다.\n\n유의사항:  \n- fromDate 없이 제공하면, genesis 원장 생성 시점부터 해당 날짜까지 결과를 조회합니다.  \n- toDate 값은 fromDate 값과 같거나 더 미래여야 합니다.  \n- fromDate와 toDate가 동일하면, 해당 날짜에 발생한 원장만 조회합니다.  \n- 이 필드는 fromLedger, toLedger와 함께 사용할 수 없습니다."
                       pattern: >-
@@ -4846,7 +4898,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - &ref_46
+                        - &ref_47
                           type: object
                           required:
                             - ledgerIndex
@@ -4901,17 +4953,17 @@ paths:
                                 트랜잭션의 종류(Payment, OfferCreate, EscrowCreate 등)를
                                 나타내는 문자열입니다. Transfer 조회 API에서 필수인 필드입니다.
                               example: OfferCreate
-                            affectedNodesIndex: &ref_59
+                            affectedNodesIndex: &ref_61
                               type: integer
                               description: AffectedNodes 배열 내에서 해당 노드의 인덱스를 나타냅니다.
                               example: 1
-                            account: &ref_60
+                            account: &ref_62
                               type: string
                               description: >-
                                 트랜잭션으로 인해 잔액이 변경된 계정 주소입니다. 계정 주소는 25~35자리 길이의
                                 Base58 인코딩 문자열로, 'r'로 시작하는 형식을 가집니다.
                               example: rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn
-                            currency: &ref_61
+                            currency: &ref_63
                               type: string
                               description: >-
                                 자산의 통화 코드를 나타냅니다. 일반적으로 ISO 4217 표준 코드(예: "USD",
@@ -4921,7 +4973,7 @@ paths:
                                 경우에는 "XRP"라는 고정된 문자열이 currency 필드에 사용되며, IOU 자산과
                                 동일한 구조로 반환됩니다. 
                               example: USD
-                            issuer: &ref_62
+                            issuer: &ref_64
                               type: string
                               description: >-
                                 자산을 발행한 계정의 주소입니다. 동일한 통화 코드(currency)라 하더라도,
@@ -4932,19 +4984,19 @@ paths:
                                 XRP는 네이티브 자산이므로 발행자가 없으며, 이 경우 issuer는 빈
                                 문자열("")로 표시됩니다.
                               example: rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq
-                            previousBalance: &ref_63
+                            previousBalance: &ref_65
                               type: string
                               description: >-
                                 변경 전 자산의 수량을 나타냅니다. XRP인 경우, XRP 단위로 표기되며 1 XRP는
                                 1,000,000 drop에 해당합니다.
                               example: '1000.34'
-                            finalBalance: &ref_64
+                            finalBalance: &ref_66
                               type: string
                               description: >-
                                 변경 후 자산의 수량을 나타냅니다. XRP인 경우, XRP 단위로 표기되며 1 XRP는
                                 1,000,000 drop에 해당합니다.
                               example: '900.12'
-                            balanceChange: &ref_65
+                            balanceChange: &ref_67
                               type: string
                               description: >-
                                 트랜잭션으로 인해 변경된 수량을 나타냅니다. 수량의 증감 여부를 포함하며, XRP인
@@ -5121,7 +5173,7 @@ paths:
                           description: >-
                             조회하고자 하는 컨트랙트 주소의 배열을 지정하는 파라미터입니다. 컨트랙트 주소는 "T"로
                             시작하는 34자리 base58 문자열 형식을 가집니다.
-                          items: &ref_25
+                          items: &ref_26
                             type: string
                             description: >-
                               조회할 컨트랙트 주소를 지정하는 파라미터입니다. 이 필드는 "T"로 시작하는 34자리
@@ -5163,7 +5215,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - &ref_32
+                        - &ref_33
                           type: object
                           required:
                             - address
@@ -5204,7 +5256,7 @@ paths:
                               description: >-
                                 컨트랙트 타입을 반환합니다. 컨트랙트 타입은 표준 규격의 이름이 표기됩니다.
                                 (e.g., TRC20)
-                        - &ref_33
+                        - &ref_34
                           type: object
                           required:
                             - name
@@ -5392,14 +5444,14 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           type: object
-                          required: *ref_22
-                          properties: *ref_23
+                          required: *ref_23
+                          properties: *ref_24
                         - title: Tron
                           type: object
-                          required: &ref_42
+                          required: &ref_43
                             - ownerAddress
                             - balance
-                          properties: &ref_43
+                          properties: &ref_44
                             ownerAddress:
                               type: string
                               description: >-
@@ -5722,7 +5774,7 @@ paths:
                             문자열 형태로 입력할 수 있습니다.
                           pattern: ^0[xX][0-9a-fA-F]{40}$
                           default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                        relation: *ref_24
+                        relation: *ref_25
                         contractAddresses: *ref_13
                         fromBlock: *ref_14
                         toBlock: *ref_15
@@ -5734,6 +5786,7 @@ paths:
                     - type: object
                       properties:
                         withZeroValue: *ref_19
+                        withFunction: *ref_20
                 - title: Tron
                   allOf:
                     - type: object
@@ -5745,14 +5798,14 @@ paths:
                             base58 문자열 형식을 가집니다.
                           pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                           default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                        relation: *ref_24
-                        contractAddresses: &ref_40
+                        relation: *ref_25
+                        contractAddresses: &ref_41
                           type: array
                           description: >-
                             조회하고자 하는 컨트랙트 주소의 배열을 지정하는 파라미터입니다. 컨트랙트 주소는 "T"로
                             시작하는 34자리 base58 문자열 형식을 가집니다.
-                          items: *ref_25
-                        fromBlock: &ref_34
+                          items: *ref_26
+                        fromBlock: &ref_35
                           type: string
                           description: >
                             조회 시작 시점을 지정하는 파라미터입니다. block number, block hash 또는
@@ -5778,7 +5831,7 @@ paths:
 
                             - fromBlock에는 "latest"를 입력할 수 없습니다.
                           pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
-                        toBlock: &ref_35
+                        toBlock: &ref_36
                           type: string
                           description: >-
                             조회 종료 시점을 지정하는 파라미터입니다. block number, block hash 또는
@@ -5804,7 +5857,7 @@ paths:
 
                             - toBlock에는 "earliest"를 입력할 수 없습니다.
                           pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
-                        fromDate: &ref_36
+                        fromDate: &ref_37
                           type: string
                           description: >-
                             조회 시작 시점을 지정하는 파라미터입니다. 날짜는 ISO 8601
@@ -5828,7 +5881,7 @@ paths:
                             결과가 조회됩니다.
                           pattern: >-
                             ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
-                        toDate: &ref_37
+                        toDate: &ref_38
                           type: string
                           description: >-
                             조회 종료 시점을 지정하는 파라미터입니다. 날짜는 ISO 8601
@@ -5866,13 +5919,13 @@ paths:
                             문자열이며 항상 "r"로 시작합니다.
                           pattern: ^r[1-9A-HJ-NP-Za-km-z]{25,35}$
                           default: rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah
-                        relation: *ref_24
-                        currency: *ref_26
-                        issuer: *ref_27
-                        fromLedger: *ref_28
-                        toLedger: *ref_29
-                        fromDate: *ref_30
-                        toDate: *ref_31
+                        relation: *ref_25
+                        currency: *ref_27
+                        issuer: *ref_28
+                        fromLedger: *ref_29
+                        toLedger: *ref_30
+                        fromDate: *ref_31
+                        toDate: *ref_32
                       required:
                         - accountAddress
                     - *ref_8
@@ -5911,7 +5964,7 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_20
+                            - *ref_21
                             - type: object
                               properties:
                                 contract:
@@ -6135,7 +6188,7 @@ paths:
                                   decimals: 18
                         - title: Tron
                           allOf:
-                            - &ref_39
+                            - &ref_40
                               type: object
                               required:
                                 - from
@@ -6208,8 +6261,8 @@ paths:
                               properties:
                                 contract:
                                   allOf:
-                                    - *ref_32
                                     - *ref_33
+                                    - *ref_34
                           example:
                             rpp: 5
                             page: 1
@@ -6322,16 +6375,16 @@ paths:
                                   decimals: 6
                         - title: XRPL
                           allOf:
-                            - &ref_38
+                            - &ref_39
                               type: object
-                              required: &ref_66
+                              required: &ref_68
                                 - affectedNodesIndex
                                 - from
                                 - to
                                 - issuer
                                 - currency
                                 - value
-                              properties: &ref_67
+                              properties: &ref_69
                                 ledgerIndex:
                                   type: integer
                                   description: >-
@@ -6580,6 +6633,7 @@ paths:
                     - type: object
                       properties:
                         withZeroValue: *ref_19
+                        withFunction: *ref_20
                 - title: Tron
                   allOf:
                     - type: object
@@ -6591,10 +6645,10 @@ paths:
                             base58 문자열 형식을 가집니다.
                           pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                           default: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
-                        fromBlock: *ref_34
-                        toBlock: *ref_35
-                        fromDate: *ref_36
-                        toDate: *ref_37
+                        fromBlock: *ref_35
+                        toBlock: *ref_36
+                        fromDate: *ref_37
+                        toDate: *ref_38
                       required:
                         - contractAddress
                     - *ref_8
@@ -6636,7 +6690,7 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_20
+                            - *ref_21
                             - type: object
                               properties:
                                 contract:
@@ -6870,10 +6924,10 @@ paths:
                                     34자리 base58 문자열 형식을 가집니다.
                                   pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                                   default: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
-                                fromBlock: *ref_34
-                                toBlock: *ref_35
-                                fromDate: *ref_36
-                                toDate: *ref_37
+                                fromBlock: *ref_35
+                                toBlock: *ref_36
+                                fromDate: *ref_37
+                                toDate: *ref_38
                               required:
                                 - contractAddress
                             - *ref_8
@@ -7034,12 +7088,12 @@ paths:
               allOf:
                 - type: object
                   properties:
-                    currency: *ref_26
-                    issuer: *ref_27
-                    fromLedger: *ref_28
-                    toLedger: *ref_29
-                    fromDate: *ref_30
-                    toDate: *ref_31
+                    currency: *ref_27
+                    issuer: *ref_28
+                    fromLedger: *ref_29
+                    toLedger: *ref_30
+                    fromDate: *ref_31
+                    toDate: *ref_32
                   required:
                     - currency
                 - *ref_8
@@ -7076,7 +7130,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_38
+                        - *ref_39
               example:
                 rpp: 5
                 page: 1
@@ -7235,14 +7289,15 @@ paths:
                     - type: object
                       properties:
                         withZeroValue: *ref_19
+                        withFunction: *ref_20
                 - title: Tron
                   allOf:
                     - type: object
                       properties:
-                        fromBlock: *ref_34
-                        toBlock: *ref_35
-                        fromDate: *ref_36
-                        toDate: *ref_37
+                        fromBlock: *ref_35
+                        toBlock: *ref_36
+                        fromDate: *ref_37
+                        toDate: *ref_38
                     - *ref_8
                     - type: object
                       properties:
@@ -7251,10 +7306,10 @@ paths:
                   allOf:
                     - type: object
                       properties:
-                        fromLedger: *ref_28
-                        toLedger: *ref_29
-                        fromDate: *ref_30
-                        toDate: *ref_31
+                        fromLedger: *ref_29
+                        toLedger: *ref_30
+                        fromDate: *ref_31
+                        toDate: *ref_32
                     - *ref_8
       responses:
         '200':
@@ -7291,7 +7346,7 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_20
+                            - *ref_21
                             - type: object
                               properties:
                                 contract:
@@ -7515,13 +7570,13 @@ paths:
                                   decimals: 18
                         - title: Tron
                           allOf:
-                            - *ref_39
+                            - *ref_40
                             - type: object
                               properties:
                                 contract:
                                   allOf:
-                                    - *ref_32
                                     - *ref_33
+                                    - *ref_34
                           example:
                             rpp: 5
                             page: 1
@@ -7634,7 +7689,7 @@ paths:
                                   decimals: 6
                         - title: XRPL
                           allOf:
-                            - *ref_38
+                            - *ref_39
                           example:
                             rpp: 5
                             page: 1
@@ -7803,7 +7858,7 @@ paths:
                             base58 문자열 형식을 가집니다.
                           pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                           default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                        contractAddresses: *ref_40
+                        contractAddresses: *ref_41
                       required:
                         - accountAddress
                     - *ref_8
@@ -7842,7 +7897,7 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_41
+                            - *ref_42
                             - type: object
                               properties:
                                 contract:
@@ -8140,16 +8195,16 @@ paths:
                                   decimals: 18
                         - title: Tron
                           allOf:
-                            - &ref_45
+                            - &ref_46
                               type: object
-                              required: *ref_42
-                              properties: *ref_43
+                              required: *ref_43
+                              properties: *ref_44
                             - type: object
                               properties:
                                 contract:
                                   allOf:
-                                    - *ref_32
                                     - *ref_33
+                                    - *ref_34
                           example:
                             rpp: 5
                             page: 1
@@ -8482,8 +8537,8 @@ paths:
                                 decimals: 18
                         - title: Tron
                           allOf:
-                            - *ref_32
                             - *ref_33
+                            - *ref_34
                           example:
                             rpp: 20
                             page: 1
@@ -8795,15 +8850,15 @@ paths:
                 oneOf:
                   - title: EVM (Ethereum, Optimism, ...)
                     type: object
-                    required: *ref_22
-                    properties: *ref_23
+                    required: *ref_23
+                    properties: *ref_24
                     example:
                       ownerAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                       balance: '1085515662023271641379'
                   - title: Tron
                     type: object
-                    required: *ref_42
-                    properties: *ref_43
+                    required: *ref_43
+                    properties: *ref_44
                     example:
                       ownerAddress: TCepLZhb8kvrLToRYC1pWDiUJxrL1cBNia
                       balance: '2'
@@ -8849,7 +8904,7 @@ paths:
             schema:
               additionalProperties: false
               type: object
-              properties: *ref_44
+              properties: *ref_45
       responses:
         '200':
           description: Successful Response
@@ -8881,7 +8936,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_45
+                    items: *ref_46
               example:
                 rpp: 5
                 page: 1
@@ -8976,10 +9031,10 @@ paths:
                 oneOf:
                   - title: Bitcoin, Dogecoin
                     type: object
-                    required: &ref_47
+                    required: &ref_48
                       - ownerAddress
                       - balance
-                    properties: &ref_48
+                    properties: &ref_49
                       ownerAddress:
                         type: string
                         description: 소유자 주소를 나타내는 필드입니다.
@@ -9062,10 +9117,10 @@ paths:
                         항상 "r"로 시작합니다.
                       pattern: ^r[1-9A-HJ-NP-Za-km-z]{25,35}$
                       default: rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah
-                    fromLedger: *ref_28
-                    toLedger: *ref_29
-                    fromDate: *ref_30
-                    toDate: *ref_31
+                    fromLedger: *ref_29
+                    toLedger: *ref_30
+                    fromDate: *ref_31
+                    toDate: *ref_32
                   required:
                     - accountAddress
                 - *ref_8
@@ -9074,7 +9129,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema: *ref_46
+              schema: *ref_47
               example:
                 rpp: 5
                 page: 1
@@ -9201,8 +9256,8 @@ paths:
                         ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
                       example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
                       default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-                    relation: *ref_24
-                    fromBlock: &ref_70
+                    relation: *ref_25
+                    fromBlock: &ref_72
                       type: string
                       description: >
                         조회 시작 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
@@ -9225,7 +9280,7 @@ paths:
 
                         - fromBlock에 "latest"는 toBlock이 "latest"일 때만 허용됩니다.
                       pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
-                    toBlock: &ref_71
+                    toBlock: &ref_73
                       type: string
                       description: >
                         조회 종료 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
@@ -9249,7 +9304,7 @@ paths:
 
                         - toBlock에 "earliest"는 fromBlock이 "earliest"일 때만 허용됩니다.
                       pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
-                    fromDate: &ref_72
+                    fromDate: &ref_74
                       type: string
                       description: >-
                         조회 시작 날짜를 지정하는 파라미터입니다. 날짜는 ISO 8601
@@ -9269,7 +9324,7 @@ paths:
                       pattern: >-
                         ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
                       default: '2025-01-01T00:00:00+00:00'
-                    toDate: &ref_73
+                    toDate: &ref_75
                       type: string
                       description: >-
                         조회 종료 날짜를 지정하는 파라미터입니다. 날짜는 ISO 8601
@@ -9299,8 +9354,8 @@ paths:
             application/json:
               schema:
                 type: object
-                required: *ref_47
-                properties: *ref_48
+                required: *ref_48
+                properties: *ref_49
               example:
                 rpp: 20
                 cursor: eyJibG9ja0hlaWdodCI6ODc1NDc1LCJ0cmFuc2FjdGlvbkluZGV4IjowfQ==
@@ -9696,11 +9751,11 @@ paths:
                         문자열 형식을 가집니다.
                       pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                    relation: *ref_24
-                    fromBlock: *ref_34
-                    toBlock: *ref_35
-                    fromDate: *ref_36
-                    toDate: *ref_37
+                    relation: *ref_25
+                    fromBlock: *ref_35
+                    toBlock: *ref_36
+                    fromDate: *ref_37
+                    toDate: *ref_38
                 - *ref_8
                 - type: object
                   properties:
@@ -9736,7 +9791,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_39
+                    items: *ref_40
               example:
                 rpp: 5
                 page: 1
@@ -9838,10 +9893,10 @@ paths:
               allOf:
                 - type: object
                   properties:
-                    fromBlock: *ref_34
-                    toBlock: *ref_35
-                    fromDate: *ref_36
-                    toDate: *ref_37
+                    fromBlock: *ref_35
+                    toBlock: *ref_36
+                    fromDate: *ref_37
+                    toDate: *ref_38
                 - *ref_8
                 - type: object
                   properties:
@@ -9877,7 +9932,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_39
+                    items: *ref_40
               example:
                 rpp: 5
                 page: 1
@@ -10061,7 +10116,7 @@ paths:
                 oneOf:
                   - title: EVM (Ethereum, Optimism, ...)
                     type: object
-                    required: &ref_49
+                    required: &ref_50
                       - hash
                       - number
                       - timestamp
@@ -10082,7 +10137,7 @@ paths:
                       - sha3Uncles
                       - transactionCount
                       - transactions
-                    properties: &ref_50
+                    properties: &ref_51
                       hash:
                         type: string
                         description: 블록 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
@@ -10535,8 +10590,8 @@ paths:
                     items:
                       allOf:
                         - type: object
-                          required: *ref_49
-                          properties: *ref_50
+                          required: *ref_50
+                          properties: *ref_51
               example:
                 rpp: 20
                 cursor: >-
@@ -11284,7 +11339,7 @@ paths:
                             문자열 형태로 입력할 수 있습니다.
                           pattern: ^0[xX][0-9a-fA-F]{40}$
                           default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                        relation: *ref_24
+                        relation: *ref_25
                         fromBlock:
                           type: string
                           description: >
@@ -11317,7 +11372,7 @@ paths:
                     - type: object
                       properties:
                         withZeroValue: *ref_19
-                        withExternalTransaction: &ref_51
+                        withExternalTransaction: &ref_52
                           type: boolean
                           description: >-
                             응답에 external transaction 포함 여부를 결정하는 파라미터입니다.
@@ -11336,11 +11391,11 @@ paths:
                             base58 문자열 형식을 가집니다.
                           pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                           default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                        relation: *ref_24
-                        fromBlock: *ref_34
-                        toBlock: *ref_35
-                        fromDate: *ref_36
-                        toDate: *ref_37
+                        relation: *ref_25
+                        fromBlock: *ref_35
+                        toBlock: *ref_36
+                        fromDate: *ref_37
+                        toDate: *ref_38
                       required:
                         - accountAddress
                     - *ref_8
@@ -11377,7 +11432,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: &ref_52
+                        items: &ref_53
                           type: object
                           required: []
                           properties:
@@ -11639,7 +11694,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: &ref_53
+                        items: &ref_54
                           type: object
                           required:
                             - internalTransactionHash
@@ -11872,7 +11927,7 @@ paths:
                     - type: object
                       properties:
                         withZeroValue: *ref_19
-                        withExternalTransaction: *ref_51
+                        withExternalTransaction: *ref_52
                 - title: Tron
                   allOf:
                     - type: object
@@ -11921,7 +11976,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: *ref_52
+                        items: *ref_53
                     example:
                       rpp: 10
                       page: 1
@@ -12043,7 +12098,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: *ref_53
+                        items: *ref_54
                     example:
                       rpp: 5
                       page: 1
@@ -12159,7 +12214,7 @@ paths:
             application/json:
               schema:
                 type: object
-                required: &ref_54
+                required: &ref_55
                   - ledgerHash
                   - ledgerIndex
                   - ledgerIndex
@@ -12170,7 +12225,7 @@ paths:
                   - transactionHash
                   - transactionCount
                   - transactions
-                properties: &ref_55
+                properties: &ref_56
                   ledgerHash:
                     type: string
                     description: >-
@@ -12505,10 +12560,10 @@ paths:
               allOf:
                 - type: object
                   properties:
-                    fromLedger: *ref_28
-                    toLedger: *ref_29
-                    fromDate: *ref_30
-                    toDate: *ref_31
+                    fromLedger: *ref_29
+                    toLedger: *ref_30
+                    fromDate: *ref_31
+                    toDate: *ref_32
                 - *ref_8
       responses:
         '200':
@@ -12544,8 +12599,8 @@ paths:
                     items:
                       allOf:
                         - type: object
-                          required: *ref_54
-                          properties: *ref_55
+                          required: *ref_55
+                          properties: *ref_56
               example:
                 rpp: 5
                 page: 1
@@ -13642,13 +13697,13 @@ paths:
                       pattern: ^0[xX][0-9a-fA-F]{64}$
                       default: >-
                         0x1632ac1627903e586c8ea0b1c134908c34ee95e84face9a303abd63686eb2022
-                    withLogs: &ref_68
+                    withLogs: &ref_70
                       type: boolean
                       description: >-
                         응답에 logs 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한 경우,
                         응답속도가 느려질 수 있습니다.
                       default: false
-                    withDecode: &ref_69
+                    withDecode: &ref_71
                       type: boolean
                       description: >-
                         응답에 decodedInput, decodedLog 필드의 포함 여부를 지정하는 파라미터입니다. 이
@@ -13673,14 +13728,14 @@ paths:
                             CEE2B3341141745B41DD40C775D34A6E24CBD79F5A4E5D025712416D5CE85784
                     - type: object
                       properties:
-                        withBalanceChanges: &ref_74
+                        withBalanceChanges: &ref_76
                           type: boolean
                           description: >-
                             응답에 balanceChanges 필드를 포함할지를 결정하는 선택적 파라미터입니다.
                             balanceChanges에는 네이티브 토큰(XRP)과 IOU 토큰의 잔고 변동 내역이
                             담기며, 이 옵션을 true로 설정하면 응답 속도가 느려질 수 있습니다.
                           default: false
-                        withTokenTransfers: &ref_75
+                        withTokenTransfers: &ref_77
                           type: boolean
                           description: >-
                             응답에 tokenTransfers 필드를 포함할지를 결정하는 선택적 파라미터입니다.
@@ -13698,7 +13753,7 @@ paths:
                 oneOf:
                   - title: EVM (Ethereum, Optimism, ...)
                     allOf:
-                      - &ref_76
+                      - &ref_78
                         type: object
                         required:
                           - transactionHash
@@ -13784,24 +13839,8 @@ paths:
                                 description: 트랜잭션의 함수 시그니처를 나타내는 필드입니다.
                               args:
                                 type: array
-                                items: &ref_56
-                                  type: object
-                                  properties:
-                                    name:
-                                      type: string
-                                      description: 인자의 이름을 나타내는 필드입니다.
-                                    type:
-                                      type: string
-                                      description: 인자의 타입을 나타내는 필드입니다.
-                                    value:
-                                      type: string
-                                      description: 인자의 값을 나타내는 필드입니다.
-                          functionSelector:
-                            type: string
-                            description: >-
-                              트랜잭션에서 호출한 함수의 selector를 나타내는 필드입니다. 0x로 시작하는 8자리
-                              16진수 문자열 형태로 제공됩니다.
-                            pattern: ^0[xX][0-9a-fA-F]{8}
+                                items: *ref_57
+                          functionSelector: *ref_58
                           nonce:
                             type: string
                             description: >-
@@ -13975,7 +14014,7 @@ paths:
                         properties:
                           logs:
                             type: object
-                            required: &ref_83
+                            required: &ref_85
                               - contractAddress
                               - transactionHash
                               - transactionIndex
@@ -13985,53 +14024,53 @@ paths:
                               - logIndex
                               - removed
                               - topics
-                            properties: &ref_84
-                              contractAddress: &ref_90
+                            properties: &ref_86
+                              contractAddress: &ref_92
                                 type: string
                                 description: >-
                                   로그를 생성한 컨트랙트 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의
                                   16진수 문자열 형태로 제공됩니다.
                                 pattern: ^0[xX][0-9a-fA-F]{40}$
-                              transactionHash: &ref_91
+                              transactionHash: &ref_93
                                 type: string
                                 description: >-
                                   로그를 생성한 트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리
                                   16진수 문자열 형태로 제공됩니다.
                                 pattern: ^0[xX][0-9a-fA-F]{64}$
-                              transactionIndex: &ref_92
+                              transactionIndex: &ref_94
                                 type: string
                                 description: >-
                                   로그를 생성한 트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를
                                   나타냅니다. 10진수 문자열 형태로 제공됩니다.
                                 pattern: ^[0-9]+$
-                              blockHash: &ref_93
+                              blockHash: &ref_95
                                 type: string
                                 description: >-
                                   로그를 생성한 블록의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수
                                   문자열 형태로 제공됩니다.
                                 pattern: ^0[xX][0-9a-fA-F]{64}
-                              blockNumber: &ref_94
+                              blockNumber: &ref_96
                                 type: integer
                                 description: 로그를 생성한 블록 번호를 나타내는 필드입니다.
                                 pattern: ^[0-9]+$
-                              data: &ref_95
+                              data: &ref_97
                                 type: string
                                 description: >-
                                   로그의 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열 형태로
                                   제공됩니다. 이 필드는 로그의 이벤트 데이터를 나타냅니다.
                                 pattern: ^0[xX][0-9a-fA-F]+$
-                              logIndex: &ref_96
+                              logIndex: &ref_98
                                 type: string
                                 description: >-
                                   로그의 인덱스를 나타내는 필드입니다. 트랜잭션에서 발생한 이벤트의 순서를
                                   의미합니다. 10진수 문자열 형태로 제공됩니다.
                                 pattern: ^[0-9]+$
-                              removed: &ref_97
+                              removed: &ref_99
                                 type: boolean
                                 description: >-
                                   로그가 제거되었는지 여부를 나타내는 필드입니다. 체인의 재구성(Reorg)으로 인해
                                   로그가 제거된 경우 true를 반환합니다.
-                              topics: &ref_98
+                              topics: &ref_100
                                 type: array
                                 description: 인덱스된 로그의 인자를 나타내는 필드입니다. 최대 4개의 토픽을 가질 수 있습니다.
                                 items:
@@ -14042,13 +14081,13 @@ paths:
                                   pattern: ^0[xX][0-9a-fA-F]{64}
                               decodedLog:
                                 type: object
-                                required: &ref_77
+                                required: &ref_79
                                   - name
                                   - eventFragment
                                   - signature
                                   - eventHash
                                   - args
-                                properties: &ref_78
+                                properties: &ref_80
                                   name:
                                     type: string
                                     description: 로그의 이벤트 이름을 나타내는 필드입니다.
@@ -14063,10 +14102,11 @@ paths:
                                     description: 로그의 이벤트 해시를 나타내는 필드입니다.
                                   args:
                                     type: array
-                                    items: *ref_56
+                                    description: 로그의 인자를 나타내는 필드입니다.
+                                    items: *ref_57
                   - title: XRPL
                     allOf:
-                      - &ref_82
+                      - &ref_84
                         type: object
                         required:
                           - ledgerIndex
@@ -14265,7 +14305,7 @@ paths:
                                 properties:
                                   asset:
                                     type: object
-                                    properties: &ref_57
+                                    properties: &ref_59
                                       currency:
                                         type: string
                                         description: >-
@@ -14293,13 +14333,13 @@ paths:
                                       구성되며, 같은 통화 코드와 발행자를 가질 수 없습니다.
                                   asset2:
                                     type: object
-                                    properties: *ref_57
+                                    properties: *ref_59
                                     description: >-
                                       AMM 풀에서 사용되는 두 번째 자산을 나타냅니다. Asset과 함께
                                       구성되며, 같은 통화 코드와 발행자를 가질 수 없습니다.
                                   amount:
                                     type: object
-                                    properties: &ref_58
+                                    properties: &ref_60
                                       currency:
                                         type: string
                                         description: >-
@@ -14336,7 +14376,7 @@ paths:
                                       AMMWithdraw에서는 인출할 첫 번째 자산을 나타냅니다.
                                   amount2:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       AMM 풀에 추가되는 두 번째 자산의 양을 나타냅니다.
                                       AMMWithdraw에서는 인출할 두 번째 자산을 나타냅니다.
@@ -14348,27 +14388,27 @@ paths:
                                     example: 250
                                   effectivePrice:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       AMMDeposit에서 유효한 최대 가격을 설정합니다.
                                       AMMWithdraw에서는 최소 보장 가격을 설정합니다.
                                   lpTokenIn:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: AMM 풀에서 반환하는 LP 토큰의 수량을 나타냅니다.
                                   lpTokenOut:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: AMM 풀에 유동성을 공급한 대가로 발행되는 LP 토큰의 수량을 나타냅니다.
                                   bidMin:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       최소 입찰 금액을 설정합니다. 이 값을 높게 설정하면 다른 사용자가 더 높은
                                       입찰가를 제시하기 어렵습니다.
                                   bidMax:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       최대 입찰 금액을 설정합니다. 입찰 금액이 bidMax를 초과하면 트랜잭션이
                                       실패합니다.
@@ -14401,7 +14441,7 @@ paths:
                                     example: rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah
                                   sendMax:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       수표 발행자가 해당 수표를 통해 송금할 수 있도록 설정한 최대 자산
                                       수량입니다. 수취인은 이 값과 동일한 통화 및 발행자의 자산만 받을 수
@@ -14431,7 +14471,7 @@ paths:
                                       6F1DFD1D0FE8A32E40E1F2C05CF1C15545BAB56B617F9C6C2D63A6B704BEF59B
                                   amount:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       수표를 현금화할 때 실제로 적용된 자산의 수량이 표시됩니다. 이 값은 수표의
                                       sendMax 필드와 동일한 자산 코드 및 발행자를 가져야 하며, 그 범위
@@ -14440,7 +14480,7 @@ paths:
                                       없습니다.
                                   deliverMin:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       수취인이 수령한 최소 보장 자산 수량이 표시됩니다. CheckCash
                                       트랜잭션에서 가능한 최대한 많은 금액을 수령하는 방식에서 사용되며,
@@ -14458,7 +14498,7 @@ paths:
                                 properties:
                                   amount:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       에스크로(Escrow)에 예치된 자산의 수량이 표시됩니다. 이 값은 송금자의
                                       계정에서 차감되며, 설정된 조건을 만족하면 수령인에게 지급됩니다.
@@ -14525,14 +14565,14 @@ paths:
                                 properties:
                                   takerPays:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       오퍼를 통해 구매자가 지불하기로 제안한 자산의 수량이 표시됩니다. 오퍼
                                       작성자는 이 필드를 통해 지불 대상 자산(구매 측면)을 명시하며, 이는
                                       상대방이 받을 자산에 해당합니다.
                                   takerGets:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       오퍼를 통해 구매자가 수령하고자 제안한 자산의 수량이 표시됩니다. 오퍼
                                       작성자는 이 필드를 통해 얻고자 하는 자산(판매 측면)을 명시하며, 이는
@@ -14562,27 +14602,27 @@ paths:
                                 properties:
                                   amount:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       송신자가 수신자에게 전달하고자 한 자산의 수량이 표시됩니다. 이 값은 요청된
                                       송금 금액이며, 실제 수령 금액은 이보다 작을 수 있습니다. 부분 결제가
                                       발생한 경우, deliveredAmount와 차이가 날 수 있습니다.
                                   deliverMax:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       트랜잭션 처리 시 사용된 송금 상한선이 표시됩니다. 경유 수수료나 환율
                                       조건을 고려한 금액이며, amount와 동일한 경우도 많지만 내부 처리
                                       결과에 따라 달라질 수 있습니다.
                                   deliverMin:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       부분 결제가 허용된 경우, 수신자가 반드시 수령해야 하는 최소 자산
                                       수량입니다. 이보다 적은 금액이 도달하면 트랜잭션은 실패합니다.
                                   destinationAmount:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       실제로 수신자에게 전달된 자산 수량입니다. 부분 결제가 발생한 경우
                                       amount보다 작을 수 있으며, 과거 원장(2014-01-20 이전)에서는
@@ -14657,7 +14697,7 @@ paths:
                                           type: 1
                                   sendMax:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       송신자가 결제를 위해 지불할 수 있는 최대 자산 수량입니다. 환전 수수료,
                                       경유 비용 등을 포함할 수 있으며, 트랜잭션 수수료(XRP 소각)는 포함되지
@@ -14676,7 +14716,7 @@ paths:
                                 properties:
                                   amount:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       PaymentChannelCreate 시 예치할 금액,
                                       PaymentChannelFund 시 추가 자금,
@@ -14760,7 +14800,7 @@ paths:
                                     example: 820000000
                                   balance:
                                     type: object
-                                    properties: *ref_58
+                                    properties: *ref_60
                                     description: >-
                                       현재까지 수신자에게 청구된 총 금액을 나타냅니다. XRP 단위이며, 채널
                                       상에서 청구 가능한 누적 금액입니다.
@@ -14786,23 +14826,47 @@ paths:
                               - finalBalance
                               - changeValue
                             properties:
-                              affectedNodesIndex: *ref_59
-                              account: *ref_60
-                              currency: *ref_61
-                              issuer: *ref_62
-                              previousBalance: *ref_63
-                              finalBalance: *ref_64
-                              balanceChange: *ref_65
+                              affectedNodesIndex: *ref_61
+                              account: *ref_62
+                              currency: *ref_63
+                              issuer: *ref_64
+                              previousBalance: *ref_65
+                              finalBalance: *ref_66
+                              balanceChange: *ref_67
                             description: >-
                               트랜잭션으로 인해 발생한 계정별 잔액 변동 내역을 포함하는 객체 배열입니다. 각 객체는
                               변경된 계정, 변동 금액, 통화 종류 등을 명시합니다.
                           tokenTransfers:
                             type: object
-                            required: *ref_66
-                            properties: *ref_67
+                            required: *ref_68
+                            properties: *ref_69
                             description: >-
                               트랜잭션에 포함된 토큰 전송 내역을 나타내는 객체 배열입니다. 각 객체는 전송된 토큰의
                               종류, 전송 금액, 송수신 계정 등의 정보를 포함합니다.
+                          balanceOutAccounts:
+                            type: array
+                            description: >-
+                              트랜잭션에서 발생한 모든 송·수신을 합산한 결과, 최종 잔고 변동이 0보다 작은(감소한)
+                              계정 주소 목록입니다. XRP와 IOU 토큰 잔고 변동을 모두 반영합니다.
+                            items:
+                              type: string
+                              description: 잔고 감소가 확정된 계정 주소
+                          balanceInAccounts:
+                            type: array
+                            description: >-
+                              트랜잭션에서 발생한 모든 송·수신을 합산한 결과, 최종 잔고 변동이 0보다 큰(증가한)
+                              계정 주소 목록입니다. XRP와 IOU 토큰 잔고 변동을 모두 반영합니다.
+                            items:
+                              type: string
+                              description: 잔고 증가가 확정된 계정 주소
+                          balanceChangedTokens:
+                            type: array
+                            description: >-
+                              트랜잭션 전체를 통산했을 때 최종 순잔고 변동이 0이 아닌 토큰의 식별자 목록입니다. 각
+                              항목은 'currency-issuer' 형식을 따릅니다.
+                            items:
+                              type: string
+                              description: '''currency-issuer'' 형식의 토큰 식별자'
               example:
                 transactionHash: >-
                   0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -15044,7 +15108,7 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - &ref_79
+                    - &ref_81
                       type: object
                       required:
                         - id
@@ -15134,7 +15198,7 @@ paths:
                           example: 1716177005
                     - type: object
                       properties:
-                        vin: &ref_80
+                        vin: &ref_82
                           type: object
                           required:
                             - index
@@ -15222,7 +15286,7 @@ paths:
                               items:
                                 type: string
                                 example: 3045022100b228e33e8b62f825...
-                        vout: &ref_81
+                        vout: &ref_83
                           type: object
                           required:
                             - index
@@ -15411,7 +15475,7 @@ paths:
                             문자열 형태로 입력할 수 있습니다.
                           pattern: ^0[xX][0-9a-fA-F]{40}$
                           default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                        relation: *ref_24
+                        relation: *ref_25
                         fromBlock: *ref_14
                         toBlock: *ref_15
                         fromDate: *ref_16
@@ -15421,8 +15485,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_68
-                        withDecode: *ref_69
+                        withLogs: *ref_70
+                        withDecode: *ref_71
                 - title: Bitcoin, Dogecoin
                   allOf:
                     - type: object
@@ -15436,11 +15500,11 @@ paths:
                             ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
                           example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
                           default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-                        relation: *ref_24
-                        fromBlock: *ref_70
-                        toBlock: *ref_71
-                        fromDate: *ref_72
-                        toDate: *ref_73
+                        relation: *ref_25
+                        fromBlock: *ref_72
+                        toBlock: *ref_73
+                        fromDate: *ref_74
+                        toDate: *ref_75
                       required:
                         - accountAddress
                     - *ref_8
@@ -15456,18 +15520,18 @@ paths:
                             base58 문자열 형식을 가집니다.
                           pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                           default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                        relation: *ref_24
-                        fromBlock: *ref_34
-                        toBlock: *ref_35
-                        fromDate: *ref_36
-                        toDate: *ref_37
+                        relation: *ref_25
+                        fromBlock: *ref_35
+                        toBlock: *ref_36
+                        fromDate: *ref_37
+                        toDate: *ref_38
                       required:
                         - accountAddress
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_68
-                        withDecode: *ref_69
+                        withLogs: *ref_70
+                        withDecode: *ref_71
                   required:
                     - accountAddress
                 - title: XRPL
@@ -15482,17 +15546,36 @@ paths:
                             문자열이며 항상 "r"로 시작합니다.
                           pattern: ^r[1-9A-HJ-NP-Za-km-z]{25,35}$
                           default: rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah
-                        fromLedger: *ref_28
-                        toLedger: *ref_29
-                        fromDate: *ref_30
-                        toDate: *ref_31
+                        relation:
+                          type: string
+                          description: >-
+                            잔고 변동을 기준으로 **송신자(잔고 감소)**·**수신자(잔고 증가)** 를 구분하며, 이
+                            파라미터 값에 따라 다음과 같이 트랜잭션을 필터링합니다. 
+
+
+                            - **from**  : 대상 계정이 **balanceOutAccounts**(송신자 목록)에
+                            포함된 트랜잭션만 조회  
+
+                            - **to**    : 대상 계정이 **balanceInAccounts**(수신자 목록)에
+                            포함된 트랜잭션만 조회  
+
+                            - **both** *(기본값)* : 대상 계정이 balanceOutAccounts 또는
+                            balanceInAccounts 어느 한쪽이라도 포함된 모든 트랜잭션 조회
+                          enum:
+                            - from
+                            - to
+                            - both
+                        fromLedger: *ref_29
+                        toLedger: *ref_30
+                        fromDate: *ref_31
+                        toDate: *ref_32
                       required:
                         - accountAddress
                     - *ref_8
                     - type: object
                       properties:
-                        withBalanceChanges: *ref_74
-                        withTokenTransfers: *ref_75
+                        withBalanceChanges: *ref_76
+                        withTokenTransfers: *ref_77
       responses:
         '200':
           description: Successful Response
@@ -15528,13 +15611,13 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_76
+                            - *ref_78
                             - type: object
                               properties:
                                 logs:
                                   type: object
-                                  required: *ref_77
-                                  properties: *ref_78
+                                  required: *ref_79
+                                  properties: *ref_80
                           example:
                             rpp: 10
                             page: 1
@@ -16302,11 +16385,11 @@ paths:
                                           value: '50000000000'
                         - title: Bitcoin, Dogecoin
                           allOf:
-                            - *ref_79
+                            - *ref_81
                             - type: object
                               properties:
-                                vin: *ref_80
-                                vout: *ref_81
+                                vin: *ref_82
+                                vout: *ref_83
                           example:
                             rpp: 10
                             page: 1
@@ -16428,7 +16511,7 @@ paths:
                                       type: witness_v0_keyhash
                         - title: Tron
                           allOf:
-                            - &ref_85
+                            - &ref_87
                               type: object
                               required:
                                 - transactionHash
@@ -16796,7 +16879,7 @@ paths:
                               properties:
                                 logs:
                                   type: object
-                                  required: &ref_86
+                                  required: &ref_88
                                     - contractAddress
                                     - transactionHash
                                     - transactionIndex
@@ -16804,7 +16887,7 @@ paths:
                                     - data
                                     - logIndex
                                     - topics
-                                  properties: &ref_87
+                                  properties: &ref_89
                                     contractAddress:
                                       type: string
                                       description: >-
@@ -17316,318 +17399,107 @@ paths:
                                           value: '60000000'
                         - title: XRPL
                           allOf:
-                            - *ref_82
+                            - *ref_84
                           example:
-                            rpp: 5
+                            rpp: 2
                             page: 1
-                            count: 4103
                             items:
-                              - ledgerIndex: 95498176
-                                ledgerTimestamp: 1744818572
+                              - ledgerIndex: 93817701
+                                ledgerTimestamp: 1738280032
                                 transactionIndex: 4
                                 transactionHash: >-
-                                  A3F980B6E5794F04F36B112604C3B2156E9970B5678BC7BFA86B92628838FC3C
+                                  47A8862BF7895E5BAA68B84D64B682F8104BBE6980EDF1D990143A66FFEE89A3
                                 transactionType: Payment
                                 transactionResult: tesSUCCESS
-                                account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                sequence: 67525456
-                                lastLedgerSequence: null
-                                ticketSequence: null
+                                account: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
+                                sequence: 0
+                                lastLedgerSequence: 93817710
+                                ticketSequence: 80608521
                                 signingPubKey: >-
-                                  03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964
+                                  0364865565D2E85ED2D9EB79D276E89D8C89AE950ED995B479BDB6513B1E090B8D
                                 txnSignature: >-
-                                  30440220279CDFEE2519AE8971B9DEF069E839343C1D79070CD340ABDB3DD1148B5A9B21022032C2409D6B3341228E6DBE4BC1952DA0CBBCF64438C33C770813617F1C0D036E
-                                fee: '0.000012'
+                                  3045022100ADDCD184F86B1D73819E7FC20599DE9BCE64F2E99ED630E318DDA031DFC0836D02201B3313C7FD29849C4E1D51217B370E2AC1A326E12E541515D8F179D775D7B328
+                                fee: '0.000022'
                                 flags: null
-                                accountTxnId: null
-                                sourceTag: null
-                                signers: null
-                                memos:
-                                  - memoData: Xaman Service Fee
-                                    memoFormat: null
-                                    memoType: null
-                                transactionCategory: Payment
-                                transactionDetails:
-                                  amount:
-                                    currency: XRP
-                                    issuer: null
-                                    value: '0.0045'
-                                  deliverMax:
-                                    currency: XRP
-                                    issuer: null
-                                    value: '0.0045'
-                                  deliverMin: null
-                                  deliveredAmount:
-                                    currency: XRP
-                                    issuer: null
-                                    value: '0.0045'
-                                  destination: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
-                                  destinationTag: null
-                                  invoiceId: >-
-                                    8E3E8ABB59D7542F16F54888554B199061490F785EE2E3740ECD2DD43AF8FBAF
-                                  paths: null
-                                  sendMax: null
-                                  credentialIds: null
-                                balanceChanges:
-                                  - affectedNodesIndex: 0
-                                    account: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '2296.092214'
-                                    finalBalance: '2296.096714'
-                                    balanceChange: '0.0045'
-                                  - affectedNodesIndex: 1
-                                    account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '9321.954704'
-                                    finalBalance: '9321.950192'
-                                    balanceChange: '-0.004512'
-                                tokenTransfers: []
-                              - ledgerIndex: 95498175
-                                ledgerTimestamp: 1744818571
-                                transactionIndex: 43
-                                transactionHash: >-
-                                  8E3E8ABB59D7542F16F54888554B199061490F785EE2E3740ECD2DD43AF8FBAF
-                                transactionType: OfferCreate
-                                transactionResult: tesSUCCESS
-                                account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                sequence: 67525455
-                                lastLedgerSequence: 95498193
-                                ticketSequence: null
-                                signingPubKey: >-
-                                  03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964
-                                txnSignature: >-
-                                  3044022032DB63B2BD1D0C4CB6CA9666C18C371510487D4DEE9C9AFA287F69ACACBCB448022016B6A0609B591391ABD04CA0AEF339FD87165E96B38CB8867E52149FA715BE93
-                                fee: '0.000012'
-                                flags: 655360
                                 accountTxnId: null
                                 sourceTag: null
                                 signers: null
                                 memos: null
-                                transactionCategory: Offer
-                                transactionDetails:
-                                  takerPays:
-                                    currency: SOLO
-                                    issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    value: '76.91692325'
-                                  takerGets:
-                                    currency: XRP
-                                    issuer: null
-                                    value: '10'
-                                  expiration: null
-                                balanceChanges:
-                                  - affectedNodesIndex: 1
-                                    account: rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '53405.002493'
-                                    finalBalance: '53415.002493'
-                                    balanceChange: '10'
-                                  - affectedNodesIndex: 4
-                                    account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '9331.954716'
-                                    finalBalance: '9321.954704'
-                                    balanceChange: '-10.000012'
-                                tokenTransfers:
-                                  - affectedNodesIndex: 0
-                                    from: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    to: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                    issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    currency: SOLO
-                                    value: '92.2424125052'
-                                  - affectedNodesIndex: 3
-                                    from: rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
-                                    to: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    currency: SOLO
-                                    value: '92.2516367465'
-                              - ledgerIndex: 95490756
-                                ledgerTimestamp: 1744789591
-                                transactionIndex: 48
-                                transactionHash: >-
-                                  BD345A8795A190464EB28A61C721048586B547AFC8846A7F813DB4FE4C30A977
-                                transactionType: Payment
-                                transactionResult: tesSUCCESS
-                                account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                sequence: 67525454
-                                lastLedgerSequence: null
-                                ticketSequence: null
-                                signingPubKey: >-
-                                  03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964
-                                txnSignature: >-
-                                  304402206EC88A212D61E0FD9EDA73B8B9F07E4C7F6B36017C95B5B20FB0BBB1F5AE0ADF02202D795E3345BF37758C619C78344F240C52A6B8EF92030B6314FC4002383B51D1
-                                fee: '0.000012'
-                                flags: null
-                                accountTxnId: null
-                                sourceTag: null
-                                signers: null
-                                memos:
-                                  - memoData: Xaman Service Fee
-                                    memoFormat: null
-                                    memoType: null
                                 transactionCategory: Payment
                                 transactionDetails:
                                   amount:
                                     currency: XRP
-                                    issuer: null
-                                    value: '0.0045'
+                                    issuer: ''
+                                    value: '1'
                                   deliverMax:
                                     currency: XRP
-                                    issuer: null
-                                    value: '0.0045'
+                                    issuer: ''
+                                    value: '1'
                                   deliverMin: null
                                   deliveredAmount:
                                     currency: XRP
-                                    issuer: null
-                                    value: '0.0045'
-                                  destination: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
+                                    issuer: ''
+                                    value: '1'
+                                  destination: rDH8aaMbQU8fJgHNumGqeWdcJgAo6uJLHN
                                   destinationTag: null
-                                  invoiceId: >-
-                                    F56440CCD5DE51A3A768990753BB753BC24FF5F2BE46E0AAF433FFF5C9E26FD9
+                                  invoiceId: null
                                   paths: null
                                   sendMax: null
                                   credentialIds: null
-                                balanceChanges:
-                                  - affectedNodesIndex: 0
-                                    account: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '2272.763768'
-                                    finalBalance: '2272.768268'
-                                    balanceChange: '0.0045'
-                                  - affectedNodesIndex: 1
-                                    account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '9331.959228'
-                                    finalBalance: '9331.954716'
-                                    balanceChange: '-0.004512'
-                                tokenTransfers: []
-                              - ledgerIndex: 95490755
-                                ledgerTimestamp: 1744789590
-                                transactionIndex: 0
+                                balanceInAccounts:
+                                  - rDH8aaMbQU8fJgHNumGqeWdcJgAo6uJLHN
+                                balanceOutAccounts:
+                                  - ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
+                                balanceChangedTokens:
+                                  - XRP
+                              - ledgerIndex: 93805122
+                                ledgerTimestamp: 1738231161
+                                transactionIndex: 1
                                 transactionHash: >-
-                                  F56440CCD5DE51A3A768990753BB753BC24FF5F2BE46E0AAF433FFF5C9E26FD9
-                                transactionType: OfferCreate
+                                  63E40CE829B00F06A45E09FE7E210C072D647838DD30B712DCE2C90ADAE90ED2
+                                transactionType: Payment
                                 transactionResult: tesSUCCESS
-                                account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                sequence: 67525453
-                                lastLedgerSequence: 95490773
-                                ticketSequence: null
+                                account: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
+                                sequence: 0
+                                lastLedgerSequence: 93805130
+                                ticketSequence: 80608524
                                 signingPubKey: >-
-                                  03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964
+                                  0364865565D2E85ED2D9EB79D276E89D8C89AE950ED995B479BDB6513B1E090B8D
                                 txnSignature: >-
-                                  304402205924DF8294AA7824E9D4419116ED76909E4F3285C9FB42A49486EBD28F20235402207C85233FDC4B35E511EEFBC765EF14110FE0CD288D143F3030187D388508379E
-                                fee: '0.000012'
-                                flags: 655360
+                                  304502210085D28EBEFD747F4D54EDAF4092DD759CA26B80B9A5AC1F6ADD9E11624697B4A102202D5D18D91B048D1810A316EF613A727A544952672617DD64FD212E0E44B9562C
+                                fee: '0.000022'
+                                flags: null
                                 accountTxnId: null
                                 sourceTag: null
                                 signers: null
                                 memos: null
-                                transactionCategory: Offer
-                                transactionDetails:
-                                  takerPays:
-                                    currency: SOLO
-                                    issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    value: '76.95061593'
-                                  takerGets:
-                                    currency: XRP
-                                    issuer: null
-                                    value: '10'
-                                  expiration: null
-                                balanceChanges:
-                                  - affectedNodesIndex: 2
-                                    account: rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '56985.418112'
-                                    finalBalance: '56995.418112'
-                                    balanceChange: '10'
-                                  - affectedNodesIndex: 6
-                                    account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '9341.95924'
-                                    finalBalance: '9331.959228'
-                                    balanceChange: '-10.000012'
-                                tokenTransfers:
-                                  - affectedNodesIndex: 0
-                                    from: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    to: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                    issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    currency: SOLO
-                                    value: '92.3068872348'
-                                  - affectedNodesIndex: 4
-                                    from: rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
-                                    to: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-                                    currency: SOLO
-                                    value: '92.3161179235'
-                              - ledgerIndex: 95490740
-                                ledgerTimestamp: 1744789530
-                                transactionIndex: 19
-                                transactionHash: >-
-                                  F5CB1CEAF296773E0BD06AD3D07A756273BE2EF09CFDCE422CC05B431A318B4B
-                                transactionType: Payment
-                                transactionResult: tesSUCCESS
-                                account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                sequence: 67525452
-                                lastLedgerSequence: null
-                                ticketSequence: null
-                                signingPubKey: >-
-                                  03352A627DA01497368C1A296CB2DC07CA05B38C4DD9985F9BE65F8FFB4B248964
-                                txnSignature: >-
-                                  3045022100E54C56177BD1318395976A75C0B9B25E120730F9F9B818D8A87BDD4858529B19022035CAC8888BC26778951B2B50FFDC110273FA4F3A4EEB9E2001140EF1CCBB6790
-                                fee: '0.000012'
-                                flags: null
-                                accountTxnId: null
-                                sourceTag: null
-                                signers: null
-                                memos:
-                                  - memoData: Xaman Service Fee
-                                    memoFormat: null
-                                    memoType: null
                                 transactionCategory: Payment
                                 transactionDetails:
                                   amount:
                                     currency: XRP
-                                    issuer: null
-                                    value: '0.02'
+                                    issuer: ''
+                                    value: '1'
                                   deliverMax:
                                     currency: XRP
-                                    issuer: null
-                                    value: '0.02'
+                                    issuer: ''
+                                    value: '1'
                                   deliverMin: null
                                   deliveredAmount:
                                     currency: XRP
-                                    issuer: null
-                                    value: '0.02'
-                                  destination: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
+                                    issuer: ''
+                                    value: '1'
+                                  destination: rMYQWiYiqBTiLGmmpZbZFduMzstG8bCFqR
                                   destinationTag: null
-                                  invoiceId: >-
-                                    62604C3F2C05A997503D99F7232D19F2F62922B322267164B5D9C844CA83F35B
+                                  invoiceId: null
                                   paths: null
                                   sendMax: null
                                   credentialIds: null
-                                balanceChanges:
-                                  - affectedNodesIndex: 0
-                                    account: ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '2272.023768'
-                                    finalBalance: '2272.043768'
-                                    balanceChange: '0.02'
-                                  - affectedNodesIndex: 1
-                                    account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
-                                    currency: XRP
-                                    issuer: ''
-                                    previousBalance: '9341.979252'
-                                    finalBalance: '9341.95924'
-                                    balanceChange: '-0.020012'
-                                tokenTransfers: []
+                                balanceInAccounts:
+                                  - rMYQWiYiqBTiLGmmpZbZFduMzstG8bCFqR
+                                balanceOutAccounts:
+                                  - ryouhapPYV5KNHmFUKrjNqsjxhnxvQiVt
+                                balanceChangedTokens:
+                                  - XRP
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -17751,8 +17623,8 @@ paths:
                         - transactionHashes
                     - type: object
                       properties:
-                        withLogs: *ref_68
-                        withDecode: *ref_69
+                        withLogs: *ref_70
+                        withDecode: *ref_71
                 - title: Tron
                   allOf:
                     - type: object
@@ -17777,8 +17649,8 @@ paths:
                         - transactionHashes
                     - type: object
                       properties:
-                        withLogs: *ref_68
-                        withDecode: *ref_69
+                        withLogs: *ref_70
+                        withDecode: *ref_71
                 - title: XRPL
                   allOf:
                     - type: object
@@ -17801,8 +17673,8 @@ paths:
                         - transactionHashes
                     - type: object
                       properties:
-                        withBalanceChanges: *ref_74
-                        withTokenTransfers: *ref_75
+                        withBalanceChanges: *ref_76
+                        withTokenTransfers: *ref_77
       responses:
         '200':
           description: Successful Response
@@ -17814,15 +17686,15 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - *ref_76
+                        - *ref_78
                         - type: object
                           properties:
                             logs:
                               type: array
-                              items: &ref_88
+                              items: &ref_90
                                 type: object
-                                required: *ref_83
-                                properties: *ref_84
+                                required: *ref_85
+                                properties: *ref_86
                     example:
                       - transactionHash: >-
                           0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -18070,13 +17942,13 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - *ref_85
+                        - *ref_87
                         - type: object
                           properties:
-                            logs: &ref_89
+                            logs: &ref_91
                               type: object
-                              required: *ref_86
-                              properties: *ref_87
+                              required: *ref_88
+                              properties: *ref_89
                     example:
                       - transactionHash: >-
                           06d18b13a2de63586d539de478b7c0abb83643626a71bc236c0e8be2c0b2fd67
@@ -18288,7 +18160,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - *ref_82
+                        - *ref_84
                     example:
                       - ledgerIndex: 95352729
                         ledgerTimestamp: 1744250580
@@ -18319,10 +18191,17 @@ paths:
                             value: '788.30533369'
                           takerGets:
                             currency: XRP
-                            issuer: null
+                            issuer: ''
                             value: '100'
                           expiration: null
                         balanceChanges:
+                          - affectedNodesIndex: 0
+                            account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
+                            currency: SOLO
+                            issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
+                            previousBalance: '132461.2210886739'
+                            finalBalance: '133408.6859790499'
+                            balanceChange: '947.464890376'
                           - affectedNodesIndex: 2
                             account: rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
                             currency: XRP
@@ -18337,6 +18216,13 @@ paths:
                             previousBalance: '303170.283761'
                             finalBalance: '303265.318619'
                             balanceChange: '95.034858'
+                          - affectedNodesIndex: 5
+                            account: rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
+                            currency: SOLO
+                            issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
+                            previousBalance: '90656.66155553141'
+                            finalBalance: '90609.37606245491'
+                            balanceChange: '-47.2854930765'
                           - affectedNodesIndex: 7
                             account: rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
                             currency: XRP
@@ -18344,6 +18230,13 @@ paths:
                             previousBalance: '6100.839453'
                             finalBalance: '6000.839441'
                             balanceChange: '-100.000012'
+                          - affectedNodesIndex: 8
+                            account: rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo
+                            currency: SOLO
+                            issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
+                            previousBalance: '2894594.629755294'
+                            finalBalance: '2893694.445629918'
+                            balanceChange: '-900.184125376'
                         tokenTransfers:
                           - affectedNodesIndex: 0
                             from: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
@@ -18363,6 +18256,17 @@ paths:
                             issuer: rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
                             currency: SOLO
                             value: '900.184125376'
+                        balanceInAccounts:
+                          - rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
+                          - rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo
+                          - rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
+                        balanceOutAccounts:
+                          - rMEJo9H5XvTe17UoAJzj8jtKVvTRcxwngo
+                          - rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54
+                          - rMdpzP6SSRcNDSgHQGGx4hV3qeRiuRoqQM
+                        balanceChangedTokens:
+                          - XRP
+                          - SOLO-rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
                       - ledgerIndex: 95337004
                         ledgerTimestamp: 1744189040
                         transactionIndex: 0
@@ -18408,10 +18312,24 @@ paths:
                           paths: null
                           sendMax:
                             currency: XRP
-                            issuer: null
+                            issuer: ''
                             value: '0.710302'
                           credentialIds: null
                         balanceChanges:
+                          - affectedNodesIndex: 0
+                            account: rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB
+                            currency: XRPT
+                            issuer: r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN
+                            previousBalance: '38754983.30079729'
+                            finalBalance: '38745399.0227375'
+                            balanceChange: '-9584.27805979'
+                          - affectedNodesIndex: 1
+                            account: rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq
+                            currency: XRPT
+                            issuer: r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN
+                            previousBalance: '40422.49827208704'
+                            finalBalance: '50006.77633187704'
+                            balanceChange: '9584.27805979'
                           - affectedNodesIndex: 2
                             account: rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB
                             currency: XRP
@@ -18439,6 +18357,15 @@ paths:
                             issuer: r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN
                             currency: XRPT
                             value: '9584.27805979'
+                        balanceInAccounts:
+                          - rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB
+                          - rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq
+                        balanceOutAccounts:
+                          - rJ4rwvSdfa424iFBPu6nWysfzZBBrEL2qB
+                          - rLgsUS9Tj3UV9GZfg4Ppi5g3fyBu9qsdjq
+                        balanceChangedTokens:
+                          - XRP
+                          - XRPT-r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -18510,11 +18437,11 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - *ref_79
+                    - *ref_81
                     - type: object
                       properties:
-                        vin: *ref_80
-                        vout: *ref_81
+                        vin: *ref_82
+                        vout: *ref_83
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -18622,8 +18549,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_68
-                        withDecode: *ref_69
+                        withLogs: *ref_70
+                        withDecode: *ref_71
                 - title: Tron
                   allOf:
                     - type: object
@@ -18647,8 +18574,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_68
-                        withDecode: *ref_69
+                        withLogs: *ref_70
+                        withDecode: *ref_71
       responses:
         '200':
           description: Successful Response
@@ -18684,12 +18611,12 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_76
+                            - *ref_78
                             - type: object
                               properties:
                                 logs:
                                   type: array
-                                  items: *ref_88
+                                  items: *ref_90
                           example:
                             rpp: 10
                             page: 1
@@ -19491,12 +19418,12 @@ paths:
                                           value: '-87943'
                         - title: Tron
                           allOf:
-                            - *ref_85
+                            - *ref_87
                             - type: object
                               properties:
                                 logs:
                                   type: array
-                                  items: *ref_89
+                                  items: *ref_91
                           example:
                             rpp: 5
                             page: 1
@@ -19750,8 +19677,8 @@ paths:
                 - *ref_8
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_74
-                    withTokenTransfers: *ref_75
+                    withBalanceChanges: *ref_76
+                    withTokenTransfers: *ref_77
       responses:
         '200':
           description: Successful Response
@@ -19785,286 +19712,169 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_82
+                        - *ref_84
               example:
-                rpp: 5
+                rpp: 2
                 page: 1
-                count: 78
+                count: 51
                 items:
-                  - ledgerIndex: 95352729
-                    ledgerTimestamp: 1744250580
-                    transactionIndex: 77
+                  - ledgerIndex: 97175931
+                    ledgerTimestamp: 1751361192
+                    transactionIndex: 50
                     transactionHash: >-
-                      3DE2DD0B1E55A634EF1A702B3799EAD8AFB46E8C4F13FDD82F4EB1ED8D6C2437
+                      56F58611673C5D4CB8DD9325B708B4FF08559C03EDA0BEC0DD50171AC5E87222
                     transactionType: Payment
-                    transactionResult: tesSUCCESS
-                    account: rh4x93J9CDF43LCNYcegc7FKLqVW53uot1
-                    sequence: 95344906
-                    lastLedgerSequence: 95352829
+                    transactionResult: tecPATH_DRY
+                    account: rM5CQeFQd71G5Cs3tdW2GmTBjJevCkiXsj
+                    sequence: 82878302
+                    lastLedgerSequence: 97175948
                     ticketSequence: null
                     signingPubKey: >-
-                      ED894E71B14403E0FB0EDB36AA1FF60CFF23077D9AADE5D533940A7CEE15DA333A
+                      02148091628A91C55A24DBC461B72BBCDDFC7B43A6F5F8717E935917733739FB7C
                     txnSignature: >-
-                      10BC398067C6648715BBF5E3BB32111091BBF5BE9F789FBED5326D4A36D3871C762E38507BF0E37FE89FAE163FF8DBE14E26D54F13AFE6F2A8906EBA1A018308
-                    fee: '0.000011'
-                    flags: 0
-                    accountTxnId: null
-                    sourceTag: null
-                    signers: null
-                    memos: null
-                    transactionCategory: Payment
-                    transactionDetails:
-                      amount:
-                        currency: XRP
-                        issuer: null
-                        value: '0.000001'
-                      deliverMax:
-                        currency: XRP
-                        issuer: null
-                        value: '0.000001'
-                      deliverMin: null
-                      deliveredAmount:
-                        currency: XRP
-                        issuer: null
-                        value: '0.000001'
-                      destination: rhoetJYEHuFVvpHsj6tcv9AzHja19915vD
-                      destinationTag: null
-                      invoiceId: null
-                      paths: null
-                      sendMax: null
-                      credentialIds: null
-                    balanceChanges:
-                      - affectedNodesIndex: 0
-                        account: rh4x93J9CDF43LCNYcegc7FKLqVW53uot1
-                        currency: XRP
-                        issuer: ''
-                        previousBalance: '26.806897'
-                        finalBalance: '26.806885'
-                        balanceChange: '-0.000012'
-                      - affectedNodesIndex: 1
-                        account: rhoetJYEHuFVvpHsj6tcv9AzHja19915vD
-                        currency: XRP
-                        issuer: ''
-                        previousBalance: '31.45649'
-                        finalBalance: '31.456491'
-                        balanceChange: '0.000001'
-                    tokenTransfers: []
-                  - ledgerIndex: 95352729
-                    ledgerTimestamp: 1744250580
-                    transactionIndex: 76
-                    transactionHash: >-
-                      A38F171D9F5D0CA3E8054937C3AF503A1F4F79DE9980A0DC1A972707F908B022
-                    transactionType: Payment
-                    transactionResult: tesSUCCESS
-                    account: rh4x93J9CDF43LCNYcegc7FKLqVW53uot1
-                    sequence: 95344905
-                    lastLedgerSequence: 95352829
-                    ticketSequence: null
-                    signingPubKey: >-
-                      ED894E71B14403E0FB0EDB36AA1FF60CFF23077D9AADE5D533940A7CEE15DA333A
-                    txnSignature: >-
-                      BCDB7637CC7989C7C69E5B028A6F72B2EC477E3E791D2BB11C9EBDDD1DD89EECE65A131D0F6BAF5ADF7A425DABA7BEDF81C284FBB996BF29A4E7E47E30D4BF0B
-                    fee: '0.000011'
-                    flags: 0
-                    accountTxnId: null
-                    sourceTag: null
-                    signers: null
-                    memos: null
-                    transactionCategory: Payment
-                    transactionDetails:
-                      amount:
-                        currency: XRP
-                        issuer: null
-                        value: '0.000001'
-                      deliverMax:
-                        currency: XRP
-                        issuer: null
-                        value: '0.000001'
-                      deliverMin: null
-                      deliveredAmount:
-                        currency: XRP
-                        issuer: null
-                        value: '0.000001'
-                      destination: rhoetJYEHuFVvpHsj6tcv9AzHja19915vD
-                      destinationTag: null
-                      invoiceId: null
-                      paths: null
-                      sendMax: null
-                      credentialIds: null
-                    balanceChanges:
-                      - affectedNodesIndex: 0
-                        account: rh4x93J9CDF43LCNYcegc7FKLqVW53uot1
-                        currency: XRP
-                        issuer: ''
-                        previousBalance: '26.806909'
-                        finalBalance: '26.806897'
-                        balanceChange: '-0.000012'
-                      - affectedNodesIndex: 1
-                        account: rhoetJYEHuFVvpHsj6tcv9AzHja19915vD
-                        currency: XRP
-                        issuer: ''
-                        previousBalance: '31.456489'
-                        finalBalance: '31.45649'
-                        balanceChange: '0.000001'
-                    tokenTransfers: []
-                  - ledgerIndex: 95352729
-                    ledgerTimestamp: 1744250580
-                    transactionIndex: 75
-                    transactionHash: >-
-                      E84F69E427DF6895636A3AA3CD921F14387A5D1D64E9D43E5AC2B957B3A71432
-                    transactionType: OfferCreate
-                    transactionResult: tesSUCCESS
-                    account: rhhh49pFH96roGyuC4E5P4CHaNjS1k8gzM
-                    sequence: 29713714
-                    lastLedgerSequence: 95352732
-                    ticketSequence: null
-                    signingPubKey: >-
-                      03B51A3EDF70E4098DA7FB053A01C5A6A0A163A30ED1445F14F87C7C3295FCB3BE
-                    txnSignature: >-
-                      3044022043D419B3CFC546369170245ABA6CC2CFCA5B9550FF0CDB3B0A4892B8AEE74E6602201BF50821F48CD95F376004D68AD68DE9958C7272711A5E7166D72E1B83044178
+                      3045022100E9BA49BFEF8F265B6726EB73CE5E02C16D311A7C5E2ACED7ED6C3EDDA601CE7E02202BF4BF9460198E441C8A6D82953838A22A45F470B8E79DF0ECDB8D13A8B95CC6
                     fee: '0.000012'
                     flags: 0
                     accountTxnId: null
                     sourceTag: null
                     signers: null
-                    memos: null
-                    transactionCategory: Offer
+                    memos:
+                      - memoData: >-
+                          Successfully rewarded RDC from RichDuck soft staking
+                          of richducks.club 
+                        memoFormat: null
+                        memoType: null
+                    transactionCategory: Payment
                     transactionDetails:
-                      takerPays:
-                        currency: CNY
-                        issuer: rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y
-                        value: '1511411.967'
-                      takerGets:
-                        currency: XRP
-                        issuer: null
-                        value: '100000'
-                      expiration: null
+                      amount:
+                        currency: RDC
+                        issuer: rDuckCoinu8jntxtYoWRhEv4oNvsLYx6EQ
+                        value: '300'
+                      deliverMax:
+                        currency: RDC
+                        issuer: rDuckCoinu8jntxtYoWRhEv4oNvsLYx6EQ
+                        value: '300'
+                      deliverMin: null
+                      deliveredAmount: null
+                      destination: rDvMTYwQxRbC4EJX28FYHnnes8BV1ZJyoo
+                      destinationTag: null
+                      invoiceId: null
+                      paths: null
+                      sendMax: null
+                      credentialIds: null
                     balanceChanges:
-                      - affectedNodesIndex: 2
-                        account: rhhh49pFH96roGyuC4E5P4CHaNjS1k8gzM
+                      - affectedNodesIndex: 0
+                        account: rM5CQeFQd71G5Cs3tdW2GmTBjJevCkiXsj
                         currency: XRP
                         issuer: ''
-                        previousBalance: '1640.15129'
-                        finalBalance: '1640.151278'
+                        previousBalance: '1.952014'
+                        finalBalance: '1.952002'
                         balanceChange: '-0.000012'
                     tokenTransfers: []
-                  - ledgerIndex: 95352729
-                    ledgerTimestamp: 1744250580
-                    transactionIndex: 74
+                    balanceInAccounts: []
+                    balanceOutAccounts:
+                      - rM5CQeFQd71G5Cs3tdW2GmTBjJevCkiXsj
+                    balanceChangedTokens:
+                      - XRP
+                  - ledgerIndex: 97175931
+                    ledgerTimestamp: 1751361192
+                    transactionIndex: 49
                     transactionHash: >-
-                      055A90BCD7EB13D00C885B924D409100B2ED9205288F6FCC2E044DA51A23E606
+                      22938A9610711FA656D9DE37BE0DBC652AE478B89D5E15E14E5EF37AE56FB85E
                     transactionType: Payment
                     transactionResult: tesSUCCESS
-                    account: rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98
-                    sequence: 94432244
-                    lastLedgerSequence: 95352747
+                    account: rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w
+                    sequence: 94978326
+                    lastLedgerSequence: 97175949
                     ticketSequence: null
                     signingPubKey: >-
-                      ED8C90BFC8D8F79C61FE13DF91C1DBC448E6F2818DB6BDBC516AF21F33569E5674
+                      EDDC4A6AFA966C060106BAB0988FA13F041E167F1B800E915E2F8982005DD3BA1F
                     txnSignature: >-
-                      FA8C33C1AB2A31004C0B469B52808ACFDB254FD2A2C4850DF153CBD1003F8AA0737051E97E4309D61D7BC89BEEF5D0A1DD949D5BEB6CA64DA918AF95270C0B0F
+                      5922D8B76FD2FFDC9304432A744BAC6E2CA57AB8F268709221E660EC3D9039EC17514770DFCCE314C0F3BFF4E4298F102A941AAF5D3626FA63DECE155509FA08
                     fee: '0.00001'
                     flags: 131072
                     accountTxnId: null
                     sourceTag: null
                     signers: null
-                    memos: null
+                    memos:
+                      - memoData: ARMY OG Market Maker v2
+                        memoFormat: text/plain
+                        memoType: trade
                     transactionCategory: Payment
                     transactionDetails:
                       amount:
-                        currency: Xoge
-                        issuer: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        value: '235041040.768995'
+                        currency: bull
+                        issuer: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        value: '37.36681'
                       deliverMax:
-                        currency: Xoge
-                        issuer: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        value: '235041040.768995'
-                      deliverMin:
-                        currency: Xoge
-                        issuer: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        value: '230340219.953615'
+                        currency: bull
+                        issuer: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        value: '37.36681'
+                      deliverMin: null
                       deliveredAmount:
-                        currency: Xoge
-                        issuer: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        value: '235041040.768995'
-                      destination: rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98
+                        currency: bull
+                        issuer: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        value: '36.8972433'
+                      destination: rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w
                       destinationTag: null
                       invoiceId: null
                       paths: null
                       sendMax:
                         currency: XRP
-                        issuer: null
-                        value: '0.719543'
+                        issuer: ''
+                        value: '0.00368'
                       credentialIds: null
                     balanceChanges:
-                      - affectedNodesIndex: 1
-                        account: rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98
-                        currency: XRP
-                        issuer: ''
-                        previousBalance: '8.688907'
-                        finalBalance: '7.9695'
-                        balanceChange: '-0.719407'
-                      - affectedNodesIndex: 2
-                        account: rLikwdZqS14VEqtAB43NAYeCv8uJVYQXzJ
-                        currency: XRP
-                        issuer: ''
-                        previousBalance: '29747.343483'
-                        finalBalance: '29748.06288'
-                        balanceChange: '0.719397'
-                    tokenTransfers:
                       - affectedNodesIndex: 0
-                        from: rLikwdZqS14VEqtAB43NAYeCv8uJVYQXzJ
-                        to: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        issuer: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        currency: Xoge
-                        value: '235041040.769'
-                      - affectedNodesIndex: 3
-                        from: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        to: rnsnBkk26o91aSUnjhSsd4bAvj4XNW8h98
-                        issuer: rJMtvf5B3GbuFMrqybh5wYVXEH4QE8VyU1
-                        currency: Xoge
-                        value: '235041040.768995'
-                  - ledgerIndex: 95352729
-                    ledgerTimestamp: 1744250580
-                    transactionIndex: 73
-                    transactionHash: >-
-                      924CB7A6BBF85E6D25B651D4A0A27BF8FE6DCDCBFA2F12973904D9BCFB54226C
-                    transactionType: OfferCreate
-                    transactionResult: tesSUCCESS
-                    account: rntopA1H9AJoFjpiCueBMFEpXQRBD3ueyG
-                    sequence: 0
-                    lastLedgerSequence: 95352742
-                    ticketSequence: 87883614
-                    signingPubKey: >-
-                      EDC680BD209E3E1CFE3494D3BEBADB43CC9A15787AA5930B6D6A08003B82BF2C11
-                    txnSignature: >-
-                      F1F3C8A327E2D6079200B1AB70F4BCC5F9520DFBCDAC6A2F6F7175254B5BC1E27743A94D69728C8BCE2354CDD204F9B1AD47C9F7926337860EDAAADE9A0B0D03
-                    fee: '0.000012'
-                    flags: 0
-                    accountTxnId: null
-                    sourceTag: null
-                    signers: null
-                    memos: null
-                    transactionCategory: Offer
-                    transactionDetails:
-                      takerPays:
-                        currency: FLR
-                        issuer: rcxJwVnftZzXqyH9YheB8TgeiZUhNo1Eu
-                        value: '1685.48932781003'
-                      takerGets:
-                        currency: XRP
-                        issuer: null
-                        value: '10.96195'
-                      expiration: null
-                    balanceChanges:
-                      - affectedNodesIndex: 1
-                        account: rntopA1H9AJoFjpiCueBMFEpXQRBD3ueyG
+                        account: rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w
                         currency: XRP
                         issuer: ''
-                        previousBalance: '708.028224'
-                        finalBalance: '708.028212'
-                        balanceChange: '-0.000012'
-                    tokenTransfers: []
+                        previousBalance: '74.15833'
+                        finalBalance: '74.15464'
+                        balanceChange: '-0.00369'
+                      - affectedNodesIndex: 1
+                        account: rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG
+                        currency: XRP
+                        issuer: ''
+                        previousBalance: '22955.027716'
+                        finalBalance: '22955.031396'
+                        balanceChange: '0.00368'
+                      - affectedNodesIndex: 2
+                        account: rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG
+                        currency: bull
+                        issuer: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        previousBalance: '232439451.4457152'
+                        finalBalance: '232439414.5484719'
+                        balanceChange: '-36.8972433'
+                      - affectedNodesIndex: 3
+                        account: rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w
+                        currency: bull
+                        issuer: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        previousBalance: '8930725.522693059'
+                        finalBalance: '8930762.419936359'
+                        balanceChange: '36.8972433'
+                    tokenTransfers:
+                      - affectedNodesIndex: 2
+                        from: rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG
+                        to: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        issuer: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        currency: bull
+                        value: '36.8972433'
+                      - affectedNodesIndex: 3
+                        from: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        to: rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w
+                        issuer: rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                        currency: bull
+                        value: '36.8972433'
+                    balanceInAccounts:
+                      - rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w
+                      - rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG
+                    balanceOutAccounts:
+                      - rHFofSpDWmyBkzUxknfi1uEeAeTVjpYSrG
+                      - rHh6NxvrJzbVe287tS7D9MjfjRAr92aJ7w
+                    balanceChangedTokens:
+                      - bull-rwxrCZTjrxXmtYA6v6krDKjjFaRuUiAhvJ
+                      - XRP
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -20589,15 +20399,15 @@ paths:
                         - removed
                         - topics
                       properties:
-                        contractAddress: *ref_90
-                        transactionHash: *ref_91
-                        transactionIndex: *ref_92
-                        blockHash: *ref_93
-                        blockNumber: *ref_94
-                        data: *ref_95
-                        logIndex: *ref_96
-                        removed: *ref_97
-                        topics: *ref_98
+                        contractAddress: *ref_92
+                        transactionHash: *ref_93
+                        transactionIndex: *ref_94
+                        blockHash: *ref_95
+                        blockNumber: *ref_96
+                        data: *ref_97
+                        logIndex: *ref_98
+                        removed: *ref_99
+                        topics: *ref_100
               example:
                 rpp: 5
                 page: 1
@@ -20795,14 +20605,14 @@ paths:
                       지난 후에도 도메인 갱신 및 새로운 등록이 발생하지 않으면, 이전 도메인이 가리키고 있는 주소가
                       반환됩니다.
                     default: null
-                    example: &ref_99
+                    example: &ref_101
                       address: '0xbe6A97E98545439717e0e8A19E7204F434FFCa79'
                   expiryDate:
                     type: string
                     description: >-
                       ENS 도메인의 만료 날짜를 나타냅니다. 만료 날짜가 지난 후에도 도메인 갱신 및 새로운 등록이 발생하지
                       않으면, 이전 만료 날짜를 반환됩니다.
-                    example: *ref_99
+                    example: *ref_101
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -20890,14 +20700,14 @@ paths:
                     description: >-
                       주소에 매핑된 ENS 도메인 이름입니다. 주소에 매핑된 ENS 도메인이 없을 경우 null을 반환합니다.
                       만료 날짜가 지난 후에도 도메인 갱신 및 새로운 등록이 발생하지 않으면, 이전 도메인 이름을 표시합니다.
-                    example: &ref_100
+                    example: &ref_102
                       name: vitalik.eth
                   expiryDate:
                     type: string
                     description: >-
                       ENS 도메인의 만료 날짜를 나타냅니다. 만료 날짜가 지난 후에도 도메인 갱신 및 새로운 등록이 발생하지
                       않으면, 이전 만료 날짜를 반환합니다.
-                    example: *ref_100
+                    example: *ref_102
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -20949,7 +20759,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema: &ref_101
+              schema: &ref_103
                 type: object
                 required:
                   - name
@@ -21213,7 +21023,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_101
+                        - *ref_103
               example: {}
         '400': *ref_3
         '401': *ref_4
@@ -21507,7 +21317,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: &ref_102
+                    items: &ref_104
                       type: object
                       required:
                         - date
@@ -21652,7 +21462,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_102
+                    items: *ref_104
               example:
                 count: 10
                 items:
@@ -21774,7 +21584,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_102
+                    items: *ref_104
               example:
                 count: 10
                 items:
@@ -21904,7 +21714,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_102
+                    items: *ref_104
               example:
                 count: 10
                 items:
@@ -22027,7 +21837,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: &ref_103
+                    items: &ref_105
                       type: object
                       required:
                         - date
@@ -22201,7 +22011,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_103
+                    items: *ref_105
               example:
                 count: 25
                 items:
@@ -22354,7 +22164,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_103
+                    items: *ref_105
               example:
                 count: 10
                 items:
@@ -22485,7 +22295,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_103
+                    items: *ref_105
               example:
                 count: 25
                 items:
@@ -22630,7 +22440,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_45
+                    items: *ref_46
               example:
                 rpp: 5
                 page: 1
@@ -22704,7 +22514,7 @@ paths:
                 assetIds:
                   type: array
                   description: 조회할 Asset ID 목록을 입력합니다. Asset ID는 0보다 큰 정수여야 합니다.
-                  items: &ref_105
+                  items: &ref_107
                     type: integer
                   default:
                     - 1000001
@@ -22716,7 +22526,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &ref_104
+                items: &ref_106
                   type: object
                   required:
                     - id
@@ -22906,7 +22716,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema: *ref_104
+              schema: *ref_106
               example:
                 id: 1002357
                 name: GMCoin
@@ -22986,14 +22796,14 @@ paths:
                         문자열 형식을 가집니다.
                       pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                    assetIds: &ref_106
+                    assetIds: &ref_108
                       type: array
                       description: 조회할 Asset ID 목록을 입력합니다. Asset ID는 0보다 큰 정수여야 합니다.
-                      items: *ref_105
-                    fromBlock: *ref_34
-                    toBlock: *ref_35
-                    fromDate: *ref_36
-                    toDate: *ref_37
+                      items: *ref_107
+                    fromBlock: *ref_35
+                    toBlock: *ref_36
+                    fromDate: *ref_37
+                    toDate: *ref_38
                 - *ref_8
                 - type: object
                   properties:
@@ -23031,10 +22841,10 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_39
+                        - *ref_40
                         - type: object
                           properties:
-                            asset: *ref_104
+                            asset: *ref_106
               example:
                 rpp: 5
                 page: 1
@@ -23234,10 +23044,10 @@ paths:
                       type: integer
                       description: 조회할 Asset ID를 입력합니다. Asset ID는 0보다 큰 정수여야 합니다.
                       default: 1002357
-                    fromBlock: *ref_34
-                    toBlock: *ref_35
-                    fromDate: *ref_36
-                    toDate: *ref_37
+                    fromBlock: *ref_35
+                    toBlock: *ref_36
+                    fromDate: *ref_37
+                    toDate: *ref_38
                 - *ref_8
                 - type: object
                   properties:
@@ -23275,10 +23085,10 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_39
+                        - *ref_40
                         - type: object
                           properties:
-                            asset: *ref_104
+                            asset: *ref_106
               example:
                 rpp: 5
                 page: 1
@@ -23473,10 +23283,10 @@ paths:
                 - type: object
                   required: []
                   properties:
-                    fromBlock: *ref_34
-                    toBlock: *ref_35
-                    fromDate: *ref_36
-                    toDate: *ref_37
+                    fromBlock: *ref_35
+                    toBlock: *ref_36
+                    fromDate: *ref_37
+                    toDate: *ref_38
                 - *ref_8
                 - type: object
                   properties:
@@ -23514,10 +23324,10 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_39
+                        - *ref_40
                         - type: object
                           properties:
-                            asset: *ref_104
+                            asset: *ref_106
               example:
                 rpp: 5
                 page: 1
@@ -23726,7 +23536,7 @@ paths:
                         문자열 형식을 가집니다.
                       pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                    assetIds: *ref_106
+                    assetIds: *ref_108
                 - *ref_8
       responses:
         '200':
@@ -23761,10 +23571,10 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_45
+                        - *ref_46
                         - type: object
                           properties:
-                            asset: *ref_104
+                            asset: *ref_106
               example:
                 rpp: 30
                 page: 1
@@ -23880,7 +23690,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_104
+                    items: *ref_106
               example:
                 rpp: 5
                 page: 1

@@ -149,6 +149,7 @@ function getRequestAndResponse(protocol: string): {
 									type: "object",
 									properties: {
 										withZeroValue: Requests.withZeroValue,
+										withFunction: Requests.Ethereum.withFunction,
 									},
 								},
 							],
@@ -274,6 +275,7 @@ function getRequestAndResponse(protocol: string): {
 							type: "object",
 							properties: {
 								withZeroValue: Requests.withZeroValue,
+								withFunction: Requests.Ethereum.withFunction,
 							},
 						},
 					],
@@ -400,6 +402,7 @@ function getRequestAndResponse(protocol: string): {
 							type: "object",
 							properties: {
 								withZeroValue: Requests.withZeroValue,
+								withFunction: Requests.Ethereum.withFunction,
 							},
 						},
 					],

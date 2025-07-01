@@ -741,7 +741,7 @@ export const Transaction: OpenAPIV3.SchemaObject = {
 		"transactionCategory",
 		"transactionDetails",
 		// "balanceChanges",
-		// "tokenTransfer"
+		// "tokenTransfer",
 	],
 	properties: {
 		ledgerIndex: {
@@ -868,6 +868,34 @@ export const Transaction: OpenAPIV3.SchemaObject = {
 			description:
 				"트랜잭션에 포함된 토큰 전송 내역을 나타내는 객체 배열입니다. 각 객체는 전송된 토큰의 종류, 전송 금액, 송수신 계정 등의 정보를 포함합니다.",
 		},
+		balanceOutAccounts: {
+			type: "array",
+			description:
+			  "트랜잭션에서 발생한 모든 송·수신을 합산한 결과, 최종 잔고 변동이 0보다 작은(감소한) 계정 주소 목록입니다. XRP와 IOU 토큰 잔고 변동을 모두 반영합니다.",
+			items: {
+			  type: "string",
+			  description: "잔고 감소가 확정된 계정 주소",
+			},
+		  },
+		  
+		balanceInAccounts: {
+			type: "array",
+			description:
+				"트랜잭션에서 발생한 모든 송·수신을 합산한 결과, 최종 잔고 변동이 0보다 큰(증가한) 계정 주소 목록입니다. XRP와 IOU 토큰 잔고 변동을 모두 반영합니다.",
+			items: {
+				type: "string",
+				description: "잔고 증가가 확정된 계정 주소",
+			},
+		},	
+		balanceChangedTokens: {
+			type: "array",
+			description:
+				"트랜잭션 전체를 통산했을 때 최종 순잔고 변동이 0이 아닌 토큰의 식별자 목록입니다. 각 항목은 'currency-issuer' 형식을 따릅니다.",
+			items: {
+				type: "string",
+				description: "'currency-issuer' 형식의 토큰 식별자",
+			},
+		}
 	},
 };
 

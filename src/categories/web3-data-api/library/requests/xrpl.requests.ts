@@ -97,6 +97,16 @@ export const transactionHash: OpenAPIV3.SchemaObject = {
 };
 
 /* Options */
+export const relation: OpenAPIV3.SchemaObject = {
+	type: "string",
+	description: `잔고 변동을 기준으로 **송신자(잔고 감소)**·**수신자(잔고 증가)** 를 구분하며, 이 파라미터 값에 따라 다음과 같이 트랜잭션을 필터링합니다. 
+
+- **from**  : 대상 계정이 **balanceOutAccounts**(송신자 목록)에 포함된 트랜잭션만 조회  
+- **to**    : 대상 계정이 **balanceInAccounts**(수신자 목록)에 포함된 트랜잭션만 조회  
+- **both** *(기본값)* : 대상 계정이 balanceOutAccounts 또는 balanceInAccounts 어느 한쪽이라도 포함된 모든 트랜잭션 조회`,
+	enum: ["from", "to", "both"],
+};
+
 export const withBalanceChanges: OpenAPIV3.SchemaObject = {
 	type: "boolean",
 	description: `응답에 balanceChanges 필드를 포함할지를 결정하는 선택적 파라미터입니다. balanceChanges에는 네이티브 토큰(XRP)과 IOU 토큰의 잔고 변동 내역이 담기며, 이 옵션을 true로 설정하면 응답 속도가 느려질 수 있습니다.`,
