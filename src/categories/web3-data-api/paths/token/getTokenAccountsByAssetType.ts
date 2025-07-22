@@ -3,22 +3,20 @@ import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
-import {
-  kaiaUsingTipsForBlock,
-  kaiaUsingTipsForCommon,
-} from "../../../../callouts";
 import { getChainInfo } from "../../../../constants";
 
-const summary = "Get Blocks Within Range";
-const endpoint = "getBlocksWithinRange";
+const summary = "Get Token Accounts By Asset Type";
+const endpoint = "getTokenAccountsByAssetType";
 const isPublic = true;
-const tags = ["Blockchain API"];
+const tags = ["Token API"];
 
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
+    case "none":
+    case "aptos":
     default:
-      return "특정 기간, 특정 구간의 블록 리스트 정보를 조회합니다.";
+      return `특정 Asset Type을 가진 토큰의 목록을 조회합니다. 조회 결과는 Owner 주소 기준이 아닌 Object 주소를 기준으로 제공됩니다.`;
   }
 }
 
@@ -78,27 +76,8 @@ function getOpIdAndParams(protocol: string): {
     return {
       operationId: endpoint,
       parameters: [
-        Requests.protocol("ethereum", [
-          // evm
-          "arbitrum",
-          "base",
-          "ethereum",
-          "kaia",
-          "optimism",
-          "polygon",
-          "luniverse",
-          "chiliz",
-
-          // Move 기반 체인
-          "aptos",
-        ]),
-        Requests.network("mainnet", [
-          "mainnet",
-          "testnet",
-          "sepolia",
-          "hoodi",
-          "amoy",
-        ]),
+        Requests.protocol("aptos", ["aptos"]),
+        Requests.network("mainnet", ["mainnet", "testnet"]),
       ],
     };
   } else {
@@ -126,86 +105,8 @@ function getRequestAndResponse(protocol: string): {
 } {
   switch (protocol) {
     case "none":
-    case "kaia":
-      return {
-        requestBody: {
-          additionalProperties: false,
-          oneOf: [
-            {
-              title: "EVM (Ethereum, Optimism, ...)",
-              allOf: [
-                {
-                  type: "object",
-                  properties: {
-                    fromBlock: Requests.Kaia.fromBlock, // 카이아 하드포크로 인한 안내 문구 포함
-                    toBlock: Requests.Ethereum.toBlock,
-                    fromDate: Requests.Ethereum.fromDate,
-                    toDate: Requests.Ethereum.toDate,
-                  },
-                },
-                Requests.PaginationSet,
-              ],
-            },
-            {
-              title: "Aptos",
-              allOf: [
-                {
-                  type: "object",
-                  properties: {
-                    fromBlock: Requests.Aptos.fromBlock,
-                    toBlock: Requests.Aptos.toBlock,
-                    fromDate: Requests.Aptos.fromDate,
-                    toDate: Requests.Aptos.toDate,
-                  },
-                },
-                Requests.PaginationSet,
-              ],
-            },
-          ],
-        },
-        successResponse: {
-          schema: Domains.Pagination({
-            oneOf: [
-              {
-                title: "EVM (Ethereum, Optimism, ...)",
-                ...Domains.Ethereum.Block,
-                example: Examples.Ethereum[endpoint],
-              },
-              {
-                title: "Aptos",
-                ...Domains.Aptos.Block,
-                example: Examples.Aptos[endpoint],
-              },
-            ],
-          }),
-        },
-      };
-
     case "aptos":
-      return {
-        requestBody: {
-          additionalProperties: false,
-          allOf: [
-            {
-              type: "object",
-              properties: {
-                fromBlock: Requests.Aptos.fromBlock,
-                toBlock: Requests.Aptos.toBlock,
-                fromDate: Requests.Aptos.fromDate,
-                toDate: Requests.Aptos.toDate,
-              },
-            },
-            Requests.PaginationSet,
-          ],
-        },
-        successResponse: {
-          schema: Domains.Pagination(Domains.Aptos.Block),
-          example: Examples.Aptos[endpoint],
-        },
-      };
-
     default:
-      // 그 외 (Ethereum, Polygon, Arbitrum, etc.)
       return {
         requestBody: {
           additionalProperties: false,
@@ -213,18 +114,29 @@ function getRequestAndResponse(protocol: string): {
             {
               type: "object",
               properties: {
-                fromBlock: Requests.Ethereum.fromBlock,
-                toBlock: Requests.Ethereum.toBlock,
-                fromDate: Requests.Ethereum.fromDate,
-                toDate: Requests.Ethereum.toDate,
+                assetType: {
+                  ...Requests.Aptos.assetType,
+                  description: `${Requests.Aptos.assetType.description}
+
+<strong style='color: red;'>*</strong> assetType과 linkedAssetType 중 하나는 필수로 입력해야 하며, 두 파라미터를 동시에 사용할 수 없습니다.`,
+                  default: "0x1::aptos_coin::AptosCoin",
+                },
+                linkedAssetType: {
+                  ...Requests.Aptos.linkedAssetType,
+                  description: `${Requests.Aptos.linkedAssetType.description}
+
+<strong style='color: red;'>*</strong> assetType과 linkedAssetType 중 하나는 필수로 입력해야 하며, 두 파라미터를 동시에 사용할 수 없습니다.`,
+                  example:
+                    "0x000000000000000000000000000000000000000000000000000000000000000a",
+                },
               },
             },
             Requests.PaginationSet,
           ],
         },
         successResponse: {
-          schema: Domains.Pagination(Domains.Ethereum.Block),
-          example: Examples.Ethereum[endpoint],
+          schema: Domains.Pagination(Domains.Aptos.TokenAccount),
+          example: Examples.Aptos[endpoint],
         },
       };
   }
@@ -237,8 +149,7 @@ function getRequestAndResponse(protocol: string): {
 function getCallouts(protocol: string): string {
   switch (protocol) {
     case "none":
-    case "kaia":
-      return `${kaiaUsingTipsForCommon(kaiaUsingTipsForBlock)}`;
+    case "aptos":
     default:
       return ""; // 해당 체인에서는 callouts가 없음
   }

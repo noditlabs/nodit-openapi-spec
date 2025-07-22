@@ -3,22 +3,18 @@ import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
-import {
-  kaiaUsingTipsForBlock,
-  kaiaUsingTipsForCommon,
-} from "../../../../callouts";
-import { getChainInfo } from "../../../../constants";
+import { APTOS_ACCOUNTS, getChainInfo } from "../../../../constants";
 
-const summary = "Get Blocks Within Range";
-const endpoint = "getBlocksWithinRange";
+const summary = "Get Token Balance Changes Within Range";
+const endpoint = "getTokenBalanceChangesWithinRange";
 const isPublic = true;
-const tags = ["Blockchain API"];
+const tags = ["Token API"];
 
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
     default:
-      return "특정 기간, 특정 구간의 블록 리스트 정보를 조회합니다.";
+      return `특정 기간 혹은 블록 범위 내의 자산 변화 내역을 조회합니다.`;
   }
 }
 
@@ -78,27 +74,8 @@ function getOpIdAndParams(protocol: string): {
     return {
       operationId: endpoint,
       parameters: [
-        Requests.protocol("ethereum", [
-          // evm
-          "arbitrum",
-          "base",
-          "ethereum",
-          "kaia",
-          "optimism",
-          "polygon",
-          "luniverse",
-          "chiliz",
-
-          // Move 기반 체인
-          "aptos",
-        ]),
-        Requests.network("mainnet", [
-          "mainnet",
-          "testnet",
-          "sepolia",
-          "hoodi",
-          "amoy",
-        ]),
+        Requests.protocol("aptos", ["aptos"]),
+        Requests.network("mainnet", ["mainnet", "testnet"]),
       ],
     };
   } else {
@@ -126,64 +103,15 @@ function getRequestAndResponse(protocol: string): {
 } {
   switch (protocol) {
     case "none":
-    case "kaia":
-      return {
-        requestBody: {
-          additionalProperties: false,
-          oneOf: [
-            {
-              title: "EVM (Ethereum, Optimism, ...)",
-              allOf: [
-                {
-                  type: "object",
-                  properties: {
-                    fromBlock: Requests.Kaia.fromBlock, // 카이아 하드포크로 인한 안내 문구 포함
-                    toBlock: Requests.Ethereum.toBlock,
-                    fromDate: Requests.Ethereum.fromDate,
-                    toDate: Requests.Ethereum.toDate,
-                  },
-                },
-                Requests.PaginationSet,
-              ],
-            },
-            {
-              title: "Aptos",
-              allOf: [
-                {
-                  type: "object",
-                  properties: {
-                    fromBlock: Requests.Aptos.fromBlock,
-                    toBlock: Requests.Aptos.toBlock,
-                    fromDate: Requests.Aptos.fromDate,
-                    toDate: Requests.Aptos.toDate,
-                  },
-                },
-                Requests.PaginationSet,
-              ],
-            },
-          ],
-        },
-        successResponse: {
-          schema: Domains.Pagination({
-            oneOf: [
-              {
-                title: "EVM (Ethereum, Optimism, ...)",
-                ...Domains.Ethereum.Block,
-                example: Examples.Ethereum[endpoint],
-              },
-              {
-                title: "Aptos",
-                ...Domains.Aptos.Block,
-                example: Examples.Aptos[endpoint],
-              },
-            ],
-          }),
-        },
-      };
-
     case "aptos":
+    default:
       return {
         requestBody: {
+          title: "Block Range",
+          description: `블록 범위를 지정하여 자산 변화 내역을 조회합니다.
+
+<strong style='color: red;'>*</strong> block 범위 파라미터(fromBlock, toBlock)와 date 범위 파라미터(fromDate, toDate)는 함께 사용할 수 없습니다. 지정하지 않을 경우 모든 블록 범위를 조회합니다.
+`,
           additionalProperties: false,
           allOf: [
             {
@@ -199,32 +127,8 @@ function getRequestAndResponse(protocol: string): {
           ],
         },
         successResponse: {
-          schema: Domains.Pagination(Domains.Aptos.Block),
+          schema: Domains.Pagination(Domains.Aptos.BalanceChange),
           example: Examples.Aptos[endpoint],
-        },
-      };
-
-    default:
-      // 그 외 (Ethereum, Polygon, Arbitrum, etc.)
-      return {
-        requestBody: {
-          additionalProperties: false,
-          allOf: [
-            {
-              type: "object",
-              properties: {
-                fromBlock: Requests.Ethereum.fromBlock,
-                toBlock: Requests.Ethereum.toBlock,
-                fromDate: Requests.Ethereum.fromDate,
-                toDate: Requests.Ethereum.toDate,
-              },
-            },
-            Requests.PaginationSet,
-          ],
-        },
-        successResponse: {
-          schema: Domains.Pagination(Domains.Ethereum.Block),
-          example: Examples.Ethereum[endpoint],
         },
       };
   }
@@ -237,10 +141,9 @@ function getRequestAndResponse(protocol: string): {
 function getCallouts(protocol: string): string {
   switch (protocol) {
     case "none":
-    case "kaia":
-      return `${kaiaUsingTipsForCommon(kaiaUsingTipsForBlock)}`;
+    case "aptos":
     default:
-      return ""; // 해당 체인에서는 callouts가 없음
+      return ``;
   }
 }
 

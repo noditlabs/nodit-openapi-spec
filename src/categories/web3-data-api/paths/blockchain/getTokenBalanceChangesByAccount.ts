@@ -3,13 +3,9 @@ import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
-import {
-  APTOS_ACCOUNTS,
-  getChainInfo,
-  XRPL_ACCOUNTS,
-} from "../../../../constants";
+import { APTOS_ACCOUNTS, getChainInfo } from "../../../../constants";
 
-const summary = "Get Token Balance Changes by Account";
+const summary = "Get Token Balance Changes By Account";
 const endpoint = "getTokenBalanceChangesByAccount";
 const isPublic = true;
 const tags = ["Token API"];
@@ -17,10 +13,8 @@ const tags = ["Token API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "aptos":
-      return `특정 계정의 자산 변화 내역을 조회합니다.`;
     default:
-      return `특정 계정의 IOU 토큰 잔고 변동 내역을 조회합니다.`;
+      return `특정 계정의 자산 변화 내역을 조회합니다.`;
   }
 }
 
@@ -80,7 +74,7 @@ function getOpIdAndParams(protocol: string): {
     return {
       operationId: endpoint,
       parameters: [
-        Requests.protocol("xrpl", ["xrpl", "aptos"]),
+        Requests.protocol("aptos", ["aptos"]),
         Requests.network("mainnet", ["mainnet", "testnet"]),
       ],
     };
@@ -109,69 +103,8 @@ function getRequestAndResponse(protocol: string): {
 } {
   switch (protocol) {
     case "none":
-    default:
-      return {
-        requestBody: {
-          oneOf: [
-            {
-              title: "XRPL",
-              type: "object",
-              allOf: [
-                {
-                  type: "object",
-                  properties: {
-                    accountAddress: Requests.XRPL.accountAddress,
-                    currency: Requests.XRPL.currency,
-                    issuer: Requests.XRPL.issuer,
-                    fromLedger: Requests.XRPL.fromLedger,
-                    toLedger: Requests.XRPL.toLedger,
-                    fromDate: Requests.XRPL.fromDate,
-                    toDate: Requests.XRPL.toDate,
-                  },
-                },
-                Requests.PaginationSet,
-              ],
-            },
-            {
-              title: "Aptos",
-              type: "object",
-              allOf: [
-                {
-                  type: "object",
-                  properties: {
-                    accountAddress: Requests.Aptos.accountAddress,
-                    assetTypes: Requests.Aptos.assetType,
-                    linkedAssetTypes: Requests.Aptos.linkedAssetType,
-                    fromBlock: Requests.Aptos.fromBlock,
-                    toBlock: Requests.Aptos.toBlock,
-                    fromDate: Requests.Aptos.fromDate,
-                    toDate: Requests.Aptos.toDate,
-                  },
-                },
-                Requests.PaginationSet,
-              ],
-            },
-          ],
-        },
-        successResponse: {
-          schema: Domains.Pagination({
-            oneOf: [
-              {
-                title: "XRPL",
-                allOf: [Domains.XRPL.BalanceChanges],
-                example: Examples.XRPL[endpoint],
-              },
-              {
-                title: "Aptos",
-                allOf: [Domains.Aptos.BalanceChange],
-                example: Examples.Aptos[endpoint],
-              },
-            ],
-          }),
-        },
-      };
-
     case "aptos":
+    default:
       return {
         requestBody: {
           additionalProperties: false,
@@ -212,37 +145,6 @@ function getRequestAndResponse(protocol: string): {
           example: Examples.Aptos[endpoint],
         },
       };
-    case "xrpl":
-      return {
-        requestBody: {
-          additionalProperties: false,
-          allOf: [
-            {
-              type: "object",
-              properties: {
-                accountAddress: {
-                  ...Requests.XRPL.accountAddress,
-                  default: XRPL_ACCOUNTS.ACCOUNT_1,
-                },
-                currency: Requests.XRPL.currency,
-                issuer: Requests.XRPL.issuer,
-                fromLedger: Requests.XRPL.fromLedger,
-                toLedger: Requests.XRPL.toLedger,
-                fromDate: Requests.XRPL.fromDate,
-                toDate: Requests.XRPL.toDate,
-              },
-              required: ["accountAddress"],
-            },
-            Requests.PaginationSet,
-          ],
-        },
-        successResponse: {
-          schema: Domains.Pagination({
-            allOf: [Domains.XRPL.BalanceChanges],
-          }),
-          example: Examples.XRPL[endpoint],
-        },
-      };
   }
 }
 
@@ -255,7 +157,7 @@ function getCallouts(protocol: string): string {
     case "none":
     case "aptos":
     default:
-      return ""; // 해당 체인에서는 callouts가 없음
+      return ``;
   }
 }
 

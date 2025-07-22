@@ -1,0 +1,12 @@
+export const APTOS_ACCOUNTS = {
+  APTOS_LABS: "0x1",
+  ACCOUNT_1:
+    "0x51c6abe562e755582d268340b2cf0e2d8895a155dc9b7a7fb5465000d62d770b",
+  ACCOUNT_2:
+    "0xd03d34771b9d22c94b9ed15f401240bc323f69b24da2f7d11de0e52a806978b9",
+};
+
+export const FUNGIBLE_ASSETS = {
+  APT: "0xa",
+  USDC: "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
+};

@@ -4,14 +4,16 @@ import * as Bitcoin from "./bitcoin.requests";
 import * as Kaia from "./kaia.requests";
 import * as Tron from "./tron.requests";
 import * as XRPL from "./xrpl.requests";
+import * as Aptos from "./aptos.requests";
 
 const requests = {
-	...Common,
-	Ethereum,
-	Bitcoin,
-	Kaia,
-	Tron,
-	XRPL,
+  ...Common,
+  Ethereum,
+  Bitcoin,
+  Kaia,
+  Tron,
+  XRPL,
+  Aptos,
 };
 
 export default requests;
