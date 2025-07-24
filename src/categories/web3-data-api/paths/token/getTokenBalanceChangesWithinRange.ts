@@ -3,7 +3,7 @@ import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
-import { APTOS_ACCOUNTS, getChainInfo } from "../../../../constants";
+import { getChainInfo } from "../../../../constants";
 
 const summary = "Get Token Balance Changes Within Range";
 const endpoint = "getTokenBalanceChangesWithinRange";

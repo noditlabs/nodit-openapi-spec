@@ -89,7 +89,7 @@ export const supportedChains: ChainInfo[] = [
   {
     protocol: "aptos",
     mainnet: "mainnet",
-    testnet: ["testnet"],
+    testnet: [],
   },
   {
     protocol: "bitcoin",
@@ -1327,7 +1327,39 @@ export const supportedApisChains: SupportedApis[] = [
         endpoints: ["executeViewFunctionOfAModule"],
       },
     ],
-    web3DataApi: [],
+    web3DataApi: [
+      {
+        category: "blockchain",
+        endpoints: [
+          "getBlockByHashOrNumber",
+          "getBlocksWithinRange",
+          "getTransactionsInBlock",
+          "getTransactionsByAccount",
+          "getTotalTransactionCountByAccount",
+          "getTransactionByHash",
+          "getTransactionsByHashes",
+          "getTransactionByVersion",
+          "getTransactionsByVersions",
+        ],
+      },
+      {
+        category: "token",
+        endpoints: [
+          "getTokenBalanceChangesByAccount",
+          "getTokenBalanceChangesByAssetType",
+          "getTokenBalanceChangesWithinRange",
+          "getTokensOwnedByAccount",
+          "getTokenAccountsByAssetType",
+          "getTokenMetadataByAssetTypes",
+          "getTokenPairByAssetType",
+          "getAccountStats",
+        ],
+      },
+      {
+        category: "stats",
+        endpoints: ["getAccountStats"],
+      },
+    ],
     webhookApi: [
       "createWebhook",
       "updateWebhook",
@@ -1576,43 +1608,5 @@ export const supportedApisChains: SupportedApis[] = [
     nodeApi: [],
     // chiliz
     webhookApi: [],
-  },
-  {
-    chain: "aptos",
-    nodeApi: [], // 따로 있음
-    web3DataApi: [
-      {
-        category: "blockchain",
-        endpoints: [
-          "getBlockByHashOrNumber",
-          "getBlocksWithinRange",
-          "getTransactionsInBlock",
-          "getTransactionsByAccount",
-          "getTotalTransactionCountByAccount",
-          "getTransactionByHash",
-          "getTransactionsByHashes",
-          "getTransactionByVersion",
-          "getTransactionsByVersions",
-        ],
-      },
-      {
-        category: "token",
-        endpoints: [
-          "getTokenBalanceChangesByAccount",
-          "getTokenBalanceChangesByAssetType",
-          "getTokenBalanceChangesWithinRange",
-          "getTokensOwnedByAccount",
-          "getTokenAccountsByAssetType",
-          "getTokenMetadataByAssetTypes",
-          "getTokenPairByAssetType",
-        ],
-      },
-      {
-        category: "stats",
-        endpoints: ["getAccountStats"],
-      },
-    ],
-    webhookApi: [],
-    streamApi: false,
   },
 ];

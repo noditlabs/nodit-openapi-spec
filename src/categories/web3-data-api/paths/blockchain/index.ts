@@ -5,27 +5,28 @@ import { createPath } from "../../../../utils";
 import { isEndpointSupported } from "../../../../constants";
 
 function createPathsForProtocol(protocol: string) {
-	let paths: OpenAPIV3.PathsObject = {};
-	const tagPage = __dirname.split("/").pop(); // get tag page title from directory name
-	if (!tagPage) return;
+  let paths: OpenAPIV3.PathsObject = {};
+  const tagPage = __dirname.split("/").pop(); // get tag page title from directory name
+  if (!tagPage) return;
 
-	fs.readdirSync(__dirname).forEach((file) => {
-		if (file === "index.ts") return; // 현재 파일은 무시
+  fs.readdirSync(__dirname).forEach((file) => {
+    if (file === "index.ts") return; // 현재 파일은 무시
 
-		const apiSpec: ApiSpec = require(`./${file}`).default;
+    const apiSpec: ApiSpec = require(`./${file}`).default;
 
-		if (!apiSpec?.isPublic) return; // isPublic false인 경우, 해당 API를 문서에 노출하지 않음
-		if (protocol !== "none" && !isEndpointSupported(protocol, apiSpec.endpoint)) return; // 해당 프로토h콜에서 지원하지 않는 endpoint는 문서에 노출하지 않음
+    if (!apiSpec?.isPublic) return; // isPublic false인 경우, 해당 API를 문서에 노출하지 않음
+    if (protocol !== "none" && !isEndpointSupported(protocol, apiSpec.endpoint))
+      return; // 해당 프로토콜에서 지원하지 않는 endpoint는 문서에 노출하지 않음
 
-		const newPath = createPath({ protocol, tagPage, apiSpec });
+    const newPath = createPath({ protocol, tagPage, apiSpec });
 
-		paths = {
-			...paths,
-			...newPath,
-		};
-	});
+    paths = {
+      ...paths,
+      ...newPath,
+    };
+  });
 
-	return paths;
+  return paths;
 }
 
 export default createPathsForProtocol;

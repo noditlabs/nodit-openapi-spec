@@ -124,7 +124,7 @@ function getRequestAndResponse(protocol: string): {
                   description: `${Requests.Aptos.linkedAssetType.description}
 
 <strong style='color: red;'>*</strong> assetType과 linkedAssetType 중 하나는 필수로 입력해야 하며, 두 파라미터를 동시에 사용할 수 없습니다.`,
-                  default:
+                  example:
                     "0x000000000000000000000000000000000000000000000000000000000000000a",
                 },
                 fromBlock: Requests.Aptos.fromBlock,

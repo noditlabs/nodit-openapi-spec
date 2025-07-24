@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: xrpl
-  version: 1.2.11
+  version: 1.2.12
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -504,6 +504,8 @@ paths:
                         - from
                         - to
                         - both
+                      pattern: from|to|both
+                      default: both
                     currency: *ref_0
                     issuer: *ref_1
                     fromLedger: *ref_2
@@ -2638,7 +2640,6 @@ paths:
                       - signingPubKey
                       - fee
                       - transactionCategory
-                      - transactionDetails
                     properties:
                       ledgerIndex:
                         type: integer
@@ -3587,9 +3588,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items:
-                      allOf:
-                        - *ref_29
+                    items: *ref_29
               example:
                 rpp: 2
                 page: 1
@@ -3787,9 +3786,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  allOf:
-                    - *ref_29
+                items: *ref_29
                 example:
                   - ledgerIndex: 95352729
                     ledgerTimestamp: 1744250580

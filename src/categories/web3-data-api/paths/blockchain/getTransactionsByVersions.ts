@@ -118,7 +118,7 @@ function getRequestAndResponse(protocol: string): {
             {
               type: "object",
               properties: {
-                transactionHashes: {
+                transactionVersions: {
                   type: "array",
                   items: {
                     ...Requests.Aptos.transactionVersion,

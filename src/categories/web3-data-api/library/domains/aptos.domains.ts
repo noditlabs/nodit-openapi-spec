@@ -168,10 +168,7 @@ Move 모듈에서 정의된 이벤트 구조체의 전체 경로(주소::모듈:
       type: "string",
       description: `Coin과 Fungible Asset이 마이그레이션된 경우, 두 자산을 이어주는 공통 식별자입니다.
 
-- Fungible Asset인 경우: assetType과 동일한 Fungible Asset Object 주소가 들어갑니다.
-- Coin인 경우: 연결된 Fungible Asset의 Object 주소가 들어갑니다.
-
-이 필드는 Coin/Fungible Asset를 하나의 자산 단위로 묶어 식별 및 조회할 수 있도록 해주는 통합 키 역할을 합니다.`,
+이 필드는 Coin/Fungible Asset를 하나의 자산 단위로 묶어 식별 및 조회할 수 있도록 해주는 통합 키 역할을 하며, 마이그레이션된 Fungible Asset의 Metadata가 저장된 Object 주소를 제공합니다.`,
       example:
         "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
     },
@@ -190,8 +187,7 @@ Move 모듈에서 정의된 이벤트 구조체의 전체 경로(주소::모듈:
       type: "string",
       description: `자산의 표준 유형을 나타내는 필드입니다.
 
-자산이 따르는 표준 규격을 나타내며, 다음과 같은 값들이 가능합니다:
-- v1: Coin 표준을 따르는 자산, 
+- v1: Coin 표준을 따르는 자산
 - v2: Fungible Asset 표준을 따르는 자산`,
       example: "coin",
     },
@@ -602,7 +598,6 @@ true인 경우 해당 Object가 Owner 주소의 대표 Object임을 의미합니
       type: "string",
       description: `자산이 따르는 표준을 나타내는 필드입니다.
 
-다음과 같은 값들이 가능합니다:
 - v1: Coin 표준을 따르는 자산
 - v2: Fungible Asset 표준을 따르는 자산`,
       example: "v1",
@@ -611,11 +606,7 @@ true인 경우 해당 Object가 Owner 주소의 대표 Object임을 의미합니
       type: "string",
       description: `Coin과 Fungible Asset가 마이그레이션된 경우, 두 자산을 이어주는 공통 식별자입니다.
 
-다음과 같이 제공됩니다:
-- Coin인 경우: 연결된 Fungible Asset의 Object 주소
-- Fungible Asset인 경우: assetType과 동일한 Fungible Asset Object 주소
-
-이 필드는 Coin/Fungible Asset를 하나의 자산 단위로 묶어 식별 및 조회할 수 있도록 해주는 통합 키 역할을 합니다.`,
+이 필드는 Coin/Fungible Asset를 하나의 자산 단위로 묶어 식별 및 조회할 수 있도록 해주는 통합 키 역할을 하며, 마이그레이션된 Fungible Asset의 Metadata가 저장된 Object 주소를 제공합니다.`,
       example:
         "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
     },
@@ -648,7 +639,6 @@ export const TokenMeta: OpenAPIV3.SchemaObject = {
       type: "string",
       description: `자산이 따르는 표준을 나타내는 필드입니다.
 
-다음과 같은 값들이 가능합니다:
 - v1: Coin 표준을 따르는 자산
 - v2: Fungible Asset 표준을 따르는 자산`,
       example: "v1",
@@ -758,11 +748,7 @@ Fungible Asset 표준은 0x로 시작하는 64자리 16진수 문자열 형태�
       type: "string",
       description: `Coin과 Fungible Asset이 마이그레이션된 경우, 두 자산을 이어주는 공통 식별자입니다.
 
-마이그레이션 된 토큰의 Object 주소를 가리키며, 다음과 같이 제공됩니다:
-- Coin인 경우: 마이그레이션된 Fungible Asset의 Object 주소
-- Fungible Asset인 경우: assetType과 동일한 Fungible Asset Object 주소
-
-이 필드는 Coin/Fungible Asset을 하나의 자산 단위로 묶어 식별 및 조회할 수 있도록 해주는 통합 키 역할을 합니다.`,
+이 필드는 Coin/Fungible Asset을 하나의 자산 단위로 묶어 식별 및 조회할 수 있도록 해주는 통합 키 역할을 하며, 마이그레이션된 Fungible Asset의 Metadata가 저장된 Object 주소를 제공합니다.`,
       example:
         "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b",
     },
@@ -778,21 +764,16 @@ export const AccountStats: OpenAPIV3.SchemaObject = {
       description: `계정이 생성한 트랜잭션 수를 나타내는 필드입니다. 해당 계정이 sender에 포함된 트랜잭션을 의미합니다.`,
       example: 48,
     },
-    transferCounts: {
-      type: "integer",
-      description: `계정이 참여한 전송 트랜잭션 수를 나타내는 필드입니다.`,
-      example: 100,
+    balanceChangeCounts: {
+      type: "object",
+      properties: {
+        tokens: {
+          type: "integer",
+          description: `Token(Coin, Fungible Asset)의 잔액 변동 횟수를 나타내는 필드입니다.`,
+          example: 100,
+        },
+      },
     },
-    // balanceChangeCounts: {
-    //   type: "object",
-    //   properties: {
-    //     tokens: {
-    //       type: "integer",
-    //       description: `Token의 잔액 변동 횟수를 나타내는 필드입니다.`,
-    //       example: 100,
-    //     },
-    //   },
-    // },
     assets: {
       type: "object",
       properties: {
