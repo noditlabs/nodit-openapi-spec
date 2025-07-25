@@ -1,0 +1,382 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_subscribeEvent
+      description: |
+        Subscribe to a stream of Sui event
+      summary: suix_subscribeEvent
+      operationId: suix_subscribeEvent
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: suix_subscribeEvent
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    oneOf:
+                      - title: filter
+                        $ref: '#/components/schemas/EventFilter'
+                        description: The filter criteria of the event stream. See Event filter documentation for examples.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    EventFilter:
+      oneOf:
+        - description: Return all events.
+          type: object
+          required:
+            - All
+          properties:
+            All:
+              type: array
+          additionalProperties: false
+        - description: Return events that match any of the given filters. Only supported on event subscriptions.
+          type: object
+          required:
+            - Any
+          properties:
+            Any:
+              type: array
+              items:
+                $ref: '#/components/schemas/EventFilter'
+          additionalProperties: false
+        - description: Query by sender address.
+          type: object
+          required:
+            - Sender
+          properties:
+            Sender:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - description: Return events emitted by the given transaction.
+          type: object
+          required:
+            - Transaction
+          properties:
+            Transaction:
+              $ref: '#/components/schemas/TransactionDigest'
+          additionalProperties: false
+        - description: Return events emitted in a specified Move module. If the event is defined in Module A but emitted in a tx with Module B, query `MoveModule` by module B returns the event. Query `MoveEventModule` by module A returns the event too.
+          type: object
+          required:
+            - MoveModule
+          properties:
+            MoveModule:
+              type: object
+              required:
+                - module
+                - package
+              properties:
+                module:
+                  description: the module name
+                  type: string
+                package:
+                  description: the Move package ID
+                  allOf:
+                    - $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - description: Return events with the given Move event struct name (struct tag). For example, if the event is defined in `0xabcd::MyModule`, and named `Foo`, then the struct tag is `0xabcd::MyModule::Foo`.
+          type: object
+          required:
+            - MoveEventType
+          properties:
+            MoveEventType:
+              type: string
+          additionalProperties: false
+        - description: Return events with the given Move module name where the event struct is defined. If the event is defined in Module A but emitted in a tx with Module B, query `MoveEventModule` by module A returns the event. Query `MoveModule` by module B returns the event too.
+          type: object
+          required:
+            - MoveEventModule
+          properties:
+            MoveEventModule:
+              type: object
+              required:
+                - module
+                - package
+              properties:
+                module:
+                  description: the module name
+                  type: string
+                package:
+                  description: the Move package ID
+                  allOf:
+                    - $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - description: Return events emitted in [start_time, end_time] interval
+          type: object
+          required:
+            - TimeRange
+          properties:
+            TimeRange:
+              type: object
+              required:
+                - endTime
+                - startTime
+              properties:
+                endTime:
+                  description: right endpoint of time interval, milliseconds since epoch, exclusive
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+                startTime:
+                  description: left endpoint of time interval, milliseconds since epoch, inclusive
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+    Hex:
+      description: Hex string encoding.
+      type: string
+    SuiAddress:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    TransactionDigest:
+      allOf:
+        - $ref: '#/components/schemas/Digest'
+      description: A transaction will have a (unique) digest.
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    BigInt_for_uint64:
+      type: string
+    Base64:
+      description: Base64 encoding
+      type: string
+    EventID:
+      description: Unique ID of a Sui Event, the ID is a combination of transaction digest and event seq number.
+      type: object
+      required:
+        - eventSeq
+        - txDigest
+      properties:
+        eventSeq:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        txDigest:
+          $ref: '#/components/schemas/TransactionDigest'
+    Event:
+      type: object
+      oneOf:
+        - type: object
+          required:
+            - bcs
+            - bcsEncoding
+          properties:
+            bcs:
+              $ref: '#/components/schemas/Base64'
+            bcsEncoding:
+              type: string
+              enum:
+                - base64
+        - type: object
+          required:
+            - bcs
+            - bcsEncoding
+          properties:
+            bcs:
+              $ref: '#/components/schemas/Base58'
+            bcsEncoding:
+              type: string
+              enum:
+                - base58
+      required:
+        - id
+        - packageId
+        - parsedJson
+        - sender
+        - transactionModule
+        - type
+      properties:
+        id:
+          description: Sequential event ID, ie (transaction seq number, event seq number). 1) Serves as a unique event ID for each fullnode 2) Also serves to sequence events for the purposes of pagination and querying. A higher id is an event seen later by that fullnode. This ID is the "cursor" for event querying.
+          allOf:
+            - $ref: '#/components/schemas/EventID'
+        packageId:
+          description: Move package where this event was emitted.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        parsedJson:
+          description: Parsed json value of the event
+        sender:
+          description: Sender's Sui address.
+          allOf:
+            - $ref: '#/components/schemas/SuiAddress'
+        timestampMs:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+          description: UTC timestamp in milliseconds since epoch (1/1/1970)
+        transactionModule:
+          description: Move module where this event was emitted.
+          type: string
+        type:
+          description: Move event type.
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

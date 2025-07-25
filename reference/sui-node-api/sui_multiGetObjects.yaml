@@ -1,0 +1,699 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_multiGetObjects
+      description: |
+        Return the object data for a list of objects
+      summary: sui_multiGetObjects
+      operationId: sui_multiGetObjects
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: sui_multiGetObjects
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  items:
+                    oneOf:
+                      - title: object_ids
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ObjectID'
+                        description: The IDs of the queried objects
+                      - title: options
+                        $ref: '#/components/schemas/ObjectDataOptions'
+                        description: Options for specifying the content to be returned
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: sui_multiGetObjects
+                params:
+                  - - '0x77b3482580ee8d5bdc5b824808df54bfec4fc817622e5add0e48f749f01def98'
+                    - '0x9060d87664c26a3f9a509228c21b16dc6797cf787c839a07edc03e6338421091'
+                    - '0xb37379c527753c5c8ab783f697e7b61439368cd75ebe63d633af32ffb4a022d1'
+                    - '0xee309e94ff5c9f6b02c5637f018f6ea7bed8f6c3d80f2a595c2305e12dd6d07c'
+                    - '0x29bc7c8d230db3b417edb1184cf075da5e934f672d3da3e003d989075efaecc7'
+                  - showType: true
+                    showOwner: true
+                    showPreviousTransaction: true
+                    showDisplay: false
+                    showContent: true
+                    showBcs: false
+                    showStorageRebate: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SuiObjectResponse'
+              example:
+                jsonrpc: '2.0'
+                result:
+                  - data:
+                      objectId: '0x77b3482580ee8d5bdc5b824808df54bfec4fc817622e5add0e48f749f01def98'
+                      version: '1'
+                      digest: 2QwXW3qzMEZPAyyP9VHtXbC2tp7iomypQc5XnkyPsu5d
+                      type: 0x2::coin::Coin<0x2::sui::SUI>
+                      owner:
+                        AddressOwner: '0x504d411325e3c7f89d412044fe99007efb0f94f1e64d2e8090c619a39299d87e'
+                      previousTransaction: GcjpL3GJBoiqc7RNwfV1R4411dFPYz4hTNyXQchsq6Sa
+                      storageRebate: '100'
+                      content:
+                        dataType: moveObject
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        hasPublicTransfer: true
+                        fields:
+                          balance: '100000000'
+                          id:
+                            id: '0x77b3482580ee8d5bdc5b824808df54bfec4fc817622e5add0e48f749f01def98'
+                  - data:
+                      objectId: '0x9060d87664c26a3f9a509228c21b16dc6797cf787c839a07edc03e6338421091'
+                      version: '1'
+                      digest: 5itvhMFvtJcV6fY2VY4x7F9Ex18q2N4Rr5WU4FXTJsFU
+                      type: 0x2::coin::Coin<0x2::sui::SUI>
+                      owner:
+                        AddressOwner: '0x23618df6438d21a48040e6bb568cafc13246bd847c60448160e0358cac4a1134'
+                      previousTransaction: 6m5GPm6XurdzRcEBd7epcnn4rDv8s3fVUK7dN6vYiYk8
+                      storageRebate: '100'
+                      content:
+                        dataType: moveObject
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        hasPublicTransfer: true
+                        fields:
+                          balance: '100000000'
+                          id:
+                            id: '0x9060d87664c26a3f9a509228c21b16dc6797cf787c839a07edc03e6338421091'
+                  - data:
+                      objectId: '0xb37379c527753c5c8ab783f697e7b61439368cd75ebe63d633af32ffb4a022d1'
+                      version: '1'
+                      digest: 8rsTRNPs13DZvD2xneZEtf2nAAipep6uHXPXWVXfzDBr
+                      type: 0x2::coin::Coin<0x2::sui::SUI>
+                      owner:
+                        AddressOwner: '0x8b95b4eaa9fd3b22b43f6b2c8e92090bd6d16522a6fd4fa83ec70a5f197ad656'
+                      previousTransaction: FgEJG8uwH2z3e5e4d2QGeVDYH5tdhbR3vKyXsXWf2zqY
+                      storageRebate: '100'
+                      content:
+                        dataType: moveObject
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        hasPublicTransfer: true
+                        fields:
+                          balance: '100000000'
+                          id:
+                            id: '0xb37379c527753c5c8ab783f697e7b61439368cd75ebe63d633af32ffb4a022d1'
+                  - data:
+                      objectId: '0xee309e94ff5c9f6b02c5637f018f6ea7bed8f6c3d80f2a595c2305e12dd6d07c'
+                      version: '1'
+                      digest: 3w6ars2tmgBST4ozGxPWzSpEGyn4AdxMBv3K9sdkCWfR
+                      type: 0x2::coin::Coin<0x2::sui::SUI>
+                      owner:
+                        AddressOwner: '0x3fbbd3ebef7dbcc7b02346cdf05674452cc61f316af5d5d7c02b94b023242685'
+                      previousTransaction: 13Y8Ukebq34DkeL6dKEdr6ySSzeRMUpqhQXtZC9KmtTQ
+                      storageRebate: '100'
+                      content:
+                        dataType: moveObject
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        hasPublicTransfer: true
+                        fields:
+                          balance: '100000000'
+                          id:
+                            id: '0xee309e94ff5c9f6b02c5637f018f6ea7bed8f6c3d80f2a595c2305e12dd6d07c'
+                  - data:
+                      objectId: '0x29bc7c8d230db3b417edb1184cf075da5e934f672d3da3e003d989075efaecc7'
+                      version: '1'
+                      digest: BE9GoMd7Mr8fGte3EdsXxUMwYjcErW71n6Gsm4iPvDmv
+                      type: 0x2::coin::Coin<0x2::sui::SUI>
+                      owner:
+                        AddressOwner: '0x9b5cd5df0df2a168259b7115a41ccc0a372b6fd0026e0c63043492ce4d0c19a6'
+                      previousTransaction: 5CxnSSi2hCEo7beFke1fCp23W1rCKKRfPJrAELCpxiHc
+                      storageRebate: '100'
+                      content:
+                        dataType: moveObject
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        hasPublicTransfer: true
+                        fields:
+                          balance: '100000000'
+                          id:
+                            id: '0x29bc7c8d230db3b417edb1184cf075da5e934f672d3da3e003d989075efaecc7'
+                id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Hex:
+      description: Hex string encoding.
+      type: string
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    ObjectDataOptions:
+      type: object
+      properties:
+        showBcs:
+          description: Whether to show the content in BCS format. Default to be False
+          default: false
+          type: boolean
+        showContent:
+          description: Whether to show the content(i.e., package content or Move struct content) of the object. Default to be False
+          default: false
+          type: boolean
+        showDisplay:
+          description: Whether to show the Display metadata of the object for frontend rendering. Default to be False
+          default: false
+          type: boolean
+        showOwner:
+          description: Whether to show the owner of the object. Default to be False
+          default: false
+          type: boolean
+        showPreviousTransaction:
+          description: Whether to show the previous transaction digest of the object. Default to be False
+          default: false
+          type: boolean
+        showStorageRebate:
+          description: Whether to show the storage rebate of the object. Default to be False
+          default: false
+          type: boolean
+        showType:
+          description: Whether to show the type of the object. Default to be False
+          default: false
+          type: boolean
+    Base64:
+      description: Base64 encoding
+      type: string
+    BigInt_for_uint64:
+      type: string
+    UpgradeInfo:
+      description: Upgraded package info for the linkage table
+      type: object
+      required:
+        - upgraded_id
+        - upgraded_version
+      properties:
+        upgraded_id:
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+          description: ID of the upgraded packages
+        upgraded_version:
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+          description: Version of the upgraded package
+    TypeOrigin:
+      description: Identifies a struct and the module it was defined in
+      type: object
+      required:
+        - datatype_name
+        - module_name
+        - package
+      properties:
+        datatype_name:
+          type: string
+        module_name:
+          type: string
+        package:
+          $ref: '#/components/schemas/ObjectID'
+    RawData:
+      oneOf:
+        - type: object
+          required:
+            - bcsBytes
+            - dataType
+            - hasPublicTransfer
+            - type
+            - version
+          properties:
+            bcsBytes:
+              $ref: '#/components/schemas/Base64'
+            dataType:
+              type: string
+              enum:
+                - moveObject
+            hasPublicTransfer:
+              type: boolean
+            type:
+              type: string
+            version:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - dataType
+            - id
+            - linkageTable
+            - moduleMap
+            - typeOriginTable
+            - version
+          properties:
+            dataType:
+              type: string
+              enum:
+                - package
+            id:
+              $ref: '#/components/schemas/ObjectID'
+            linkageTable:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/UpgradeInfo'
+            moduleMap:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/Base64'
+            typeOriginTable:
+              type: array
+              items:
+                $ref: '#/components/schemas/TypeOrigin'
+            version:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+    SuiAddress:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    MoveValue:
+      anyOf:
+        - type: integer
+          format: uint32
+          minimum: 0
+        - type: boolean
+        - $ref: '#/components/schemas/SuiAddress'
+        - type: array
+          items:
+            $ref: '#/components/schemas/MoveValue'
+        - type: string
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: '#/components/schemas/ObjectID'
+        - $ref: '#/components/schemas/MoveStruct'
+        - $ref: '#/components/schemas/MoveValue'
+        - $ref: '#/components/schemas/MoveVariant'
+    MoveStruct:
+      anyOf:
+        - type: array
+          items:
+            $ref: '#/components/schemas/MoveValue'
+        - type: object
+          required:
+            - fields
+            - type
+          properties:
+            fields:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/MoveValue'
+            type:
+              type: string
+        - type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MoveValue'
+    MoveVariant:
+      type: object
+      required:
+        - fields
+        - type
+        - variant
+      properties:
+        fields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MoveValue'
+        type:
+          type: string
+        variant:
+          type: string
+    Data:
+      oneOf:
+        - type: object
+          required:
+            - dataType
+            - fields
+            - hasPublicTransfer
+            - type
+          properties:
+            dataType:
+              type: string
+              enum:
+                - moveObject
+            fields:
+              $ref: '#/components/schemas/MoveStruct'
+            hasPublicTransfer:
+              type: boolean
+            type:
+              type: string
+        - type: object
+          required:
+            - dataType
+            - disassembled
+          properties:
+            dataType:
+              type: string
+              enum:
+                - package
+            disassembled:
+              type: object
+              additionalProperties: true
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    ObjectResponseError:
+      oneOf:
+        - type: object
+          required:
+            - code
+            - object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - notExists
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - parent_object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - dynamicFieldNotFound
+            parent_object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - digest
+            - object_id
+            - version
+          properties:
+            code:
+              type: string
+              enum:
+                - deleted
+            digest:
+              description: Base64 string representing the object digest
+              allOf:
+                - $ref: '#/components/schemas/Digest'
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+            version:
+              description: Object version.
+              allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - code
+          properties:
+            code:
+              type: string
+              enum:
+                - unknown
+        - type: object
+          required:
+            - code
+            - error
+          properties:
+            code:
+              type: string
+              enum:
+                - displayError
+            error:
+              type: string
+    DisplayFieldsResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: string
+        error:
+          $ref: '#/components/schemas/ObjectResponseError'
+    Owner:
+      oneOf:
+        - description: Object is exclusively owned by a single address, and is mutable.
+          type: object
+          required:
+            - AddressOwner
+          properties:
+            AddressOwner:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - description: Object is exclusively owned by a single object, and is mutable. The object ID is converted to SuiAddress as SuiAddress is universal.
+          type: object
+          required:
+            - ObjectOwner
+          properties:
+            ObjectOwner:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - description: Object is shared, can be used by any address, and is mutable.
+          type: object
+          required:
+            - Shared
+          properties:
+            Shared:
+              type: object
+              required:
+                - initial_shared_version
+              properties:
+                initial_shared_version:
+                  description: The version at which the object became shared
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+        - description: Object is immutable, and hence ownership doesn't matter.
+          type: string
+          enum:
+            - Immutable
+        - description: Object is exclusively owned by a single address and sequenced via consensus.
+          type: object
+          required:
+            - ConsensusAddressOwner
+          properties:
+            ConsensusAddressOwner:
+              type: object
+              required:
+                - owner
+                - start_version
+              properties:
+                owner:
+                  $ref: '#/components/schemas/SuiAddress'
+                start_version:
+                  description: The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes.
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+    TransactionDigest:
+      allOf:
+        - $ref: '#/components/schemas/Digest'
+      description: A transaction will have a (unique) digest.
+    SequenceNumber:
+      type: integer
+      format: uint64
+      minimum: 0
+    ObjectData:
+      type: object
+      required:
+        - digest
+        - objectId
+        - version
+      properties:
+        bcs:
+          description: Move object content or package content in BCS, default to be None unless SuiObjectDataOptions.showBcs is set to true
+          $ref: '#/components/schemas/RawData'
+        content:
+          description: Move object content or package content, default to be None unless SuiObjectDataOptions.showContent is set to true
+          $ref: '#/components/schemas/Data'
+        digest:
+          description: Base64 string representing the object digest
+          allOf:
+            - $ref: '#/components/schemas/Digest'
+        display:
+          description: The Display metadata for frontend UI rendering, default to be None unless SuiObjectDataOptions.showContent is set to true This can also be None if the struct type does not have Display defined See more details in <https://forums.sui.io/t/nft-object-display-proposal/4872>
+          $ref: '#/components/schemas/DisplayFieldsResponse'
+        objectId:
+          $ref: '#/components/schemas/ObjectID'
+        owner:
+          description: The owner of this object. Default to be None unless SuiObjectDataOptions.showOwner is set to true
+          $ref: '#/components/schemas/Owner'
+        previousTransaction:
+          description: The digest of the transaction that created or last mutated this object. Default to be None unless SuiObjectDataOptions.showPreviousTransaction is set to true
+          $ref: '#/components/schemas/TransactionDigest'
+        storageRebate:
+          description: The amount of SUI we would rebate if this object gets deleted. This number is re-calculated each time the object is mutated based on the present storage gas price.
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        type:
+          description: The type of the object. Default to be None unless SuiObjectDataOptions.showType is set to true
+          type: string
+        version:
+          description: Object version.
+          allOf:
+            - $ref: '#/components/schemas/SequenceNumber'
+    SuiObjectResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ObjectData'
+        error:
+          $ref: '#/components/schemas/ObjectResponseError'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

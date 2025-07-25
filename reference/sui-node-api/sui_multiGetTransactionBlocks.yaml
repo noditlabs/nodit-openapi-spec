@@ -1,0 +1,2003 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_multiGetTransactionBlocks
+      description: |
+        Returns an ordered list of transaction responses. The method will throw an error if the input contains any duplicate or the input size exceeds QUERY_MAX_RESULT_LIMIT
+      summary: sui_multiGetTransactionBlocks
+      operationId: sui_multiGetTransactionBlocks
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: sui_multiGetTransactionBlocks
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  items:
+                    oneOf:
+                      - title: digests
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TransactionDigest'
+                        description: A list of transaction digests.
+                      - title: options
+                        $ref: '#/components/schemas/TransactionBlockResponseOptions'
+                        description: Config options to control which fields to fetch
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: sui_multiGetTransactionBlocks
+                params:
+                  - - EMqJqkQip6UaTkdff493ewAQNHGQFJwXDDn6m9CTgZzo
+                    - Hn3B25vTQNTFAdThFkWvfkiAAUZxzwTaj4uEengu1ACX
+                    - 9vLSG9a4QcLcMdG1xCu6FRdXAjWWqvJHoHBCJfPMKkR9
+                  - showInput: true
+                    showRawInput: false
+                    showEffects: true
+                    showEvents: true
+                    showObjectChanges: false
+                    showBalanceChanges: false
+                    showRawEffects: false
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransactionBlockResponse'
+              example:
+                jsonrpc: '2.0'
+                result:
+                  - digest: EMqJqkQip6UaTkdff493ewAQNHGQFJwXDDn6m9CTgZzo
+                    transaction:
+                      data:
+                        messageVersion: v1
+                        transaction:
+                          kind: ProgrammableTransaction
+                          inputs:
+                            - type: pure
+                              valueType: address
+                              value: '0x751b2dd4de1138554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c6'
+                            - type: object
+                              objectType: immOrOwnedObject
+                              objectId: '0x7a8e9a0d074f90fddb42cd928f74b986c6f539a734f3d7c9a75a9cb227ec3157'
+                              version: '2'
+                              digest: JAgYeYMPm5VLzBYcYxxQUEatfG9gHdFqSNwmBBS41Bri
+                          transactions:
+                            - TransferObjects:
+                                - - Input: 1
+                                - Input: 0
+                        sender: '0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5'
+                        gasData:
+                          payment:
+                            - objectId: '0x24962ee4193c8c0d2fb28bbe0eb4ba5fc87a2c6d1a7c12c9454872c5ea06d5e1'
+                              version: 2
+                              digest: B4g7NgvgmCFYzG2BPH6nT6kM5bPaRMD76LVJ4LWysq5w
+                          owner: '0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5'
+                          price: '10'
+                          budget: '100000'
+                      txSignatures:
+                        - ADCkpLtz9B6h6by9gst01e1ap3M9XyCjZ75pT59rvq6esYIxNzb7+KWZb+L5uZ7xsmzUtxR9ayYrSkXO99Rj5gkHrX7t0yuVOWkkiOMuz7HdUZsfbMy0efpXac3VZ8UVmA==
+                    rawTransaction: AQAAAAAAAgAgdRst1N4ROFVKn/e09rWflCbDIcgBOv7Qk0gd1O8SZ8YBAHqOmg0HT5D920LNko90uYbG9TmnNPPXyadanLIn7DFXAgAAAAAAAAAg/xGekvV6500bJQ1d8stRcHgqikOPv2ge3tTR4KLNffsBAQEBAQABAABeUve8quH9cqfEIMHmhTfkhdIVsejqRVcrGymAQI/5tQEkli7kGTyMDS+yi74OtLpfyHosbRp8EslFSHLF6gbV4QIAAAAAAAAAIJWF1VkVIb/RLew6Ny79U5EIuoB6Davtbl2g8XTvw/WOXlL3vKrh/XKnxCDB5oU35IXSFbHo6kVXKxspgECP+bUKAAAAAAAAAKCGAQAAAAAAAAFhADCkpLtz9B6h6by9gst01e1ap3M9XyCjZ75pT59rvq6esYIxNzb7+KWZb+L5uZ7xsmzUtxR9ayYrSkXO99Rj5gkHrX7t0yuVOWkkiOMuz7HdUZsfbMy0efpXac3VZ8UVmA==
+                    effects:
+                      messageVersion: v1
+                      status:
+                        status: success
+                      executedEpoch: '0'
+                      gasUsed:
+                        computationCost: '100'
+                        storageCost: '100'
+                        storageRebate: '10'
+                        nonRefundableStorageFee: '0'
+                      transactionDigest: J4k64LwycebB7TQhKrPaZ954yCK64rwbDJMSrSUW4Ba4
+                      mutated:
+                        - owner:
+                            AddressOwner: '0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5'
+                          reference:
+                            objectId: '0x24962ee4193c8c0d2fb28bbe0eb4ba5fc87a2c6d1a7c12c9454872c5ea06d5e1'
+                            version: 2
+                            digest: B4g7NgvgmCFYzG2BPH6nT6kM5bPaRMD76LVJ4LWysq5w
+                        - owner:
+                            AddressOwner: '0x751b2dd4de1138554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c6'
+                          reference:
+                            objectId: '0x7a8e9a0d074f90fddb42cd928f74b986c6f539a734f3d7c9a75a9cb227ec3157'
+                            version: 2
+                            digest: JAgYeYMPm5VLzBYcYxxQUEatfG9gHdFqSNwmBBS41Bri
+                      gasObject:
+                        owner:
+                          ObjectOwner: '0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5'
+                        reference:
+                          objectId: '0x24962ee4193c8c0d2fb28bbe0eb4ba5fc87a2c6d1a7c12c9454872c5ea06d5e1'
+                          version: 2
+                          digest: B4g7NgvgmCFYzG2BPH6nT6kM5bPaRMD76LVJ4LWysq5w
+                      eventsDigest: 2SY11dmdTQv6JLD2wqcsMiJNqXbXUkn87Rzw5NHib8Mf
+                    objectChanges:
+                      - type: transferred
+                        sender: '0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5'
+                        recipient:
+                          AddressOwner: '0x751b2dd4de1138554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c6'
+                        objectType: 0x2::example::Object
+                        objectId: '0x7a8e9a0d074f90fddb42cd928f74b986c6f539a734f3d7c9a75a9cb227ec3157'
+                        version: '2'
+                        digest: 3gmeyj5oEdE8A4PvjWsDSHchC6tb6YQj18gnD7xnDqGz
+                  - digest: Hn3B25vTQNTFAdThFkWvfkiAAUZxzwTaj4uEengu1ACX
+                    transaction:
+                      data:
+                        messageVersion: v1
+                        transaction:
+                          kind: ProgrammableTransaction
+                          inputs:
+                            - type: pure
+                              valueType: address
+                              value: '0x7cbab4983e180ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797'
+                            - type: object
+                              objectType: immOrOwnedObject
+                              objectId: '0xc3e4f846a282754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e23'
+                              version: '2'
+                              digest: snEA8RNnDvsYjKJx2NMUP49TMjoAuQXx3LJgwe4qo9B
+                          transactions:
+                            - TransferObjects:
+                                - - Input: 1
+                                - Input: 0
+                        sender: '0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925'
+                        gasData:
+                          payment:
+                            - objectId: '0x2fac1a70e20e146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601'
+                              version: 2
+                              digest: DeJhcQ3CmMPwyhVct22PP7hYaVny6zbz8V7gnTw3yoAT
+                          owner: '0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925'
+                          price: '10'
+                          budget: '100000'
+                      txSignatures:
+                        - AND+G9umCSLK1La6UWAgniuJWhkB3BNqVfk66Fj+f2hK1qIT2uJUWRYSwWYky6TO0unNN8egfzwvLJjFCMXU9gRy3O9A+7GacyYQAw/at8erjWXdUi4gR/xfdp6t5wPBDg==
+                    rawTransaction: AQAAAAAAAgAgfLq0mD4YCtLDHow2gapPfTVIjPa/ETXS/IcDaQ4IV5cBAMPk+EaignVJRuGB4A9DQaU7Xole+Ow8c9I3igoRgl4jAgAAAAAAAAAgDQItueIaDwm8uJB3PRHBq9cXZ7H2eoBAJneIID85dyIBAQEBAQABAABi1Nr25QaYm6eiWw2JFRQugSUshZ6M0i21MK4hPuwZJQEvrBpw4g4Ub7EwO9YOtL6pvUU+UGkLQjJB8OLpvqvWAQIAAAAAAAAAILvavygo7pyn5CJ6Yc/4Uf75+2oIrkRMlvmBAnXWr5c8YtTa9uUGmJunolsNiRUULoElLIWejNIttTCuIT7sGSUKAAAAAAAAAKCGAQAAAAAAAAFhAND+G9umCSLK1La6UWAgniuJWhkB3BNqVfk66Fj+f2hK1qIT2uJUWRYSwWYky6TO0unNN8egfzwvLJjFCMXU9gRy3O9A+7GacyYQAw/at8erjWXdUi4gR/xfdp6t5wPBDg==
+                    effects:
+                      messageVersion: v1
+                      status:
+                        status: success
+                      executedEpoch: '0'
+                      gasUsed:
+                        computationCost: '100'
+                        storageCost: '100'
+                        storageRebate: '10'
+                        nonRefundableStorageFee: '0'
+                      transactionDigest: CHia3BiES8mt5kqMYhzBpjAeLRpjcsMNDMFakBAdcVAg
+                      mutated:
+                        - owner:
+                            AddressOwner: '0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925'
+                          reference:
+                            objectId: '0x2fac1a70e20e146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601'
+                            version: 2
+                            digest: DeJhcQ3CmMPwyhVct22PP7hYaVny6zbz8V7gnTw3yoAT
+                        - owner:
+                            AddressOwner: '0x7cbab4983e180ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797'
+                          reference:
+                            objectId: '0xc3e4f846a282754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e23'
+                            version: 2
+                            digest: snEA8RNnDvsYjKJx2NMUP49TMjoAuQXx3LJgwe4qo9B
+                      gasObject:
+                        owner:
+                          ObjectOwner: '0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925'
+                        reference:
+                          objectId: '0x2fac1a70e20e146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601'
+                          version: 2
+                          digest: DeJhcQ3CmMPwyhVct22PP7hYaVny6zbz8V7gnTw3yoAT
+                      eventsDigest: 69bh3Q9RhRgMFKwmQn8LYE8vYujFTpYyUSVBht3oYkm6
+                    objectChanges:
+                      - type: transferred
+                        sender: '0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925'
+                        recipient:
+                          AddressOwner: '0x7cbab4983e180ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797'
+                        objectType: 0x2::example::Object
+                        objectId: '0xc3e4f846a282754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e23'
+                        version: '2'
+                        digest: HyJbrm9Th6ox4oU9vrrRzgZSaCu1n3omMJ1fAcHswvvo
+                  - digest: 9vLSG9a4QcLcMdG1xCu6FRdXAjWWqvJHoHBCJfPMKkR9
+                    transaction:
+                      data:
+                        messageVersion: v1
+                        transaction:
+                          kind: ProgrammableTransaction
+                          inputs:
+                            - type: pure
+                              valueType: address
+                              value: '0x385b00a1a8902e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d1'
+                            - type: object
+                              objectType: immOrOwnedObject
+                              objectId: '0x0388c28ddd5977a58e206acd19639c875a4fbecf3342b825c8384300ac7e3bad'
+                              version: '2'
+                              digest: 9CpH2aW4XPVxaZBGHRwHueXEQUvN3Pf7JQpASHiEsNCw
+                          transactions:
+                            - TransferObjects:
+                                - - Input: 1
+                                - Input: 0
+                        sender: '0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5'
+                        gasData:
+                          payment:
+                            - objectId: '0xc820a75b574224b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5c'
+                              version: 2
+                              digest: FYD6KHzkQnbwS52WA8rYS9WbJza1K583ootS5MK9BR2T
+                          owner: '0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5'
+                          price: '10'
+                          budget: '100000'
+                      txSignatures:
+                        - AIPB1qErFsOHPUI/MJO9d5n2tTpG6fhxRumDT54vvkGYqtiHX9nlqhyujSbprdl0Th2qM/n3z18p/tLCmnjWMgR0l3KzifzaD4mmOjFLz1qKIB/e8f9eE9s+E+w2jwNGDQ==
+                    rawTransaction: AQAAAAAAAgAgOFsAoaiQLoToH4ccR8MUniexJQDaiEr99cMLGcAXoNEBAAOIwo3dWXeljiBqzRljnIdaT77PM0K4Jcg4QwCsfjutAgAAAAAAAAAgeeRW/wE/VlPau21sld3X01pC0x86m+u7aD22booGcGgBAQEBAQABAACbdImsy1WpKBkM+of1ICLXIsBobtp2d7NZXc1hZ6S05QHIIKdbV0IkuSCqmwBQk7gg3yTvi0NxVJn0//TgVsDNXAIAAAAAAAAAINgCS0s5p/7ScTSwc9qGOEVBETllGTeeiIyDq68OYAUEm3SJrMtVqSgZDPqH9SAi1yLAaG7adnezWV3NYWektOUKAAAAAAAAAKCGAQAAAAAAAAFhAIPB1qErFsOHPUI/MJO9d5n2tTpG6fhxRumDT54vvkGYqtiHX9nlqhyujSbprdl0Th2qM/n3z18p/tLCmnjWMgR0l3KzifzaD4mmOjFLz1qKIB/e8f9eE9s+E+w2jwNGDQ==
+                    effects:
+                      messageVersion: v1
+                      status:
+                        status: success
+                      executedEpoch: '0'
+                      gasUsed:
+                        computationCost: '100'
+                        storageCost: '100'
+                        storageRebate: '10'
+                        nonRefundableStorageFee: '0'
+                      transactionDigest: HaFQHEJugXDGh95A9Ye1tp7GikbuAQNiEanrQuVLvpfz
+                      mutated:
+                        - owner:
+                            AddressOwner: '0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5'
+                          reference:
+                            objectId: '0xc820a75b574224b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5c'
+                            version: 2
+                            digest: FYD6KHzkQnbwS52WA8rYS9WbJza1K583ootS5MK9BR2T
+                        - owner:
+                            AddressOwner: '0x385b00a1a8902e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d1'
+                          reference:
+                            objectId: '0x0388c28ddd5977a58e206acd19639c875a4fbecf3342b825c8384300ac7e3bad'
+                            version: 2
+                            digest: 9CpH2aW4XPVxaZBGHRwHueXEQUvN3Pf7JQpASHiEsNCw
+                      gasObject:
+                        owner:
+                          ObjectOwner: '0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5'
+                        reference:
+                          objectId: '0xc820a75b574224b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5c'
+                          version: 2
+                          digest: FYD6KHzkQnbwS52WA8rYS9WbJza1K583ootS5MK9BR2T
+                      eventsDigest: DzJWHtFNHttaBdpECZGDMF7tcx5NYZfNfCk5NsaaRgmn
+                    objectChanges:
+                      - type: transferred
+                        sender: '0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5'
+                        recipient:
+                          AddressOwner: '0x385b00a1a8902e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d1'
+                        objectType: 0x2::example::Object
+                        objectId: '0x0388c28ddd5977a58e206acd19639c875a4fbecf3342b825c8384300ac7e3bad'
+                        version: '2'
+                        digest: 6jsxetsBSZJ5ozgZuDmHXJzn9ZBp8emivfYHe6tnHg7C
+                id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    TransactionDigest:
+      allOf:
+        - $ref: '#/components/schemas/Digest'
+      description: A transaction will have a (unique) digest.
+    TransactionBlockResponseOptions:
+      type: object
+      properties:
+        showBalanceChanges:
+          description: Whether to show balance_changes. Default to be False
+          default: false
+          type: boolean
+        showEffects:
+          description: Whether to show transaction effects. Default to be False
+          default: false
+          type: boolean
+        showEvents:
+          description: Whether to show transaction events. Default to be False
+          default: false
+          type: boolean
+        showInput:
+          description: Whether to show transaction input data. Default to be False
+          default: false
+          type: boolean
+        showObjectChanges:
+          description: Whether to show object_changes. Default to be False
+          default: false
+          type: boolean
+        showRawEffects:
+          description: Whether to show raw transaction effects. Default to be False
+          default: false
+          type: boolean
+        showRawInput:
+          description: Whether to show bcs-encoded transaction input data
+          default: false
+          type: boolean
+    Hex:
+      description: Hex string encoding.
+      type: string
+    SuiAddress:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    BigInt_for_uint64:
+      type: string
+    Owner:
+      oneOf:
+        - description: Object is exclusively owned by a single address, and is mutable.
+          type: object
+          required:
+            - AddressOwner
+          properties:
+            AddressOwner:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - description: Object is exclusively owned by a single object, and is mutable. The object ID is converted to SuiAddress as SuiAddress is universal.
+          type: object
+          required:
+            - ObjectOwner
+          properties:
+            ObjectOwner:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - description: Object is shared, can be used by any address, and is mutable.
+          type: object
+          required:
+            - Shared
+          properties:
+            Shared:
+              type: object
+              required:
+                - initial_shared_version
+              properties:
+                initial_shared_version:
+                  description: The version at which the object became shared
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+        - description: Object is immutable, and hence ownership doesn't matter.
+          type: string
+          enum:
+            - Immutable
+        - description: Object is exclusively owned by a single address and sequenced via consensus.
+          type: object
+          required:
+            - ConsensusAddressOwner
+          properties:
+            ConsensusAddressOwner:
+              type: object
+              required:
+                - owner
+                - start_version
+              properties:
+                owner:
+                  $ref: '#/components/schemas/SuiAddress'
+                start_version:
+                  description: The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes.
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+    BalanceChange:
+      type: object
+      required:
+        - amount
+        - coinType
+        - owner
+      properties:
+        amount:
+          description: The amount indicate the balance value changes, negative amount means spending coin value and positive means receiving coin value.
+          type: string
+        coinType:
+          type: string
+        owner:
+          description: Owner of the balance change
+          allOf:
+            - $ref: '#/components/schemas/Owner'
+    SuiMoveAbort:
+      type: object
+      properties:
+        error_code:
+          type:
+            - integer
+            - 'null'
+          format: uint64
+          minimum: 0
+        function:
+          type:
+            - string
+            - 'null'
+        line:
+          type:
+            - integer
+            - 'null'
+          format: uint16
+          minimum: 0
+        module_id:
+          type:
+            - string
+            - 'null'
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    SequenceNumber:
+      type: integer
+      format: uint64
+      minimum: 0
+    ObjectRef:
+      type: object
+      required:
+        - digest
+        - objectId
+        - version
+      properties:
+        digest:
+          description: Base64 string representing the object digest
+          allOf:
+            - $ref: '#/components/schemas/Digest'
+        objectId:
+          description: Hex code as string representing the object id
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        version:
+          description: Object version.
+          allOf:
+            - $ref: '#/components/schemas/SequenceNumber'
+    OwnedObjectRef:
+      type: object
+      required:
+        - owner
+        - reference
+      properties:
+        owner:
+          $ref: '#/components/schemas/Owner'
+        reference:
+          $ref: '#/components/schemas/ObjectRef'
+    GasCostSummary:
+      description: |
+        Summary of the charges in a transaction. Storage is charged independently of computation. There are 3 parts to the storage charges:
+        `storage_cost`: it is the charge of storage at the time the transaction is executed. The cost of storage is the number of bytes of the objects being mutated multiplied by a variable storage cost per byte
+        `storage_rebate`: this is the amount a user gets back when manipulating an object. The `storage_rebate` is the `storage_cost` for an object minus fees.
+        `non_refundable_storage_fee`: not all the value of the object storage cost is given back to user and there is a small fraction that is kept by the system. This value tracks that charge.
+
+        When looking at a gas cost summary the amount charged to the user is `computation_cost + storage_cost - storage_rebate` and that is the amount that is deducted from the gas coins. `non_refundable_storage_fee` is collected from the objects being mutated/deleted and it is tracked by the system in storage funds.
+
+        Objects deleted, including the older versions of objects mutated, have the storage field on the objects added up to a pool of "potential rebate". This rebate then is reduced by the "nonrefundable rate" such that: `potential_rebate(storage cost of deleted/mutated objects) = storage_rebate + non_refundable_storage_fee`
+      type: object
+      required:
+        - computationCost
+        - nonRefundableStorageFee
+        - storageCost
+        - storageRebate
+      properties:
+        computationCost:
+          description: Cost of computation/execution
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        nonRefundableStorageFee:
+          description: The fee for the rebate. The portion of the storage rebate kept by the system.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        storageCost:
+          description: Storage cost, it's the sum of all storage cost for all objects created or mutated.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        storageRebate:
+          description: The amount of storage cost refunded to the user for all objects deleted or mutated in the transaction.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+    TransactionBlockEffectsModifiedAtVersions:
+      type: object
+      required:
+        - objectId
+        - sequenceNumber
+      properties:
+        objectId:
+          $ref: '#/components/schemas/ObjectID'
+        sequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+    ExecutionStatus:
+      oneOf:
+        - type: object
+          required:
+            - status
+          properties:
+            status:
+              type: string
+              enum:
+                - success
+        - type: object
+          required:
+            - error
+            - status
+          properties:
+            error:
+              type: string
+            status:
+              type: string
+              enum:
+                - failure
+    TransactionBlockEffects:
+      oneOf:
+        - description: The response from processing a transaction or a certified transaction
+          type: object
+          required:
+            - executedEpoch
+            - gasObject
+            - gasUsed
+            - messageVersion
+            - status
+            - transactionDigest
+          properties:
+            abortError:
+              description: The abort error populated if the transaction failed with an abort code.
+              $ref: '#/components/schemas/SuiMoveAbort'
+            created:
+              description: ObjectRef and owner of new objects created.
+              type: array
+              items:
+                $ref: '#/components/schemas/OwnedObjectRef'
+            deleted:
+              description: Object Refs of objects now deleted (the old refs).
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjectRef'
+            dependencies:
+              description: The set of transaction digests this transaction depends on.
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionDigest'
+            eventsDigest:
+              description: The digest of the events emitted during execution, can be None if the transaction does not emit any event.
+              $ref: '#/components/schemas/Digest'
+            executedEpoch:
+              description: The epoch when this transaction was executed.
+              allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+            gasObject:
+              description: The updated gas object reference. Have a dedicated field for convenient access. It's also included in mutated.
+              allOf:
+                - $ref: '#/components/schemas/OwnedObjectRef'
+            gasUsed:
+              $ref: '#/components/schemas/GasCostSummary'
+            messageVersion:
+              type: string
+              enum:
+                - v1
+            modifiedAtVersions:
+              description: The version that every modified (mutated or deleted) object had before it was modified by this transaction.
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionBlockEffectsModifiedAtVersions'
+            mutated:
+              description: ObjectRef and owner of mutated objects, including gas object.
+              type: array
+              items:
+                $ref: '#/components/schemas/OwnedObjectRef'
+            sharedObjects:
+              description: The object references of the shared objects used in this transaction. Empty if no shared objects were used.
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjectRef'
+            status:
+              description: The status of the execution
+              allOf:
+                - $ref: '#/components/schemas/ExecutionStatus'
+            transactionDigest:
+              description: The transaction digest
+              allOf:
+                - $ref: '#/components/schemas/TransactionDigest'
+            unwrapped:
+              description: ObjectRef and owner of objects that are unwrapped in this transaction. Unwrapped objects are objects that were wrapped into other objects in the past, and just got extracted out.
+              type: array
+              items:
+                $ref: '#/components/schemas/OwnedObjectRef'
+            unwrappedThenDeleted:
+              description: Object refs of objects previously wrapped in other objects but now deleted.
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjectRef'
+            wrapped:
+              description: Object refs of objects now wrapped in other objects.
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjectRef'
+    Base64:
+      description: Base64 encoding
+      type: string
+    EventID:
+      description: Unique ID of a Sui Event, the ID is a combination of transaction digest and event seq number.
+      type: object
+      required:
+        - eventSeq
+        - txDigest
+      properties:
+        eventSeq:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        txDigest:
+          $ref: '#/components/schemas/TransactionDigest'
+    Event:
+      type: object
+      oneOf:
+        - type: object
+          required:
+            - bcs
+            - bcsEncoding
+          properties:
+            bcs:
+              $ref: '#/components/schemas/Base64'
+            bcsEncoding:
+              type: string
+              enum:
+                - base64
+        - type: object
+          required:
+            - bcs
+            - bcsEncoding
+          properties:
+            bcs:
+              $ref: '#/components/schemas/Base58'
+            bcsEncoding:
+              type: string
+              enum:
+                - base58
+      required:
+        - id
+        - packageId
+        - parsedJson
+        - sender
+        - transactionModule
+        - type
+      properties:
+        id:
+          description: Sequential event ID, ie (transaction seq number, event seq number). 1) Serves as a unique event ID for each fullnode 2) Also serves to sequence events for the purposes of pagination and querying. A higher id is an event seen later by that fullnode. This ID is the "cursor" for event querying.
+          allOf:
+            - $ref: '#/components/schemas/EventID'
+        packageId:
+          description: Move package where this event was emitted.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        parsedJson:
+          description: Parsed json value of the event
+        sender:
+          description: Sender's Sui address.
+          allOf:
+            - $ref: '#/components/schemas/SuiAddress'
+        timestampMs:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+          description: UTC timestamp in milliseconds since epoch (1/1/1970)
+        transactionModule:
+          description: Move module where this event was emitted.
+          type: string
+        type:
+          description: Move event type.
+          type: string
+    ObjectChange:
+      description: ObjectChange are derived from the object mutations in the TransactionEffect to provide richer object information.
+      oneOf:
+        - description: Module published
+          type: object
+          required:
+            - digest
+            - modules
+            - packageId
+            - type
+            - version
+          properties:
+            digest:
+              $ref: '#/components/schemas/Digest'
+            modules:
+              type: array
+              items:
+                type: string
+            packageId:
+              $ref: '#/components/schemas/ObjectID'
+            type:
+              type: string
+              enum:
+                - published
+            version:
+              $ref: '#/components/schemas/SequenceNumber'
+        - description: Transfer objects to new address / wrap in another object
+          type: object
+          required:
+            - digest
+            - objectId
+            - objectType
+            - recipient
+            - sender
+            - type
+            - version
+          properties:
+            digest:
+              $ref: '#/components/schemas/Digest'
+            objectId:
+              $ref: '#/components/schemas/ObjectID'
+            objectType:
+              type: string
+            recipient:
+              $ref: '#/components/schemas/Owner'
+            sender:
+              $ref: '#/components/schemas/SuiAddress'
+            type:
+              type: string
+              enum:
+                - transferred
+            version:
+              $ref: '#/components/schemas/SequenceNumber'
+        - description: Object mutated.
+          type: object
+          required:
+            - digest
+            - objectId
+            - objectType
+            - owner
+            - previousVersion
+            - sender
+            - type
+            - version
+          properties:
+            digest:
+              $ref: '#/components/schemas/Digest'
+            objectId:
+              $ref: '#/components/schemas/ObjectID'
+            objectType:
+              type: string
+            owner:
+              $ref: '#/components/schemas/Owner'
+            previousVersion:
+              $ref: '#/components/schemas/SequenceNumber'
+            sender:
+              $ref: '#/components/schemas/SuiAddress'
+            type:
+              type: string
+              enum:
+                - mutated
+            version:
+              $ref: '#/components/schemas/SequenceNumber'
+        - description: Delete object
+          type: object
+          required:
+            - objectId
+            - objectType
+            - sender
+            - type
+            - version
+          properties:
+            objectId:
+              $ref: '#/components/schemas/ObjectID'
+            objectType:
+              type: string
+            sender:
+              $ref: '#/components/schemas/SuiAddress'
+            type:
+              type: string
+              enum:
+                - deleted
+            version:
+              $ref: '#/components/schemas/SequenceNumber'
+        - description: Wrapped object
+          type: object
+          required:
+            - objectId
+            - objectType
+            - sender
+            - type
+            - version
+          properties:
+            objectId:
+              $ref: '#/components/schemas/ObjectID'
+            objectType:
+              type: string
+            sender:
+              $ref: '#/components/schemas/SuiAddress'
+            type:
+              type: string
+              enum:
+                - wrapped
+            version:
+              $ref: '#/components/schemas/SequenceNumber'
+        - description: New object creation
+          type: object
+          required:
+            - digest
+            - objectId
+            - objectType
+            - owner
+            - sender
+            - type
+            - version
+          properties:
+            digest:
+              $ref: '#/components/schemas/Digest'
+            objectId:
+              $ref: '#/components/schemas/ObjectID'
+            objectType:
+              type: string
+            owner:
+              $ref: '#/components/schemas/Owner'
+            sender:
+              $ref: '#/components/schemas/SuiAddress'
+            type:
+              type: string
+              enum:
+                - created
+            version:
+              $ref: '#/components/schemas/SequenceNumber'
+    GasData:
+      type: object
+      required:
+        - budget
+        - owner
+        - payment
+        - price
+      properties:
+        budget:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        owner:
+          $ref: '#/components/schemas/SuiAddress'
+        payment:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjectRef'
+        price:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+    SuiJsonValue:
+      type: object
+    SuiCallArg:
+      oneOf:
+        - type: object
+          oneOf:
+            - type: object
+              required:
+                - digest
+                - objectId
+                - objectType
+                - version
+              properties:
+                digest:
+                  $ref: '#/components/schemas/Digest'
+                objectId:
+                  $ref: '#/components/schemas/ObjectID'
+                objectType:
+                  type: string
+                  enum:
+                    - immOrOwnedObject
+                version:
+                  $ref: '#/components/schemas/SequenceNumber'
+            - type: object
+              required:
+                - initialSharedVersion
+                - mutable
+                - objectId
+                - objectType
+              properties:
+                initialSharedVersion:
+                  $ref: '#/components/schemas/SequenceNumber'
+                mutable:
+                  type: boolean
+                objectId:
+                  $ref: '#/components/schemas/ObjectID'
+                objectType:
+                  type: string
+                  enum:
+                    - sharedObject
+            - type: object
+              required:
+                - digest
+                - objectId
+                - objectType
+                - version
+              properties:
+                digest:
+                  $ref: '#/components/schemas/Digest'
+                objectId:
+                  $ref: '#/components/schemas/ObjectID'
+                objectType:
+                  type: string
+                  enum:
+                    - receiving
+                version:
+                  $ref: '#/components/schemas/SequenceNumber'
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - object
+        - type: object
+          required:
+            - type
+            - value
+          properties:
+            type:
+              type: string
+              enum:
+                - pure
+            value:
+              $ref: '#/components/schemas/SuiJsonValue'
+            valueType:
+              type:
+                - string
+                - 'null'
+    SuiArgument:
+      description: An argument to a transaction in a programmable transaction block
+      oneOf:
+        - description: The gas coin. The gas coin can only be used by-ref, except for with `TransferObjects`, which can use it by-value.
+          type: string
+          enum:
+            - GasCoin
+        - description: One of the input objects or primitive values (from `ProgrammableTransactionBlock` inputs)
+          type: object
+          required:
+            - Input
+          properties:
+            Input:
+              type: integer
+              format: uint16
+              minimum: 0
+          additionalProperties: false
+        - description: The result of another transaction (from `ProgrammableTransactionBlock` transactions)
+          type: object
+          required:
+            - Result
+          properties:
+            Result:
+              type: integer
+              format: uint16
+              minimum: 0
+          additionalProperties: false
+        - description: Like a `Result` but it accesses a nested result. Currently, the only usage of this is to access a value from a Move call with multiple return values.
+          type: object
+          required:
+            - NestedResult
+          properties:
+            NestedResult:
+              type: array
+              items:
+                type: integer
+                format: uint16
+              maxItems: 2
+              minItems: 2
+          additionalProperties: false
+    SuiProgrammableMoveCall:
+      description: The transaction for calling a Move function, either an entry function or a public function (which cannot return references).
+      type: object
+      required:
+        - function
+        - module
+        - package
+      properties:
+        arguments:
+          description: The arguments to the function.
+          type: array
+          items:
+            $ref: '#/components/schemas/SuiArgument'
+        function:
+          description: The function to be called.
+          type: string
+        module:
+          description: The specific module in the package containing the function.
+          type: string
+        package:
+          description: The package containing the module and function.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        type_arguments:
+          description: The type arguments to the function.
+          type: array
+          items:
+            type: string
+    SuiTransaction:
+      description: A single transaction in a programmable transaction block.
+      oneOf:
+        - description: A call to either an entry or a public Move function
+          type: object
+          required:
+            - MoveCall
+          properties:
+            MoveCall:
+              $ref: '#/components/schemas/SuiProgrammableMoveCall'
+          additionalProperties: false
+        - description: (Vec<forall T:key+store. T>, address) It sends n-objects to the specified address. These objects must have store (public transfer) and either the previous owner must be an address or the object must be newly created.
+          type: object
+          required:
+            - TransferObjects
+          properties:
+            TransferObjects:
+              type: array
+              items:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/SuiArgument'
+                  - $ref: '#/components/schemas/SuiArgument'
+              maxItems: 2
+              minItems: 2
+          additionalProperties: false
+        - description: (&mut Coin<T>, Vec<u64>) -> Vec<Coin<T>> It splits off some amounts into a new coins with those amounts
+          type: object
+          required:
+            - SplitCoins
+          properties:
+            SplitCoins:
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/SuiArgument'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/SuiArgument'
+              maxItems: 2
+              minItems: 2
+          additionalProperties: false
+        - description: (&mut Coin<T>, Vec<Coin<T>>) It merges n-coins into the first coin
+          type: object
+          required:
+            - MergeCoins
+          properties:
+            MergeCoins:
+              type: array
+              items:
+                oneOf:
+                  - $ref: '#/components/schemas/SuiArgument'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/SuiArgument'
+              maxItems: 2
+              minItems: 2
+          additionalProperties: false
+        - description: Publishes a Move package. It takes the package bytes and a list of the package's transitive dependencies to link against on-chain.
+          type: object
+          required:
+            - Publish
+          properties:
+            Publish:
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - description: Upgrades a Move package
+          type: object
+          required:
+            - Upgrade
+          properties:
+            Upgrade:
+              type: array
+              items:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/ObjectID'
+                  - $ref: '#/components/schemas/ObjectID'
+                  - $ref: '#/components/schemas/SuiArgument'
+              maxItems: 3
+              minItems: 3
+          additionalProperties: false
+        - description: 'forall T: Vec<T> -> vector<T> Given n-values of the same type, it constructs a vector. For non objects or an empty vector, the type tag must be specified.'
+          type: object
+          required:
+            - MakeMoveVec
+          properties:
+            MakeMoveVec:
+              type: array
+              items:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/SuiArgument'
+                  - type: string
+                    enum:
+                      - 'null'
+              maxItems: 2
+              minItems: 2
+          additionalProperties: false
+    SuiJWK:
+      type: object
+      required:
+        - alg
+        - e
+        - kty
+        - 'n'
+      properties:
+        alg:
+          type: string
+        e:
+          type: string
+        kty:
+          type: string
+        'n':
+          type: string
+    SuiJwkId:
+      type: object
+      required:
+        - iss
+        - kid
+      properties:
+        iss:
+          type: string
+        kid:
+          type: string
+    SuiActiveJwk:
+      type: object
+      required:
+        - epoch
+        - jwk
+        - jwk_id
+      properties:
+        epoch:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        jwk:
+          $ref: '#/components/schemas/SuiJWK'
+        jwk_id:
+          $ref: '#/components/schemas/SuiJwkId'
+    SuiChangeEpoch:
+      type: object
+      required:
+        - computation_charge
+        - epoch
+        - epoch_start_timestamp_ms
+        - storage_charge
+        - storage_rebate
+      properties:
+        computation_charge:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        epoch:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        epoch_start_timestamp_ms:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        storage_charge:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        storage_rebate:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+    SuiAuthenticatorStateExpire:
+      type: object
+      required:
+        - min_epoch
+      properties:
+        min_epoch:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+    CheckpointDigest:
+      description: Representation of a Checkpoint's digest
+      allOf:
+        - $ref: '#/components/schemas/Digest'
+    SuiEndOfEpochTransactionKind:
+      oneOf:
+        - type: string
+          enum:
+            - AuthenticatorStateCreate
+            - RandomnessStateCreate
+            - CoinDenyListStateCreate
+            - StoreExecutionTimeObservations
+            - AccumulatorRootCreate
+        - type: object
+          required:
+            - ChangeEpoch
+          properties:
+            ChangeEpoch:
+              $ref: '#/components/schemas/SuiChangeEpoch'
+          additionalProperties: false
+        - type: object
+          required:
+            - AuthenticatorStateExpire
+          properties:
+            AuthenticatorStateExpire:
+              $ref: '#/components/schemas/SuiAuthenticatorStateExpire'
+          additionalProperties: false
+        - type: object
+          required:
+            - BridgeStateCreate
+          properties:
+            BridgeStateCreate:
+              $ref: '#/components/schemas/CheckpointDigest'
+          additionalProperties: false
+        - type: object
+          required:
+            - BridgeCommitteeUpdate
+          properties:
+            BridgeCommitteeUpdate:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+    ConsensusDeterminedVersionAssignments:
+      description: Uses an enum to allow for future expansion of the ConsensusDeterminedVersionAssignments.
+      oneOf:
+        - type: object
+          required:
+            - CancelledTransactions
+          properties:
+            CancelledTransactions:
+              type: array
+        - type: object
+          required:
+            - CancelledTransactionsV2
+          properties:
+            CancelledTransactionsV2:
+              type: array
+    TransactionBlockKind:
+      oneOf:
+        - description: A system transaction that will update epoch information on-chain.
+          type: object
+          required:
+            - computation_charge
+            - epoch
+            - epoch_start_timestamp_ms
+            - kind
+            - storage_charge
+            - storage_rebate
+          properties:
+            computation_charge:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            epoch:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            epoch_start_timestamp_ms:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            kind:
+              type: string
+              enum:
+                - ChangeEpoch
+            storage_charge:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            storage_rebate:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - description: A system transaction used for initializing the initial state of the chain.
+          type: object
+          required:
+            - kind
+            - objects
+          properties:
+            kind:
+              type: string
+              enum:
+                - Genesis
+            objects:
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjectID'
+        - description: A system transaction marking the start of a series of transactions scheduled as part of a checkpoint
+          type: object
+          required:
+            - commit_timestamp_ms
+            - epoch
+            - kind
+            - round
+          properties:
+            commit_timestamp_ms:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            epoch:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            kind:
+              type: string
+              enum:
+                - ConsensusCommitPrologue
+            round:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - description: A series of transactions where the results of one transaction can be used in future transactions
+          type: object
+          required:
+            - inputs
+            - kind
+            - transactions
+          properties:
+            inputs:
+              description: Input objects or primitive values
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiCallArg'
+            kind:
+              type: string
+              enum:
+                - ProgrammableTransaction
+            transactions:
+              description: The transactions to be executed sequentially. A failure in any transaction will result in the failure of the entire programmable transaction block.
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiTransaction'
+        - description: A transaction which updates global authenticator state
+          type: object
+          required:
+            - epoch
+            - kind
+            - new_active_jwks
+            - round
+          properties:
+            epoch:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            kind:
+              type: string
+              enum:
+                - AuthenticatorStateUpdate
+            new_active_jwks:
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiActiveJwk'
+            round:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - description: A transaction which updates global randomness state
+          type: object
+          required:
+            - epoch
+            - kind
+            - random_bytes
+            - randomness_round
+          properties:
+            epoch:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            kind:
+              type: string
+              enum:
+                - RandomnessStateUpdate
+            random_bytes:
+              type: array
+              items:
+                type: integer
+                format: uint8
+                minimum: 0
+            randomness_round:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - description: The transaction which occurs only at the end of the epoch
+          type: object
+          required:
+            - kind
+            - transactions
+          properties:
+            kind:
+              type: string
+              enum:
+                - EndOfEpochTransaction
+            transactions:
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiEndOfEpochTransactionKind'
+        - type: object
+          required:
+            - commit_timestamp_ms
+            - consensus_commit_digest
+            - epoch
+            - kind
+            - round
+          properties:
+            commit_timestamp_ms:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            consensus_commit_digest:
+              $ref: '#/components/schemas/Digest'
+            epoch:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            kind:
+              type: string
+              enum:
+                - ConsensusCommitPrologueV2
+            round:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - commit_timestamp_ms
+            - consensus_commit_digest
+            - consensus_determined_version_assignments
+            - epoch
+            - kind
+            - round
+          properties:
+            commit_timestamp_ms:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            consensus_commit_digest:
+              $ref: '#/components/schemas/Digest'
+            consensus_determined_version_assignments:
+              $ref: '#/components/schemas/ConsensusDeterminedVersionAssignments'
+            epoch:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            kind:
+              type: string
+              enum:
+                - ConsensusCommitPrologueV3
+            round:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            sub_dag_index:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - additional_state_digest
+            - commit_timestamp_ms
+            - consensus_commit_digest
+            - consensus_determined_version_assignments
+            - epoch
+            - kind
+            - round
+          properties:
+            additional_state_digest:
+              $ref: '#/components/schemas/Digest'
+            commit_timestamp_ms:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            consensus_commit_digest:
+              $ref: '#/components/schemas/Digest'
+            consensus_determined_version_assignments:
+              $ref: '#/components/schemas/ConsensusDeterminedVersionAssignments'
+            epoch:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            kind:
+              type: string
+              enum:
+                - ConsensusCommitPrologueV4
+            round:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+            sub_dag_index:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - description: A series of commands where the results of one command can be used in future commands
+          type: object
+          required:
+            - inputs
+            - kind
+            - transactions
+          properties:
+            inputs:
+              description: Input objects or primitive values
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiCallArg'
+            kind:
+              type: string
+              enum:
+                - ProgrammableSystemTransaction
+            transactions:
+              description: The transactions to be executed sequentially. A failure in any transaction will result in the failure of the entire programmable transaction block.
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiTransaction'
+    TransactionBlockData:
+      oneOf:
+        - type: object
+          required:
+            - gasData
+            - messageVersion
+            - sender
+            - transaction
+          properties:
+            gasData:
+              $ref: '#/components/schemas/GasData'
+            messageVersion:
+              type: string
+              enum:
+                - v1
+            sender:
+              $ref: '#/components/schemas/SuiAddress'
+            transaction:
+              $ref: '#/components/schemas/TransactionBlockKind'
+    ZkLoginPublicIdentifier:
+      description: A wrapper struct to retrofit in [enum PublicKey] for zkLogin. Useful to construct [struct MultiSigPublicKey].
+      allOf:
+        - $ref: '#/components/schemas/Base64'
+    PublicKey:
+      oneOf:
+        - type: object
+          required:
+            - Ed25519
+          properties:
+            Ed25519:
+              $ref: '#/components/schemas/Base64'
+          additionalProperties: false
+        - type: object
+          required:
+            - Secp256k1
+          properties:
+            Secp256k1:
+              $ref: '#/components/schemas/Base64'
+          additionalProperties: false
+        - type: object
+          required:
+            - Secp256r1
+          properties:
+            Secp256r1:
+              $ref: '#/components/schemas/Base64'
+          additionalProperties: false
+        - type: object
+          required:
+            - ZkLogin
+          properties:
+            ZkLogin:
+              $ref: '#/components/schemas/ZkLoginPublicIdentifier'
+          additionalProperties: false
+        - type: object
+          required:
+            - Passkey
+          properties:
+            Passkey:
+              $ref: '#/components/schemas/Base64'
+          additionalProperties: false
+    MultiSigPublicKey:
+      description: The struct that contains the public key used for authenticating a MultiSig.
+      type: object
+      required:
+        - pk_map
+        - threshold
+      properties:
+        pk_map:
+          description: A list of public key and its corresponding weight.
+          type: array
+          items:
+            type: array
+            items:
+              oneOf:
+                - $ref: '#/components/schemas/PublicKey'
+                - type: integer
+                  format: uint8
+                  minimum: 0
+            maxItems: 2
+            minItems: 2
+        threshold:
+          description: If the total weight of the public keys corresponding to verified signatures is larger than threshold, the MultiSig is verified.
+          type: integer
+          format: uint16
+          minimum: 0
+    CompressedSignature:
+      description: Unlike [enum Signature], [enum CompressedSignature] does not contain public key.
+      oneOf:
+        - type: object
+          required:
+            - Ed25519
+          properties:
+            Ed25519:
+              $ref: '#/components/schemas/Base64'
+        - type: object
+          required:
+            - Secp256k1
+          properties:
+            Secp256k1:
+              $ref: '#/components/schemas/Base64'
+        - type: object
+          required:
+            - Secp256r1
+          properties:
+            Secp256r1:
+              $ref: '#/components/schemas/Base64'
+        - type: object
+          required:
+            - ZkLogin
+          properties:
+            ZkLogin:
+              $ref: '#/components/schemas/Base64'
+        - type: object
+          required:
+            - Passkey
+          properties:
+            Passkey:
+              $ref: '#/components/schemas/Base64'
+    MultiSig:
+      description: The struct that contains signatures and public keys necessary for authenticating a MultiSig.
+      type: object
+      required:
+        - bitmap
+        - multisig_pk
+        - sigs
+      properties:
+        bitmap:
+          description: A bitmap that indicates the position of which public key the signature should be authenticated with.
+          type: integer
+          format: uint16
+          minimum: 0
+        multisig_pk:
+          description: The public key encoded with each public key with its signature scheme used along with the corresponding weight.
+          allOf:
+            - $ref: '#/components/schemas/MultiSigPublicKey'
+        sigs:
+          description: The plain signature encoded with signature scheme.
+          type: array
+          items:
+            $ref: '#/components/schemas/CompressedSignature'
+    MultiSigPublicKeyLegacy:
+      description: Deprecated, use [struct MultiSigPublicKey] instead. The struct that contains the public key used for authenticating a MultiSig.
+      type: object
+      required:
+        - pk_map
+        - threshold
+      properties:
+        pk_map:
+          description: A list of public key and its corresponding weight.
+          type: array
+          items:
+            type: array
+            items:
+              oneOf:
+                - $ref: '#/components/schemas/PublicKey'
+                - type: integer
+                  format: uint8
+                  minimum: 0
+            maxItems: 2
+            minItems: 2
+        threshold:
+          description: If the total weight of the public keys corresponding to verified signatures is larger than threshold, the MultiSig is verified.
+          type: integer
+          format: uint16
+          minimum: 0
+    MultiSigLegacy:
+      description: Deprecated, use [struct MultiSig] instead. The struct that contains signatures and public keys necessary for authenticating a MultiSigLegacy.
+      type: object
+      required:
+        - bitmap
+        - multisig_pk
+        - sigs
+      properties:
+        bitmap:
+          description: A bitmap that indicates the position of which public key the signature should be authenticated with.
+          allOf:
+            - $ref: '#/components/schemas/Base64'
+        multisig_pk:
+          description: The public key encoded with each public key with its signature scheme used along with the corresponding weight.
+          allOf:
+            - $ref: '#/components/schemas/MultiSigPublicKeyLegacy'
+        sigs:
+          description: The plain signature encoded with signature scheme.
+          type: array
+          items:
+            $ref: '#/components/schemas/CompressedSignature'
+    Signature:
+      oneOf:
+        - type: object
+          required:
+            - Ed25519SuiSignature
+          properties:
+            Ed25519SuiSignature:
+              $ref: '#/components/schemas/Base64'
+          additionalProperties: false
+        - type: object
+          required:
+            - Secp256k1SuiSignature
+          properties:
+            Secp256k1SuiSignature:
+              $ref: '#/components/schemas/Base64'
+          additionalProperties: false
+        - type: object
+          required:
+            - Secp256r1SuiSignature
+          properties:
+            Secp256r1SuiSignature:
+              $ref: '#/components/schemas/Base64'
+          additionalProperties: false
+    Bn254FrElement:
+      description: A struct that stores a Bn254 Fr field element as 32 bytes.
+      type: string
+    Claim:
+      description: A claim consists of value and index_mod_4.
+      type: object
+      required:
+        - indexMod4
+        - value
+      properties:
+        indexMod4:
+          type: integer
+          format: uint8
+          minimum: 0
+        value:
+          type: string
+    Bn254FqElement:
+      description: A struct that stores a Bn254 Fq field element as 32 bytes.
+      type: string
+    ZkLoginProof:
+      description: The struct for zk login proof.
+      type: object
+      required:
+        - a
+        - b
+        - c
+      properties:
+        a:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bn254FqElement'
+        b:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Bn254FqElement'
+        c:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bn254FqElement'
+    ZkLoginInputs:
+      description: All inputs required for the zk login proof verification and other public inputs.
+      type: object
+      required:
+        - addressSeed
+        - headerBase64
+        - issBase64Details
+        - proofPoints
+      properties:
+        addressSeed:
+          $ref: '#/components/schemas/Bn254FrElement'
+        headerBase64:
+          type: string
+        issBase64Details:
+          $ref: '#/components/schemas/Claim'
+        proofPoints:
+          $ref: '#/components/schemas/ZkLoginProof'
+    ZkLoginAuthenticator:
+      description: An zk login authenticator with all the necessary fields.
+      type: object
+      required:
+        - inputs
+        - maxEpoch
+        - userSignature
+      properties:
+        inputs:
+          $ref: '#/components/schemas/ZkLoginInputs'
+        maxEpoch:
+          type: integer
+          format: uint64
+          minimum: 0
+        userSignature:
+          $ref: '#/components/schemas/Signature'
+    PasskeyAuthenticator:
+      description: An passkey authenticator with parsed fields. See field defition below. Can be initialized from [struct RawPasskeyAuthenticator].
+      type: object
+      required:
+        - authenticator_data
+        - client_data_json
+      properties:
+        authenticator_data:
+          description: '`authenticatorData` is a bytearray that encodes [Authenticator Data](https://www.w3.org/TR/webauthn-2/#sctn-authenticator-data) structure returned by the authenticator attestation response as is.'
+          type: array
+          items:
+            type: integer
+            format: uint8
+            minimum: 0
+        client_data_json:
+          description: '`clientDataJSON` contains a JSON-compatible UTF-8 encoded string of the client data which is passed to the authenticator by the client during the authentication request (see [CollectedClientData](https://www.w3.org/TR/webauthn-2/#dictdef-collectedclientdata))'
+          type: string
+    GenericSignature:
+      description: Due to the incompatibility of [enum Signature] (which dispatches a trait that assumes signature and pubkey bytes for verification), here we add a wrapper enum where member can just implement a lightweight [trait AuthenticatorTrait]. This way MultiSig (and future Authenticators) can implement its own `verify`.
+      oneOf:
+        - type: object
+          required:
+            - MultiSig
+          properties:
+            MultiSig:
+              $ref: '#/components/schemas/MultiSig'
+          additionalProperties: false
+        - type: object
+          required:
+            - MultiSigLegacy
+          properties:
+            MultiSigLegacy:
+              $ref: '#/components/schemas/MultiSigLegacy'
+          additionalProperties: false
+        - type: object
+          required:
+            - Signature
+          properties:
+            Signature:
+              $ref: '#/components/schemas/Signature'
+          additionalProperties: false
+        - type: object
+          required:
+            - ZkLoginAuthenticator
+          properties:
+            ZkLoginAuthenticator:
+              $ref: '#/components/schemas/ZkLoginAuthenticator'
+          additionalProperties: false
+        - type: object
+          required:
+            - PasskeyAuthenticator
+          properties:
+            PasskeyAuthenticator:
+              $ref: '#/components/schemas/PasskeyAuthenticator'
+          additionalProperties: false
+    TransactionBlock:
+      type: object
+      required:
+        - data
+        - txSignatures
+      properties:
+        data:
+          $ref: '#/components/schemas/TransactionBlockData'
+        txSignatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericSignature'
+    TransactionBlockResponse:
+      type: object
+      required:
+        - digest
+      properties:
+        balanceChanges:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/BalanceChange'
+        checkpoint:
+          description: The checkpoint number when this transaction was included and hence finalized. This is only returned in the read api, not in the transaction execution api.
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        confirmedLocalExecution:
+          type:
+            - boolean
+            - 'null'
+        digest:
+          $ref: '#/components/schemas/TransactionDigest'
+        effects:
+          $ref: '#/components/schemas/TransactionBlockEffects'
+        errors:
+          type: array
+          items:
+            type: string
+        events:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/Event'
+        objectChanges:
+          type:
+            - array
+            - 'null'
+          items:
+            $ref: '#/components/schemas/ObjectChange'
+        rawEffects:
+          type: array
+          items:
+            type: integer
+            format: uint8
+            minimum: 0
+        rawTransaction:
+          description: BCS encoded [SenderSignedData] that includes input object references returns empty array if `show_raw_transaction` is false
+          allOf:
+            - $ref: '#/components/schemas/Base64'
+        timestampMs:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        transaction:
+          description: Transaction input data
+          $ref: '#/components/schemas/TransactionBlock'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

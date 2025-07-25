@@ -1,0 +1,775 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getOwnedObjects
+      description: |
+        Return the list of objects owned by an address. Note that if the address owns more than `QUERY_MAX_RESULT_LIMIT` objects, the pagination is not accurate, because previous page may have been updated when the next page is fetched. Please use suix_queryObjects if this is a concern.
+      summary: suix_getOwnedObjects
+      operationId: suix_getOwnedObjects
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: suix_getOwnedObjects
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 4
+                  items:
+                    oneOf:
+                      - title: address
+                        $ref: '#/components/schemas/SuiAddress'
+                        description: The owner's Sui address
+                      - title: query
+                        $ref: '#/components/schemas/ObjectResponseQuery'
+                        description: The objects query criteria.
+                      - title: cursor
+                        $ref: '#/components/schemas/ObjectID'
+                        description: An optional paging cursor. If provided, the query will start from the next item after the specified cursor. Default to start from the first item if not specified.
+                      - title: limit
+                        type: integer
+                        description: Max number of items returned per page, default to [QUERY_MAX_RESULT_LIMIT] if not specified.
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: suix_getOwnedObjects
+                params:
+                  - '0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827'
+                  - filter:
+                      MatchAll:
+                        - StructType: 0x2::coin::Coin<0x2::sui::SUI>
+                        - AddressOwner: '0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827'
+                        - Version: '13488'
+                    options:
+                      showType: true
+                      showOwner: true
+                      showPreviousTransaction: true
+                      showDisplay: false
+                      showContent: false
+                      showBcs: false
+                      showStorageRebate: false
+                  - '0x0cd4bb4d4f520fe9bbf0cf1cebe3f2549412826c3c9261bff9786c240123749f'
+                  - 3
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: '#/components/schemas/Page_for_SuiObjectResponse_and_ObjectID'
+              example:
+                jsonrpc: '2.0'
+                result:
+                  data:
+                    - data:
+                        objectId: '0x0b37a91692359a98496738a58c17a9334aeacc435c70ab9635e47a277d8f8dd9'
+                        version: '13488'
+                        digest: FZzfCnKCSRW2jN9AwkiarjYQapViUQAh799aiRMZ4YC2
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        owner:
+                          AddressOwner: '0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827'
+                        previousTransaction: AJhAseKLEndWYT45FbvYGgCJQTqZP537xqNnthY9FqSa
+                        storageRebate: '100'
+                    - data:
+                        objectId: '0xd4feace07fc863a2eef286c3e95ed48e2c181bb65db5beaf7ea664b4ca6b744c'
+                        version: '13488'
+                        digest: 3cxBDcfnkVgtXWhnMnKKkMGtZdiEorUhb1vdp2DkVyfi
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        owner:
+                          AddressOwner: '0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827'
+                        previousTransaction: 8qCvxDHh5LtDfF95Ci9G7vvQN2P6y4v55S9xoKBYp7FM
+                        storageRebate: '100'
+                    - data:
+                        objectId: '0xe26860fac6839ce2d7ed7e6f29d276a1b4c23f2d9a9b6f0d8b2c17beace292b7'
+                        version: '13488'
+                        digest: 3tX9sgYC4A6nVKGjKEE5xxW6t4zkvDL9BwjuaxMg8arP
+                        type: 0x2::coin::Coin<0x2::sui::SUI>
+                        owner:
+                          AddressOwner: '0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827'
+                        previousTransaction: 5Ka3vDaDy9h5UYk3Maz3vssWHrhbcGXQgwg8fL2ygyTi
+                        storageRebate: '100'
+                  nextCursor: '0xe26860fac6839ce2d7ed7e6f29d276a1b4c23f2d9a9b6f0d8b2c17beace292b7'
+                  hasNextPage: true
+                id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Hex:
+      description: Hex string encoding.
+      type: string
+    SuiAddress:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    SuiObjectDataFilter:
+      oneOf:
+        - type: object
+          required:
+            - MatchAll
+          properties:
+            MatchAll:
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiObjectDataFilter'
+          additionalProperties: false
+        - type: object
+          required:
+            - MatchAny
+          properties:
+            MatchAny:
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiObjectDataFilter'
+          additionalProperties: false
+        - type: object
+          required:
+            - MatchNone
+          properties:
+            MatchNone:
+              type: array
+              items:
+                $ref: '#/components/schemas/SuiObjectDataFilter'
+          additionalProperties: false
+        - description: Query by type a specified Package.
+          type: object
+          required:
+            - Package
+          properties:
+            Package:
+              $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - description: Query by type a specified Move module.
+          type: object
+          required:
+            - MoveModule
+          properties:
+            MoveModule:
+              type: object
+              required:
+                - module
+                - package
+              properties:
+                module:
+                  description: the module name
+                  type: string
+                package:
+                  description: the Move package ID
+                  allOf:
+                    - $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - description: Query by type
+          type: object
+          required:
+            - StructType
+          properties:
+            StructType:
+              type: string
+          additionalProperties: false
+        - type: object
+          required:
+            - AddressOwner
+          properties:
+            AddressOwner:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - type: object
+          required:
+            - ObjectOwner
+          properties:
+            ObjectOwner:
+              $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - type: object
+          required:
+            - ObjectId
+          properties:
+            ObjectId:
+              $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - type: object
+          required:
+            - ObjectIds
+          properties:
+            ObjectIds:
+              type: array
+              items:
+                $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - type: object
+          required:
+            - Version
+          properties:
+            Version:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    BigInt_for_uint64:
+      type: string
+    ObjectDataOptions:
+      type: object
+      properties:
+        showBcs:
+          description: Whether to show the content in BCS format. Default to be False
+          default: false
+          type: boolean
+        showContent:
+          description: Whether to show the content(i.e., package content or Move struct content) of the object. Default to be False
+          default: false
+          type: boolean
+        showDisplay:
+          description: Whether to show the Display metadata of the object for frontend rendering. Default to be False
+          default: false
+          type: boolean
+        showOwner:
+          description: Whether to show the owner of the object. Default to be False
+          default: false
+          type: boolean
+        showPreviousTransaction:
+          description: Whether to show the previous transaction digest of the object. Default to be False
+          default: false
+          type: boolean
+        showStorageRebate:
+          description: Whether to show the storage rebate of the object. Default to be False
+          default: false
+          type: boolean
+        showType:
+          description: Whether to show the type of the object. Default to be False
+          default: false
+          type: boolean
+    ObjectResponseQuery:
+      type: object
+      properties:
+        filter:
+          description: If None, no filter will be applied
+          $ref: '#/components/schemas/SuiObjectDataFilter'
+        options:
+          description: config which fields to include in the response, by default only digest is included
+          $ref: '#/components/schemas/ObjectDataOptions'
+    Base64:
+      description: Base64 encoding
+      type: string
+    UpgradeInfo:
+      description: Upgraded package info for the linkage table
+      type: object
+      required:
+        - upgraded_id
+        - upgraded_version
+      properties:
+        upgraded_id:
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+          description: ID of the upgraded packages
+        upgraded_version:
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+          description: Version of the upgraded package
+    TypeOrigin:
+      description: Identifies a struct and the module it was defined in
+      type: object
+      required:
+        - datatype_name
+        - module_name
+        - package
+      properties:
+        datatype_name:
+          type: string
+        module_name:
+          type: string
+        package:
+          $ref: '#/components/schemas/ObjectID'
+    RawData:
+      oneOf:
+        - type: object
+          required:
+            - bcsBytes
+            - dataType
+            - hasPublicTransfer
+            - type
+            - version
+          properties:
+            bcsBytes:
+              $ref: '#/components/schemas/Base64'
+            dataType:
+              type: string
+              enum:
+                - moveObject
+            hasPublicTransfer:
+              type: boolean
+            type:
+              type: string
+            version:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - dataType
+            - id
+            - linkageTable
+            - moduleMap
+            - typeOriginTable
+            - version
+          properties:
+            dataType:
+              type: string
+              enum:
+                - package
+            id:
+              $ref: '#/components/schemas/ObjectID'
+            linkageTable:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/UpgradeInfo'
+            moduleMap:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/Base64'
+            typeOriginTable:
+              type: array
+              items:
+                $ref: '#/components/schemas/TypeOrigin'
+            version:
+              $ref: '#/components/schemas/BigInt_for_uint64'
+    MoveValue:
+      anyOf:
+        - type: integer
+          format: uint32
+          minimum: 0
+        - type: boolean
+        - $ref: '#/components/schemas/SuiAddress'
+        - type: array
+          items:
+            $ref: '#/components/schemas/MoveValue'
+        - type: string
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: '#/components/schemas/ObjectID'
+        - $ref: '#/components/schemas/MoveStruct'
+        - $ref: '#/components/schemas/MoveValue'
+        - $ref: '#/components/schemas/MoveVariant'
+    MoveStruct:
+      anyOf:
+        - type: array
+          items:
+            $ref: '#/components/schemas/MoveValue'
+        - type: object
+          required:
+            - fields
+            - type
+          properties:
+            fields:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/MoveValue'
+            type:
+              type: string
+        - type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MoveValue'
+    MoveVariant:
+      type: object
+      required:
+        - fields
+        - type
+        - variant
+      properties:
+        fields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MoveValue'
+        type:
+          type: string
+        variant:
+          type: string
+    Data:
+      oneOf:
+        - type: object
+          required:
+            - dataType
+            - fields
+            - hasPublicTransfer
+            - type
+          properties:
+            dataType:
+              type: string
+              enum:
+                - moveObject
+            fields:
+              $ref: '#/components/schemas/MoveStruct'
+            hasPublicTransfer:
+              type: boolean
+            type:
+              type: string
+        - type: object
+          required:
+            - dataType
+            - disassembled
+          properties:
+            dataType:
+              type: string
+              enum:
+                - package
+            disassembled:
+              type: object
+              additionalProperties: true
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    ObjectResponseError:
+      oneOf:
+        - type: object
+          required:
+            - code
+            - object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - notExists
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - parent_object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - dynamicFieldNotFound
+            parent_object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - digest
+            - object_id
+            - version
+          properties:
+            code:
+              type: string
+              enum:
+                - deleted
+            digest:
+              description: Base64 string representing the object digest
+              allOf:
+                - $ref: '#/components/schemas/Digest'
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+            version:
+              description: Object version.
+              allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - code
+          properties:
+            code:
+              type: string
+              enum:
+                - unknown
+        - type: object
+          required:
+            - code
+            - error
+          properties:
+            code:
+              type: string
+              enum:
+                - displayError
+            error:
+              type: string
+    DisplayFieldsResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: string
+        error:
+          $ref: '#/components/schemas/ObjectResponseError'
+    Owner:
+      oneOf:
+        - description: Object is exclusively owned by a single address, and is mutable.
+          type: object
+          required:
+            - AddressOwner
+          properties:
+            AddressOwner:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - description: Object is exclusively owned by a single object, and is mutable. The object ID is converted to SuiAddress as SuiAddress is universal.
+          type: object
+          required:
+            - ObjectOwner
+          properties:
+            ObjectOwner:
+              $ref: '#/components/schemas/SuiAddress'
+          additionalProperties: false
+        - description: Object is shared, can be used by any address, and is mutable.
+          type: object
+          required:
+            - Shared
+          properties:
+            Shared:
+              type: object
+              required:
+                - initial_shared_version
+              properties:
+                initial_shared_version:
+                  description: The version at which the object became shared
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+        - description: Object is immutable, and hence ownership doesn't matter.
+          type: string
+          enum:
+            - Immutable
+        - description: Object is exclusively owned by a single address and sequenced via consensus.
+          type: object
+          required:
+            - ConsensusAddressOwner
+          properties:
+            ConsensusAddressOwner:
+              type: object
+              required:
+                - owner
+                - start_version
+              properties:
+                owner:
+                  $ref: '#/components/schemas/SuiAddress'
+                start_version:
+                  description: The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes.
+                  allOf:
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
+          additionalProperties: false
+    TransactionDigest:
+      allOf:
+        - $ref: '#/components/schemas/Digest'
+      description: A transaction will have a (unique) digest.
+    SequenceNumber:
+      type: integer
+      format: uint64
+      minimum: 0
+    ObjectData:
+      type: object
+      required:
+        - digest
+        - objectId
+        - version
+      properties:
+        bcs:
+          description: Move object content or package content in BCS, default to be None unless SuiObjectDataOptions.showBcs is set to true
+          $ref: '#/components/schemas/RawData'
+        content:
+          description: Move object content or package content, default to be None unless SuiObjectDataOptions.showContent is set to true
+          $ref: '#/components/schemas/Data'
+        digest:
+          description: Base64 string representing the object digest
+          allOf:
+            - $ref: '#/components/schemas/Digest'
+        display:
+          description: The Display metadata for frontend UI rendering, default to be None unless SuiObjectDataOptions.showContent is set to true This can also be None if the struct type does not have Display defined See more details in <https://forums.sui.io/t/nft-object-display-proposal/4872>
+          $ref: '#/components/schemas/DisplayFieldsResponse'
+        objectId:
+          $ref: '#/components/schemas/ObjectID'
+        owner:
+          description: The owner of this object. Default to be None unless SuiObjectDataOptions.showOwner is set to true
+          $ref: '#/components/schemas/Owner'
+        previousTransaction:
+          description: The digest of the transaction that created or last mutated this object. Default to be None unless SuiObjectDataOptions.showPreviousTransaction is set to true
+          $ref: '#/components/schemas/TransactionDigest'
+        storageRebate:
+          description: The amount of SUI we would rebate if this object gets deleted. This number is re-calculated each time the object is mutated based on the present storage gas price.
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        type:
+          description: The type of the object. Default to be None unless SuiObjectDataOptions.showType is set to true
+          type: string
+        version:
+          description: Object version.
+          allOf:
+            - $ref: '#/components/schemas/SequenceNumber'
+    SuiObjectResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ObjectData'
+        error:
+          $ref: '#/components/schemas/ObjectResponseError'
+    Page_for_SuiObjectResponse_and_ObjectID:
+      description: '`next_cursor` points to the last item in the page; Reading with `next_cursor` will start from the next item after `next_cursor` if `next_cursor` is `Some`, otherwise it will start from the first item.'
+      type: object
+      required:
+        - data
+        - hasNextPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuiObjectResponse'
+        hasNextPage:
+          type: boolean
+        nextCursor:
+          $ref: '#/components/schemas/ObjectID'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

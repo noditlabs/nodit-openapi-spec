@@ -1,0 +1,387 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_getCheckpoint
+      description: |
+        Return a checkpoint
+      summary: sui_getCheckpoint
+      operationId: sui_getCheckpoint
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: sui_getCheckpoint
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    oneOf:
+                      - title: id
+                        $ref: '#/components/schemas/CheckpointId'
+                        description: Checkpoint identifier, can use either checkpoint digest, or checkpoint sequence number as input
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: sui_getCheckpoint
+                params:
+                  - '1000'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: '#/components/schemas/Checkpoint'
+              example:
+                jsonrpc: '2.0'
+                result:
+                  epoch: '5000'
+                  sequenceNumber: '1000'
+                  digest: G6Dtzr1ZSfHFhotGsTE3cLENa7L1ooe1BBvknAUsARbV
+                  networkTotalTransactions: '792385'
+                  previousDigest: 6tBy8RXZKrdrB4XkMQn7J3MNG4fQCo9XcRduFFvYrL5Z
+                  epochRollingGasCostSummary:
+                    computationCost: '0'
+                    storageCost: '0'
+                    storageRebate: '0'
+                    nonRefundableStorageFee: '0'
+                  timestampMs: '1676911928'
+                  transactions:
+                    - mN8YNBgVR3wB7vfXmjVgDRF4oqxVRRjzmJ6U4mzbq77
+                  checkpointCommitments: []
+                  validatorSignature: wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    BigInt_for_uint64:
+      type: string
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    CheckpointDigest:
+      description: Representation of a Checkpoint's digest
+      allOf:
+        - $ref: '#/components/schemas/Digest'
+    CheckpointId:
+      anyOf:
+        - $ref: '#/components/schemas/BigInt_for_uint64'
+        - $ref: '#/components/schemas/CheckpointDigest'
+    ECMHLiveObjectSetDigest:
+      description: The Sha256 digest of an EllipticCurveMultisetHash committing to the live object set.
+      type: object
+      required:
+        - digest
+      properties:
+        digest:
+          type: array
+          items:
+            type: integer
+            format: uint8
+            minimum: 0
+          maxItems: 32
+          minItems: 32
+    CheckpointCommitment:
+      oneOf:
+        - type: object
+          required:
+            - ECMHLiveObjectSetDigest
+          properties:
+            ECMHLiveObjectSetDigest:
+              $ref: '#/components/schemas/ECMHLiveObjectSetDigest'
+          additionalProperties: false
+    Base64:
+      description: Base64 encoding
+      type: string
+    AuthorityPublicKeyBytes:
+      description: Defines the compressed version of the public key that we pass around in Sui
+      allOf:
+        - $ref: '#/components/schemas/Base64'
+    EndOfEpochData:
+      type: object
+      required:
+        - epochCommitments
+        - nextEpochCommittee
+        - nextEpochProtocolVersion
+      properties:
+        epochCommitments:
+          description: Commitments to epoch specific state (e.g. live object set)
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckpointCommitment'
+        nextEpochCommittee:
+          description: next_epoch_committee is `Some` if and only if the current checkpoint is the last checkpoint of an epoch. Therefore next_epoch_committee can be used to pick the last checkpoint of an epoch, which is often useful to get epoch level summary stats like total gas cost of an epoch, or the total number of transactions from genesis to the end of an epoch. The committee is stored as a vector of validator pub key and stake pairs. The vector should be sorted based on the Committee data structure.
+          type: array
+          items:
+            type: array
+            items:
+              oneOf:
+                - $ref: '#/components/schemas/AuthorityPublicKeyBytes'
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+            maxItems: 2
+            minItems: 2
+        nextEpochProtocolVersion:
+          description: The protocol version that is in effect during the epoch that starts immediately after this checkpoint.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+    GasCostSummary:
+      description: |
+        Summary of the charges in a transaction. Storage is charged independently of computation. There are 3 parts to the storage charges:
+        `storage_cost`: it is the charge of storage at the time the transaction is executed. The cost of storage is the number of bytes of the objects being mutated multiplied by a variable storage cost per byte
+        `storage_rebate`: this is the amount a user gets back when manipulating an object. The `storage_rebate` is the `storage_cost` for an object minus fees.
+        `non_refundable_storage_fee`: not all the value of the object storage cost is given back to user and there is a small fraction that is kept by the system. This value tracks that charge.
+
+        When looking at a gas cost summary the amount charged to the user is `computation_cost + storage_cost - storage_rebate` and that is the amount that is deducted from the gas coins. `non_refundable_storage_fee` is collected from the objects being mutated/deleted and it is tracked by the system in storage funds.
+
+        Objects deleted, including the older versions of objects mutated, have the storage field on the objects added up to a pool of "potential rebate". This rebate then is reduced by the "nonrefundable rate" such that: `potential_rebate(storage cost of deleted/mutated objects) = storage_rebate + non_refundable_storage_fee`
+      type: object
+      required:
+        - computationCost
+        - nonRefundableStorageFee
+        - storageCost
+        - storageRebate
+      properties:
+        computationCost:
+          description: Cost of computation/execution
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        nonRefundableStorageFee:
+          description: The fee for the rebate. The portion of the storage rebate kept by the system.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        storageCost:
+          description: Storage cost, it's the sum of all storage cost for all objects created or mutated.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        storageRebate:
+          description: The amount of storage cost refunded to the user for all objects deleted or mutated in the transaction.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+    TransactionDigest:
+      allOf:
+        - $ref: '#/components/schemas/Digest'
+      description: A transaction will have a (unique) digest.
+    Checkpoint:
+      type: object
+      required:
+        - checkpointCommitments
+        - digest
+        - epoch
+        - epochRollingGasCostSummary
+        - networkTotalTransactions
+        - sequenceNumber
+        - timestampMs
+        - transactions
+        - validatorSignature
+      properties:
+        checkpointCommitments:
+          description: Commitments to checkpoint state
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckpointCommitment'
+        digest:
+          description: Checkpoint digest
+          allOf:
+            - $ref: '#/components/schemas/CheckpointDigest'
+        endOfEpochData:
+          $ref: '#/components/schemas/EndOfEpochData'
+          description: Present only on the final checkpoint of the epoch.
+        epoch:
+          description: Checkpoint's epoch ID
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        epochRollingGasCostSummary:
+          description: The running total gas costs of all transactions included in the current epoch so far until this checkpoint.
+          allOf:
+            - $ref: '#/components/schemas/GasCostSummary'
+        networkTotalTransactions:
+          description: Total number of transactions committed since genesis, including those in this checkpoint.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        previousDigest:
+          description: Digest of the previous checkpoint
+          $ref: '#/components/schemas/CheckpointDigest'
+        sequenceNumber:
+          description: Checkpoint sequence number
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        timestampMs:
+          description: Timestamp of the checkpoint - number of milliseconds from the Unix epoch Checkpoint timestamps are monotonic, but not strongly monotonic - subsequent checkpoints can have same timestamp if they originate from the same underlining consensus commit
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        transactions:
+          description: Transaction digests
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDigest'
+        validatorSignature:
+          description: Validator Signature
+          allOf:
+            - $ref: '#/components/schemas/Base64'
+    Hex:
+      description: Hex string encoding.
+      type: string
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

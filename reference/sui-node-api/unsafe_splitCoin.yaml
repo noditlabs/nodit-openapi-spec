@@ -1,0 +1,301 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - unsafe_splitCoin
+      description: |
+        Create an unsigned transaction to split a coin object into multiple coins.
+      summary: unsafe_splitCoin
+      operationId: unsafe_splitCoin
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: unsafe_splitCoin
+                params:
+                  type: array
+                  minItems: 4
+                  maxItems: 5
+                  items:
+                    oneOf:
+                      - title: signer
+                        $ref: '#/components/schemas/SuiAddress'
+                        description: The transaction signer's Sui address
+                      - title: coin_object_id
+                        $ref: '#/components/schemas/ObjectID'
+                        description: The coin object to be spilt
+                      - title: split_amounts
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BigInt_for_uint64'
+                        description: The amounts to split out from the coin
+                      - title: gas
+                        $ref: '#/components/schemas/ObjectID'
+                        description: Gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+                      - title: gas_budget
+                        $ref: '#/components/schemas/BigInt_for_uint64'
+                        description: The gas budget, the transaction will fail if the gas cost exceed the budget
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: '#/components/schemas/TransactionBlockBytes'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Hex:
+      description: Hex string encoding.
+      type: string
+    SuiAddress:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    BigInt_for_uint64:
+      type: string
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    SequenceNumber:
+      type: integer
+      format: uint64
+      minimum: 0
+    ObjectRef:
+      type: object
+      required:
+        - digest
+        - objectId
+        - version
+      properties:
+        digest:
+          description: Base64 string representing the object digest
+          allOf:
+            - $ref: '#/components/schemas/Digest'
+        objectId:
+          description: Hex code as string representing the object id
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        version:
+          description: Object version.
+          allOf:
+            - $ref: '#/components/schemas/SequenceNumber'
+    InputObjectKind:
+      oneOf:
+        - type: object
+          required:
+            - MovePackage
+          properties:
+            MovePackage:
+              $ref: '#/components/schemas/ObjectID'
+          additionalProperties: false
+        - type: object
+          required:
+            - ImmOrOwnedMoveObject
+          properties:
+            ImmOrOwnedMoveObject:
+              $ref: '#/components/schemas/ObjectRef'
+          additionalProperties: false
+        - type: object
+          required:
+            - SharedMoveObject
+          properties:
+            SharedMoveObject:
+              type: object
+              required:
+                - id
+                - initial_shared_version
+              properties:
+                id:
+                  $ref: '#/components/schemas/ObjectID'
+                initial_shared_version:
+                  $ref: '#/components/schemas/BigInt_for_uint64'
+                mutable:
+                  default: true
+                  type: boolean
+          additionalProperties: false
+    Base64:
+      description: Base64 encoding
+      type: string
+    TransactionBlockBytes:
+      type: object
+      required:
+        - gas
+        - inputObjects
+        - txBytes
+      properties:
+        gas:
+          description: the gas objects to be used
+          type: array
+          items:
+            $ref: '#/components/schemas/ObjectRef'
+        inputObjects:
+          description: objects to be used in this transaction
+          type: array
+          items:
+            $ref: '#/components/schemas/InputObjectKind'
+        txBytes:
+          description: BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
+          allOf:
+            - $ref: '#/components/schemas/Base64'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

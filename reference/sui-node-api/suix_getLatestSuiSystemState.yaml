@@ -1,0 +1,561 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getLatestSuiSystemState
+      description: |
+        Return the latest SUI system state object on-chain.
+      summary: suix_getLatestSuiSystemState
+      operationId: suix_getLatestSuiSystemState
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: suix_getLatestSuiSystemState
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 0
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: suix_getLatestSuiSystemState
+                params: []
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: '#/components/schemas/SuiSystemStateSummary'
+              example:
+                jsonrpc: '2.0'
+                result: some_system_state
+                id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    BigInt_for_uint64:
+      type: string
+    Hex:
+      description: Hex string encoding.
+      type: string
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    Base64:
+      description: Base64 encoding
+      type: string
+    SuiAddress:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    SuiValidatorSummary:
+      description: This is the JSON-RPC type for the SUI validator. It flattens all inner structures to top-level fields so that they are decoupled from the internal definitions.
+      type: object
+      required:
+        - commissionRate
+        - description
+        - exchangeRatesId
+        - exchangeRatesSize
+        - gasPrice
+        - imageUrl
+        - name
+        - netAddress
+        - networkPubkeyBytes
+        - nextEpochCommissionRate
+        - nextEpochGasPrice
+        - nextEpochStake
+        - operationCapId
+        - p2pAddress
+        - pendingPoolTokenWithdraw
+        - pendingStake
+        - pendingTotalSuiWithdraw
+        - poolTokenBalance
+        - primaryAddress
+        - projectUrl
+        - proofOfPossessionBytes
+        - protocolPubkeyBytes
+        - rewardsPool
+        - stakingPoolId
+        - stakingPoolSuiBalance
+        - suiAddress
+        - votingPower
+        - workerAddress
+        - workerPubkeyBytes
+      properties:
+        commissionRate:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        description:
+          type: string
+        exchangeRatesId:
+          description: ID of the exchange rate table object.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        exchangeRatesSize:
+          description: Number of exchange rates in the table.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        gasPrice:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        imageUrl:
+          type: string
+        name:
+          type: string
+        netAddress:
+          type: string
+        networkPubkeyBytes:
+          $ref: '#/components/schemas/Base64'
+        nextEpochCommissionRate:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        nextEpochGasPrice:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        nextEpochNetAddress:
+          type:
+            - string
+            - 'null'
+        nextEpochNetworkPubkeyBytes:
+          $ref: '#/components/schemas/Base64'
+        nextEpochP2pAddress:
+          type:
+            - string
+            - 'null'
+        nextEpochPrimaryAddress:
+          type:
+            - string
+            - 'null'
+        nextEpochProofOfPossession:
+          $ref: '#/components/schemas/Base64'
+        nextEpochProtocolPubkeyBytes:
+          $ref: '#/components/schemas/Base64'
+        nextEpochStake:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        nextEpochWorkerAddress:
+          type:
+            - string
+            - 'null'
+        nextEpochWorkerPubkeyBytes:
+          $ref: '#/components/schemas/Base64'
+        operationCapId:
+          $ref: '#/components/schemas/ObjectID'
+        p2pAddress:
+          type: string
+        pendingPoolTokenWithdraw:
+          description: Pending pool token withdrawn during the current epoch, emptied at epoch boundaries.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        pendingStake:
+          description: Pending stake amount for this epoch.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        pendingTotalSuiWithdraw:
+          description: Pending stake withdrawn during the current epoch, emptied at epoch boundaries.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        poolTokenBalance:
+          description: Total number of pool tokens issued by the pool.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        primaryAddress:
+          type: string
+        projectUrl:
+          type: string
+        proofOfPossessionBytes:
+          $ref: '#/components/schemas/Base64'
+        protocolPubkeyBytes:
+          $ref: '#/components/schemas/Base64'
+        rewardsPool:
+          description: The epoch stake rewards will be added here at the end of each epoch.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        stakingPoolActivationEpoch:
+          description: The epoch at which this pool became active.
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        stakingPoolDeactivationEpoch:
+          description: The epoch at which this staking pool ceased to be active. `None` = {pre-active, active},
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        stakingPoolId:
+          description: ID of the staking pool object.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        stakingPoolSuiBalance:
+          description: The total number of SUI tokens in this pool.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        suiAddress:
+          $ref: '#/components/schemas/SuiAddress'
+        votingPower:
+          $ref: '#/components/schemas/BigInt_for_uint64'
+        workerAddress:
+          type: string
+        workerPubkeyBytes:
+          $ref: '#/components/schemas/Base64'
+    SuiSystemStateSummary:
+      description: This is the JSON-RPC type for the SUI system state object. It flattens all fields to make them top-level fields such that it as minimum dependencies to the internal data structures of the SUI system state type.
+      type: object
+      required:
+        - activeValidators
+        - atRiskValidators
+        - epoch
+        - epochDurationMs
+        - epochStartTimestampMs
+        - inactivePoolsId
+        - inactivePoolsSize
+        - maxValidatorCount
+        - minValidatorJoiningStake
+        - pendingActiveValidatorsId
+        - pendingActiveValidatorsSize
+        - pendingRemovals
+        - protocolVersion
+        - referenceGasPrice
+        - safeMode
+        - safeModeComputationRewards
+        - safeModeNonRefundableStorageFee
+        - safeModeStorageRebates
+        - safeModeStorageRewards
+        - stakeSubsidyBalance
+        - stakeSubsidyCurrentDistributionAmount
+        - stakeSubsidyDecreaseRate
+        - stakeSubsidyDistributionCounter
+        - stakeSubsidyPeriodLength
+        - stakeSubsidyStartEpoch
+        - stakingPoolMappingsId
+        - stakingPoolMappingsSize
+        - storageFundNonRefundableBalance
+        - storageFundTotalObjectStorageRebates
+        - systemStateVersion
+        - totalStake
+        - validatorCandidatesId
+        - validatorCandidatesSize
+        - validatorLowStakeGracePeriod
+        - validatorLowStakeThreshold
+        - validatorReportRecords
+        - validatorVeryLowStakeThreshold
+      properties:
+        activeValidators:
+          description: The list of active validators in the current epoch.
+          type: array
+          items:
+            $ref: '#/components/schemas/SuiValidatorSummary'
+        atRiskValidators:
+          description: Map storing the number of epochs for which each validator has been below the low stake threshold.
+          type: array
+          items:
+            type: array
+            items:
+              oneOf:
+                - $ref: '#/components/schemas/SuiAddress'
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+            maxItems: 2
+            minItems: 2
+        epoch:
+          description: The current epoch ID, starting from 0.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        epochDurationMs:
+          description: The duration of an epoch, in milliseconds.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        epochStartTimestampMs:
+          description: Unix timestamp of the current epoch start
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        inactivePoolsId:
+          description: ID of the object that maps from a staking pool ID to the inactive validator that has that pool as its staking pool.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        inactivePoolsSize:
+          description: Number of inactive staking pools.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        maxValidatorCount:
+          description: Maximum number of active validators at any moment. We do not allow the number of validators in any epoch to go above this.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        minValidatorJoiningStake:
+          description: Lower-bound on the amount of stake required to become a validator.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        pendingActiveValidatorsId:
+          description: ID of the object that contains the list of new validators that will join at the end of the epoch.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        pendingActiveValidatorsSize:
+          description: Number of new validators that will join at the end of the epoch.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        pendingRemovals:
+          description: Removal requests from the validators. Each element is an index pointing to `active_validators`.
+          type: array
+          items:
+            $ref: '#/components/schemas/BigInt_for_uint64'
+        protocolVersion:
+          description: The current protocol version, starting from 1.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        referenceGasPrice:
+          description: The reference gas price for the current epoch.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        safeMode:
+          description: Whether the system is running in a downgraded safe mode due to a non-recoverable bug. This is set whenever we failed to execute advance_epoch, and ended up executing advance_epoch_safe_mode. It can be reset once we are able to successfully execute advance_epoch.
+          type: boolean
+        safeModeComputationRewards:
+          description: Amount of computation rewards accumulated (and not yet distributed) during safe mode.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        safeModeNonRefundableStorageFee:
+          description: Amount of non-refundable storage fee accumulated during safe mode.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        safeModeStorageRebates:
+          description: Amount of storage rebates accumulated (and not yet burned) during safe mode.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        safeModeStorageRewards:
+          description: Amount of storage rewards accumulated (and not yet distributed) during safe mode.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        stakeSubsidyBalance:
+          description: Balance of SUI set aside for stake subsidies that will be drawn down over time.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        stakeSubsidyCurrentDistributionAmount:
+          description: The amount of stake subsidy to be drawn down per epoch. This amount decays and decreases over time.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        stakeSubsidyDecreaseRate:
+          description: The rate at which the distribution amount decays at the end of each period. Expressed in basis points.
+          type: integer
+          format: uint16
+          minimum: 0
+        stakeSubsidyDistributionCounter:
+          description: This counter may be different from the current epoch number if in some epochs we decide to skip the subsidy.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        stakeSubsidyPeriodLength:
+          description: Number of distributions to occur before the distribution amount decays.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        stakeSubsidyStartEpoch:
+          description: The starting epoch in which stake subsidies start being paid out
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        stakingPoolMappingsId:
+          description: ID of the object that maps from staking pool's ID to the sui address of a validator.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        stakingPoolMappingsSize:
+          description: Number of staking pool mappings.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        storageFundNonRefundableBalance:
+          description: The non-refundable portion of the storage fund coming from storage reinvestment, non-refundable storage rebates and any leftover staking rewards.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        storageFundTotalObjectStorageRebates:
+          description: The storage rebates of all the objects on-chain stored in the storage fund.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        systemStateVersion:
+          description: The current version of the system state data structure type.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        totalStake:
+          description: Total amount of stake from all active validators at the beginning of the epoch.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        validatorCandidatesId:
+          description: ID of the object that stores preactive validators, mapping their addresses to their `Validator` structs.
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        validatorCandidatesSize:
+          description: Number of preactive validators.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        validatorLowStakeGracePeriod:
+          description: A validator can have stake below `validator_low_stake_threshold` for this many epochs before being kicked out.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        validatorLowStakeThreshold:
+          description: Validators with stake amount below `validator_low_stake_threshold` are considered to have low stake and will be escorted out of the validator set after being below this threshold for more than `validator_low_stake_grace_period` number of epochs.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+        validatorReportRecords:
+          description: A map storing the records of validator reporting each other.
+          type: array
+          items:
+            type: array
+            items:
+              oneOf:
+                - $ref: '#/components/schemas/SuiAddress'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/SuiAddress'
+            maxItems: 2
+            minItems: 2
+        validatorVeryLowStakeThreshold:
+          description: Validators with stake below `validator_very_low_stake_threshold` will be removed immediately at epoch change, no grace period.
+          allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

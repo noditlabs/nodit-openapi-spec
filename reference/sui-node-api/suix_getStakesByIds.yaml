@@ -1,0 +1,250 @@
+openapi: 3.1.0
+info:
+  title: SUI Node API
+  version: 1.2.10
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        description: The network to use for the API.
+        enum:
+          - sui-mainnet
+        default: sui-mainnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getStakesByIds
+      description: |
+        Return one or more [DelegatedStake]. If a Stake was withdrawn its status will be Unstaked.
+      summary: suix_getStakesByIds
+      operationId: suix_getStakesByIds
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: suix_getStakesByIds
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    oneOf:
+                      - title: staked_sui_ids
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ObjectID'
+                        description: Array of staked SUI IDs
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: suix_getStakesByIds
+                params:
+                  - - '0x378423de90ed03b694cecf443c72b5387b29a731d26d98108d7abc4902107d7d'
+                    - '0x6a8e0f8fea6fda5488462e58724c034462b6064a08845e2ae2942fe7c4ee816d'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DelegatedStake'
+              example:
+                jsonrpc: '2.0'
+                result:
+                  validatorAddress: '0x754eb2eed23e6c6bb32c89fe1f21ab588374445e72e0402aea014b2956105799'
+                  stakingPool: '0x63ee67e81398729f87d81d62f399c041b0f8d0938923ea7e3917608ee62df437'
+                  stakes:
+                    - stakedSuiId: '0x378423de90ed03b694cecf443c72b5387b29a731d26d98108d7abc4902107d7d'
+                      stakeRequestEpoch: '62'
+                      stakeActiveEpoch: '63'
+                      principal: '200000000000'
+                      status: Active
+                      estimatedReward: '520000000'
+                    - stakedSuiId: '0x6a8e0f8fea6fda5488462e58724c034462b6064a08845e2ae2942fe7c4ee816d'
+                      stakeRequestEpoch: '244'
+                      stakeActiveEpoch: '245'
+                      principal: '200000000000'
+                      status: Unstaked
+                id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Hex:
+      description: Hex string encoding.
+      type: string
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    SuiAddress:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    DelegatedStake:
+      type: object
+      required:
+        - stakes
+        - stakingPool
+        - validatorAddress
+      properties:
+        stakes:
+          type: array
+        stakingPool:
+          $ref: '#/components/schemas/ObjectID'
+          description: Staking pool object id.
+        validatorAddress:
+          $ref: '#/components/schemas/SuiAddress'
+          description: Validator's Address.
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    BigInt_for_uint64:
+      type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - notExists
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - dynamic_field_not_found
+                  parent_object_id:
+                    $ref: '#/components/schemas/ObjectID'
+              - type: object
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - deleted
+                  digest:
+                    $ref: '#/components/schemas/Digest'
+                  object_id:
+                    $ref: '#/components/schemas/ObjectID'
+                  version:
+                    $ref: '#/components/schemas/BigInt_for_uint64'
+              - type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - unknown
+              - type: object
+                required:
+                  - code
+                  - error
+                properties:
+                  code:
+                    type: string
+                    enum:
+                      - displayError
+                  error:
+                    type: string
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests
