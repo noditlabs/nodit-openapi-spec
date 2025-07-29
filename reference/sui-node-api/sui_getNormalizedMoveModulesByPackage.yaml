@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_getNormalizedMoveModulesByPackage
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return structured representations of all modules in the given package
       summary: sui_getNormalizedMoveModulesByPackage
-      operationId: sui_getNormalizedMoveModulesByPackage
+      operationId: sui-sui_getNormalizedMoveModulesByPackage
       parameters: []
       requestBody:
         required: true

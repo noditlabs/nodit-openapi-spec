@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: unsafe_splitCoinEqual
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Create an unsigned transaction to split a coin object into multiple equal-size coins.
       summary: unsafe_splitCoinEqual
-      operationId: unsafe_splitCoinEqual
+      operationId: sui-unsafe_splitCoinEqual
       parameters: []
       requestBody:
         required: true

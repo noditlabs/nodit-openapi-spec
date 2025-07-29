@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: unsafe_mergeCoins
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Create an unsigned transaction to merge multiple coins into one coin.
       summary: unsafe_mergeCoins
-      operationId: unsafe_mergeCoins
+      operationId: sui-unsafe_mergeCoins
       parameters: []
       requestBody:
         required: true

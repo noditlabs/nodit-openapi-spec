@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: suix_getStakesByIds
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return one or more [DelegatedStake]. If a Stake was withdrawn its status will be Unstaked.
       summary: suix_getStakesByIds
-      operationId: suix_getStakesByIds
+      operationId: sui-suix_getStakesByIds
       parameters: []
       requestBody:
         required: true

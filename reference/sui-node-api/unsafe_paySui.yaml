@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: unsafe_paySui
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -24,7 +24,7 @@ paths:
         3. the balance of the first input coin after tx is sum(input_coins) - sum(amounts) - actual_gas_cost
         4. all other input coints other than the first one are deleted.
       summary: unsafe_paySui
-      operationId: unsafe_paySui
+      operationId: sui-unsafe_paySui
       parameters: []
       requestBody:
         required: true

@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_tryGetPastObject
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Note there is no software-level guarantee/SLA that objects with past versions can be retrieved by this API, even if the object and version exists/existed. The result may vary across nodes depending on their pruning policies. Return the object information for a specified version
       summary: sui_tryGetPastObject
-      operationId: sui_tryGetPastObject
+      operationId: sui-sui_tryGetPastObject
       parameters: []
       requestBody:
         required: true

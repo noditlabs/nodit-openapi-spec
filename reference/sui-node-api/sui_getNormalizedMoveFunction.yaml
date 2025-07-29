@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_getNormalizedMoveFunction
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return a structured representation of Move function
       summary: sui_getNormalizedMoveFunction
-      operationId: sui_getNormalizedMoveFunction
+      operationId: sui-sui_getNormalizedMoveFunction
       parameters: []
       requestBody:
         required: true

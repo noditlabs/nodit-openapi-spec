@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: suix_resolveNameServiceAddress
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return the resolved address given resolver and name
       summary: suix_resolveNameServiceAddress
-      operationId: suix_resolveNameServiceAddress
+      operationId: sui-suix_resolveNameServiceAddress
       parameters: []
       requestBody:
         required: true

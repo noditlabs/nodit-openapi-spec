@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_dryRunTransactionBlock
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return transaction execution effects including the gas cost summary, while the effects are not committed to the chain.
       summary: sui_dryRunTransactionBlock
-      operationId: sui_dryRunTransactionBlock
+      operationId: sui-sui_dryRunTransactionBlock
       parameters: []
       requestBody:
         required: true

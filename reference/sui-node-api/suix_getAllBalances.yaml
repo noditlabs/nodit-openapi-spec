@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: suix_getAllBalances
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return the total coin balance for all coin type, owned by the address owner.
       summary: suix_getAllBalances
-      operationId: suix_getAllBalances
+      operationId: sui-suix_getAllBalances
       parameters: []
       requestBody:
         required: true

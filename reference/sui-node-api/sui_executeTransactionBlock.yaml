@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_executeTransactionBlock
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -25,7 +25,7 @@ paths:
         However if the node fails to execute the transaction locally in a timely manner, a bool type in the response is set to false to indicated the case.
         request_type is default to be WaitForEffectsCert unless options.show_events or options.show_effects is true
       summary: sui_executeTransactionBlock
-      operationId: sui_executeTransactionBlock
+      operationId: sui-sui_executeTransactionBlock
       parameters: []
       requestBody:
         required: true

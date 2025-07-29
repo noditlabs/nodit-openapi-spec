@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_getNormalizedMoveStruct
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return a structured representation of Move struct
       summary: sui_getNormalizedMoveStruct
-      operationId: sui_getNormalizedMoveStruct
+      operationId: sui-sui_getNormalizedMoveStruct
       parameters: []
       requestBody:
         required: true

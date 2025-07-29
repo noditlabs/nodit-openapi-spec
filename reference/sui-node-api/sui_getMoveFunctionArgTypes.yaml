@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_getMoveFunctionArgTypes
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return the argument types of a Move function, based on normalized Type.
       summary: sui_getMoveFunctionArgTypes
-      operationId: sui_getMoveFunctionArgTypes
+      operationId: sui-sui_getMoveFunctionArgTypes
       parameters: []
       requestBody:
         required: true

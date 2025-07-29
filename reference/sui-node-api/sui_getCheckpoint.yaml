@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_getCheckpoint
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return a checkpoint
       summary: sui_getCheckpoint
-      operationId: sui_getCheckpoint
+      operationId: sui-sui_getCheckpoint
       parameters: []
       requestBody:
         required: true

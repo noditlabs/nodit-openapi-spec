@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: suix_subscribeEvent
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Subscribe to a stream of Sui event
       summary: suix_subscribeEvent
-      operationId: suix_subscribeEvent
+      operationId: sui-suix_subscribeEvent
       parameters: []
       requestBody:
         required: true

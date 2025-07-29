@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: sui_getTransactionBlock
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return the transaction response object.
       summary: sui_getTransactionBlock
-      operationId: sui_getTransactionBlock
+      operationId: sui-sui_getTransactionBlock
       parameters: []
       requestBody:
         required: true

@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: unsafe_moveCall
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Create an unsigned transaction to execute a Move call on the network, by calling the specified function in the module of a given package.
       summary: unsafe_moveCall
-      operationId: unsafe_moveCall
+      operationId: sui-unsafe_moveCall
       parameters: []
       requestBody:
         required: true

@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: unsafe_batchTransaction
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Create an unsigned batched transaction.
       summary: unsafe_batchTransaction
-      operationId: unsafe_batchTransaction
+      operationId: sui-unsafe_batchTransaction
       parameters: []
       requestBody:
         required: true

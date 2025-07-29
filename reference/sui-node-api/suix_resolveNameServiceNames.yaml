@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: suix_resolveNameServiceNames
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return the resolved names given address, if multiple names are resolved, the first one is the primary name.
       summary: suix_resolveNameServiceNames
-      operationId: suix_resolveNameServiceNames
+      operationId: sui-suix_resolveNameServiceNames
       parameters: []
       requestBody:
         required: true

@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: SUI Node API
+  title: suix_getDynamicFieldObject
   version: 1.2.10
 servers:
   - url: https://{sui-network}.nodit.io
@@ -20,7 +20,7 @@ paths:
       description: |
         Return the dynamic field object information for a specified object
       summary: suix_getDynamicFieldObject
-      operationId: suix_getDynamicFieldObject
+      operationId: sui-suix_getDynamicFieldObject
       parameters: []
       requestBody:
         required: true
