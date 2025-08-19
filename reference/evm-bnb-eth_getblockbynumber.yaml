@@ -1,0 +1,212 @@
+openapi: 3.1.0
+info:
+  title: evm-bnb-eth_getBlockByNumber
+  version: 1.2.14
+servers:
+  - url: https://{bnb-network}.nodit.io
+    variables:
+      bnb-network:
+        default: bnb-mainnet
+        enum:
+          - bnb-mainnet
+          - bnb-mainnet
+          - bnb-testnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-bnb-eth_getBlockByNumber
+      description: "블록 넘버를 입력하여 특정 블록의 정보를 조회합니다.\n\t\t\t\t\t\n\n> 🚧 응답 시간이 오래 걸리나요? 트랜잭션을 함께 요청하면 응답시간이 길어질 수 있습니다!\n>\n> 특정 블록에 대한 모든 정보를 요청할 때, 해당 블록에 많은 트랜잭션이 포함된 경우 응답 시간이 길어질 수 있습니다.\n> 만약 빠른 응답을 원한다면 요청 시 블록의 트랜잭션을 제외하고 블록 헤더만 요청하세요 (include transactions=false).\n"
+      summary: eth_getBlockByNumber
+      operationId: bnb-eth_getBlockByNumber
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_getBlockByNumber
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Number or Tag
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 넘버 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                      - title: Include Transactions
+                        type: boolean
+                        default: false
+                        description: 트랜잭션을 포함할지 여부를 나타냅니다. true로 설정하면 트랜잭션을 포함한 결과를 반환합니다.
+                  minItems: 2
+                  maxItems: 2
+                  default:
+                    - '0x1076B5A'
+                    - false
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `block number or block tag`: 조회하고자 하는 블록 넘버를 16진수 문자열
+                    형식으로 입력합니다. "earliest", "latest", "pending" 등의 블록 태그를 입력할 수도
+                    있습니다.
+
+                    2. `includeTransactions` : 블록 조회시 해당 블록에 포함된 모든 트랜잭션 정보를 함께
+                    조회할지 여부를 Boolean 형식으로 입력합니다. true로 입력한 경우 모든 트랜잭션을 포함하며,
+                    false로 입력하는 경우 포함하지 않습니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  baseFeePerGas: '0xb25ce488f'
+                  difficulty: '0x0'
+                  extraData: '0x6265617665726275696c642e6f7267'
+                  gasLimit: '0x1c9c380'
+                  gasUsed: '0x9d6057'
+                  hash: >-
+                    0x59f63e3840e0f4a1659074c1a4021e881a268a52d31958688da1d66bfbf6d2ca
+                  logsBloom: >-
+                    0x44ac510200a6014110057376a14d5485001541a84893289ee0c31013e08c8464d59145a90c002333650031500911057202a28300888128d11e40fc13c7b419010850000879cf8eac3dc3c2c8484ec630585188043a440c502c2455e692d21410d2b8af22f2814c8110a430318402884502181e0c083105a5920e63d8100e070a2e22a214556c080240cd8050056083276d208c8591011dbc443530f2d6f8bf044f9843da708065196e9a63d488a985480f940a44ae821a8b26ab0e0a38993041c98d868a0715a8f1000741c102019441610000a8e3a45a312814712a01436b5f90b6a0087581d581c204649a10184c350332821d9a780b47188f12f4d0791c4c
+                  miner: '0x388c818ca8b9251b393131c08a736a67ccb19297'
+                  mixHash: >-
+                    0xece1eb0b690ac889dcc9827dc80c87be317b50092ba0d5853619a004176393aa
+                  nonce: '0x0000000000000000'
+                  number: '0x1076b5a'
+                  parentHash: >-
+                    0x78e316d93c059503a17ac843d1d4a99ad638f4d312e22d5eb4f88845d675982b
+                  receiptsRoot: >-
+                    0xcf8924b0179ce08d6a1ae59ed4fa840ef8744dba0c249e476b7080d2c5af974e
+                  sha3Uncles: >-
+                    0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347
+                  size: '0x25c46'
+                  stateRoot: >-
+                    0x58fe9dd8d65183497e88f7a5e5603721806563ed41999bbff153d2c358df603e
+                  timestamp: '0x6461d323'
+                  totalDifficulty: '0xc70d815d562d3cfa955'
+                  transactions:
+                    - >-
+                      0xf3b9303a4149fed1a61438c737264d7d2ca9c33a94c2174506b84192998d9000
+                    - >-
+                      0xfe5c51e3c60b41d1f4e58914356c895923cee931096bd1474b04ab7fd8e93be7
+                    - >-
+                      0xd5fbb985d3d72f990c0e25a37d065c180c4c22f51e1be6304bf85463b11cf02b
+                    - >-
+                      0xc654141dad3b63c4fcf015ed573ff6310d4b0395a9ccdde8a08a27cedb638626
+                    - >-
+                      0xf0dfb4b0ee42f47bcfc641f47b1df323d73c14ab8f5e26022f56ca8352b4804c
+                    - >-
+                      0xf00b3b2fb2f58a4fea4e52477dda6785392f93bdd3a535300d02e0426c7d33bf
+                  transactionsRoot: >-
+                    0x33ea85c37a76ea540ac2c4f5cff2245c08ad5b57a9fe3a4bda3d5159a4a8549d
+                  uncles: []
+                  withdrawals:
+                    - index: '0x37cda6'
+                      validatorIndex: '0x7387b'
+                      address: '0x48bbf1c68037bf35b0eb090f1b5e0fa52f690502'
+                      amount: '0xbc27d7'
+                    - index: '0x37cda7'
+                      validatorIndex: '0x7387c'
+                      address: '0x48bbf1c68037bf35b0eb090f1b5e0fa52f690502'
+                      amount: '0xbd4f74'
+                  withdrawalsRoot: >-
+                    0xfc59eb2b12a8b3b8f5f8cfb03f1c335734883d17edd226cf10d68e2b32b908df
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

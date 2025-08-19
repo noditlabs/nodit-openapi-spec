@@ -116,6 +116,11 @@ export const supportedChains: ChainInfo[] = [
     mainnet: "mainnet",
     testnet: [],
   },
+  {
+    protocol: "bnb",
+    mainnet: "mainnet",
+    testnet: ["mainnet", "testnet"],
+  },
 ];
 
 export const supportedApisChains: SupportedApis[] = [
@@ -1607,6 +1612,73 @@ export const supportedApisChains: SupportedApis[] = [
     // chiliz
     nodeApi: [],
     // chiliz
+    webhookApi: [],
+  },
+  {
+    chain: "bnb",
+    streamApi: false,
+    web3DataApi: [],
+    nodeApi: [
+      {
+        category: "eth",
+        endpoints: [
+          "eth_blockNumber",
+          "eth_call",
+          "eth_chainId",
+          "eth_createAccessList",
+          "eth_estimateGas",
+          "eth_feeHistory",
+          "eth_gasPrice",
+          "eth_getBalance",
+          "eth_getBlockByHash",
+          "eth_getBlockByNumber",
+          "eth_getBlockReceipts",
+          "eth_getBlockTransactionCountByHash",
+          "eth_getBlockTransactionCountByNumber",
+          "eth_getCode",
+          "eth_getFilterChanges",
+          "eth_getFilterLogs",
+          "eth_getLogs",
+          "eth_getProof",
+          "eth_getStorageAt",
+          "eth_getTransactionByBlockHashAndIndex",
+          "eth_getTransactionByBlockNumberAndIndex",
+          "eth_getTransactionByHash",
+          "eth_getTransactionCount",
+          "eth_getTransactionReceipt",
+          "eth_getUncleByBlockHashAndIndex",
+          "eth_getUncleByBlockNumberAndIndex",
+          "eth_getUncleCountByBlockHash",
+          "eth_getUncleCountByBlockNumber",
+          "eth_maxPriorityFeePerGas",
+          "eth_newBlockFilter",
+          "eth_newFilter",
+          "eth_newPendingTransactionFilter",
+          "eth_sendRawTransaction",
+          "eth_uninstallFilter",
+          "eth_subscribe",
+          "eth_unsubscribe",
+        ],
+      },
+      {
+        category: "net",
+        endpoints: ["net_listening", "net_version"],
+      },
+      {
+        category: "web3",
+        endpoints: ["web3_clientVersion", "web3_sha3"],
+      },
+      { category: "trace", endpoints: [] },
+      {
+        category: "debug",
+        endpoints: [
+          "debug_traceBlockByHash",
+          "debug_traceBlockByNumber",
+          "debug_traceCall",
+          "debug_traceTransaction",
+        ],
+      },
+    ],
     webhookApi: [],
   },
 ];

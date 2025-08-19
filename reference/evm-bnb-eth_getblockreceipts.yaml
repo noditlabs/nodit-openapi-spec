@@ -1,0 +1,211 @@
+openapi: 3.1.0
+info:
+  title: evm-bnb-eth_getBlockReceipts
+  version: 1.2.14
+servers:
+  - url: https://{bnb-network}.nodit.io
+    variables:
+      bnb-network:
+        default: bnb-mainnet
+        enum:
+          - bnb-mainnet
+          - bnb-mainnet
+          - bnb-testnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-bnb-eth_getBlockReceipts
+      description: "블록 해시를 입력하여 해당 블록의 Receipt를 조회합니다.\n\t\t\t\t\t\n\n> 🚧 응답 시간이 오래 걸리시나요? 블록 내 트랜잭션 수에 따라 응답 시간이 길어질 수 있습니다!\n>\n> eth_getBlockReceipts는 특정 블록에 포함된 모든 트랜잭션의 실행 결과(receipts)를 한 번에 조회합니다. 이때 트랜잭션 수가 많거나 실행 결과가 복잡한 경우, 응답 시간이 지연될 수 있습니다.\n>\n> 빠른 응답을 원하신다면 다음 권장사항을 참고하세요:\n>\n> - 특정 트랜잭션만 필요한 경우, eth_getTransactionReceipt를 사용하여 원하는 트랜잭션의 실행 결과만 개별 조회하는 것을 권장합니다.\n"
+      summary: eth_getBlockReceipts
+      operationId: bnb-eth_getBlockReceipts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_getBlockReceipts
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Identifier
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Hash
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]{64}
+                            default: >-
+                              0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                            description: >-
+                              블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로
+                              표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 해시, 블록 넘버, 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 해시: 64자리 16진수 문자열 (ex.
+                          "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                  minItems: 1
+                  maxItems: 1
+                  default:
+                    - latest
+                  description: "다음 파라미터들을 타입에 맞게 배열로 입력합니다.\n1. `block identifier` - 조회 대상 블록 식별자로 블록 넘버, 블록 해시, 블록 태그 중 하나를 입력할 수 있습니다. \n\t- 블록 넘버: 16진수 문자열 (ex. \"0x1\")\n\t- 블록 해시: 64자리 16진수 문자열 (ex. \"0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48\")]\n\t- 블록 태그: enum 문자열 (ex. \"latest\", \"earliest\", \"pending\")"
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  - blockHash: >-
+                      0xf30beb3b775df15a6260eabffcb36829d5f9ced5a9c7ea2ca05be9164851d2a9
+                    blockNumber: '0x1076fc6'
+                    contractAddress: null
+                    cumulativeGasUsed: '0x32b59'
+                    effectiveGasPrice: '0x99a077c25'
+                    from: '0xd99b5603addd1306b56e9fcc001ebe65956d1e31'
+                    gasUsed: '0x32b59'
+                    logs:
+                      - address: '0x000000000022d473030f116ddee9f6b43ac78ba3'
+                        topics:
+                          - >-
+                            0xc6a377bfc4eb120024a8ac08eef205be16b817020812c73223e81d1bdb9708ec
+                          - >-
+                            0x000000000000000000000000d99b5603addd1306b56e9fcc001ebe65956d1e31
+                          - >-
+                            0x0000000000000000000000000d58df0929b6baf8ed231f3fa672f0e5dcd665f7
+                          - >-
+                            0x000000000000000000000000ef1c6e67703c7bd7107eed8303fbe6ec2554bf6b
+                        data: >-
+                          0x000000000000000000000000ffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000648995c20000000000000000000000000000000000000000000000000000000000000000
+                        blockNumber: '0x1076fc6'
+                        transactionHash: >-
+                          0xe9bb07a140494db1d6f0a02f95e0804e520db1fd80bc541d95d4711e20e76e20
+                        transactionIndex: '0x0'
+                        blockHash: >-
+                          0xf30beb3b775df15a6260eabffcb36829d5f9ced5a9c7ea2ca05be9164851d2a9
+                        logIndex: '0x0'
+                        removed: false
+                      - address: '0x0d58df0929b6baf8ed231f3fa672f0e5dcd665f7'
+                        topics:
+                          - >-
+                            0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef
+                          - >-
+                            0x000000000000000000000000d99b5603addd1306b56e9fcc001ebe65956d1e31
+                          - >-
+                            0x0000000000000000000000003bcfd7f139a4286a37aabff1cbde1447e90a6d57
+                        data: >-
+                          0x0000000000000000000000000000000000000000000000656357415e66f0de16
+                        blockNumber: '0x1076fc6'
+                        transactionHash: >-
+                          0xe9bb07a140494db1d6f0a02f95e0804e520db1fd80bc541d95d4711e20e76e20
+                        transactionIndex: '0x0'
+                        blockHash: >-
+                          0xf30beb3b775df15a6260eabffcb36829d5f9ced5a9c7ea2ca05be9164851d2a9
+                        logIndex: '0x1'
+                        removed: false
+                    logsBloom: >-
+                      0x00210000000000000000000080000000000000000000000020001000000000000000020000000000800000000000000002014000880000000000000000280000000000000000000000004008000000201800000000400800000000000008040200000000000000000000000000000000400000000000040000000010000000000000004020000000000000000000000000000000000000080000004000001000020800000000000000000000000000000400000000000000400000100000000000000002000000000000000000000000400000000000001000000002000000000010200000000000000000000000000000000000000000000000000080000400
+                    status: '0x1'
+                    to: '0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b'
+                    transactionHash: >-
+                      0xe9bb07a140494db1d6f0a02f95e0804e520db1fd80bc541d95d4711e20e76e20
+                    transactionIndex: '0x0'
+                    type: '0x2'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.
