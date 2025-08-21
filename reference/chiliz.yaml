@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: chiliz
-  version: 1.2.10
+  version: 1.2.13
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -503,7 +503,7 @@ paths:
                         - totalBalance
                         - uniqueBalance
                       properties:
-                        ownerAddress: &ref_21
+                        ownerAddress: &ref_22
                           type: string
                           description: 소유자 주소를 나타내는 필드입니다.
                           pattern: ^0[xX][0-9a-fA-F]{40}$
@@ -1404,7 +1404,7 @@ paths:
                         형태로 입력할 수 있습니다.
                       pattern: ^0[xX][0-9a-fA-F]{40}$
                       default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                    relation: &ref_23
+                    relation: &ref_24
                       type: string
                       description: |-
                         조회 대상 계정 주소가 송신자 또는 수신자에 속한 트랜잭션만 필터링하기 위한 파라미터입니다.  
@@ -1415,6 +1415,8 @@ paths:
                         - from
                         - to
                         - both
+                      pattern: from|to|both
+                      default: both
                     contractAddresses: *ref_13
                     fromBlock: &ref_14
                       type: string
@@ -1521,6 +1523,12 @@ paths:
                         응답에 value가 0인 결과를 포함하는지 여부를 지정하는 파라미터입니다. 더 빠른 응답을 원한다면
                         이 파라미터를 true로 설정하세요.
                       default: false
+                    withFunction: &ref_20
+                      type: boolean
+                      description: >-
+                        응답에 function 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한
+                        경우, 응답속도가 느려질 수 있습니다.
+                      default: false
       responses:
         '200':
           description: Successful Response
@@ -1554,7 +1562,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - &ref_20
+                        - &ref_21
                           type: object
                           required:
                             - from
@@ -1604,6 +1612,49 @@ paths:
                               description: >-
                                 토큰 전송 트랜잭션의 배치 인덱스를 나타내는 필드입니다. 이 필드는 ERC1155 토큰
                                 전송에 대한 응답에만 포함됩니다.
+                            function:
+                              type: object
+                              description: >-
+                                Transfer가 포함된 트랜잭션에서 호출된 함수의 정보를 나타내는 필드입니다. 이
+                                필드는 withFunction 파라미터에 true를 입력한 경우에만 응답에 포함됩니다.
+                              required:
+                                - selector
+                                - input
+                              properties:
+                                selector: &ref_30
+                                  type: string
+                                  description: >-
+                                    호출된 함수를 식별하는 4바이트 함수 셀렉터 값입니다. 함수 셀렉터는 함수
+                                    시그니처를 Keccak-256 해싱한 결과의 앞 4바이트를 의미합니다. 0x로
+                                    시작하는 8자리의 16진수 문자열 형태로 제공됩니다.
+                                  pattern: ^0[xX][0-9a-fA-F]{8}
+                                name:
+                                  type: string
+                                  description: 호출 함수의 이름을 나타내는 필드입니다.
+                                signature:
+                                  type: string
+                                  description: '호출 함수의 시그니처를 나타내는 필드입니다. '
+                                args:
+                                  type: array
+                                  description: 호출 함수의 인자를 나타내는 필드입니다.
+                                  items: &ref_29
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: 인자의 이름을 나타내는 필드입니다.
+                                      type:
+                                        type: string
+                                        description: 인자의 타입을 나타내는 필드입니다.
+                                      value:
+                                        type: string
+                                        description: 인자의 값을 나타내는 필드입니다.
+                                input:
+                                  type: string
+                                  description: >-
+                                    함수의 입력 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열
+                                    형태로 제공됩니다.
+                                  pattern: ^0[xX][0-9a-fA-F]+$
                         - type: object
                           properties:
                             contract:
@@ -2138,6 +2189,7 @@ paths:
                   properties:
                     withMetadata: *ref_18
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -2171,7 +2223,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -2715,6 +2767,7 @@ paths:
                   properties:
                     withMetadata: *ref_18
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -2748,7 +2801,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -2859,6 +2912,7 @@ paths:
                   properties:
                     withMetadata: *ref_18
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -2892,7 +2946,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -3481,13 +3535,13 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - &ref_22
+                        - &ref_23
                           type: object
                           required:
                             - ownerAddress
                             - balance
                           properties:
-                            ownerAddress: *ref_21
+                            ownerAddress: *ref_22
                             balance:
                               type: string
                               description: 잔고 나타내는 필드입니다.
@@ -3758,8 +3812,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
@@ -4383,7 +4437,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_22
+                    items: *ref_23
               example:
                 rpp: 10
                 cursor: >-
@@ -4420,7 +4474,7 @@ paths:
         - api_key: []
       tags:
         - Token API
-      description: >+
+      description: >
         입력한 ERC20 토큰 컨트랙트에서 발행한 Token의 온체인 마켓 가격을 조회합니다. 다수의 컨트랙트를 조회할 수 있으며, 최대
         100개의 컨트랙트를 조회할 수 있습니다.
 
@@ -4430,8 +4484,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
@@ -4448,9 +4502,6 @@ paths:
         > 이 API에서 제공되는 토큰 가격은 CoinMarketCap의 데이터를 기반으로 합니다. 가격 정보는 일정 주기로 갱신되기
         때문에 실시간 가격과 차이가 있을 수 있습니다. 또한, CoinMarketCap에 등록되지 않은 토큰을 조회할 경우 빈 배열이
         반환됩니다.
-
-
-
       summary: Get Token Prices by Contracts
       operationId: chiliz-getTokenPricesByContracts
       parameters:
@@ -4654,7 +4705,7 @@ paths:
                         형태로 입력할 수 있습니다.
                       pattern: ^0[xX][0-9a-fA-F]{40}$
                       default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                    relation: *ref_23
+                    relation: *ref_24
                     contractAddresses: *ref_13
                     fromBlock: *ref_14
                     toBlock: *ref_15
@@ -4666,6 +4717,7 @@ paths:
                 - type: object
                   properties:
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -4699,7 +4751,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -4983,6 +5035,7 @@ paths:
                 - type: object
                   properties:
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -5016,7 +5069,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -5297,6 +5350,7 @@ paths:
                 - type: object
                   properties:
                     withZeroValue: *ref_19
+                    withFunction: *ref_20
       responses:
         '200':
           description: Successful Response
@@ -5330,7 +5384,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_20
+                        - *ref_21
                         - type: object
                           properties:
                             contract:
@@ -5641,7 +5695,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_22
+                        - *ref_23
                         - type: object
                           properties:
                             contract:
@@ -5947,25 +6001,23 @@ paths:
         - api_key: []
       tags:
         - Token API
-      description: >+
-        ERC20 토큰 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다. 
+      description: >
+        ERC20 토큰 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다.
+
 
 
         > 🚧 429 에러가 발생했나요? 구독 중인 플랜을 확인하세요!
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
 
         > 👉 [Compute Unit Costs 페이지로
         이동하기](https://developer.nodit.io/docs/usage-measuringcu)
-
-
-
       summary: Search Token Contract Metadata by Keyword
       operationId: chiliz-searchTokenContractMetadataByKeyword
       parameters:
@@ -6200,7 +6252,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema: *ref_22
+              schema: *ref_23
               example:
                 ownerAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                 balance: '1085515662023271641379'
@@ -6266,7 +6318,7 @@ paths:
             application/json:
               schema:
                 type: object
-                required: &ref_24
+                required: &ref_25
                   - hash
                   - number
                   - timestamp
@@ -6287,7 +6339,7 @@ paths:
                   - sha3Uncles
                   - transactionCount
                   - transactions
-                properties: &ref_25
+                properties: &ref_26
                   hash:
                     type: string
                     description: 블록 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
@@ -6563,10 +6615,9 @@ paths:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
-                      allOf:
-                        - type: object
-                          required: *ref_24
-                          properties: *ref_25
+                      type: object
+                      required: *ref_25
+                      properties: *ref_26
               example:
                 rpp: 20
                 cursor: >-
@@ -7255,9 +7306,23 @@ paths:
         - api_key: []
       tags:
         - Blockchain API
-      description: |+
+      description: >
         특정 Account와 관련된 internal transaction 리스트를 조회합니다.
 
+
+
+        > 🚧 429 에러가 발생했나요? 구독 중인 플랜을 확인하세요!
+
+        > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
+
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
+
+        > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
+        필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
+
+        > 👉 [Compute Unit Costs 페이지로
+        이동하기](https://developer.nodit.io/docs/usage-measuringcu)
       summary: Get Internal Transactions By Account
       operationId: chiliz-getInternalTransactionsByAccount
       parameters:
@@ -7295,7 +7360,7 @@ paths:
                         형태로 입력할 수 있습니다.
                       pattern: ^0[xX][0-9a-fA-F]{40}$
                       default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                    relation: *ref_23
+                    relation: *ref_24
                     fromBlock: *ref_14
                     toBlock: *ref_15
                     fromDate: *ref_16
@@ -7306,7 +7371,7 @@ paths:
                 - type: object
                   properties:
                     withZeroValue: *ref_19
-                    withExternalTransaction: &ref_26
+                    withExternalTransaction: &ref_27
                       type: boolean
                       description: >-
                         응답에 external transaction 포함 여부를 결정하는 파라미터입니다. external
@@ -7345,7 +7410,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: &ref_27
+                    items: &ref_28
                       type: object
                       required: []
                       properties:
@@ -7636,7 +7701,7 @@ paths:
                 - type: object
                   properties:
                     withZeroValue: *ref_19
-                    withExternalTransaction: *ref_26
+                    withExternalTransaction: *ref_27
       responses:
         '200':
           description: Successful Response
@@ -7668,7 +7733,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_27
+                    items: *ref_28
               example:
                 rpp: 10
                 page: 1
@@ -7957,13 +8022,13 @@ paths:
                       pattern: ^0[xX][0-9a-fA-F]{64}$
                       default: >-
                         0x1632ac1627903e586c8ea0b1c134908c34ee95e84face9a303abd63686eb2022
-                    withLogs: &ref_29
+                    withLogs: &ref_31
                       type: boolean
                       description: >-
                         응답에 logs 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한 경우,
                         응답속도가 느려질 수 있습니다.
                       default: false
-                    withDecode: &ref_30
+                    withDecode: &ref_32
                       type: boolean
                       description: >-
                         응답에 decodedInput, decodedLog 필드의 포함 여부를 지정하는 파라미터입니다. 이
@@ -7982,7 +8047,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - &ref_31
+                  - &ref_33
                     type: object
                     required:
                       - transactionHash
@@ -8065,24 +8130,8 @@ paths:
                             description: 트랜잭션의 함수 시그니처를 나타내는 필드입니다.
                           args:
                             type: array
-                            items: &ref_28
-                              type: object
-                              properties:
-                                name:
-                                  type: string
-                                  description: 인자의 이름을 나타내는 필드입니다.
-                                type:
-                                  type: string
-                                  description: 인자의 타입을 나타내는 필드입니다.
-                                value:
-                                  type: string
-                                  description: 인자의 값을 나타내는 필드입니다.
-                      functionSelector:
-                        type: string
-                        description: >-
-                          트랜잭션에서 호출한 함수의 selector를 나타내는 필드입니다. 0x로 시작하는 8자리 16진수
-                          문자열 형태로 제공됩니다.
-                        pattern: ^0[xX][0-9a-fA-F]{8}
+                            items: *ref_29
+                      functionSelector: *ref_30
                       nonce:
                         type: string
                         description: >-
@@ -8251,7 +8300,7 @@ paths:
                     properties:
                       logs:
                         type: object
-                        required: &ref_32
+                        required: &ref_34
                           - contractAddress
                           - transactionHash
                           - transactionIndex
@@ -8261,53 +8310,53 @@ paths:
                           - logIndex
                           - removed
                           - topics
-                        properties: &ref_33
-                          contractAddress: &ref_35
+                        properties: &ref_35
+                          contractAddress: &ref_37
                             type: string
                             description: >-
                               로그를 생성한 컨트랙트 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수
                               문자열 형태로 제공됩니다.
                             pattern: ^0[xX][0-9a-fA-F]{40}$
-                          transactionHash: &ref_36
+                          transactionHash: &ref_38
                             type: string
                             description: >-
                               로그를 생성한 트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수
                               문자열 형태로 제공됩니다.
                             pattern: ^0[xX][0-9a-fA-F]{64}$
-                          transactionIndex: &ref_37
+                          transactionIndex: &ref_39
                             type: string
                             description: >-
                               로그를 생성한 트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를 나타냅니다.
                               10진수 문자열 형태로 제공됩니다.
                             pattern: ^[0-9]+$
-                          blockHash: &ref_38
+                          blockHash: &ref_40
                             type: string
                             description: >-
                               로그를 생성한 블록의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열
                               형태로 제공됩니다.
                             pattern: ^0[xX][0-9a-fA-F]{64}
-                          blockNumber: &ref_39
+                          blockNumber: &ref_41
                             type: integer
                             description: 로그를 생성한 블록 번호를 나타내는 필드입니다.
                             pattern: ^[0-9]+$
-                          data: &ref_40
+                          data: &ref_42
                             type: string
                             description: >-
                               로그의 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열 형태로 제공됩니다.
                               이 필드는 로그의 이벤트 데이터를 나타냅니다.
                             pattern: ^0[xX][0-9a-fA-F]+$
-                          logIndex: &ref_41
+                          logIndex: &ref_43
                             type: string
                             description: >-
                               로그의 인덱스를 나타내는 필드입니다. 트랜잭션에서 발생한 이벤트의 순서를 의미합니다.
                               10진수 문자열 형태로 제공됩니다.
                             pattern: ^[0-9]+$
-                          removed: &ref_42
+                          removed: &ref_44
                             type: boolean
                             description: >-
                               로그가 제거되었는지 여부를 나타내는 필드입니다. 체인의 재구성(Reorg)으로 인해 로그가
                               제거된 경우 true를 반환합니다.
-                          topics: &ref_43
+                          topics: &ref_45
                             type: array
                             description: 인덱스된 로그의 인자를 나타내는 필드입니다. 최대 4개의 토픽을 가질 수 있습니다.
                             items:
@@ -8339,7 +8388,8 @@ paths:
                                 description: 로그의 이벤트 해시를 나타내는 필드입니다.
                               args:
                                 type: array
-                                items: *ref_28
+                                description: 로그의 인자를 나타내는 필드입니다.
+                                items: *ref_29
               example:
                 transactionHash: >-
                   0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -8571,7 +8621,7 @@ paths:
                         형태로 입력할 수 있습니다.
                       pattern: ^0[xX][0-9a-fA-F]{40}$
                       default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                    relation: *ref_23
+                    relation: *ref_24
                     fromBlock: *ref_14
                     toBlock: *ref_15
                     fromDate: *ref_16
@@ -8581,8 +8631,8 @@ paths:
                 - *ref_8
                 - type: object
                   properties:
-                    withLogs: *ref_29
-                    withDecode: *ref_30
+                    withLogs: *ref_31
+                    withDecode: *ref_32
               required:
                 - accountAddress
       responses:
@@ -8618,15 +8668,15 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_31
+                        - *ref_33
                         - type: object
                           properties:
                             logs:
                               type: array
-                              items: &ref_34
+                              items: &ref_36
                                 type: object
-                                required: *ref_32
-                                properties: *ref_33
+                                required: *ref_34
+                                properties: *ref_35
               example:
                 rpp: 10
                 page: 1
@@ -9392,8 +9442,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
@@ -9450,8 +9500,8 @@ paths:
                     - transactionHashes
                 - type: object
                   properties:
-                    withLogs: *ref_29
-                    withDecode: *ref_30
+                    withLogs: *ref_31
+                    withDecode: *ref_32
       responses:
         '200':
           description: Successful Response
@@ -9461,12 +9511,12 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - *ref_31
+                    - *ref_33
                     - type: object
                       properties:
                         logs:
                           type: array
-                          items: *ref_34
+                          items: *ref_36
               example:
                 - transactionHash: >-
                     0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -9781,8 +9831,8 @@ paths:
                 - *ref_8
                 - type: object
                   properties:
-                    withLogs: *ref_29
-                    withDecode: *ref_30
+                    withLogs: *ref_31
+                    withDecode: *ref_32
       responses:
         '200':
           description: Successful Response
@@ -9816,12 +9866,12 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_31
+                        - *ref_33
                         - type: object
                           properties:
                             logs:
                               type: array
-                              items: *ref_34
+                              items: *ref_36
               example:
                 rpp: 10
                 page: 1
@@ -10681,8 +10731,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
@@ -10796,15 +10846,15 @@ paths:
                         - removed
                         - topics
                       properties:
-                        contractAddress: *ref_35
-                        transactionHash: *ref_36
-                        transactionIndex: *ref_37
-                        blockHash: *ref_38
-                        blockNumber: *ref_39
-                        data: *ref_40
-                        logIndex: *ref_41
-                        removed: *ref_42
-                        topics: *ref_43
+                        contractAddress: *ref_37
+                        transactionHash: *ref_38
+                        transactionIndex: *ref_39
+                        blockHash: *ref_40
+                        blockNumber: *ref_41
+                        data: *ref_42
+                        logIndex: *ref_43
+                        removed: *ref_44
+                        topics: *ref_45
               example:
                 rpp: 5
                 page: 1

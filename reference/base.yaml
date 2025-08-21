@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: base
-  version: 1.2.11
+  version: 1.2.13
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -1422,6 +1422,8 @@ paths:
                         - from
                         - to
                         - both
+                      pattern: from|to|both
+                      default: both
                     contractAddresses: *ref_13
                     fromBlock: &ref_14
                       type: string
@@ -3821,8 +3823,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
@@ -4488,7 +4490,7 @@ paths:
         - api_key: []
       tags:
         - Token API
-      description: >+
+      description: >
         입력한 ERC20 토큰 컨트랙트에서 발행한 Token의 온체인 마켓 가격을 조회합니다. 다수의 컨트랙트를 조회할 수 있으며, 최대
         100개의 컨트랙트를 조회할 수 있습니다.
 
@@ -4498,8 +4500,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
@@ -4516,9 +4518,6 @@ paths:
         > 이 API에서 제공되는 토큰 가격은 CoinMarketCap의 데이터를 기반으로 합니다. 가격 정보는 일정 주기로 갱신되기
         때문에 실시간 가격과 차이가 있을 수 있습니다. 또한, CoinMarketCap에 등록되지 않은 토큰을 조회할 경우 빈 배열이
         반환됩니다.
-
-
-
       summary: Get Token Prices by Contracts
       operationId: base-getTokenPricesByContracts
       parameters:
@@ -6023,25 +6022,23 @@ paths:
         - api_key: []
       tags:
         - Token API
-      description: >+
-        ERC20 토큰 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다. 
+      description: >
+        ERC20 토큰 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다.
+
 
 
         > 🚧 429 에러가 발생했나요? 구독 중인 플랜을 확인하세요!
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
 
         > 👉 [Compute Unit Costs 페이지로
         이동하기](https://developer.nodit.io/docs/usage-measuringcu)
-
-
-
       summary: Search Token Contract Metadata by Keyword
       operationId: base-searchTokenContractMetadataByKeyword
       parameters:
@@ -6643,10 +6640,9 @@ paths:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
-                      allOf:
-                        - type: object
-                          required: *ref_25
-                          properties: *ref_26
+                      type: object
+                      required: *ref_25
+                      properties: *ref_26
               example:
                 rpp: 20
                 cursor: >-
@@ -7336,9 +7332,23 @@ paths:
         - api_key: []
       tags:
         - Blockchain API
-      description: |+
+      description: >
         특정 Account와 관련된 internal transaction 리스트를 조회합니다.
 
+
+
+        > 🚧 429 에러가 발생했나요? 구독 중인 플랜을 확인하세요!
+
+        > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
+
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
+
+        > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
+        필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
+
+        > 👉 [Compute Unit Costs 페이지로
+        이동하기](https://developer.nodit.io/docs/usage-measuringcu)
       summary: Get Internal Transactions By Account
       operationId: base-getInternalTransactionsByAccount
       parameters:
@@ -9464,8 +9474,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
@@ -10756,8 +10766,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
