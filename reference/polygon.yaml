@@ -1628,7 +1628,7 @@ paths:
                                 - selector
                                 - input
                               properties:
-                                selector: &ref_28
+                                selector: &ref_30
                                   type: string
                                   description: >-
                                     호출된 함수를 식별하는 4바이트 함수 셀렉터 값입니다. 함수 셀렉터는 함수
@@ -1644,7 +1644,7 @@ paths:
                                 args:
                                   type: array
                                   description: 호출 함수의 인자를 나타내는 필드입니다.
-                                  items: &ref_27
+                                  items: &ref_29
                                     type: object
                                     properties:
                                       name:
@@ -7326,6 +7326,542 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
+  /{protocol}/{network}/blockchain/getInternalTransactionsByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: >
+        특정 Account와 관련된 internal transaction 리스트를 조회합니다.
+
+
+
+        > 🚧 429 에러가 발생했나요? 구독 중인 플랜을 확인하세요!
+
+        > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
+
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
+
+        > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
+        필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!
+
+        > 👉 [Compute Unit Costs 페이지로
+        이동하기](https://developer.nodit.io/docs/usage-measuringcu)
+      summary: Get Internal Transactions By Account
+      operationId: polygon-getInternalTransactionsByAccount
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - polygon
+            default: polygon
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+              - amoy
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    accountAddress:
+                      type: string
+                      description: >-
+                        조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열
+                        형태로 입력할 수 있습니다.
+                      pattern: ^0[xX][0-9a-fA-F]{40}$
+                      default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                    relation: *ref_24
+                    fromBlock: *ref_14
+                    toBlock: *ref_15
+                    fromDate: *ref_16
+                    toDate: *ref_17
+                  required:
+                    - accountAddress
+                - *ref_8
+                - type: object
+                  properties:
+                    withZeroValue: *ref_19
+                    withExternalTransaction: &ref_27
+                      type: boolean
+                      description: >-
+                        응답에 external transaction 포함 여부를 결정하는 파라미터입니다. external
+                        transaction은 internal transaction과 동일한 형식으로 반환되며, trace
+                        index가 0으로 표기됩니다. 이 파라미터를 true로 입력한 경우, external
+                        transaction을 포함하며 응답속도가 느려질 수 있습니다.
+                      default: false
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  page:
+                    type: integer
+                    description: >-
+                      page 파라미터에 지정된 페이지 번호를 나타내는 필드입니다. 이 필드는 page 파라미터에 0보다 큰
+                      값을 입력한 경우에만 응답에 포함됩니다.
+                  rpp:
+                    type: integer
+                    description: rpp 파라미터에 지정된 페이지당 결과 수를 나타내는 필드입니다.
+                  cursor:
+                    type: string
+                    description: >-
+                      cursor 페이지네이션을 위한 필드로, 다음 페이지의 데이터를 로드하기 위해 다음 요청에 제공해야 하는
+                      값입니다.
+                  count:
+                    type: integer
+                    description: >-
+                      요청한 데이터의 총 개수를 나타내는 필드입니다. 이 필드는 withCount 파라미터에 true를 입력한
+                      경우에만 응답에 포함됩니다.
+                  items:
+                    type: array
+                    description: 조회된 데이터의 목록을 나타내는 필드입니다.
+                    items: &ref_28
+                      type: object
+                      required: []
+                      properties:
+                        traceId:
+                          type: string
+                          description: >-
+                            트랜잭션의 트레이스 ID를 나타내는 필드입니다. 트랜잭션의 깊이와 호출 순서에 따라 고유한
+                            값을 가집니다.
+
+
+                            네이밍 규칙:
+                            `call_{blockNumber}_{transactionIndex}_{depth1's
+                            callOrder}_{depth2's callOrder}_{...}`
+                        traceIndex:
+                          type: integer
+                          description: >-
+                            트랜잭션의 트레이스 인덱스를 나타내는 필드입니다. external transaction의 경우
+                            0을 반환합니다.
+                        transactionHash:
+                          type: string
+                          description: >-
+                            트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로
+                            제공됩니다.
+                          pattern: ^0[xX][0-9a-fA-F]{64}$
+                        transactionIndex:
+                          type: string
+                          description: >-
+                            트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를 나타냅니다. 10진수 문자열
+                            형태로 제공됩니다.
+                          pattern: ^[0-9]+$
+                        from:
+                          type: string
+                          description: >-
+                            트랜잭션을 발생시킨 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수 문자열
+                            형태로 제공됩니다.
+                          pattern: ^0[xX][0-9a-fA-F]{40}$
+                        to:
+                          type: string
+                          description: >-
+                            트랜잭션의 수신 주소를 나타내는 필드입니다. 컨트랙트 생성 트랜잭션의 경우, 이 필드는 생성된
+                            컨트랙트 주소를 반환합니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 제공됩니다.
+                          pattern: ^0[xX][0-9a-fA-F]{40}$
+                        value:
+                          type: string
+                          description: 트랜잭션에서 전송된 수량을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+                          pattern: ^[0-9]+$
+                        traceType:
+                          type: string
+                          description: 트랜잭션의 트레이스 타입을 나타내는 필드입니다. call, create 등이 있습니다.
+                        callType:
+                          type: string
+                          description: >-
+                            트랜잭션의 호출 타입을 나타내는 필드입니다. call, delegatecall,
+                            staticcall 등이 있습니다.
+                        gas:
+                          type: string
+                          description: 트랜잭션에 할당된 가스의 양을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+                          pattern: ^[0-9]+$
+                        gasUsed:
+                          type: string
+                          description: >-
+                            트랜잭션 실행에서 실제로 사용된 가스의 양을 나타내는 필드입니다. 10진수 문자열 형태로
+                            제공됩니다.
+                          pattern: ^[0-9]+$
+                        status:
+                          type: string
+                          description: >-
+                            트랜잭션의 상태를 나타내는 필드입니다. 1이면 성공, 0이면 실패를 나타냅니다. 10진수
+                            문자열 형태로 제공됩니다.
+                          pattern: ^[0-9]+$
+                        blockNumber:
+                          type: integer
+                          description: 트랜잭션이 포함된 블록의 번호를 나타내는 필드입니다.
+                          pattern: ^[0-9]+$
+                        timeStamp:
+                          type: integer
+                          description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
+              example:
+                rpp: 10
+                page: 1
+                count: 2826
+                items:
+                  - traceId: call_21466252_48_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0xd746bd1b26b7cc1ab78de4acc835589dc2ed1ca12fd90e742f423e7870ef6181
+                    transactionIndex: '48'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69736'
+                    gasUsed: '46109'
+                    status: '1'
+                    blockNumber: 21466252
+                    timestamp: 1734969803
+                  - traceId: call_21466245_173_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0x6a0d6c13f43363f551d0328f457968956030ea958507525b283584e858b4fe08
+                    transactionIndex: '173'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '94584'
+                    gasUsed: '57472'
+                    status: '1'
+                    blockNumber: 21466245
+                    timestamp: 1734969719
+                  - traceId: call_21465955_148_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0x35d93778e7e5080170c66c8e60bd0598f1d0bc6700f4301b75c8649efaa0a66e
+                    transactionIndex: '148'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69736'
+                    gasUsed: '46109'
+                    status: '1'
+                    blockNumber: 21465955
+                    timestamp: 1734966203
+                  - traceId: call_21465902_31_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0xa05ff39f77a1693fb9c56b21b073acae5dda6ec564120210f62edb9fe144ef98
+                    transactionIndex: '31'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69736'
+                    gasUsed: '46109'
+                    status: '1'
+                    blockNumber: 21465902
+                    timestamp: 1734965567
+                  - traceId: call_21465884_174_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0x01bbc22a3228ed3b166c0d39a5ff563508b2760adadde468a7efacbd1a120701
+                    transactionIndex: '174'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69718'
+                    gasUsed: '46097'
+                    status: '1'
+                    blockNumber: 21465884
+                    timestamp: 1734965351
+                  - traceId: call_21465404_137_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0x0e07487f530ad3d0de2dbe8dbfed15e6e9a47d34611a74081c2c0097b98bbaf6
+                    transactionIndex: '137'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69736'
+                    gasUsed: '46109'
+                    status: '1'
+                    blockNumber: 21465404
+                    timestamp: 1734959555
+                  - traceId: call_21465398_400_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0x4b9c2ee3cfa2a5033a5688b170bc4427891fe9d6aa7f7d56a5a658bd43d5c047
+                    transactionIndex: '400'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '96082'
+                    gasUsed: '63221'
+                    status: '1'
+                    blockNumber: 21465398
+                    timestamp: 1734959483
+                  - traceId: call_21463854_134_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0xd3add695d036aa80b3d8cf7d896a5146ad676be45471b89f7c77ea26c97a8803
+                    transactionIndex: '134'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69736'
+                    gasUsed: '46109'
+                    status: '1'
+                    blockNumber: 21463854
+                    timestamp: 1734940859
+                  - traceId: call_21444745_224_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0xdd20822079f8448b9b3254c57dcec7a6d7c4440a847445a2db85132a328f1713
+                    transactionIndex: '224'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69736'
+                    gasUsed: '46109'
+                    status: '1'
+                    blockNumber: 21444745
+                    timestamp: 1734709943
+                  - traceId: call_21443730_166_
+                    traceIndex: 0
+                    transactionHash: >-
+                      0x0e9912120f6826b71bd4cbec8ce6e9f03c070e1c37737c04a76f11091d368eb1
+                    transactionIndex: '166'
+                    from: '0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a'
+                    to: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '69736'
+                    gasUsed: '46109'
+                    status: '1'
+                    blockNumber: 21443730
+                    timestamp: 1734697667
+        '400': *ref_3
+        '401': *ref_4
+        '403': *ref_5
+        '404': *ref_6
+        '429': *ref_7
+  /{protocol}/{network}/blockchain/getInternalTransactionsByTransactionHash:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        특정 트랜잭션에서 발생한 internal transaction 리스트를 조회합니다.
+
+      summary: Get Internal Transactions By Transaction Hash
+      operationId: polygon-getInternalTransactionsByTransactionHash
+      parameters:
+        - name: protocol
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - polygon
+            default: polygon
+          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+              - amoy
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    transactionHash:
+                      type: string
+                      description: >-
+                        조회하고자 하는 트랜잭션의 해시를 지정하는 파라미터입니다. 0x로 시작하는 64자리 16진수 문자열
+                        형태로 입력할 수 있습니다.
+                      pattern: ^0[xX][0-9a-fA-F]{64}$
+                      default: >-
+                        0x1632ac1627903e586c8ea0b1c134908c34ee95e84face9a303abd63686eb2022
+                  required:
+                    - transactionHash
+                - *ref_8
+                - type: object
+                  properties:
+                    withZeroValue: *ref_19
+                    withExternalTransaction: *ref_27
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  page:
+                    type: integer
+                    description: >-
+                      page 파라미터에 지정된 페이지 번호를 나타내는 필드입니다. 이 필드는 page 파라미터에 0보다 큰
+                      값을 입력한 경우에만 응답에 포함됩니다.
+                  rpp:
+                    type: integer
+                    description: rpp 파라미터에 지정된 페이지당 결과 수를 나타내는 필드입니다.
+                  cursor:
+                    type: string
+                    description: >-
+                      cursor 페이지네이션을 위한 필드로, 다음 페이지의 데이터를 로드하기 위해 다음 요청에 제공해야 하는
+                      값입니다.
+                  count:
+                    type: integer
+                    description: >-
+                      요청한 데이터의 총 개수를 나타내는 필드입니다. 이 필드는 withCount 파라미터에 true를 입력한
+                      경우에만 응답에 포함됩니다.
+                  items:
+                    type: array
+                    description: 조회된 데이터의 목록을 나타내는 필드입니다.
+                    items: *ref_28
+              example:
+                rpp: 10
+                page: 1
+                count: 6
+                items:
+                  - traceId: call_21309845_6_0_3
+                    traceIndex: 6
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: '6'
+                    from: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    value: '0'
+                    traceType: call
+                    callType: staticcall
+                    gas: '43288'
+                    gasUsed: '534'
+                    status: '1'
+                    blockNumber: 21309845
+                    timestamp: 1733082431
+                  - traceId: call_21309845_6_0_2_0
+                    traceIndex: 5
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: '6'
+                    from: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '51689'
+                    gasUsed: '8732'
+                    status: '1'
+                    blockNumber: 21309845
+                    timestamp: 1733082431
+                  - traceId: call_21309845_6_0_2
+                    traceIndex: 4
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: '6'
+                    from: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                    to: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '52924'
+                    gasUsed: '9147'
+                    status: '1'
+                    blockNumber: 21309845
+                    timestamp: 1733082431
+                  - traceId: call_21309845_6_0_1
+                    traceIndex: 3
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: '6'
+                    from: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    value: '0'
+                    traceType: call
+                    callType: staticcall
+                    gas: '54225'
+                    gasUsed: '534'
+                    status: '1'
+                    blockNumber: 21309845
+                    timestamp: 1733082431
+                  - traceId: call_21309845_6_0_0
+                    traceIndex: 2
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: '6'
+                    from: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                    to: '0xB1F1ee126e9c96231Cc3d3fAD7C08b4cf873b1f1'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '63640'
+                    gasUsed: '8681'
+                    status: '1'
+                    blockNumber: 21309845
+                    timestamp: 1733082431
+                  - traceId: call_21309845_6_0
+                    traceIndex: 1
+                    transactionHash: >-
+                      0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
+                    transactionIndex: '6'
+                    from: '0x1f2F10D1C40777AE1Da742455c65828FF36Df387'
+                    to: '0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83'
+                    value: '0'
+                    traceType: call
+                    callType: call
+                    gas: '87277'
+                    gasUsed: '47533'
+                    status: '1'
+                    blockNumber: 21309845
+                    timestamp: 1733082431
+        '400': *ref_3
+        '401': *ref_4
+        '403': *ref_5
+        '404': *ref_6
+        '429': *ref_7
   /{protocol}/{network}/blockchain/getNextNonceByAccount:
     post:
       security:
@@ -7517,13 +8053,13 @@ paths:
                       pattern: ^0[xX][0-9a-fA-F]{64}$
                       default: >-
                         0x1632ac1627903e586c8ea0b1c134908c34ee95e84face9a303abd63686eb2022
-                    withLogs: &ref_29
+                    withLogs: &ref_31
                       type: boolean
                       description: >-
                         응답에 logs 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한 경우,
                         응답속도가 느려질 수 있습니다.
                       default: false
-                    withDecode: &ref_30
+                    withDecode: &ref_32
                       type: boolean
                       description: >-
                         응답에 decodedInput, decodedLog 필드의 포함 여부를 지정하는 파라미터입니다. 이
@@ -7542,7 +8078,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - &ref_31
+                  - &ref_33
                     type: object
                     required:
                       - transactionHash
@@ -7625,8 +8161,8 @@ paths:
                             description: 트랜잭션의 함수 시그니처를 나타내는 필드입니다.
                           args:
                             type: array
-                            items: *ref_27
-                      functionSelector: *ref_28
+                            items: *ref_29
+                      functionSelector: *ref_30
                       nonce:
                         type: string
                         description: >-
@@ -7795,7 +8331,7 @@ paths:
                     properties:
                       logs:
                         type: object
-                        required: &ref_32
+                        required: &ref_34
                           - contractAddress
                           - transactionHash
                           - transactionIndex
@@ -7805,53 +8341,53 @@ paths:
                           - logIndex
                           - removed
                           - topics
-                        properties: &ref_33
-                          contractAddress: &ref_35
+                        properties: &ref_35
+                          contractAddress: &ref_37
                             type: string
                             description: >-
                               로그를 생성한 컨트랙트 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수
                               문자열 형태로 제공됩니다.
                             pattern: ^0[xX][0-9a-fA-F]{40}$
-                          transactionHash: &ref_36
+                          transactionHash: &ref_38
                             type: string
                             description: >-
                               로그를 생성한 트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수
                               문자열 형태로 제공됩니다.
                             pattern: ^0[xX][0-9a-fA-F]{64}$
-                          transactionIndex: &ref_37
+                          transactionIndex: &ref_39
                             type: string
                             description: >-
                               로그를 생성한 트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를 나타냅니다.
                               10진수 문자열 형태로 제공됩니다.
                             pattern: ^[0-9]+$
-                          blockHash: &ref_38
+                          blockHash: &ref_40
                             type: string
                             description: >-
                               로그를 생성한 블록의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열
                               형태로 제공됩니다.
                             pattern: ^0[xX][0-9a-fA-F]{64}
-                          blockNumber: &ref_39
+                          blockNumber: &ref_41
                             type: integer
                             description: 로그를 생성한 블록 번호를 나타내는 필드입니다.
                             pattern: ^[0-9]+$
-                          data: &ref_40
+                          data: &ref_42
                             type: string
                             description: >-
                               로그의 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열 형태로 제공됩니다.
                               이 필드는 로그의 이벤트 데이터를 나타냅니다.
                             pattern: ^0[xX][0-9a-fA-F]+$
-                          logIndex: &ref_41
+                          logIndex: &ref_43
                             type: string
                             description: >-
                               로그의 인덱스를 나타내는 필드입니다. 트랜잭션에서 발생한 이벤트의 순서를 의미합니다.
                               10진수 문자열 형태로 제공됩니다.
                             pattern: ^[0-9]+$
-                          removed: &ref_42
+                          removed: &ref_44
                             type: boolean
                             description: >-
                               로그가 제거되었는지 여부를 나타내는 필드입니다. 체인의 재구성(Reorg)으로 인해 로그가
                               제거된 경우 true를 반환합니다.
-                          topics: &ref_43
+                          topics: &ref_45
                             type: array
                             description: 인덱스된 로그의 인자를 나타내는 필드입니다. 최대 4개의 토픽을 가질 수 있습니다.
                             items:
@@ -7884,7 +8420,7 @@ paths:
                               args:
                                 type: array
                                 description: 로그의 인자를 나타내는 필드입니다.
-                                items: *ref_27
+                                items: *ref_29
               example:
                 transactionHash: >-
                   0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -8127,8 +8663,8 @@ paths:
                 - *ref_8
                 - type: object
                   properties:
-                    withLogs: *ref_29
-                    withDecode: *ref_30
+                    withLogs: *ref_31
+                    withDecode: *ref_32
               required:
                 - accountAddress
       responses:
@@ -8164,15 +8700,15 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_31
+                        - *ref_33
                         - type: object
                           properties:
                             logs:
                               type: array
-                              items: &ref_34
+                              items: &ref_36
                                 type: object
-                                required: *ref_32
-                                properties: *ref_33
+                                required: *ref_34
+                                properties: *ref_35
               example:
                 rpp: 10
                 page: 1
@@ -8997,8 +9533,8 @@ paths:
                     - transactionHashes
                 - type: object
                   properties:
-                    withLogs: *ref_29
-                    withDecode: *ref_30
+                    withLogs: *ref_31
+                    withDecode: *ref_32
       responses:
         '200':
           description: Successful Response
@@ -9008,12 +9544,12 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - *ref_31
+                    - *ref_33
                     - type: object
                       properties:
                         logs:
                           type: array
-                          items: *ref_34
+                          items: *ref_36
               example:
                 - transactionHash: >-
                     0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -9329,8 +9865,8 @@ paths:
                 - *ref_8
                 - type: object
                   properties:
-                    withLogs: *ref_29
-                    withDecode: *ref_30
+                    withLogs: *ref_31
+                    withDecode: *ref_32
       responses:
         '200':
           description: Successful Response
@@ -9364,12 +9900,12 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_31
+                        - *ref_33
                         - type: object
                           properties:
                             logs:
                               type: array
-                              items: *ref_34
+                              items: *ref_36
               example:
                 rpp: 10
                 page: 1
@@ -10346,15 +10882,15 @@ paths:
                         - removed
                         - topics
                       properties:
-                        contractAddress: *ref_35
-                        transactionHash: *ref_36
-                        transactionIndex: *ref_37
-                        blockHash: *ref_38
-                        blockNumber: *ref_39
-                        data: *ref_40
-                        logIndex: *ref_41
-                        removed: *ref_42
-                        topics: *ref_43
+                        contractAddress: *ref_37
+                        transactionHash: *ref_38
+                        transactionIndex: *ref_39
+                        blockHash: *ref_40
+                        blockNumber: *ref_41
+                        data: *ref_42
+                        logIndex: *ref_43
+                        removed: *ref_44
+                        topics: *ref_45
               example:
                 rpp: 5
                 page: 1
