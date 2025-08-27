@@ -9,7 +9,6 @@ servers:
         default: bnb-mainnet
         enum:
           - bnb-mainnet
-          - bnb-mainnet
           - bnb-testnet
 components:
   securitySchemes:

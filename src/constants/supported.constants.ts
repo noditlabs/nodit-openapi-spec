@@ -119,7 +119,7 @@ export const supportedChains: ChainInfo[] = [
   {
     protocol: "bnb",
     mainnet: "mainnet",
-    testnet: ["mainnet", "testnet"],
+    testnet: ["testnet"],
   },
 ];
 
