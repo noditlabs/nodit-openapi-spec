@@ -16,12 +16,14 @@ export async function updateToReadme(docsPath: string, id: string) {
   // 입력 인자 유효성 검사
   if (!docsPath || !id || !/^[0-9a-fA-F]{24}$/.test(id)) {
     console.error(
-      "Usage: npm run update-api -- <docs path> <id (24 hex characters)>",
+      "Usage: npm run update-api -- <docs path> <id (24 hex characters)>"
     );
     process.exit(1);
   }
 
-  const command = `npx rdme openapi --update ${path.resolve(docsPath)} --id ${id} --key ${apiKey}`;
+  const command = `npx rdme openapi --update ${path.resolve(
+    docsPath
+  )} --id ${id} --key ${apiKey}`;
 
   exec(command, (error, stdout, stderr) => {
     if (error) {
@@ -84,7 +86,7 @@ export async function getFilteredCategories({
     const filteredCategories = allCategories.filter(
       (category) =>
         category.reference &&
-        slugs.some((slug) => category.slug.startsWith(slug)),
+        slugs.some((slug) => category.slug.startsWith(slug))
     );
 
     return filteredCategories;
@@ -182,7 +184,7 @@ export async function getMainVersion(): Promise<ReadmeVersionData> {
       version.is_stable &&
       !version.is_hidden &&
       !version.is_deprecated &&
-      !version.is_beta,
+      !version.is_beta
   );
 
   if (!mainVersion) {

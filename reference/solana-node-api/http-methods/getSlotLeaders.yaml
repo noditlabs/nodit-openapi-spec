@@ -1,0 +1,214 @@
+openapi: 3.1.0
+info:
+  title: solana-getSlotLeaders
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getSlotLeaders
+      description: |
+        Returns the slot leaders for a given slot range
+      summary: getSlotLeaders
+      operationId: solana-getSlotLeaders
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getSlotLeaders
+                params:
+                  type: array
+                  minItems: 2
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. StartSlot (`required`)
+                    2. Limit (`required`)
+                  items:
+                    oneOf:
+                      - title: StartSlot
+                        $ref: '#/components/schemas/SlotNumber'
+                      - title: Limit
+                        type: integer
+                        format: uint64
+                        description: The limit of the result. It must be between 1 and 500000.
+                        minimum: 1
+                        maximum: 500000
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getSlotLeaders
+                params:
+                  - 100
+                  - 10
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: array
+                        description: Array of Node identity public keys as base-58 encoded strings.
+                        items:
+                          type: string
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    - ChorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH15n
+                    - ChorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH15n
+                    - ChorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH15n
+                    - ChorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH15n
+                    - Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM
+                    - Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM
+                    - Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM
+                    - Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM
+                    - DWvDTSh3qfn88UoQTEKRV2JnLt5jtJAVoiCo3ivtMwXP
+                    - DWvDTSh3qfn88UoQTEKRV2JnLt5jtJAVoiCo3ivtMwXP
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    SlotNumber:
+      type: integer
+      format: uint64
+      description: The slot number.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

@@ -1,0 +1,540 @@
+openapi: 3.1.0
+info:
+  title: solana-getTransaction
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getTransaction
+      description: |
+        Returns transaction details for a confirmed transaction
+      summary: getTransaction
+      operationId: solana-getTransaction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getTransaction
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Transaction signature (`required`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Transaction signature
+                        type: string
+                        description: Transaction signature, as base-58 encoded string
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: '#/components/schemas/Commitment'
+                          maxSupportedTransactionVersion:
+                            $ref: '#/components/schemas/MaxSupportedTransactionVersion'
+                          transactionDetails:
+                            $ref: '#/components/schemas/TransactionDetails'
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getTransaction
+                params:
+                  - 5Pj5fCupXLUePYn18JkY8SrRaWFiUctuDTRwvUy2ML9yvkENLb1QMYbcBGcBXRrSVDjp7RjUwk9a3rLC6gpvtYpZ
+                  - commitment: confirmed
+                    maxSupportedTransactionVersion: 0
+                    encoding: json
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          blockTime:
+                            type: integer
+                            description: Estimated production time, as Unix timestamp (seconds since the Unix epoch) of when the transaction was processed. null if not available
+                          meta:
+                            $ref: '#/components/schemas/TransactionMeta'
+                          slot:
+                            type: integer
+                            description: The slot this transaction was processed in
+                          transaction:
+                            $ref: '#/components/schemas/Transaction'
+                          version:
+                            $ref: '#/components/schemas/TransactionVersion'
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    blockTime: 1746479684
+                    meta:
+                      computeUnitsConsumed: 150
+                      err: null
+                      fee: 5000
+                      innerInstructions: []
+                      loadedAddresses:
+                        readonly: []
+                        writable: []
+                      logMessages:
+                        - Program 11111111111111111111111111111111 invoke [1]
+                        - Program 11111111111111111111111111111111 success
+                      postBalances:
+                        - 989995000
+                        - 10000000
+                        - 1
+                      postTokenBalances: []
+                      preBalances:
+                        - 1000000000
+                        - 0
+                        - 1
+                      preTokenBalances: []
+                      rewards: []
+                      status:
+                        Ok: null
+                    slot: 378917547
+                    transaction:
+                      message:
+                        accountKeys:
+                          - 7BvfixZx7Rwywf6EJFgRW6acEQ2FLSFJr4n3kLLVeEes
+                          - 6KtbxYovphtE3eHjPjr2sWwDfgaDwtAn2FcojDyzZWT6
+                          - '11111111111111111111111111111111'
+                        header:
+                          numReadonlySignedAccounts: 0
+                          numReadonlyUnsignedAccounts: 1
+                          numRequiredSignatures: 1
+                        instructions:
+                          - accounts:
+                              - 0
+                              - 1
+                            data: 3Bxs4NN8M2Yn4TLb
+                            programIdIndex: 2
+                            stackHeight: null
+                        recentBlockhash: 23dwTHxFhSzqohXhdni5LwpuSRpgN36YvVMCAM2VXQSf
+                      signatures:
+                        - 5Pj5fCupXLUePYn18JkY8SrRaWFiUctuDTRwvUy2ML9yvkENLb1QMYbcBGcBXRrSVDjp7RjUwk9a3rLC6gpvtYpZ
+                    version: legacy
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    MaxSupportedTransactionVersion:
+      type: integer
+      default: 0
+      description: |
+        Currently, the only valid value for this parameter is `0`. Setting it to `0` allows you to fetch all transactions, including both Versioned and legacy transactions.
+
+        This parameter determines the maximum transaction version that will be returned in the response. If you request a transaction with a higher version than this value, an error will be returned. If you omit this parameter, only legacy transactions will be returned—any versioned transaction will result in an error.
+    TransactionDetails:
+      type: string
+      enum:
+        - full
+        - accounts
+        - signatures
+        - none
+      default: full
+      description: |
+        Level of transaction detail to return.
+        - If accounts are requested, transaction details only include signatures and an annotated list of accounts in each transaction.
+        - Transaction metadata is limited to only: fee, err, pre_balances, post_balances, pre_token_balances, and post_token_balances.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    Err:
+      type: object
+      description: Error if transaction failed, null if transaction succeeded.
+    InnerInstruction:
+      type: object
+      properties:
+        index:
+          type: number
+          description: Index of the transaction instruction from which the inner instruction(s) originated
+        instructions:
+          type: array
+          description: Ordered list of inner program instructions that were invoked during a single transaction instruction.
+          items:
+            type: object
+        programIdIndex:
+          type: number
+          description: Index into the message.accountKeys array indicating the program account that executes this instruction.
+        accounts:
+          type: array
+          description: List of ordered indices into the message.accountKeys array indicating which accounts to pass to the program.
+          items:
+            type: number
+        data:
+          type: string
+          description: The program input data encoded in a base-58 string.
+    TokenBalance:
+      type: object
+      properties:
+        accountIndex:
+          type: number
+          description: Index of the account in which the token balance is provided for.
+        mint:
+          type: string
+          description: Pubkey of the token's mint.
+        owner:
+          type: string
+          description: Pubkey of token balance's owner.
+        programId:
+          type: string
+          description: Pubkey of the Token program that owns the account.
+        uiTokenAmount:
+          type: object
+          properties:
+            amount:
+              type: string
+              description: Raw amount of tokens as a string, ignoring decimals.
+            decimals:
+              type: number
+              description: Number of decimals configured for token's mint.
+            uiAmount:
+              type: number
+              description: |
+                `DEPRECATED` Token amount as a float, accounting for decimals.
+            uiAmountString:
+              type: string
+              description: Token amount as a string, accounting for decimals.
+    TransactionVersion:
+      description: Transaction version. Undefined if maxSupportedTransactionVersion is not set in request params.
+      oneOf:
+        - type: string
+          enum:
+            - legacy
+        - type: number
+    TransactionMeta:
+      type: object
+      properties:
+        err:
+          $ref: '#/components/schemas/Err'
+        fee:
+          type: integer
+          description: fee this transaction was charged, as u64 integer
+        preBalances:
+          type: array
+          items:
+            type: integer
+          description: array of u64 account balances from before the transaction was processed
+        postBalances:
+          type: array
+          items:
+            type: integer
+          description: array of u64 account balances after the transaction was processed
+        innerInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/InnerInstruction'
+          description: List of inner instructions or null if inner instruction recording was not enabled during this transaction
+        preTokenBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenBalance'
+          description: List of token balances from before the transaction was processed or omitted if token balance recording was not yet enabled during this transaction
+        postTokenBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenBalance'
+          description: List of token balances from after the transaction was processed or omitted if token balance recording was not yet enabled during this transaction
+        logMessages:
+          type: array
+          items:
+            type: string
+          description: array of string log messages or null if log message recording was not enabled during this transaction
+        rewards:
+          type: array
+          description: |
+            transaction-level rewards
+          items:
+            type: object
+            properties:
+              pubkey:
+                type: string
+                description: The public key, as base-58 encoded string, of the account that received the reward
+              lamports:
+                type: integer
+                description: number of reward lamports credited or debited by the account, as a i64
+              postBalance:
+                type: integer
+                description: account balance in lamports after the reward was applied
+              rewardType:
+                type: string
+                enum:
+                  - fee
+                  - rent
+                  - voting
+                  - staking
+              commission:
+                type: integer
+                description: vote account commission when the reward was credited, only present for voting and staking rewards
+        loadedAddresses:
+          type: object
+          description: Transaction addresses loaded from address lookup tables. Undefined if maxSupportedTransactionVersion is not set in request params, or if jsonParsed encoding is set in request params.
+          properties:
+            writable:
+              type: array
+              description: Ordered list of base-58 encoded addresses for writable loaded accounts
+            readonly:
+              type: array
+              description: Ordered list of base-58 encoded addresses for readonly loaded accounts
+        returnData:
+          type: object
+          description: |
+            the most-recent return data generated by an instruction in the transaction, with the following fields:
+          properties:
+            programId:
+              type: string
+              description: the program that generated the return data, as base-58 encoded Pubkey
+            data:
+              type: string
+              description: the return data itself, as base-64 encoded binary data
+        computeUnitsConsumed:
+          type: integer
+          description: number of compute units consumed by the transaction
+        version:
+          $ref: '#/components/schemas/TransactionVersion'
+        signatures:
+          type: array
+          description: present if "signatures" are requested for transaction details; an array of signatures strings, corresponding to the transaction order in the block
+          items:
+            type: string
+    Message:
+      type: object
+      required:
+        - accountKeys
+        - header
+        - recentBlockhash
+        - instructions
+        - addressTableLookups
+      properties:
+        accountKeys:
+          type: array
+          description: List of base-58 encoded public keys used by the transaction, including by the instructions and for signatures. The first `message.header.numRequiredSignatures` public keys must sign the transaction.
+          items:
+            type: string
+        header:
+          type: object
+          description: Details the account types and signatures required by the transaction.
+          required:
+            - numRequiredSignatures
+            - numReadonlySignedAccounts
+            - numReadonlyUnsignedAccounts
+          properties:
+            numRequiredSignatures:
+              type: integer
+              description: The total number of signatures required to make the transaction valid. The signatures must match the first `numRequiredSignatures` of `message.accountKeys`.
+            numReadonlySignedAccounts:
+              type: integer
+              description: The last `numReadonlySignedAccounts` of the signed keys are read-only accounts. Programs may process multiple transactions that load read-only accounts within a single PoH entry, but are not permitted to credit or debit lamports or modify account data. Transactions targeting the same read-write account are evaluated sequentially.
+            numReadonlyUnsignedAccounts:
+              type: integer
+              description: The last `numReadonlyUnsignedAccounts` of the unsigned keys are read-only accounts.
+        recentBlockhash:
+          type: string
+          description: A base-58 encoded hash of a recent block in the ledger used to prevent transaction duplication and to give transactions lifetimes.
+        instructions:
+          type: array
+          items:
+            type: object
+            required:
+              - programIdIndex
+              - accounts
+              - data
+            properties:
+              programIdIndex:
+                type: integer
+                description: Index into the `message.accountKeys` array indicating the program account that executes this instruction.
+              accounts:
+                type: array
+                items:
+                  type: integer
+                description: List of ordered indices into the `message.accountKeys` array indicating which accounts to pass to the program.
+              data:
+                type: string
+                description: The program input data encoded in a base-58 string.
+        addressTableLookups:
+          type: array
+          items:
+            type: object
+            required:
+              - accountKey
+              - writableIndexes
+              - readonlyIndexes
+            properties:
+              accountKey:
+                type: string
+                description: Base-58 encoded public key for an address lookup table account.
+              writableIndexes:
+                type: array
+                items:
+                  type: integer
+                description: List of indices used to load addresses of writable accounts from a lookup table.
+              readonlyIndexes:
+                type: array
+                items:
+                  type: integer
+                description: List of indices used to load addresses of readonly accounts from a lookup table.
+    Transaction:
+      type: object
+      required:
+        - message
+        - signatures
+      properties:
+        message:
+          $ref: '#/components/schemas/Message'
+        signatures:
+          type: array
+          description: A list of base-58 encoded signatures applied to the transaction. The list is always of length `message.header.numRequiredSignatures` and not empty. The signature at index `i` corresponds to the public key at index `i` in `message.accountKeys`. The first one is used as the transaction id.
+          items:
+            type: string
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

@@ -1,0 +1,797 @@
+openapi: 3.1.0
+info:
+  title: solana-getBlock
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getBlock
+      description: |
+        Returns identity and transaction information about a confirmed block in the ledger
+      summary: getBlock
+      operationId: solana-getBlock
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getBlock
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Slot number (`required`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Slot number
+                        $ref: '#/components/schemas/SlotNumber'
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: '#/components/schemas/Commitment'
+                          encoding:
+                            type: string
+                            description: |
+                              Encoding format for each returned transaction. See Parsed Responses.
+
+                              - `jsonParsed` attempts to use program-specific instruction parsers to return more human-readable and explicit data in the transaction.message.instructions list.
+                              - If `jsonParsed` is requested but a parser cannot be found, the instruction falls back to regular JSON encoding (accounts, data, and programIdIndex fields).
+                            enum:
+                              - json
+                              - jsonParsed
+                              - base58
+                              - base64
+                          transactionDetails:
+                            $ref: '#/components/schemas/TransactionDetails'
+                          maxSupportedTransactionVersion:
+                            $ref: '#/components/schemas/MaxSupportedTransactionVersion'
+                          rewards:
+                            $ref: '#/components/schemas/Rewards'
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getBlock
+                params:
+                  - 378967388
+                  - commitment: finalized
+                    encoding: json
+                    transactionDetails: full
+                    maxSupportedTransactionVersion: 0
+                    rewards: false
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          blockHeight:
+                            $ref: '#/components/schemas/BlockHeight'
+                          blockTime:
+                            $ref: '#/components/schemas/BlockTime'
+                          blockhash:
+                            $ref: '#/components/schemas/Blockhash'
+                          parentSlot:
+                            $ref: '#/components/schemas/ParentSlot'
+                          previousBlockhash:
+                            $ref: '#/components/schemas/PreviousBlockhash'
+                          transactions:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - transaction
+                                - meta
+                              properties:
+                                transaction:
+                                  $ref: '#/components/schemas/Transaction'
+                                meta:
+                                  $ref: '#/components/schemas/TransactionMeta'
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    blockHeight: 247274050
+                    blockTime: 1700225734
+                    blockhash: 57eP5Cy4ZpREfuSEagC7fyX4Aq49vbv9NGqLjNCEFCyi
+                    parentSlot: 258967387
+                    previousBlockhash: 8e8brip4atAwZnuVWCeHs5xWUQbjwbrWZMZ2TTimsGw1
+                    transactions:
+                      - meta:
+                          computeUnitsConsumed: 2100
+                          err: null
+                          fee: 5000
+                          innerInstructions: []
+                          loadedAddresses:
+                            readonly: []
+                            writable: []
+                          logMessages:
+                            - Program Vote111111111111111111111111111111111111111 invoke [1]
+                            - Program Vote111111111111111111111111111111111111111 success
+                          postBalances:
+                            - 1007388953256632
+                            - 100000000000
+                            - 1
+                          postTokenBalances: []
+                          preBalances:
+                            - 1007388953261632
+                            - 100000000000
+                            - 1
+                          preTokenBalances: []
+                          rewards: null
+                          status:
+                            Ok: null
+                        transaction:
+                          message:
+                            accountKeys:
+                              - dv2eQHeP4RFrJZ6UeiZWoc3XTtmtZCUKxxCApCDcRNV
+                              - i7NyKBMJCA9bLM2nsGyAGCKHECuR2L5eh4GqFciuwNT
+                              - Vote111111111111111111111111111111111111111
+                            header:
+                              numReadonlySignedAccounts: 0
+                              numReadonlyUnsignedAccounts: 1
+                              numRequiredSignatures: 1
+                            instructions:
+                              - accounts:
+                                  - 1
+                                  - 0
+                                data: Fk63PWrkyA55WyomNsd7oxdDhXWxEGWqEiZH7dEU8VdZY1Qq2Nnm7xTbD3AtRZb9f2QgBMd618dshgcFds1cPiQxVqR7MEP5X4L8H9JuVoceLRsj3ZvbHe9XU8qAz4ocndMQeJW6csuHN6k6ikLGP1tTC7dqQj
+                                programIdIndex: 2
+                                stackHeight: 1
+                            recentBlockhash: 8e8brip4atAwZnuVWCeHs5xWUQbjwbrWZMZ2TTimsGw1
+                          signatures:
+                            - 4AaMrcYam73YMjiwpB9T4eLNLsyc5eJMZgD4EorSrdRkaHy9hfv94YVAc7jKYfzdEZyzV3GuFaReAvkBNDuQqm4z
+                        version: legacy
+                      - meta:
+                          computeUnitsConsumed: 53919
+                          err: null
+                          fee: 5000
+                          innerInstructions: []
+                          loadedAddresses:
+                            readonly: []
+                            writable: []
+                          logMessages:
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4533 of 480000 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4396 of 475467 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4273 of 471071 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4405 of 466798 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4571 of 462393 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4528 of 457822 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4792 of 453294 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4403 of 448502 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4546 of 444099 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4778 of 439553 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4390 of 434775 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s invoke [1]
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s consumed 4154 of 430385 compute units
+                            - Program gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s success
+                            - Program ComputeBudget111111111111111111111111111111 invoke [1]
+                            - Program ComputeBudget111111111111111111111111111111 success
+                          postBalances:
+                            - 78723895000
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 1
+                            - 1169280
+                            - 1141440
+                          postTokenBalances: []
+                          preBalances:
+                            - 78723900000
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 23942400
+                            - 1
+                            - 1169280
+                            - 1141440
+                          preTokenBalances: []
+                          rewards: null
+                          status:
+                            Ok: null
+                        transaction:
+                          message:
+                            accountKeys:
+                              - HUZu4xMSHbxTWbkXR6jkGdjvDPJLjrpSNXSoUFBRgjWs
+                              - 2hsrGu1CLET6CMvyg3sGXmpaDUT59nyQyeT7qfzMRLAJ
+                              - 3g5BEM6cqJyXwy2VVgdynCpJAHqFMQnGqQdiVNvEyvpc
+                              - 4BwstmwCNY4qCMkcuUPPuCsRovXTQcn6RKjKpKetUXMQ
+                              - 5Qz1ayDLUQ1VeW4hc18FEAF3qwUg5rqmgMzCz3o72usT
+                              - 6Eg8YdfFJQF2HHonzPUBSCCmyUEhrStg9VBLK957sBe6
+                              - 7X3UJgftWJBqrdPVWCUSJ4pjVZ9qEKT1CNxhoYy8zb5m
+                              - 7XcEQ3VLi8i36PtA8hg79tRPwvckodiMv5LrMspZoofT
+                              - 9FUjsTnUmJyF7zMkc6cKSzfgwmwyvS5YpUXkvCA1epCN
+                              - CdTeotBBfP6R6oLh2A7FyEXDg9abWz6RWDp8X8s37RCW
+                              - DspwfrfzKNv8bxbCLq9WZQXFJaR7jci6kc1m7swQ278Z
+                              - EgCFaKazieBrHE72hVtA7NH2TrozYKEPw7rXPfsUqpoM
+                              - GxZnb9KnT2NjkwbsxDLyHvV3s1gvNodEh8cmQVTgFXWC
+                              - ComputeBudget111111111111111111111111111111
+                              - SysvarC1ock11111111111111111111111111111111
+                              - gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s
+                            header:
+                              numReadonlySignedAccounts: 0
+                              numReadonlyUnsignedAccounts: 3
+                              numRequiredSignatures: 1
+                            instructions:
+                              - accounts:
+                                  - 0
+                                  - 4
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwfGuYwCrFk1wocUNW5EPAzuAyPfnVPbUN3
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 2
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcweBR3ehe7RjbNQLBULTGVghhwExWzSEgM5
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 12
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwvhWRMMs6bGr4oeF4ScuUNYF7SmsLib5KV
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 9
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwhV9XpzqNKHJzHb2DUTyvNf36qcqaJbts1
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 8
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwh2ewy8W5fhkE63iZTn6EkDUUYZ9fdHpyu
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 6
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwkfQqDgs3DKYSuTfA5rXef8LZYaERvWoDy
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 10
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwqdaGuveouF3n4zbfkqUzzHsfCmUTST927
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 1
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwveZ2KtTQzzieY7UWM4gMbu5CF3f5aaLEj
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 5
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwsyg4txZVL1aSgZrjTmdaJKMfx6kaMZrJb
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 11
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwnFZTVkBVjXxM4E4SoZD4bStTohHy2U6TZ
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 3
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwcurtegisDhJuCzZD9K7nTxvaGL9VfT5Xu
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts:
+                                  - 0
+                                  - 7
+                                  - 14
+                                data: 6mJFQCt94hG4CKNYKgVcwezjfJh1Jw1fwERnR3aKYLoRWmStAzGgfZ
+                                programIdIndex: 15
+                                stackHeight: 1
+                              - accounts: []
+                                data: E6YYnj
+                                programIdIndex: 13
+                                stackHeight: 1
+                            recentBlockhash: 2nzraoD3rYnBsH7Ahj2VqWJHbHNWRnEpfB1mnefd3TNU
+                          signatures:
+                            - 5jTSajMfBmqixmRwU8chgwCGyCaUQB7L4z7GvQS2apuudJmL7nWzM1Mgf23kgWrEu99TdUYSqGVQYsWHJQbzTY3R
+                        version: legacy
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    SlotNumber:
+      type: integer
+      format: uint64
+      description: The slot number.
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    TransactionDetails:
+      type: string
+      enum:
+        - full
+        - accounts
+        - signatures
+        - none
+      default: full
+      description: |
+        Level of transaction detail to return.
+        - If accounts are requested, transaction details only include signatures and an annotated list of accounts in each transaction.
+        - Transaction metadata is limited to only: fee, err, pre_balances, post_balances, pre_token_balances, and post_token_balances.
+    MaxSupportedTransactionVersion:
+      type: integer
+      default: 0
+      description: |
+        Currently, the only valid value for this parameter is `0`. Setting it to `0` allows you to fetch all transactions, including both Versioned and legacy transactions.
+
+        This parameter determines the maximum transaction version that will be returned in the response. If you request a transaction with a higher version than this value, an error will be returned. If you omit this parameter, only legacy transactions will be returned—any versioned transaction will result in an error.
+    Rewards:
+      type: boolean
+      default: true
+      description: Whether to populate the rewards array. If parameter not provided, the default includes rewards.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    BlockHeight:
+      type: integer
+      format: uint64
+      description: The number of blocks beneath this block.
+    BlockTime:
+      type: integer
+      format: int64
+      description: Estimated production time, as Unix timestamp (seconds since the Unix epoch). null if not available.
+    Blockhash:
+      type: string
+      description: The blockhash of the block, as base-58 encoded string
+    ParentSlot:
+      type: integer
+      format: uint64
+      description: The slot index of the parent block.
+    PreviousBlockhash:
+      type: string
+      description: The blockhash of this block's parent, as base-58 encoded string; if the parent block is not available due to ledger cleanup, this field will return "11111111111111111111111111111111"
+    Message:
+      type: object
+      required:
+        - accountKeys
+        - header
+        - recentBlockhash
+        - instructions
+        - addressTableLookups
+      properties:
+        accountKeys:
+          type: array
+          description: List of base-58 encoded public keys used by the transaction, including by the instructions and for signatures. The first `message.header.numRequiredSignatures` public keys must sign the transaction.
+          items:
+            type: string
+        header:
+          type: object
+          description: Details the account types and signatures required by the transaction.
+          required:
+            - numRequiredSignatures
+            - numReadonlySignedAccounts
+            - numReadonlyUnsignedAccounts
+          properties:
+            numRequiredSignatures:
+              type: integer
+              description: The total number of signatures required to make the transaction valid. The signatures must match the first `numRequiredSignatures` of `message.accountKeys`.
+            numReadonlySignedAccounts:
+              type: integer
+              description: The last `numReadonlySignedAccounts` of the signed keys are read-only accounts. Programs may process multiple transactions that load read-only accounts within a single PoH entry, but are not permitted to credit or debit lamports or modify account data. Transactions targeting the same read-write account are evaluated sequentially.
+            numReadonlyUnsignedAccounts:
+              type: integer
+              description: The last `numReadonlyUnsignedAccounts` of the unsigned keys are read-only accounts.
+        recentBlockhash:
+          type: string
+          description: A base-58 encoded hash of a recent block in the ledger used to prevent transaction duplication and to give transactions lifetimes.
+        instructions:
+          type: array
+          items:
+            type: object
+            required:
+              - programIdIndex
+              - accounts
+              - data
+            properties:
+              programIdIndex:
+                type: integer
+                description: Index into the `message.accountKeys` array indicating the program account that executes this instruction.
+              accounts:
+                type: array
+                items:
+                  type: integer
+                description: List of ordered indices into the `message.accountKeys` array indicating which accounts to pass to the program.
+              data:
+                type: string
+                description: The program input data encoded in a base-58 string.
+        addressTableLookups:
+          type: array
+          items:
+            type: object
+            required:
+              - accountKey
+              - writableIndexes
+              - readonlyIndexes
+            properties:
+              accountKey:
+                type: string
+                description: Base-58 encoded public key for an address lookup table account.
+              writableIndexes:
+                type: array
+                items:
+                  type: integer
+                description: List of indices used to load addresses of writable accounts from a lookup table.
+              readonlyIndexes:
+                type: array
+                items:
+                  type: integer
+                description: List of indices used to load addresses of readonly accounts from a lookup table.
+    Transaction:
+      type: object
+      required:
+        - message
+        - signatures
+      properties:
+        message:
+          $ref: '#/components/schemas/Message'
+        signatures:
+          type: array
+          description: A list of base-58 encoded signatures applied to the transaction. The list is always of length `message.header.numRequiredSignatures` and not empty. The signature at index `i` corresponds to the public key at index `i` in `message.accountKeys`. The first one is used as the transaction id.
+          items:
+            type: string
+    Err:
+      type: object
+      description: Error if transaction failed, null if transaction succeeded.
+    InnerInstruction:
+      type: object
+      properties:
+        index:
+          type: number
+          description: Index of the transaction instruction from which the inner instruction(s) originated
+        instructions:
+          type: array
+          description: Ordered list of inner program instructions that were invoked during a single transaction instruction.
+          items:
+            type: object
+        programIdIndex:
+          type: number
+          description: Index into the message.accountKeys array indicating the program account that executes this instruction.
+        accounts:
+          type: array
+          description: List of ordered indices into the message.accountKeys array indicating which accounts to pass to the program.
+          items:
+            type: number
+        data:
+          type: string
+          description: The program input data encoded in a base-58 string.
+    TokenBalance:
+      type: object
+      properties:
+        accountIndex:
+          type: number
+          description: Index of the account in which the token balance is provided for.
+        mint:
+          type: string
+          description: Pubkey of the token's mint.
+        owner:
+          type: string
+          description: Pubkey of token balance's owner.
+        programId:
+          type: string
+          description: Pubkey of the Token program that owns the account.
+        uiTokenAmount:
+          type: object
+          properties:
+            amount:
+              type: string
+              description: Raw amount of tokens as a string, ignoring decimals.
+            decimals:
+              type: number
+              description: Number of decimals configured for token's mint.
+            uiAmount:
+              type: number
+              description: |
+                `DEPRECATED` Token amount as a float, accounting for decimals.
+            uiAmountString:
+              type: string
+              description: Token amount as a string, accounting for decimals.
+    TransactionVersion:
+      description: Transaction version. Undefined if maxSupportedTransactionVersion is not set in request params.
+      oneOf:
+        - type: string
+          enum:
+            - legacy
+        - type: number
+    TransactionMeta:
+      type: object
+      properties:
+        err:
+          $ref: '#/components/schemas/Err'
+        fee:
+          type: integer
+          description: fee this transaction was charged, as u64 integer
+        preBalances:
+          type: array
+          items:
+            type: integer
+          description: array of u64 account balances from before the transaction was processed
+        postBalances:
+          type: array
+          items:
+            type: integer
+          description: array of u64 account balances after the transaction was processed
+        innerInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/InnerInstruction'
+          description: List of inner instructions or null if inner instruction recording was not enabled during this transaction
+        preTokenBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenBalance'
+          description: List of token balances from before the transaction was processed or omitted if token balance recording was not yet enabled during this transaction
+        postTokenBalances:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenBalance'
+          description: List of token balances from after the transaction was processed or omitted if token balance recording was not yet enabled during this transaction
+        logMessages:
+          type: array
+          items:
+            type: string
+          description: array of string log messages or null if log message recording was not enabled during this transaction
+        rewards:
+          type: array
+          description: |
+            transaction-level rewards
+          items:
+            type: object
+            properties:
+              pubkey:
+                type: string
+                description: The public key, as base-58 encoded string, of the account that received the reward
+              lamports:
+                type: integer
+                description: number of reward lamports credited or debited by the account, as a i64
+              postBalance:
+                type: integer
+                description: account balance in lamports after the reward was applied
+              rewardType:
+                type: string
+                enum:
+                  - fee
+                  - rent
+                  - voting
+                  - staking
+              commission:
+                type: integer
+                description: vote account commission when the reward was credited, only present for voting and staking rewards
+        loadedAddresses:
+          type: object
+          description: Transaction addresses loaded from address lookup tables. Undefined if maxSupportedTransactionVersion is not set in request params, or if jsonParsed encoding is set in request params.
+          properties:
+            writable:
+              type: array
+              description: Ordered list of base-58 encoded addresses for writable loaded accounts
+            readonly:
+              type: array
+              description: Ordered list of base-58 encoded addresses for readonly loaded accounts
+        returnData:
+          type: object
+          description: |
+            the most-recent return data generated by an instruction in the transaction, with the following fields:
+          properties:
+            programId:
+              type: string
+              description: the program that generated the return data, as base-58 encoded Pubkey
+            data:
+              type: string
+              description: the return data itself, as base-64 encoded binary data
+        computeUnitsConsumed:
+          type: integer
+          description: number of compute units consumed by the transaction
+        version:
+          $ref: '#/components/schemas/TransactionVersion'
+        signatures:
+          type: array
+          description: present if "signatures" are requested for transaction details; an array of signatures strings, corresponding to the transaction order in the block
+          items:
+            type: string
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

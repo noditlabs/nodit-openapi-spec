@@ -256,7 +256,7 @@ Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트
 ### 3.4. Unsubscribe
 
 터미널 창에서 <CTRL+C> 를 입력하여 연결을 종료하면, 구독이 해제됩니다.
-혹은 eth_subscribe 를 사용하여, 연결을 유지한채 구독을 해제할 수 있습니다. 아래의 예시와 같이 채널에 연결된 subscription ID를 params에 입력하여 전송하면 해당 구독이 해제됩니다.
+혹은 eth_unsubscribe 를 사용하여, 연결을 유지한채 구독을 해제할 수 있습니다. 아래의 예시와 같이 채널에 연결된 subscription ID를 params에 입력하여 전송하면 해당 구독이 해제됩니다.
 
 ```json unsubscribe example
 {

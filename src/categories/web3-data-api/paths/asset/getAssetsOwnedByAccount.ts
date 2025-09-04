@@ -46,7 +46,12 @@ function getOpIdAndParams(protocol: string): {
 			operationId: `${protocol}-${endpoint}`,
 			parameters: [
 				Requests.protocol(protocol, [protocol]),
-				Requests.network(chainInfo.mainnet, [chainInfo.mainnet, ...chainInfo.testnet]),
+				Requests.network(
+          chainInfo?.mainnet || chainInfo?.testnet?.[0] || null,
+          chainInfo?.mainnet
+            ? [chainInfo.mainnet, ...(chainInfo?.testnet || [])]
+            : [...(chainInfo?.testnet || [])]
+        ),
 			],
 		};
 	}

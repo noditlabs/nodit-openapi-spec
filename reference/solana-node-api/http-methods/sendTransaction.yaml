@@ -1,0 +1,244 @@
+openapi: 3.1.0
+info:
+  title: solana-sendTransaction
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-sendTransaction
+      description: |
+        Submits a signed transaction to the cluster for processing.
+
+        This method does not alter the transaction in any way; it relays the transaction created by clients to the node as-is.
+
+        If the node's rpc service receives the transaction, this method immediately succeeds, without waiting for any confirmations. A successful response from this method does not guarantee the transaction is processed or confirmed by the cluster.
+
+        While the rpc service will reasonably retry to submit it, the transaction could be rejected if transaction's recent_blockhash expires before it lands.
+
+        Use getSignatureStatuses to ensure a transaction is processed and confirmed.
+
+        Before submitting, the following preflight checks are performed:
+
+        The transaction signatures are verified
+        The transaction is simulated against the bank slot specified by the preflight commitment. On failure an error will be returned. Preflight checks may be disabled if desired. It is recommended to specify the same commitment and preflight commitment to avoid confusing behavior.
+        The returned signature is the first signature in the transaction, which is used to identify the transaction (transaction id). This identifier can be easily extracted from the transaction data before submission.
+      summary: sendTransaction
+      operationId: solana-sendTransaction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: sendTransaction
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                      1. Signed transaction hash (`required`)
+                      2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Signed transaction hash
+                        type: string
+                        description: Fully-signed Transaction, as encoded string.
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          encoding:
+                            type: string
+                            enum:
+                              - base58
+                              - base64
+                            default: base58
+                            description: |
+                              Encoding used for the transaction data. Values: `base58` (slow, `DEPRECATED`), or `base64`.
+                          skipPreflight:
+                            type: boolean
+                            description: |
+                              When true, skip the preflight transaction checks. Default: false.
+                          preflightCommitment:
+                            $ref: '#/components/schemas/Commitment'
+                            default: finalized
+                          maxRetries:
+                            type: integer
+                            description: Maximum number of times for the RPC node to retry sending the transaction to the leader. If this parameter not provided, the RPC node will retry the transaction until it is finalized or until the blockhash expires.
+                          minContextSlot:
+                            $ref: '#/components/schemas/MinContextSlot'
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: sendTransaction
+                params:
+                  - 4hXTCkRzt9WyecNzV1XPgCDfGAZzQKNxLXgynz5QDuWWPSAZBZSHptvWRL3BjCvzUXRdKvHL2b7yGrRQcWyaqsaBCncVG7BFggS8w9snUts67BSh3EqKpXLUm5UMHfD7ZBe9GhARjbNQMLJ1QD3Spr6oMTBU6EhdB4RD8CP2xUxr2u3d6fos36PD98XS6oX8TQjLpsMwncs5DAMiD4nNnR8NBfyghGCWvCVifVwvA8B8TJxE1aiyiv2L429BCWfyzAme5sZW8rDb14NeCQHhZbtNqfXhcp2tAnaAT
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: integer
+                        format: uint64
+                        description: The minimum ledger slot number
+                example:
+                  jsonrpc: '2.0'
+                  result: 2id3YC2jK9G5Wo2phDx4gJVAew8DcY5NAojnVuao8rkxwPYPe8cSwE5GzhEgJA2y8fVjDEo6iR6ykBvDxrTQrtpb
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    MinContextSlot:
+      type: string
+      description: The minimum slot that the request can be evaluated at.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

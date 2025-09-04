@@ -1,0 +1,239 @@
+openapi: 3.1.0
+info:
+  title: solana-getEpochInfo
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getEpochInfo
+      description: |
+        Returns information about the current epoch
+      summary: getEpochInfo
+      operationId: solana-getEpochInfo
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getEpochInfo
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  description: |
+                    It contains following items:
+                    1. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: '#/components/schemas/Commitment'
+                          minContextSlot:
+                            $ref: '#/components/schemas/MinContextSlot'
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getEpochInfo
+                params:
+                  - commitment: finalized
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          absoluteSlot:
+                            type: integer
+                            format: uint64
+                            description: The current slot
+                          blockHeight:
+                            type: integer
+                            format: uint64
+                            description: The current block height
+                          epoch:
+                            type: integer
+                            format: uint64
+                            description: The current epoch
+                          slotIndex:
+                            type: integer
+                            format: uint64
+                            description: The current slot relative to the start of the current epoch
+                          slotsInEpoch:
+                            type: integer
+                            format: uint64
+                            description: The number of slots in this epoch
+                          transactionCount:
+                            type: integer
+                            format: uint64
+                            description: Total number of transactions processed without error since genesis
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    absoluteSlot: 166598
+                    blockHeight: 166500
+                    epoch: 27
+                    slotIndex: 2790
+                    slotsInEpoch: 8192
+                    transactionCount: 22661093
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    MinContextSlot:
+      type: string
+      description: The minimum slot that the request can be evaluated at.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

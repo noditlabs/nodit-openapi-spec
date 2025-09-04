@@ -1,0 +1,376 @@
+openapi: 3.1.0
+info:
+  title: solana-simulateTransaction
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-simulateTransaction
+      description: Simulate sending a transaction
+      summary: simulateTransaction
+      operationId: solana-simulateTransaction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: simulateTransaction
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                      1. Transaction (`required`)
+                      2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Transaction
+                        type: string
+                        description: Transaction, as an encoded string.
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: '#/components/schemas/Commitment'
+                            default: finalized
+                          encoding:
+                            $ref: '#/components/schemas/EncodingForTransaction'
+                          replaceRecentBlockhash:
+                            type: boolean
+                            description: |
+                              If true the transaction recent blockhash will be replaced with the most recent blockhash (conflicts with `sigVerify`)
+                          sigVerify:
+                            type: boolean
+                            description: |
+                              If true the transaction signatures will be verified (conflicts with replaceRecentBlockhash)
+                          minContextSlot:
+                            $ref: '#/components/schemas/MinContextSlot'
+                          innerInstructions:
+                            type: boolean
+                            description: |
+                              If true the response will include inner instructions. These inner instructions will be jsonParsed where possible, otherwise json.
+                          accounts:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                addresses:
+                                  type: string
+                                  description: An array of accounts to return, as base-58 encoded strings
+                                encoding:
+                                  type: string
+                                  description: |
+                                    Encoding for returned Account data. Note: jsonParsed encoding attempts to use program-specific state parsers to return more human-readable and explicit account state data. If jsonParsed is requested but a parser cannot be found, the field falls back to base64 encoding, detectable when the returned accounts.data field is type string.
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: simulateTransaction
+                params:
+                  - AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEEjNmKiZGiOtSZ+g0//wH5kEQo3+UzictY+KlLV8hjXcs44M/Xnr+1SlZsqS6cFMQc46yj9PIsxqkycxJmXT+veJjIvefX4nhY9rY+B5qreeqTHu4mG6Xtxr5udn4MN8PnBt324e51j94YQl285GzN2rYa/E2DuQ0n/r35KNihi/zamQ6EeyeeVDvPVgUO2W3Lgt9hT+CfyqHvIa11egFPCgEDAwIBAAkDZAAAAAAAAAA=
+                  - commitment: confirmed
+                    encoding: base64
+                    replaceRecentBlockhash: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          context:
+                            $ref: '#/components/schemas/Context'
+                          value:
+                            type: object
+                            properties:
+                              accounts:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/Account'
+                              err:
+                                $ref: '#/components/schemas/Err'
+                              innerInstructions:
+                                type: array
+                                description: Defined only if innerInstructions was set to true. The value is a list of inner instructions.
+                                items:
+                                  $ref: '#/components/schemas/InnerInstruction'
+                              loadedAccountsDataSize:
+                                type: integer
+                                description: The number of bytes of all accounts loaded by this transaction
+                              logs:
+                                type: array
+                                description: Array of log messages the transaction instructions output during execution, null if simulation failed before the transaction was able to execute
+                                items:
+                                  type: string
+                              replacementBlockhash:
+                                type: object
+                                properties:
+                                  blockhash:
+                                    $ref: '#/components/schemas/Blockhash'
+                                  lastValidBlockHeight:
+                                    type: integer
+                                    format: uint64
+                                    description: The last valid block height at which the blockhash is still valid.
+                              returnData:
+                                type: object
+                                description: |
+                                  The most-recent return data generated by an instruction in the transaction
+                                properties:
+                                  programId:
+                                    type: string
+                                    description: the program that generated the return data, as base-58 encoded Pubkey
+                                  data:
+                                    type: string
+                                    description: the return data itself, as base-64 encoded binary data
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    context:
+                      apiVersion: 2.3.3
+                      slot: 393226680
+                    value:
+                      accounts: null
+                      err: null
+                      innerInstructions: null
+                      loadedAccountsDataSize: 413
+                      logs:
+                        - Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]
+                        - 'Program log: Instruction: Transfer'
+                        - Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 1714 of 200000 compute units
+                        - Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success
+                      replacementBlockhash:
+                        blockhash: 6oFLsE7kmgJx9PjR4R63VRNtpAVJ648gCTr3nq5Hihit
+                        lastValidBlockHeight: 381186895
+                      returnData: null
+                      unitsConsumed: 1714
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    EncodingForTransaction:
+      type: string
+      enum:
+        - base58
+        - base64
+      description: |
+        Encoding used for the transaction data. Values: `base58` (slow, `DEPRECATED`), or `base64`.
+    MinContextSlot:
+      type: string
+      description: The minimum slot that the request can be evaluated at.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    Context:
+      type: object
+      description: An object containing metadata about the current state of the Solana network at the time of the request.
+      properties:
+        apiVersion:
+          type: string
+          description: The API version used for the request
+        slot:
+          type: integer
+          description: The slot number at which the request was evaluated
+    Lamports:
+      type: integer
+      format: uint64
+      description: Number of lamports assigned to this account
+    Account:
+      type: object
+      properties:
+        data:
+          type: array
+          description: |
+            Data associated with the account, either as encoded binary data or JSON format {<program>: <state>} - depending on encoding parameter
+        executable:
+          type: boolean
+          description: Boolean indicating if the account contains a program (and is strictly read-only)
+        lamports:
+          $ref: '#/components/schemas/Lamports'
+        owner:
+          type: string
+          description: Base-58 encoded Pubkey of the program this account has been assigned to
+        rentEpoch:
+          type: integer
+          format: uint64
+          description: The epoch at which this account will next owe rent
+        space:
+          type: integer
+          format: uint64
+          description: The data size of the account
+    Err:
+      type: object
+      description: Error if transaction failed, null if transaction succeeded.
+    InnerInstruction:
+      type: object
+      properties:
+        index:
+          type: number
+          description: Index of the transaction instruction from which the inner instruction(s) originated
+        instructions:
+          type: array
+          description: Ordered list of inner program instructions that were invoked during a single transaction instruction.
+          items:
+            type: object
+        programIdIndex:
+          type: number
+          description: Index into the message.accountKeys array indicating the program account that executes this instruction.
+        accounts:
+          type: array
+          description: List of ordered indices into the message.accountKeys array indicating which accounts to pass to the program.
+          items:
+            type: number
+        data:
+          type: string
+          description: The program input data encoded in a base-58 string.
+    Blockhash:
+      type: string
+      description: The blockhash of the block, as base-58 encoded string
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

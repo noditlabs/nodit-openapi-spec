@@ -13,8 +13,8 @@ export interface SupportedApis {
 
 export interface ChainInfo {
   protocol: string;
-  mainnet: string;
-  testnet: string[];
+  mainnet?: string;
+  testnet?: string[];
 }
 
 export function getChainInfo(protocol: string): ChainInfo {
@@ -120,6 +120,10 @@ export const supportedChains: ChainInfo[] = [
     protocol: "bnb",
     mainnet: "mainnet",
     testnet: ["testnet"],
+  },
+  {
+    protocol: "giwa",
+    testnet: ["sepolia"],
   },
 ];
 
@@ -290,7 +294,7 @@ export const supportedApisChains: SupportedApis[] = [
       "updateWebhook",
       "getWebhook",
       "deleteWebhook",
-      // "getWebhookHistory"
+      "getWebhookHistory",
     ],
   },
   {
@@ -435,7 +439,7 @@ export const supportedApisChains: SupportedApis[] = [
       "updateWebhook",
       "getWebhook",
       "deleteWebhook",
-      // "getWebhookHistory"
+      "getWebhookHistory",
     ],
   },
   {
@@ -575,7 +579,7 @@ export const supportedApisChains: SupportedApis[] = [
       "updateWebhook",
       "getWebhook",
       "deleteWebhook",
-      // "getWebhookHistory"
+      "getWebhookHistory",
     ],
   },
   {
@@ -712,7 +716,7 @@ export const supportedApisChains: SupportedApis[] = [
       "updateWebhook",
       "getWebhook",
       "deleteWebhook",
-      // "getWebhookHistory"
+      "getWebhookHistory",
     ],
   },
   {
@@ -852,7 +856,7 @@ export const supportedApisChains: SupportedApis[] = [
       "updateWebhook",
       "getWebhook",
       "deleteWebhook",
-      // "getWebhookHistory"
+      "getWebhookHistory",
     ],
   },
   {
@@ -1057,7 +1061,7 @@ export const supportedApisChains: SupportedApis[] = [
       "updateWebhook",
       "getWebhook",
       "deleteWebhook",
-      // "getWebhookHistory"
+      "getWebhookHistory",
     ],
   },
   {
@@ -1203,11 +1207,11 @@ export const supportedApisChains: SupportedApis[] = [
     ],
     // luniverse
     webhookApi: [
-      // "createWebhook",
-      // "updateWebhook",
-      // "getWebhook",
-      // "deleteWebhook",
-      // "getWebhookHistory"
+      "createWebhook",
+      "updateWebhook",
+      "getWebhook",
+      "deleteWebhook",
+      "getWebhookHistory",
     ],
   },
   {
@@ -1274,13 +1278,13 @@ export const supportedApisChains: SupportedApis[] = [
       { category: "kaia", endpoints: [] },
       { category: "klay", endpoints: [] },
     ],
-    // luniverse
+    // avalanche
     webhookApi: [
       // "createWebhook",
       // "updateWebhook",
       // "getWebhook",
       // "deleteWebhook",
-      // "getWebhookHistory"
+      // "getWebhookHistory",
     ],
   },
   {
@@ -1428,6 +1432,7 @@ export const supportedApisChains: SupportedApis[] = [
     webhookApi: [],
     streamApi: false,
   },
+  // Tron
   {
     chain: "tron",
     streamApi: true,
@@ -1680,5 +1685,145 @@ export const supportedApisChains: SupportedApis[] = [
       },
     ],
     webhookApi: [],
+  },
+  {
+    chain: "giwa",
+    streamApi: true,
+    web3DataApi: [
+      {
+        category: "blockchain",
+        endpoints: [
+          "getBlockByHashOrNumber",
+          "getBlocksWithinRange",
+          "getGasPrice",
+          "getInternalTransactionsByAccount",
+          "getInternalTransactionsByTransactionHash",
+          "getNextNonceByAccount",
+          "getTotalTransactionCountByAccount",
+          "getTransactionByHash",
+          // "getTransactionByTransactionId",
+          "getTransactionsByAccount",
+          "getTransactionsByHashes",
+          // "getTransactionsByTransactionIds",
+          "getTransactionsInBlock",
+          // "getUnspentTransactionOutputsByAccount",
+          "isContract",
+          "searchEvents",
+        ],
+      },
+      { category: "ens", endpoints: [] },
+      {
+        category: "native",
+        endpoints: [
+          "getNativeBalanceByAccount",
+          // "getNativeTokenBalanceByAccount",
+          // "getNativeTokenTransfersByAccount",
+        ],
+      },
+      {
+        category: "nft",
+        endpoints: [
+          "getNftContractMetadataByContracts",
+          "getNftsOwnedByAccount",
+          "getNftTransfersByAccount",
+          "getNftTransfersByContract",
+          "getNftTransfersByTokenId",
+          "getNftTransfersWithinRange",
+          "getNftContractsByAccount",
+          "getNftHoldersByTokenId",
+          "getNftHoldersByContract",
+          "getNftMetadataByContract",
+          "getNftMetadataByTokenIds",
+          "searchNftContractMetadataByKeyword",
+          "syncNftMetadata",
+        ],
+      },
+      { category: "stats", endpoints: ["getAccountStats"] },
+      {
+        category: "token",
+        endpoints: [
+          "getTokenAllowance",
+          "getTokenContractMetadataByContracts",
+          "getTokenHoldersByContract",
+          "getTokenPricesByContracts",
+          "getTokensOwnedByAccount",
+          "getTokenTransfersByAccount",
+          "getTokenTransfersByContract",
+          "getTokenTransfersWithinRange",
+          "searchTokenContractMetadataByKeyword",
+        ],
+      },
+    ],
+    // giwa
+    nodeApi: [
+      {
+        category: "eth",
+        endpoints: [
+          "eth_blockNumber",
+          "eth_call",
+          "eth_chainId",
+          "eth_createAccessList",
+          "eth_estimateGas",
+          "eth_feeHistory",
+          "eth_gasPrice",
+          "eth_getBalance",
+          "eth_getBlockByHash",
+          "eth_getBlockByNumber",
+          "eth_getBlockReceipts",
+          "eth_getBlockTransactionCountByHash",
+          "eth_getBlockTransactionCountByNumber",
+          "eth_getCode",
+          "eth_getFilterChanges",
+          "eth_getFilterLogs",
+          "eth_getLogs",
+          "eth_getProof",
+          "eth_getStorageAt",
+          "eth_getTransactionByBlockHashAndIndex",
+          "eth_getTransactionByBlockNumberAndIndex",
+          "eth_getTransactionByHash",
+          "eth_getTransactionCount",
+          "eth_getTransactionReceipt",
+          "eth_getUncleByBlockHashAndIndex",
+          "eth_getUncleByBlockNumberAndIndex",
+          "eth_getUncleCountByBlockHash",
+          "eth_getUncleCountByBlockNumber",
+          "eth_maxPriorityFeePerGas",
+          "eth_newBlockFilter",
+          "eth_newFilter",
+          "eth_newPendingTransactionFilter",
+          "eth_sendRawTransaction",
+          "eth_uninstallFilter",
+          "eth_subscribe",
+          "eth_unsubscribe",
+        ],
+      },
+      { category: "net", endpoints: ["net_listening", "net_version"] },
+      { category: "web3", endpoints: ["web3_clientVersion", "web3_sha3"] },
+      { category: "trace", endpoints: [] },
+      {
+        category: "debug",
+        endpoints: [
+          "debug_traceBlockByHash",
+          "debug_traceBlockByNumber",
+          "debug_traceCall",
+          "debug_traceTransaction",
+        ],
+      },
+      { category: "bor", endpoints: [] },
+      {
+        category: "optimism",
+        endpoints: ["optimism_outputAtBlock", "optimism_rollupConfig"],
+      },
+      { category: "kaia", endpoints: [] },
+      { category: "klay", endpoints: [] },
+    ],
+    // giwa
+    webhookApi: [
+      "createWebhook",
+      "updateWebhook",
+      "getWebhook",
+      "deleteWebhook",
+      "getWebhookHistory",
+    ],
   },
 ];

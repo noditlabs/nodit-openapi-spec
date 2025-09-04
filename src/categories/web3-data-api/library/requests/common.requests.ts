@@ -20,7 +20,7 @@ export function protocol(
 }
 
 export function network(
-  example: string,
+  example: string | null,
   list: string[]
 ): OpenAPIV3.ParameterObject {
   return {

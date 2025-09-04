@@ -1,0 +1,262 @@
+openapi: 3.1.0
+info:
+  title: solana-getSignatureStatuses
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getSignatureStatuses
+      description: |
+        Returns the statuses of a list of signatures. Each signature must be a txid, the first signature of a transaction.
+        Unless the `searchTransactionHistory` configuration parameter is included, this method only searches the recent status cache of signatures, which retains statuses for all active slots plus `MAX_RECENT_BLOCKHASHES` rooted slots.
+      summary: getSignatureStatuses
+      operationId: solana-getSignatureStatuses
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getSignatureStatuses
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Transaction signatures (`required`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    type: string
+                  oneOf:
+                    - title: Transaction signatures
+                      type: string
+                      description: An array of transaction signatures to confirm, as base-58 encoded strings (up to a maximum of 256)
+                    - title: Configuration Object
+                      type: object
+                      properties:
+                        searchTransactionHistory:
+                          type: boolean
+                          description: |
+                            if true - a Solana node will search its ledger cache for any signatures not found in the recent status cache
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getSignatureStatuses
+                params:
+                  - - 5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR4tjF3ZpRzrFmBV6UjKdiSZkQUW
+                  - searchTransactionHistory: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          context:
+                            $ref: '#/components/schemas/Context'
+                          value:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                slot:
+                                  type: integer
+                                  format: uint64
+                                  description: The slot the transaction was processed
+                                confirmations:
+                                  type: integer
+                                  format: uint64
+                                  description: Number of blocks since signature confirmation, null if rooted, as well as finalized by a supermajority of the cluster
+                                err:
+                                  $ref: '#/components/schemas/Err'
+                                status:
+                                  type: object
+                                  description: |
+                                    `DEPRECATED` Transaction status
+
+                                    "Ok": <null> - Transaction was successful
+                                    "Err": <ERR> - Transaction failed with TransactionError
+                                confirmationStatus:
+                                  $ref: '#/components/schemas/ConfirmationStatus'
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    context:
+                      slot: 82
+                    value:
+                      - slot: 48
+                        confirmations: null
+                        err: null
+                        status:
+                          Ok: null
+                        confirmationStatus: finalized
+                      - null
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    Context:
+      type: object
+      description: An object containing metadata about the current state of the Solana network at the time of the request.
+      properties:
+        apiVersion:
+          type: string
+          description: The API version used for the request
+        slot:
+          type: integer
+          description: The slot number at which the request was evaluated
+    Err:
+      type: object
+      description: Error if transaction failed, null if transaction succeeded.
+    ConfirmationStatus:
+      type: string
+      description: |
+        The transaction's cluster confirmation status; Either processed, confirmed, or finalized.
+        - processed - the transaction has been processed by the cluster
+        - confirmed - the transaction has been confirmed by the cluster
+        - finalized - the transaction has been finalized by the cluster
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

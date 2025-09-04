@@ -1,0 +1,279 @@
+openapi: 3.1.0
+info:
+  title: solana-getLeaderSchedule
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getLeaderSchedule
+      description: |
+        Returns the leader schedule for an epoch
+      summary: getLeaderSchedule
+      operationId: solana-getLeaderSchedule
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getLeaderSchedule
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Epoch (`optional`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    title: Configuration Object
+                    type: object
+                    properties:
+                      commitment:
+                        $ref: '#/components/schemas/Commitment'
+                      identity:
+                        $ref: '#/components/schemas/Identity'
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getLeaderSchedule
+                params:
+                  - null
+                  - commitment: processed
+                    identity: dv2eQHeP4RFrJZ6UeiZWoc3XTtmtZCUKxxCApCDcRNV
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        description: |
+                          Returns null if requested epoch is not found, otherwise returns an object where:
+                          - Keys are validator identities (as base-58 encoded strings)
+                          - Values are arrays of leader slot indices relative to the first slot in the requested epoch
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    4Qkev8aNZcqFNSRhQzwyLMFSsi94jHqE8WNVTJzTP99F:
+                      - 0
+                      - 1
+                      - 2
+                      - 3
+                      - 4
+                      - 5
+                      - 6
+                      - 7
+                      - 8
+                      - 9
+                      - 10
+                      - 11
+                      - 12
+                      - 13
+                      - 14
+                      - 15
+                      - 16
+                      - 17
+                      - 18
+                      - 19
+                      - 20
+                      - 21
+                      - 22
+                      - 23
+                      - 24
+                      - 25
+                      - 26
+                      - 27
+                      - 28
+                      - 29
+                      - 30
+                      - 31
+                      - 32
+                      - 33
+                      - 34
+                      - 35
+                      - 36
+                      - 37
+                      - 38
+                      - 39
+                      - 40
+                      - 41
+                      - 42
+                      - 43
+                      - 44
+                      - 45
+                      - 46
+                      - 47
+                      - 48
+                      - 49
+                      - 50
+                      - 51
+                      - 52
+                      - 53
+                      - 54
+                      - 55
+                      - 56
+                      - 57
+                      - 58
+                      - 59
+                      - 60
+                      - 61
+                      - 62
+                      - 63
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    Identity:
+      type: string
+      description: Only return results for this validator identity (base-58 encoded).
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

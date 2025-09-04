@@ -4,7 +4,10 @@ import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
 import { ERC721, getChainInfo } from "../../../../constants";
-import { kaiaUsingTipsForCommon, kaiaUsingTipsForNftHolder } from "../../../../callouts";
+import {
+  kaiaUsingTipsForCommon,
+  kaiaUsingTipsForNftHolder,
+} from "../../../../callouts";
 
 const summary = "Get NFT Holders by Contract";
 const endpoint = "getNftHoldersByContract";
@@ -13,54 +16,54 @@ const tags = ["NFT API"];
 
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
-	switch (protocol) {
-		default:
-			return `특정 NFT 컨트랙트의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 NFT의 수량이 포함됩니다.`;
-	}
+  switch (protocol) {
+    default:
+      return `특정 NFT 컨트랙트의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 NFT의 수량이 포함됩니다.`;
+  }
 }
 
 const info = (protocol: string): OpenAPIV3.PathItemObject => {
-	// A. operationId, parameters 설정
-	const { operationId, parameters } = getOpIdAndParams(protocol);
-	// B. requestBody, successResponse 설정
-	const { requestBody, successResponse } = getRequestAndResponse(protocol);
-	// C. callouts 설정
-	const callouts = getCallouts(protocol);
-	// D. protocol에 따른 description 설정
-	const protocolDescription = getDescription(protocol);
+  // A. operationId, parameters 설정
+  const { operationId, parameters } = getOpIdAndParams(protocol);
+  // B. requestBody, successResponse 설정
+  const { requestBody, successResponse } = getRequestAndResponse(protocol);
+  // C. callouts 설정
+  const callouts = getCallouts(protocol);
+  // D. protocol에 따른 description 설정
+  const protocolDescription = getDescription(protocol);
 
-	return {
-		post: {
-			security: [
-				{
-					api_key: [],
-				},
-			],
-			tags,
-			description: `${protocolDescription}\n\n${callouts}`,
-			summary,
-			operationId,
-			parameters,
-			requestBody: {
-				required: true,
-				content: {
-					"application/json": {
-						schema: requestBody,
-					},
-				},
-			},
-			responses: {
-				"200": {
-					...Responses.Success200(successResponse),
-				},
-				"400": Responses.Error400,
-				"401": Responses.Error401,
-				"403": Responses.Error403,
-				"404": Responses.Error404,
-				"429": Responses.Error429,
-			},
-		},
-	};
+  return {
+    post: {
+      security: [
+        {
+          api_key: [],
+        },
+      ],
+      tags,
+      description: `${protocolDescription}\n\n${callouts}`,
+      summary,
+      operationId,
+      parameters,
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: requestBody,
+          },
+        },
+      },
+      responses: {
+        "200": {
+          ...Responses.Success200(successResponse),
+        },
+        "400": Responses.Error400,
+        "401": Responses.Error401,
+        "403": Responses.Error403,
+        "404": Responses.Error404,
+        "429": Responses.Error429,
+      },
+    },
+  };
 };
 
 // ─────────────────────────────────────
@@ -68,37 +71,48 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
 //   - none vs. 그 외
 // ─────────────────────────────────────
 function getOpIdAndParams(protocol: string): {
-	operationId: string;
-	parameters: OpenAPIV3.ParameterObject[];
+  operationId: string;
+  parameters: OpenAPIV3.ParameterObject[];
 } {
-	if (protocol === "none") {
-		return {
-			operationId: endpoint,
-			parameters: [
-				Requests.protocol("ethereum", [
-					// evm
-					"arbitrum",
-					"base",
-					"ethereum",
-					"kaia",
-					"optimism",
-					"polygon",
-					"luniverse",
-					"chiliz",
-				]),
-				Requests.network("mainnet", ["mainnet", "sepolia", "hoodi", "amoy", "testnet"]),
-			],
-		};
-	} else {
-		const chainInfo = getChainInfo(protocol);
-		return {
-			operationId: `${protocol}-${endpoint}`,
-			parameters: [
-				Requests.protocol(protocol, [protocol]),
-				Requests.network(chainInfo.mainnet, [chainInfo.mainnet, ...chainInfo.testnet]),
-			],
-		};
-	}
+  if (protocol === "none") {
+    return {
+      operationId: endpoint,
+      parameters: [
+        Requests.protocol("ethereum", [
+          // evm
+          "arbitrum",
+          "base",
+          "ethereum",
+          "kaia",
+          "optimism",
+          "polygon",
+          "luniverse",
+          "chiliz",
+        ]),
+        Requests.network("mainnet", [
+          "mainnet",
+          "sepolia",
+          "hoodi",
+          "amoy",
+          "testnet",
+        ]),
+      ],
+    };
+  } else {
+    const chainInfo = getChainInfo(protocol);
+    return {
+      operationId: `${protocol}-${endpoint}`,
+      parameters: [
+        Requests.protocol(protocol, [protocol]),
+        Requests.network(
+          chainInfo?.mainnet || chainInfo?.testnet?.[0] || null,
+          chainInfo?.mainnet
+            ? [chainInfo.mainnet, ...(chainInfo?.testnet || [])]
+            : [...(chainInfo?.testnet || [])]
+        ),
+      ],
+    };
+  }
 }
 
 // ─────────────────────────────────────
@@ -106,35 +120,35 @@ function getOpIdAndParams(protocol: string): {
 //   - 프로토콜별로 모두 다름
 // ─────────────────────────────────────
 function getRequestAndResponse(protocol: string): {
-	requestBody: OpenAPIV3.SchemaObject;
-	successResponse: OpenAPIV3.MediaTypeObject;
+  requestBody: OpenAPIV3.SchemaObject;
+  successResponse: OpenAPIV3.MediaTypeObject;
 } {
-	switch (protocol) {
-		case "none":
-		default:
-			return {
-				requestBody: {
-					additionalProperties: false,
-					allOf: [
-						{
-							type: "object",
-							properties: {
-								contractAddress: {
-									...Requests.Ethereum.contractAddress,
-									default: ERC721.BAYC.CONTRACT_ADDRESS,
-								},
-							},
-							required: ["contractAddress"],
-						},
-						Requests.PaginationSet,
-					],
-				},
-				successResponse: {
-					schema: Domains.Pagination(Domains.Ethereum.NftHolder),
-					example: Examples.Ethereum[endpoint],
-				},
-			};
-	}
+  switch (protocol) {
+    case "none":
+    default:
+      return {
+        requestBody: {
+          additionalProperties: false,
+          allOf: [
+            {
+              type: "object",
+              properties: {
+                contractAddress: {
+                  ...Requests.Ethereum.contractAddress,
+                  default: ERC721.BAYC.CONTRACT_ADDRESS,
+                },
+              },
+              required: ["contractAddress"],
+            },
+            Requests.PaginationSet,
+          ],
+        },
+        successResponse: {
+          schema: Domains.Pagination(Domains.Ethereum.NftHolder),
+          example: Examples.Ethereum[endpoint],
+        },
+      };
+  }
 }
 
 // ─────────────────────────────────────
@@ -142,18 +156,18 @@ function getRequestAndResponse(protocol: string): {
 //   - none일 경우 모든 케이스의 callouts 처리
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
-	switch (protocol) {
-		case "none":
-		case "kaia":
-			return `${kaiaUsingTipsForCommon(kaiaUsingTipsForNftHolder)}`;
-		default:
-			return ``;
-	}
+  switch (protocol) {
+    case "none":
+    case "kaia":
+      return `${kaiaUsingTipsForCommon(kaiaUsingTipsForNftHolder)}`;
+    default:
+      return ``;
+  }
 }
 
 export default {
-	summary,
-	endpoint,
-	isPublic,
-	info,
+  summary,
+  endpoint,
+  isPublic,
+  info,
 };

@@ -58,11 +58,31 @@ Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트
 ```json newHeads
 { "jsonrpc": "2.0", "id": 1, "method": "eth_subscribe", "params": ["newHeads"] }
 ```
+
 ```json logs
-{"jsonrpc":"2.0", "id": 1, "method": "eth_subscribe", "params": ["logs", {"address": "0xdAC17F958D2ee523a2206206994597C13D831ec7", "topics":["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"]}]}
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "eth_subscribe",
+  "params": [
+    "logs",
+    {
+      "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "topics": [
+        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+      ]
+    }
+  ]
+}
 ```
+
 ```json newPendingTransactions
-{"jsonrpc":"2.0", "id": 1, "method": "eth_subscribe", "params": ["newPendingTransactions", true]}
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "eth_subscribe",
+  "params": ["newPendingTransactions", true]
+}
 ```
 
 ### 3.3. Listen subscription
@@ -95,10 +115,15 @@ Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트
 ### 3.4. Unsubscribe
 
 터미널 창에서 <CTRL+C> 를 입력하여 연결을 종료하면, 구독이 해제됩니다.
-혹은 eth_subscribe 를 사용하여, 연결을 유지한채 구독을 해제할 수 있습니다. 아래의 예시와 같이 채널에 연결된 subscription ID를 params에 입력하여 전송하면 해당 구독이 해제됩니다.
+혹은 eth_unsubscribe 를 사용하여, 연결을 유지한채 구독을 해제할 수 있습니다. 아래의 예시와 같이 채널에 연결된 subscription ID를 params에 입력하여 전송하면 해당 구독이 해제됩니다.
 
 ```json unsubscribe example
-{"jsonrpc":"2.0", "id": 1, "method": "eth_unsubscribe", "params": ["0x540e1706d67fd05fc8f3318dc7e86fc7"]}
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "eth_unsubscribe",
+  "params": ["0x540e1706d67fd05fc8f3318dc7e86fc7"]
+}
 ```
 
 만약 정상적으로 구독 해제되었다면 아래의 응답을 받을 수 있습니다.

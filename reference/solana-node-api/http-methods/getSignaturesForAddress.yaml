@@ -1,0 +1,266 @@
+openapi: 3.1.0
+info:
+  title: solana-getSignaturesForAddress
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getSignaturesForAddress
+      description: |
+        Returns signatures for confirmed transactions that include the given address in their accountKeys list. Returns signatures backwards in time from the provided signature or most recent confirmed block
+      summary: getSignaturesForAddress
+      operationId: solana-getSignaturesForAddress
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getSignaturesForAddress
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Account address (`required`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    type: string
+                  oneOf:
+                    - title: Account address
+                      type: string
+                      description: Account address as base-58 encoded string
+                    - title: Configuration Object
+                      type: object
+                      properties:
+                        commitment:
+                          $ref: '#/components/schemas/Commitment'
+                        minContextSlot:
+                          $ref: '#/components/schemas/MinContextSlot'
+                        limit:
+                          type: integer
+                          description: Maximum transaction signatures to return (between 1 and 1,000).
+                          default: 1000
+                        before:
+                          type: string
+                          description: Start searching backwards from this transaction signature. If not provided the search starts from the top of the highest max confirmed block.
+                        until:
+                          type: string
+                          description: Search until this transaction signature, if found before limit reached
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getSignaturesForAddress
+                params:
+                  - Vote111111111111111111111111111111111111111
+                  - commitment: finalized
+                    limit: 1
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            signature:
+                              type: string
+                              description: Transaction signature as base-58 encoded string
+                            slot:
+                              type: integer
+                              format: uint64
+                              description: The slot that contains the block with the transaction
+                            err:
+                              $ref: '#/components/schemas/Err'
+                            memo:
+                              type: string
+                              description: Memo associated with the transaction, null if no memo is present
+                            blockTime:
+                              type: integer
+                              format: int64
+                              description: Estimated production time, as Unix timestamp (seconds since the Unix epoch) of when transaction was processed. null if not available.
+                            confirmationStatus:
+                              $ref: '#/components/schemas/ConfirmationStatus'
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    - signature: 5h6xBEauJ3PK6SWCZ1PGjBvj8vDdWG3KpwATGy1ARAXFSDwt8GFXM7W5Ncn16wmqokgpiKRLuS83KUxyZyv2sUYv
+                      slot: 114
+                      err: null
+                      memo: null
+                      blockTime: null
+                      confirmationStatus: finalized
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    MinContextSlot:
+      type: string
+      description: The minimum slot that the request can be evaluated at.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    Err:
+      type: object
+      description: Error if transaction failed, null if transaction succeeded.
+    ConfirmationStatus:
+      type: string
+      description: |
+        The transaction's cluster confirmation status; Either processed, confirmed, or finalized.
+        - processed - the transaction has been processed by the cluster
+        - confirmed - the transaction has been confirmed by the cluster
+        - finalized - the transaction has been finalized by the cluster
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

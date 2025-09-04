@@ -1,0 +1,246 @@
+openapi: 3.1.0
+info:
+  title: solana-getInflationReward
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getInflationReward
+      description: |
+        Returns the specific inflation values for the current epoch
+      summary: getInflationReward
+      operationId: solana-getInflationReward
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getInflationReward
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Addresses (`optional`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Addresses
+                        type: array
+                        description: An array of addresses to query, as base-58 encoded strings
+                        items:
+                          type: string
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: '#/components/schemas/Commitment'
+                          epoch:
+                            type: string
+                            description: The blockhash of query, as base-58 encoded string
+                          minContextSlot:
+                            $ref: '#/components/schemas/MinContextSlot'
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getInflationReward
+                params:
+                  - - 6dmNQ5jwLeLk5REvio1JcMshcbvkYMwy26sJ8pbkvStu
+                    - BGsqMegLpV6n6Ve146sSX2dTjUMj3M92HnU8BbNRMhF2
+                  - epoch: 800
+                    commitment: finalized
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          epoch:
+                            type: integer
+                            description: Epoch for which reward occurred
+                            format: uint64
+                          effectiveSlot:
+                            type: integer
+                            description: The slot in which the rewards are effective
+                            format: uint64
+                          amount:
+                            type: integer
+                            description: Reward amount in lamports
+                            format: uint64
+                          postBalance:
+                            type: integer
+                            description: Post balance of the account in lamports
+                            format: uint64
+                          commission:
+                            type: integer
+                            description: Vote account commission when the reward was credited
+                            format: uint8
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    - epoch: 2
+                      effectiveSlot: 224
+                      amount: 2500
+                      postBalance: 499999442500
+                    - null
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    MinContextSlot:
+      type: string
+      description: The minimum slot that the request can be evaluated at.
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

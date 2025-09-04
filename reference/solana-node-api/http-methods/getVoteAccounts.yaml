@@ -1,0 +1,283 @@
+openapi: 3.1.0
+info:
+  title: solana-getVoteAccounts
+  version: 1.2.15
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        description: The network to use for the API.
+        enum:
+          - solana-devnet
+        default: solana-devnet
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getVoteAccounts
+      description: |
+        Returns the current Solana version running on the node
+      summary: getVoteAccounts
+      operationId: solana-getVoteAccounts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getVoteAccounts
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 1
+                  description: |
+                    It contains following items:
+                    1. ConfigurationObject (`optional`)
+                  items:
+                    title: Configuration Object
+                    type: object
+                    properties:
+                      commitment:
+                        $ref: '#/components/schemas/Commitment'
+                      votePubkey:
+                        type: string
+                        description: Only return results for this validator vote address (base-58 encoded)
+                      keepUnstakedDelinquents:
+                        type: boolean
+                        description: Do not filter out delinquent validators with no stake
+                      delinquentSlotDistance:
+                        type: integer
+                        description: |
+                          Specify the number of slots behind the tip that a validator must fall to be considered delinquent. NOTE: For the sake of consistency between ecosystem products, it is not recommended that this argument be specified.
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                method: getVoteAccounts
+                params:
+                  - commitment: finalized
+                    votePubkey: i7NyKBMJCA9bLM2nsGyAGCKHECuR2L5eh4GqFciuwNT
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessfulResponse'
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          current:
+                            type: array
+                            description: |
+                              Array of all vote accounts currently participating in the validator set
+                            items:
+                              $ref: '#/components/schemas/VoteAccount'
+                          delinquent:
+                            type: array
+                            description: |
+                              Array of all vote accounts that are delinquent
+                            items:
+                              $ref: '#/components/schemas/VoteAccount'
+                example:
+                  jsonrpc: '2.0'
+                  result:
+                    current:
+                      - activatedStake: 38363352618301510
+                        commission: 95
+                        epochCredits:
+                          - - 934
+                            - 1603998845
+                            - 1597086973
+                          - - 935
+                            - 1610910636
+                            - 1603998845
+                          - - 936
+                            - 1617822620
+                            - 1610910636
+                          - - 937
+                            - 1624734345
+                            - 1617822620
+                          - - 938
+                            - 1627258041
+                            - 1624734345
+                        epochVoteAccount: true
+                        lastVote: 405373729
+                        nodePubkey: dv2eQHeP4RFrJZ6UeiZWoc3XTtmtZCUKxxCApCDcRNV
+                        rootSlot: 405373698
+                        votePubkey: i7NyKBMJCA9bLM2nsGyAGCKHECuR2L5eh4GqFciuwNT
+                    delinquent: []
+                  id: 1
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Commitment:
+      type: string
+      description: |
+        The commitment describes how finalized a block is at that point in time.
+        - finalized - the node will query the most recent block confirmed by supermajority of the cluster as having reached maximum lockout, meaning the cluster has recognized this block as finalized
+        - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
+        - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
+      enum:
+        - processed
+        - confirmed
+        - finalized
+    SuccessfulResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The request ID
+        jsonrpc:
+          type: string
+          description: The JSON-RPC version
+    VoteAccount:
+      type: object
+      properties:
+        activatedStake:
+          type: integer
+          description: The stake, in lamports, delegated to this vote account and active in this epoch
+        commission:
+          type: integer
+          description: Percentage (0-100) of rewards payout owed to the vote account
+        epochCredits:
+          type: array
+          description: |
+            Latest history of earned credits for up to five epochs, as an array of arrays containing: [epoch, credits, previousCredits]
+          items:
+            type: array
+            items:
+              type: integer
+        epochVoteAccount:
+          type: boolean
+          description: Whether the vote account is staked for this epoch
+        lastVote:
+          type: integer
+          description: Most recent slot voted on by this vote account
+        nodePubkey:
+          type: string
+          description: Validator identity, as base-58 encoded string
+        rootSlot:
+          type: integer
+          description: Current root slot for this vote account
+        votePubkey:
+          type: string
+          description: Vote account address, as base-58 encoded string
+    ErrorFromRPC:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Returns a code that identifies the situation where the error occurred.
+          example: -32602
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ErrorFromRPC'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests
