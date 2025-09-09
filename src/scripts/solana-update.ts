@@ -112,28 +112,64 @@ async function main() {
         const endpoint = file.replace(".md", "");
         const filePath = path.join(websocketMethodsDir, file);
         const mdContent = fs.readFileSync(filePath, "utf-8");
+        const docSlug = `solana-${endpoint.toLowerCase()}`;
+        console.log(docSlug);
 
-        // WebSocket 문서 업데이트 (createDoc로 새로 생성하거나 기존 문서 찾아서 업데이트)
-        const uploadResponse = await ReadmeApi.createDoc({
-          version: versionInput,
-          options: {
-            categorySlug: "solana",
-            parentDocSlug: "solana-websocket",
-            title: endpoint,
-            body: mdContent,
-            hidden: false,
-          },
-        });
+        try {
+          // 기존 문서가 있는지 확인
+          const existingDoc = await ReadmeApi.getDoc({
+            slug: docSlug,
+            version: versionInput,
+          });
+          console.log(existingDoc);
 
-        const uploadedDocsId = uploadResponse?.id;
-        await delay(1000);
+          if (existingDoc) {
+            // 기존 문서 업데이트
+            const updateResponse = await ReadmeApi.updateDoc({
+              version: versionInput,
+              slug: docSlug,
+              options: {
+                body: mdContent,
+              },
+            });
 
-        if (uploadedDocsId)
-          console.log(`ᄂ Updated WebSocket API specification for ${endpoint}`);
-        else
-          console.log(
-            `❌ Failed to update WebSocket API specification for ${endpoint}`
-          );
+            if (updateResponse?.id) {
+              console.log(
+                `✅ Updated WebSocket API specification for ${endpoint}`
+              );
+            } else {
+              console.log(
+                `❌ Failed to update WebSocket API specification for ${endpoint}`
+              );
+            }
+          } else {
+            // 새 문서 생성
+            const createResponse = await ReadmeApi.createDoc({
+              version: versionInput,
+              options: {
+                categorySlug: "solana",
+                parentDocSlug: "solana-websocket-methods",
+                title: endpoint,
+                body: mdContent,
+                hidden: false,
+              },
+            });
+
+            if (createResponse?.id) {
+              console.log(
+                `✅ Created WebSocket API specification for ${endpoint}`
+              );
+            } else {
+              console.log(
+                `❌ Failed to create WebSocket API specification for ${endpoint}`
+              );
+            }
+          }
+
+          await delay(1000);
+        } catch (error: any) {
+          console.error(`Error updating doc ${endpoint}:`, error.message);
+        }
       }
     }
 

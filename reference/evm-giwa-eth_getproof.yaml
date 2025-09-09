@@ -1,0 +1,225 @@
+openapi: 3.1.0
+info:
+  title: evm-giwa-eth_getProof
+  version: 1.2.16
+servers:
+  - url: https://{giwa-network}.nodit.io
+    variables:
+      giwa-network:
+        default: giwa-undefined
+        enum:
+          - giwa-undefined
+          - giwa-sepolia
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-giwa-eth_getProof
+      description: >-
+        특정 주소의 Storage에 저장된 값을 merkle-proof가 포함된 형식으로 반환합니다. 반환된 Proof값을 활용하여
+        조회한 Storage의 현재 상태값이 위변조되지 않았음을 검증할 수 있습니다.
+      summary: eth_getProof
+      operationId: giwa-eth_getProof
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_getProof
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Address
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]{40}$
+                        default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                        description: >-
+                          주소는 20바이트 길이의 16진수 문자열로 표현되며, EVM 계열의 블록체인에서 사용되는 주소
+                          형식입니다.
+                      - title: Storage Hashes
+                        type: array
+                        items:
+                          title: Storage Hash
+                          type: string
+                          description: >-
+                            Storage Hash는 특정 주소의 Storage에 저장된 값을 조회하기 위한 해시값입니다.
+                            해시값은 64자리 16진수 문자열로 표현됩니다
+                          pattern: ^0[xX][0-9a-fA-F]{64}
+                        default:
+                          - >-
+                            0x000000000000000000000000c6cde7c39eb2f0f0095f41570af89efc2c1ea828
+                        description: >-
+                          Storage Hashes는 특정 주소의 Storage에 저장된 값을 조회하기 위한 해시값들의
+                          배열입니다. 각 해시값은 해시값은 64자리 16진수 문자열로 표현됩니다
+                      - title: Block Identifier
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Hash
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]{64}
+                            default: >-
+                              0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                            description: >-
+                              블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로
+                              표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 해시, 블록 넘버, 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 해시: 64자리 16진수 문자열 (ex.
+                          "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                  minItems: 3
+                  maxItems: 3
+                  default:
+                    - '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                    - - >-
+                        0x000000000000000000000000c6cde7c39eb2f0f0095f41570af89efc2c1ea828
+                    - latest
+                  description: "다음 파라미터들을 타입에 맞게 배열로 입력합니다.\n1. `address` - 조회 대상 주소를 40자리 16진수 문자열로 입력합니다.\n2. `storage hashes` - 조회 대상 Storage 위치 배열 (16진수 문자열)\n3. `block identifier` - 조회 대상 블록 식별자로 블록 넘버, 블록 해시, 블록 태그 중 하나를 입력할 수 있습니다. \n\t- 블록 넘버: 16진수 문자열 (ex. \"0x1\")\n\t- 블록 해시: 64자리 16진수 문자열 (ex. \"0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48\")]\n\t- 블록 태그: enum 문자열 (ex. \"latest\", \"earliest\", \"pending\")"
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                  accountProof:
+                    - >-
+                      0xf90211a0aeaad4504cad94586d72924036d6a56303b79de2aa58e4a71a80ea669b8056e4a0c6c02d9237fc7a55de8613c37c88c8a8b12010a936ee17bc16d5889492da2b47a01847071db2b02c308ae426de5045e15d5e70165ac4c49899ccf3669c77223233a062eb9bc5ef7f4e4efa75efee00281fa6e41ef15d538301cd40a935dc00811979a05fffa04dfd8b2020f9107cb31afdf908276ac2e73e08ff8302e71aea35ca27c9a0a62ba70b4590c4ecda75ce99b0fa106841a18f26cc1fdbcf775c2fbd9da9c6d9a03c58190094d17d6d8bbe55c24179443edb3963762ce98784238246a303e984e1a0a003f6c1a189434b5b846ce62eb0603b8efbf250916d516a598a9f34339f5265a022cfc434f128c32464466c63caaf90f6a754405b4077ce1d89b524ee426dd691a0b9994ad9ec2dedd163c032b3516b929f6cb868a893dbd73506415a4737a9d6cfa0194904ce2e5696f30956710612dbde670ed633a147e3fb43df8d910214a0e3cfa0f4eb25b04b3f1963e40ae9c243949dfbecff266aee680aaab8555441f9154c66a0db1a4b393c141152ae4d868952bc877f0f7b1d41d1896b6e82dc4a54e3087f52a04704ad626428744d3dc3b13d3c78db54e8ff226ad28fd8f1d69e099965331153a0c14b3bf8ebdbc7ff2e058e35ee5ef43240b8c8aaf40fcaa1926a10dc51aed390a027293cf0bfb00fffb7a619077c66d4935c3c20f70188d09aed0c207dd30ad0c780
+                    - >-
+                      0xf90211a0faea1a96c6eb6489dfd508f1002cb2c046e4bfa65ba2f95a86f9975c4bef09eda056d035d6bde8376488db15e71b862156c04d4c875f348fb84f1911c474b9d6bba0c7a65f4bb0c14e8d5aa7e09e84bafe91c1f782767665fff2112eb63670ed395ca072e1c579f8ef3a6558158180048a26bbb06cf1572a113e52f82ee3e970bc3eb5a0b71931595e8dd4214e8cb4d550e5a77caf1a163257136f3db92a73a99cf8a054a05f76a45d771b1e15b684b81bc91292d157575de8cb0b71c8913bf19455320111a0e64436a7207ec119b5acf6dbada885eb3611be26f5be705f1c96d5061fc96f75a0e0fd6f3601adc869eaa0f252ddb162cd441d8e30ab05d91117bfd6b062c51463a05e2916047732c4ecc54b5f6443e05ce38ba22970012bc6283e895397a550c2bfa0cb3116c354690cd5993935eadfd99776739e5af1f41aa72f792d57df50b0be9da03f8a9157aa6f543d2f99a8159846c784e1c5adc2b264e7c67259b2b5902d6c23a08d8b09f6268e3eeba33785296c2eebbe5afed31c5a93ec238cd8d86ace78dc72a0bec60b8d8e79b8c8f2f707395ec62e15d3a42a12c1d7676992fa5fe1de310956a02cbccfd359afadf7ff33f73fb37bd3916c0d0727923a493e680575fe5689d711a0b6bef9acfe779ede7bde298ae295235ae74885e05a795877a94dadb5bd98a4d9a038ddfc4d4609e737420d5b1a649f11e9a6fd81efee1d5b34de4916568b0560c780
+                    - >-
+                      0xf90211a0f33830db669a2f0db05b1bf83a71e163eb3b28c863c47b67ddb536b4c21ab4b4a033b7e46b55e05547c3fe51834a94e1def3c21dcaff7e7ee340148c2e2494970da01f95290619f6af8f3875924a3d39a9ae980c2263139a67f53e0fabf5961bd014a0a509a6cd77c53eb22e9ff1883cab5c5fd339099f02ac051b8b042c41f4dfbae1a0dd9a6e0dc5be45a5c98f9ab9cf2186a12db99f9fb25a589848cc3dbf1ca744f2a080cc92a71a892e1800e752ace385de85aae3b8757b9d7a8e63aad340cca999ada0a2542fe745e647d088a153bf4088f9d1dd37dbc309c92f8d79f8999936aa9321a09c41338af6af58c9509a905fafb954cff427c7ead93d42a18613ce935e1c13b4a062c079590acc0c78b5ed89de58fac7472da071cef01cdb8e5a2ae766a429d7fda00bf3c793b05e25b01cd68abd87e7621946c2cf9c488f333c72ffd381cb591c7da080cb17b6b959b2f69be25619306fb7597e16bf64b081752b6676ad0f8dcd70c1a0bb4e404a01cbf8c0240deedbf24ee0754f302039b580f801c6731134c1a7bf17a0d5c125da1fb9fae26ecbd3f61751a104aaaa6b1319ac7b844378010473a6d702a059d6248a00858fcdfa27867155d5eeed6230a826c2bc4905b0b39113a147da81a0280e10e1b8b15081f3b8b11b5d9e4cd62050b3a90d12cf653a8cc7b7724d0effa0545eeddf52ec3b65841a5c7fa26584da4697866f52a320c4232e6dc6b24806ec80
+                    - >-
+                      0xf90211a056b2d7cd600ac2acb7e7868344484bd407ee531553e25dc9889dde5d429c569ca0b4a86b9d0073227bfbc51bcf9e83567d183f446ddefbaefb7dc810283cebda68a0f7c3b8914aff33f7349292e916f0a51c0703518f618da61e53413710cd1d5d5ca06c99c92c5d04f2f78421e91b34947bc32afa461c42a1f76f59858afc831915a8a0873196c2ad2284564aed83debf8ee2d0284c606981ca92b29f212340d831d62ea02a222e6f439c5a548849d6424e57d21aa271ccd413a2d03c91ba367295add112a0b89bcc79249b16f66c0e2b125db12993cbfafd0d989d5fe72cc1314a89025f50a007dee5851801eeb43cf52aa8ea25e4edbcfa3053a7aac2add5e2f75a6e9acea1a05230cd738f6f4ac70408001b00e054ff0bb893eaac0d871ab3be1483a2517428a089b869f98a526dd70072d37716e0b2d2df84ad4def6d273004153f904ac76ee3a075575baadf02f16b94e15b993b4ebdda6ccb383931d18dfc98c83c51caa3ee7fa0a45c4753ac66bf583be710895275525ab673b6978459063d7afb9f4a019fc1eda007a53b74382fc53444e41e0e7ec5100e5c272d49cfc51998b83cb65e0c987271a0bb8c3a891aa996b0459abe8cfc3d3fffc840c9d15144e9506e4a5d0257af7d4da0723a27e1dc6177f2ba1ae1a42f8d3f5f2a7e79faac654f398cc7c935f7c4871aa0dcb62e2dfc47afbcbd05650aa7b4e152c088016881045d17881594981937247380
+                    - >-
+                      0xf90211a0b864ac8ff6dfffd616595324bd5bd699b4f1049040c2573d4ae474bde325bf59a08828117a5fb3e3c6f5e861bb3c36f897a9c127c0f37b2a40d9d1405ef79635bca09c3b3c6c3e3fd6e3903bfa840a898d636c678acfc286cc8d1a20a896bca27a51a095d38695815c6a832dba7197fe64d76d34536c14898ba90cc7a23de19ec422e1a07d3391a9de036564a42daf64d0ad8fcc18d6206b2d576a9056c40b916a79d110a0c8c87350c563eedaaade7c2b1deaf857d39375f9d160f60d290934a999297466a0fe74749381eceb68f3f4eaa9c421600456134afd2c201b1d502b7b1b9ce4c786a01cc00d2541ecf89345d4b17b5110e1e49023395d0261fc26798af8f9df12c86fa07a36523de33a0bf2d380719afb4ae001374e159c5316d1244e940878204c581ea051e29ae1919d6b7651810b35ed5ef6e7b60c1f1929df35e4d19b35a45478f332a03edb845f9ec59d2a99d5372c9ce7746675d7492641c3709d63b7a9a3e3a1732da085f9121f8e67c41c1a304141adcc4a4bf24a7813444a1415b14d960a9038d173a0d5f9d8a43792a88946018d26acc2edeea52e0b7bc9f411ae4b7226784763c78fa0aaef25d7a442c422e78392ebac1e3938b4ff7f44d8f5f2b92b467af4f625729ea02aac4a171db9fa255a62f42954b1456c37244aa7163e179011cca6a0390e1edfa06f61d24f2ee65feb8e10f18827cc0fdd38a6a951efdbe493e75b0272aa9aeb3480
+                    - >-
+                      0xf90211a0e31b4c19fcc4fcb854b8e624b318ad21b022c57c58e30f80f27bcd9fe4e61649a0950522557eb40bafbd082f0f5cc4be3bcdcb7f80c14eee43afd2bcd01f8d5137a006344fc5ae8c6063578d0b997b0caebc50abb303fc195a9875c55a5d3e7566b4a011a2f9312c3308640a0d6ceeae218747290f23806067456da1d444c65abae437a0b3097a108bfce79af6699da4ae3003cd4929f0b4576aad655c31cb725bde84c7a00975b2742460058745a4ee9f17d4c2cd50047b9831702204293a4648ea4e21d3a0dad365a01abd5c2bcc43eee8029b91a5e1aa943e9ec37ba5c16bf5fff1e502cea0392e914c6ab5987bbcd8f5c9e23b4948ee28dcf45dd72273bf6cc106036f852aa0a7bbe5c7d23562fa1577db79cf77c262d65862d50241de2b147a9b5b318aacb4a07bff4eedea913e11c281bf9631984344780fcc3dbcda40cab7c25dadbf13c2aba00b3757b624f3e65e3cadbd9b61e092af2f6086fe846ac6ed51a2f0261d21b475a0b7d528fc41c8fdc8ea18c6e7d0099270c777ec1403cf879d1f5134bdc12a6c6ca04382be5d1766702f4ba15e120f3799421ca93e9fbd4e2f7d43216a9bb1c61d19a0251c695862941c0ccb2313831b0f637e2b60301268ebbfb483afc5c821221e62a0c5fa30673798625171fa89a7f413131bca535c09ff4d0b38350c0df769787d4ea08bd2b242e992653fa60521d04209d0f948548de03ed9d063f6c847212da606f480
+                    - >-
+                      0xf90191a00a7a0118e00981ab321049c9d340cd52c3a4781037540f7c48d0fdc27e899b3280a08537f2e248702a6ae2a57e9110a5740f5772c876389739ac90debd6a0692713ea00b3a26a05b5494fb3ff6f0b3897688a5581066b20b07ebab9252d169d928717fa0a9a54d84976d134d6dba06a65064c7f3a964a75947d452db6f6bb4b6c47b43aaa01e2a1ed3d1572b872bbf09ee44d2ed737da31f01de3c0f4b4e1f046740066461a064231d115790a3129ba68c7e94cb10bfb2b1fc3872f7738439b92510b06551bea0774a01a624cb14a50d17f2fe4b7ae6af8a67bbb029177ccc3dd729a734484d3ea07996eec5c60c660d5120322fde82ec72013e44f25f9c2ad664dc2f37ea7df376a0c8d71dd13d2806e2865a5c2cfa447f626471bf0b66182a8fd07230434e1cad2680a0e9864fdfaf3693b2602f56cd938ccd494b8634b1f91800ef02203a3609ca4c21a0c69d174ad6b6e58b0bd05914352839ec60915cd066dd2bee2a48016139687f21a0513dd5514fd6bad56871711441d38de2821cc6913cb192416b0385f025650731808080
+                    - >-
+                      0xf8669d3802a763f7db875346d03fbf86f137de55814b191c069e721f47474733b846f8440101a0d3608601d110c72fde912f74850cce1ade25b7c016fc9a210aa11b655874c58da0b44fb4e949d0f78f87f79ee46428f23a2a5713ce6fc6e0beb3dda78c2ac1ea55
+                  balance: '0x1'
+                  codeHash: >-
+                    0xb44fb4e949d0f78f87f79ee46428f23a2a5713ce6fc6e0beb3dda78c2ac1ea55
+                  nonce: '0x1'
+                  storageHash: >-
+                    0xd3608601d110c72fde912f74850cce1ade25b7c016fc9a210aa11b655874c58d
+                  storageProof:
+                    - key: >-
+                        0x000000000000000000000000c6cde7c39eb2f0f0095f41570af89efc2c1ea828
+                      value: '0x0'
+                      proof:
+                        - >-
+                          0xf90211a00e644cf176cfbba55091f8cec937669a1af96b71d59063d3f6d5b0fbdb902184a07fdca6f834133f25517d2d8e7e428a7c21dca91455cdf3bb2df5c4ae2bf0a402a08671604c547e5def6aac9c109e8fb109e267b8be5a58929cb004aac78b8f4727a0a71ccafc2517189b07b2d90a97571cd08494f38b41fb5b38f7cbf13369e17610a0ff8ff916389febb5cfe8f7ed25057b80c90361e48f312ebb55b3a1b80fb5454aa0c7189e06bcd67b6c53cc3e6b51cd11700e9733db1be9001d706a8be7642e6f3aa0781373cb1f08fc3de543c50792c3fb1c6723b07377d785b558fdcca3d423b295a0ec8a85298ed419fe47c405518325e60ccc974ea40453157ad416be4d70898635a011c1353084067b41810f561b9df2988ee4e452e2ad20cea1aa5a36c710ab7ea0a04de8fbc0a7257cbf28b0271150d0f7cc40747d9a38ba16e71fbf33f442bd3034a074d26afd8300d68ece53ca22ada133eb50755cff5fe76396e72247b22148745ca0c0c5160fb8e3ceeffd828bec5fd73b528cf31f10aee999c4827dca9d8e740b38a03b3848430155c5fe9eee1c426f86e49e9c173edcb4178d089171620ca75e86fea0c0cf4564558785373ee280d2586e7db879f3a3a02e77ecf89ed7e95a626e6d96a07a68ab8175728d1d730bf75e2cc755b502db9c3a3ddcf805e16522b155839659a092ada998c4c9f6529e6b2880ede5560a6338d16c82e00559af17ce22252c508780
+                        - >-
+                          0xf90211a07125ab977bbb5ee352c63811b37df50c7814103ba3bad3b063111888d2272a5aa04f70e98d9644537d0c342b6b0fd734307e1e6981059625d2b6a325e80a3e7593a07334289a8329b8e25d5cbbecbdaaf316dbd70583131fcb2ee32467c7985f433fa070a7b77a5ba8359f1b123dc22b188448ab4c880d23530402a462054c20b8b01da067cdcdc55cf81211f36e21b0f2996732d7603b662145648a93ecf57faf7ef09fa03380f8102deb1c3cac3e653084ee99b25807a5d64043842d63a54691297a050ba089d16db7516c0a9bfeb44608c23de78b6993a7753f539d9629e842e4a625d918a0cf37d2aa016f212c3467f88c5b647b215b9cd31e91e307c37ae84aacca637ef3a04c2337723fc3b2adde48c715632d5b65c1aba684d0b5d01215d12fde38559830a0452b1d32bb02657c99046c3a75502e32b1885d4856889ca96a600c37101154f8a05664e3a15ec43f94eb303a2995c48233b802f42816f61c7b511648329b5c72bea0a7f54f22509ff17198676b6c8e6cec139f9174d037dc259894d79d599c5dbf0fa0d417f77591f3be32d3028d72a651251c4532c2ab92197613e73831aa45994018a01a918a9a5b31061b61c7ad3d34fe18caf2c1961ce2c54464a90ee7b59d14d5b3a092ecbb98e5b39128bc5adfd849876f599814adc648f7e84d832f1d3c0a4c3a0fa072d1879f93e454eb401c5595a0b8a783916565ef8a9cee9f370f577f3a2bf9e780
+                        - >-
+                          0xf90211a02e8625500365bb8b35fd81ce862a2a6e36d9ce8ba7ba075c8df802e0f5ca8a7ba09cb46ddbe8e109ea9c6335beaea1da63c46d02db6491b202d2966b7ee5da953ea070f94d8fe6732751b627ed825dfca71c7d4472468f60dc6e25a43d16211724aba002638bbf30c30269661bc09542eca237852fb8c708883ec81c2b9d28a87b83f6a06a9dcb5ab7fab906bbf0cf5300ce500f36ca6af3e5524e47141d0ef47873eecba0928c361bedd68068496972c3b3e9a11cba095a02a25d249119b7a2c8c0579f43a0f623a74a457dd27e6b7b8141e614903a92fd6f14d5b11b8bcf87599e4e114373a018b26622bd16d447e8e22cd03cac5efdf4871b487880aa57d950be5bac774de6a0c48cf8f543cd0e7cbeacfdb0b0597daed5b963dfcb263755fd22b6436b128b54a0c7f73935e103ba6a427af186969d0c320e35e4890cd76615c7147c97f12254b7a0849c35bb5b30129d02413957650e5ba7bf0a9a7cb0e845ef512f0cbb0b4ceb12a02035f0ec86c1606844006c3fad3ac145379ea551277439bd921fc41b92b4a947a047748651c11e3cdf0282c98923884bad42b8d383a8a31b256c735e9891dc78f2a096ebe5d129f6aeccd3518b48bf1a29f873d7fd1308b00eb01b02d20e9c9b7b68a0339f9fbd17f08f60a84f9204ee50b4df4530ea7dc7b0241f427d49b886d22f53a099716267dc87e01a1f1a9a2e40c274c49713be4991343e10d23804b33c61659d80
+                        - >-
+                          0xf90211a0ae934cee9fd11f3ca29cb39ddfb6729a93db755ec1e20a0576894f0ec17f2ab7a0aea70d4be6733a4d857001de7b779997778ce14c27d644e10a8c31433881bda4a0d52ce1d4786931a6c340b3963163fb1ecac02d800ae6705cedf2ca465087aeeea0eaefcd9149694ece17cd66a1d6d692722f10688c9a9df9ab66ce8943d9b94ebea0dbc1292161180fe058b911e0f2392a6fa813ec4ca7e57843ebef77a5488749fea09f7c521cb2bc15930fd045871c1590fa2efe1f88965664435e0235ed03d458eba09abfc52f29de58f099c3b21596aeb148a0752d5c8198abdc4da51b4a26d34951a02231eaaa11dfe76c85486787ea589dc390782fb00f860789895799611439a413a0980c38c94e9f3074ef12374d9eb84cb8fe910a4973c14c9037aab6c59359fa52a0f28669e6862ee623018a1195451999dfcf42799d47f0b664a3ade1f2ec1d55afa0ec8706942245b4148994f81174d03b08de6e4c41c278ab1bd57107ffd4e0e64da0db95c819645028b92c14abc804a34c91ac7cd523e7592dea788f397d1d578330a06d5dede0245d61dcf45bddfe3199519e62b12c77ba1958211112eb32e1c3d821a017126f64fe369c14491e6a78e834ab238c0d78b181aa82ddff75b8a3bb496455a0e9ff7ac10d7130e4948bd323b17104da1e38064f55265cb1af8a10da0edb07a7a04cf0ca4b12f63cc0044b79325eb168641992b3d106d555f62b167750e59a222280
+                        - >-
+                          0xf90211a0289b574fbf9dffd62c81305ee4d566ef077375328a42ac99ff0aa1e44d90bd49a037b3ac4fa451cf06ff8482bb4bdcfc0c4837a7f3fcb1fcb2b7c914096d47c708a0ca4c3e6fdce35f213c32eb7005a011b74153694343825915d1676f8a80a793aaa0bbfdbab8be743f5efe6d68683095ff5604cd0dee6cebc4e431f9997af32353d2a0942f3c9e0c1d29e8c3d4aab0c9fd5a88db49025265996b2794531231737143e7a0351778750daf2d2430760be22954a66ae9649cf2f7ffacc93835786968859461a03b39f969b15339dbaa0a63b0fc97e4ae55066c291471958e30ce2652e01e84f6a0e53714aef250206f64b48c6fd9e80d8f6f7df1fe16fae6b8391b315df6d617e4a0bd49d28ceeecef3bbdd32b15809c6dbb94495b55e1c96ae2f6afc5e8bfe8f55ca04dc30cb4fa606a93007185dd761159fd91bd5097123768a3be683d5d18fc8830a0f7cf005d73e05400d00e937bcd146096ff0e9db08b76b4cd86d7a849bf3f0505a0dd7b37f0634bffa6c77c4fcae90577ec44ea5d74b959443b0b2f2a9ea94405dfa033ec0b61d2406b877574ee27165d211e2689e27c383c201ca61abd7ebdd9c245a087fefa5743f470ab3d6dbe61ae93ec9428cfd353fd5bb41cb25ed7cce04fa588a07c945ead594a1cf4838eba9beea2c65f39ee80556ac3de82da08645512ffc4a3a0069f15cfa0989515d92f6e0eca9e1a500c8ac014c1bd16eec4d561bcfeeda18b80
+                        - >-
+                          0xf9013180a08f37b55d43e54b1d0852dbc589f67819df6384b90b8f82517eb4a65311c973daa00b30cd65e5a8e5cb404be94521289d3283ed4842369f3bdd58e6600afadb6ee2a0e0171053b33c05ef76f4a9829922ac230a96391b6a8d1f71fcc7ca1db78a0d5280a009bb9aab0780ca946d97b65029a557cb905d4810597a4df8d9fe6460b1b1991ca0c8de368bb4234cdb5660d255b1b4f117338a8ba404065c28f6ee7118298fa66280a0c4340bbb5cbf3f6c7cc8722eb93abf878760060b7975d3e34b755308b4e3ba30a04a06b068128d93073b7df21dfe9b3c1c7ad859dcd74c4af6bd080bcca755456c8080a04f38b2097ab164fdf6679117098509d448a4a27261d1d24bf7d60ab4e916865180a06d0255928d6c36cd4e1fa73d29bb4d274091080624c7069ab1df8edd44e313948080
+                        - >-
+                          0xe39e200495a0aa634107fcb2b0c855244d33bd2f89df0972cc95e0be3fe1aea683820563
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

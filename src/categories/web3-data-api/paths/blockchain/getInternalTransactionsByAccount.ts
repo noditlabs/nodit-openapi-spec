@@ -83,6 +83,7 @@ function getOpIdAndParams(protocol: string): {
           "ethereum",
           "arbitrum",
           "base",
+          "giwa",
           "kaia",
           "luniverse",
           "tron",

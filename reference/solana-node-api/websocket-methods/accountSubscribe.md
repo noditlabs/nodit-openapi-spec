@@ -1,6 +1,6 @@
 # accountSubscribe
 
-Solana의 `accountSubscribe` 메서드는 특정 계정의 **lamports** 또는 **데이터 변경**이 발생할 때마다 실시간 알림을 받을 수 있도록 구독을 생성합니다.
+Solana의 accountSubscribe 메서드는 특정 계정의 **lamports** 또는 **데이터 변경**이 발생할 때마다 실시간 알림을 받을 수 있도록 구독을 생성합니다.
 
 > 📘 사용 시 참고사항
 >
@@ -162,9 +162,9 @@ wscat -c wss://api.mainnet-beta.solana.com
 
 구독을 해제하는 방법은 두 가지가 있습니다:
 
-1. **연결 종료**: 터미널 창에서 `<CTRL+C>`를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
+1. **연결 종료**: 터미널 창에서 <CTRL+C>를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
 
-2. **특정 구독 해제**: `accountUnsubscribe`를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
+2. **특정 구독 해제**: accountUnsubscribe를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
 
 구독 해제 요청:
 

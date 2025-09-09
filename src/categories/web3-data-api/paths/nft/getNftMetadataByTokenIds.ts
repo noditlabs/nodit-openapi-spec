@@ -87,6 +87,7 @@ function getOpIdAndParams(protocol: string): {
           "arbitrum",
           "base",
           "ethereum",
+          "giwa",
           "kaia",
           "optimism",
           "polygon",

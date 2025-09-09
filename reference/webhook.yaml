@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Webhook
-  version: 1.2.11
+  version: 1.2.16
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -482,6 +482,7 @@ paths:
               - arbitrum
               - base
               - ethereum
+              - giwa
               - kaia
               - optimism
               - polygon
@@ -506,6 +507,7 @@ paths:
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
             - ethereum: "mainnet", "sepolia", "hoodi"
+            - giwa: "sepolia"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
@@ -959,6 +961,7 @@ paths:
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
             - ethereum: "mainnet", "sepolia", "hoodi"
+            - giwa: "sepolia"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
@@ -1147,6 +1150,7 @@ paths:
               - arbitrum
               - base
               - ethereum
+              - giwa
               - kaia
               - optimism
               - polygon
@@ -1171,6 +1175,7 @@ paths:
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
             - ethereum: "mainnet", "sepolia", "hoodi"
+            - giwa: "sepolia"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
@@ -1225,6 +1230,7 @@ paths:
               - arbitrum
               - base
               - ethereum
+              - giwa
               - kaia
               - optimism
               - polygon
@@ -1251,6 +1257,7 @@ paths:
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
             - ethereum: "mainnet", "sepolia", "hoodi"
+            - giwa: "sepolia"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
@@ -1325,6 +1332,7 @@ paths:
             - arbitrum: "mainnet", "sepolia"
             - base: "mainnet", "sepolia",
             - ethereum: "mainnet", "sepolia", "hoodi"
+            - giwa: "sepolia"
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"

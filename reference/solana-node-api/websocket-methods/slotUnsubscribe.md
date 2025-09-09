@@ -1,11 +1,11 @@
 # slotUnsubscribe
 
-Solana의 `slotUnsubscribe` 메서드는 `slotSubscribe`로 생성된 슬롯 구독을 해제하여 더 이상 슬롯 처리 알림을 받지 않도록 합니다.
+Solana의 slotUnsubscribe 메서드는 slotSubscribe로 생성된 슬롯 구독을 해제하여 더 이상 슬롯 처리 알림을 받지 않도록 합니다.
 
 > 📘 사용 시 참고사항
 >
 > - 반드시 **WebSocket** 엔드포인트를 통해 호출해야 하며, HTTP는 지원되지 않습니다.
-> - 구독 해제 후에는 해당 subscription ID로 다시 구독할 수 없습니다. 새로운 구독이 필요한 경우 `slotSubscribe`를 다시 호출해야 합니다.
+> - 구독 해제 후에는 해당 subscription ID로 다시 구독할 수 없습니다. 새로운 구독이 필요한 경우 slotubscribe를 다시 호출해야 합니다.
 > - WebSocket 연결이 끊어지면 구독이 자동으로 해제되므로, 재연결 시 구독을 다시 설정해야 합니다.
 
 ---
@@ -40,7 +40,7 @@ Solana의 `slotUnsubscribe` 메서드는 `slotSubscribe`로 생성된 슬롯 구
 
 ### Success Response
 
-성공적으로 구독이 해제되면 `true`가 반환됩니다.
+성공적으로 구독이 해제되면 true가 반환됩니다.
 
 ```json Response example
 {
@@ -100,9 +100,9 @@ wscat -c wss://api.mainnet-beta.solana.com
 
 구독을 해제하는 방법은 두 가지가 있습니다:
 
-1. **연결 종료**: 터미널 창에서 `<CTRL+C>`를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
+1. **연결 종료**: 터미널 창에서 <CTRL+C>를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
 
-2. **특정 구독 해제**: `slotUnsubscribe`를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
+2. **특정 구독 해제**: slotUnsubscribe를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
 
 ```json unsubscribe example
 {

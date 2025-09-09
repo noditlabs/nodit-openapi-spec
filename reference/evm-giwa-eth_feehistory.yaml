@@ -1,0 +1,187 @@
+openapi: 3.1.0
+info:
+  title: evm-giwa-eth_feeHistory
+  version: 1.2.16
+servers:
+  - url: https://{giwa-network}.nodit.io
+    variables:
+      giwa-network:
+        default: giwa-sepolia
+        enum:
+          - giwa-sepolia
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-giwa-eth_feeHistory
+      description: >-
+        요청한 블록 범위 내의 가스 수수료 히스토리를 반환합니다. 이 정보를 사용하여 트랜잭션을 생성할 때 maxFeePerGas 및
+        maxPriorityFeePerGas의 적절한 값을 설정할 수 있습니다.
+      summary: eth_feeHistory
+      operationId: giwa-eth_feeHistory
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_feeHistory
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Count
+                        type: integer
+                        minimum: 1
+                        maximum: 1024
+                        default: 2
+                      - title: Block Number or Tag
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 넘버 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                      - title: Reward Percentiles
+                        type: array
+                        items:
+                          type: integer
+                          minimum: 0
+                          maximum: 100
+                        default:
+                          - 0
+                          - 100
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `block count`: 조회하고자 하는 블록의 범위를 입력합니다. 블록 범위는 1이상 1024이하의
+                    정수로 입력합니다. 사용 가능한 모든 블록이 제공되지 않으면 요청된 수보다 적은 수가 반환될 수 있습니다.
+
+                    2. `newest block`: 조회의 기준이 되는 블록을 입력합니다. 16진수 문자열 형식의 블록 넘버
+                    또는 "latest"를 입력합니다.
+
+                    3. `reward percentiles`: 우선 순위 수수료에 대한 백분위 값을 샘플링하기 위한 정수
+                    배열을 입력합니다. 각 블록의 사용된 가스량에 따라 가중치를 부여하여 백분위 값을 계산합니다. 백분위 값은
+                    0 이상 100 이하의 정수를 오름차순으로 입력합니다.
+                  minItems: 3
+                  maxItems: 3
+                  default:
+                    - 2
+                    - latest
+                    - - 0
+                      - 100
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  oldestBlock: '0x1249315'
+                  reward:
+                    - - '0x186a0'
+                      - '0x61ac6361c'
+                    - - '0x0'
+                      - '0xae908e1c8'
+                  baseFeePerGas:
+                    - '0x589753de4'
+                    - '0x5634a5a38'
+                    - '0x5a0918fd1'
+                  gasUsedRatio:
+                    - 0.392293
+                    - 0.6777092333333333
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.

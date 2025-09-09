@@ -1,11 +1,11 @@
 # signatureSubscribe
 
-Solana의 `signatureSubscribe` 메서드는 특정 트랜잭션 서명이 지정된 commitment 레벨에 도달했을 때 알림을 받을 수 있도록 구독을 생성합니다.
+Solana의 signatureSubscribe 메서드는 특정 트랜잭션 서명이 지정된 commitment 레벨에 도달했을 때 알림을 받을 수 있도록 구독을 생성합니다.
 
 > 📘 사용 시 참고사항
 >
 > - 반드시 **WebSocket** 엔드포인트를 통해 호출해야 하며, HTTP는 지원되지 않습니다.
-> - 이는 **단일 알림 구독**입니다. 서버가 `signatureNotification`을 전송한 후 자동으로 구독이 취소됩니다.
+> - 이는 **단일 알림 구독**입니다. 서버가 signatureNotification을 전송한 후 자동으로 구독이 취소됩니다.
 > - CU는 구독한 데이터의 양에 따라 소진되므로, 필요한 데이터만을 구독할 수 있도록 적절한 필터링 옵션 사용을 권장합니다.
 
 ---
@@ -59,7 +59,7 @@ Solana의 `signatureSubscribe` 메서드는 특정 트랜잭션 서명이 지정
 }
 ```
 
-이 subscription ID는 `signatureUnsubscribe` 메서드 호출 시 필요합니다.
+이 subscription ID는 signatureUnsubscribe 메서드 호출 시 필요합니다.
 
 ### Notifications
 
@@ -74,7 +74,7 @@ Solana의 `signatureSubscribe` 메서드는 특정 트랜잭션 서명이 지정
 
 **value 필드 상세:**
 
-- **서명 수신 알림** (`enableReceivedNotification`이 `true`이고 서명이 수신된 경우):
+- **서명 수신 알림** (enableReceivedNotification이 true이고 서명이 수신된 경우):
 
   - 타입: `string`
   - 값: `"receivedSignature"`
@@ -82,7 +82,7 @@ Solana의 `signatureSubscribe` 메서드는 특정 트랜잭션 서명이 지정
 
 - **트랜잭션 처리 완료 알림** (서명이 처리된 경우):
   - 타입: `object`
-  - 값: `{ "err": null }` (성공) 또는 `{ "err": TransactionError }` (실패)
+  - 값: { "err": null } (성공) 또는 { "err": TransactionError } (실패)
   - 설명: 트랜잭션이 지정된 commitment 레벨에서 처리됨
 
 #### Examples

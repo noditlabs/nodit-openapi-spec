@@ -1809,13 +1809,10 @@ export const supportedApisChains: SupportedApis[] = [
           "debug_traceTransaction",
         ],
       },
-      { category: "bor", endpoints: [] },
       {
         category: "optimism",
         endpoints: ["optimism_outputAtBlock", "optimism_rollupConfig"],
       },
-      { category: "kaia", endpoints: [] },
-      { category: "klay", endpoints: [] },
     ],
     // giwa
     webhookApi: [

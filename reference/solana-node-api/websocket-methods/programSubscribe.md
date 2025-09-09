@@ -1,6 +1,6 @@
 # programSubscribe
 
-Solana의 `programSubscribe` 메서드는 특정 프로그램이 소유한 계정의 **lamports** 또는 **데이터 변경**이 발생할 때마다 실시간 알림을 받을 수 있도록 구독을 생성합니다.
+Solana의 programSubscribe 메서드는 특정 프로그램이 소유한 계정의 **lamports** 또는 **데이터 변경**이 발생할 때마다 실시간 알림을 받을 수 있도록 구독을 생성합니다.
 
 > 📘 사용 시 참고사항
 >
@@ -60,17 +60,17 @@ Solana의 `programSubscribe` 메서드는 특정 프로그램이 소유한 계�
 }
 ```
 
-이 subscription ID는 `programUnsubscribe` 메서드 호출 시 필요합니다.
+이 subscription ID는 programUnsubscribe 메서드 호출 시 필요합니다.
 
 ### Notifications
 
 구독이 활성화되면, 프로그램이 소유한 계정의 상태가 변경될 때마다 서버에서 알림을 푸시합니다.
-알림 형식은 `getProgramAccounts` RPC HTTP 메서드와 동일합니다.
+알림 형식은 getProgramAccounts RPC HTTP 메서드와 동일합니다.
 
 **응답 데이터 형식:**
 
-- 응답 데이터는 `encoding` 옵션에 따라 `base58`, `base64`, `base64+zstd`, `jsonParsed` 중 하나로 전달됩니다.
-- `jsonParsed`는 프로그램별 parser를 통해 사람이 읽기 쉬운 형태로 변환하지만, parser가 없는 경우 바이너리 문자열로 반환됩니다.
+- 응답 데이터는 encoding 옵션에 따라 base58, base64, base64+zstd, jsonParsed 중 하나로 전달됩니다.
+- jsonParsed는 프로그램별 parser를 통해 사람이 읽기 쉬운 형태로 변환하지만, parser가 없는 경우 바이너리 문자열로 반환됩니다.
 
 #### Base58 Encoding Example
 
@@ -179,9 +179,9 @@ wscat -c wss://api.mainnet-beta.solana.com
 
 구독을 해제하는 방법은 두 가지가 있습니다:
 
-1. **연결 종료**: 터미널 창에서 `<CTRL+C>`를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
+1. **연결 종료**: 터미널 창에서 <CTRL+C>를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
 
-2. **특정 구독 해제**: `programUnsubscribe`를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
+2. **특정 구독 해제**: programUnsubscribe를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
 
 구독 해제 요청:
 
