@@ -26,9 +26,12 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
         url: BASE_URL.NODE_API(protocol),
         variables: protocolNetwork(
           protocol,
-          `${protocol}-${getChainInfo(protocol).mainnet}`,
+          `${protocol}-${
+            getChainInfo(protocol).mainnet ||
+            getChainInfo(protocol).testnet?.[0]
+          }`,
           [
-            `${protocol}-${getChainInfo(protocol).mainnet}`,
+            ...(getChainInfo(protocol).mainnet || []),
             ...(getChainInfo(protocol).testnet?.map(
               (testnet) => `${protocol}-${testnet}`
             ) || []),

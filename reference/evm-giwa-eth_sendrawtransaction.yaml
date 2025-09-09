@@ -6,9 +6,8 @@ servers:
   - url: https://{giwa-network}.nodit.io
     variables:
       giwa-network:
-        default: giwa-undefined
+        default: giwa-sepolia
         enum:
-          - giwa-undefined
           - giwa-sepolia
 components:
   securitySchemes:
