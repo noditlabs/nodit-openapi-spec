@@ -174,7 +174,7 @@ function getRequestAndResponse(protocol: string): {
             type: "array",
             items: {
               allOf: [
-                Domains.Ethereum.NftMeta,
+                Domains.Ethereum.NftMetaAllRequired,
                 {
                   type: "object",
                   properties: {

@@ -151,7 +151,7 @@ function getRequestAndResponse(protocol: string): {
         successResponse: {
           schema: Domains.Pagination({
             allOf: [
-              Domains.Ethereum.NftMeta,
+              Domains.Ethereum.NftMetaAllRequired,
               {
                 type: "object",
                 properties: {
