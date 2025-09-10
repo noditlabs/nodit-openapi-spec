@@ -113,7 +113,6 @@ async function main() {
         const filePath = path.join(websocketMethodsDir, file);
         const mdContent = fs.readFileSync(filePath, "utf-8");
         const docSlug = `solana-${endpoint.toLowerCase()}`;
-        console.log(docSlug);
 
         try {
           // 기존 문서가 있는지 확인
@@ -121,7 +120,6 @@ async function main() {
             slug: docSlug,
             version: versionInput,
           });
-          console.log(existingDoc);
 
           if (existingDoc) {
             // 기존 문서 업데이트

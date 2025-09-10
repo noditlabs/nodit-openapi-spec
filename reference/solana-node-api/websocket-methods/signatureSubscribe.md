@@ -130,3 +130,54 @@ Solana의 signatureSubscribe 메서드는 특정 트랜잭션 서명이 지정�
 ```sh wscat
 wscat -c wss://api.mainnet-beta.solana.com
 ```
+
+### Subscribe to Signature
+
+```json subscribe example
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "signatureSubscribe",
+  "params": [
+    "2EBVM6cB8vAAD93Ktr6Vd8p67XPbQzCJX47MpReuiCXJAtcjaxpvWpcg9Ege1Nr5Tk3a2GFrByT7WPBjdsTycY9b",
+    {
+      "commitment": "finalized",
+      "enableReceivedNotification": false
+    }
+  ]
+}
+```
+
+### Receive Notification
+
+- 최초 응답: subscription ID 반환
+- 이후: 조건에 맞는 트랜잭션이 지정된 commitment 레벨에 도달하면 서버에서 자동으로 알림 전송되며 알림 수신 후 구독은 자동으로 해제됨 (단일 알림 구독)
+
+### Unsubscribe
+
+구독을 해제하는 방법은 두 가지가 있습니다:
+
+1. **연결 종료**: 터미널 창에서 <CTRL+C>를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
+
+2. **특정 구독 해제**: signatureUnsubscribe를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
+
+구독 해제 요청:
+
+```json unsubscribe example
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "signatureUnsubscribe",
+  "params": [10]
+}
+```
+
+구독 해제 후 응답:
+
+```json unsubscribe success
+{
+  "jsonrpc": "2.0",
+  "result": true,
+  "id": 2
+}
+```
