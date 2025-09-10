@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-optimism-debug_traceBlockByHash
-  version: 1.2.10
+  version: 1.2.16
 servers:
   - url: https://{optimism-network}.nodit.io
     variables:
@@ -38,8 +38,8 @@ paths:
 
         > 429 에러는 구독 중인 플랜의 Throughput 제한을 초과했을 때 발생할 수 있습니다. 
 
-        > 예를 들어, 무료 플랜은 초당 200CU의 제한이 있기 때문에, 무료 플랜을 사용할 경우 CU 소비량이 350인 API를
-        호출하면 429 오류가 발생할 수 있습니다.
+        > 예를 들어, Starter 플랜은 초당 300CU의 제한이 있기 때문에, Starter 플랜을 사용할 경우 CU 소비량이
+        350인 API를 호출하면 429 오류가 발생할 수 있습니다.
 
         > Compute Unit Costs 페이지에서 사용 중인 API의 CU 소비량을 확인하고, 더 많은 Throughput이
         필요하다면 상위 플랜으로 업그레이드하는 것을 고려하세요!

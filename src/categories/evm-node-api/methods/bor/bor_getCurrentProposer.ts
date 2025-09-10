@@ -30,7 +30,9 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
             getChainInfo(protocol).testnet?.[0]
           }`,
           [
-            ...(getChainInfo(protocol).mainnet || []),
+            ...(getChainInfo(protocol).mainnet
+              ? [`${protocol}-${getChainInfo(protocol).mainnet}`]
+              : []),
             ...(getChainInfo(protocol).testnet?.map(
               (testnet) => `${protocol}-${testnet}`
             ) || []),

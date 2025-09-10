@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-bnb-eth_getUncleCountByBlockNumber
-  version: 1.2.14
+  version: 1.2.16
 servers:
   - url: https://{bnb-network}.nodit.io
     variables:

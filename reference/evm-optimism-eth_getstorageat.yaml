@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-optimism-eth_getStorageAt
-  version: 1.2.10
+  version: 1.2.16
 servers:
   - url: https://{optimism-network}.nodit.io
     variables:

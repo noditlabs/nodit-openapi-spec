@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-ethereum-eth_getBlockTransactionCountByNumber
-  version: 1.2.10
+  version: 1.2.16
 servers:
   - url: https://{ethereum-network}.nodit.io
     variables:
@@ -97,10 +97,6 @@ paths:
 
                           * 블록 태그: enum 문자열 (ex. "latest", "earliest",
                           "pending")
-                      - title: Include Transactions
-                        type: boolean
-                        default: false
-                        description: 트랜잭션을 포함할지 여부를 나타냅니다. true로 설정하면 트랜잭션을 포함한 결과를 반환합니다.
                   minItems: 1
                   maxItems: 1
                   default:

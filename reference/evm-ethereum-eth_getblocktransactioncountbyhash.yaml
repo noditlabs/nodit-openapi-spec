@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-ethereum-eth_getBlockTransactionCountByHash
-  version: 1.2.10
+  version: 1.2.16
 servers:
   - url: https://{ethereum-network}.nodit.io
     variables:
@@ -64,10 +64,6 @@ paths:
                         default: >-
                           0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
                         description: 블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로 표현됩니다.
-                      - title: Include Transactions
-                        type: boolean
-                        default: false
-                        description: 트랜잭션을 포함할지 여부를 나타냅니다. true로 설정하면 트랜잭션을 포함한 결과를 반환합니다.
                   minItems: 1
                   maxItems: 1
                   default:

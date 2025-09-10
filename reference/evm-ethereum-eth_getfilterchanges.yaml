@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: evm-ethereum-eth_getFilterChanges
-  version: 1.2.10
+  version: 1.2.16
 servers:
   - url: https://{ethereum-network}.nodit.io
     variables:
