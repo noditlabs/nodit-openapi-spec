@@ -1,0 +1,20 @@
+description: Bad Request
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        jsonrpc:
+          type: string
+          description: JSON-RPC version
+          example: "2.0"
+        id:
+          type: integer
+          description: Request ID
+          example: 1
+        error:
+          $ref: ../schemas/ErrorFromRPC.yaml
+      required:
+        - jsonrpc
+        - id
+        - error

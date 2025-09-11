@@ -1,0 +1,131 @@
+description: "This is the JSON-RPC type for the SUI validator. It flattens all inner structures to top-level fields so that they are decoupled from the internal definitions."
+type: object
+required:
+  - commissionRate
+  - description
+  - exchangeRatesId
+  - exchangeRatesSize
+  - gasPrice
+  - imageUrl
+  - name
+  - netAddress
+  - networkPubkeyBytes
+  - nextEpochCommissionRate
+  - nextEpochGasPrice
+  - nextEpochStake
+  - operationCapId
+  - p2pAddress
+  - pendingPoolTokenWithdraw
+  - pendingStake
+  - pendingTotalSuiWithdraw
+  - poolTokenBalance
+  - primaryAddress
+  - projectUrl
+  - proofOfPossessionBytes
+  - protocolPubkeyBytes
+  - rewardsPool
+  - stakingPoolId
+  - stakingPoolSuiBalance
+  - suiAddress
+  - votingPower
+  - workerAddress
+  - workerPubkeyBytes
+properties:
+  commissionRate:
+    $ref: "./BigInt_for_uint64.yaml"
+  description:
+    type: string
+  exchangeRatesId:
+    description: "ID of the exchange rate table object."
+    allOf:
+      - $ref: "./ObjectID.yaml"
+  exchangeRatesSize:
+    description: "Number of exchange rates in the table."
+    allOf:
+      - $ref: "./BigInt_for_uint64.yaml"
+  gasPrice:
+    $ref: "./BigInt_for_uint64.yaml"
+  imageUrl:
+    type: string
+  name:
+    type: string
+  netAddress:
+    type: string
+  networkPubkeyBytes:
+    $ref: "./Base64.yaml"
+  nextEpochCommissionRate:
+    $ref: "./BigInt_for_uint64.yaml"
+  nextEpochGasPrice:
+    $ref: "./BigInt_for_uint64.yaml"
+  nextEpochNetAddress:
+    type: [string, "null"]
+  nextEpochNetworkPubkeyBytes:
+    $ref: "./Base64.yaml"
+  nextEpochP2pAddress:
+    type: [string, "null"]
+  nextEpochPrimaryAddress:
+    type: [string, "null"]
+  nextEpochProofOfPossession:
+    $ref: "./Base64.yaml"
+  nextEpochProtocolPubkeyBytes:
+    $ref: "./Base64.yaml"
+  nextEpochStake:
+    $ref: "./BigInt_for_uint64.yaml"
+  nextEpochWorkerAddress:
+    type: [string, "null"]
+  nextEpochWorkerPubkeyBytes:
+    $ref: "./Base64.yaml"
+  operationCapId:
+    $ref: "./ObjectID.yaml"
+  p2pAddress:
+    type: string
+  pendingPoolTokenWithdraw:
+    description: "Pending pool token withdrawn during the current epoch, emptied at epoch boundaries."
+    allOf:
+      - $ref: "./BigInt_for_uint64.yaml"
+  pendingStake:
+    description: "Pending stake amount for this epoch."
+    allOf:
+      - $ref: "./BigInt_for_uint64.yaml"
+  pendingTotalSuiWithdraw:
+    description: "Pending stake withdrawn during the current epoch, emptied at epoch boundaries."
+    allOf:
+      - $ref: "./BigInt_for_uint64.yaml"
+  poolTokenBalance:
+    description: "Total number of pool tokens issued by the pool."
+    allOf:
+      - $ref: "./BigInt_for_uint64.yaml"
+  primaryAddress:
+    type: string
+  projectUrl:
+    type: string
+  proofOfPossessionBytes:
+    $ref: "./Base64.yaml"
+  protocolPubkeyBytes:
+    $ref: "./Base64.yaml"
+  rewardsPool:
+    description: "The epoch stake rewards will be added here at the end of each epoch."
+    allOf:
+      - $ref: "./BigInt_for_uint64.yaml"
+  stakingPoolActivationEpoch:
+    description: "The epoch at which this pool became active."
+    $ref: "./BigInt_for_uint64.yaml"
+  stakingPoolDeactivationEpoch:
+    description: "The epoch at which this staking pool ceased to be active. `None` = {pre-active, active},"
+    $ref: "./BigInt_for_uint64.yaml"
+  stakingPoolId:
+    description: "ID of the staking pool object."
+    allOf:
+      - $ref: "./ObjectID.yaml"
+  stakingPoolSuiBalance:
+    description: "The total number of SUI tokens in this pool."
+    allOf:
+      - $ref: "./BigInt_for_uint64.yaml"
+  suiAddress:
+    $ref: "./SuiAddress.yaml"
+  votingPower:
+    $ref: "./BigInt_for_uint64.yaml"
+  workerAddress:
+    type: string
+  workerPubkeyBytes:
+    $ref: "./Base64.yaml"

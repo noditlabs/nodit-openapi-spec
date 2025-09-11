@@ -1,0 +1,3 @@
+type: integer
+format: uint64
+description: The number of blocks beneath this block.

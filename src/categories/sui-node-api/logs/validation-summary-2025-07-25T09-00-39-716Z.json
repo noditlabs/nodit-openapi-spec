@@ -1,0 +1,232 @@
+{
+  "totalFiles": 56,
+  "passed": 56,
+  "failed": 0,
+  "timestamp": "2025-07-25T09:01:57.142Z",
+  "results": [
+    {
+      "file": "sui_devInspectTransactionBlock.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_dryRunTransactionBlock.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_executeTransactionBlock.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getChainIdentifier.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getCheckpoint.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getCheckpoints.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getEvents.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getLatestCheckpointSequenceNumber.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getMoveFunctionArgTypes.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getNormalizedMoveFunction.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getNormalizedMoveModule.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getNormalizedMoveModulesByPackage.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getNormalizedMoveStruct.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getObject.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getProtocolConfig.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getTotalTransactionBlocks.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_getTransactionBlock.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_multiGetObjects.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_multiGetTransactionBlocks.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_tryGetPastObject.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_tryMultiGetPastObjects.yaml",
+      "success": true
+    },
+    {
+      "file": "sui_verifyZkLoginSignature.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getAllBalances.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getAllCoins.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getBalance.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getCoinMetadata.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getCoins.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getCommitteeInfo.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getDynamicFieldObject.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getDynamicFields.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getLatestSuiSystemState.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getOwnedObjects.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getReferenceGasPrice.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getStakes.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getStakesByIds.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getTotalSupply.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_getValidatorsApy.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_queryEvents.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_queryTransactionBlocks.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_resolveNameServiceAddress.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_resolveNameServiceNames.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_subscribeEvent.yaml",
+      "success": true
+    },
+    {
+      "file": "suix_subscribeTransaction.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_batchTransaction.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_mergeCoins.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_moveCall.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_pay.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_payAllSui.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_paySui.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_publish.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_requestAddStake.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_requestWithdrawStake.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_splitCoin.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_splitCoinEqual.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_transferObject.yaml",
+      "success": true
+    },
+    {
+      "file": "unsafe_transferSui.yaml",
+      "success": true
+    }
+  ]
+}

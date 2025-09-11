@@ -1,0 +1,15 @@
+oneOf:
+  - type: object
+    required:
+      - transferObjectRequestParams
+    properties:
+      transferObjectRequestParams:
+        $ref: "./TransferObjectParams.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - moveCallRequestParams
+    properties:
+      moveCallRequestParams:
+        $ref: "./MoveCallParams.yaml"
+    additionalProperties: false

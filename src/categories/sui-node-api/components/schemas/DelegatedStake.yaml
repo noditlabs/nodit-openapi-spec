@@ -1,0 +1,14 @@
+type: object
+required:
+  - stakes
+  - stakingPool
+  - validatorAddress
+properties:
+  stakes:
+    type: array
+  stakingPool:
+    $ref: "./ObjectID.yaml"
+    description: "Staking pool object id."
+  validatorAddress:
+    $ref: "./SuiAddress.yaml"
+    description: "Validator's Address."

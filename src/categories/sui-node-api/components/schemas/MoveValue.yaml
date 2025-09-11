@@ -1,0 +1,19 @@
+anyOf:
+  - type: integer
+    format: uint32
+    minimum: 0
+  - type: boolean
+  - $ref: "./SuiAddress.yaml"
+  - type: array
+    items:
+      $ref: "./MoveValue.yaml"
+  - type: string
+  - type: object
+    required:
+      - id
+    properties:
+      id:
+        $ref: "./ObjectID.yaml"
+  - $ref: "./MoveStruct.yaml"
+  - $ref: "./MoveValue.yaml"
+  - $ref: "./MoveVariant.yaml"

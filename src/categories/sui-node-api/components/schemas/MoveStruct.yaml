@@ -1,0 +1,18 @@
+anyOf:
+  - type: array
+    items:
+      $ref: "./MoveValue.yaml"
+  - type: object
+    required:
+      - fields
+      - type
+    properties:
+      fields:
+        type: object
+        additionalProperties:
+          $ref: "./MoveValue.yaml"
+      type:
+        type: string
+  - type: object
+    additionalProperties:
+      $ref: "./MoveValue.yaml"

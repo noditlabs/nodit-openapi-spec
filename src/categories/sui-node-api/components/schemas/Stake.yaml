@@ -1,0 +1,45 @@
+type: object
+required:
+  - principal
+  - stakeActiveEpoch
+  - stakeRequestEpoch
+  - stakedSuiId
+properties:
+  principal:
+    $ref: "./BigInt_for_uint64.yaml"
+  stakeActiveEpoch:
+    $ref: "./BigInt_for_uint64.yaml"
+  stakeRequestEpoch:
+    $ref: "./BigInt_for_uint64.yaml"
+  stakedSuiId:
+    description: "ID of the StakedSui receipt object."
+    allOf:
+      - $ref: "./ObjectID.yaml"
+oneOf:
+  - type: object
+    required:
+      - status
+    properties:
+      status:
+        type: string
+        enum:
+          - "Pending"
+  - type: object
+    required:
+      - estimatedReward
+      - status
+    properties:
+      estimatedReward:
+        $ref: "./BigInt_for_uint64.yaml"
+      status:
+        type: string
+        enum:
+          - "Active"
+  - type: object
+    required:
+      - status
+    properties:
+      status:
+        type: string
+        enum:
+          - "Unstaked"

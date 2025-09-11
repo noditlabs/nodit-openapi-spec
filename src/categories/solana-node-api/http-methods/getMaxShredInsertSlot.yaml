@@ -1,0 +1,73 @@
+openapi: 3.1.0
+info:
+  title: solana-getMaxShredInsertSlot
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getMaxShredInsertSlot
+      description: |
+        Get the max slot seen from after shred insert.
+      summary: getMaxShredInsertSlot
+      operationId: solana-getMaxShredInsertSlot
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getMaxShredInsertSlot
+              example:
+                { "jsonrpc": "2.0", "id": 1, "method": "getMaxShredInsertSlot" }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: integer
+                        format: uint64
+                        description: The max slot seen from after shred insert
+                example:
+                  $ref: "../components/examples/getMaxShredInsertSlot.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

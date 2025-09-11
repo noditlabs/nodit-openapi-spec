@@ -1,0 +1,6 @@
+type: string
+enum:
+  - base58
+  - base64
+description: |
+  Encoding used for the transaction data. Values: `base58` (slow, `DEPRECATED`), or `base64`.

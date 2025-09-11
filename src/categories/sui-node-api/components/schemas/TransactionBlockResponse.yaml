@@ -1,0 +1,44 @@
+type: object
+required:
+  - digest
+properties:
+  balanceChanges:
+    type: [array, "null"]
+    items:
+      $ref: "./BalanceChange.yaml"
+  checkpoint:
+    description: "The checkpoint number when this transaction was included and hence finalized. This is only returned in the read api, not in the transaction execution api."
+    $ref: "./BigInt_for_uint64.yaml"
+  confirmedLocalExecution:
+    type: [boolean, "null"]
+  digest:
+    $ref: "./TransactionDigest.yaml"
+  effects:
+    $ref: "./TransactionBlockEffects.yaml"
+  errors:
+    type: array
+    items:
+      type: string
+  events:
+    type: [array, "null"]
+    items:
+      $ref: "./Event.yaml"
+  objectChanges:
+    type: [array, "null"]
+    items:
+      $ref: "./ObjectChange.yaml"
+  rawEffects:
+    type: array
+    items:
+      type: integer
+      format: uint8
+      minimum: 0
+  rawTransaction:
+    description: "BCS encoded [SenderSignedData] that includes input object references returns empty array if `show_raw_transaction` is false"
+    allOf:
+      - $ref: "./Base64.yaml"
+  timestampMs:
+    $ref: "./BigInt_for_uint64.yaml"
+  transaction:
+    description: "Transaction input data"
+    $ref: "./TransactionBlock.yaml"

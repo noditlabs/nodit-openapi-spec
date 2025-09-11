@@ -1,0 +1,18 @@
+oneOf:
+  - type: object
+    required:
+      - gasData
+      - messageVersion
+      - sender
+      - transaction
+    properties:
+      gasData:
+        $ref: "./GasData.yaml"
+      messageVersion:
+        type: string
+        enum:
+          - "v1"
+      sender:
+        $ref: "./SuiAddress.yaml"
+      transaction:
+        $ref: "./TransactionBlockKind.yaml"

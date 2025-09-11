@@ -1,0 +1,110 @@
+openapi: 3.1.0
+info:
+  title: solana-getInflationGovernor
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getInflationGovernor
+      description: |
+        Returns the current inflation governor
+      summary: getInflationGovernor
+      operationId: solana-getInflationGovernor
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getInflationGovernor
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 1
+                  description: |
+                    It contains following items:
+                    1. ConfigurationObject (`optional`)
+                  items:
+                    title: Configuration Object
+                    type: object
+                    properties:
+                      commitment:
+                        $ref: "../components/schemas/Commitment.yaml"
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getInflationGovernor",
+                  "params": [{ "commitment": "finalized" }],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          foundation:
+                            type: number
+                            format: float64
+                            description: Percentage of total inflation allocated to the foundation
+                          foundationTerm:
+                            type: integer
+                            description: Duration of foundation pool inflation in years
+                          initial:
+                            type: number
+                            format: float64
+                            description: Initial inflation percentage from time 0
+                          taper:
+                            type: number
+                            format: float64
+                            description: Rate per year at which inflation is lowered. (Rate reduction is derived using the target slot time in genesis config)
+                          terminal:
+                            type: number
+                            format: float64
+                            description: Terminal inflation percentage
+                example:
+                  $ref: "../components/examples/getInflationGovernor.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

@@ -1,0 +1,22 @@
+type: object
+required:
+  - abilities
+  - typeParameters
+  - variants
+properties:
+  abilities:
+    $ref: "./SuiMoveAbilitySet.yaml"
+  typeParameters:
+    type: array
+    items:
+      $ref: "./SuiMoveStructTypeParameter.yaml"
+  variantDeclarationOrder:
+    type: [array, "null"]
+    items:
+      type: string
+  variants:
+    type: object
+    additionalProperties:
+      type: array
+      items:
+        $ref: "./SuiMoveNormalizedField.yaml"

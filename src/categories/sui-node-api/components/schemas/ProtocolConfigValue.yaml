@@ -1,0 +1,36 @@
+oneOf:
+  - type: object
+    required:
+      - u16
+    properties:
+      u16:
+        $ref: "./BigInt_for_uint16.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - u32
+    properties:
+      u32:
+        $ref: "./BigInt_for_uint32.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - u64
+    properties:
+      u64:
+        $ref: "./BigInt_for_uint64.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - f64
+    properties:
+      f64:
+        type: string
+    additionalProperties: false
+  - type: object
+    required:
+      - bool
+    properties:
+      bool:
+        type: string
+    additionalProperties: false

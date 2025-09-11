@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: solana-getRecentPerformanceSamples
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getRecentPerformanceSamples
+      description: |
+        Returns a list of recent performance samples, in reverse slot order. Performance samples are taken every 60 seconds and include the number of transactions and slots that occur in a given time window.
+      summary: getRecentPerformanceSamples
+      operationId: solana-getRecentPerformanceSamples
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getRecentPerformanceSamples
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 1
+                  description: |
+                    It contains following items:
+                    1. Number of samples (`optional`)
+                  items:
+                    title: Number of samples
+                    type: integer
+                    description: Number of samples to return (maximum 720)
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getRecentPerformanceSamples",
+                  "params": [2],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            slot:
+                              type: integer
+                              format: uint64
+                              description: Slot in which sample was taken at
+                            numTransactions:
+                              type: integer
+                              description: Number of transactions processed during the sample period
+                            numSlots:
+                              type: integer
+                              description: Number of slots completed during the sample period
+                            samplePeriodSecs:
+                              type: integer
+                              description: Number of seconds in a sample window
+                            numNonVoteTransactions:
+                              type: integer
+                              description: Number of non-vote transactions processed during the sample period
+                example:
+                  $ref: "../components/examples/getRecentPerformanceSamples.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

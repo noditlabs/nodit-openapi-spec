@@ -1,0 +1,9 @@
+type: object
+required:
+  - owner
+  - reference
+properties:
+  owner:
+    $ref: "./Owner.yaml"
+  reference:
+    $ref: "./ObjectRef.yaml"

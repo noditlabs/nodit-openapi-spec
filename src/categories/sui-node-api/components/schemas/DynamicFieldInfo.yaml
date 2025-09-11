@@ -1,0 +1,44 @@
+type: object
+oneOf:
+  - type: object
+    required:
+      - bcsEncoding
+      - bcsName
+    properties:
+      bcsEncoding:
+        type: string
+        enum:
+          - "base64"
+      bcsName:
+        $ref: "./Base64.yaml"
+  - type: object
+    required:
+      - bcsEncoding
+      - bcsName
+    properties:
+      bcsEncoding:
+        type: string
+        enum:
+          - "base58"
+      bcsName:
+        $ref: "./Base58.yaml"
+required:
+  - digest
+  - name
+  - objectId
+  - objectType
+  - type
+  - version
+properties:
+  digest:
+    $ref: "./ObjectDigest.yaml"
+  name:
+    $ref: "./DynamicFieldName.yaml"
+  objectId:
+    $ref: "./ObjectID.yaml"
+  objectType:
+    type: string
+  type:
+    $ref: "./DynamicFieldType.yaml"
+  version:
+    $ref: "./SequenceNumber2.yaml"

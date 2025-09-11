@@ -1,0 +1,13 @@
+type: object
+description: Slot range to return block production for. If parameter not provided, defaults to current epoch.
+required:
+  - firstSlot
+properties:
+  firstSlot:
+    type: integer
+    format: uint64
+    description: first slot to return block production information for (inclusive)
+  lastSlot:
+    type: integer
+    format: uint64
+    description: last slot to return block production information for (inclusive). If parameter not provided, defaults to the highest slot

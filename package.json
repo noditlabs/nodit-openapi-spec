@@ -21,6 +21,15 @@
     "solana-delete": "ts-node ./src/scripts/solana-delete.ts",
     "solana-hidden": "ts-node ./src/scripts/solana-hidden.ts",
     "solana-move": "ts-node ./src/scripts/solana-move.ts",
+    "solana-bundle": "ts-node ./src/categories/solana-node-api/scripts/bundle_methods.ts",
+    "solana-validate": "ts-node ./src/categories/solana-node-api/scripts/validate_oas.ts",
+    "sui-create": "ts-node ./src/scripts/sui-create.ts",
+    "sui-delete": "ts-node ./src/scripts/sui-delete.ts",
+    "sui-hidden": "ts-node ./src/scripts/sui-hidden.ts",
+    "sui-move": "ts-node ./src/scripts/sui-move.ts",
+    "sui-update": "ts-node ./src/scripts/sui-update.ts",
+    "sui-bundle": "ts-node ./src/categories/sui-node-api/scripts/bundle_methods.ts",
+    "sui-validate": "ts-node ./src/categories/sui-node-api/scripts/validate_oas.ts",
     "create-links": "ts-node ./src/scripts/create-links.ts",
     "delete-links": "ts-node ./src/scripts/delete-links.ts"
   },
@@ -28,6 +37,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@redocly/cli": "^2.1.0",
+    "@types/fs-extra": "^11.0.4",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.15.3",
     "child_process": "^1.0.2",
@@ -38,6 +49,7 @@
   "dependencies": {
     "axios": "^1.6.8",
     "form-data": "^4.0.0",
+    "fs-extra": "^11.3.1",
     "js-yaml": "^4.1.0",
     "openapi-types": "^12.1.3",
     "rdme": "^10.0.0",

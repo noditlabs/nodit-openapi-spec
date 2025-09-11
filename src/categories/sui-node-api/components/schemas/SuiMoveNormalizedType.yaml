@@ -1,0 +1,65 @@
+oneOf:
+  - type: string
+    enum:
+      - "Bool"
+      - "U8"
+      - "U16"
+      - "U32"
+      - "U64"
+      - "U128"
+      - "U256"
+      - "Address"
+      - "Signer"
+  - type: object
+    required:
+      - Struct
+    properties:
+      Struct:
+        type: object
+        required:
+          - address
+          - module
+          - name
+          - typeArguments
+        properties:
+          address:
+            type: string
+          module:
+            type: string
+          name:
+            type: string
+          typeArguments:
+            type: array
+            items:
+              $ref: "./SuiMoveNormalizedType.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Vector
+    properties:
+      Vector:
+        $ref: "./SuiMoveNormalizedType.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - TypeParameter
+    properties:
+      TypeParameter:
+        type: integer
+        format: uint16
+        minimum: 0
+    additionalProperties: false
+  - type: object
+    required:
+      - Reference
+    properties:
+      Reference:
+        $ref: "./SuiMoveNormalizedType.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - MutableReference
+    properties:
+      MutableReference:
+        $ref: "./SuiMoveNormalizedType.yaml"
+    additionalProperties: false

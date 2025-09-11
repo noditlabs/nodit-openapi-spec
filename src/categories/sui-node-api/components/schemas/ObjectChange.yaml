@@ -1,0 +1,151 @@
+description: "ObjectChange are derived from the object mutations in the TransactionEffect to provide richer object information."
+oneOf:
+  - description: "Module published"
+    type: object
+    required:
+      - digest
+      - modules
+      - packageId
+      - type
+      - version
+    properties:
+      digest:
+        $ref: "./ObjectDigest.yaml"
+      modules:
+        type: array
+        items:
+          type: string
+      packageId:
+        $ref: "./ObjectID.yaml"
+      type:
+        type: string
+        enum:
+          - "published"
+      version:
+        $ref: "./SequenceNumber.yaml"
+  - description: "Transfer objects to new address / wrap in another object"
+    type: object
+    required:
+      - digest
+      - objectId
+      - objectType
+      - recipient
+      - sender
+      - type
+      - version
+    properties:
+      digest:
+        $ref: "./ObjectDigest.yaml"
+      objectId:
+        $ref: "./ObjectID.yaml"
+      objectType:
+        type: string
+      recipient:
+        $ref: "./Owner.yaml"
+      sender:
+        $ref: "./SuiAddress.yaml"
+      type:
+        type: string
+        enum:
+          - "transferred"
+      version:
+        $ref: "./SequenceNumber.yaml"
+  - description: "Object mutated."
+    type: object
+    required:
+      - digest
+      - objectId
+      - objectType
+      - owner
+      - previousVersion
+      - sender
+      - type
+      - version
+    properties:
+      digest:
+        $ref: "./ObjectDigest.yaml"
+      objectId:
+        $ref: "./ObjectID.yaml"
+      objectType:
+        type: string
+      owner:
+        $ref: "./Owner.yaml"
+      previousVersion:
+        $ref: "./SequenceNumber.yaml"
+      sender:
+        $ref: "./SuiAddress.yaml"
+      type:
+        type: string
+        enum:
+          - "mutated"
+      version:
+        $ref: "./SequenceNumber.yaml"
+  - description: "Delete object"
+    type: object
+    required:
+      - objectId
+      - objectType
+      - sender
+      - type
+      - version
+    properties:
+      objectId:
+        $ref: "./ObjectID.yaml"
+      objectType:
+        type: string
+      sender:
+        $ref: "./SuiAddress.yaml"
+      type:
+        type: string
+        enum:
+          - "deleted"
+      version:
+        $ref: "./SequenceNumber.yaml"
+  - description: "Wrapped object"
+    type: object
+    required:
+      - objectId
+      - objectType
+      - sender
+      - type
+      - version
+    properties:
+      objectId:
+        $ref: "./ObjectID.yaml"
+      objectType:
+        type: string
+      sender:
+        $ref: "./SuiAddress.yaml"
+      type:
+        type: string
+        enum:
+          - "wrapped"
+      version:
+        $ref: "./SequenceNumber.yaml"
+  - description: "New object creation"
+    type: object
+    required:
+      - digest
+      - objectId
+      - objectType
+      - owner
+      - sender
+      - type
+      - version
+    properties:
+      digest:
+        $ref: "./ObjectDigest.yaml"
+      objectId:
+        $ref: "./ObjectID.yaml"
+      objectType:
+        type: string
+      owner:
+        $ref: "./Owner.yaml"
+      sender:
+        $ref: "./SuiAddress.yaml"
+      type:
+        type: string
+        enum:
+          - "created"
+      version:
+        $ref: "./SequenceNumber.yaml"

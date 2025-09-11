@@ -1,0 +1,21 @@
+type: object
+required:
+  - balance
+  - coinObjectId
+  - coinType
+  - digest
+  - previousTransaction
+  - version
+properties:
+  balance:
+    $ref: "./BigInt_for_uint64.yaml"
+  coinObjectId:
+    $ref: "./ObjectID.yaml"
+  coinType:
+    type: string
+  digest:
+    $ref: "./ObjectDigest.yaml"
+  previousTransaction:
+    $ref: "./TransactionDigest.yaml"
+  version:
+    $ref: "./SequenceNumber.yaml"

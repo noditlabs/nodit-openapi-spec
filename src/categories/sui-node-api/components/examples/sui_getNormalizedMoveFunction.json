@@ -1,0 +1,15 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "visibility": "Public",
+    "isEntry": false,
+    "typeParameters": [
+      {
+        "abilities": ["Store", "Key"]
+      }
+    ],
+    "parameters": ["U64"],
+    "return": ["U64"]
+  },
+  "id": 1
+}

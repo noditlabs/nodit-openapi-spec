@@ -1,0 +1,30 @@
+type: object
+properties:
+  showBcs:
+    description: "Whether to show the content in BCS format. Default to be False"
+    default: false
+    type: boolean
+  showContent:
+    description: "Whether to show the content(i.e., package content or Move struct content) of the object. Default to be False"
+    default: false
+    type: boolean
+  showDisplay:
+    description: "Whether to show the Display metadata of the object for frontend rendering. Default to be False"
+    default: false
+    type: boolean
+  showOwner:
+    description: "Whether to show the owner of the object. Default to be False"
+    default: false
+    type: boolean
+  showPreviousTransaction:
+    description: "Whether to show the previous transaction digest of the object. Default to be False"
+    default: false
+    type: boolean
+  showStorageRebate:
+    description: "Whether to show the storage rebate of the object. Default to be False"
+    default: false
+    type: boolean
+  showType:
+    description: "Whether to show the type of the object. Default to be False"
+    default: false
+    type: boolean

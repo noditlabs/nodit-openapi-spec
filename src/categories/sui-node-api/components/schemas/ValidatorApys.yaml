@@ -1,0 +1,11 @@
+type: object
+required:
+  - apys
+  - epoch
+properties:
+  apys:
+    type: array
+    items:
+      $ref: "./ValidatorApy.yaml"
+  epoch:
+    $ref: "./BigInt_for_uint64.yaml"

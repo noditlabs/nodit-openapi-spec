@@ -1,0 +1,18 @@
+type: object
+required:
+  - gas
+  - inputObjects
+  - txBytes
+properties:
+  gas:
+    description: "the gas objects to be used"
+    type: array
+    items:
+      $ref: "./ObjectRef.yaml"
+  inputObjects:
+    description: "objects to be used in this transaction"
+    type: array
+    items:
+      $ref: "./InputObjectKind.yaml"
+  txBytes:
+    $ref: "./TxBytes.yaml"

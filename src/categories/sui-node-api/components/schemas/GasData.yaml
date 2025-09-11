@@ -1,0 +1,17 @@
+type: object
+required:
+  - budget
+  - owner
+  - payment
+  - price
+properties:
+  budget:
+    $ref: "./BigInt_for_uint64.yaml"
+  owner:
+    $ref: "./SuiAddress.yaml"
+  payment:
+    type: array
+    items:
+      $ref: "./ObjectRef.yaml"
+  price:
+    $ref: "./BigInt_for_uint64.yaml"

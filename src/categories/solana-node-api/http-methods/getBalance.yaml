@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: solana-getBalance
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getBalance
+      description: |
+        Returns the lamport balance of the account of provided Pubkey
+      summary: getBalance
+      operationId: solana-getBalance
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getBalance
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Pubkey (`required`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Pubkey
+                        type: string
+                        description: Pubkey of account to query, as base-58 encoded string.
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: "../components/schemas/Commitment.yaml"
+                          minContextSlot:
+                            $ref: "../components/schemas/MinContextSlot.yaml"
+              example:
+                {
+                  jsonrpc: "2.0",
+                  id: 1,
+                  method: "getBalance",
+                  params:
+                    [
+                      "3fJ7AiixCoHhaYzaNn1nNoLZMQnrGSMDNmMN4ZNUMpEa",
+                      { commitment: "processed", minContextSlot: "1234567890" },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          context:
+                            $ref: "../components/schemas/Context.yaml"
+                          value:
+                            type: integer
+                            description: The lamport balance of the account
+                example:
+                  $ref: "../components/examples/getBalance.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

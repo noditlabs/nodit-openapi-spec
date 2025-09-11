@@ -1,0 +1,12 @@
+type: object
+required:
+  - message
+  - signatures
+properties:
+  message:
+    $ref: "./Message.yaml"
+  signatures:
+    type: array
+    description: A list of base-58 encoded signatures applied to the transaction. The list is always of length `message.header.numRequiredSignatures` and not empty. The signature at index `i` corresponds to the public key at index `i` in `message.accountKeys`. The first one is used as the transaction id.
+    items:
+      type: string

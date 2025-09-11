@@ -1,0 +1,20 @@
+description: "Additional rguments supplied to dev inspect beyond what is allowed in today's API."
+type: object
+properties:
+  gasBudget:
+    $ref: "./BigInt_for_uint64.yaml"
+    description: The gas budget for the transaction.
+  gasObjects:
+    type: array
+    items:
+      $ref: "./ObjectRef.yaml"
+    description: The gas objects used to pay for the transaction.
+  gasSponsor:
+    $ref: "./SuiAddress.yaml"
+    description: The sponsor of the gas for the transaction, might be different from the sender.
+  showRawTxnDataAndEffects:
+    type: boolean
+    description: Whether to return the raw transaction data and effects.
+  skipChecks:
+    type: boolean
+    description: Whether to skip transaction checks for the transaction.

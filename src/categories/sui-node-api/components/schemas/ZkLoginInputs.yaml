@@ -1,0 +1,16 @@
+description: "All inputs required for the zk login proof verification and other public inputs."
+type: object
+required:
+  - addressSeed
+  - headerBase64
+  - issBase64Details
+  - proofPoints
+properties:
+  addressSeed:
+    $ref: "./Bn254FrElement.yaml"
+  headerBase64:
+    type: string
+  issBase64Details:
+    $ref: "./Claim.yaml"
+  proofPoints:
+    $ref: "./ZkLoginProof.yaml"

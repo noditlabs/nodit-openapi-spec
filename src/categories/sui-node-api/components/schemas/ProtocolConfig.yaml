@@ -1,0 +1,22 @@
+type: object
+required:
+  - attributes
+  - featureFlags
+  - maxSupportedProtocolVersion
+  - minSupportedProtocolVersion
+  - protocolVersion
+properties:
+  attributes:
+    type: object
+    additionalProperties:
+      $ref: "./ProtocolConfigValue.yaml"
+  featureFlags:
+    type: object
+    additionalProperties:
+      type: boolean
+  maxSupportedProtocolVersion:
+    $ref: "./ProtocolVersion.yaml"
+  minSupportedProtocolVersion:
+    $ref: "./ProtocolVersion.yaml"
+  protocolVersion:
+    $ref: "./ProtocolVersion.yaml"

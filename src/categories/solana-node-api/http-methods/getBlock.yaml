@@ -1,0 +1,145 @@
+openapi: 3.1.0
+info:
+  title: solana-getBlock
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getBlock
+      description: |
+        Returns identity and transaction information about a confirmed block in the ledger
+      summary: getBlock
+      operationId: solana-getBlock
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getBlock
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Slot number (`required`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Slot number
+                        $ref: "../components/schemas/SlotNumber.yaml"
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: "../components/schemas/Commitment.yaml"
+                          encoding:
+                            type: string
+                            description: |
+                              Encoding format for each returned transaction. See Parsed Responses.
+
+                              - `jsonParsed` attempts to use program-specific instruction parsers to return more human-readable and explicit data in the transaction.message.instructions list.
+                              - If `jsonParsed` is requested but a parser cannot be found, the instruction falls back to regular JSON encoding (accounts, data, and programIdIndex fields).
+                            enum:
+                              - json
+                              - jsonParsed
+                              - base58
+                              - base64
+                          transactionDetails:
+                            $ref: "../components/schemas/TransactionDetails.yaml"
+                          maxSupportedTransactionVersion:
+                            $ref: "../components/schemas/MaxSupportedTransactionVersion.yaml"
+                          rewards:
+                            $ref: "../components/schemas/Rewards.yaml"
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getBlock",
+                  "params":
+                    [
+                      378967388,
+                      {
+                        "commitment": "finalized",
+                        "encoding": "json",
+                        "transactionDetails": "full",
+                        "maxSupportedTransactionVersion": 0,
+                        "rewards": false,
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          blockHeight:
+                            $ref: "../components/schemas/BlockHeight.yaml"
+                          blockTime:
+                            $ref: "../components/schemas/BlockTime.yaml"
+                          blockhash:
+                            $ref: "../components/schemas/Blockhash.yaml"
+                          parentSlot:
+                            $ref: "../components/schemas/ParentSlot.yaml"
+                          previousBlockhash:
+                            $ref: "../components/schemas/PreviousBlockhash.yaml"
+                          transactions:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - transaction
+                                - meta
+                              properties:
+                                transaction:
+                                  $ref: "../components/schemas/Transaction.yaml"
+                                meta:
+                                  $ref: "../components/schemas/TransactionMeta.yaml"
+                example:
+                  $ref: "../components/examples/getBlock.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

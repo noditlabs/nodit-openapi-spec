@@ -1,0 +1,22 @@
+Method: getAccountInfo
+Error: Command failed: npx redocly bundle /Users/damon.yoon/Github/Work/nodit-openapi-spec/src/categories/solana-node-api/http-methods/getAccountInfo.yaml --output /Users/damon.yoon/Github/Work/nodit-openapi-spec/src/reference/solana-node-api/getAccountInfo.yaml
+
+⚠️ Warning: failed to satisfy expected node version. Expected: ">=22.12.0 || >=20.19.0 <21.0.0", Current "v16.15.1"
+
+/Users/damon.yoon/Github/Work/nodit-openapi-spec/node_modules/@redocly/cli/node_modules/undici/lib/web/fetch/response.js:528
+  ReadableStream
+  ^
+
+ReferenceError: ReadableStream is not defined
+    at Object.<anonymous> (/Users/damon.yoon/Github/Work/nodit-openapi-spec/node_modules/@redocly/cli/node_modules/undici/lib/web/fetch/response.js:528:3)
+    at Module._compile (node:internal/modules/cjs/loader:1105:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1159:10)
+    at Module.load (node:internal/modules/cjs/loader:981:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:822:12)
+    at Module.require (node:internal/modules/cjs/loader:1005:19)
+    at require (node:internal/modules/cjs/helpers:102:18)
+    at Object.<anonymous> (/Users/damon.yoon/Github/Work/nodit-openapi-spec/node_modules/@redocly/cli/node_modules/undici/lib/web/fetch/index.js:11:5)
+    at Module._compile (node:internal/modules/cjs/loader:1105:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1159:10)
+
+---

@@ -1,0 +1,3 @@
+allOf:
+  - $ref: "./Base58.yaml"
+description: "A representation of a 32 byte digest"

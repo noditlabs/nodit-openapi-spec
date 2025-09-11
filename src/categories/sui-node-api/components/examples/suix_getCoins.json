@@ -1,0 +1,34 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": [
+      {
+        "coinType": "0x2::sui::SUI",
+        "coinObjectId": "0xd62ca040aba24f862a763851c54908cd2a0ee7d709c11b93d4a2083747b76856",
+        "version": "103626",
+        "digest": "C9fdokK19BpDCgUgWsJv3cfd4LDyk7WGYBeGhFHbEL2Z",
+        "balance": "200000000",
+        "previousTransaction": "tw5DzJTfdxTn4f3rekFrhN7dQTUezBgsEhycDobTBLb"
+      },
+      {
+        "coinType": "0x2::sui::SUI",
+        "coinObjectId": "0xf44d295a385dc3544d211411b865e8bc4f01f49186970c7cf61e1cc829cc0be7",
+        "version": "103626",
+        "digest": "5qZkmtN5J5uGHURtiy9BtBhnXATPR2Wa6BJBDLrMzCaf",
+        "balance": "200000000",
+        "previousTransaction": "AfgFe7ZfjJ5dWV6VAy2LbtvBFhcABkvdvwEjLrRcFqtr"
+      },
+      {
+        "coinType": "0x2::sui::SUI",
+        "coinObjectId": "0x42ef9314ccc792dd4401a88e69c66b4c5e43f21e9e57f4abe3c702649d3a7dd0",
+        "version": "103626",
+        "digest": "FLE2nB2Wio3oUyTx6HyzkrMsWiZxDg9Kk8s7ivvuoBbD",
+        "balance": "200000000",
+        "previousTransaction": "9er6jxigfuQEKsn9gtPV2oW1zGQRcFtKNijHVe88GUJD"
+      }
+    ],
+    "nextCursor": "abcd",
+    "hasNextPage": true
+  },
+  "id": 1
+}

@@ -1,0 +1,15 @@
+type: object
+required:
+  - amount
+  - coinType
+  - owner
+properties:
+  amount:
+    description: "The amount indicate the balance value changes, negative amount means spending coin value and positive means receiving coin value."
+    type: string
+  coinType:
+    type: string
+  owner:
+    description: "Owner of the balance change"
+    allOf:
+      - $ref: "./Owner.yaml"

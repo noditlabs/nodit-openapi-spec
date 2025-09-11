@@ -1,0 +1,2 @@
+type: string
+description: "BCS serialized transaction data bytes without its type tag, as base-64 encoded string."

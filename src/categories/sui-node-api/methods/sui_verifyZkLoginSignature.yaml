@@ -1,0 +1,88 @@
+openapi: 3.1.0
+info:
+  title: sui_verifyZkLoginSignature
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_verifyZkLoginSignature
+      description: |
+        Verify a zklogin signature for the given bytes, intent scope and author.
+      summary: sui_verifyZkLoginSignature
+      operationId: sui-sui_verifyZkLoginSignature
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_verifyZkLoginSignature
+                params:
+                  type: array
+                  minItems: 4
+                  maxItems: 4
+                  items:
+                    oneOf:
+                      - title: bytes
+                        type: string
+                        description: The Base64 string of bcs bytes for raw transaction data or personal message indicated by intent_scope.
+                      - title: signature
+                        type: string
+                        description: The Base64 string of the zklogin signature to verify.
+                      - title: intent_scope
+                        $ref: "../components/schemas/ZkLoginIntentScope.yaml"
+                        description: The intent scope, either transaction data or personal message. Used to parse bytes.
+                      - title: author
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The author of the signature.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/ZkLoginVerifyResult.yaml"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

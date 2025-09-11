@@ -1,0 +1,17 @@
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "pubkey": "CxELquR1gPP8wHe33gZ4QxqGB3sZ9RSwsJ2KshVewkFY",
+      "account": {
+        "data": "2R9jLfiAQ9bgdcw6h8s44439",
+        "executable": false,
+        "lamports": 15298080,
+        "owner": "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T",
+        "rentEpoch": 28,
+        "space": 42
+      }
+    }
+  ],
+  "id": 1
+}

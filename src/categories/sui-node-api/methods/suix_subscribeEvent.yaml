@@ -1,0 +1,79 @@
+openapi: 3.1.0
+info:
+  title: suix_subscribeEvent
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_subscribeEvent
+      description: |
+        Subscribe to a stream of Sui event
+      summary: suix_subscribeEvent
+      operationId: sui-suix_subscribeEvent
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: suix_subscribeEvent
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    oneOf:
+                      - title: filter
+                        $ref: "../components/schemas/EventFilter.yaml"
+                        description: The filter criteria of the event stream. See Event filter documentation for examples.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/Event.yaml"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

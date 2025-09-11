@@ -1,0 +1,27 @@
+description: "The transaction for calling a Move function, either an entry function or a public function (which cannot return references)."
+type: object
+required:
+  - function
+  - module
+  - package
+properties:
+  arguments:
+    description: "The arguments to the function."
+    type: array
+    items:
+      $ref: "./SuiArgument.yaml"
+  function:
+    description: "The function to be called."
+    type: string
+  module:
+    description: "The specific module in the package containing the function."
+    type: string
+  package:
+    description: "The package containing the module and function."
+    allOf:
+      - $ref: "./ObjectID.yaml"
+  type_arguments:
+    description: "The type arguments to the function."
+    type: array
+    items:
+      type: string

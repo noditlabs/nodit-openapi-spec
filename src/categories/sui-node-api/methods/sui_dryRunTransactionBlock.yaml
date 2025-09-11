@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info:
+  title: sui_dryRunTransactionBlock
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_dryRunTransactionBlock
+      description: |
+        Return transaction execution effects including the gas cost summary, while the effects are not committed to the chain.
+      summary: sui_dryRunTransactionBlock
+      operationId: sui-sui_dryRunTransactionBlock
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_dryRunTransactionBlock
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    oneOf:
+                      - title: tx_bytes
+                        $ref: "../components/schemas/TxBytes.yaml"
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_dryRunTransactionBlock",
+                  "params":
+                    [
+                      "AAACACB7qR3cfnF89wjJNwYPBASHNuwz+xdG2Zml5YzVxnftgAEAT4LxyFh7mNZMAL+0bDhDvYv2zPp8ZahhOGmM0f3Kw9wCAAAAAAAAACCxDABG4pPAjOwPQHg9msS/SrtNf4IGR/2F0ZGD3ufH/wEBAQEBAAEAAGH7tbTzQqQL2/h/5KlGueONGM+P/HsAALl1F1x7apV2AejYx86GPzE9o9vZKoPvJtEouI/ma/JuDg0Jza9yfR2EAgAAAAAAAAAgzMqpegLMOpgEFnDhYJ23FOmFjJbp5GmFXxzzv9+X6GVh+7W080KkC9v4f+SpRrnjjRjPj/x7AAC5dRdce2qVdgoAAAAAAAAAoIYBAAAAAAAA",
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  jsonrpc:
+                    type: string
+                  result:
+                    $ref: "../components/schemas/DryRunTransactionBlockResponse.yaml"
+              example:
+                $ref: "../components/examples/sui_dryRunTransactionBlock.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

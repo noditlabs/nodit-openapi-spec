@@ -1,0 +1,33 @@
+type: object
+required:
+  - address
+  - exposedFunctions
+  - fileFormatVersion
+  - friends
+  - name
+  - structs
+properties:
+  address:
+    type: string
+  enums:
+    type: object
+    additionalProperties:
+      $ref: "./SuiMoveNormalizedEnum.yaml"
+  exposedFunctions:
+    type: object
+    additionalProperties:
+      $ref: "./SuiMoveNormalizedFunction.yaml"
+  fileFormatVersion:
+    type: integer
+    format: uint32
+    minimum: 0
+  friends:
+    type: array
+    items:
+      $ref: "./SuiMoveModuleId.yaml"
+  name:
+    type: string
+  structs:
+    type: object
+    additionalProperties:
+      $ref: "./SuiMoveNormalizedStruct.yaml"

@@ -1,0 +1,8 @@
+oneOf:
+  - type: object
+    required:
+      - ECMHLiveObjectSetDigest
+    properties:
+      ECMHLiveObjectSetDigest:
+        $ref: "./ECMHLiveObjectSetDigest.yaml"
+    additionalProperties: false

@@ -1,0 +1,116 @@
+openapi: 3.1.0
+info:
+  title: sui_tryMultiGetPastObjects
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_tryMultiGetPastObjects
+      description: |
+        Note there is no software-level guarantee/SLA that objects with past versions can be retrieved by this API, even if the object and version exists/existed. The result may vary across nodes depending on their pruning policies. Return the object information for a specified version
+      summary: sui_tryMultiGetPastObjects
+      operationId: sui-sui_tryMultiGetPastObjects
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_tryMultiGetPastObjects
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  items:
+                    oneOf:
+                      - title: past_objects
+                        type: array
+                        items:
+                          $ref: "../components/schemas/GetPastObjectRequest.yaml"
+                        description: A vector of object and versions to be queried
+                      - title: options
+                        $ref: "../components/schemas/ObjectDataOptions.yaml"
+                        description: Options for specifying the content to be returned
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_tryMultiGetPastObjects",
+                  "params":
+                    [
+                      [
+                        {
+                          "objectId": "0x38b3186a7bb26a1ab2c982a0a9b482aa70f5a010fffc60f20194ef0f597474e8",
+                          "version": "4",
+                        },
+                        {
+                          "objectId": "0xceaf9ee4582d3a233101e322a22cb2a5bea2e681ea5af4e59bd1abb0bb4fcb27",
+                          "version": "12",
+                        },
+                      ],
+                      {
+                        "showType": true,
+                        "showOwner": true,
+                        "showPreviousTransaction": true,
+                        "showDisplay": false,
+                        "showContent": true,
+                        "showBcs": false,
+                        "showStorageRebate": true,
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: "../components/schemas/ObjectRead.yaml"
+              example:
+                $ref: "../components/examples/sui_tryMultiGetPastObjects.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

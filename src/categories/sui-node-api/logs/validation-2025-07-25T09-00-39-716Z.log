@@ -1,0 +1,287 @@
+Validation started at 2025-07-25T09:00:39.718Z
+
+File: sui_devInspectTransactionBlock.yaml
+Status: PASS
+
+---
+
+File: sui_dryRunTransactionBlock.yaml
+Status: PASS
+
+---
+
+File: sui_executeTransactionBlock.yaml
+Status: PASS
+
+---
+
+File: sui_getChainIdentifier.yaml
+Status: PASS
+
+---
+
+File: sui_getCheckpoint.yaml
+Status: PASS
+
+---
+
+File: sui_getCheckpoints.yaml
+Status: PASS
+
+---
+
+File: sui_getEvents.yaml
+Status: PASS
+
+---
+
+File: sui_getLatestCheckpointSequenceNumber.yaml
+Status: PASS
+
+---
+
+File: sui_getMoveFunctionArgTypes.yaml
+Status: PASS
+
+---
+
+File: sui_getNormalizedMoveFunction.yaml
+Status: PASS
+
+---
+
+File: sui_getNormalizedMoveModule.yaml
+Status: PASS
+
+---
+
+File: sui_getNormalizedMoveModulesByPackage.yaml
+Status: PASS
+
+---
+
+File: sui_getNormalizedMoveStruct.yaml
+Status: PASS
+
+---
+
+File: sui_getObject.yaml
+Status: PASS
+
+---
+
+File: sui_getProtocolConfig.yaml
+Status: PASS
+
+---
+
+File: sui_getTotalTransactionBlocks.yaml
+Status: PASS
+
+---
+
+File: sui_getTransactionBlock.yaml
+Status: PASS
+
+---
+
+File: sui_multiGetObjects.yaml
+Status: PASS
+
+---
+
+File: sui_multiGetTransactionBlocks.yaml
+Status: PASS
+
+---
+
+File: sui_tryGetPastObject.yaml
+Status: PASS
+
+---
+
+File: sui_tryMultiGetPastObjects.yaml
+Status: PASS
+
+---
+
+File: sui_verifyZkLoginSignature.yaml
+Status: PASS
+
+---
+
+File: suix_getAllBalances.yaml
+Status: PASS
+
+---
+
+File: suix_getAllCoins.yaml
+Status: PASS
+
+---
+
+File: suix_getBalance.yaml
+Status: PASS
+
+---
+
+File: suix_getCoinMetadata.yaml
+Status: PASS
+
+---
+
+File: suix_getCoins.yaml
+Status: PASS
+
+---
+
+File: suix_getCommitteeInfo.yaml
+Status: PASS
+
+---
+
+File: suix_getDynamicFieldObject.yaml
+Status: PASS
+
+---
+
+File: suix_getDynamicFields.yaml
+Status: PASS
+
+---
+
+File: suix_getLatestSuiSystemState.yaml
+Status: PASS
+
+---
+
+File: suix_getOwnedObjects.yaml
+Status: PASS
+
+---
+
+File: suix_getReferenceGasPrice.yaml
+Status: PASS
+
+---
+
+File: suix_getStakes.yaml
+Status: PASS
+
+---
+
+File: suix_getStakesByIds.yaml
+Status: PASS
+
+---
+
+File: suix_getTotalSupply.yaml
+Status: PASS
+
+---
+
+File: suix_getValidatorsApy.yaml
+Status: PASS
+
+---
+
+File: suix_queryEvents.yaml
+Status: PASS
+
+---
+
+File: suix_queryTransactionBlocks.yaml
+Status: PASS
+
+---
+
+File: suix_resolveNameServiceAddress.yaml
+Status: PASS
+
+---
+
+File: suix_resolveNameServiceNames.yaml
+Status: PASS
+
+---
+
+File: suix_subscribeEvent.yaml
+Status: PASS
+
+---
+
+File: suix_subscribeTransaction.yaml
+Status: PASS
+
+---
+
+File: unsafe_batchTransaction.yaml
+Status: PASS
+
+---
+
+File: unsafe_mergeCoins.yaml
+Status: PASS
+
+---
+
+File: unsafe_moveCall.yaml
+Status: PASS
+
+---
+
+File: unsafe_pay.yaml
+Status: PASS
+
+---
+
+File: unsafe_payAllSui.yaml
+Status: PASS
+
+---
+
+File: unsafe_paySui.yaml
+Status: PASS
+
+---
+
+File: unsafe_publish.yaml
+Status: PASS
+
+---
+
+File: unsafe_requestAddStake.yaml
+Status: PASS
+
+---
+
+File: unsafe_requestWithdrawStake.yaml
+Status: PASS
+
+---
+
+File: unsafe_splitCoin.yaml
+Status: PASS
+
+---
+
+File: unsafe_splitCoinEqual.yaml
+Status: PASS
+
+---
+
+File: unsafe_transferObject.yaml
+Status: PASS
+
+---
+
+File: unsafe_transferSui.yaml
+Status: PASS
+
+---
+
+
+Summary:
+Total files: 56
+Passed: 56
+Failed: 0

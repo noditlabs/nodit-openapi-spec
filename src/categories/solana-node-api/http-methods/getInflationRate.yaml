@@ -1,0 +1,88 @@
+openapi: 3.1.0
+info:
+  title: solana-getInflationRate
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getInflationRate
+      description: |
+        Returns the specific inflation values for the current epoch
+      summary: getInflationRate
+      operationId: solana-getInflationRate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getInflationRate
+              example:
+                { "jsonrpc": "2.0", "id": 1, "method": "getInflationRate" }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                            format: float64
+                            description: Total inflation
+                          validator:
+                            type: number
+                            format: float64
+                            description: Inflation allocated to validators
+                          foundation:
+                            type: number
+                            format: float64
+                            description: Inflation allocated to the foundation
+                          epoch:
+                            type: integer
+                            description: Epoch for which these values are valid
+                            format: uint64
+                example:
+                  $ref: "../components/examples/getInflationRate.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

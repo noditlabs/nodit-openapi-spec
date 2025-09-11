@@ -1,0 +1,14 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "context": {
+      "apiVersion": "2.3.6",
+      "slot": 405340750
+    },
+    "value": {
+      "blockhash": "CQvDmVwMX2M7yUVpUJPAhyX4xnb7EUYXMWJucvvMNd6L",
+      "lastValidBlockHeight": 393293415
+    }
+  },
+  "id": 1
+}

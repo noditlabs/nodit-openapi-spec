@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "abilities": {
+      "abilities": ["Store", "Key"]
+    },
+    "typeParameters": [],
+    "fields": []
+  },
+  "id": 1
+}

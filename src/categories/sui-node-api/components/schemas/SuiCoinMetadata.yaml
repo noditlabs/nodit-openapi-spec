@@ -1,0 +1,27 @@
+type: object
+required:
+  - decimals
+  - description
+  - name
+  - symbol
+properties:
+  decimals:
+    description: "Number of decimal places the coin uses."
+    type: integer
+    format: uint8
+    minimum: 0
+  description:
+    description: "Description of the token"
+    type: string
+  iconUrl:
+    description: "URL for the token logo"
+    type: [string, "null"]
+  id:
+    description: "Object id for the CoinMetadata object"
+    $ref: "./ObjectID.yaml"
+  name:
+    description: "Name for the token"
+    type: string
+  symbol:
+    description: "Symbol for the token"
+    type: string

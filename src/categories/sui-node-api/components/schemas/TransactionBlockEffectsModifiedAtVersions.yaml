@@ -1,0 +1,9 @@
+type: object
+required:
+  - objectId
+  - sequenceNumber
+properties:
+  objectId:
+    $ref: "./ObjectID.yaml"
+  sequenceNumber:
+    $ref: "./SequenceNumber.yaml"

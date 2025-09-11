@@ -1,0 +1,96 @@
+openapi: 3.1.0
+info:
+  title: unsafe_requestAddStake
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - unsafe_requestAddStake
+      description: |
+        Add stake to a validator's staking pool using multiple coins and amount.
+      summary: unsafe_requestAddStake
+      operationId: sui-unsafe_requestAddStake
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: unsafe_requestAddStake
+                params:
+                  type: array
+                  minItems: 4
+                  maxItems: 6
+                  items:
+                    oneOf:
+                      - title: signer
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The transaction signer's Sui address
+                      - title: coins
+                        type: array
+                        items:
+                          $ref: "../components/schemas/ObjectID.yaml"
+                        description: Coin<SUI> object to stake
+                      - title: amount
+                        $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: Stake amount
+                      - title: validator
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The validator's Sui address
+                      - title: gas
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: Gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+                      - title: gas_budget
+                        $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The gas budget, the transaction will fail if the gas cost exceed the budget
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/TransactionBlockBytes.yaml"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

@@ -1,0 +1,14 @@
+type: object
+properties:
+  error_code:
+    type: [integer, "null"]
+    format: uint64
+    minimum: 0
+  function:
+    type: [string, "null"]
+  line:
+    type: [integer, "null"]
+    format: uint16
+    minimum: 0
+  module_id:
+    type: [string, "null"]

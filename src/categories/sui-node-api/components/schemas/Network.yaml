@@ -1,0 +1,4 @@
+description: The network to use for the API.
+enum:
+  - sui-mainnet
+default: sui-mainnet

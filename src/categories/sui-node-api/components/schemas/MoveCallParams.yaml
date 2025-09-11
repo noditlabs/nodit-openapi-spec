@@ -1,0 +1,22 @@
+type: object
+required:
+  - arguments
+  - function
+  - module
+  - packageObjectId
+properties:
+  arguments:
+    type: array
+    items:
+      $ref: "./SuiJsonValue.yaml"
+  function:
+    type: string
+  module:
+    type: string
+  packageObjectId:
+    $ref: "./ObjectID.yaml"
+  typeArguments:
+    default: []
+    type: array
+    items:
+      $ref: "./TypeTag.yaml"

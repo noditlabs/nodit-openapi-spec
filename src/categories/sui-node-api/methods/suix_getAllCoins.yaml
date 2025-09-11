@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: suix_getAllCoins
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getAllCoins
+      description: |
+        Return all Coin objects owned by an address.
+      summary: suix_getAllCoins
+      operationId: sui-suix_getAllCoins
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: suix_getAllCoins
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 3
+                  items:
+                    oneOf:
+                      - title: owner
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The owner's Sui address
+                      - title: cursor
+                        type: string
+                        description: Optional paging cursor
+                      - title: limit
+                        type: integer
+                        description: Maximum number of items per page
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "suix_getAllCoins",
+                  "params":
+                    [
+                      "0x41f5975e3c6bd5c95f041a8493ad7e9934be26e69152d2c2e86d8a9bdbd242b3",
+                      "0x2564cd31a71cf9833609b111436d8f0f47b7f8b9927ec3f8975a1dcbf9b25564",
+                      3,
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  jsonrpc:
+                    type: string
+                  result:
+                    $ref: "../components/schemas/Page_for_Coin_and_String.yaml"
+              example:
+                $ref: "../components/examples/suix_getAllCoins.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

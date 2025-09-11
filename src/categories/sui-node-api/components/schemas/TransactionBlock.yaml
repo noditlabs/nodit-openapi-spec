@@ -1,0 +1,11 @@
+type: object
+required:
+  - data
+  - txSignatures
+properties:
+  data:
+    $ref: "./TransactionBlockData.yaml"
+  txSignatures:
+    type: array
+    items:
+      $ref: "./GenericSignature.yaml"

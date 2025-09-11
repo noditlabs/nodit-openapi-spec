@@ -1,0 +1,63 @@
+oneOf:
+  - type: object
+    required:
+      - code
+      - object_id
+    properties:
+      code:
+        type: string
+        enum:
+          - "notExists"
+      object_id:
+        $ref: "./ObjectID.yaml"
+  - type: object
+    required:
+      - code
+      - parent_object_id
+    properties:
+      code:
+        type: string
+        enum:
+          - "dynamicFieldNotFound"
+      parent_object_id:
+        $ref: "./ObjectID.yaml"
+  - type: object
+    required:
+      - code
+      - digest
+      - object_id
+      - version
+    properties:
+      code:
+        type: string
+        enum:
+          - "deleted"
+      digest:
+        description: "Base64 string representing the object digest"
+        allOf:
+          - $ref: "./ObjectDigest.yaml"
+      object_id:
+        $ref: "./ObjectID.yaml"
+      version:
+        description: "Object version."
+        allOf:
+          - $ref: "./SequenceNumber2.yaml"
+  - type: object
+    required:
+      - code
+    properties:
+      code:
+        type: string
+        enum:
+          - "unknown"
+  - type: object
+    required:
+      - code
+      - error
+    properties:
+      code:
+        type: string
+        enum:
+          - "displayError"
+      error:
+        type: string

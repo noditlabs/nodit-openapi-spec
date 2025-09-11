@@ -1,0 +1,83 @@
+openapi: 3.1.0
+info:
+  title: sui_getLatestCheckpointSequenceNumber
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_getLatestCheckpointSequenceNumber
+      description: |
+        Return the sequence number of the latest checkpoint that has been executed
+      summary: sui_getLatestCheckpointSequenceNumber
+      operationId: sui-sui_getLatestCheckpointSequenceNumber
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_getLatestCheckpointSequenceNumber
+                params:
+                  type: array
+                  maxItems: 0
+                  items: {}
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_getLatestCheckpointSequenceNumber",
+                  "params": [],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/BigInt_for_uint64.yaml"
+              example:
+                $ref: "../components/examples/sui_getLatestCheckpointSequenceNumber.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

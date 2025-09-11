@@ -1,0 +1,28 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "context": {
+      "apiVersion": "2.3.3",
+      "slot": 393226680
+    },
+    "value": {
+      "accounts": null,
+      "err": null,
+      "innerInstructions": null,
+      "loadedAccountsDataSize": 413,
+      "logs": [
+        "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb invoke [1]",
+        "Program log: Instruction: Transfer",
+        "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb consumed 1714 of 200000 compute units",
+        "Program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb success"
+      ],
+      "replacementBlockhash": {
+        "blockhash": "6oFLsE7kmgJx9PjR4R63VRNtpAVJ648gCTr3nq5Hihit",
+        "lastValidBlockHeight": 381186895
+      },
+      "returnData": null,
+      "unitsConsumed": 1714
+    }
+  },
+  "id": 1
+}

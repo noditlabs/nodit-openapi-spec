@@ -1,0 +1,33 @@
+type: object
+properties:
+  accountIndex:
+    type: number
+    description: Index of the account in which the token balance is provided for.
+  mint:
+    type: string
+    description: Pubkey of the token's mint.
+  owner:
+    type: string
+    # undefined: true
+    description: Pubkey of token balance's owner.
+  programId:
+    type: string
+    # undefined: true
+    description: Pubkey of the Token program that owns the account.
+  uiTokenAmount:
+    type: object
+    properties:
+      amount:
+        type: string
+        description: Raw amount of tokens as a string, ignoring decimals.
+      decimals:
+        type: number
+        description: Number of decimals configured for token's mint.
+      uiAmount:
+        type: number
+        # nullable: true
+        description: |
+          `DEPRECATED` Token amount as a float, accounting for decimals.
+      uiAmountString:
+        type: string
+        description: Token amount as a string, accounting for decimals.

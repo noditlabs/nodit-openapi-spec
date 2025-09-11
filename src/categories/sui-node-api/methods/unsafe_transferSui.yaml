@@ -1,0 +1,91 @@
+openapi: 3.1.0
+info:
+  title: unsafe_transferSui
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - unsafe_transferSui
+      description: |
+        Create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object.
+      summary: unsafe_transferSui
+      operationId: sui-unsafe_transferSui
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: unsafe_transferSui
+                params:
+                  type: array
+                  minItems: 4
+                  maxItems: 5
+                  items:
+                    oneOf:
+                      - title: signer
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The transaction signer's Sui address
+                      - title: sui_object_id
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The Sui coin object to be used in this transaction
+                      - title: gas_budget
+                        $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The gas budget, the transaction will fail if the gas cost exceed the budget
+                      - title: recipient
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The recipient's Sui address
+                      - title: amount
+                        $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The amount to be split out and transferred
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/TransactionBlockBytes.yaml"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

@@ -1,0 +1,127 @@
+openapi: 3.1.0
+info:
+  title: suix_getOwnedObjects
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getOwnedObjects
+      description: |
+        Return the list of objects owned by an address. Note that if the address owns more than `QUERY_MAX_RESULT_LIMIT` objects, the pagination is not accurate, because previous page may have been updated when the next page is fetched. Please use suix_queryObjects if this is a concern.
+      summary: suix_getOwnedObjects
+      operationId: sui-suix_getOwnedObjects
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: suix_getOwnedObjects
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 4
+                  items:
+                    oneOf:
+                      - title: address
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The owner's Sui address
+                      - title: query
+                        $ref: "../components/schemas/ObjectResponseQuery.yaml"
+                        description: The objects query criteria.
+                      - title: cursor
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: An optional paging cursor. If provided, the query will start from the next item after the specified cursor. Default to start from the first item if not specified.
+                      - title: limit
+                        type: integer
+                        description: Max number of items returned per page, default to [QUERY_MAX_RESULT_LIMIT] if not specified.
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "suix_getOwnedObjects",
+                  "params":
+                    [
+                      "0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827",
+                      {
+                        "filter":
+                          {
+                            "MatchAll":
+                              [
+                                {
+                                  "StructType": "0x2::coin::Coin<0x2::sui::SUI>",
+                                },
+                                {
+                                  "AddressOwner": "0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827",
+                                },
+                                { "Version": "13488" },
+                              ],
+                          },
+                        "options":
+                          {
+                            "showType": true,
+                            "showOwner": true,
+                            "showPreviousTransaction": true,
+                            "showDisplay": false,
+                            "showContent": false,
+                            "showBcs": false,
+                            "showStorageRebate": false,
+                          },
+                      },
+                      "0x0cd4bb4d4f520fe9bbf0cf1cebe3f2549412826c3c9261bff9786c240123749f",
+                      3,
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/Page_for_SuiObjectResponse_and_ObjectID.yaml"
+              example:
+                $ref: "../components/examples/suix_getOwnedObjects.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

@@ -1,0 +1,11 @@
+type: object
+properties:
+  code:
+    type: string
+    description: Returns a code that identifies the situation where the error occurred.
+  message:
+    type: string
+    description: Returns a detailed message explaining the cause of the error.
+required:
+  - code
+  - message

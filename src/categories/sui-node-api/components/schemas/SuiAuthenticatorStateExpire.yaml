@@ -1,0 +1,6 @@
+type: object
+required:
+  - min_epoch
+properties:
+  min_epoch:
+    $ref: "./BigInt_for_uint64.yaml"

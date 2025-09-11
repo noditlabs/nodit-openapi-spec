@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: sui_devInspectTransactionBlock
-  version: 1.2.10
+  version: 1.2.17
 servers:
   - url: https://{sui-network}.nodit.io
     variables:
@@ -39,7 +39,7 @@ paths:
                   default: 1
                 jsonrpc:
                   type: string
-                  default: "2.0"
+                  default: '2.0'
                 method:
                   type: string
                   default: sui_devInspectTransactionBlock
@@ -50,31 +50,31 @@ paths:
                   items:
                     oneOf:
                       - title: sender_address
-                        $ref: "#/components/schemas/SuiAddress"
+                        $ref: '#/components/schemas/SuiAddress'
                       - title: tx_bytes
-                        $ref: "#/components/schemas/TransactionBlockBytes"
+                        $ref: '#/components/schemas/TxBytes'
                         description: BCS encoded TransactionKind(as opposed to TransactionData, which include gasBudget and gasPrice)
                       - title: gas_price
-                        $ref: "#/components/schemas/SequenceNumber"
+                        $ref: '#/components/schemas/SequenceNumber'
                         description: Gas is not charged, but gas usage is still calculated. Default to use reference gas price
                       - title: epoch
-                        $ref: "#/components/schemas/SequenceNumber"
+                        $ref: '#/components/schemas/SequenceNumber'
                         description: The epoch to perform the call. Will be set from the system state object if not provided
                       - title: additional_args
-                        $ref: "#/components/schemas/DevInspectArgs"
+                        $ref: '#/components/schemas/DevInspectArgs'
                         description: Additional arguments including gas_budget, gas_objects, gas_sponsor and skip_checks.
               example:
-                jsonrpc: "2.0"
+                jsonrpc: '2.0'
                 id: 1
                 method: sui_devInspectTransactionBlock
                 params:
-                  - "0xd70420418b84502e506794227f897237764dde8d79a01ab2104bf742a277a2ab"
+                  - '0xd70420418b84502e506794227f897237764dde8d79a01ab2104bf742a277a2ab'
                   - AAACACBnxtMcbJcOVn8D72fYEaT4Q2ZbjePygvpIs+AQO6m77QEAagYVO5/EhuEB8OnicDrIZm0GrsxN3355JqNhlwxlpbECAAAAAAAAACDoQ3EipycU+/EOvBcDPFtMkZiSbdzWAw3CwdmQCAtBWAEBAQEBAAEAAC9cVD1xauQ9RT3rOxmbva8bxwMMdoL4dwPc5DEkj+3gASxDgF0Nb1QCp60Npb3sVJx83qBrxKHTOaIlIe6pM7iJAgAAAAAAAAAgnvsgc1pPauyCE27/c+aBnHN3fSsxRAWdEJYzYFOryNAvXFQ9cWrkPUU96zsZm72vG8cDDHaC+HcD3OQxJI/t4AoAAAAAAAAAoIYBAAAAAAAA
                   - 1000
                   - 8888
                   - null
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
@@ -86,54 +86,54 @@ paths:
                   jsonrpc:
                     type: string
                   result:
-                    $ref: "#/components/schemas/DevInspectResults"
+                    $ref: '#/components/schemas/DevInspectResults'
               example:
-                jsonrpc: "2.0"
+                jsonrpc: '2.0'
                 result:
                   effects:
                     messageVersion: v1
                     status:
                       status: success
-                    executedEpoch: "0"
+                    executedEpoch: '0'
                     gasUsed:
-                      computationCost: "100"
-                      storageCost: "100"
-                      storageRebate: "10"
-                      nonRefundableStorageFee: "0"
+                      computationCost: '100'
+                      storageCost: '100'
+                      storageRebate: '10'
+                      nonRefundableStorageFee: '0'
                     transactionDigest: 76gyHCk7FRrGACRqXM7Ybj5uJLtAzgEMJ5P9CeEzxZSG
                     mutated:
                       - owner:
-                          AddressOwner: "0x2f5c543d716ae43d453deb3b199bbdaf1bc7030c7682f87703dce431248fede0"
+                          AddressOwner: '0x2f5c543d716ae43d453deb3b199bbdaf1bc7030c7682f87703dce431248fede0'
                         reference:
-                          objectId: "0x2c43805d0d6f5402a7ad0da5bdec549c7cdea06bc4a1d339a22521eea933b889"
+                          objectId: '0x2c43805d0d6f5402a7ad0da5bdec549c7cdea06bc4a1d339a22521eea933b889'
                           version: 2
                           digest: BhbWpBeESxuRWvmvLMyb2JNUuFa6j4aG1T4WUiPgKAHm
                       - owner:
-                          AddressOwner: "0x67c6d31c6c970e567f03ef67d811a4f843665b8de3f282fa48b3e0103ba9bbed"
+                          AddressOwner: '0x67c6d31c6c970e567f03ef67d811a4f843665b8de3f282fa48b3e0103ba9bbed'
                         reference:
-                          objectId: "0x6a06153b9fc486e101f0e9e2703ac8666d06aecc4ddf7e7926a361970c65a5b1"
+                          objectId: '0x6a06153b9fc486e101f0e9e2703ac8666d06aecc4ddf7e7926a361970c65a5b1'
                           version: 2
                           digest: GdfET1avZReDftpJNB8LSuHJ2cKUheSbEaLMzuPVXHsM
                     gasObject:
                       owner:
-                        ObjectOwner: "0x2f5c543d716ae43d453deb3b199bbdaf1bc7030c7682f87703dce431248fede0"
+                        ObjectOwner: '0x2f5c543d716ae43d453deb3b199bbdaf1bc7030c7682f87703dce431248fede0'
                       reference:
-                        objectId: "0x2c43805d0d6f5402a7ad0da5bdec549c7cdea06bc4a1d339a22521eea933b889"
+                        objectId: '0x2c43805d0d6f5402a7ad0da5bdec549c7cdea06bc4a1d339a22521eea933b889'
                         version: 2
                         digest: BhbWpBeESxuRWvmvLMyb2JNUuFa6j4aG1T4WUiPgKAHm
                     eventsDigest: 6kerMphN4S5QTfd9TAhwMiFq1q9c2YwfpheBfWm85vUq
                   events: []
                 id: 1
-        "400":
-          $ref: "#/components/responses/400"
-        "401":
-          $ref: "#/components/responses/401"
-        "403":
-          $ref: "#/components/responses/403"
-        "404":
-          $ref: "#/components/responses/404"
-        "429":
-          $ref: "#/components/responses/429"
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
 components:
   securitySchemes:
     api_key:
@@ -148,20 +148,25 @@ components:
       type: string
     SuiAddress:
       allOf:
-        - $ref: "#/components/schemas/Hex"
-    Base58:
+        - $ref: '#/components/schemas/Hex'
+    TxBytes:
       type: string
-    Digest:
-      allOf:
-        - $ref: "#/components/schemas/Base58"
-      description: A representation of a 32 byte digest
-    ObjectID:
-      allOf:
-        - $ref: "#/components/schemas/Hex"
+      description: BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
     SequenceNumber:
       type: integer
       format: uint64
       minimum: 0
+    BigInt_for_uint64:
+      type: string
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
     ObjectRef:
       type: object
       required:
@@ -172,89 +177,29 @@ components:
         digest:
           description: Base64 string representing the object digest
           allOf:
-            - $ref: "#/components/schemas/Digest"
+            - $ref: '#/components/schemas/Digest'
         objectId:
           description: Hex code as string representing the object id
           allOf:
-            - $ref: "#/components/schemas/ObjectID"
+            - $ref: '#/components/schemas/ObjectID'
         version:
           description: Object version.
           allOf:
-            - $ref: "#/components/schemas/SequenceNumber"
-    BigInt_for_uint64:
-      type: string
-    InputObjectKind:
-      oneOf:
-        - type: object
-          required:
-            - MovePackage
-          properties:
-            MovePackage:
-              $ref: "#/components/schemas/ObjectID"
-          additionalProperties: false
-        - type: object
-          required:
-            - ImmOrOwnedMoveObject
-          properties:
-            ImmOrOwnedMoveObject:
-              $ref: "#/components/schemas/ObjectRef"
-          additionalProperties: false
-        - type: object
-          required:
-            - SharedMoveObject
-          properties:
-            SharedMoveObject:
-              type: object
-              required:
-                - id
-                - initial_shared_version
-              properties:
-                id:
-                  $ref: "#/components/schemas/ObjectID"
-                initial_shared_version:
-                  $ref: "#/components/schemas/BigInt_for_uint64"
-                mutable:
-                  default: true
-                  type: boolean
-          additionalProperties: false
-    Base64:
-      description: Base64 encoding
-      type: string
-    TransactionBlockBytes:
-      type: object
-      required:
-        - gas
-        - inputObjects
-        - txBytes
-      properties:
-        gas:
-          description: the gas objects to be used
-          type: array
-          items:
-            $ref: "#/components/schemas/ObjectRef"
-        inputObjects:
-          description: objects to be used in this transaction
-          type: array
-          items:
-            $ref: "#/components/schemas/InputObjectKind"
-        txBytes:
-          description: BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
-          allOf:
-            - $ref: "#/components/schemas/Base64"
+            - $ref: '#/components/schemas/SequenceNumber'
     DevInspectArgs:
       description: Additional rguments supplied to dev inspect beyond what is allowed in today's API.
       type: object
       properties:
         gasBudget:
-          $ref: "#/components/schemas/BigInt_for_uint64"
+          $ref: '#/components/schemas/BigInt_for_uint64'
           description: The gas budget for the transaction.
         gasObjects:
           type: array
           items:
-            $ref: "#/components/schemas/ObjectRef"
+            $ref: '#/components/schemas/ObjectRef'
           description: The gas objects used to pay for the transaction.
         gasSponsor:
-          $ref: "#/components/schemas/SuiAddress"
+          $ref: '#/components/schemas/SuiAddress'
           description: The sponsor of the gas for the transaction, might be different from the sender.
         showRawTxnDataAndEffects:
           type: boolean
@@ -268,23 +213,23 @@ components:
         error_code:
           type:
             - integer
-            - "null"
+            - 'null'
           format: uint64
           minimum: 0
         function:
           type:
             - string
-            - "null"
+            - 'null'
         line:
           type:
             - integer
-            - "null"
+            - 'null'
           format: uint16
           minimum: 0
         module_id:
           type:
             - string
-            - "null"
+            - 'null'
     Owner:
       oneOf:
         - description: Object is exclusively owned by a single address, and is mutable.
@@ -293,7 +238,7 @@ components:
             - AddressOwner
           properties:
             AddressOwner:
-              $ref: "#/components/schemas/SuiAddress"
+              $ref: '#/components/schemas/SuiAddress'
           additionalProperties: false
         - description: Object is exclusively owned by a single object, and is mutable. The object ID is converted to SuiAddress as SuiAddress is universal.
           type: object
@@ -301,7 +246,7 @@ components:
             - ObjectOwner
           properties:
             ObjectOwner:
-              $ref: "#/components/schemas/SuiAddress"
+              $ref: '#/components/schemas/SuiAddress'
           additionalProperties: false
         - description: Object is shared, can be used by any address, and is mutable.
           type: object
@@ -316,7 +261,7 @@ components:
                 initial_shared_version:
                   description: The version at which the object became shared
                   allOf:
-                    - $ref: "#/components/schemas/BigInt_for_uint64"
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
           additionalProperties: false
         - description: Object is immutable, and hence ownership doesn't matter.
           type: string
@@ -334,11 +279,11 @@ components:
                 - start_version
               properties:
                 owner:
-                  $ref: "#/components/schemas/SuiAddress"
+                  $ref: '#/components/schemas/SuiAddress'
                 start_version:
                   description: The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes.
                   allOf:
-                    - $ref: "#/components/schemas/BigInt_for_uint64"
+                    - $ref: '#/components/schemas/BigInt_for_uint64'
           additionalProperties: false
     OwnedObjectRef:
       type: object
@@ -347,12 +292,12 @@ components:
         - reference
       properties:
         owner:
-          $ref: "#/components/schemas/Owner"
+          $ref: '#/components/schemas/Owner'
         reference:
-          $ref: "#/components/schemas/ObjectRef"
+          $ref: '#/components/schemas/ObjectRef'
     TransactionDigest:
       allOf:
-        - $ref: "#/components/schemas/Digest"
+        - $ref: '#/components/schemas/Digest'
       description: A transaction will have a (unique) digest.
     GasCostSummary:
       description: |
@@ -374,19 +319,19 @@ components:
         computationCost:
           description: Cost of computation/execution
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+            - $ref: '#/components/schemas/BigInt_for_uint64'
         nonRefundableStorageFee:
           description: The fee for the rebate. The portion of the storage rebate kept by the system.
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+            - $ref: '#/components/schemas/BigInt_for_uint64'
         storageCost:
           description: Storage cost, it's the sum of all storage cost for all objects created or mutated.
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+            - $ref: '#/components/schemas/BigInt_for_uint64'
         storageRebate:
           description: The amount of storage cost refunded to the user for all objects deleted or mutated in the transaction.
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+            - $ref: '#/components/schemas/BigInt_for_uint64'
     TransactionBlockEffectsModifiedAtVersions:
       type: object
       required:
@@ -394,9 +339,9 @@ components:
         - sequenceNumber
       properties:
         objectId:
-          $ref: "#/components/schemas/ObjectID"
+          $ref: '#/components/schemas/ObjectID'
         sequenceNumber:
-          $ref: "#/components/schemas/SequenceNumber"
+          $ref: '#/components/schemas/SequenceNumber'
     ExecutionStatus:
       oneOf:
         - type: object
@@ -432,35 +377,35 @@ components:
           properties:
             abortError:
               description: The abort error populated if the transaction failed with an abort code.
-              $ref: "#/components/schemas/SuiMoveAbort"
+              $ref: '#/components/schemas/SuiMoveAbort'
             created:
               description: ObjectRef and owner of new objects created.
               type: array
               items:
-                $ref: "#/components/schemas/OwnedObjectRef"
+                $ref: '#/components/schemas/OwnedObjectRef'
             deleted:
               description: Object Refs of objects now deleted (the old refs).
               type: array
               items:
-                $ref: "#/components/schemas/ObjectRef"
+                $ref: '#/components/schemas/ObjectRef'
             dependencies:
               description: The set of transaction digests this transaction depends on.
               type: array
               items:
-                $ref: "#/components/schemas/TransactionDigest"
+                $ref: '#/components/schemas/TransactionDigest'
             eventsDigest:
               description: The digest of the events emitted during execution, can be None if the transaction does not emit any event.
-              $ref: "#/components/schemas/Digest"
+              $ref: '#/components/schemas/Digest'
             executedEpoch:
               description: The epoch when this transaction was executed.
               allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
+                - $ref: '#/components/schemas/BigInt_for_uint64'
             gasObject:
               description: The updated gas object reference. Have a dedicated field for convenient access. It's also included in mutated.
               allOf:
-                - $ref: "#/components/schemas/OwnedObjectRef"
+                - $ref: '#/components/schemas/OwnedObjectRef'
             gasUsed:
-              $ref: "#/components/schemas/GasCostSummary"
+              $ref: '#/components/schemas/GasCostSummary'
             messageVersion:
               type: string
               enum:
@@ -469,40 +414,40 @@ components:
               description: The version that every modified (mutated or deleted) object had before it was modified by this transaction.
               type: array
               items:
-                $ref: "#/components/schemas/TransactionBlockEffectsModifiedAtVersions"
+                $ref: '#/components/schemas/TransactionBlockEffectsModifiedAtVersions'
             mutated:
               description: ObjectRef and owner of mutated objects, including gas object.
               type: array
               items:
-                $ref: "#/components/schemas/OwnedObjectRef"
+                $ref: '#/components/schemas/OwnedObjectRef'
             sharedObjects:
               description: The object references of the shared objects used in this transaction. Empty if no shared objects were used.
               type: array
               items:
-                $ref: "#/components/schemas/ObjectRef"
+                $ref: '#/components/schemas/ObjectRef'
             status:
               description: The status of the execution
               allOf:
-                - $ref: "#/components/schemas/ExecutionStatus"
+                - $ref: '#/components/schemas/ExecutionStatus'
             transactionDigest:
               description: The transaction digest
               allOf:
-                - $ref: "#/components/schemas/TransactionDigest"
+                - $ref: '#/components/schemas/TransactionDigest'
             unwrapped:
               description: ObjectRef and owner of objects that are unwrapped in this transaction. Unwrapped objects are objects that were wrapped into other objects in the past, and just got extracted out.
               type: array
               items:
-                $ref: "#/components/schemas/OwnedObjectRef"
+                $ref: '#/components/schemas/OwnedObjectRef'
             unwrappedThenDeleted:
               description: Object refs of objects previously wrapped in other objects but now deleted.
               type: array
               items:
-                $ref: "#/components/schemas/ObjectRef"
+                $ref: '#/components/schemas/ObjectRef'
             wrapped:
               description: Object refs of objects now wrapped in other objects.
               type: array
               items:
-                $ref: "#/components/schemas/ObjectRef"
+                $ref: '#/components/schemas/ObjectRef'
     DevInspectResults:
       description: The response from processing a dev inspect transaction
       type: object
@@ -512,7 +457,7 @@ components:
       properties:
         effects:
           description: Summary of effects that likely would be generated if the transaction is actually run. Note however, that not all dev-inspect transactions are actually usable as transactions so it might not be possible actually generate these effects from a normal transaction.
-          $ref: "#/components/schemas/TransactionBlockEffects"
+          $ref: '#/components/schemas/TransactionBlockEffects'
         error:
           type: string
           description: Execution error from executing the transactions
@@ -528,8 +473,72 @@ components:
         results:
           type: array
           items:
-            $ref: "#/components/schemas/TransactionBlockEffects"
+            $ref: '#/components/schemas/TransactionBlockEffects'
           description: Execution results (including return values) from executing the transactions
+    ObjectResponseError:
+      oneOf:
+        - type: object
+          required:
+            - code
+            - object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - notExists
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - parent_object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - dynamicFieldNotFound
+            parent_object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - digest
+            - object_id
+            - version
+          properties:
+            code:
+              type: string
+              enum:
+                - deleted
+            digest:
+              description: Base64 string representing the object digest
+              allOf:
+                - $ref: '#/components/schemas/Digest'
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+            version:
+              description: Object version.
+              allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - code
+          properties:
+            code:
+              type: string
+              enum:
+                - unknown
+        - type: object
+          required:
+            - code
+            - error
+          properties:
+            code:
+              type: string
+              enum:
+                - displayError
+            error:
+              type: string
     Error:
       type: object
       properties:
@@ -543,92 +552,60 @@ components:
         - code
         - message
   responses:
-    "400":
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ObjectResponseError'
+            required:
+              - jsonrpc
+              - id
+              - error
+    '401':
       description: Unauthorized
       content:
         application/json:
           schema:
-            oneOf:
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - notExists
-                  object_id:
-                    $ref: "#/components/schemas/ObjectID"
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - dynamic_field_not_found
-                  parent_object_id:
-                    $ref: "#/components/schemas/ObjectID"
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - deleted
-                  digest:
-                    $ref: "#/components/schemas/Digest"
-                  object_id:
-                    $ref: "#/components/schemas/ObjectID"
-                  version:
-                    $ref: "#/components/schemas/BigInt_for_uint64"
-              - type: object
-                required:
-                  - code
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - unknown
-              - type: object
-                required:
-                  - code
-                  - error
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - displayError
-                  error:
-                    type: string
-    "401":
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
-    "403":
+    '403':
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
-    "404":
+    '404':
       description: Not Found
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
-    "429":
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests

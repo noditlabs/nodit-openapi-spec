@@ -1,0 +1,21 @@
+description: "The struct for zk login proof."
+type: object
+required:
+  - a
+  - b
+  - c
+properties:
+  a:
+    type: array
+    items:
+      $ref: "./Bn254FqElement.yaml"
+  b:
+    type: array
+    items:
+      type: array
+      items:
+        $ref: "./Bn254FqElement.yaml"
+  c:
+    type: array
+    items:
+      $ref: "./Bn254FqElement.yaml"

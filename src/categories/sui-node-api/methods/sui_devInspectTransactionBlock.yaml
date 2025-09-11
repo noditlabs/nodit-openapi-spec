@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: sui_devInspectTransactionBlock
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_devInspectTransactionBlock
+      description: |
+        Runs the transaction in dev-inspect mode. Which allows for nearly any transaction (or Move call) with any arguments. Detailed results are provided, including both the transaction effects and any return values.
+      summary: sui_devInspectTransactionBlock
+      operationId: sui-sui_devInspectTransactionBlock
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_devInspectTransactionBlock
+                params:
+                  type: array
+                  minItems: 2
+                  maxItems: 5
+                  items:
+                    oneOf:
+                      - title: sender_address
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                      - title: tx_bytes
+                        $ref: "../components/schemas/TxBytes.yaml"
+                        description: BCS encoded TransactionKind(as opposed to TransactionData, which include gasBudget and gasPrice)
+                      - title: gas_price
+                        $ref: "../components/schemas/SequenceNumber.yaml"
+                        description: Gas is not charged, but gas usage is still calculated. Default to use reference gas price
+                      - title: epoch
+                        $ref: "../components/schemas/SequenceNumber.yaml"
+                        description: The epoch to perform the call. Will be set from the system state object if not provided
+                      - title: additional_args
+                        $ref: "../components/schemas/DevInspectArgs.yaml"
+                        description: Additional arguments including gas_budget, gas_objects, gas_sponsor and skip_checks.
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_devInspectTransactionBlock",
+                  "params":
+                    [
+                      "0xd70420418b84502e506794227f897237764dde8d79a01ab2104bf742a277a2ab",
+                      "AAACACBnxtMcbJcOVn8D72fYEaT4Q2ZbjePygvpIs+AQO6m77QEAagYVO5/EhuEB8OnicDrIZm0GrsxN3355JqNhlwxlpbECAAAAAAAAACDoQ3EipycU+/EOvBcDPFtMkZiSbdzWAw3CwdmQCAtBWAEBAQEBAAEAAC9cVD1xauQ9RT3rOxmbva8bxwMMdoL4dwPc5DEkj+3gASxDgF0Nb1QCp60Npb3sVJx83qBrxKHTOaIlIe6pM7iJAgAAAAAAAAAgnvsgc1pPauyCE27/c+aBnHN3fSsxRAWdEJYzYFOryNAvXFQ9cWrkPUU96zsZm72vG8cDDHaC+HcD3OQxJI/t4AoAAAAAAAAAoIYBAAAAAAAA",
+                      1000,
+                      8888,
+                      null,
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  jsonrpc:
+                    type: string
+                  result:
+                    $ref: "../components/schemas/DevInspectResults.yaml"
+              example:
+                $ref: "../components/examples/sui_devInspectTransactionBlock.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

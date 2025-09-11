@@ -1,0 +1,18 @@
+type: object
+required:
+  - digest
+  - objectId
+  - version
+properties:
+  digest:
+    description: "Base64 string representing the object digest"
+    allOf:
+      - $ref: "./ObjectDigest.yaml"
+  objectId:
+    description: "Hex code as string representing the object id"
+    allOf:
+      - $ref: "./ObjectID.yaml"
+  version:
+    description: "Object version."
+    allOf:
+      - $ref: "./SequenceNumber.yaml"

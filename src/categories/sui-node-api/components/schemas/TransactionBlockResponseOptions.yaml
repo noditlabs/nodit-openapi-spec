@@ -1,0 +1,30 @@
+type: object
+properties:
+  showBalanceChanges:
+    description: "Whether to show balance_changes. Default to be False"
+    default: false
+    type: boolean
+  showEffects:
+    description: "Whether to show transaction effects. Default to be False"
+    default: false
+    type: boolean
+  showEvents:
+    description: "Whether to show transaction events. Default to be False"
+    default: false
+    type: boolean
+  showInput:
+    description: "Whether to show transaction input data. Default to be False"
+    default: false
+    type: boolean
+  showObjectChanges:
+    description: "Whether to show object_changes. Default to be False"
+    default: false
+    type: boolean
+  showRawEffects:
+    description: "Whether to show raw transaction effects. Default to be False"
+    default: false
+    type: boolean
+  showRawInput:
+    description: "Whether to show bcs-encoded transaction input data"
+    default: false
+    type: boolean

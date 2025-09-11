@@ -1,0 +1,54 @@
+oneOf:
+  - description: "Object is exclusively owned by a single address, and is mutable."
+    type: object
+    required:
+      - AddressOwner
+    properties:
+      AddressOwner:
+        $ref: "./SuiAddress.yaml"
+    additionalProperties: false
+  - description: "Object is exclusively owned by a single object, and is mutable. The object ID is converted to SuiAddress as SuiAddress is universal."
+    type: object
+    required:
+      - ObjectOwner
+    properties:
+      ObjectOwner:
+        $ref: "./SuiAddress.yaml"
+    additionalProperties: false
+  - description: "Object is shared, can be used by any address, and is mutable."
+    type: object
+    required:
+      - Shared
+    properties:
+      Shared:
+        type: object
+        required:
+          - initial_shared_version
+        properties:
+          initial_shared_version:
+            description: "The version at which the object became shared"
+            allOf:
+              - $ref: "./SequenceNumber2.yaml"
+    additionalProperties: false
+  - description: "Object is immutable, and hence ownership doesn't matter."
+    type: string
+    enum:
+      - "Immutable"
+  - description: "Object is exclusively owned by a single address and sequenced via consensus."
+    type: object
+    required:
+      - ConsensusAddressOwner
+    properties:
+      ConsensusAddressOwner:
+        type: object
+        required:
+          - owner
+          - start_version
+        properties:
+          owner:
+            $ref: "./SuiAddress.yaml"
+          start_version:
+            description: "The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes."
+            allOf:
+              - $ref: "./SequenceNumber2.yaml"
+    additionalProperties: false

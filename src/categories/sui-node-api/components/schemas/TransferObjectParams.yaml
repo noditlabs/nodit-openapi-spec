@@ -1,0 +1,9 @@
+type: object
+required:
+  - objectId
+  - recipient
+properties:
+  objectId:
+    $ref: "./ObjectID.yaml"
+  recipient:
+    $ref: "./SuiAddress.yaml"

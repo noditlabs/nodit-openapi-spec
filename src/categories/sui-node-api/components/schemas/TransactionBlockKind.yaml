@@ -1,0 +1,228 @@
+oneOf:
+  - description: "A system transaction that will update epoch information on-chain."
+    type: object
+    required:
+      - computation_charge
+      - epoch
+      - epoch_start_timestamp_ms
+      - kind
+      - storage_charge
+      - storage_rebate
+    properties:
+      computation_charge:
+        $ref: "./BigInt_for_uint64.yaml"
+      epoch:
+        $ref: "./BigInt_for_uint64.yaml"
+      epoch_start_timestamp_ms:
+        $ref: "./BigInt_for_uint64.yaml"
+      kind:
+        type: string
+        enum:
+          - "ChangeEpoch"
+      storage_charge:
+        $ref: "./BigInt_for_uint64.yaml"
+      storage_rebate:
+        $ref: "./BigInt_for_uint64.yaml"
+  - description: "A system transaction used for initializing the initial state of the chain."
+    type: object
+    required:
+      - kind
+      - objects
+    properties:
+      kind:
+        type: string
+        enum:
+          - "Genesis"
+      objects:
+        type: array
+        items:
+          $ref: "./ObjectID.yaml"
+  - description: "A system transaction marking the start of a series of transactions scheduled as part of a checkpoint"
+    type: object
+    required:
+      - commit_timestamp_ms
+      - epoch
+      - kind
+      - round
+    properties:
+      commit_timestamp_ms:
+        $ref: "./BigInt_for_uint64.yaml"
+      epoch:
+        $ref: "./BigInt_for_uint64.yaml"
+      kind:
+        type: string
+        enum:
+          - "ConsensusCommitPrologue"
+      round:
+        $ref: "./BigInt_for_uint64.yaml"
+  - description: "A series of transactions where the results of one transaction can be used in future transactions"
+    type: object
+    required:
+      - inputs
+      - kind
+      - transactions
+    properties:
+      inputs:
+        description: "Input objects or primitive values"
+        type: array
+        items:
+          $ref: "./SuiCallArg.yaml"
+      kind:
+        type: string
+        enum:
+          - "ProgrammableTransaction"
+      transactions:
+        description: "The transactions to be executed sequentially. A failure in any transaction will result in the failure of the entire programmable transaction block."
+        type: array
+        items:
+          $ref: "./SuiTransaction.yaml"
+  - description: "A transaction which updates global authenticator state"
+    type: object
+    required:
+      - epoch
+      - kind
+      - new_active_jwks
+      - round
+    properties:
+      epoch:
+        $ref: "./BigInt_for_uint64.yaml"
+      kind:
+        type: string
+        enum:
+          - "AuthenticatorStateUpdate"
+      new_active_jwks:
+        type: array
+        items:
+          $ref: "./SuiActiveJwk.yaml"
+      round:
+        $ref: "./BigInt_for_uint64.yaml"
+  - description: "A transaction which updates global randomness state"
+    type: object
+    required:
+      - epoch
+      - kind
+      - random_bytes
+      - randomness_round
+    properties:
+      epoch:
+        $ref: "./BigInt_for_uint64.yaml"
+      kind:
+        type: string
+        enum:
+          - "RandomnessStateUpdate"
+      random_bytes:
+        type: array
+        items:
+          type: integer
+          format: uint8
+          minimum: 0
+      randomness_round:
+        $ref: "./BigInt_for_uint64.yaml"
+  - description: "The transaction which occurs only at the end of the epoch"
+    type: object
+    required:
+      - kind
+      - transactions
+    properties:
+      kind:
+        type: string
+        enum:
+          - "EndOfEpochTransaction"
+      transactions:
+        type: array
+        items:
+          $ref: "./SuiEndOfEpochTransactionKind.yaml"
+  - type: object
+    required:
+      - commit_timestamp_ms
+      - consensus_commit_digest
+      - epoch
+      - kind
+      - round
+    properties:
+      commit_timestamp_ms:
+        $ref: "./BigInt_for_uint64.yaml"
+      consensus_commit_digest:
+        $ref: "./ConsensusCommitDigest.yaml"
+      epoch:
+        $ref: "./BigInt_for_uint64.yaml"
+      kind:
+        type: string
+        enum:
+          - "ConsensusCommitPrologueV2"
+      round:
+        $ref: "./BigInt_for_uint64.yaml"
+  - type: object
+    required:
+      - commit_timestamp_ms
+      - consensus_commit_digest
+      - consensus_determined_version_assignments
+      - epoch
+      - kind
+      - round
+    properties:
+      commit_timestamp_ms:
+        $ref: "./BigInt_for_uint64.yaml"
+      consensus_commit_digest:
+        $ref: "./ConsensusCommitDigest.yaml"
+      consensus_determined_version_assignments:
+        $ref: "./ConsensusDeterminedVersionAssignments.yaml"
+      epoch:
+        $ref: "./BigInt_for_uint64.yaml"
+      kind:
+        type: string
+        enum:
+          - "ConsensusCommitPrologueV3"
+      round:
+        $ref: "./BigInt_for_uint64.yaml"
+      sub_dag_index:
+        $ref: "./BigInt_for_uint64.yaml"
+  - type: object
+    required:
+      - additional_state_digest
+      - commit_timestamp_ms
+      - consensus_commit_digest
+      - consensus_determined_version_assignments
+      - epoch
+      - kind
+      - round
+    properties:
+      additional_state_digest:
+        $ref: "./AdditionalConsensusStateDigest.yaml"
+      commit_timestamp_ms:
+        $ref: "./BigInt_for_uint64.yaml"
+      consensus_commit_digest:
+        $ref: "./ConsensusCommitDigest.yaml"
+      consensus_determined_version_assignments:
+        $ref: "./ConsensusDeterminedVersionAssignments.yaml"
+      epoch:
+        $ref: "./BigInt_for_uint64.yaml"
+      kind:
+        type: string
+        enum:
+          - "ConsensusCommitPrologueV4"
+      round:
+        $ref: "./BigInt_for_uint64.yaml"
+      sub_dag_index:
+        $ref: "./BigInt_for_uint64.yaml"
+  - description: "A series of commands where the results of one command can be used in future commands"
+    type: object
+    required:
+      - inputs
+      - kind
+      - transactions
+    properties:
+      inputs:
+        description: "Input objects or primitive values"
+        type: array
+        items:
+          $ref: "./SuiCallArg.yaml"
+      kind:
+        type: string
+        enum:
+          - "ProgrammableSystemTransaction"
+      transactions:
+        description: "The transactions to be executed sequentially. A failure in any transaction will result in the failure of the entire programmable transaction block."
+        type: array
+        items:
+          $ref: "./SuiTransaction.yaml"

@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: suix_getDynamicFieldObject
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getDynamicFieldObject
+      description: |
+        Return the dynamic field object information for a specified object
+      summary: suix_getDynamicFieldObject
+      operationId: sui-suix_getDynamicFieldObject
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: suix_getDynamicFieldObject
+                params:
+                  type: array
+                  minItems: 2
+                  maxItems: 2
+                  items:
+                    oneOf:
+                      - title: parent_object_id
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The ID of the queried parent object
+                      - title: name
+                        $ref: "../components/schemas/DynamicFieldName.yaml"
+                        description: The Name of the dynamic field
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "suix_getDynamicFieldObject",
+                  "params":
+                    [
+                      "0x3ddea0f8c3da994d9ead562ce76e36fdef6a382da344930c73d1298b0e9644b8",
+                      {
+                        "type": "0x0000000000000000000000000000000000000000000000000000000000000009::test::TestField",
+                        "value": "some_value",
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/SuiObjectResponse.yaml"
+                    description: The response from the dynamic field object query
+              example:
+                $ref: "../components/examples/suix_getDynamicFieldObject.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

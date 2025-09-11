@@ -1,0 +1,32 @@
+description: "Unlike [enum Signature], [enum CompressedSignature] does not contain public key."
+oneOf:
+  - type: object
+    required:
+      - Ed25519
+    properties:
+      Ed25519:
+        $ref: "./Base64.yaml"
+  - type: object
+    required:
+      - Secp256k1
+    properties:
+      Secp256k1:
+        $ref: "./Base64.yaml"
+  - type: object
+    required:
+      - Secp256r1
+    properties:
+      Secp256r1:
+        $ref: "./Base64.yaml"
+  - type: object
+    required:
+      - ZkLogin
+    properties:
+      ZkLogin:
+        $ref: "./ZkLoginAuthenticatorAsBytes.yaml"
+  - type: object
+    required:
+      - Passkey
+    properties:
+      Passkey:
+        $ref: "./PasskeyAuthenticatorAsBytes.yaml"

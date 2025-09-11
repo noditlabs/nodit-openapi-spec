@@ -1,0 +1,97 @@
+openapi: 3.1.0
+info:
+  title: solana-getClusterNodes
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getClusterNodes
+      description: |
+        Returns information about all the nodes participating in the cluster
+      summary: getClusterNodes
+      operationId: solana-getClusterNodes
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getClusterNodes
+              example:
+                { "jsonrpc": "2.0", "id": 1, "method": "getClusterNodes" }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            featureSet:
+                              type: integer
+                              format: uint32
+                              description: The unique identifier of the node's feature set
+                            gossip:
+                              type: string
+                              description: Gossip network address for the node
+                            pubkey:
+                              type: string
+                              description: Node public key, as base-58 encoded string
+                            rpc:
+                              type: string
+                              description: JSON RPC network address for the node, or null if the JSON RPC service is not enabled
+                            shredVersion:
+                              type: integer
+                              format: uint16
+                              description: The shred version the node has been configured to use
+                            tpu:
+                              type: string
+                              description: TPU network address for the node
+                            version:
+                              type: string
+                              description: The software version of the node, or null if the version information is not available
+                example:
+                  $ref: "../components/examples/getClusterNodes.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

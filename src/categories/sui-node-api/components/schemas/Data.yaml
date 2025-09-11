@@ -1,0 +1,30 @@
+oneOf:
+  - type: object
+    required:
+      - dataType
+      - fields
+      - hasPublicTransfer
+      - type
+    properties:
+      dataType:
+        type: string
+        enum:
+          - "moveObject"
+      fields:
+        $ref: "./MoveStruct.yaml"
+      hasPublicTransfer:
+        type: boolean
+      type:
+        type: string
+  - type: object
+    required:
+      - dataType
+      - disassembled
+    properties:
+      dataType:
+        type: string
+        enum:
+          - "package"
+      disassembled:
+        type: object
+        additionalProperties: true

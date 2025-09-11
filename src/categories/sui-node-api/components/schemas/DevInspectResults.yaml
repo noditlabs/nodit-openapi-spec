@@ -1,0 +1,26 @@
+description: "The response from processing a dev inspect transaction"
+type: object
+required:
+  - effects
+  - events
+properties:
+  effects:
+    description: "Summary of effects that likely would be generated if the transaction is actually run. Note however, that not all dev-inspect transactions are actually usable as transactions so it might not be possible actually generate these effects from a normal transaction."
+    $ref: "./TransactionBlockEffects.yaml"
+  error:
+    type: string
+    description: Execution error from executing the transactions
+  events:
+    type: array
+    description: Events that likely would be generated if the transaction is actually run.
+  rawEffects:
+    type: array
+    description: The raw effects of the transaction that was dev inspected.
+  rawTxnData:
+    type: array
+    description: The raw transaction data of the transaction that was dev inspected.
+  results:
+    type: array
+    items:
+      $ref: "./TransactionBlockEffects.yaml"
+    description: Execution results (including return values) from executing the transactions

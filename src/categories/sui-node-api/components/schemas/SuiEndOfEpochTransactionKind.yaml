@@ -1,0 +1,36 @@
+oneOf:
+  - type: string
+    enum:
+      - "AuthenticatorStateCreate"
+      - "RandomnessStateCreate"
+      - "CoinDenyListStateCreate"
+      - "StoreExecutionTimeObservations"
+      - "AccumulatorRootCreate"
+  - type: object
+    required:
+      - ChangeEpoch
+    properties:
+      ChangeEpoch:
+        $ref: "./SuiChangeEpoch.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - AuthenticatorStateExpire
+    properties:
+      AuthenticatorStateExpire:
+        $ref: "./SuiAuthenticatorStateExpire.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - BridgeStateCreate
+    properties:
+      BridgeStateCreate:
+        $ref: "./CheckpointDigest.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - BridgeCommitteeUpdate
+    properties:
+      BridgeCommitteeUpdate:
+        $ref: "./SequenceNumber2.yaml"
+    additionalProperties: false

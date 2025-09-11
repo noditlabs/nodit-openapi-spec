@@ -21,6 +21,10 @@ function validateInputs(
     );
   }
 
+  if (namespaceInput && !["sui", "suix", "unsafe"].includes(namespaceInput)) {
+    throw new Error("Error: Namespace must be 'sui', 'suix', or 'unsafe'.");
+  }
+
   return [versionInput, namespaceInput];
 }
 
@@ -45,6 +49,13 @@ async function main() {
 
     for (const file of yamlFiles) {
       const endpoint = file.replace(".yaml", "");
+
+      // namespace 필터링
+      if (namespaceInput) {
+        const fileNamespace = endpoint.split("_")[0];
+        if (fileNamespace !== namespaceInput) continue;
+      }
+
       const filePath = path.join(yamlDir, file);
 
       // API 업로드
@@ -58,10 +69,9 @@ async function main() {
 
       if (uploadedDocsId)
         console.log(
-          `ᄂ Successfully uploaded API specification for ${endpoint} (ID: ${uploadedDocsId})!`
+          `✅ Successfully uploaded API specification for ${endpoint} (ID: ${uploadedDocsId})!`
         );
-      else
-        console.log(`ᄂ ❌ Failed to upload API specification for ${endpoint}`);
+      else console.log(`❌ Failed to upload API specification for ${endpoint}`);
     }
 
     console.log(`✅ All done for v${versionInput}!`);

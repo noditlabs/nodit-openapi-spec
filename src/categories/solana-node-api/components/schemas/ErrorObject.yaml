@@ -1,0 +1,12 @@
+# JSON RPC 2.0 Error Object
+type: object
+properties:
+  code:
+    type: integer
+    description: A Number that indicates the error type that occurred.
+  message:
+    type: string
+    description: A String providing a short description of the error.
+required:
+  - code
+  - message

@@ -1,0 +1,27 @@
+Validation started at 2025-09-11T05:45:51.713Z
+
+File: sui_devInspectTransactionBlock.yaml
+Status: PASS
+
+---
+
+File: sui_dryRunTransactionBlock.yaml
+Status: PASS
+
+---
+
+File: sui_executeTransactionBlock.yaml
+Status: PASS
+
+---
+
+File: sui_getChainIdentifier.yaml
+Status: PASS
+
+---
+
+File: sui_getCheckpoint.yaml
+Status: PASS
+
+---
+

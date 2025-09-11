@@ -1,0 +1,18 @@
+type: object
+required:
+  - computation_charge
+  - epoch
+  - epoch_start_timestamp_ms
+  - storage_charge
+  - storage_rebate
+properties:
+  computation_charge:
+    $ref: "./BigInt_for_uint64.yaml"
+  epoch:
+    $ref: "./BigInt_for_uint64.yaml"
+  epoch_start_timestamp_ms:
+    $ref: "./BigInt_for_uint64.yaml"
+  storage_charge:
+    $ref: "./BigInt_for_uint64.yaml"
+  storage_rebate:
+    $ref: "./BigInt_for_uint64.yaml"

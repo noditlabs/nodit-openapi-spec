@@ -1,0 +1,3 @@
+type: boolean
+default: true
+description: Whether to populate the rewards array. If parameter not provided, the default includes rewards.

@@ -1,0 +1,19 @@
+type: object
+properties:
+  coinObjectCount:
+    type: integer
+    format: uint
+    minimum: 0
+  coinType:
+    type: string
+  lockedBalance:
+    type: object
+    additionalProperties:
+      $ref: "./BigInt_for_uint128.yaml"
+  totalBalance:
+    $ref: "./BigInt_for_uint128.yaml"
+required:
+  - coinObjectCount
+  - coinType
+  - lockedBalance
+  - totalBalance

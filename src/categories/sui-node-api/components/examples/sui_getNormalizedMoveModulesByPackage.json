@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "fileFormatVersion": 6,
+    "address": "0x800105867da4655eca6d9eb1258bfd1ad92af329a07781ee71e60065e00f2de9",
+    "name": "module",
+    "friends": [],
+    "structs": {},
+    "exposedFunctions": {}
+  },
+  "id": 1
+}

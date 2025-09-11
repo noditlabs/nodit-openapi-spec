@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: unsafe_moveCall
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - unsafe_moveCall
+      description: |
+        Create an unsigned transaction to execute a Move call on the network, by calling the specified function in the module of a given package.
+      summary: unsafe_moveCall
+      operationId: sui-unsafe_moveCall
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: unsafe_moveCall
+                params:
+                  type: array
+                  minItems: 7
+                  maxItems: 9
+                  items:
+                    oneOf:
+                      - title: signer
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The transaction signer's Sui address
+                      - title: package_object_id
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The Move package ID, e.g. 0x2
+                      - title: module
+                        type: string
+                        description: The Move module name, e.g. pay
+                      - title: function
+                        type: string
+                        description: The move function name, e.g. split
+                      - title: type_arguments
+                        type: array
+                        items:
+                          $ref: "../components/schemas/TypeTag.yaml"
+                        description: The type arguments of the Move function
+                      - title: arguments
+                        type: array
+                        items:
+                          $ref: "../components/schemas/SuiJsonValue.yaml"
+                        description: The arguments to be passed into the Move function, in SuiJson format
+                      - title: gas
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: Gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+                      - title: gas_budget
+                        $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The gas budget, the transaction will fail if the gas cost exceed the budget
+                      - title: execution_mode
+                        $ref: "../components/schemas/SuiTransactionBlockBuilderMode.yaml"
+                        description: Whether this is a Normal transaction or a Dev Inspect Transaction. Default to be SuiTransactionBlockBuilderMode::Commit when it's None.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/TransactionBlockBytes.yaml"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

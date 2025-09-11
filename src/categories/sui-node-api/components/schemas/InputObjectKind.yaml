@@ -1,0 +1,33 @@
+oneOf:
+  - type: object
+    required:
+      - MovePackage
+    properties:
+      MovePackage:
+        $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - ImmOrOwnedMoveObject
+    properties:
+      ImmOrOwnedMoveObject:
+        $ref: "./ObjectRef.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - SharedMoveObject
+    properties:
+      SharedMoveObject:
+        type: object
+        required:
+          - id
+          - initial_shared_version
+        properties:
+          id:
+            $ref: "./ObjectID.yaml"
+          initial_shared_version:
+            $ref: "./SequenceNumber2.yaml"
+          mutable:
+            default: true
+            type: boolean
+    additionalProperties: false

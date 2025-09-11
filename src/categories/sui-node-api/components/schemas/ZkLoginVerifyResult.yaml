@@ -1,0 +1,13 @@
+type: object
+required:
+  - errors
+  - success
+properties:
+  errors:
+    description: "The errors field captures any verification error"
+    type: array
+    items:
+      type: string
+  success:
+    description: "The boolean result of the verification. If true, errors should be empty."
+    type: boolean

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: suix_getAllBalances
-  version: 1.2.10
+  version: 1.2.17
 servers:
   - url: https://{sui-network}.nodit.io
     variables:
@@ -18,7 +18,7 @@ paths:
       tags:
         - suix_getAllBalances
       description: |
-        Return the total coin balance for all coin type, owned by the address owner.
+        Return the total coin balance for all coin type, owned by the address owner. test
       summary: suix_getAllBalances
       operationId: sui-suix_getAllBalances
       parameters: []
@@ -39,7 +39,7 @@ paths:
                   default: 1
                 jsonrpc:
                   type: string
-                  default: '2.0'
+                  default: "2.0"
                 method:
                   type: string
                   default: suix_getAllBalances
@@ -50,16 +50,16 @@ paths:
                   items:
                     oneOf:
                       - title: owner
-                        $ref: '#/components/schemas/SuiAddress'
+                        $ref: "#/components/schemas/SuiAddress"
                         description: The owner's Sui address
               example:
-                jsonrpc: '2.0'
+                jsonrpc: "2.0"
                 id: 1
                 method: suix_getAllBalances
                 params:
-                  - '0x94f1a597b4e8f709a396f7f6b1482bdcd65a673d111e49286c527fab7c2d0961'
+                  - "0x94f1a597b4e8f709a396f7f6b1482bdcd65a673d111e49286c527fab7c2d0961"
       responses:
-        '200':
+        "200":
           description: Successful Response
           content:
             application/json:
@@ -73,25 +73,25 @@ paths:
                   result:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Balance'
+                      $ref: "#/components/schemas/Balance"
               example:
-                jsonrpc: '2.0'
+                jsonrpc: "2.0"
                 result:
                   - coinType: 0x2::sui::SUI
                     coinObjectCount: 15
-                    totalBalance: '3000000000'
+                    totalBalance: "3000000000"
                     lockedBalance: {}
                 id: 1
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '429':
-          $ref: '#/components/responses/429'
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
 components:
   securitySchemes:
     api_key:
@@ -106,7 +106,7 @@ components:
       type: string
     SuiAddress:
       allOf:
-        - $ref: '#/components/schemas/Hex'
+        - $ref: "#/components/schemas/Hex"
     BigInt_for_uint128:
       type: string
     Balance:
@@ -121,9 +121,9 @@ components:
         lockedBalance:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BigInt_for_uint128'
+            $ref: "#/components/schemas/BigInt_for_uint128"
         totalBalance:
-          $ref: '#/components/schemas/BigInt_for_uint128'
+          $ref: "#/components/schemas/BigInt_for_uint128"
       required:
         - coinObjectCount
         - coinType
@@ -131,15 +131,79 @@ components:
         - totalBalance
     ObjectID:
       allOf:
-        - $ref: '#/components/schemas/Hex'
+        - $ref: "#/components/schemas/Hex"
     Base58:
       type: string
     Digest:
       allOf:
-        - $ref: '#/components/schemas/Base58'
+        - $ref: "#/components/schemas/Base58"
       description: A representation of a 32 byte digest
     BigInt_for_uint64:
       type: string
+    ObjectResponseError:
+      oneOf:
+        - type: object
+          required:
+            - code
+            - object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - notExists
+            object_id:
+              $ref: "#/components/schemas/ObjectID"
+        - type: object
+          required:
+            - code
+            - parent_object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - dynamicFieldNotFound
+            parent_object_id:
+              $ref: "#/components/schemas/ObjectID"
+        - type: object
+          required:
+            - code
+            - digest
+            - object_id
+            - version
+          properties:
+            code:
+              type: string
+              enum:
+                - deleted
+            digest:
+              description: Base64 string representing the object digest
+              allOf:
+                - $ref: "#/components/schemas/Digest"
+            object_id:
+              $ref: "#/components/schemas/ObjectID"
+            version:
+              description: Object version.
+              allOf:
+                - $ref: "#/components/schemas/BigInt_for_uint64"
+        - type: object
+          required:
+            - code
+          properties:
+            code:
+              type: string
+              enum:
+                - unknown
+        - type: object
+          required:
+            - code
+            - error
+          properties:
+            code:
+              type: string
+              enum:
+                - displayError
+            error:
+              type: string
     Error:
       type: object
       properties:
@@ -153,92 +217,60 @@ components:
         - code
         - message
   responses:
-    '400':
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: "2.0"
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: "#/components/schemas/ObjectResponseError"
+            required:
+              - jsonrpc
+              - id
+              - error
+    "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            oneOf:
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - notExists
-                  object_id:
-                    $ref: '#/components/schemas/ObjectID'
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - dynamic_field_not_found
-                  parent_object_id:
-                    $ref: '#/components/schemas/ObjectID'
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - deleted
-                  digest:
-                    $ref: '#/components/schemas/Digest'
-                  object_id:
-                    $ref: '#/components/schemas/ObjectID'
-                  version:
-                    $ref: '#/components/schemas/BigInt_for_uint64'
-              - type: object
-                required:
-                  - code
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - unknown
-              - type: object
-                required:
-                  - code
-                  - error
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - displayError
-                  error:
-                    type: string
-    '401':
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
-    '403':
+    "403":
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: PERMISSION_DENIED
               message: Permission denied
-    '404':
+    "404":
       description: Not Found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: RESOURCE_NOT_FOUND
-              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
-    '429':
+              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+    "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests

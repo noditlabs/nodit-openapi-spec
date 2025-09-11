@@ -1,0 +1,23 @@
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "Object": "ByMutableReference"
+    },
+    "Pure",
+    "Pure",
+    {
+      "Object": "ByValue"
+    },
+    {
+      "Object": "ByImmutableReference"
+    },
+    {
+      "Object": "ByValue"
+    },
+    {
+      "Object": "ByMutableReference"
+    }
+  ],
+  "id": 1
+}

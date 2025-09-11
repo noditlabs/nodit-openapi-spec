@@ -1,0 +1,24 @@
+description: "Deprecated, use [struct MultiSigPublicKey] instead. The struct that contains the public key used for authenticating a MultiSig."
+type: object
+required:
+  - pk_map
+  - threshold
+properties:
+  pk_map:
+    description: "A list of public key and its corresponding weight."
+    type: array
+    items:
+      type: array
+      items:
+        oneOf:
+          - $ref: "./PublicKey.yaml"
+          - type: integer
+            format: uint8
+            minimum: 0
+      maxItems: 2
+      minItems: 2
+  threshold:
+    description: "If the total weight of the public keys corresponding to verified signatures is larger than threshold, the MultiSig is verified."
+    type: integer
+    format: uint16
+    minimum: 0

@@ -1,0 +1,11 @@
+oneOf:
+  - type: string
+    enum:
+      - "Pure"
+  - type: object
+    required:
+      - Object
+    properties:
+      Object:
+        $ref: "./ObjectValueKind.yaml"
+    additionalProperties: false

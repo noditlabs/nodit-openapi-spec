@@ -1,0 +1,103 @@
+openapi: 3.1.0
+info:
+  title: sui_getObject
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_getObject
+      description: |
+        Return the object information for a specified object
+      summary: sui_getObject
+      operationId: sui-sui_getObject
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_getObject
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  items:
+                    oneOf:
+                      - title: object_id
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The ID of the queried object
+                      - title: options
+                        $ref: "../components/schemas/ObjectDataOptions.yaml"
+                        description: Options for specifying the content to be returned
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_getObject",
+                  "params":
+                    [
+                      "0x53e4567ccafa5f36ce84c80aa8bc9be64e0d5ae796884274aef3005ae6733809",
+                      {
+                        "showType": true,
+                        "showOwner": true,
+                        "showPreviousTransaction": true,
+                        "showDisplay": false,
+                        "showContent": true,
+                        "showBcs": false,
+                        "showStorageRebate": true,
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/SuiObjectResponse.yaml"
+              example:
+                $ref: "../components/examples/sui_getObject.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

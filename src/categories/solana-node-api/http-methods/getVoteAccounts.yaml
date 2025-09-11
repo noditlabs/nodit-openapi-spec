@@ -1,0 +1,119 @@
+openapi: 3.1.0
+info:
+  title: solana-getVoteAccounts
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getVoteAccounts
+      description: |
+        Returns the current Solana version running on the node
+      summary: getVoteAccounts
+      operationId: solana-getVoteAccounts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getVoteAccounts
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 1
+                  description: |
+                    It contains following items:
+                    1. ConfigurationObject (`optional`)
+                  items:
+                    title: Configuration Object
+                    type: object
+                    properties:
+                      commitment:
+                        $ref: ../components/schemas/Commitment.yaml
+                      votePubkey:
+                        type: string
+                        description: Only return results for this validator vote address (base-58 encoded)
+                      keepUnstakedDelinquents:
+                        type: boolean
+                        description: Do not filter out delinquent validators with no stake
+                      delinquentSlotDistance:
+                        type: integer
+                        description: |
+                          Specify the number of slots behind the tip that a validator must fall to be considered delinquent. NOTE: For the sake of consistency between ecosystem products, it is not recommended that this argument be specified.
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getVoteAccounts",
+                  "params":
+                    [
+                      {
+                        "commitment": "finalized",
+                        "votePubkey": "i7NyKBMJCA9bLM2nsGyAGCKHECuR2L5eh4GqFciuwNT",
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        properties:
+                          current:
+                            type: array
+                            description: |
+                              Array of all vote accounts currently participating in the validator set
+                            items:
+                              $ref: "../components/schemas/VoteAccount.yaml"
+                          delinquent:
+                            type: array
+                            description: |
+                              Array of all vote accounts that are delinquent
+                            items:
+                              $ref: "../components/schemas/VoteAccount.yaml"
+                example:
+                  $ref: "../components/examples/getVoteAccounts.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

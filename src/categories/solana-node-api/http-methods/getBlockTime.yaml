@@ -1,0 +1,94 @@
+openapi: 3.1.0
+info:
+  title: solana-getBlockTime
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getBlockTime
+      description: |
+        Returns the estimated production time of a block.
+      summary: getBlockTime
+      operationId: solana-getBlockTime
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getBlockTime
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 1
+                  description: |
+                    It contains following items:
+                    1. Block number (`required`)
+                  items:
+                    oneOf:
+                      - title: Block number
+                        $ref: "../components/schemas/BlockNumber.yaml"
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getBlockTime",
+                  "params": [338967300],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        oneOf:
+                          - title: available
+                            type: integer
+                            format: int64
+                            description: Estimated production time, as Unix timestamp (seconds since the Unix epoch)
+                          - title: unavailable
+                            $ref: "../components/schemas/ErrorObject.yaml"
+                example:
+                  $ref: "../components/examples/getBlockTime.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

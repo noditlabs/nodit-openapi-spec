@@ -1,0 +1,14 @@
+description: "Uses an enum to allow for future expansion of the ConsensusDeterminedVersionAssignments."
+oneOf:
+  - type: object
+    required:
+      - CancelledTransactions
+    properties:
+      CancelledTransactions:
+        type: array
+  - type: object
+    required:
+      - CancelledTransactionsV2
+    properties:
+      CancelledTransactionsV2:
+        type: array

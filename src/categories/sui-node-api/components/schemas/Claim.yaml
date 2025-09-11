@@ -1,0 +1,12 @@
+description: "A claim consists of value and index_mod_4."
+type: object
+required:
+  - indexMod4
+  - value
+properties:
+  indexMod4:
+    type: integer
+    format: uint8
+    minimum: 0
+  value:
+    type: string

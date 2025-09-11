@@ -1,0 +1,12 @@
+type: object
+properties:
+  code:
+    type: integer
+    description: Returns a code that identifies the situation where the error occurred.
+    example: -32602
+  message:
+    type: string
+    description: Returns a detailed message explaining the cause of the error.
+required:
+  - code
+  - message

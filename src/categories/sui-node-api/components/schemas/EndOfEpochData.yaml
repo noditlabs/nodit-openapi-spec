@@ -1,0 +1,26 @@
+type: object
+required:
+  - epochCommitments
+  - nextEpochCommittee
+  - nextEpochProtocolVersion
+properties:
+  epochCommitments:
+    description: "Commitments to epoch specific state (e.g. live object set)"
+    type: array
+    items:
+      $ref: "./CheckpointCommitment.yaml"
+  nextEpochCommittee:
+    description: "next_epoch_committee is `Some` if and only if the current checkpoint is the last checkpoint of an epoch. Therefore next_epoch_committee can be used to pick the last checkpoint of an epoch, which is often useful to get epoch level summary stats like total gas cost of an epoch, or the total number of transactions from genesis to the end of an epoch. The committee is stored as a vector of validator pub key and stake pairs. The vector should be sorted based on the Committee data structure."
+    type: array
+    items:
+      type: array
+      items:
+        oneOf:
+          - $ref: "./AuthorityPublicKeyBytes.yaml"
+          - $ref: "./BigInt_for_uint64.yaml"
+      maxItems: 2
+      minItems: 2
+  nextEpochProtocolVersion:
+    description: "The protocol version that is in effect during the epoch that starts immediately after this checkpoint."
+    allOf:
+      - $ref: "./ProtocolVersion.yaml"

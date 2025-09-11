@@ -1,0 +1,9 @@
+oneOf:
+  - description: "Regular Sui Transactions that are committed on chain"
+    type: string
+    enum:
+      - "Commit"
+  - description: "Simulated transaction that allows calling any Move function with arbitrary values."
+    type: string
+    enum:
+      - "DevInspect"

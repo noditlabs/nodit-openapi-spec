@@ -1,0 +1,20 @@
+oneOf:
+  - type: object
+    required:
+      - status
+    properties:
+      status:
+        type: string
+        enum:
+          - "success"
+  - type: object
+    required:
+      - error
+      - status
+    properties:
+      error:
+        type: string
+      status:
+        type: string
+        enum:
+          - "failure"

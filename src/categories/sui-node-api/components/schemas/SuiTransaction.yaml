@@ -1,0 +1,103 @@
+description: "A single transaction in a programmable transaction block."
+oneOf:
+  - description: "A call to either an entry or a public Move function"
+    type: object
+    required:
+      - MoveCall
+    properties:
+      MoveCall:
+        $ref: "./SuiProgrammableMoveCall.yaml"
+    additionalProperties: false
+  - description: "(Vec<forall T:key+store. T>, address) It sends n-objects to the specified address. These objects must have store (public transfer) and either the previous owner must be an address or the object must be newly created."
+    type: object
+    required:
+      - TransferObjects
+    properties:
+      TransferObjects:
+        type: array
+        items:
+          oneOf:
+            - type: array
+              items:
+                $ref: "./SuiArgument.yaml"
+            - $ref: "./SuiArgument.yaml"
+        maxItems: 2
+        minItems: 2
+    additionalProperties: false
+  - description: "(&mut Coin<T>, Vec<u64>) -> Vec<Coin<T>> It splits off some amounts into a new coins with those amounts"
+    type: object
+    required:
+      - SplitCoins
+    properties:
+      SplitCoins:
+        type: array
+        items:
+          oneOf:
+            - $ref: "./SuiArgument.yaml"
+            - type: array
+              items:
+                $ref: "./SuiArgument.yaml"
+        maxItems: 2
+        minItems: 2
+    additionalProperties: false
+  - description: "(&mut Coin<T>, Vec<Coin<T>>) It merges n-coins into the first coin"
+    type: object
+    required:
+      - MergeCoins
+    properties:
+      MergeCoins:
+        type: array
+        items:
+          oneOf:
+            - $ref: "./SuiArgument.yaml"
+            - type: array
+              items:
+                $ref: "./SuiArgument.yaml"
+        maxItems: 2
+        minItems: 2
+    additionalProperties: false
+  - description: "Publishes a Move package. It takes the package bytes and a list of the package's transitive dependencies to link against on-chain."
+    type: object
+    required:
+      - Publish
+    properties:
+      Publish:
+        type: array
+        items:
+          $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - description: "Upgrades a Move package"
+    type: object
+    required:
+      - Upgrade
+    properties:
+      Upgrade:
+        type: array
+        items:
+          oneOf:
+            - type: array
+              items:
+                $ref: "./ObjectID.yaml"
+            - $ref: "./ObjectID.yaml"
+            - $ref: "./SuiArgument.yaml"
+        maxItems: 3
+        minItems: 3
+    additionalProperties: false
+  - description: "forall T: Vec<T> -> vector<T> Given n-values of the same type, it constructs a vector. For non objects or an empty vector, the type tag must be specified."
+    type: object
+    required:
+      - MakeMoveVec
+    properties:
+      MakeMoveVec:
+        type: array
+        items:
+          oneOf:
+            - type: array
+              items:
+                $ref: "./SuiArgument.yaml"
+            - type: string
+              enum:
+                - "null"
+        maxItems: 2
+        minItems: 2
+    additionalProperties: false

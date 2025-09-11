@@ -1,0 +1,113 @@
+openapi: 3.1.0
+info:
+  title: sui_multiGetObjects
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_multiGetObjects
+      description: |
+        Return the object data for a list of objects
+      summary: sui_multiGetObjects
+      operationId: sui-sui_multiGetObjects
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_multiGetObjects
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  items:
+                    oneOf:
+                      - title: object_ids
+                        type: array
+                        items:
+                          $ref: "../components/schemas/ObjectID.yaml"
+                        description: The IDs of the queried objects
+                      - title: options
+                        $ref: "../components/schemas/ObjectDataOptions.yaml"
+                        description: Options for specifying the content to be returned
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_multiGetObjects",
+                  "params":
+                    [
+                      [
+                        "0x77b3482580ee8d5bdc5b824808df54bfec4fc817622e5add0e48f749f01def98",
+                        "0x9060d87664c26a3f9a509228c21b16dc6797cf787c839a07edc03e6338421091",
+                        "0xb37379c527753c5c8ab783f697e7b61439368cd75ebe63d633af32ffb4a022d1",
+                        "0xee309e94ff5c9f6b02c5637f018f6ea7bed8f6c3d80f2a595c2305e12dd6d07c",
+                        "0x29bc7c8d230db3b417edb1184cf075da5e934f672d3da3e003d989075efaecc7",
+                      ],
+                      {
+                        "showType": true,
+                        "showOwner": true,
+                        "showPreviousTransaction": true,
+                        "showDisplay": false,
+                        "showContent": true,
+                        "showBcs": false,
+                        "showStorageRebate": true,
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: "../components/schemas/SuiObjectResponse.yaml"
+              example:
+                $ref: "../components/examples/sui_multiGetObjects.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

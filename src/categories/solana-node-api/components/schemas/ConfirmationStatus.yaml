@@ -1,0 +1,10 @@
+type: string
+description: |
+  The transaction's cluster confirmation status; Either processed, confirmed, or finalized.
+  - processed - the transaction has been processed by the cluster
+  - confirmed - the transaction has been confirmed by the cluster
+  - finalized - the transaction has been finalized by the cluster
+enum:
+  - processed
+  - confirmed
+  - finalized

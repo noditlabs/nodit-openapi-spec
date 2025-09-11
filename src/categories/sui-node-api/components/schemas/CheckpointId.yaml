@@ -1,0 +1,3 @@
+anyOf:
+  - $ref: "./BigInt_for_uint64.yaml"
+  - $ref: "./CheckpointDigest.yaml"

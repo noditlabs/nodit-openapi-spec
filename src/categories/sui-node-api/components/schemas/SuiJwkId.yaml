@@ -1,0 +1,9 @@
+type: object
+required:
+  - iss
+  - kid
+properties:
+  iss:
+    type: string
+  kid:
+    type: string

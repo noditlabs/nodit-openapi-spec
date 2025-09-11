@@ -1,0 +1,21 @@
+type: object
+properties:
+  index:
+    type: number
+    description: Index of the transaction instruction from which the inner instruction(s) originated
+  instructions:
+    type: array
+    description: Ordered list of inner program instructions that were invoked during a single transaction instruction.
+    items:
+      type: object
+  programIdIndex:
+    type: number
+    description: Index into the message.accountKeys array indicating the program account that executes this instruction.
+  accounts:
+    type: array
+    description: List of ordered indices into the message.accountKeys array indicating which accounts to pass to the program.
+    items:
+      type: number
+  data:
+    type: string
+    description: The program input data encoded in a base-58 string.

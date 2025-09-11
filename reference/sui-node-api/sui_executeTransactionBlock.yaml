@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: sui_executeTransactionBlock
-  version: 1.2.10
+  version: 1.2.17
 servers:
   - url: https://{sui-network}.nodit.io
     variables:
@@ -55,7 +55,7 @@ paths:
                   items:
                     oneOf:
                       - title: tx_bytes
-                        $ref: '#/components/schemas/TransactionBlockBytes'
+                        $ref: '#/components/schemas/TxBytes'
                       - title: signatures
                         type: array
                         items:
@@ -191,101 +191,12 @@ components:
       x-default: nodit-demo
       description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
   schemas:
-    Base58:
+    TxBytes:
       type: string
-    Digest:
-      allOf:
-        - $ref: '#/components/schemas/Base58'
-      description: A representation of a 32 byte digest
-    Hex:
-      description: Hex string encoding.
-      type: string
-    ObjectID:
-      allOf:
-        - $ref: '#/components/schemas/Hex'
-    SequenceNumber:
-      type: integer
-      format: uint64
-      minimum: 0
-    ObjectRef:
-      type: object
-      required:
-        - digest
-        - objectId
-        - version
-      properties:
-        digest:
-          description: Base64 string representing the object digest
-          allOf:
-            - $ref: '#/components/schemas/Digest'
-        objectId:
-          description: Hex code as string representing the object id
-          allOf:
-            - $ref: '#/components/schemas/ObjectID'
-        version:
-          description: Object version.
-          allOf:
-            - $ref: '#/components/schemas/SequenceNumber'
-    BigInt_for_uint64:
-      type: string
-    InputObjectKind:
-      oneOf:
-        - type: object
-          required:
-            - MovePackage
-          properties:
-            MovePackage:
-              $ref: '#/components/schemas/ObjectID'
-          additionalProperties: false
-        - type: object
-          required:
-            - ImmOrOwnedMoveObject
-          properties:
-            ImmOrOwnedMoveObject:
-              $ref: '#/components/schemas/ObjectRef'
-          additionalProperties: false
-        - type: object
-          required:
-            - SharedMoveObject
-          properties:
-            SharedMoveObject:
-              type: object
-              required:
-                - id
-                - initial_shared_version
-              properties:
-                id:
-                  $ref: '#/components/schemas/ObjectID'
-                initial_shared_version:
-                  $ref: '#/components/schemas/BigInt_for_uint64'
-                mutable:
-                  default: true
-                  type: boolean
-          additionalProperties: false
+      description: BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
     Base64:
       description: Base64 encoding
       type: string
-    TransactionBlockBytes:
-      type: object
-      required:
-        - gas
-        - inputObjects
-        - txBytes
-      properties:
-        gas:
-          description: the gas objects to be used
-          type: array
-          items:
-            $ref: '#/components/schemas/ObjectRef'
-        inputObjects:
-          description: objects to be used in this transaction
-          type: array
-          items:
-            $ref: '#/components/schemas/InputObjectKind'
-        txBytes:
-          description: BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
-          allOf:
-            - $ref: '#/components/schemas/Base64'
     Signature:
       oneOf:
         - type: object
@@ -340,9 +251,14 @@ components:
           description: Whether to show bcs-encoded transaction input data
           default: false
           type: boolean
+    Hex:
+      description: Hex string encoding.
+      type: string
     SuiAddress:
       allOf:
         - $ref: '#/components/schemas/Hex'
+    BigInt_for_uint64:
+      type: string
     Owner:
       oneOf:
         - description: Object is exclusively owned by a single address, and is mutable.
@@ -414,6 +330,12 @@ components:
           description: Owner of the balance change
           allOf:
             - $ref: '#/components/schemas/Owner'
+    Base58:
+      type: string
+    Digest:
+      allOf:
+        - $ref: '#/components/schemas/Base58'
+      description: A representation of a 32 byte digest
     TransactionDigest:
       allOf:
         - $ref: '#/components/schemas/Digest'
@@ -441,6 +363,32 @@ components:
           type:
             - string
             - 'null'
+    ObjectID:
+      allOf:
+        - $ref: '#/components/schemas/Hex'
+    SequenceNumber:
+      type: integer
+      format: uint64
+      minimum: 0
+    ObjectRef:
+      type: object
+      required:
+        - digest
+        - objectId
+        - version
+      properties:
+        digest:
+          description: Base64 string representing the object digest
+          allOf:
+            - $ref: '#/components/schemas/Digest'
+        objectId:
+          description: Hex code as string representing the object id
+          allOf:
+            - $ref: '#/components/schemas/ObjectID'
+        version:
+          description: Object version.
+          allOf:
+            - $ref: '#/components/schemas/SequenceNumber'
     OwnedObjectRef:
       type: object
       required:
@@ -1818,6 +1766,70 @@ components:
         transaction:
           description: Transaction input data
           $ref: '#/components/schemas/TransactionBlock'
+    ObjectResponseError:
+      oneOf:
+        - type: object
+          required:
+            - code
+            - object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - notExists
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - parent_object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - dynamicFieldNotFound
+            parent_object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - digest
+            - object_id
+            - version
+          properties:
+            code:
+              type: string
+              enum:
+                - deleted
+            digest:
+              description: Base64 string representing the object digest
+              allOf:
+                - $ref: '#/components/schemas/Digest'
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+            version:
+              description: Object version.
+              allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - code
+          properties:
+            code:
+              type: string
+              enum:
+                - unknown
+        - type: object
+          required:
+            - code
+            - error
+          properties:
+            code:
+              type: string
+              enum:
+                - displayError
+            error:
+              type: string
     Error:
       type: object
       properties:
@@ -1832,58 +1844,26 @@ components:
         - message
   responses:
     '400':
-      description: Unauthorized
+      description: Bad Request
       content:
         application/json:
           schema:
-            oneOf:
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - notExists
-                  object_id:
-                    $ref: '#/components/schemas/ObjectID'
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - dynamic_field_not_found
-                  parent_object_id:
-                    $ref: '#/components/schemas/ObjectID'
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - deleted
-                  digest:
-                    $ref: '#/components/schemas/Digest'
-                  object_id:
-                    $ref: '#/components/schemas/ObjectID'
-                  version:
-                    $ref: '#/components/schemas/BigInt_for_uint64'
-              - type: object
-                required:
-                  - code
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - unknown
-              - type: object
-                required:
-                  - code
-                  - error
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - displayError
-                  error:
-                    type: string
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ObjectResponseError'
+            required:
+              - jsonrpc
+              - id
+              - error
     '401':
       description: Unauthorized
       content:

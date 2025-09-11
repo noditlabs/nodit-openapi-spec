@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: sui_tryGetPastObject
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_tryGetPastObject
+      description: |
+        Note there is no software-level guarantee/SLA that objects with past versions can be retrieved by this API, even if the object and version exists/existed. The result may vary across nodes depending on their pruning policies. Return the object information for a specified version
+      summary: sui_tryGetPastObject
+      operationId: sui-sui_tryGetPastObject
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_tryGetPastObject
+                params:
+                  type: array
+                  minItems: 2
+                  maxItems: 3
+                  items:
+                    oneOf:
+                      - title: object_id
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The ID of the queried object
+                      - title: version
+                        $ref: "../components/schemas/SequenceNumber2.yaml"
+                        description: The version of the queried object. If None, default to the latest known version
+                      - title: options
+                        $ref: "../components/schemas/ObjectDataOptions.yaml"
+                        description: Options for specifying the content to be returned
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_tryGetPastObject",
+                  "params":
+                    [
+                      "0x11af4b844ff94b3fbef6e36b518da3ad4c5856fa686464524a876b463d129760",
+                      4,
+                      {
+                        "showType": true,
+                        "showOwner": true,
+                        "showPreviousTransaction": true,
+                        "showDisplay": false,
+                        "showContent": true,
+                        "showBcs": false,
+                        "showStorageRebate": true,
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/ObjectRead.yaml"
+              example:
+                $ref: "../components/examples/sui_tryGetPastObject.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

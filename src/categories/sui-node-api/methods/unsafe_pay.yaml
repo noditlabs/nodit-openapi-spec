@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: unsafe_pay
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - unsafe_pay
+      description: |
+        Send Coin<T> to a list of addresses, where T can be any coin type, following a list of amounts, The object specified in the gas field will be used to pay the gas fee for the transaction. The gas object can not appear in input_coins. If the gas object is not specified, the RPC server will auto-select one.
+      summary: unsafe_pay
+      operationId: sui-unsafe_pay
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: unsafe_pay
+                params:
+                  type: array
+                  minItems: 5
+                  maxItems: 6
+                  items:
+                    oneOf:
+                      - title: signer
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The transaction signer's Sui address
+                      - title: input_coins
+                        type: array
+                        items:
+                          $ref: "../components/schemas/ObjectID.yaml"
+                        description: The Sui coins to be used in this transaction
+                      - title: recipients
+                        type: array
+                        items:
+                          $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The recipients' addresses, the length of this vector must be the same as amounts.
+                      - title: amounts
+                        type: array
+                        items:
+                          $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The amounts to be transferred to recipients, following the same order
+                      - title: gas
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: Gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+                      - title: gas_budget
+                        $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The gas budget, the transaction will fail if the gas cost exceed the budget
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/TransactionBlockBytes.yaml"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

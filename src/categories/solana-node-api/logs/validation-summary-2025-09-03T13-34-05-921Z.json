@@ -1,0 +1,196 @@
+{
+  "totalFiles": 47,
+  "passed": 47,
+  "failed": 0,
+  "timestamp": "2025-09-03T13:35:50.915Z",
+  "results": [
+    {
+      "file": "getAccountInfo.yaml",
+      "success": true
+    },
+    {
+      "file": "getBalance.yaml",
+      "success": true
+    },
+    {
+      "file": "getBlock.yaml",
+      "success": true
+    },
+    {
+      "file": "getBlockCommitment.yaml",
+      "success": true
+    },
+    {
+      "file": "getBlockHeight.yaml",
+      "success": true
+    },
+    {
+      "file": "getBlockProduction.yaml",
+      "success": true
+    },
+    {
+      "file": "getBlockTime.yaml",
+      "success": true
+    },
+    {
+      "file": "getBlocks.yaml",
+      "success": true
+    },
+    {
+      "file": "getBlocksWithLimit.yaml",
+      "success": true
+    },
+    {
+      "file": "getClusterNodes.yaml",
+      "success": true
+    },
+    {
+      "file": "getEpochInfo.yaml",
+      "success": true
+    },
+    {
+      "file": "getEpochSchedule.yaml",
+      "success": true
+    },
+    {
+      "file": "getFeeForMessage.yaml",
+      "success": true
+    },
+    {
+      "file": "getFirstAvailableBlock.yaml",
+      "success": true
+    },
+    {
+      "file": "getGenesisHash.yaml",
+      "success": true
+    },
+    {
+      "file": "getHealth.yaml",
+      "success": true
+    },
+    {
+      "file": "getHighestSnapshotSlot.yaml",
+      "success": true
+    },
+    {
+      "file": "getIdentity.yaml",
+      "success": true
+    },
+    {
+      "file": "getInflationGovernor.yaml",
+      "success": true
+    },
+    {
+      "file": "getInflationRate.yaml",
+      "success": true
+    },
+    {
+      "file": "getInflationReward.yaml",
+      "success": true
+    },
+    {
+      "file": "getLatestBlockhash.yaml",
+      "success": true
+    },
+    {
+      "file": "getLeaderSchedule.yaml",
+      "success": true
+    },
+    {
+      "file": "getMaxRetransmitSlot.yaml",
+      "success": true
+    },
+    {
+      "file": "getMinimumBalanceForRentExemption.yaml",
+      "success": true
+    },
+    {
+      "file": "getMultipleAccounts.yaml",
+      "success": true
+    },
+    {
+      "file": "getProgramAccounts.yaml",
+      "success": true
+    },
+    {
+      "file": "getRecentPerformanceSamples.yaml",
+      "success": true
+    },
+    {
+      "file": "getRecentPrioritizationFees.yaml",
+      "success": true
+    },
+    {
+      "file": "getSignatureStatuses.yaml",
+      "success": true
+    },
+    {
+      "file": "getSignaturesForAddress.yaml",
+      "success": true
+    },
+    {
+      "file": "getSlot.yaml",
+      "success": true
+    },
+    {
+      "file": "getSlotLeader.yaml",
+      "success": true
+    },
+    {
+      "file": "getSlotLeaders.yaml",
+      "success": true
+    },
+    {
+      "file": "getStakeMinimumDelegation.yaml",
+      "success": true
+    },
+    {
+      "file": "getSupply.yaml",
+      "success": true
+    },
+    {
+      "file": "getTokenAccountBalance.yaml",
+      "success": true
+    },
+    {
+      "file": "getTokenAccountsByOwner.yaml",
+      "success": true
+    },
+    {
+      "file": "getTokenSupply.yaml",
+      "success": true
+    },
+    {
+      "file": "getTransaction.yaml",
+      "success": true
+    },
+    {
+      "file": "getTransactionCount.yaml",
+      "success": true
+    },
+    {
+      "file": "getVersion.yaml",
+      "success": true
+    },
+    {
+      "file": "getVoteAccounts.yaml",
+      "success": true
+    },
+    {
+      "file": "isBlockhashValid.yaml",
+      "success": true
+    },
+    {
+      "file": "minimumLedgerSlot.yaml",
+      "success": true
+    },
+    {
+      "file": "sendTransaction.yaml",
+      "success": true
+    },
+    {
+      "file": "simulateTransaction.yaml",
+      "success": true
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: suix_getCommitteeInfo
-  version: 1.2.10
+  version: 1.2.17
 servers:
   - url: https://{sui-network}.nodit.io
     variables:
@@ -130,6 +130,70 @@ components:
       allOf:
         - $ref: '#/components/schemas/Base58'
       description: A representation of a 32 byte digest
+    ObjectResponseError:
+      oneOf:
+        - type: object
+          required:
+            - code
+            - object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - notExists
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - parent_object_id
+          properties:
+            code:
+              type: string
+              enum:
+                - dynamicFieldNotFound
+            parent_object_id:
+              $ref: '#/components/schemas/ObjectID'
+        - type: object
+          required:
+            - code
+            - digest
+            - object_id
+            - version
+          properties:
+            code:
+              type: string
+              enum:
+                - deleted
+            digest:
+              description: Base64 string representing the object digest
+              allOf:
+                - $ref: '#/components/schemas/Digest'
+            object_id:
+              $ref: '#/components/schemas/ObjectID'
+            version:
+              description: Object version.
+              allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+        - type: object
+          required:
+            - code
+          properties:
+            code:
+              type: string
+              enum:
+                - unknown
+        - type: object
+          required:
+            - code
+            - error
+          properties:
+            code:
+              type: string
+              enum:
+                - displayError
+            error:
+              type: string
     Error:
       type: object
       properties:
@@ -144,58 +208,26 @@ components:
         - message
   responses:
     '400':
-      description: Unauthorized
+      description: Bad Request
       content:
         application/json:
           schema:
-            oneOf:
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - notExists
-                  object_id:
-                    $ref: '#/components/schemas/ObjectID'
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - dynamic_field_not_found
-                  parent_object_id:
-                    $ref: '#/components/schemas/ObjectID'
-              - type: object
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - deleted
-                  digest:
-                    $ref: '#/components/schemas/Digest'
-                  object_id:
-                    $ref: '#/components/schemas/ObjectID'
-                  version:
-                    $ref: '#/components/schemas/BigInt_for_uint64'
-              - type: object
-                required:
-                  - code
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - unknown
-              - type: object
-                required:
-                  - code
-                  - error
-                properties:
-                  code:
-                    type: string
-                    enum:
-                      - displayError
-                  error:
-                    type: string
+            type: object
+            properties:
+              jsonrpc:
+                type: string
+                description: JSON-RPC version
+                example: '2.0'
+              id:
+                type: integer
+                description: Request ID
+                example: 1
+              error:
+                $ref: '#/components/schemas/ObjectResponseError'
+            required:
+              - jsonrpc
+              - id
+              - error
     '401':
       description: Unauthorized
       content:

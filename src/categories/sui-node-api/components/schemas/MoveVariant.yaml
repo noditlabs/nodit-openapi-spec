@@ -1,0 +1,14 @@
+type: object
+required:
+  - fields
+  - type
+  - variant
+properties:
+  fields:
+    type: object
+    additionalProperties:
+      $ref: "./MoveValue.yaml"
+  type:
+    type: string
+  variant:
+    type: string

@@ -1,0 +1,74 @@
+oneOf:
+  - type: object
+    oneOf:
+      - type: object
+        required:
+          - digest
+          - objectId
+          - objectType
+          - version
+        properties:
+          digest:
+            $ref: "./ObjectDigest.yaml"
+          objectId:
+            $ref: "./ObjectID.yaml"
+          objectType:
+            type: string
+            enum:
+              - "immOrOwnedObject"
+          version:
+            $ref: "./SequenceNumber.yaml"
+      - type: object
+        required:
+          - initialSharedVersion
+          - mutable
+          - objectId
+          - objectType
+        properties:
+          initialSharedVersion:
+            $ref: "./SequenceNumber.yaml"
+          mutable:
+            type: boolean
+          objectId:
+            $ref: "./ObjectID.yaml"
+          objectType:
+            type: string
+            enum:
+              - "sharedObject"
+      - type: object
+        required:
+          - digest
+          - objectId
+          - objectType
+          - version
+        properties:
+          digest:
+            $ref: "./ObjectDigest.yaml"
+          objectId:
+            $ref: "./ObjectID.yaml"
+          objectType:
+            type: string
+            enum:
+              - "receiving"
+          version:
+            $ref: "./SequenceNumber.yaml"
+    required:
+      - type
+    properties:
+      type:
+        type: string
+        enum:
+          - "object"
+  - type: object
+    required:
+      - type
+      - value
+    properties:
+      type:
+        type: string
+        enum:
+          - "pure"
+      value:
+        $ref: "./SuiJsonValue.yaml"
+      valueType:
+        type: [string, "null"]

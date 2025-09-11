@@ -1,0 +1,8 @@
+type: object
+required:
+  - abilities
+properties:
+  abilities:
+    type: array
+    items:
+      $ref: "./SuiMoveAbility.yaml"

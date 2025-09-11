@@ -1,0 +1,12 @@
+{
+  "totalFiles": 1,
+  "passed": 1,
+  "failed": 0,
+  "timestamp": "2025-09-11T05:14:58.415Z",
+  "results": [
+    {
+      "file": "sui_devInspectTransactionBlock.yaml",
+      "success": true
+    }
+  ]
+}

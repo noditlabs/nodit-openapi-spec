@@ -1,0 +1,9 @@
+type: object
+required:
+  - constraints
+  - isPhantom
+properties:
+  constraints:
+    $ref: "./SuiMoveAbilitySet.yaml"
+  isPhantom:
+    type: boolean

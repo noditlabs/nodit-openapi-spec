@@ -1,0 +1,22 @@
+type: object
+properties:
+  data:
+    type: array
+    description: |
+      Data associated with the account, either as encoded binary data or JSON format {<program>: <state>} - depending on encoding parameter
+  executable:
+    type: boolean
+    description: Boolean indicating if the account contains a program (and is strictly read-only)
+  lamports:
+    $ref: "./Lamports.yaml"
+  owner:
+    type: string
+    description: Base-58 encoded Pubkey of the program this account has been assigned to
+  rentEpoch:
+    type: integer
+    format: uint64
+    description: The epoch at which this account will next owe rent
+  space:
+    type: integer
+    format: uint64
+    description: The data size of the account

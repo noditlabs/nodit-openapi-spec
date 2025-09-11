@@ -1,0 +1,5 @@
+description: The network to use for the API.
+enum:
+  - solana-mainnet
+  - solana-devnet
+default: solana-mainnet

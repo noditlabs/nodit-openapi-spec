@@ -1,0 +1,21 @@
+description: "The struct that contains signatures and public keys necessary for authenticating a MultiSig."
+type: object
+required:
+  - bitmap
+  - multisig_pk
+  - sigs
+properties:
+  bitmap:
+    description: "A bitmap that indicates the position of which public key the signature should be authenticated with."
+    type: integer
+    format: uint16
+    minimum: 0
+  multisig_pk:
+    description: "The public key encoded with each public key with its signature scheme used along with the corresponding weight."
+    allOf:
+      - $ref: "./MultiSigPublicKey.yaml"
+  sigs:
+    description: "The plain signature encoded with signature scheme."
+    type: array
+    items:
+      $ref: "./CompressedSignature.yaml"

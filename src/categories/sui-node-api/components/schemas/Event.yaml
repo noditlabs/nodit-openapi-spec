@@ -1,0 +1,55 @@
+type: object
+oneOf:
+  - type: object
+    required:
+      - bcs
+      - bcsEncoding
+    properties:
+      bcs:
+        $ref: "./Base64.yaml"
+      bcsEncoding:
+        type: string
+        enum:
+          - "base64"
+  - type: object
+    required:
+      - bcs
+      - bcsEncoding
+    properties:
+      bcs:
+        $ref: "./Base58.yaml"
+      bcsEncoding:
+        type: string
+        enum:
+          - "base58"
+required:
+  - id
+  - packageId
+  - parsedJson
+  - sender
+  - transactionModule
+  - type
+properties:
+  id:
+    description: 'Sequential event ID, ie (transaction seq number, event seq number). 1) Serves as a unique event ID for each fullnode 2) Also serves to sequence events for the purposes of pagination and querying. A higher id is an event seen later by that fullnode. This ID is the "cursor" for event querying.'
+    allOf:
+      - $ref: "./EventID.yaml"
+  packageId:
+    description: "Move package where this event was emitted."
+    allOf:
+      - $ref: "./ObjectID.yaml"
+  parsedJson:
+    description: "Parsed json value of the event"
+  sender:
+    description: "Sender's Sui address."
+    allOf:
+      - $ref: "./SuiAddress.yaml"
+  timestampMs:
+    $ref: "./BigInt_for_uint64.yaml"
+    description: "UTC timestamp in milliseconds since epoch (1/1/1970)"
+  transactionModule:
+    description: "Move module where this event was emitted."
+    type: string
+  type:
+    description: "Move event type."
+    type: string

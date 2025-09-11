@@ -1,0 +1,20 @@
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "slot": 348125,
+      "numTransactions": 126,
+      "numSlots": 126,
+      "samplePeriodSecs": 60,
+      "numNonVoteTransactions": 1
+    },
+    {
+      "slot": 347999,
+      "numTransactions": 126,
+      "numSlots": 126,
+      "samplePeriodSecs": 60,
+      "numNonVoteTransactions": 1
+    }
+  ],
+  "id": 1
+}

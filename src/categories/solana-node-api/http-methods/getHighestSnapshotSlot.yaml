@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info:
+  title: solana-getHighestSnapshotSlot
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getHighestSnapshotSlot
+      description: |
+        Returns the highest slot information that the node has snapshots for.
+
+        This will find the highest full snapshot slot, and the highest incremental snapshot slot based on the full snapshot slot, if there is one.
+      summary: getHighestSnapshotSlot
+      operationId: solana-getHighestSnapshotSlot
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getHighestSnapshotSlot
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getHighestSnapshotSlot",
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        oneOf:
+                          - title: Snapshot
+                            type: object
+                            properties:
+                              full:
+                                type: integer
+                                format: uint64
+                                description: The highest full snapshot slot
+                              incremental:
+                                type: integer
+                                format: uint64
+                                description: The highest incremental snapshot slot based on full
+                          - title: No Snapshot
+                            $ref: "../components/schemas/ErrorObject.yaml"
+                example:
+                  $ref: "../components/examples/getHighestSnapshotSlot.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

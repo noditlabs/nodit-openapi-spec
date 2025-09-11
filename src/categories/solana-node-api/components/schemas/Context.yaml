@@ -1,0 +1,9 @@
+type: object
+description: An object containing metadata about the current state of the Solana network at the time of the request.
+properties:
+  apiVersion:
+    type: string
+    description: The API version used for the request
+  slot:
+    type: integer
+    description: The slot number at which the request was evaluated

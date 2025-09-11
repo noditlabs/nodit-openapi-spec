@@ -1,0 +1,13 @@
+description: "Identifies a struct and the module it was defined in"
+type: object
+required:
+  - datatype_name
+  - module_name
+  - package
+properties:
+  datatype_name:
+    type: string
+  module_name:
+    type: string
+  package:
+    $ref: "./ObjectID.yaml"

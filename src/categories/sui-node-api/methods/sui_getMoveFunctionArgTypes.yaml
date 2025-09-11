@@ -1,0 +1,101 @@
+openapi: 3.1.0
+info:
+  title: sui_getMoveFunctionArgTypes
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_getMoveFunctionArgTypes
+      description: |
+        Return the argument types of a Move function, based on normalized Type.
+      summary: sui_getMoveFunctionArgTypes
+      operationId: sui-sui_getMoveFunctionArgTypes
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_getMoveFunctionArgTypes
+                params:
+                  type: array
+                  minItems: 3
+                  maxItems: 3
+                  items:
+                    oneOf:
+                      - title: package
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The package ID
+                      - title: module
+                        type: string
+                        description: The module name
+                      - title: function
+                        type: string
+                        description: The function name
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_getMoveFunctionArgTypes",
+                  "params":
+                    [
+                      "0xa0a7b108f5023b7356f2c6a4be6f058e267aae38e08260c7d519d8641897490c",
+                      "suifrens",
+                      "mint",
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    type: array
+                    items:
+                      $ref: "../components/schemas/MoveFunctionArgType.yaml"
+              example:
+                $ref: "../components/examples/sui_getMoveFunctionArgTypes.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

@@ -1,0 +1,102 @@
+oneOf:
+  - description: "Return all events."
+    type: object
+    required:
+      - All
+    properties:
+      All:
+        type: array
+        # maxItems: 0
+    additionalProperties: false
+  - description: "Return events that match any of the given filters. Only supported on event subscriptions."
+    type: object
+    required:
+      - Any
+    properties:
+      Any:
+        type: array
+        items:
+          $ref: "./EventFilter.yaml"
+    additionalProperties: false
+  - description: "Query by sender address."
+    type: object
+    required:
+      - Sender
+    properties:
+      Sender:
+        $ref: "./SuiAddress.yaml"
+    additionalProperties: false
+  - description: "Return events emitted by the given transaction."
+    type: object
+    required:
+      - Transaction
+    properties:
+      Transaction:
+        $ref: "./TransactionDigest.yaml"
+    additionalProperties: false
+  - description: "Return events emitted in a specified Move module. If the event is defined in Module A but emitted in a tx with Module B, query `MoveModule` by module B returns the event. Query `MoveEventModule` by module A returns the event too."
+    type: object
+    required:
+      - MoveModule
+    properties:
+      MoveModule:
+        type: object
+        required:
+          - module
+          - package
+        properties:
+          module:
+            description: "the module name"
+            type: string
+          package:
+            description: "the Move package ID"
+            allOf:
+              - $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - description: "Return events with the given Move event struct name (struct tag). For example, if the event is defined in `0xabcd::MyModule`, and named `Foo`, then the struct tag is `0xabcd::MyModule::Foo`."
+    type: object
+    required:
+      - MoveEventType
+    properties:
+      MoveEventType:
+        type: string
+    additionalProperties: false
+  - description: "Return events with the given Move module name where the event struct is defined. If the event is defined in Module A but emitted in a tx with Module B, query `MoveEventModule` by module A returns the event. Query `MoveModule` by module B returns the event too."
+    type: object
+    required:
+      - MoveEventModule
+    properties:
+      MoveEventModule:
+        type: object
+        required:
+          - module
+          - package
+        properties:
+          module:
+            description: "the module name"
+            type: string
+          package:
+            description: "the Move package ID"
+            allOf:
+              - $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - description: "Return events emitted in [start_time, end_time] interval"
+    type: object
+    required:
+      - TimeRange
+    properties:
+      TimeRange:
+        type: object
+        required:
+          - endTime
+          - startTime
+        properties:
+          endTime:
+            description: "right endpoint of time interval, milliseconds since epoch, exclusive"
+            allOf:
+              - $ref: "./BigInt_for_uint64.yaml"
+          startTime:
+            description: "left endpoint of time interval, milliseconds since epoch, inclusive"
+            allOf:
+              - $ref: "./BigInt_for_uint64.yaml"
+    additionalProperties: false

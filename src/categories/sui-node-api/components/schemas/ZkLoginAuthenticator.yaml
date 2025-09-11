@@ -1,0 +1,15 @@
+description: "An zk login authenticator with all the necessary fields."
+type: object
+required:
+  - inputs
+  - maxEpoch
+  - userSignature
+properties:
+  inputs:
+    $ref: "./ZkLoginInputs.yaml"
+  maxEpoch:
+    type: integer
+    format: uint64
+    minimum: 0
+  userSignature:
+    $ref: "./Signature.yaml"

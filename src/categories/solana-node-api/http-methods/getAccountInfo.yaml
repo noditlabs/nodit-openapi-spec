@@ -1,0 +1,168 @@
+openapi: 3.1.0
+info:
+  title: solana-getAccountInfo
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getAccountInfo
+      description: |
+        Returns all information associated with the account of provided Pubkey
+      summary: getAccountInfo
+      operationId: solana-getAccountInfo
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getAccountInfo
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. Pubkey (`required`)
+                    2. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Pubkey
+                        type: string
+                        description: Pubkey of account to query, as base-58 encoded string.
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: "../components/schemas/Commitment.yaml"
+                          encoding:
+                            type: string
+                            enum:
+                              - base58
+                              - base64
+                              - base64+zstd
+                              - jsonParsed
+                            description: |
+                              Encoding format for Account data.
+
+                              base58 is slow and limited to less than 129 bytes of Account data.
+                              base64 will return base64 encoded data for Account data of any size.
+                              base64+zstd compresses the Account data using Zstandard and base64-encodes the result.
+                              jsonParsed encoding attempts to use program-specific state parsers to return more human-readable and explicit account state data.
+                              If jsonParsed is requested but a parser cannot be found, the field falls back to base64 encoding, detectable when the data field is type string.
+                          dataSlice:
+                            $ref: "../components/schemas/DataSlice.yaml"
+                          minContextSlot:
+                            $ref: "../components/schemas/MinContextSlot.yaml"
+              example:
+                {
+                  jsonrpc: "2.0",
+                  id: 1,
+                  method: "getAccountInfo",
+                  params:
+                    [
+                      "3fJ7AiixCoHhaYzaNn1nNoLZMQnrGSMDNmMN4ZNUMpEa",
+                      {
+                        commitment: "processed",
+                        encoding: "base58",
+                        dataSlice: { offset: 0, length: 100 },
+                        minContextSlot: "1234567890",
+                      },
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        description: |
+                          If the requested account doesn't exist result will be null. Otherwise, an object containing:
+                          1. context
+                          2. value
+                        properties:
+                          context:
+                            $ref: "../components/schemas/Context.yaml"
+                          value:
+                            type: object
+                            properties:
+                              data:
+                                description: |
+                                  Data associated with the account, either as encoded binary data or JSON format {<program>: <state>} - depending on encoding parameter
+                                oneOf:
+                                  - type: array
+                                    items:
+                                      minItems: 2
+                                      maxItems: 2
+                                      oneOf:
+                                        - type: string
+                                        - title: encoding
+                                          type: string
+                                          enum:
+                                            - base58
+                                            - base64
+                                            - base64+zstd
+                                            - jsonParsed
+                                            - json
+                                            - base64+jsonParsed
+                                  - type: object
+                              executable:
+                                type: boolean
+                                description: Boolean indicating if the account contains a program (and is strictly read-only)
+                              lamports:
+                                type: integer
+                                description: Number of lamports assigned to this account
+                              owner:
+                                type: string
+                                description: base-58 encoded Pubkey of the program this account has been assigned to
+                              rentEpoch:
+                                type: integer
+                                description: The epoch at which this account will next owe rent, as u64
+                              space:
+                                type: integer
+                                description: The data size of the account
+                example:
+                  $ref: "../components/examples/getAccountInfo.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

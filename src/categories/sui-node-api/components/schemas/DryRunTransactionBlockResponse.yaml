@@ -1,0 +1,28 @@
+type: object
+required:
+  - balanceChanges
+  - effects
+  - events
+  - input
+  - objectChanges
+properties:
+  balanceChanges:
+    type: array
+    items:
+      $ref: "./BalanceChange.yaml"
+  effects:
+    $ref: "./TransactionBlockEffects.yaml"
+  events:
+    type: array
+    items:
+      $ref: "./Event.yaml"
+  executionErrorSource:
+    type: string
+  input:
+    $ref: "./TransactionBlockData.yaml"
+  objectChanges:
+    type: array
+    items:
+      $ref: "./ObjectChange.yaml"
+  suggestedGasPrice:
+    $ref: "./BigInt_for_uint64.yaml"

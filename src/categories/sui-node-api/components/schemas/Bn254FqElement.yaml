@@ -1,0 +1,2 @@
+description: "A struct that stores a Bn254 Fq field element as 32 bytes."
+type: string

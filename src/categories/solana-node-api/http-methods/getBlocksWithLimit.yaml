@@ -1,0 +1,104 @@
+openapi: 3.1.0
+info:
+  title: solana-getBlocksWithLimit
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getBlocksWithLimit
+      description: |
+        Returns a list of confirmed blocks starting at the given slot
+      summary: getBlocksWithLimit
+      operationId: solana-getBlocksWithLimit
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getBlocksWithLimit
+                params:
+                  type: array
+                  minItems: 2
+                  maxItems: 3
+                  description: |
+                    It contains following items:
+                    1. Start slot (`required`)
+                    2. Limit (`required`)
+                    3. ConfigurationObject (`optional`)
+                  items:
+                    oneOf:
+                      - title: Start slot
+                        $ref: "../components/schemas/SlotNumber.yaml"
+                      - title: Limit
+                        type: integer
+                        format: uint64
+                        description: Limit (must be no more than 500,000 blocks higher than the start_slot)
+                      - title: Configuration Object
+                        type: object
+                        properties:
+                          commitment:
+                            $ref: "../components/schemas/Commitment.yaml"
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getBlocksWithLimit",
+                  "params": [338967300, 10],
+                  { "commitment": "finalized" },
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: array
+                        description: An array of u64 integers listing confirmed blocks starting at `start_slot` for up to `limit` blocks, inclusive.
+                        items:
+                          type: integer
+                          format: uint64
+                example:
+                  $ref: "../components/examples/getBlocksWithLimit.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: suix_getDynamicFields
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getDynamicFields
+      description: |
+        Return the list of dynamic field objects owned by an object.
+      summary: suix_getDynamicFields
+      operationId: sui-suix_getDynamicFields
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: suix_getDynamicFields
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 3
+                  items:
+                    oneOf:
+                      - title: parent_object_id
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The ID of the parent object
+                      - title: cursor
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: An optional paging cursor. If provided, the query will start from the next item after the specified cursor. Default to start from the first item if not specified.
+                      - title: limit
+                        type: integer
+                        description: Maximum item returned per page, default to [QUERY_MAX_RESULT_LIMIT] if not specified.
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "suix_getDynamicFields",
+                  "params":
+                    [
+                      "0x5612581eba57ebe7e594b809ccceec2be4dac6ff6945d49b3ecc043d049611f6",
+                      "0x671832358f25bfacde706e528df4e15bb8de6dadd21835dfe44f4973139c15f9",
+                      3,
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/Page_for_DynamicFieldInfo_and_ObjectID.yaml"
+              example:
+                $ref: "../components/examples/suix_getDynamicFields.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

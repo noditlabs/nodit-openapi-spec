@@ -1,0 +1,31 @@
+type: object
+properties:
+  activatedStake:
+    type: integer
+    description: The stake, in lamports, delegated to this vote account and active in this epoch
+  commission:
+    type: integer
+    description: Percentage (0-100) of rewards payout owed to the vote account
+  epochCredits:
+    type: array
+    description: |
+      Latest history of earned credits for up to five epochs, as an array of arrays containing: [epoch, credits, previousCredits]
+    items:
+      type: array
+      items:
+        type: integer
+  epochVoteAccount:
+    type: boolean
+    description: Whether the vote account is staked for this epoch
+  lastVote:
+    type: integer
+    description: Most recent slot voted on by this vote account
+  nodePubkey:
+    type: string
+    description: Validator identity, as base-58 encoded string
+  rootSlot:
+    type: integer
+    description: Current root slot for this vote account
+  votePubkey:
+    type: string
+    description: Vote account address, as base-58 encoded string

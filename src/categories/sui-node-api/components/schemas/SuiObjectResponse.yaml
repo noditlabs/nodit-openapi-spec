@@ -1,0 +1,6 @@
+type: object
+properties:
+  data:
+    $ref: "./ObjectData.yaml"
+  error:
+    $ref: "./ObjectResponseError.yaml"

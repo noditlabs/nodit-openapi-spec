@@ -1,0 +1,100 @@
+oneOf:
+  - type: object
+    required:
+      - MatchAll
+    properties:
+      MatchAll:
+        type: array
+        items:
+          $ref: "./SuiObjectDataFilter.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - MatchAny
+    properties:
+      MatchAny:
+        type: array
+        items:
+          $ref: "./SuiObjectDataFilter.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - MatchNone
+    properties:
+      MatchNone:
+        type: array
+        items:
+          $ref: "./SuiObjectDataFilter.yaml"
+    additionalProperties: false
+  - description: "Query by type a specified Package."
+    type: object
+    required:
+      - Package
+    properties:
+      Package:
+        $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - description: "Query by type a specified Move module."
+    type: object
+    required:
+      - MoveModule
+    properties:
+      MoveModule:
+        type: object
+        required:
+          - module
+          - package
+        properties:
+          module:
+            description: "the module name"
+            type: string
+          package:
+            description: "the Move package ID"
+            allOf:
+              - $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - description: "Query by type"
+    type: object
+    required:
+      - StructType
+    properties:
+      StructType:
+        type: string
+    additionalProperties: false
+  - type: object
+    required:
+      - AddressOwner
+    properties:
+      AddressOwner:
+        $ref: "./SuiAddress.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - ObjectOwner
+    properties:
+      ObjectOwner:
+        $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - ObjectId
+    properties:
+      ObjectId:
+        $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - ObjectIds
+    properties:
+      ObjectIds:
+        type: array
+        items:
+          $ref: "./ObjectID.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Version
+    properties:
+      Version:
+        $ref: "./BigInt_for_uint64.yaml"
+    additionalProperties: false

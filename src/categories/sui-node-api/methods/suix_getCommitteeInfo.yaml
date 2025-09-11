@@ -1,0 +1,88 @@
+openapi: 3.1.0
+info:
+  title: suix_getCommitteeInfo
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_getCommitteeInfo
+      description: |
+        Return the committee information for the asked epoch.
+      summary: suix_getCommitteeInfo
+      operationId: sui-suix_getCommitteeInfo
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: suix_getCommitteeInfo
+                params:
+                  type: array
+                  minItems: 0
+                  maxItems: 1
+                  items:
+                    oneOf:
+                      - title: epoch
+                        type: string
+                        description: The epoch of interest. If None, default to the latest epoch
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "suix_getCommitteeInfo",
+                  "params": ["5000"],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/CommitteeInfo.yaml"
+              example:
+                $ref: "../components/examples/suix_getCommitteeInfo.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

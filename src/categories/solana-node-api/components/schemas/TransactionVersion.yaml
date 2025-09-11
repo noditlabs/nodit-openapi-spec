@@ -1,0 +1,8 @@
+description: Transaction version. Undefined if maxSupportedTransactionVersion is not set in request params.
+# undefined: true
+oneOf:
+  - type: string
+    enum:
+      - legacy
+  - type: number
+  # - type: undefined

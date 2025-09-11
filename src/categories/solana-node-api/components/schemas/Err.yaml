@@ -1,0 +1,2 @@
+type: object
+description: Error if transaction failed, null if transaction succeeded.

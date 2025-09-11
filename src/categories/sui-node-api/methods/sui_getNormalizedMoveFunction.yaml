@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: sui_getNormalizedMoveFunction
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - sui_getNormalizedMoveFunction
+      description: |
+        Return a structured representation of Move function
+      summary: sui_getNormalizedMoveFunction
+      operationId: sui-sui_getNormalizedMoveFunction
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: sui_getNormalizedMoveFunction
+                params:
+                  type: array
+                  minItems: 3
+                  maxItems: 3
+                  items:
+                    oneOf:
+                      - title: package
+                        $ref: "../components/schemas/ObjectID.yaml"
+                        description: The package ID
+                      - title: module_name
+                        type: string
+                        description: The module name
+                      - title: function_name
+                        type: string
+                        description: The function name
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "sui_getNormalizedMoveFunction",
+                  "params":
+                    [
+                      "0x9c4eb6769ca8b6a23efeb7298cf0a8d0b837b78749c2cfc711c42036cc6b7621",
+                      "moduleName",
+                      "functionName",
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/SuiMoveNormalizedFunction.yaml"
+              example:
+                $ref: "../components/examples/sui_getNormalizedMoveFunction.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

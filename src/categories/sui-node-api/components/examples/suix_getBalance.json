@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "coinType": "0x168da5bf1f48dafc111b0a488fa454aca95e0b5e::usdc::USDC",
+    "coinObjectCount": 15,
+    "totalBalance": "15",
+    "lockedBalance": {}
+  },
+  "id": 1
+}

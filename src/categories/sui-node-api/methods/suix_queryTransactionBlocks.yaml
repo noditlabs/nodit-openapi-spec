@@ -1,0 +1,109 @@
+openapi: 3.1.0
+info:
+  title: suix_queryTransactionBlocks
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - suix_queryTransactionBlocks
+      description: |
+        Return list of transactions for a specified query criteria.
+      summary: suix_queryTransactionBlocks
+      operationId: sui-suix_queryTransactionBlocks
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: suix_queryTransactionBlocks
+                params:
+                  type: array
+                  minItems: 1
+                  maxItems: 4
+                  items:
+                    oneOf:
+                      - title: query
+                        $ref: "../components/schemas/TransactionBlockResponseQuery.yaml"
+                        description: The transaction query criteria.
+                      - title: cursor
+                        $ref: "../components/schemas/TransactionDigest.yaml"
+                        description: An optional paging cursor. If provided, the query will start from the next item after the specified cursor. Default to start from the first item if not specified.
+                      - title: limit
+                        type: integer
+                        description: Maximum item returned per page, default to QUERY_MAX_RESULT_LIMIT if not specified.
+                      - title: descending_order
+                        type: boolean
+                        description: Query result ordering, default to false (ascending order), oldest record first.
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "suix_queryTransactionBlocks",
+                  "params":
+                    [
+                      {
+                        "filter":
+                          {
+                            "InputObject": "0x93633829fcba6d6e0ccb13d3dbfe7614b81ea76b255e5d435032cd8595f37eb8",
+                          },
+                        "options": null,
+                      },
+                      "HxidAfFfyr4kXSiWeVq1J6Tk526YUVDoSUY5PSnS4tEJ",
+                      100,
+                      false,
+                    ],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/Page_for_TransactionBlockResponse_and_TransactionDigest.yaml"
+              example:
+                $ref: "../components/examples/suix_queryTransactionBlocks.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

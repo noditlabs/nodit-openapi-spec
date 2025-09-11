@@ -1,0 +1,22 @@
+oneOf:
+  - type: object
+    required:
+      - Ed25519SuiSignature
+    properties:
+      Ed25519SuiSignature:
+        $ref: "./Ed25519SuiSignature.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Secp256k1SuiSignature
+    properties:
+      Secp256k1SuiSignature:
+        $ref: "./Secp256k1SuiSignature.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Secp256r1SuiSignature
+    properties:
+      Secp256r1SuiSignature:
+        $ref: "./Secp256r1SuiSignature.yaml"
+    additionalProperties: false

@@ -1,0 +1,101 @@
+openapi: 3.1.0
+info:
+  title: unsafe_paySui
+  version: 1.2.17
+servers:
+  - url: https://{sui-network}.nodit.io
+    variables:
+      sui-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - unsafe_paySui
+      description: |
+        Send SUI coins to a list of addresses, following a list of amounts. This is for SUI coin only and does not require a separate gas coin object. Specifically, what pay_sui does are:
+        1. debit each input_coin to create new coin following the order of amounts and assign it to the corresponding recipient.
+        2. accumulate all residual SUI from input coins left and deposit all SUI to the first input coin, then use the first input coin as the gas coin object.
+        3. the balance of the first input coin after tx is sum(input_coins) - sum(amounts) - actual_gas_cost
+        4. all other input coints other than the first one are deleted.
+      summary: unsafe_paySui
+      operationId: sui-unsafe_paySui
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                method:
+                  type: string
+                  default: unsafe_paySui
+                params:
+                  type: array
+                  minItems: 5
+                  maxItems: 5
+                  items:
+                    oneOf:
+                      - title: signer
+                        $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The transaction signer's Sui address
+                      - title: input_coins
+                        type: array
+                        items:
+                          $ref: "../components/schemas/ObjectID.yaml"
+                        description: The Sui coins to be used in this transaction, including the coin for gas payment.
+                      - title: recipients
+                        type: array
+                        items:
+                          $ref: "../components/schemas/SuiAddress.yaml"
+                        description: The recipients' addresses, the length of this vector must be the same as amounts.
+                      - title: amounts
+                        type: array
+                        items:
+                          $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The amounts to be transferred to recipients, following the same order
+                      - title: gas_budget
+                        $ref: "../components/schemas/BigInt_for_uint64.yaml"
+                        description: The gas budget, the transaction will fail if the gas cost exceed the budget
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: integer
+                  result:
+                    $ref: "../components/schemas/TransactionBlockBytes.yaml"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

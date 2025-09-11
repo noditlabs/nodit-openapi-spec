@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "decimals": 9,
+    "name": "Usdc",
+    "symbol": "USDC",
+    "description": "Stable coin.",
+    "iconUrl": null,
+    "id": "0x51ceab2edc89f74730e683ebee65578cb3bc9237ba6fca019438a9737cf156ae"
+  },
+  "id": 1
+}

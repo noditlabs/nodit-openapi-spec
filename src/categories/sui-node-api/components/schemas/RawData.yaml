@@ -1,0 +1,50 @@
+oneOf:
+  - type: object
+    required:
+      - bcsBytes
+      - dataType
+      - hasPublicTransfer
+      - type
+      - version
+    properties:
+      bcsBytes:
+        $ref: "./Base64.yaml"
+      dataType:
+        type: string
+        enum:
+          - "moveObject"
+      hasPublicTransfer:
+        type: boolean
+      type:
+        type: string
+      version:
+        $ref: "./SequenceNumber2.yaml"
+  - type: object
+    required:
+      - dataType
+      - id
+      - linkageTable
+      - moduleMap
+      - typeOriginTable
+      - version
+    properties:
+      dataType:
+        type: string
+        enum:
+          - "package"
+      id:
+        $ref: "./ObjectID.yaml"
+      linkageTable:
+        type: object
+        additionalProperties:
+          $ref: "./UpgradeInfo.yaml"
+      moduleMap:
+        type: object
+        additionalProperties:
+          $ref: "./Base64.yaml"
+      typeOriginTable:
+        type: array
+        items:
+          $ref: "./TypeOrigin.yaml"
+      version:
+        $ref: "./SequenceNumber2.yaml"

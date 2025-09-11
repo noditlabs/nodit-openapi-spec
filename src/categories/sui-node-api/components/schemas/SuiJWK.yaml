@@ -1,0 +1,15 @@
+type: object
+required:
+  - alg
+  - e
+  - kty
+  - n
+properties:
+  alg:
+    type: string
+  e:
+    type: string
+  kty:
+    type: string
+  n:
+    type: string

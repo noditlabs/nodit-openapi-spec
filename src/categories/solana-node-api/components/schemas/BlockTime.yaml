@@ -1,0 +1,3 @@
+type: integer
+format: int64
+description: Estimated production time, as Unix timestamp (seconds since the Unix epoch). null if not available.

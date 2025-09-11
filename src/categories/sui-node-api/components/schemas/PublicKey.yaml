@@ -1,0 +1,36 @@
+oneOf:
+  - type: object
+    required:
+      - Ed25519
+    properties:
+      Ed25519:
+        $ref: "./Base64.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Secp256k1
+    properties:
+      Secp256k1:
+        $ref: "./Base64.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Secp256r1
+    properties:
+      Secp256r1:
+        $ref: "./Base64.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - ZkLogin
+    properties:
+      ZkLogin:
+        $ref: "./ZkLoginPublicIdentifier.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Passkey
+    properties:
+      Passkey:
+        $ref: "./Base64.yaml"
+    additionalProperties: false

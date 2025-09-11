@@ -1,0 +1,29 @@
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "status": "VersionFound",
+    "details": {
+      "objectId": "0x11af4b844ff94b3fbef6e36b518da3ad4c5856fa686464524a876b463d129760",
+      "version": "4",
+      "digest": "5VPAwDXy3BL72ehFc7gSJoz27ahMd6spUg5YwYc4ibcv",
+      "type": "0x2::coin::Coin<0x2::sui::SUI>",
+      "owner": {
+        "AddressOwner": "0x3568c40e814d9d5396d23087a0fd641e91e0e00df6c012cded9ef9ba5e5bf042"
+      },
+      "previousTransaction": "5jQByoouHBwaico5pQB73GdbzerC2StjTiHh5garBjiV",
+      "storageRebate": "100",
+      "content": {
+        "dataType": "moveObject",
+        "type": "0x2::coin::Coin<0x2::sui::SUI>",
+        "hasPublicTransfer": true,
+        "fields": {
+          "balance": "10000",
+          "id": {
+            "id": "0x11af4b844ff94b3fbef6e36b518da3ad4c5856fa686464524a876b463d129760"
+          }
+        }
+      }
+    }
+  },
+  "id": 1
+}

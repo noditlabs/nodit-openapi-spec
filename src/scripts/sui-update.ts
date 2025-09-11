@@ -1,7 +1,7 @@
 import path from "path";
 import { Patterns } from "../patterns";
 import { ReadmeApi } from "../connectors/readme.apis";
-import { convertTsToYaml, delay, findApiSpecId } from "../utils";
+import { delay, findApiSpecId } from "../utils";
 import fs from "fs";
 
 // 입력값 검증 함수
@@ -21,6 +21,15 @@ function validateInputs(
     );
   }
 
+  if (
+    namespaceInput &&
+    !["sui", "suix", "unsafe", "all"].includes(namespaceInput)
+  ) {
+    throw new Error(
+      "Error: Namespace must be 'sui', 'suix', 'unsafe', or 'all'."
+    );
+  }
+
   return [versionInput, namespaceInput];
 }
 
@@ -31,74 +40,64 @@ async function main() {
       ...process.argv.slice(2)
     );
 
-    console.log(`🚀 Updating SUI API files`);
-    const basePath = path.resolve(
-      process.cwd(),
-      "./src/categories/sui-node-api/paths"
+    console.log(
+      `🚀 Updating SUI API files${
+        namespaceInput ? ` (namespace: ${namespaceInput})` : " (all namespaces)"
+      }`
     );
-    const outputDir = path.resolve(process.cwd(), "./reference/sui-node-api");
 
-    // 디렉토리가 없으면 생성
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
+    const basePath = path.resolve(process.cwd(), "./reference/sui-node-api");
 
-    // 모든 디렉토리 순회
-    const directories = fs
-      .readdirSync(basePath, { withFileTypes: true })
-      .filter((dirent) => dirent.isDirectory())
-      .map((dirent) => dirent.name);
+    // methods 디렉토리에서 파일들 직접 처리
+    const files = fs
+      .readdirSync(basePath)
+      .filter((file) => file.endsWith(".yaml"));
 
-    for (const namespace of directories) {
-      if (namespaceInput && namespaceInput !== namespace) continue;
+    const validNamespaces = ["sui", "suix", "unsafe"];
 
-      const namespacePath = path.join(basePath, namespace);
-      const files = fs
-        .readdirSync(namespacePath)
-        .filter((file) => file.endsWith(".ts") && file !== "index.ts");
+    for (const file of files) {
+      const method = file.replace(".yaml", "");
+      const fileNamespace = method.split("_")[0];
 
-      for (const file of files) {
-        const endpoint = file.replace(".ts", "");
-        const tsFilePath = path.join(namespacePath, file);
-        const docTitle = `sui-node-api-${endpoint}`;
-
-        let apiDefinitionId = await findApiSpecId({
-          version: versionInput,
-          title: docTitle,
-        });
-
-        if (!apiDefinitionId) {
-          console.log(
-            `❌ API specification not found for ${endpoint}. Skipping...`
-          );
-          continue;
-        }
-
-        // YAML 변환
-        const yamlFile = await convertTsToYaml({
-          version: versionInput,
-          outputDir,
-          tsFilePath,
-          protocol: "sui",
-        });
-        const outputPath = yamlFile.outputPath;
-
-        // API 업데이트
-        const result = await ReadmeApi.updateSpecification({
-          filePath: outputPath,
-          id: apiDefinitionId,
-        });
-
-        const resultId = result?._id;
-        await delay(1000);
-
-        if (!resultId) {
-          console.log(`❌ Failed to update API specification for ${endpoint}`);
-          continue;
-        }
-
-        console.log(`ᄂ Updated API specification for ${endpoint}`);
+      // namespace 필터링
+      if (namespaceInput && namespaceInput !== "all") {
+        if (fileNamespace !== namespaceInput) continue;
+      } else if (namespaceInput === "all") {
+        if (!validNamespaces.includes(fileNamespace!)) continue;
+      } else {
+        // namespace가 없으면 모든 유효한 네임스페이스 처리
+        if (!validNamespaces.includes(fileNamespace!)) continue;
       }
+
+      const yamlFilePath = path.join(basePath, file);
+
+      let apiDefinitionId = await findApiSpecId({
+        version: versionInput,
+        title: method,
+      });
+
+      if (!apiDefinitionId) {
+        console.log(
+          `❌ API specification not found for ${method}. Skipping...`
+        );
+        continue;
+      }
+
+      // API 업데이트
+      const result = await ReadmeApi.updateSpecification({
+        filePath: yamlFilePath,
+        id: apiDefinitionId,
+      });
+
+      const resultId = result?._id;
+      await delay(1000);
+
+      if (!resultId) {
+        console.log(`❌ Failed to update API specification for ${method}`);
+        continue;
+      }
+
+      console.log(`✅ Updated API specification for ${method}`);
     }
 
     console.log(`✅ All done for v${versionInput}!`);

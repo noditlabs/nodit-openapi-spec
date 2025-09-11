@@ -1,0 +1,24 @@
+type: object
+required:
+  - isEntry
+  - parameters
+  - return
+  - typeParameters
+  - visibility
+properties:
+  isEntry:
+    type: boolean
+  parameters:
+    type: array
+    items:
+      $ref: "./SuiMoveNormalizedType.yaml"
+  return:
+    type: array
+    items:
+      $ref: "./SuiMoveNormalizedType.yaml"
+  typeParameters:
+    type: array
+    items:
+      $ref: "./SuiMoveAbilitySet.yaml"
+  visibility:
+    $ref: "./SuiMoveVisibility.yaml"

@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: solana-getSlotLeaders
+  version: 1.2.17
+servers:
+  - url: https://{solana-network}.nodit.io
+    variables:
+      solana-network:
+        $ref: ../components/schemas/Network.yaml
+components:
+  securitySchemes:
+    api_key:
+      $ref: ../components/securitySchemes/X-API-KEY.yaml
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - solana-http-method-getSlotLeaders
+      description: |
+        Returns the slot leaders for a given slot range
+      summary: getSlotLeaders
+      operationId: solana-getSlotLeaders
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jsonrpc
+                - id
+                - method
+                - params
+              properties:
+                jsonrpc:
+                  type: string
+                  default: "2.0"
+                id:
+                  type: integer
+                  default: 1
+                method:
+                  type: string
+                  default: getSlotLeaders
+                params:
+                  type: array
+                  minItems: 2
+                  maxItems: 2
+                  description: |
+                    It contains following items:
+                    1. StartSlot (`required`)
+                    2. Limit (`required`)
+                  items:
+                    oneOf:
+                      - title: StartSlot
+                        $ref: "../components/schemas/SlotNumber.yaml"
+                      - title: Limit
+                        type: integer
+                        format: uint64
+                        description: The limit of the result. It must be between 1 and 500000.
+                        minimum: 1
+                        maximum: 500000
+              example:
+                {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "getSlotLeaders",
+                  "params": [100, 10],
+                }
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../components/schemas/SuccessfulResponse.yaml"
+                  - type: object
+                    properties:
+                      result:
+                        type: array
+                        description: Array of Node identity public keys as base-58 encoded strings.
+                        items:
+                          type: string
+                example:
+                  $ref: "../components/examples/getSlotLeaders.json"
+        "400":
+          $ref: "../components/responses/400.yaml"
+        "401":
+          $ref: "../components/responses/401.yaml"
+        "403":
+          $ref: "../components/responses/403.yaml"
+        "404":
+          $ref: "../components/responses/404.yaml"
+        "429":
+          $ref: "../components/responses/429.yaml"

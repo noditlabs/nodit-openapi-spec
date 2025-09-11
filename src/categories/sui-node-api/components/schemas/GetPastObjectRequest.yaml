@@ -1,0 +1,13 @@
+type: object
+required:
+  - objectId
+  - version
+properties:
+  objectId:
+    description: "the ID of the queried object"
+    allOf:
+      - $ref: "./ObjectID.yaml"
+  version:
+    description: "the version of the queried object."
+    allOf:
+      - $ref: "./SequenceNumber.yaml"

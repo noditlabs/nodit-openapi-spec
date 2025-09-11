@@ -1,0 +1,2 @@
+type: string
+description: The blockhash of the block, as base-58 encoded string

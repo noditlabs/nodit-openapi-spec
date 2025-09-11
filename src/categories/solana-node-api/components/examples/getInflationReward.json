@@ -1,0 +1,13 @@
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "epoch": 2,
+      "effectiveSlot": 224,
+      "amount": 2500,
+      "postBalance": 499999442500
+    },
+    null
+  ],
+  "id": 1
+}

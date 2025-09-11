@@ -1,0 +1,37 @@
+description: "Due to the incompatibility of [enum Signature] (which dispatches a trait that assumes signature and pubkey bytes for verification), here we add a wrapper enum where member can just implement a lightweight [trait AuthenticatorTrait]. This way MultiSig (and future Authenticators) can implement its own `verify`."
+oneOf:
+  - type: object
+    required:
+      - MultiSig
+    properties:
+      MultiSig:
+        $ref: "./MultiSig.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - MultiSigLegacy
+    properties:
+      MultiSigLegacy:
+        $ref: "./MultiSigLegacy.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - Signature
+    properties:
+      Signature:
+        $ref: "./Signature.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - ZkLoginAuthenticator
+    properties:
+      ZkLoginAuthenticator:
+        $ref: "./ZkLoginAuthenticator.yaml"
+    additionalProperties: false
+  - type: object
+    required:
+      - PasskeyAuthenticator
+    properties:
+      PasskeyAuthenticator:
+        $ref: "./PasskeyAuthenticator.yaml"
+    additionalProperties: false

@@ -1,0 +1,14 @@
+description: "Upgraded package info for the linkage table"
+type: object
+required:
+  - upgraded_id
+  - upgraded_version
+properties:
+  upgraded_id:
+    allOf:
+      - $ref: "./ObjectID.yaml"
+    description: "ID of the upgraded packages"
+  upgraded_version:
+    allOf:
+      - $ref: "./SequenceNumber2.yaml"
+    description: "Version of the upgraded package"
