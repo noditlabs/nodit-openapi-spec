@@ -17,7 +17,7 @@ const tags = ["Token API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
       return `특정 토큰 컨트랙트의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 토큰의 수량이 포함됩니다.`;
     case "tron":
       return `특정 TRC20 토큰 컨트랙트의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 토큰의 수량이 포함됩니다.`;
@@ -78,7 +78,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -86,13 +86,14 @@ function getOpIdAndParams(protocol: string): {
           // evm
           "arbitrum",
           "base",
+          "bnb",
+          "chiliz",
           "ethereum",
           "giwa",
           "kaia",
           "optimism",
           "polygon",
           "luniverse",
-          "chiliz",
           "tron",
         ]),
         Requests.network("mainnet", [
@@ -130,7 +131,7 @@ function getRequestAndResponse(protocol: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (protocol) {
-    case "none":
+    case "web3":
       return {
         requestBody: {
           additionalProperties: false,
@@ -174,7 +175,7 @@ function getRequestAndResponse(protocol: string): {
             oneOf: [
               {
                 title: "EVM (Ethereum, Optimism, ...)",
-                ...Domains.Ethereum.Balance,
+                ...Domains.Ethereum.BalanceWithLastTransferredAt,
               },
               { title: "Tron", ...Domains.Tron.Balance },
             ],
@@ -224,7 +225,9 @@ function getRequestAndResponse(protocol: string): {
           ],
         },
         successResponse: {
-          schema: Domains.Pagination(Domains.Ethereum.Balance),
+          schema: Domains.Pagination(
+            Domains.Ethereum.BalanceWithLastTransferredAt
+          ),
           example: Examples.Ethereum[endpoint],
         },
       };
@@ -237,7 +240,7 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "kaka":
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTokenHolder)}`;
     default:

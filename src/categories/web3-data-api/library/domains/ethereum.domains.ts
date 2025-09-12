@@ -27,6 +27,21 @@ export const Balance: OpenAPIV3.SchemaObject = {
   },
 };
 
+export const BalanceWithLastTransferredAt: OpenAPIV3.SchemaObject = {
+  type: "object",
+  required: ["ownerAddress", "balance", "lastTransferredAt"],
+  properties: {
+    ownerAddress: ownerAddress,
+    balance: balance,
+    lastTransferredAt: {
+      type: "string",
+      description:
+        "해당 토큰 또는 NFT가 소유자에게 마지막으로 전송된 시간을 ISO 8601 형식으로 나타내는 필드입니다. 표준 토큰 규격(ERC20, ERC721, ERC1155)과 동일한 Transfer 이벤트로 전송된 경우만 반영되며, 비표준 이벤트로 인해 전송된 경우는 반영되지 않을 수 있습니다.",
+      pattern: Patterns.iso8601.source,
+    },
+  },
+};
+
 export const Args: OpenAPIV3.SchemaObject = {
   type: "object",
   properties: {
