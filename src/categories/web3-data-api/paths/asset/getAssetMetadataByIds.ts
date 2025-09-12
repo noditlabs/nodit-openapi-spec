@@ -14,7 +14,7 @@ const tags = ["Asset(TRC10) API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "tron":
     default:
       return `지정된 Asset ID를 사용하여 TRC10의 메타데이터를 조회합니다. 조회 대상 자산이 없을 경우, 빈 배열을 반환합니다.  한 번의 호출로 최대 ${INPUT_LIMITS.ITEM_MAX}건의 결과를 조회할 수 있습니다.`;
@@ -29,7 +29,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -97,7 +97,7 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "tron":
     default:
       return whatIsTrc10;

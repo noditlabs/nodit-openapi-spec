@@ -15,7 +15,7 @@ function createPathsForProtocol(protocol: string) {
     const apiSpec: ApiSpec = require(`./${file}`).default;
 
     if (!apiSpec?.isPublic) return; // isPublic false인 경우, 해당 API를 문서에 노출하지 않음
-    if (protocol !== "none" && !isEndpointSupported(protocol, apiSpec.endpoint))
+    if (protocol !== "web3" && !isEndpointSupported(protocol, apiSpec.endpoint))
       return; // 해당 프로토콜에서 지원하지 않는 endpoint는 문서에 노출하지 않음
 
     const newPath = createPath({ protocol, tagPage, apiSpec });

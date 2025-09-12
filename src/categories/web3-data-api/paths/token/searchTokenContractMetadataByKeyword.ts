@@ -18,7 +18,7 @@ const tags = ["Token API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
       return `토큰 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다.`;
     case "tron":
       return `TRC20 토큰 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다.`;
@@ -77,7 +77,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -85,13 +85,14 @@ function getOpIdAndParams(protocol: string): {
           // evm
           "arbitrum",
           "base",
+          "bnb",
+          "chiliz",
           "ethereum",
           "giwa",
           "kaia",
           "optimism",
           "polygon",
           "luniverse",
-          "chiliz",
           "tron",
         ]),
         Requests.network("mainnet", [
@@ -129,7 +130,7 @@ function getRequestAndResponse(protocol: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (protocol) {
-    case "none":
+    case "web3":
       return {
         requestBody: {
           additionalProperties: false,
@@ -235,7 +236,7 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "kaia":
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTokenContractMetadata)}
 ${throughputLimitInfoMessage}`;

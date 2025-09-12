@@ -82,7 +82,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -90,13 +90,14 @@ function getOpIdAndParams(protocol: string): {
           // evm
           "arbitrum",
           "base",
+          "bnb",
+          "chiliz",
           "ethereum",
           "giwa",
           "kaia",
           "optimism",
           "polygon",
           "luniverse",
-          "chiliz",
           "tron",
 
           // utxo
@@ -144,8 +145,8 @@ function getRequestAndResponse(protocol: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (protocol) {
-    case "none":
-      // "none"인 경우 EVM과 UTXO 프로토콜을 하나의 `oneOf`로 처리
+    case "web3":
+      // "web3"인 경우 EVM과 UTXO 프로토콜을 하나의 `oneOf`로 처리
       return {
         requestBody: {
           additionalProperties: false,
@@ -618,11 +619,11 @@ function getRequestAndResponse(protocol: string): {
 
 // ─────────────────────────────────────
 // C. callouts 설정
-//   - "none"일 때 모든 케이스의 callouts 포함
+//   - "web3"일 때 모든 케이스의 callouts 포함
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "kaia":
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTransaction)}
 

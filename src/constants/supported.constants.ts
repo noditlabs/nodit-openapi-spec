@@ -1622,7 +1622,74 @@ export const supportedApisChains: SupportedApis[] = [
   {
     chain: "bnb",
     streamApi: false,
-    web3DataApi: [],
+    web3DataApi: [
+      {
+        category: "blockchain",
+        endpoints: [
+          "getBlockByHashOrNumber",
+          "getBlocksWithinRange",
+          "getGasPrice",
+          "getInternalTransactionsByAccount",
+          "getInternalTransactionsByTransactionHash",
+          "getNextNonceByAccount",
+          "getTotalTransactionCountByAccount",
+          "getTransactionByHash",
+          // "getTransactionByTransactionId",
+          "getTransactionsByAccount",
+          "getTransactionsByHashes",
+          // "getTransactionsByTransactionIds",
+          "getTransactionsInBlock",
+          // "getUnspentTransactionOutputsByAccount",
+          "isContract",
+          "searchEvents",
+        ],
+      },
+      {
+        category: "native",
+        endpoints: [
+          "getNativeBalanceByAccount",
+          // "getNativeTokenBalanceByAccount",
+          // "getNativeTokenTransfersByAccount",
+        ],
+      },
+      {
+        category: "nft",
+        endpoints: [
+          "getNftContractMetadataByContracts",
+          "getNftsOwnedByAccount",
+          "getNftTransfersByAccount",
+          "getNftTransfersByContract",
+          "getNftTransfersByTokenId",
+          "getNftTransfersWithinRange",
+          "getNftContractsByAccount",
+          "getNftHoldersByTokenId",
+          "getNftHoldersByContract",
+          "getNftMetadataByContract",
+          "getNftMetadataByTokenIds",
+          "searchNftContractMetadataByKeyword",
+          "syncNftMetadata",
+        ],
+      },
+      {
+        category: "stats",
+        endpoints: ["getAccountStats"],
+      },
+      {
+        category: "token",
+        endpoints: [
+          "getTokenAllowance",
+          "getTokenContractMetadataByContracts",
+          "getTokenHoldersByContract",
+          "getTokenPricesByContracts",
+          "getTokensOwnedByAccount",
+          "getTokenTransfersByAccount",
+          "getTokenTransfersByContract",
+          "getTokenTransfersWithinRange",
+          "searchTokenContractMetadataByKeyword",
+        ],
+      },
+    ],
+    // bnb
     nodeApi: [
       {
         category: "eth",
@@ -1684,6 +1751,7 @@ export const supportedApisChains: SupportedApis[] = [
         ],
       },
     ],
+    // bnb
     webhookApi: [],
   },
   {

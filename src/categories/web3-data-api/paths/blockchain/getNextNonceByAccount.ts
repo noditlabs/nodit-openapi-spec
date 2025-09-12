@@ -70,7 +70,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -78,13 +78,14 @@ function getOpIdAndParams(protocol: string): {
           // EVM
           "arbitrum",
           "base",
+          "bnb",
+          "chiliz",
           "ethereum",
           "giwa",
           "kaia",
           "optimism",
           "polygon",
           "luniverse",
-          "chiliz",
         ]),
         Requests.network("mainnet", [
           "mainnet",

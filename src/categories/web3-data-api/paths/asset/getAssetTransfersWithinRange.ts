@@ -14,7 +14,7 @@ const tags = ["Asset(TRC10) API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "tron":
     default:
       return `지정된 기간 동안 발생한 TRC10 토큰 전송 내역을 조회합니다. 만약 해당 기간에 전송 기록이 없으면 빈 배열을 반환합니다.`;
@@ -29,7 +29,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -115,7 +115,7 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "tron":
     default:
       return whatIsTrc10;

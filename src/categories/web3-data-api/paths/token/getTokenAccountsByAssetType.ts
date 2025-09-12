@@ -13,7 +13,7 @@ const tags = ["Token API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "aptos":
     default:
       return `특정 Asset Type을 가진 토큰의 목록을 조회합니다. 조회 결과는 Owner 주소 기준이 아닌 Object 주소를 기준으로 제공됩니다.`;
@@ -72,7 +72,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -106,7 +106,7 @@ function getRequestAndResponse(protocol: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "aptos":
     default:
       return {
@@ -150,7 +150,7 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "aptos":
     default:
       return ""; // 해당 체인에서는 callouts가 없음

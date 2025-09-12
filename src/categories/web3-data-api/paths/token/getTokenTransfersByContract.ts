@@ -17,7 +17,7 @@ const tags = ["Token API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
       return `특정 컨트랙트에서 발생된 토큰 전송 목록을 조회합니다. 조회 결과에는 토큰 컨트랙트의 메타데이터와 전송된 토큰의 수량이 포함됩니다.`;
     case "tron":
       return `특정 컨트랙트에서 발생된 TRC20 토큰 전송 목록을 조회합니다. 조회 결과에는 토큰 컨트랙트의 메타데이터와 전송된 토큰의 수량이 포함됩니다.`;
@@ -78,7 +78,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -86,13 +86,14 @@ function getOpIdAndParams(protocol: string): {
           // evm
           "arbitrum",
           "base",
+          "bnb",
+          "chiliz",
           "ethereum",
           "giwa",
           "kaia",
           "optimism",
           "polygon",
           "luniverse",
-          "chiliz",
           "tron",
         ]),
         Requests.network("mainnet", [
@@ -130,7 +131,7 @@ function getRequestAndResponse(protocol: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (protocol) {
-    case "none":
+    case "web3":
       return {
         requestBody: {
           additionalProperties: false,
@@ -394,7 +395,7 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "kaia":
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTokenTransfer)}`;
     default:

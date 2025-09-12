@@ -78,7 +78,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -86,13 +86,14 @@ function getOpIdAndParams(protocol: string): {
           // evm
           "arbitrum",
           "base",
+          "bnb",
+          "chiliz",
           "ethereum",
           "giwa",
           "kaia",
           "optimism",
           "polygon",
           "luniverse",
-          "chiliz",
           "tron",
 
           // Move 기반 체인
@@ -134,7 +135,7 @@ function getRequestAndResponse(protocol: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (protocol) {
-    case "none":
+    case "web3":
       return {
         requestBody: {
           additionalProperties: false,
@@ -363,7 +364,7 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
     case "kaia":
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTransaction)}`;
     default:

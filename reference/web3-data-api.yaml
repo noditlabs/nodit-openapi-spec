@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.16
+  version: 1.2.19
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -58,13 +58,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -318,13 +319,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -366,7 +368,7 @@ paths:
                     - accountAddress
                 - &ref_8
                   type: object
-                  properties: &ref_62
+                  properties: &ref_63
                     page:
                       type: integer
                       description: >-
@@ -523,13 +525,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -719,13 +722,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -877,13 +881,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -1436,13 +1441,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -1595,13 +1601,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -1859,7 +1866,7 @@ paths:
                                 - selector
                                 - input
                               properties:
-                                selector: &ref_77
+                                selector: &ref_78
                                   type: string
                                   description: >-
                                     호출된 함수를 식별하는 4바이트 함수 셀렉터 값입니다. 함수 셀렉터는 함수
@@ -1875,7 +1882,7 @@ paths:
                                 args:
                                   type: array
                                   description: 호출 함수의 인자를 나타내는 필드입니다.
-                                  items: &ref_76
+                                  items: &ref_77
                                     type: object
                                     properties:
                                       name:
@@ -2440,13 +2447,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -3042,13 +3050,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -3240,13 +3249,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -3858,13 +3868,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -3941,12 +3952,22 @@ paths:
                           required: &ref_29
                             - ownerAddress
                             - balance
+                            - lastTransferredAt
                           properties: &ref_30
                             ownerAddress: *ref_23
-                            balance:
+                            balance: &ref_62
                               type: string
                               description: 잔고 나타내는 필드입니다.
                               pattern: ^[0-9]+$
+                            lastTransferredAt:
+                              type: string
+                              description: >-
+                                해당 토큰 또는 NFT가 소유자에게 마지막으로 전송된 시간을 ISO 8601 형식으로
+                                나타내는 필드입니다. 표준 토큰 규격(ERC20, ERC721, ERC1155)과
+                                동일한 Transfer 이벤트로 전송된 경우만 반영되며, 비표준 이벤트로 인해 전송된
+                                경우는 반영되지 않을 수 있습니다.
+                              pattern: >-
+                                ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
                         - *ref_22
                         - type: object
                           properties:
@@ -4256,13 +4277,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -4584,13 +4606,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -5017,13 +5040,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -5252,7 +5276,7 @@ paths:
                   allOf:
                     - type: object
                       properties:
-                        accountAddress: &ref_129
+                        accountAddress: &ref_130
                           type: string
                           description: >-
                             조회하고자 하는 계정 주소를 지정하는 파라미터입니다. 계정 주소는 64자리 16진수("0x"
@@ -5410,7 +5434,7 @@ paths:
                       oneOf:
                         - title: XRPL
                           allOf:
-                            - &ref_64
+                            - &ref_65
                               type: object
                               required:
                                 - ledgerIndex
@@ -5466,17 +5490,17 @@ paths:
                                     등)를 나타내는 문자열입니다. Transfer 조회 API에서 필수인
                                     필드입니다.
                                   example: OfferCreate
-                                affectedNodesIndex: &ref_80
+                                affectedNodesIndex: &ref_81
                                   type: integer
                                   description: AffectedNodes 배열 내에서 해당 노드의 인덱스를 나타냅니다.
                                   example: 1
-                                account: &ref_81
+                                account: &ref_82
                                   type: string
                                   description: >-
                                     트랜잭션으로 인해 잔액이 변경된 계정 주소입니다. 계정 주소는 25~35자리
                                     길이의 Base58 인코딩 문자열로, 'r'로 시작하는 형식을 가집니다.
                                   example: rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn
-                                currency: &ref_82
+                                currency: &ref_83
                                   type: string
                                   description: >-
                                     자산의 통화 코드를 나타냅니다. 일반적으로 ISO 4217 표준 코드(예:
@@ -5486,7 +5510,7 @@ paths:
                                     사용됩니다. 한편, XRP의 경우에는 "XRP"라는 고정된 문자열이
                                     currency 필드에 사용되며, IOU 자산과 동일한 구조로 반환됩니다. 
                                   example: USD
-                                issuer: &ref_83
+                                issuer: &ref_84
                                   type: string
                                   description: >-
                                     자산을 발행한 계정의 주소입니다. 동일한 통화 코드(currency)라
@@ -5497,19 +5521,19 @@ paths:
                                     시작합니다. 단, XRP는 네이티브 자산이므로 발행자가 없으며, 이 경우
                                     issuer는 빈 문자열("")로 표시됩니다.
                                   example: rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq
-                                previousBalance: &ref_84
+                                previousBalance: &ref_85
                                   type: string
                                   description: >-
                                     변경 전 자산의 수량을 나타냅니다. XRP인 경우, XRP 단위로 표기되며 1
                                     XRP는 1,000,000 drop에 해당합니다.
                                   example: '1000.34'
-                                finalBalance: &ref_85
+                                finalBalance: &ref_86
                                   type: string
                                   description: >-
                                     변경 후 자산의 수량을 나타냅니다. XRP인 경우, XRP 단위로 표기되며 1
                                     XRP는 1,000,000 drop에 해당합니다.
                                   example: '900.12'
-                                balanceChange: &ref_86
+                                balanceChange: &ref_87
                                   type: string
                                   description: >-
                                     트랜잭션으로 인해 변경된 수량을 나타냅니다. 수량의 증감 여부를 포함하며,
@@ -6112,13 +6136,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -6346,13 +6371,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -6841,13 +6867,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -7035,13 +7062,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
               - xrpl
             default: ethereum
@@ -7680,14 +7708,14 @@ paths:
                           allOf:
                             - &ref_46
                               type: object
-                              required: &ref_87
+                              required: &ref_88
                                 - affectedNodesIndex
                                 - from
                                 - to
                                 - issuer
                                 - currency
                                 - value
-                              properties: &ref_88
+                              properties: &ref_89
                                 ledgerIndex:
                                   type: integer
                                   description: >-
@@ -7886,13 +7914,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -8551,13 +8580,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
               - xrpl
             default: ethereum
@@ -9108,13 +9138,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
               - aptos
             default: ethereum
@@ -9549,7 +9580,7 @@ paths:
                                   decimals: 18
                         - title: Tron
                           allOf:
-                            - &ref_63
+                            - &ref_64
                               type: object
                               required: *ref_51
                               properties: *ref_52
@@ -9773,13 +9804,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -10221,13 +10253,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -10283,8 +10316,12 @@ paths:
                 oneOf:
                   - title: EVM (Ethereum, Optimism, ...)
                     type: object
-                    required: *ref_29
-                    properties: *ref_30
+                    required:
+                      - ownerAddress
+                      - balance
+                    properties:
+                      ownerAddress: *ref_23
+                      balance: *ref_62
                     example:
                       ownerAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                       balance: '1085515662023271641379'
@@ -10337,7 +10374,7 @@ paths:
             schema:
               additionalProperties: false
               type: object
-              properties: *ref_62
+              properties: *ref_63
       responses:
         '200':
           description: Successful Response
@@ -10369,7 +10406,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_63
+                    items: *ref_64
               example:
                 rpp: 5
                 page: 1
@@ -10464,10 +10501,10 @@ paths:
                 oneOf:
                   - title: Bitcoin, Dogecoin
                     type: object
-                    required: &ref_65
+                    required: &ref_66
                       - ownerAddress
                       - balance
-                    properties: &ref_66
+                    properties: &ref_67
                       ownerAddress:
                         type: string
                         description: 소유자 주소를 나타내는 필드입니다.
@@ -10562,7 +10599,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema: *ref_64
+              schema: *ref_65
               example:
                 rpp: 5
                 page: 1
@@ -10690,7 +10727,7 @@ paths:
                       example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
                       default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
                     relation: *ref_32
-                    fromBlock: &ref_94
+                    fromBlock: &ref_95
                       type: string
                       description: >
                         조회 시작 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
@@ -10713,7 +10750,7 @@ paths:
 
                         - fromBlock에 "latest"는 toBlock이 "latest"일 때만 허용됩니다.
                       pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
-                    toBlock: &ref_95
+                    toBlock: &ref_96
                       type: string
                       description: >
                         조회 종료 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
@@ -10737,7 +10774,7 @@ paths:
 
                         - toBlock에 "earliest"는 fromBlock이 "earliest"일 때만 허용됩니다.
                       pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
-                    fromDate: &ref_96
+                    fromDate: &ref_97
                       type: string
                       description: >-
                         조회 시작 날짜를 지정하는 파라미터입니다. 날짜는 ISO 8601
@@ -10757,7 +10794,7 @@ paths:
                       pattern: >-
                         ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
                       default: '2025-01-01T00:00:00+00:00'
-                    toDate: &ref_97
+                    toDate: &ref_98
                       type: string
                       description: >-
                         조회 종료 날짜를 지정하는 파라미터입니다. 날짜는 ISO 8601
@@ -10787,8 +10824,8 @@ paths:
             application/json:
               schema:
                 type: object
-                required: *ref_65
-                properties: *ref_66
+                required: *ref_66
+                properties: *ref_67
               example:
                 rpp: 20
                 cursor: eyJibG9ja0hlaWdodCI6ODc1NDc1LCJ0cmFuc2FjdGlvbkluZGV4IjowfQ==
@@ -11467,13 +11504,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - bitcoin
               - dogecoin
               - aptos
@@ -11551,7 +11589,7 @@ paths:
                 oneOf:
                   - title: EVM (Ethereum, Optimism, ...)
                     type: object
-                    required: &ref_67
+                    required: &ref_68
                       - hash
                       - number
                       - timestamp
@@ -11572,7 +11610,7 @@ paths:
                       - sha3Uncles
                       - transactionCount
                       - transactions
-                    properties: &ref_68
+                    properties: &ref_69
                       hash:
                         type: string
                         description: 블록 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
@@ -11912,7 +11950,7 @@ paths:
                           01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
                   - title: Aptos
                     type: object
-                    required: &ref_69
+                    required: &ref_70
                       - hash
                       - height
                       - timestamp
@@ -11920,7 +11958,7 @@ paths:
                       - lastVersion
                       - transactionsCount
                       - transactions
-                    properties: &ref_70
+                    properties: &ref_71
                       hash:
                         type: string
                         description: >-
@@ -12076,13 +12114,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - aptos
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -12159,8 +12198,8 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           type: object
-                          required: *ref_67
-                          properties: *ref_68
+                          required: *ref_68
+                          properties: *ref_69
                           example:
                             rpp: 20
                             cursor: >-
@@ -12768,8 +12807,8 @@ paths:
                                 withdrawals: null
                         - title: Aptos
                           type: object
-                          required: *ref_69
-                          properties: *ref_70
+                          required: *ref_70
+                          properties: *ref_71
                           example:
                             rpp: 3
                             page: 1
@@ -12851,13 +12890,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -12958,14 +12998,15 @@ paths:
           schema:
             type: string
             enum:
-              - ethereum
               - arbitrum
               - base
+              - bnb
+              - chiliz
+              - ethereum
               - giwa
               - kaia
               - luniverse
               - tron
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -13028,7 +13069,7 @@ paths:
                     - type: object
                       properties:
                         withZeroValue: *ref_19
-                        withExternalTransaction: &ref_71
+                        withExternalTransaction: &ref_72
                           type: boolean
                           description: >-
                             응답에 external transaction 포함 여부를 결정하는 파라미터입니다.
@@ -13088,7 +13129,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: &ref_72
+                        items: &ref_73
                           type: object
                           required: []
                           properties:
@@ -13350,7 +13391,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: &ref_73
+                        items: &ref_74
                           type: object
                           required:
                             - internalTransactionHash
@@ -13540,14 +13581,15 @@ paths:
           schema:
             type: string
             enum:
-              - ethereum
               - arbitrum
               - base
+              - bnb
+              - chiliz
+              - ethereum
               - giwa
               - kaia
               - luniverse
               - tron
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -13584,7 +13626,7 @@ paths:
                     - type: object
                       properties:
                         withZeroValue: *ref_19
-                        withExternalTransaction: *ref_71
+                        withExternalTransaction: *ref_72
                 - title: Tron
                   allOf:
                     - type: object
@@ -13633,7 +13675,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: *ref_72
+                        items: *ref_73
                     example:
                       rpp: 10
                       page: 1
@@ -13755,7 +13797,7 @@ paths:
                       items:
                         type: array
                         description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                        items: *ref_73
+                        items: *ref_74
                     example:
                       rpp: 5
                       page: 1
@@ -13871,7 +13913,7 @@ paths:
             application/json:
               schema:
                 type: object
-                required: &ref_74
+                required: &ref_75
                   - ledgerHash
                   - ledgerIndex
                   - ledgerIndex
@@ -13882,7 +13924,7 @@ paths:
                   - transactionHash
                   - transactionCount
                   - transactions
-                properties: &ref_75
+                properties: &ref_76
                   ledgerHash:
                     type: string
                     description: >-
@@ -14256,8 +14298,8 @@ paths:
                     items:
                       allOf:
                         - type: object
-                          required: *ref_74
-                          properties: *ref_75
+                          required: *ref_75
+                          properties: *ref_76
               example:
                 rpp: 5
                 page: 1
@@ -15099,13 +15141,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -15178,13 +15221,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
               - bitcoin
               - dogecoin
@@ -15327,13 +15371,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - xrpl
               - aptos
             default: ethereum
@@ -15369,13 +15414,13 @@ paths:
                       pattern: ^0[xX][0-9a-fA-F]{64}$
                       default: >-
                         0x1632ac1627903e586c8ea0b1c134908c34ee95e84face9a303abd63686eb2022
-                    withLogs: &ref_92
+                    withLogs: &ref_93
                       type: boolean
                       description: >-
                         응답에 logs 필드의 포함 여부를 지정하는 파라미터입니다. 이 파라미터에 true를 입력한 경우,
                         응답속도가 느려질 수 있습니다.
                       default: false
-                    withDecode: &ref_93
+                    withDecode: &ref_94
                       type: boolean
                       description: >-
                         응답에 decodedInput, decodedLog 필드의 포함 여부를 지정하는 파라미터입니다. 이
@@ -15400,14 +15445,14 @@ paths:
                             CEE2B3341141745B41DD40C775D34A6E24CBD79F5A4E5D025712416D5CE85784
                     - type: object
                       properties:
-                        withBalanceChanges: &ref_98
+                        withBalanceChanges: &ref_99
                           type: boolean
                           description: >-
                             응답에 balanceChanges 필드를 포함할지를 결정하는 선택적 파라미터입니다.
                             balanceChanges에는 네이티브 토큰(XRP)과 IOU 토큰의 잔고 변동 내역이
                             담기며, 이 옵션을 true로 설정하면 응답 속도가 느려질 수 있습니다.
                           default: false
-                        withTokenTransfers: &ref_99
+                        withTokenTransfers: &ref_100
                           type: boolean
                           description: >-
                             응답에 tokenTransfers 필드를 포함할지를 결정하는 선택적 파라미터입니다.
@@ -15431,7 +15476,7 @@ paths:
                         - transactionHash
                     - type: object
                       properties:
-                        withBalanceChanges: &ref_89
+                        withBalanceChanges: &ref_90
                           type: boolean
                           description: >-
                             응답에 balanceChanges 필드의 포함 여부를 지정하는 파라미터입니다.
@@ -15451,7 +15496,7 @@ paths:
                 oneOf:
                   - title: EVM (Ethereum, Optimism, ...)
                     allOf:
-                      - &ref_100
+                      - &ref_101
                         type: object
                         required:
                           - transactionHash
@@ -15537,8 +15582,8 @@ paths:
                                 description: 트랜잭션의 함수 시그니처를 나타내는 필드입니다.
                               args:
                                 type: array
-                                items: *ref_76
-                          functionSelector: *ref_77
+                                items: *ref_77
+                          functionSelector: *ref_78
                           nonce:
                             type: string
                             description: >-
@@ -15712,7 +15757,7 @@ paths:
                         properties:
                           logs:
                             type: object
-                            required: &ref_109
+                            required: &ref_110
                               - contractAddress
                               - transactionHash
                               - transactionIndex
@@ -15722,53 +15767,53 @@ paths:
                               - logIndex
                               - removed
                               - topics
-                            properties: &ref_110
-                              contractAddress: &ref_117
+                            properties: &ref_111
+                              contractAddress: &ref_118
                                 type: string
                                 description: >-
                                   로그를 생성한 컨트랙트 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의
                                   16진수 문자열 형태로 제공됩니다.
                                 pattern: ^0[xX][0-9a-fA-F]{40}$
-                              transactionHash: &ref_118
+                              transactionHash: &ref_119
                                 type: string
                                 description: >-
                                   로그를 생성한 트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리
                                   16진수 문자열 형태로 제공됩니다.
                                 pattern: ^0[xX][0-9a-fA-F]{64}$
-                              transactionIndex: &ref_119
+                              transactionIndex: &ref_120
                                 type: string
                                 description: >-
                                   로그를 생성한 트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를
                                   나타냅니다. 10진수 문자열 형태로 제공됩니다.
                                 pattern: ^[0-9]+$
-                              blockHash: &ref_120
+                              blockHash: &ref_121
                                 type: string
                                 description: >-
                                   로그를 생성한 블록의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수
                                   문자열 형태로 제공됩니다.
                                 pattern: ^0[xX][0-9a-fA-F]{64}
-                              blockNumber: &ref_121
+                              blockNumber: &ref_122
                                 type: integer
                                 description: 로그를 생성한 블록 번호를 나타내는 필드입니다.
                                 pattern: ^[0-9]+$
-                              data: &ref_122
+                              data: &ref_123
                                 type: string
                                 description: >-
                                   로그의 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열 형태로
                                   제공됩니다. 이 필드는 로그의 이벤트 데이터를 나타냅니다.
                                 pattern: ^0[xX][0-9a-fA-F]+$
-                              logIndex: &ref_123
+                              logIndex: &ref_124
                                 type: string
                                 description: >-
                                   로그의 인덱스를 나타내는 필드입니다. 트랜잭션에서 발생한 이벤트의 순서를
                                   의미합니다. 10진수 문자열 형태로 제공됩니다.
                                 pattern: ^[0-9]+$
-                              removed: &ref_124
+                              removed: &ref_125
                                 type: boolean
                                 description: >-
                                   로그가 제거되었는지 여부를 나타내는 필드입니다. 체인의 재구성(Reorg)으로 인해
                                   로그가 제거된 경우 true를 반환합니다.
-                              topics: &ref_125
+                              topics: &ref_126
                                 type: array
                                 description: 인덱스된 로그의 인자를 나타내는 필드입니다. 최대 4개의 토픽을 가질 수 있습니다.
                                 items:
@@ -15779,13 +15824,13 @@ paths:
                                   pattern: ^0[xX][0-9a-fA-F]{64}
                               decodedLog:
                                 type: object
-                                required: &ref_101
+                                required: &ref_102
                                   - name
                                   - eventFragment
                                   - signature
                                   - eventHash
                                   - args
-                                properties: &ref_102
+                                properties: &ref_103
                                   name:
                                     type: string
                                     description: 로그의 이벤트 이름을 나타내는 필드입니다.
@@ -15801,7 +15846,7 @@ paths:
                                   args:
                                     type: array
                                     description: 로그의 인자를 나타내는 필드입니다.
-                                    items: *ref_76
+                                    items: *ref_77
                     example:
                       transactionHash: >-
                         0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -15974,7 +16019,7 @@ paths:
                                 value: '-23809'
                   - title: XRPL
                     type: object
-                    required: &ref_106
+                    required: &ref_107
                       - ledgerIndex
                       - ledgerTimestamp
                       - transactionIndex
@@ -15986,7 +16031,7 @@ paths:
                       - signingPubKey
                       - fee
                       - transactionCategory
-                    properties: &ref_107
+                    properties: &ref_108
                       ledgerIndex:
                         type: integer
                         description: >-
@@ -16164,7 +16209,7 @@ paths:
                             properties:
                               asset:
                                 type: object
-                                properties: &ref_78
+                                properties: &ref_79
                                   currency:
                                     type: string
                                     description: >-
@@ -16192,13 +16237,13 @@ paths:
                                   같은 통화 코드와 발행자를 가질 수 없습니다.
                               asset2:
                                 type: object
-                                properties: *ref_78
+                                properties: *ref_79
                                 description: >-
                                   AMM 풀에서 사용되는 두 번째 자산을 나타냅니다. Asset과 함께 구성되며,
                                   같은 통화 코드와 발행자를 가질 수 없습니다.
                               amount:
                                 type: object
-                                properties: &ref_79
+                                properties: &ref_80
                                   currency:
                                     type: string
                                     description: >-
@@ -16235,7 +16280,7 @@ paths:
                                   인출할 첫 번째 자산을 나타냅니다.
                               amount2:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   AMM 풀에 추가되는 두 번째 자산의 양을 나타냅니다. AMMWithdraw에서는
                                   인출할 두 번째 자산을 나타냅니다.
@@ -16247,27 +16292,27 @@ paths:
                                 example: 250
                               effectivePrice:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   AMMDeposit에서 유효한 최대 가격을 설정합니다. AMMWithdraw에서는
                                   최소 보장 가격을 설정합니다.
                               lpTokenIn:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: AMM 풀에서 반환하는 LP 토큰의 수량을 나타냅니다.
                               lpTokenOut:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: AMM 풀에 유동성을 공급한 대가로 발행되는 LP 토큰의 수량을 나타냅니다.
                               bidMin:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   최소 입찰 금액을 설정합니다. 이 값을 높게 설정하면 다른 사용자가 더 높은
                                   입찰가를 제시하기 어렵습니다.
                               bidMax:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   최대 입찰 금액을 설정합니다. 입찰 금액이 bidMax를 초과하면 트랜잭션이
                                   실패합니다.
@@ -16299,7 +16344,7 @@ paths:
                                 example: rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah
                               sendMax:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   수표 발행자가 해당 수표를 통해 송금할 수 있도록 설정한 최대 자산 수량입니다.
                                   수취인은 이 값과 동일한 통화 및 발행자의 자산만 받을 수 있으며, 수수료를 포함한
@@ -16328,7 +16373,7 @@ paths:
                                   6F1DFD1D0FE8A32E40E1F2C05CF1C15545BAB56B617F9C6C2D63A6B704BEF59B
                               amount:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   수표를 현금화할 때 실제로 적용된 자산의 수량이 표시됩니다. 이 값은 수표의
                                   sendMax 필드와 동일한 자산 코드 및 발행자를 가져야 하며, 그 범위 내에서
@@ -16336,7 +16381,7 @@ paths:
                                   중 하나만 포함되며, 두 필드가 동시에 존재할 수는 없습니다.
                               deliverMin:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   수취인이 수령한 최소 보장 자산 수량이 표시됩니다. CheckCash 트랜잭션에서
                                   가능한 최대한 많은 금액을 수령하는 방식에서 사용되며, amount 필드와는 상호
@@ -16354,7 +16399,7 @@ paths:
                             properties:
                               amount:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   에스크로(Escrow)에 예치된 자산의 수량이 표시됩니다. 이 값은 송금자의
                                   계정에서 차감되며, 설정된 조건을 만족하면 수령인에게 지급됩니다.
@@ -16417,14 +16462,14 @@ paths:
                             properties:
                               takerPays:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   오퍼를 통해 구매자가 지불하기로 제안한 자산의 수량이 표시됩니다. 오퍼 작성자는 이
                                   필드를 통해 지불 대상 자산(구매 측면)을 명시하며, 이는 상대방이 받을 자산에
                                   해당합니다.
                               takerGets:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   오퍼를 통해 구매자가 수령하고자 제안한 자산의 수량이 표시됩니다. 오퍼 작성자는 이
                                   필드를 통해 얻고자 하는 자산(판매 측면)을 명시하며, 이는 상대방이 제공할 자산에
@@ -16454,27 +16499,27 @@ paths:
                             properties:
                               amount:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   송신자가 수신자에게 전달하고자 한 자산의 수량이 표시됩니다. 이 값은 요청된 송금
                                   금액이며, 실제 수령 금액은 이보다 작을 수 있습니다. 부분 결제가 발생한 경우,
                                   deliveredAmount와 차이가 날 수 있습니다.
                               deliverMax:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   트랜잭션 처리 시 사용된 송금 상한선이 표시됩니다. 경유 수수료나 환율 조건을
                                   고려한 금액이며, amount와 동일한 경우도 많지만 내부 처리 결과에 따라 달라질
                                   수 있습니다.
                               deliverMin:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   부분 결제가 허용된 경우, 수신자가 반드시 수령해야 하는 최소 자산 수량입니다.
                                   이보다 적은 금액이 도달하면 트랜잭션은 실패합니다.
                               destinationAmount:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   실제로 수신자에게 전달된 자산 수량입니다. 부분 결제가 발생한 경우 amount보다
                                   작을 수 있으며, 과거 원장(2014-01-20 이전)에서는
@@ -16549,7 +16594,7 @@ paths:
                                       type: 1
                               sendMax:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   송신자가 결제를 위해 지불할 수 있는 최대 자산 수량입니다. 환전 수수료, 경유
                                   비용 등을 포함할 수 있으며, 트랜잭션 수수료(XRP 소각)는 포함되지 않습니다.
@@ -16568,7 +16613,7 @@ paths:
                             properties:
                               amount:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   PaymentChannelCreate 시 예치할 금액,
                                   PaymentChannelFund 시 추가 자금,
@@ -16650,7 +16695,7 @@ paths:
                                 example: 820000000
                               balance:
                                 type: object
-                                properties: *ref_79
+                                properties: *ref_80
                                 description: >-
                                   현재까지 수신자에게 청구된 총 금액을 나타냅니다. XRP 단위이며, 채널 상에서
                                   청구 가능한 누적 금액입니다.
@@ -16675,20 +16720,20 @@ paths:
                           - finalBalance
                           - changeValue
                         properties:
-                          affectedNodesIndex: *ref_80
-                          account: *ref_81
-                          currency: *ref_82
-                          issuer: *ref_83
-                          previousBalance: *ref_84
-                          finalBalance: *ref_85
-                          balanceChange: *ref_86
+                          affectedNodesIndex: *ref_81
+                          account: *ref_82
+                          currency: *ref_83
+                          issuer: *ref_84
+                          previousBalance: *ref_85
+                          finalBalance: *ref_86
+                          balanceChange: *ref_87
                         description: >-
                           트랜잭션으로 인해 발생한 계정별 잔액 변동 내역을 포함하는 객체 배열입니다. 각 객체는 변경된
                           계정, 변동 금액, 통화 종류 등을 명시합니다.
                       tokenTransfers:
                         type: object
-                        required: *ref_87
-                        properties: *ref_88
+                        required: *ref_88
+                        properties: *ref_89
                         description: >-
                           트랜잭션에 포함된 토큰 전송 내역을 나타내는 객체 배열입니다. 각 객체는 전송된 토큰의 종류,
                           전송 금액, 송수신 계정 등의 정보를 포함합니다.
@@ -16824,7 +16869,7 @@ paths:
                         - SOLO-rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
                   - title: Aptos
                     type: object
-                    required: &ref_90
+                    required: &ref_91
                       - transactionHash
                       - transactionVersion
                       - blockHeight
@@ -16842,7 +16887,7 @@ paths:
                       - balanceInAccounts
                       - balanceOutAccounts
                       - balanceChangedTokens
-                    properties: &ref_91
+                    properties: &ref_92
                       transactionHash:
                         type: string
                         description: >-
@@ -17326,7 +17371,7 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - &ref_103
+                    - &ref_104
                       type: object
                       required:
                         - id
@@ -17416,7 +17461,7 @@ paths:
                           example: 1716177005
                     - type: object
                       properties:
-                        vin: &ref_104
+                        vin: &ref_105
                           type: object
                           required:
                             - index
@@ -17504,7 +17549,7 @@ paths:
                               items:
                                 type: string
                                 example: 3045022100b228e33e8b62f825...
-                        vout: &ref_105
+                        vout: &ref_106
                           type: object
                           required:
                             - index
@@ -17649,16 +17694,16 @@ paths:
                     - transactionVersion
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_89
+                    withBalanceChanges: *ref_90
       responses:
         '200':
           description: Successful Response
           content:
             application/json:
-              schema: &ref_108
+              schema: &ref_109
                 type: object
-                required: *ref_90
-                properties: *ref_91
+                required: *ref_91
+                properties: *ref_92
               example:
                 transactionHash: >-
                   0x45e9e15d2475eb6f38b843aedb66fb893d368ca86d1aae10e92317471cbe3aaa
@@ -17873,13 +17918,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
               - bitcoin
               - dogecoin
@@ -17928,8 +17974,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_92
-                        withDecode: *ref_93
+                        withLogs: *ref_93
+                        withDecode: *ref_94
                 - title: Bitcoin, Dogecoin
                   allOf:
                     - type: object
@@ -17944,10 +17990,10 @@ paths:
                           example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
                           default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
                         relation: *ref_32
-                        fromBlock: *ref_94
-                        toBlock: *ref_95
-                        fromDate: *ref_96
-                        toDate: *ref_97
+                        fromBlock: *ref_95
+                        toBlock: *ref_96
+                        fromDate: *ref_97
+                        toDate: *ref_98
                       required:
                         - accountAddress
                     - *ref_8
@@ -17973,8 +18019,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_92
-                        withDecode: *ref_93
+                        withLogs: *ref_93
+                        withDecode: *ref_94
                   required:
                     - accountAddress
                 - title: XRPL
@@ -18017,8 +18063,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withBalanceChanges: *ref_98
-                        withTokenTransfers: *ref_99
+                        withBalanceChanges: *ref_99
+                        withTokenTransfers: *ref_100
                 - title: Aptos
                   type: object
                   allOf:
@@ -18061,7 +18107,7 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withBalanceChanges: *ref_89
+                        withBalanceChanges: *ref_90
       responses:
         '200':
           description: Successful Response
@@ -18097,13 +18143,13 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_100
+                            - *ref_101
                             - type: object
                               properties:
                                 logs:
                                   type: object
-                                  required: *ref_101
-                                  properties: *ref_102
+                                  required: *ref_102
+                                  properties: *ref_103
                           example:
                             rpp: 10
                             page: 1
@@ -18871,11 +18917,11 @@ paths:
                                           value: '50000000000'
                         - title: Bitcoin, Dogecoin
                           allOf:
-                            - *ref_103
+                            - *ref_104
                             - type: object
                               properties:
-                                vin: *ref_104
-                                vout: *ref_105
+                                vin: *ref_105
+                                vout: *ref_106
                           example:
                             rpp: 10
                             page: 1
@@ -18997,7 +19043,7 @@ paths:
                                       type: witness_v0_keyhash
                         - title: Tron
                           allOf:
-                            - &ref_111
+                            - &ref_112
                               type: object
                               required:
                                 - transactionHash
@@ -19365,7 +19411,7 @@ paths:
                               properties:
                                 logs:
                                   type: object
-                                  required: &ref_112
+                                  required: &ref_113
                                     - contractAddress
                                     - transactionHash
                                     - transactionIndex
@@ -19373,7 +19419,7 @@ paths:
                                     - data
                                     - logIndex
                                     - topics
-                                  properties: &ref_113
+                                  properties: &ref_114
                                     contractAddress:
                                       type: string
                                       description: >-
@@ -19885,10 +19931,10 @@ paths:
                                           value: '60000000'
                         - title: XRPL
                           allOf:
-                            - &ref_114
+                            - &ref_115
                               type: object
-                              required: *ref_106
-                              properties: *ref_107
+                              required: *ref_107
+                              properties: *ref_108
                           example:
                             rpp: 2
                             page: 1
@@ -19991,7 +20037,7 @@ paths:
                                   - XRP
                         - title: Aptos
                           allOf:
-                            - *ref_108
+                            - *ref_109
                           example:
                             rpp: 1
                             page: 1
@@ -20191,13 +20237,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - xrpl
               - aptos
             default: ethereum
@@ -20244,8 +20291,8 @@ paths:
                         - transactionHashes
                     - type: object
                       properties:
-                        withLogs: *ref_92
-                        withDecode: *ref_93
+                        withLogs: *ref_93
+                        withDecode: *ref_94
                 - title: Tron
                   allOf:
                     - type: object
@@ -20270,8 +20317,8 @@ paths:
                         - transactionHashes
                     - type: object
                       properties:
-                        withLogs: *ref_92
-                        withDecode: *ref_93
+                        withLogs: *ref_93
+                        withDecode: *ref_94
                 - title: XRPL
                   allOf:
                     - type: object
@@ -20294,8 +20341,8 @@ paths:
                         - transactionHashes
                     - type: object
                       properties:
-                        withBalanceChanges: *ref_98
-                        withTokenTransfers: *ref_99
+                        withBalanceChanges: *ref_99
+                        withTokenTransfers: *ref_100
                 - title: Aptos
                   allOf:
                     - type: object
@@ -20316,7 +20363,7 @@ paths:
                               0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005
                             - >-
                               0x4a88f63c8ab07ccfdf9bc35a3a8a93a3fc4989f6a3692c4f58c26f08770b8046
-                        withBalanceChanges: *ref_89
+                        withBalanceChanges: *ref_90
                       required:
                         - transactionHashes
       responses:
@@ -20330,15 +20377,15 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - *ref_100
+                        - *ref_101
                         - type: object
                           properties:
                             logs:
                               type: array
-                              items: &ref_115
+                              items: &ref_116
                                 type: object
-                                required: *ref_109
-                                properties: *ref_110
+                                required: *ref_110
+                                properties: *ref_111
                     example:
                       - transactionHash: >-
                           0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4
@@ -20586,13 +20633,13 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - *ref_111
+                        - *ref_112
                         - type: object
                           properties:
-                            logs: &ref_116
+                            logs: &ref_117
                               type: object
-                              required: *ref_112
-                              properties: *ref_113
+                              required: *ref_113
+                              properties: *ref_114
                     example:
                       - transactionHash: >-
                           06d18b13a2de63586d539de478b7c0abb83643626a71bc236c0e8be2c0b2fd67
@@ -20802,7 +20849,7 @@ paths:
                                   value: '200560000'
                   - title: XRPL
                     type: array
-                    items: *ref_114
+                    items: *ref_115
                     example:
                       - ledgerIndex: 95352729
                         ledgerTimestamp: 1744250580
@@ -21010,7 +21057,7 @@ paths:
                           - XRPT-r3cTmDmasFg2wQdeCejNZP7XW6FWkDfUsN
                   - title: Aptos
                     type: array
-                    items: *ref_108
+                    items: *ref_109
                     example:
                       - transactionHash: >-
                           0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005
@@ -21357,11 +21404,11 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - *ref_103
+                    - *ref_104
                     - type: object
                       properties:
-                        vin: *ref_104
-                        vout: *ref_105
+                        vin: *ref_105
+                        vout: *ref_106
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -21441,7 +21488,7 @@ paths:
                     - transactionVersions
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_89
+                    withBalanceChanges: *ref_90
       responses:
         '200':
           description: Successful Response
@@ -21449,7 +21496,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: *ref_108
+                items: *ref_109
                 example:
                   - transactionHash: >-
                       0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005
@@ -21769,13 +21816,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
               - aptos
             default: ethereum
@@ -21820,8 +21868,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_92
-                        withDecode: *ref_93
+                        withLogs: *ref_93
+                        withDecode: *ref_94
                 - title: Tron
                   allOf:
                     - type: object
@@ -21845,8 +21893,8 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withLogs: *ref_92
-                        withDecode: *ref_93
+                        withLogs: *ref_93
+                        withDecode: *ref_94
                 - title: Aptos
                   allOf:
                     - type: object
@@ -21865,7 +21913,7 @@ paths:
                     - *ref_8
                     - type: object
                       properties:
-                        withBalanceChanges: *ref_89
+                        withBalanceChanges: *ref_90
       responses:
         '200':
           description: Successful Response
@@ -21901,12 +21949,12 @@ paths:
                       oneOf:
                         - title: EVM (Ethereum, Optimism, ...)
                           allOf:
-                            - *ref_100
+                            - *ref_101
                             - type: object
                               properties:
                                 logs:
                                   type: array
-                                  items: *ref_115
+                                  items: *ref_116
                           example:
                             rpp: 10
                             page: 1
@@ -22708,12 +22756,12 @@ paths:
                                           value: '-87943'
                         - title: Tron
                           allOf:
-                            - *ref_111
+                            - *ref_112
                             - type: object
                               properties:
                                 logs:
                                   type: array
-                                  items: *ref_116
+                                  items: *ref_117
                           example:
                             rpp: 5
                             page: 1
@@ -22907,7 +22955,7 @@ paths:
                                 logs: []
                         - title: Aptos
                           allOf:
-                            - *ref_108
+                            - *ref_109
                           example:
                             rpp: 10
                             page: 1
@@ -23987,8 +24035,8 @@ paths:
                 - *ref_8
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_98
-                    withTokenTransfers: *ref_99
+                    withBalanceChanges: *ref_99
+                    withTokenTransfers: *ref_100
       responses:
         '200':
           description: Successful Response
@@ -24022,7 +24070,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_114
+                        - *ref_115
               example:
                 rpp: 2
                 page: 1
@@ -24474,13 +24522,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
@@ -24605,13 +24654,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
             default: ethereum
           description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
         - name: network
@@ -24711,15 +24761,15 @@ paths:
                         - removed
                         - topics
                       properties:
-                        contractAddress: *ref_117
-                        transactionHash: *ref_118
-                        transactionIndex: *ref_119
-                        blockHash: *ref_120
-                        blockNumber: *ref_121
-                        data: *ref_122
-                        logIndex: *ref_123
-                        removed: *ref_124
-                        topics: *ref_125
+                        contractAddress: *ref_118
+                        transactionHash: *ref_119
+                        transactionIndex: *ref_120
+                        blockHash: *ref_121
+                        blockNumber: *ref_122
+                        data: *ref_123
+                        logIndex: *ref_124
+                        removed: *ref_125
+                        topics: *ref_126
               example:
                 rpp: 5
                 page: 1
@@ -24917,14 +24967,14 @@ paths:
                       지난 후에도 도메인 갱신 및 새로운 등록이 발생하지 않으면, 이전 도메인이 가리키고 있는 주소가
                       반환됩니다.
                     default: null
-                    example: &ref_126
+                    example: &ref_127
                       address: '0xbe6A97E98545439717e0e8A19E7204F434FFCa79'
                   expiryDate:
                     type: string
                     description: >-
                       ENS 도메인의 만료 날짜를 나타냅니다. 만료 날짜가 지난 후에도 도메인 갱신 및 새로운 등록이 발생하지
                       않으면, 이전 만료 날짜를 반환됩니다.
-                    example: *ref_126
+                    example: *ref_127
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -25012,14 +25062,14 @@ paths:
                     description: >-
                       주소에 매핑된 ENS 도메인 이름입니다. 주소에 매핑된 ENS 도메인이 없을 경우 null을 반환합니다.
                       만료 날짜가 지난 후에도 도메인 갱신 및 새로운 등록이 발생하지 않으면, 이전 도메인 이름을 표시합니다.
-                    example: &ref_127
+                    example: &ref_128
                       name: vitalik.eth
                   expiryDate:
                     type: string
                     description: >-
                       ENS 도메인의 만료 날짜를 나타냅니다. 만료 날짜가 지난 후에도 도메인 갱신 및 새로운 등록이 발생하지
                       않으면, 이전 만료 날짜를 반환합니다.
-                    example: *ref_127
+                    example: *ref_128
         '400': *ref_3
         '401': *ref_4
         '403': *ref_5
@@ -25071,7 +25121,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema: &ref_128
+              schema: &ref_129
                 type: object
                 required:
                   - name
@@ -25335,7 +25385,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_128
+                        - *ref_129
               example: {}
         '400': *ref_3
         '401': *ref_4
@@ -25372,13 +25422,14 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
+              - chiliz
               - ethereum
               - giwa
               - kaia
               - optimism
               - polygon
               - luniverse
-              - chiliz
               - tron
               - aptos
             default: ethereum
@@ -25428,7 +25479,7 @@ paths:
                     - address
                 - title: Aptos
                   properties:
-                    address: *ref_129
+                    address: *ref_130
       responses:
         '200':
           description: Successful Response
@@ -25667,7 +25718,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: &ref_130
+                    items: &ref_131
                       type: object
                       required:
                         - date
@@ -25812,7 +25863,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_130
+                    items: *ref_131
               example:
                 count: 10
                 items:
@@ -25934,7 +25985,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_130
+                    items: *ref_131
               example:
                 count: 10
                 items:
@@ -26064,7 +26115,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_130
+                    items: *ref_131
               example:
                 count: 10
                 items:
@@ -26187,7 +26238,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: &ref_131
+                    items: &ref_132
                       type: object
                       required:
                         - date
@@ -26361,7 +26412,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_131
+                    items: *ref_132
               example:
                 count: 25
                 items:
@@ -26514,7 +26565,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_131
+                    items: *ref_132
               example:
                 count: 10
                 items:
@@ -26645,7 +26696,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_131
+                    items: *ref_132
               example:
                 count: 25
                 items:
@@ -26790,7 +26841,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_63
+                    items: *ref_64
               example:
                 rpp: 5
                 page: 1
@@ -26864,7 +26915,7 @@ paths:
                 assetIds:
                   type: array
                   description: 조회할 Asset ID 목록을 입력합니다. Asset ID는 0보다 큰 정수여야 합니다.
-                  items: &ref_133
+                  items: &ref_134
                     type: integer
                   default:
                     - 1000001
@@ -26876,7 +26927,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &ref_132
+                items: &ref_133
                   type: object
                   required:
                     - id
@@ -27066,7 +27117,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema: *ref_132
+              schema: *ref_133
               example:
                 id: 1002357
                 name: GMCoin
@@ -27146,10 +27197,10 @@ paths:
                         문자열 형식을 가집니다.
                       pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                    assetIds: &ref_134
+                    assetIds: &ref_135
                       type: array
                       description: 조회할 Asset ID 목록을 입력합니다. Asset ID는 0보다 큰 정수여야 합니다.
-                      items: *ref_133
+                      items: *ref_134
                     fromBlock: *ref_42
                     toBlock: *ref_43
                     fromDate: *ref_44
@@ -27194,7 +27245,7 @@ paths:
                         - *ref_47
                         - type: object
                           properties:
-                            asset: *ref_132
+                            asset: *ref_133
               example:
                 rpp: 5
                 page: 1
@@ -27438,7 +27489,7 @@ paths:
                         - *ref_47
                         - type: object
                           properties:
-                            asset: *ref_132
+                            asset: *ref_133
               example:
                 rpp: 5
                 page: 1
@@ -27677,7 +27728,7 @@ paths:
                         - *ref_47
                         - type: object
                           properties:
-                            asset: *ref_132
+                            asset: *ref_133
               example:
                 rpp: 5
                 page: 1
@@ -27886,7 +27937,7 @@ paths:
                         문자열 형식을 가집니다.
                       pattern: ^T[1-9A-HJ-NP-Za-km-z]{33}$
                       default: TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N
-                    assetIds: *ref_134
+                    assetIds: *ref_135
                 - *ref_8
       responses:
         '200':
@@ -27921,10 +27972,10 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_63
+                        - *ref_64
                         - type: object
                           properties:
-                            asset: *ref_132
+                            asset: *ref_133
               example:
                 rpp: 30
                 page: 1
@@ -28054,7 +28105,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_132
+                    items: *ref_133
               example:
                 rpp: 5
                 page: 1

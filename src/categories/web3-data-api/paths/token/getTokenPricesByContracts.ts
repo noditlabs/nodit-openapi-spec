@@ -22,7 +22,7 @@ const tags = ["Token API"];
 // 프로토콜별 description을 반환하는 헬퍼 함수
 function getDescription(protocol: string): string {
   switch (protocol) {
-    case "none":
+    case "web3":
       return `입력한 토큰 컨트랙트에서 발행한 Token의 온체인 마켓 가격을 조회합니다. 다수의 컨트랙트를 조회할 수 있으며, 최대 ${INPUT_LIMITS.ITEM_MAX}개의 컨트랙트를 조회할 수 있습니다.`;
     default:
       return `입력한 ERC20 토큰 컨트랙트에서 발행한 Token의 온체인 마켓 가격을 조회합니다. 다수의 컨트랙트를 조회할 수 있으며, 최대 ${INPUT_LIMITS.ITEM_MAX}개의 컨트랙트를 조회할 수 있습니다.`;
@@ -81,7 +81,7 @@ function getOpIdAndParams(protocol: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "none") {
+  if (protocol === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -89,13 +89,14 @@ function getOpIdAndParams(protocol: string): {
           // evm
           "arbitrum",
           "base",
+          "bnb",
+          "chiliz",
           "ethereum",
           "giwa",
           "kaia",
           "optimism",
           "polygon",
           "luniverse",
-          "chiliz",
         ]),
         Requests.network("mainnet", ["mainnet"]),
       ],
