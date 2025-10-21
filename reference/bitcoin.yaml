@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: bitcoin
-  version: 1.2.19
+  version: 1.2.18
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -1024,234 +1024,230 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  allOf:
-                    - &ref_12
-                      type: object
-                      required:
-                        - id
-                        - index
-                        - hash
-                        - version
-                        - lockTime
-                        - size
-                        - vsize
-                        - weight
-                        - fee
-                        - vinCount
-                        - voutCount
-                        - blockHeight
-                        - blockHash
-                        - blockTimestamp
-                      properties:
-                        id:
-                          type: string
-                          description: 트랜잭션의 고유 식별자로, 각 트랜잭션을 유일하게 식별할 수 있는 값입니다.
-                          example: >-
-                            3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
-                        index:
-                          type: integer
-                          description: >-
-                            블록 내 트랜잭션의 인덱스를 나타냅니다. 0부터 시작하며, 블록에 포함된 트랜잭션의 순서를
-                            의미합니다.
-                          example: 0
-                        hash:
-                          type: string
-                          description: >-
-                            트랜잭션의 해시 값으로, 트랜잭션 데이터를 기반으로 계산된 고유한 식별자입니다. SegWit
-                            데이터를 포함하여 계산됩니다.
-                          example: >-
-                            3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
-                        version:
-                          type: integer
-                          description: 트랜잭션의 버전을 나타내는 값으로, 트랜잭션 형식을 정의합니다.
-                          example: 2
-                        lockTime:
-                          type: integer
-                          description: >-
-                            트랜잭션의 락타임으로, 트랜잭션이 유효해지는 조건(블록 높이 또는 UNIX 타임스탬프)을
-                            나타냅니다. 값이 `0`이면 트랜잭션은 즉시 유효합니다.
-                          example: 0
-                        size:
-                          type: integer
-                          description: 트랜잭션의 실제 크기(바이트)로, 트랜잭션의 데이터 길이를 나타냅니다.
-                          example: 223
-                        vsize:
-                          type: integer
-                          description: >-
-                            트랜잭션의 가상 크기(바이트)로, SegWit 데이터를 포함하여 블록에 포함되는 트랜잭션의
-                            유효 크기를 나타냅니다. BIP-141에 따라 가중치(weight)를 4로 나눈 후 올림
-                            처리한 값입니다.
-                          example: 300
-                        weight:
-                          type: integer
-                          description: >-
-                            트랜잭션의 가중치로, BIP-141에 따라 계산된 트랜잭션의 네트워크 비용을 나타냅니다.
-                            `(non-witness 크기 * 3) + total 크기`로 계산됩니다.
-                          example: 565
-                        fee:
-                          type: integer
-                          description: 트랜잭션의 수수료(BTC 단위)로, 입력 값에서 출력 값을 뺀 나머지 값입니다.
-                          example: 1840
-                        vinCount:
-                          type: integer
-                          description: 입력(Vin) 트랜잭션의 개수를 나타냅니다.
-                          example: 1
-                        voutCount:
-                          type: integer
-                          description: 출력(Vout) 트랜잭션의 개수를 나타냅니다.
-                          example: 1
-                        blockHeight:
-                          type: integer
-                          description: 트랜잭션이 포함된 블록의 높이를 나타냅니다.
-                          example: 844237
-                        blockHash:
-                          type: string
-                          description: 트랜잭션이 포함된 블록의 해시 값입니다.
-                          example: >-
-                            00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af
-                        blockTimestamp:
-                          type: integer
-                          description: 트랜잭션이 포함된 블록의 생성 시간을 나타내며, UNIX 타임스탬프 형식으로 표시됩니다.
-                          example: 1716177005
-                    - type: object
-                      properties:
-                        vin: &ref_13
-                          type: object
-                          required:
-                            - index
-                            - address
-                            - value
-                            - coinbase
-                            - voutTransactionId
-                            - voutIndex
-                            - scriptSig
-                            - sequence
-                            - witness
-                          properties:
-                            index:
-                              type: integer
-                              description: 포함된 트랜잭션에서 Vin(입력)의 인덱스를 나타냅니다.
-                              example: 0
-                            address:
-                              type: string
-                              description: >-
-                                Vin(입력)이 참조하는 이전 Vout(출력)의 주소로, 비트코인을 전송한 발송자의
-                                주소를 나타냅니다.
-                              example: bc1q0a7h7sa94e8svscf8sxmhyj8fujgy423fzjjfr
-                            value:
-                              type: string
-                              description: >-
-                                Vin(입력)에서 참조된 이전 Vout(출력)의 출력 값으로, 전송되는 비트코인의 양을
-                                나타냅니다 (BTC 단위).
-                              example: '0.00506140'
-                            coinbase:
-                              type: string
-                              description: >-
-                                Coinbase 트랜잭션(채굴 보상 트랜잭션)에서 사용되며, 채굴자가 정의한 임의의
-                                데이터를 포함합니다. 일반 트랜잭션에서는 null로 설정됩니다.
-                              example: null
-                            voutTransactionId:
-                              type: string
-                              description: >-
-                                Vin(입력)이 참조하는 이전 트랜잭션(Vout)의 ID를 나타냅니다. Coinbase
-                                트랜잭션의 경우 이 필드는 null로 표기됩니다.
-                              example: >-
-                                c2976d591a92cc39f2bb1f367afbc2d6ae6e3c940b640eb245dfbeef75d340db
-                            voutIndex:
-                              type: string
-                              description: >-
-                                Vin(입력)이 참조하는 이전 Vout(출력)의 인덱스를 나타냅니다. Coinbase
-                                트랜잭션의 경우 null로 표기됩니다.
-                              example: '0'
-                            scriptSig:
-                              type: object
-                              required:
-                                - hex
-                                - asm
-                                - type
-                              description: >-
-                                Vin(입력)의 서명 스크립트로, 참조된 이전 Vout(출력)의 잠금 스크립트를
-                                해제하는 데 사용됩니다.
-                              properties:
-                                hex:
-                                  type: string
-                                  description: >-
-                                    16진수 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit
-                                    트랜잭션에서는 빈 문자열로 제공됩니다.
-                                  example: 3045022100b228e33e8b62f825...
-                                asm:
-                                  type: string
-                                  description: >-
-                                    어셈블리 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit
-                                    트랜잭션에서는 빈 문자열로 제공됩니다.
-                                  example: OP_HASH160 OP_PUSHBYTES_20 000000...
-                                type:
-                                  type: string
-                                  description: >-
-                                    Vin(입력)의 서명 스크립트 유형을 나타냅니다 (예: `p2pkh`,
-                                    `p2sh` 등).
-                                  example: witness_v0_keyhash
-                            sequence:
-                              type: integer
-                              description: >-
-                                Vin(입력)의 시퀀스 번호로, 트랜잭션의 유효성을 제어하거나 `locktime`과
-                                함께 작동합니다. RBF 기능 제어에도 사용됩니다.
-                              example: 4294967295
-                            witness:
-                              type: array
-                              description: SegWit 트랜잭션의 경우 포함되는 Vin(입력)의 스크립트 서명 데이터 배열입니다.
-                              items:
+                allOf:
+                  - &ref_12
+                    type: object
+                    required:
+                      - id
+                      - index
+                      - hash
+                      - version
+                      - lockTime
+                      - size
+                      - vsize
+                      - weight
+                      - fee
+                      - vinCount
+                      - voutCount
+                      - blockHeight
+                      - blockHash
+                      - blockTimestamp
+                    properties:
+                      id:
+                        type: string
+                        description: 트랜잭션의 고유 식별자로, 각 트랜잭션을 유일하게 식별할 수 있는 값입니다.
+                        example: >-
+                          3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                      index:
+                        type: integer
+                        description: >-
+                          블록 내 트랜잭션의 인덱스를 나타냅니다. 0부터 시작하며, 블록에 포함된 트랜잭션의 순서를
+                          의미합니다.
+                        example: 0
+                      hash:
+                        type: string
+                        description: >-
+                          트랜잭션의 해시 값으로, 트랜잭션 데이터를 기반으로 계산된 고유한 식별자입니다. SegWit
+                          데이터를 포함하여 계산됩니다.
+                        example: >-
+                          3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                      version:
+                        type: integer
+                        description: 트랜잭션의 버전을 나타내는 값으로, 트랜잭션 형식을 정의합니다.
+                        example: 2
+                      lockTime:
+                        type: integer
+                        description: >-
+                          트랜잭션의 락타임으로, 트랜잭션이 유효해지는 조건(블록 높이 또는 UNIX 타임스탬프)을
+                          나타냅니다. 값이 `0`이면 트랜잭션은 즉시 유효합니다.
+                        example: 0
+                      size:
+                        type: integer
+                        description: 트랜잭션의 실제 크기(바이트)로, 트랜잭션의 데이터 길이를 나타냅니다.
+                        example: 223
+                      vsize:
+                        type: integer
+                        description: >-
+                          트랜잭션의 가상 크기(바이트)로, SegWit 데이터를 포함하여 블록에 포함되는 트랜잭션의 유효
+                          크기를 나타냅니다. BIP-141에 따라 가중치(weight)를 4로 나눈 후 올림 처리한
+                          값입니다.
+                        example: 300
+                      weight:
+                        type: integer
+                        description: >-
+                          트랜잭션의 가중치로, BIP-141에 따라 계산된 트랜잭션의 네트워크 비용을 나타냅니다.
+                          `(non-witness 크기 * 3) + total 크기`로 계산됩니다.
+                        example: 565
+                      fee:
+                        type: integer
+                        description: 트랜잭션의 수수료(BTC 단위)로, 입력 값에서 출력 값을 뺀 나머지 값입니다.
+                        example: 1840
+                      vinCount:
+                        type: integer
+                        description: 입력(Vin) 트랜잭션의 개수를 나타냅니다.
+                        example: 1
+                      voutCount:
+                        type: integer
+                        description: 출력(Vout) 트랜잭션의 개수를 나타냅니다.
+                        example: 1
+                      blockHeight:
+                        type: integer
+                        description: 트랜잭션이 포함된 블록의 높이를 나타냅니다.
+                        example: 844237
+                      blockHash:
+                        type: string
+                        description: 트랜잭션이 포함된 블록의 해시 값입니다.
+                        example: >-
+                          00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af
+                      blockTimestamp:
+                        type: integer
+                        description: 트랜잭션이 포함된 블록의 생성 시간을 나타내며, UNIX 타임스탬프 형식으로 표시됩니다.
+                        example: 1716177005
+                  - type: object
+                    properties:
+                      vin: &ref_13
+                        type: object
+                        required:
+                          - index
+                          - address
+                          - value
+                          - coinbase
+                          - voutTransactionId
+                          - voutIndex
+                          - scriptSig
+                          - sequence
+                          - witness
+                        properties:
+                          index:
+                            type: integer
+                            description: 포함된 트랜잭션에서 Vin(입력)의 인덱스를 나타냅니다.
+                            example: 0
+                          address:
+                            type: string
+                            description: >-
+                              Vin(입력)이 참조하는 이전 Vout(출력)의 주소로, 비트코인을 전송한 발송자의 주소를
+                              나타냅니다.
+                            example: bc1q0a7h7sa94e8svscf8sxmhyj8fujgy423fzjjfr
+                          value:
+                            type: string
+                            description: >-
+                              Vin(입력)에서 참조된 이전 Vout(출력)의 출력 값으로, 전송되는 비트코인의 양을
+                              나타냅니다 (BTC 단위).
+                            example: '0.00506140'
+                          coinbase:
+                            type: string
+                            description: >-
+                              Coinbase 트랜잭션(채굴 보상 트랜잭션)에서 사용되며, 채굴자가 정의한 임의의
+                              데이터를 포함합니다. 일반 트랜잭션에서는 null로 설정됩니다.
+                            example: null
+                          voutTransactionId:
+                            type: string
+                            description: >-
+                              Vin(입력)이 참조하는 이전 트랜잭션(Vout)의 ID를 나타냅니다. Coinbase
+                              트랜잭션의 경우 이 필드는 null로 표기됩니다.
+                            example: >-
+                              c2976d591a92cc39f2bb1f367afbc2d6ae6e3c940b640eb245dfbeef75d340db
+                          voutIndex:
+                            type: string
+                            description: >-
+                              Vin(입력)이 참조하는 이전 Vout(출력)의 인덱스를 나타냅니다. Coinbase
+                              트랜잭션의 경우 null로 표기됩니다.
+                            example: '0'
+                          scriptSig:
+                            type: object
+                            required:
+                              - hex
+                              - asm
+                              - type
+                            description: >-
+                              Vin(입력)의 서명 스크립트로, 참조된 이전 Vout(출력)의 잠금 스크립트를 해제하는
+                              데 사용됩니다.
+                            properties:
+                              hex:
                                 type: string
+                                description: >-
+                                  16진수 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit
+                                  트랜잭션에서는 빈 문자열로 제공됩니다.
                                 example: 3045022100b228e33e8b62f825...
-                        vout: &ref_14
-                          type: object
-                          required:
-                            - index
-                            - address
-                            - value
-                            - scriptPubKey
-                          properties:
-                            index:
-                              type: integer
-                              description: 포함된 트랜잭션에서 Vout(출력)의 인덱스를 나타냅니다.
-                              example: 0
-                            address:
+                              asm:
+                                type: string
+                                description: >-
+                                  어셈블리 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit
+                                  트랜잭션에서는 빈 문자열로 제공됩니다.
+                                example: OP_HASH160 OP_PUSHBYTES_20 000000...
+                              type:
+                                type: string
+                                description: >-
+                                  Vin(입력)의 서명 스크립트 유형을 나타냅니다 (예: `p2pkh`, `p2sh`
+                                  등).
+                                example: witness_v0_keyhash
+                          sequence:
+                            type: integer
+                            description: >-
+                              Vin(입력)의 시퀀스 번호로, 트랜잭션의 유효성을 제어하거나 `locktime`과 함께
+                              작동합니다. RBF 기능 제어에도 사용됩니다.
+                            example: 4294967295
+                          witness:
+                            type: array
+                            description: SegWit 트랜잭션의 경우 포함되는 Vin(입력)의 스크립트 서명 데이터 배열입니다.
+                            items:
                               type: string
-                              description: Vout(출력)에서 비트코인을 수신할 수신자의 주소를 나타냅니다.
-                              example: D5Vz9PwaMdPfFCxXPCbBt84s3ZJQ5wd2Gw
-                            value:
-                              type: string
-                              description: Vout(출력)에서 전송된 비트코인의 양을 나타냅니다 (BTC 단위).
-                              example: '0.00016400'
-                            scriptPubKey:
-                              type: object
-                              required:
-                                - hex
-                                - asm
-                                - type
-                              description: >-
-                                Vout(출력) 스크립트로, 비트코인을 사용하기 위한 조건(잠금 스크립트)을
-                                정의합니다.
-                              properties:
-                                hex:
-                                  type: string
-                                  description: 16진수 형식으로 표현된 Vout(출력)의 스크립트입니다.
-                                  example: >-
-                                    21025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75ac
-                                asm:
-                                  type: string
-                                  description: 어셈블리 형식으로 표현된 Vout(출력)의 스크립트입니다.
-                                  example: >-
-                                    025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75
-                                    OP_CHECKSIG
-                                type:
-                                  type: string
-                                  description: >-
-                                    Vout(출력) 스크립트의 유형을 나타냅니다 (예: pubkey, p2sh,
-                                    p2pkh 등).
-                                  example: pubkey
+                              example: 3045022100b228e33e8b62f825...
+                      vout: &ref_14
+                        type: object
+                        required:
+                          - index
+                          - address
+                          - value
+                          - scriptPubKey
+                        properties:
+                          index:
+                            type: integer
+                            description: 포함된 트랜잭션에서 Vout(출력)의 인덱스를 나타냅니다.
+                            example: 0
+                          address:
+                            type: string
+                            description: Vout(출력)에서 비트코인을 수신할 수신자의 주소를 나타냅니다.
+                            example: D5Vz9PwaMdPfFCxXPCbBt84s3ZJQ5wd2Gw
+                          value:
+                            type: string
+                            description: Vout(출력)에서 전송된 비트코인의 양을 나타냅니다 (BTC 단위).
+                            example: '0.00016400'
+                          scriptPubKey:
+                            type: object
+                            required:
+                              - hex
+                              - asm
+                              - type
+                            description: Vout(출력) 스크립트로, 비트코인을 사용하기 위한 조건(잠금 스크립트)을 정의합니다.
+                            properties:
+                              hex:
+                                type: string
+                                description: 16진수 형식으로 표현된 Vout(출력)의 스크립트입니다.
+                                example: >-
+                                  21025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75ac
+                              asm:
+                                type: string
+                                description: 어셈블리 형식으로 표현된 Vout(출력)의 스크립트입니다.
+                                example: >-
+                                  025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75
+                                  OP_CHECKSIG
+                              type:
+                                type: string
+                                description: >-
+                                  Vout(출력) 스크립트의 유형을 나타냅니다 (예: pubkey, p2sh,
+                                  p2pkh 등).
+                                example: pubkey
               example:
                 id: >-
                   01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4

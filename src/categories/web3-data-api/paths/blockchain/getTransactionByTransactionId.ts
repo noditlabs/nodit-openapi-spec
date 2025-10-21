@@ -128,19 +128,16 @@ function getRequestAndResponse(protocol: string): {
         },
         successResponse: {
           schema: {
-            type: "array",
-            items: {
-              allOf: [
-                Domains.Bitcoin.Transaction,
-                {
-                  type: "object",
-                  properties: {
-                    vin: Domains.Bitcoin.Vin,
-                    vout: Domains.Bitcoin.Vout,
-                  },
+            allOf: [
+              Domains.Bitcoin.Transaction,
+              {
+                type: "object",
+                properties: {
+                  vin: Domains.Bitcoin.Vin,
+                  vout: Domains.Bitcoin.Vout,
                 },
-              ],
-            },
+              },
+            ],
           },
           example: Examples.Bitcoin[endpoint],
         },
