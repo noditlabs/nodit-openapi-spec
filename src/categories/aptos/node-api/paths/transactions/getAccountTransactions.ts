@@ -3,6 +3,7 @@ import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Examples from "../../library/examples";
 import Schemas from "../../library/schemas";
+import { legacyIndexerDeprecationWarning } from "../../../../../callouts/aptos.callouts";
 
 const summary = "Get account transactions";
 const endpoint = "getAccountTransactions";
@@ -16,7 +17,10 @@ const info: OpenAPIV3.PathItemObject = {
       },
     ],
     tags: ["Transactions"],
-    description: `온체인에 committed 된 트랜잭션 중 특정 Account로 부터 생성된 트랜잭션을 반환합니다.`,
+    description: `온체인에 committed 된 트랜잭션 중 특정 Account로 부터 생성된 트랜잭션을 반환합니다.
+
+${legacyIndexerDeprecationWarning}
+`,
     summary,
     operationId,
     parameters: [

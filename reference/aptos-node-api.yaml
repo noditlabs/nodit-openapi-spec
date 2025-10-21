@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Aptos Node API
-  version: 1.2.12
+  version: 1.2.18
 servers:
   - url: https://{aptos-network}.nodit.io/v1
     variables:
@@ -372,7 +372,22 @@ paths:
         - api_key: []
       tags:
         - Accounts
-      description: 특정 원장 버전에서 주어진 계정의 모든 모듈을 반환합니다. 원장 버전이 지정되지 않은 경우 최신 원장 버전이 사용됩니다.
+      description: >+
+        특정 원장 버전에서 주어진 계정의 모든 모듈을 반환합니다. 원장 버전이 지정되지 않은 경우 최신 원장 버전이 사용됩니다.
+
+
+
+        > ⚠️ 일부 API 호출 관련 안내
+
+        > 
+
+        > Aptos 노드 클라이언트의 최신 버전에서 Legacy Indexer가 제외됨에 따라, 일부 API 호출 시 Indexer
+        관련 오류가 발생할 수 있습니다. 
+
+        > 현재 해당 기능의 복구 또는 대체 API 제공 방안을 검토 중이며, 관련 조치가 완료되는 대로 업데이트를 제공하겠습니다.
+
+        > 이용에 불편을 드려 죄송합니다. 
+
       summary: Get account modules
       operationId: aptos_getAccountModules
       parameters:
@@ -1044,7 +1059,22 @@ paths:
         - api_key: []
       tags:
         - Accounts
-      description: 특정 원장 버전에서 주어진 계정의 모든 리소스를 검색합니다. 원장 버전이 지정되지 않은 경우 최신 원장 버전이 사용됩니다.
+      description: >+
+        특정 원장 버전에서 주어진 계정의 모든 리소스를 검색합니다. 원장 버전이 지정되지 않은 경우 최신 원장 버전이 사용됩니다.
+
+
+
+        > ⚠️ 일부 API 호출 관련 안내
+
+        > 
+
+        > Aptos 노드 클라이언트의 최신 버전에서 Legacy Indexer가 제외됨에 따라, 일부 API 호출 시 Indexer
+        관련 오류가 발생할 수 있습니다. 
+
+        > 현재 해당 기능의 복구 또는 대체 API 제공 방안을 검토 중이며, 관련 조치가 완료되는 대로 업데이트를 제공하겠습니다.
+
+        > 이용에 불편을 드려 죄송합니다. 
+
       summary: Get account resources
       operationId: aptos_getAccountResources
       parameters:
@@ -2182,7 +2212,22 @@ paths:
         - api_key: []
       tags:
         - Events
-      description: address와 creation_number를 이용해 특정 이벤트를 반환합니다.
+      description: >+
+        address와 creation_number를 이용해 특정 이벤트를 반환합니다.
+
+
+
+        > ⚠️ 일부 API 호출 관련 안내
+
+        > 
+
+        > Aptos 노드 클라이언트의 최신 버전에서 Legacy Indexer가 제외됨에 따라, 일부 API 호출 시 Indexer
+        관련 오류가 발생할 수 있습니다. 
+
+        > 현재 해당 기능의 복구 또는 대체 API 제공 방안을 검토 중이며, 관련 조치가 완료되는 대로 업데이트를 제공하겠습니다.
+
+        > 이용에 불편을 드려 죄송합니다. 
+
       summary: Get events by creation number
       operationId: aptos_getEventsByCreationNumber
       parameters:
@@ -2316,7 +2361,22 @@ paths:
         - api_key: []
       tags:
         - Events
-      description: address와 creation_number를 이용해 특정 이벤트를 반환합니다.
+      description: >+
+        address와 creation_number를 이용해 특정 이벤트를 반환합니다.
+
+
+
+        > ⚠️ 일부 API 호출 관련 안내
+
+        > 
+
+        > Aptos 노드 클라이언트의 최신 버전에서 Legacy Indexer가 제외됨에 따라, 일부 API 호출 시 Indexer
+        관련 오류가 발생할 수 있습니다. 
+
+        > 현재 해당 기능의 복구 또는 대체 API 제공 방안을 검토 중이며, 관련 조치가 완료되는 대로 업데이트를 제공하겠습니다.
+
+        > 이용에 불편을 드려 죄송합니다. 
+
       summary: Get events by event handle
       operationId: aptos_getEventsByEventHandle
       parameters:
@@ -3513,7 +3573,22 @@ paths:
         - api_key: []
       tags:
         - Transactions
-      description: 온체인에 committed 된 트랜잭션 중 특정 Account로 부터 생성된 트랜잭션을 반환합니다.
+      description: >+
+        온체인에 committed 된 트랜잭션 중 특정 Account로 부터 생성된 트랜잭션을 반환합니다.
+
+
+
+        > ⚠️ 일부 API 호출 관련 안내
+
+        > 
+
+        > Aptos 노드 클라이언트의 최신 버전에서 Legacy Indexer가 제외됨에 따라, 일부 API 호출 시 Indexer
+        관련 오류가 발생할 수 있습니다. 
+
+        > 현재 해당 기능의 복구 또는 대체 API 제공 방안을 검토 중이며, 관련 조치가 완료되는 대로 업데이트를 제공하겠습니다.
+
+        > 이용에 불편을 드려 죄송합니다. 
+
       summary: Get account transactions
       operationId: aptos_getAccountTransactions
       parameters:
