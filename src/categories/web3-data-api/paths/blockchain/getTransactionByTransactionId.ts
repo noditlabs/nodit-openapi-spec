@@ -116,20 +116,13 @@ function getRequestAndResponse(protocol: string): {
             {
               type: "object",
               properties: {
-                transactionIds: {
-                  type: "array",
-                  items: {
-                    ...Requests.Bitcoin.transactionId,
-                  },
-                  minItems: 1,
-                  maxItems: 1000,
-                  description: "조회할 트랜잭션 ID를 배열로 입력합니다.",
-                  default: [
+                transactionId: {
+                  ...Requests.Bitcoin.transactionId,
+                  default:
                     "b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef",
-                  ],
                 },
               },
-              required: ["transactionIds"],
+              required: ["transactionId"],
             },
           ],
         },
