@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.18
+  version: 1.2.19
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -60,6 +60,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -320,6 +321,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -525,6 +527,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -721,6 +724,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -879,6 +883,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -1438,6 +1443,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -1597,6 +1603,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -2442,6 +2449,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -3044,6 +3052,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -3242,6 +3251,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -3860,6 +3870,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -4268,6 +4279,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -4596,6 +4608,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -5029,6 +5042,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -6124,6 +6138,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -6358,6 +6373,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -6853,6 +6869,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -7047,6 +7064,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -7898,6 +7916,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -8563,6 +8582,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -9120,6 +9140,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -9785,6 +9806,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -10233,6 +10255,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -11483,6 +11506,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -12092,6 +12116,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -12867,6 +12892,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -12976,6 +13002,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - luniverse
@@ -13558,6 +13585,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - luniverse
@@ -15115,6 +15143,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -15194,6 +15223,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -15343,6 +15373,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -17879,6 +17910,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -20197,6 +20229,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -21775,6 +21808,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -24480,6 +24514,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -24611,6 +24646,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism
@@ -25378,6 +25414,7 @@ paths:
               - base
               - chiliz
               - ethereum
+              - ethereumclassic
               - giwa
               - kaia
               - optimism

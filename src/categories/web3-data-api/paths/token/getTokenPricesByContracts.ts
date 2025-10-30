@@ -92,6 +92,7 @@ function getOpIdAndParams(protocol: string): {
           // "bnb",
           "chiliz",
           "ethereum",
+          "ethereumclassic",
           "giwa",
           "kaia",
           "optimism",
