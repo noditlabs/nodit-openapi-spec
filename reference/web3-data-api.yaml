@@ -58,7 +58,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -319,7 +318,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -525,7 +523,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -722,7 +719,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -881,7 +877,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -1441,7 +1436,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -1601,7 +1595,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -2447,7 +2440,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -3050,7 +3042,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -3249,7 +3240,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -3868,7 +3858,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -4277,7 +4266,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -4606,7 +4594,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -5040,7 +5027,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -6136,7 +6122,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -6371,7 +6356,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -6867,7 +6851,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -7062,7 +7045,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -7914,7 +7896,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -8580,7 +8561,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -9138,7 +9118,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -9804,7 +9783,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -10253,7 +10231,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -11504,7 +11481,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -12114,7 +12090,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -12890,7 +12865,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -13000,7 +12974,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -13583,7 +13556,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -15141,7 +15113,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -15221,7 +15192,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -15371,7 +15341,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -17908,7 +17877,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -20227,7 +20195,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -21806,7 +21773,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -24512,7 +24478,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -24644,7 +24609,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa
@@ -25412,7 +25376,6 @@ paths:
             enum:
               - arbitrum
               - base
-              - bnb
               - chiliz
               - ethereum
               - giwa

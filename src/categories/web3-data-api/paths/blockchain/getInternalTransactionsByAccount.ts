@@ -82,7 +82,7 @@ function getOpIdAndParams(protocol: string): {
         Requests.protocol("ethereum", [
           "arbitrum",
           "base",
-          "bnb",
+          // "bnb",
           "chiliz",
           "ethereum",
           "giwa",

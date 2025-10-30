@@ -84,7 +84,7 @@ function getOpIdAndParams(protocol: string): {
           // evm
           "arbitrum",
           "base",
-          "bnb",
+          // "bnb",
           "chiliz",
           "ethereum",
           "giwa",
