@@ -127,7 +127,8 @@ export const supportedChains: ChainInfo[] = [
   },
   {
     protocol: "ethereumclassic",
-    testnet: [""],
+    mainnet: "mainnet",
+    testnet: [],
   },
 ];
 

@@ -43,9 +43,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -270,9 +270,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -442,9 +442,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -605,9 +605,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -730,9 +730,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -1256,9 +1256,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -1382,9 +1382,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -2185,9 +2185,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -2754,9 +2754,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -2917,9 +2917,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -3502,9 +3502,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -3877,9 +3877,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4172,9 +4172,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4258,9 +4258,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4340,9 +4340,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4420,9 +4420,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4556,9 +4556,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -4722,9 +4722,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -5042,9 +5042,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -5366,9 +5366,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -5675,9 +5675,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6072,9 +6072,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6263,9 +6263,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6331,9 +6331,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -6609,9 +6609,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7287,9 +7287,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7370,9 +7370,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7437,9 +7437,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -7511,9 +7511,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -8110,9 +8110,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -8979,9 +8979,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -9313,9 +9313,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -10186,9 +10186,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -10268,9 +10268,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
@@ -10521,9 +10521,9 @@ paths:
           required: true
           schema:
             type: string
-            default: null
+            default: mainnet
             enum:
-              - ''
+              - mainnet
           description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
