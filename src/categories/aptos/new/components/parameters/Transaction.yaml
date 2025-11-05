@@ -1,0 +1,45 @@
+title: Transaction
+type: object
+required:
+  - sender
+  - sequence_number
+  - max_gas_amount
+  - gas_unit_price
+  - expiration_timestamp_secs
+  - payload
+  - replay_protection_nonce
+  - signature
+properties:
+  sender:
+    $ref: ../schemas/Sender.yaml
+  sequence_number:
+    $ref: ../schemas/SequenceNumber.yaml
+  max_gas_amount:
+    $ref: ../schemas/MaxGasAmount.yaml
+  gas_unit_price:
+    $ref: ../schemas/GasUnitPrice.yaml
+  expiration_timestamp_secs:
+    $ref: ../schemas/ExpirationTimestampSecs.yaml
+  payload:
+    type: object
+    description: |
+      트랜잭션 발생 시 사용할 페이로드를 나타내는 필드입니다.
+    oneOf:
+      - $ref: ../schemas/Payloads/EntryFunctionPayload.yaml
+      - $ref: ../schemas/Payloads/ScriptPayload.yaml
+      - $ref: ../schemas/Payloads/ModuleBundlePayload.yaml
+      - $ref: ../schemas/Payloads/MultisigPayload.yaml
+  replay_protection_nonce:
+    $ref: ../schemas/ReplayProtectionNonce.yaml
+  signature:
+    type: object
+    description: |
+      트랜잭션 서명을 나타내는 필드입니다.
+      Ed25519, MultiEd25519, MultiAgent, FeePayer, Account, NoAccount 중 하나를 선택할 수 있습니다.
+    oneOf:
+      - $ref: ../schemas/TransactionSignatures/Ed25519Signature.yaml
+      - $ref: ../schemas/TransactionSignatures/MultiEd25519Signature.yaml
+      - $ref: ../schemas/TransactionSignatures/MultiAgentSignature.yaml
+      - $ref: ../schemas/TransactionSignatures/FeePayerSignature.yaml
+      - $ref: ../schemas/TransactionSignatures/AccountSignature.yaml
+      - $ref: ../schemas/TransactionSignatures/NoAccountSignature.yaml

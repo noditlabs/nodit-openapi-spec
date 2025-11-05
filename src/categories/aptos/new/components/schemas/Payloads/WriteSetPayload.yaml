@@ -1,0 +1,17 @@
+type: object
+description: |
+  Genesis transaction에서만 사용되는 write set payload를 나타냅니다.
+required:
+  - type
+  - write_set
+properties:
+  type:
+    type: string
+    description: The type of the payload
+    enum:
+      - write_set_payload
+  write_set:
+    type: object
+    oneOf:
+      - $ref: ../WriteSets/DirectWriteSet.yaml
+      - $ref: ../WriteSets/ScriptWriteSet.yaml

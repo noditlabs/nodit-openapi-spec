@@ -1,0 +1,35 @@
+title: Fee Payer Signature
+type: object
+description: |
+  수수료 지불자(Fee Payer) 트랜잭션을 위한 서명입니다.
+  이 구조를 사용하면 여러 계정을 포함하는 트랜잭션과 별도의 수수료 지불자를 지정할 수 있습니다.
+required:
+  - type
+  - sender
+  - secondary_signer_addresses
+  - secondary_signers
+  - fee_payer_address
+  - fee_payer_signature
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - fee_payer_signature
+  sender:
+    $ref: AccountSignature.yaml
+  secondary_signer_addresses:
+    type: array
+    description: 기본 서명자 (sender) 외에 트랜잭션에 서명한 계정들의 주소 목록입니다.
+    items:
+      type: string
+  secondary_signers:
+    type: array
+    description: 기본 서명자 (sender) 외에 트랜잭션에 서명한 계정들의 서명 목록입니다.
+    items:
+      $ref: AccountSignature.yaml
+  fee_payer_address:
+    type: string
+    description: 수수료를 지불하는 계정의 주소입니다.
+  fee_payer_signature:
+    $ref: AccountSignature.yaml

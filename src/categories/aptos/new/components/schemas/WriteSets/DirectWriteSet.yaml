@@ -1,0 +1,28 @@
+title: Direct Write Set
+type: object
+description: |
+  Direct write set를 나타냅니다.
+required:
+  - type
+  - changes
+  - events
+properties:
+  type:
+    type: string
+    description: The type of the write set
+    enum:
+      - direct_write_set
+  changes:
+    type: array
+    items:
+      oneOf:
+        - $ref: ../Changes/DeleteModule.yaml
+        - $ref: ../Changes/DeleteResource.yaml
+        - $ref: ../Changes/DeleteTableItem.yaml
+        - $ref: ../Changes/WriteModule.yaml
+        - $ref: ../Changes/WriteResource.yaml
+        - $ref: ../Changes/WriteTableItem.yaml
+  events:
+    type: array
+    items:
+      $ref: ../Event.yaml

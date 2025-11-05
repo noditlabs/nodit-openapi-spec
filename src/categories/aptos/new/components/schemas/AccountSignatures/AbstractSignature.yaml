@@ -1,0 +1,17 @@
+type: object
+description: |
+  An abstract signature
+required:
+  - type
+  - function_info
+  - auth_data
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - abstract_signature
+  function_info:
+    type: string
+  auth_data:
+    $ref: ../Bytecode.yaml

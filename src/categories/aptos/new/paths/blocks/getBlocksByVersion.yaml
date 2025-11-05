@@ -1,0 +1,36 @@
+security:
+  - api_key: []
+tags:
+  - Blocks
+description: |
+  이 엔드포인트는 특정 블록의 트랜잭션과 해당 블록 정보를 조회할 수 있습니다.
+
+  트랜잭션은 기본 최대 트랜잭션 개수로 제한됩니다. 모든 트랜잭션이 반환되지 않는 경우, 나머지 트랜잭션은 get transactions API를 이용해 별도로 조회해야 합니다. 블록이 pruning(정리)된 경우 410 상태 코드가 반환됩니다.
+summary: Get blocks by version
+operationId: aptos_getBlocksByVersion
+parameters:
+  - $ref: ../../components/parameters/Version.yaml
+  - $ref: ../../components/parameters/WithTransactions.yaml
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Block.yaml
+        example:
+          $ref: ../../components/examples/getBlocksByVersion.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

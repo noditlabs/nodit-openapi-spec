@@ -1,0 +1,33 @@
+title: Multi Ed25519 Signature
+type: object
+description: |
+  Ed25519 다중 서명을 나타냅니다.
+  이는 트랜잭션에 대해 k-of-n 서명을 허용합니다.
+
+required:
+  - type
+  - public_keys
+  - signatures
+  - threshold
+  - bitmap
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - multi_ed25519_signature
+  public_keys:
+    type: array
+    description: Ed25519 서명에 사용되는 공개키 목록입니다.
+    items:
+      type: string
+  signatures:
+    type: array
+    description: 공개키와 동일한 순서로 매핑되는 서명 목록입니다.
+    items:
+      type: string
+  threshold:
+    type: integer
+    description: 성공적인 트랜잭션을 위해 필요한 서명 개수입니다.
+  bitmap:
+    $ref: ../Bytecode.yaml

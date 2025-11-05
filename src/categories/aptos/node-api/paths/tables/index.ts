@@ -5,8 +5,8 @@ import getRawTableItem from "./getRawTableItem";
 const url = `/tables`;
 
 const paths: OpenAPIV3.PathsObject = {
-  [`/${url}/{table_handle}/item`]: getTableItem,
-  [`/${url}/{table_handle}/raw_item`]: getRawTableItem,
+  [`${url}/{table_handle}/item`]: getTableItem,
+  [`${url}/{table_handle}/raw_item`]: getRawTableItem,
 };
 
 export default paths;

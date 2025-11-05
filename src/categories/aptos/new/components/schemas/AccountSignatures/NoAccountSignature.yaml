@@ -1,0 +1,12 @@
+title: No Account Signature
+type: object
+description: |
+  계정 서명이 없는 경우를 나타냅니다.
+required:
+  - type
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - no_account_signature

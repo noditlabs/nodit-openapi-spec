@@ -1,0 +1,8 @@
+name: field_name
+in: path
+required: true
+schema:
+  type: string
+  example: "coin_register_events"
+description: |
+  조회할 event를 특정하기 위한 event_handle 내의 field 이름

@@ -1,0 +1,43 @@
+type: object
+title: Write Table Item
+description: |
+  테이블 아이템 쓰기를 나타내는 change입니다.
+required:
+  - type
+  - state_key_hash
+  - handle
+  - key
+  - value
+  - data
+properties:
+  type:
+    type: string
+    description: Change의 타입
+    enum:
+      - write_table_item
+    example: write_table_item
+  state_key_hash:
+    type: string
+    description: State key의 해시값입니다.
+  handle:
+    $ref: ../Bytecode.yaml
+  key:
+    $ref: ../Bytecode.yaml
+  value:
+    $ref: ../Bytecode.yaml
+  data:
+    type: object
+    required:
+      - key
+      - key_type
+      - value
+      - value_type
+    properties:
+      key:
+        $ref: ../Any.yaml
+      key_type:
+        type: string
+      value:
+        $ref: ../Any.yaml
+      value_type:
+        type: string

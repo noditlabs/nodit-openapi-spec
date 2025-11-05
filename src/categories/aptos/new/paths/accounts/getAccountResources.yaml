@@ -1,0 +1,50 @@
+security:
+  - api_key: []
+tags:
+  - Accounts
+description: |
+  특정 트랜잭션의 원장 버전에서 주어진 계정의 모든 리소스를 검색합니다. 원장 버전이 지정되지 않은 경우 최신 원장 버전이 사용됩니다.
+  Aptos 노드는 구성 가능한 기간에 따라 계정 상태 기록을 정리(pruning)합니다. 요청된 원장 버전이 정리된 경우, 서버는 410 상태 코드로 응답합니다.
+
+  > ⚠️ 일부 API 호출 관련 안내
+  > 
+  > Aptos 노드 클라이언트의 최신 버전에서 Legacy Indexer가 제외됨에 따라, 일부 API 호출 시 Indexer 관련 오류가 발생할 수 있습니다. 
+  > 현재 해당 기능의 복구 또는 대체 API 제공 방안을 검토 중이며, 관련 조치가 완료되는 대로 업데이트를 제공하겠습니다.
+  > 이용에 불편을 드려 죄송합니다.
+summary: Get account resources
+operationId: aptos_getAccountResources
+parameters:
+  - $ref: ../../components/parameters/Address.yaml
+  - $ref: ../../components/parameters/LedgerVersion.yaml
+  - $ref: ../../components/parameters/Limit.yaml
+  - $ref: ../../components/parameters/Start.yaml
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                $ref: ../../components/schemas/ResourceType.yaml
+              data:
+                $ref: ../../components/schemas/ResourceData.yaml
+        example:
+          $ref: ../../components/examples/getAccountResources.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

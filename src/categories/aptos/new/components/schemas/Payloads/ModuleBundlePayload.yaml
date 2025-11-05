@@ -1,0 +1,12 @@
+type: object
+description: |
+  On-chain에 새로운 모듈을 배포하는 트랜잭션의 페이로드입니다.
+  <strong style="color: red;">*</strong>Deprecated: 이 페이로드 타입은 더 이상 지원되지 않습니다.
+required:
+  - type
+properties:
+  type:
+    type: string
+    description: The type of the payload
+    enum:
+      - module_bundle_payload

@@ -1,0 +1,18 @@
+title: Single Key Signature
+type: object
+description: |
+  단일 키 서명을 나타냅니다.
+required:
+  - type
+  - public_key
+  - signature
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - single_key_signature
+  public_key:
+    $ref: ../PublicKey.yaml
+  signature:
+    $ref: ../Signature.yaml

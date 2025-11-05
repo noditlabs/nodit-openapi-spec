@@ -1,0 +1,11 @@
+description: Bad Request
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Errors/AptosError.yaml
+      example:
+        {
+          "message": "Failed to read raw transactions from storage: AptosDB Other Error: Transaction at version 3 is pruned, min available version is 3133900526.",
+          "error_code": "internal_error",
+          "vm_error_code": null,
+        }

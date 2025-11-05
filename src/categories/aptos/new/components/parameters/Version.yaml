@@ -1,0 +1,7 @@
+name: version
+in: path
+required: true
+schema:
+  type: integer
+description: |
+  블록 정보를 조회할 트랜잭션의 원장 버전입니다.

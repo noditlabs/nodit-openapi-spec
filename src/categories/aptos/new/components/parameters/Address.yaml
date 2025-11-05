@@ -1,0 +1,10 @@
+name: address
+in: path
+required: true
+schema:
+  type: string
+  description: 조회하고자 하는 계정의 주소. hexadecimal prefix가 없는 계정 주소도 검색 가능합니다.
+  pattern: ^0[xX]?[0-9a-fA-F]{0,64}$
+  examples:
+    - "0x1"
+    - "0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa"

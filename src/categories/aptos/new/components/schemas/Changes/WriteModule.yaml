@@ -1,0 +1,23 @@
+type: object
+title: Write Module
+description: |
+  Move 모듈 쓰기를 나타내는 change입니다.
+required:
+  - type
+  - address
+  - state_key_hash
+  - data
+properties:
+  type:
+    type: string
+    description: Change의 타입
+    enum:
+      - write_module
+    example: write_module
+  address:
+    $ref: ../Address.yaml
+  state_key_hash:
+    type: string
+    description: State key의 해시값입니다.
+  data:
+    $ref: ../Module.yaml

@@ -1,0 +1,8 @@
+name: creation_number
+in: path
+required: true
+schema:
+  type: integer
+  example: 2
+description: |
+  지정된 계정에서 발생한 이벤트 스트림에 해당하는 creation number입니다.

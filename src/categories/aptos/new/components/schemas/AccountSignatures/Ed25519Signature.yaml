@@ -1,0 +1,19 @@
+title: Ed25519 Signature
+type: object
+description: |
+  단일 Ed25519 서명을 나타냅니다.
+
+required:
+  - type
+  - public_key
+  - signature
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - ed25519_signature
+  public_key:
+    $ref: ../Bytecode.yaml
+  signature:
+    $ref: ../Bytecode.yaml

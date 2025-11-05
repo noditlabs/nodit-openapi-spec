@@ -1,0 +1,7 @@
+description: Unauthorized
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Errors/NoditError.yaml
+      example:
+        { "code": "AUTHENTICATION_FAILED", "message": "Authentication failed" }

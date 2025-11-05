@@ -1,0 +1,20 @@
+type: object
+description: |
+  multisig 계정의 소유자가 사전 승인된 트랜잭션을 multisig 계정으로 실행할 수 있게 해주는 트랜잭션입니다.
+required:
+  - type
+  - multisig_address
+properties:
+  type:
+    type: string
+    description: The type of the payload
+    enum:
+      - multisig_payload
+  multisig_address:
+    type: string
+    description: |
+      Aptos 계정 주소를 16진수 문자열로 표현한 값입니다.
+      이는 64자의 16진수 문자열로 표현되며, 때때로 0x로 시작하는 64자의 16진수 문자열로 줄여서 표현됩니다.
+      예를 들어, 주소 0x0000000000000000000000000000000000000000000000000000000000000001은 0x1로 표현됩니다.
+  transaction_payload:
+    $ref: ../Payloads/EntryFunctionPayload.yaml

@@ -1,0 +1,6 @@
+type: string
+description: |
+  트랜잭션 발생 시 사용할 gas의 가격을 나타내는 필드입니다.
+  64비트 부호 없는 정수를 문자열로 나타냅니다.
+pattern: ^[0-9]+$
+example: "1"

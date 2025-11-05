@@ -1,0 +1,50 @@
+security:
+  - api_key: []
+tags:
+  - Transactions
+description: |
+  Get Transaction by Hash API와 동일하지만, 대기 중인 트랜잭션이 커밋될 때까지 기다립니다.
+
+summary: Wait for transaction by hash
+operationId: aptos_waitForTransactionByHash
+parameters:
+  - name: txn_hash
+    in: path
+    required: true
+    schema:
+      type: string
+      pattern: ^0[xX][0-9a-fA-F]{64}$|^[0-9a-fA-F]{64}$
+      example: "0xc70d759708e676c0464406c65acdc913b7b7d0228d4c7a44fd357903fdf44419"
+    description: 조회할 트랜잭션의 해시값
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            oneOf:
+              - $ref: ../../components/schemas/Transactions/PendingTransaction.yaml
+              - $ref: ../../components/schemas/Transactions/UserTransaction.yaml
+              - $ref: ../../components/schemas/Transactions/StateCheckpointTransaction.yaml
+              - $ref: ../../components/schemas/Transactions/GenesisTransaction.yaml
+              - $ref: ../../components/schemas/Transactions/BlockMetadataTransaction.yaml
+              - $ref: ../../components/schemas/Transactions/BlockEpilogueTransaction.yaml
+              - $ref: ../../components/schemas/Transactions/ValidatorTransaction.yaml
+        example:
+          $ref: ../../components/examples/getAccountTransactions.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

@@ -1,0 +1,33 @@
+title: Multi Key Signature
+type: object
+description: |
+  다중 키 서명을 나타냅니다.
+
+required:
+  - type
+  - public_keys
+  - signatures
+  - signatures_required
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - multi_key_signature
+  public_keys:
+    type: array
+    items:
+      $ref: ../PublicKey.yaml
+  signatures:
+    type: array
+    items:
+      type: object
+      properties:
+        index:
+          type: integer
+          description: 공개키 인덱스
+        signature:
+          $ref: ../Signature.yaml
+  signatures_required:
+    type: integer
+    description: 성공적인 트랜잭션을 위해 필요한 최소 서명 개수

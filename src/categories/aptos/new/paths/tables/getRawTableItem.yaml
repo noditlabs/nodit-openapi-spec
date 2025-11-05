@@ -1,0 +1,51 @@
+security:
+  - api_key: []
+tags:
+  - Tables
+description: |
+  table_handle과 key를 이용해 특정 table item을 식별할 수 있습니다.
+  Aptos 노드는 계정 상태 히스토리를 설정된 기간에 따라 정리(pruning)합니다. 요청한 원장 버전이 이미 정리된 경우, 서버는 410 응답을 반환합니다.
+summary: Get raw table item
+operationId: aptos_getRawTableItem
+parameters:
+  - $ref: ../../components/parameters/BSCAcceptHeader.yaml
+    required: true
+  - $ref: ../../components/parameters/TableHandle.yaml
+  - $ref: ../../components/parameters/LedgerVersion.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - key
+        properties:
+          key:
+            type: string
+            description: table item의 key hex string 값
+            example: "0x00000000000000000000000000000000000000000000000000000000000000010a6170746f735f636f696e094170746f73436f696e"
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: string
+          format: json
+          description: value_type에 따라 반환되는 데이터의 형식이 달라집니다.
+        example: ""
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

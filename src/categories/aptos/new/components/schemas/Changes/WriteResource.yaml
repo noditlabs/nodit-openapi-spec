@@ -1,0 +1,32 @@
+type: object
+title: Write Resource
+description: |
+  리소스 쓰기를 나타내는 change입니다.
+required:
+  - type
+  - address
+  - state_key_hash
+  - data
+properties:
+  type:
+    type: string
+    description: Change의 타입
+    enum:
+      - write_resource
+    example: write_resource
+  address:
+    $ref: ../Address.yaml
+  state_key_hash:
+    type: string
+    description: State key의 해시값입니다.
+  data:
+    type: object
+    description: 파싱된 Move 리소스입니다.
+    required:
+      - type
+      - data
+    properties:
+      type:
+        $ref: ../ResourceType.yaml
+      data:
+        $ref: ../ResourceData.yaml

@@ -1,0 +1,17 @@
+type: object
+required:
+  - message
+  - error_code
+properties:
+  message:
+    type: string
+  error_code:
+    type: string
+    description: |
+      이 코드들은 응답의 HTTP 상태 코드만으로는 알기 어려운 보다 세부적인 오류 정보를 제공합니다.
+
+      - 응답에 포함될 수 있는 에러 코드: `account_not_found`, `resource_not_found`, `module_not_found`, `struct_field_not_found`, `version_not_found`, `transaction_not_found`, `table_item_not_found`, `block_not_found`, `state_value_not_found`, `version_pruned`, `block_pruned`, `invalid_input`, `invalid_transaction_update`, `sequence_number_too_old`, `vm_error`, `health_check_failed`
+  vm_error_code:
+    type: integer
+    description: |
+      트랜잭션을 VM에 제출할 때 발생하는 VM 오류에 대한 상세 코드를 제공합니다.

@@ -1,0 +1,66 @@
+security:
+  - api_key: []
+tags:
+  - Tables
+description: |
+  table_handle, key_type, value_type과 key 값을 이용하여 특정 table item을 조회할 수 있습니다.
+  Aptos 노드는 계정 상태 히스토리를 설정된 기간에 따라 정리(pruning)합니다. 요청한 원장 버전이 이미 정리된 경우, 서버는 410 응답을 반환합니다.
+summary: Get table item
+operationId: aptos_getTableItem
+parameters:
+  - $ref: ../../components/parameters/TableHandle.yaml
+  - $ref: ../../components/parameters/LedgerVersion.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - key_type
+          - value_type
+          - key
+        properties:
+          key_type:
+            type: string
+            description: key의 type
+          value_type:
+            type: string
+            description: value의 type
+          key:
+            type: string
+            format: json
+            default: '{"account_address":"0x1","module_name":"0x6170746f735f636f696e","struct_name":"0x4170746f73436f696e"}'
+            description: |
+              table item의 key 값. key_type에 따라 반환되는 데이터의 형식이 달라집니다.
+        example:
+          {
+            "key_type": "0x1::type_info::TypeInfo",
+            "value_type": "0x1::object::Object<0x1::fungible_asset::Metadata>",
+            "key": '{"account_address":"0x1","module_name":"0x6170746f735f636f696e","struct_name":"0x4170746f73436f696e"}',
+          }
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: string
+          format: json
+          description: value_type에 따라 반환되는 데이터의 형식이 달라집니다.
+        example:
+          $ref: ../../components/examples/getTableItem.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

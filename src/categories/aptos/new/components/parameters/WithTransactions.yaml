@@ -1,0 +1,8 @@
+name: with_transactions
+in: query
+required: false
+schema:
+  type: boolean
+  description: |
+    true로 설정하면 블록 내의 모든 트랜잭션이 포함됩니다.
+    제공하지 않으면 트랜잭션이 반환되지 않습니다.

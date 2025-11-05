@@ -1,0 +1,23 @@
+type: string
+description: |
+  트랜잭션 페이로드에 노출된 Move 타입 태그의 문자열 표현. 
+  값: 
+    - `bool`
+    - `u8`
+    - `u16`,`u32`,`u64`,`u128`,`u256`
+    - `i8`,`i16`,`i32`,`i64`,`i128`,`i256`
+    - `address`
+    - `signer`
+    - `vector: vector<{non-reference MoveTypeId}>`
+    - `struct: {address}::{module_name}::{struct_name}::<{generic types}>`
+  Vector 타입 값 예시:
+  - `vector<u8>`
+  - `vector<vector<u64>>`
+  - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
+  Struct 타입 값 예시:
+  - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
+  - `0x1::account::Account`
+  참고:
+  1. 빈 문자는 2개의 struct tag id를 비교할 때 무시되어야 합니다.
+  2. URL 경로에서는 url-encoding(AKA percent-encoding)으로 인코딩되어야 합니다.
+pattern: ^(bool|u8|u16|u32|u64|u128|u256|i8|i16|i32|i64|i128|i256|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+)$

@@ -1,0 +1,245 @@
+[
+  {
+    "version": "223495386",
+    "hash": "0x82f114cf3fdfb918e2cf8a32acaabb4e7ae17c8b2191617db9d43c2566047b09",
+    "state_change_hash": "0xa75252efd0e2b19ddd7b283392f953e6d6bba7f0148969aea5fd38b74c1b9d59",
+    "event_root_hash": "0xb899f7ce227123bafd67dd572d55b645a5a87139caa552da1bf6d16624f4d345",
+    "state_checkpoint_hash": null,
+    "gas_used": "14",
+    "success": true,
+    "vm_status": "Executed successfully",
+    "accumulator_root_hash": "0xbcdfaecf62f88705e2ca1ac039c376fbfd11fb7988f1b2169be1aa72ae54ebf7",
+    "changes": [
+      {
+        "address": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+        "state_key_hash": "0x11f15e4e7cf157decaa2da253ca03c060167f2559a4dee56fe5c7b5a759cf4e4",
+        "data": {
+          "type": "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>",
+          "data": {
+            "coin": { "value": "31198769" },
+            "deposit_events": {
+              "counter": "8",
+              "guid": {
+                "id": {
+                  "addr": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+                  "creation_num": "2"
+                }
+              }
+            },
+            "frozen": false,
+            "withdraw_events": {
+              "counter": "8",
+              "guid": {
+                "id": {
+                  "addr": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+                  "creation_num": "3"
+                }
+              }
+            }
+          }
+        },
+        "type": "write_resource"
+      },
+      {
+        "address": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+        "state_key_hash": "0xefbc62a42d9cdbca367169ba49db782aae4ebbf6e93660890b7d68b30ff025c8",
+        "data": {
+          "type": "0x1::coin::CoinStore<0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa::asset::USDC>",
+          "data": {
+            "coin": { "value": "430413" },
+            "deposit_events": {
+              "counter": "7",
+              "guid": {
+                "id": {
+                  "addr": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+                  "creation_num": "17"
+                }
+              }
+            },
+            "frozen": false,
+            "withdraw_events": {
+              "counter": "7",
+              "guid": {
+                "id": {
+                  "addr": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+                  "creation_num": "18"
+                }
+              }
+            }
+          }
+        },
+        "type": "write_resource"
+      },
+      {
+        "address": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+        "state_key_hash": "0x0f76c6835c8468fad4e967c334b41dab9883e070ba15174338702f2a7fedd88f",
+        "data": {
+          "type": "0x1::account::Account",
+          "data": {
+            "authentication_key": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+            "coin_register_events": {
+              "counter": "2",
+              "guid": {
+                "id": {
+                  "addr": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+                  "creation_num": "0"
+                }
+              }
+            },
+            "guid_creation_num": "19",
+            "key_rotation_events": {
+              "counter": "0",
+              "guid": {
+                "id": {
+                  "addr": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+                  "creation_num": "1"
+                }
+              }
+            },
+            "rotation_capability_offer": { "for": { "vec": [] } },
+            "sequence_number": "15",
+            "signer_capability_offer": { "for": { "vec": [] } }
+          }
+        },
+        "type": "write_resource"
+      },
+      {
+        "address": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
+        "state_key_hash": "0xcd1191dc25bbe1491a974bf987c1566d08ca1c77dfb0fd3883cc5bba8d788e8f",
+        "data": {
+          "type": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa::swap::PairEventHolder<0x1::aptos_coin::AptosCoin, 0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa::asset::USDC>",
+          "data": {
+            "add_liquidity": {
+              "counter": "11287",
+              "guid": {
+                "id": {
+                  "addr": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
+                  "creation_num": "10"
+                }
+              }
+            },
+            "remove_liquidity": {
+              "counter": "5170",
+              "guid": {
+                "id": {
+                  "addr": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
+                  "creation_num": "11"
+                }
+              }
+            },
+            "swap": {
+              "counter": "651791",
+              "guid": {
+                "id": {
+                  "addr": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
+                  "creation_num": "12"
+                }
+              }
+            }
+          }
+        },
+        "type": "write_resource"
+      },
+      {
+        "address": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
+        "state_key_hash": "0x09c3cfb0e51245574dde40582a9d309747e8ef21bc4de9f7b10a33d8c16fc283",
+        "data": {
+          "type": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa::swap::TokenPairReserve<0x1::aptos_coin::AptosCoin, 0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa::asset::USDC>",
+          "data": {
+            "block_timestamp_last": "1691976514",
+            "reserve_x": "8029595246730",
+            "reserve_y": "565963246614"
+          }
+        },
+        "type": "write_resource"
+      },
+      {
+        "address": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa",
+        "state_key_hash": "0x4bbf43f16492e0e27126e21bac8ee2b6eac6aefa65288b4174e7e3180e3e8d77",
+        "data": {
+          "type": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa::swap::TokenPairMetadata<0x1::aptos_coin::AptosCoin, 0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa::asset::USDC>",
+          "data": {
+            "balance_x": { "value": "8029595246730" },
+            "balance_y": { "value": "565963246614" },
+            "burn_cap": { "dummy_field": false },
+            "creator": "0x76b7ae631698fcd07adf5ccc0b7bc4a72489f170446d9634d31cb8568f61cfef",
+            "fee_amount": { "value": "1775697589" },
+            "freeze_cap": { "dummy_field": false },
+            "k_last": "4544437215417183344345586",
+            "mint_cap": { "dummy_field": false }
+          }
+        },
+        "type": "write_resource"
+      },
+      {
+        "state_key_hash": "0x6e4b28d40f98a106a65163530924c0dcb40c1349d3aa915d108b4d6cfc1ddb19",
+        "handle": "0x1b854694ae746cdbd8d44186ca4929b2b337df21d1c74633be19b2710552fdca",
+        "key": "0x0619dc29a0aac8fa146714058e8dd6d2d0f3bdf5f6331907bf91f3acd81e6935",
+        "value": "0x0ffb7ae553f174010000000000000000",
+        "data": {
+          "key": "0x619dc29a0aac8fa146714058e8dd6d2d0f3bdf5f6331907bf91f3acd81e6935",
+          "key_type": "address",
+          "value": "104974033970985743",
+          "value_type": "u128"
+        },
+        "type": "write_table_item"
+      }
+    ],
+    "sender": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135",
+    "sequence_number": "14",
+    "max_gas_amount": "5000",
+    "gas_unit_price": "100",
+    "expiration_timestamp_secs": "1691977114",
+    "payload": {
+      "function": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa::router::swap_exact_input",
+      "type_arguments": [
+        "0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa::asset::USDC",
+        "0x1::aptos_coin::AptosCoin"
+      ],
+      "arguments": ["10000", "141449"],
+      "type": "entry_function_payload"
+    },
+    "signature": {
+      "public_key": "0xe6b8f5cc7ff3d15b97fd07cbb6b0b0d37746639c4dfedce7bf46b84915384900",
+      "signature": "0x2ef16d9a292bd9f491cc97f69f6fc292daeaef9031502246427bd909f14b80c19f3fb0ab6e59f379061410c5b9e9dc98225f3c62fc0827a360034972e85b4d03",
+      "type": "ed25519_signature"
+    },
+    "events": [
+      {
+        "guid": {
+          "creation_number": "18",
+          "account_address": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135"
+        },
+        "sequence_number": "6",
+        "type": "0x1::coin::WithdrawEvent",
+        "data": { "amount": "10000" }
+      },
+      {
+        "guid": {
+          "creation_number": "2",
+          "account_address": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135"
+        },
+        "sequence_number": "7",
+        "type": "0x1::coin::DepositEvent",
+        "data": { "amount": "141520" }
+      },
+      {
+        "guid": {
+          "creation_number": "12",
+          "account_address": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa"
+        },
+        "sequence_number": "651790",
+        "type": "0xc7efb4076dbe143cbcd98cfaaa929ecfc8f299203dfff63b95ccb6bfe19850fa::swap::SwapEvent<0x1::aptos_coin::AptosCoin, 0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa::asset::USDC>",
+        "data": {
+          "amount_x_in": "0",
+          "amount_x_out": "141520",
+          "amount_y_in": "10000",
+          "amount_y_out": "0",
+          "user": "0x979e9463b315e84e13b2971d6420641d611a92ab79ce78a87131e0c3e8191135"
+        }
+      }
+    ],
+    "timestamp": "1691976514691520",
+    "type": "user_transaction"
+  }
+]

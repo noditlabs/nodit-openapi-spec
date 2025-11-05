@@ -1,0 +1,40 @@
+type: array
+description: Move function
+items:
+  type: object
+  required:
+    - name
+    - visibility
+    - is_entry
+    - is_view
+    - generic_type_params
+    - params
+    - return
+  properties:
+    name:
+      type: string
+    visibility:
+      type: string
+      description: Move function visibility
+      enum:
+        - private
+        - public
+        - friend
+    is_entry:
+      type: boolean
+      description: 함수가 트랜잭션에서 직접 호출 가능한 엔트리 함수인지 여부
+    is_view:
+      type: boolean
+      description: 함수가 뷰 함수인지 여부
+    generic_type_params:
+      $ref: ./GenericTypeParams.yaml
+    params:
+      type: array
+      description: Move 함수와 연관된 파라미터
+      items:
+        type: string
+    return:
+      type: array
+      description: Move 함수의 반환 타입
+      items:
+        type: string

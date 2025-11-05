@@ -1,0 +1,24 @@
+type: object
+description: |
+  JSON 표현으로 표시된 계정 리소스 내의 일부 데이터입니다.
+  구체적으로는 주어진 리소스의 최상위 필드를 키로 하는 문자열에 임의의 JSON 값/객체를 매핑한 맵입니다.
+
+  - Move bool 타입: boolean으로 변환됩니다.
+  - u8~i32: integer로 변환됩니다.
+  - u64~i256: string으로 변환됩니다.
+  - address: HexEncodedBytes string(예: 0x1)으로 변환됩니다.
+  - 구조체: 객체(object)로 변환됩니다.
+  - vector: 배열(array)로 변환됩니다.  
+    - 단, vector<u8>는 0x로 시작하는 HexEncodedBytes string으로 변환됩니다.
+  - 0x1::string::String: 일반 string으로 변환됩니다.
+example:
+  {
+    "authentication_key": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "coin_register_events":
+      {
+        "counter": "0",
+        "guid": { "id": { "addr": "0x1", "creation_num": "0" } },
+      },
+    "self_address": "0x1",
+    "sequence_number": "0",
+  }

@@ -1,0 +1,40 @@
+title: Script Write Set
+type: object
+description: |
+  Script write set를 나타냅니다.
+required:
+  - type
+  - execute_as
+  - script
+properties:
+  type:
+    type: string
+    description: The type of the write set
+    enum:
+      - script_write_set
+  execute_as:
+    $ref: ../Address.yaml
+  script:
+    type: object
+    description: Payload which runs a script that can run multiple functions.
+    required:
+      - code
+      - type_arguments
+      - arguments
+    properties:
+      code:
+        type: object
+        description: |
+          Move script bytecode
+          It contains both bytecode and ABI.
+        required:
+          - bytecode
+        properties:
+          bytecode:
+            $ref: ../Bytecode.yaml
+          abi:
+            $ref: ../Abi.yaml
+      type_arguments:
+        $ref: ../TypeArguments.yaml
+      arguments:
+        $ref: ../Arguments.yaml

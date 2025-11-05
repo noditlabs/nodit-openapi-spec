@@ -1,0 +1,43 @@
+X-APTOS-BLOCK-HEIGHT:
+  description: 체인의 현재 블록 높이
+  schema:
+    type: integer
+  required: true
+X-APTOS-CHAIN-ID:
+  description: 현재 체인의 체인 ID
+  schema:
+    type: integer
+  required: true
+X-APTOS-EPOCH:
+  description: 체인의 현재 에포크
+  schema:
+    type: integer
+  required: true
+X-APTOS-LEDGER-OLDEST-VERSION:
+  description: 체인의 정리되지 않은 원장 중 가장 오래된 버전
+  schema:
+    type: integer
+  required: true
+X-APTOS-LEDGER-TIMESTAMPUSEC:
+  description: 체인의 현재 타임스탬프
+  schema:
+    type: integer
+  required: true
+X-APTOS-LEDGER-VERSION:
+  description: 체인의 현재 원장 버전
+  schema:
+    type: integer
+  required: true
+X-APTOS-OLDEST-BLOCK-HEIGHT:
+  description: 체인의 정리되지 않은 블록 중 가장 오래된 블록 높이
+  schema:
+    type: integer
+  required: true
+X-APTOS-CURSOR:
+  description: 다음 페이지를 위한 커서
+  schema:
+    type: string
+X-APTOS-GAS-USED:
+  description: 트랜잭션 실행에 실제로 사용된 가스의 양
+  schema:
+    type: integer

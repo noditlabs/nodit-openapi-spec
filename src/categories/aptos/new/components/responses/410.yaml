@@ -1,0 +1,11 @@
+description: Block Pruned
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Errors/AptosError.yaml
+      example:
+        {
+          "message": "Block(160155267) has been pruned",
+          "error_code": "block_pruned",
+          "vm_error_code": null,
+        }

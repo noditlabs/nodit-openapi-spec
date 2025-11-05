@@ -1,0 +1,67 @@
+security:
+  - api_key: []
+tags:
+  - Transactions
+description: |
+  트랜잭션을 실제로 실행하지 않고 시뮬레이션하는 API입니다.
+
+  시뮬레이션 결과는 실제 서명된 트랜잭션을 실행했을 때와 동일한 트랜잭션 출력과 이벤트를 포함합니다. 다만, 스토리지가 업데이트되지 않기 때문에 상태 해시는 포함되지 않습니다. 이 API를 사용하여 트랜잭션 제출 시 필요한 최대 gas 양을 추정할 수 있습니다.
+
+  사용 방법:
+    - zero-padded된 서명을 가진 트랜잭션을 생성합니다.
+    - 생성된 트랜잭션을 이 API에 제출합니다.
+
+  BCS 형식으로 이 엔드포인트를 사용하려면, BCS로 인코딩된 서명된 트랜잭션을 제출해야 합니다.
+summary: Simulate transaction
+operationId: aptos_simulateTransaction
+parameters:
+  - name: estimate_gas_price
+    in: query
+    required: false
+    schema:
+      type: boolean
+    description: |
+      True로 설정 시 트랜잭션의 gas unit price는 무시되고 추정된 값이 사용됩니다.
+  - name: estimate_max_gas
+    in: query
+    required: false
+    schema:
+      type: boolean
+    description: |
+      True로 설정 시 트랜잭션의 max gas amount는 무시되고 추정된 값이 사용됩니다.
+  - name: estimate_prioritized_gas_uint_price
+    in: query
+    required: false
+    schema:
+      type: boolean
+    description: |
+      True로 설정 시 측정치보다 높은 가격으로 트랜잭션을 실행합니다.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/parameters/Transaction.yaml
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            $ref: ../../components/schemas/Transactions/PendingTransaction.yaml
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

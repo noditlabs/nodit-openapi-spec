@@ -1,0 +1,65 @@
+type: object
+description: |
+  A Move module
+required:
+  - address
+  - name
+  - friends
+  - exposed_functions
+  - structs
+properties:
+  address:
+    $ref: ../../components/schemas/Address.yaml
+  name:
+    type: string
+  friends:
+    type: array
+    description: Friends of the module
+    items:
+      type: string
+  exposed_functions:
+    type: array
+    items:
+      $ref: ./MoveFunction.yaml
+  structs:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - is_native
+        # - is_event
+        # - is_enum
+        - abilities
+        - generic_type_params
+        - fields
+      properties:
+        name:
+          type: string
+        is_native:
+          type: boolean
+        is_event:
+          type: boolean
+          description: 구조체가 event 구조체인지 여부
+        is_enum:
+          type: boolean
+          description: 구조체가 enum인지 여부
+        abilities:
+          type: array
+          description: Move 구조체와 연관된 ability
+          items:
+            type: string
+        generic_type_params:
+          $ref: ../../components/schemas/GenericTypeParams.yaml
+        fields:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - type
+            properties:
+              name:
+                type: string
+              type:
+                $ref: ./MoveTypeTag.yaml

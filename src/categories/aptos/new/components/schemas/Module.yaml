@@ -1,0 +1,6 @@
+type: object
+properties:
+  bytecode:
+    $ref: ./Bytecode.yaml
+  abi:
+    $ref: ./Abi.yaml

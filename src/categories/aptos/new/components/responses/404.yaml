@@ -1,0 +1,10 @@
+description: Not Found
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Errors/NoditError.yaml
+      example:
+        {
+          "code": "RESOURCE_NOT_FOUND",
+          "message": "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }",
+        }

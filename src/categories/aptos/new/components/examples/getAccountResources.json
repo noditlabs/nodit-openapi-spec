@@ -1,0 +1,69 @@
+[
+  {
+    "type": "0x1::account::Account",
+    "data":
+      {
+        "authentication_key": "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c",
+        "coin_register_events":
+          {
+            "counter": "1",
+            "guid":
+              {
+                "id":
+                  {
+                    "addr": "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c",
+                    "creation_num": "0",
+                  },
+              },
+          },
+        "guid_creation_num": "4",
+        "key_rotation_events":
+          {
+            "counter": "0",
+            "guid":
+              {
+                "id":
+                  {
+                    "addr": "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c",
+                    "creation_num": "1",
+                  },
+              },
+          },
+        "rotation_capability_offer": { "for": { "vec": [] } },
+        "sequence_number": "1645002",
+        "signer_capability_offer": { "for": { "vec": [] } },
+      },
+  },
+  {
+    "type": "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>",
+    "data":
+      {
+        "coin": { "value": "1767711144" },
+        "deposit_events":
+          {
+            "counter": "137",
+            "guid":
+              {
+                "id":
+                  {
+                    "addr": "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c",
+                    "creation_num": "2",
+                  },
+              },
+          },
+        "frozen": false,
+        "withdraw_events":
+          {
+            "counter": "13",
+            "guid":
+              {
+                "id":
+                  {
+                    "addr": "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c",
+                    "creation_num": "3",
+                  },
+              },
+          },
+      },
+  },
+]

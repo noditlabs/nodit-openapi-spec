@@ -1,0 +1,27 @@
+type: object
+title: Delete Module
+description: |
+  Move 모듈 삭제를 나타내는 change입니다.
+required:
+  - type
+  - address
+  - state_key_hash
+  - module
+properties:
+  type:
+    type: string
+    description: Change의 타입
+    enum:
+      - delete_module
+  address:
+    $ref: ../Address.yaml
+  state_key_hash:
+    type: string
+    description: State key의 해시값입니다.
+  module:
+    type: string
+    description: |
+      Move 모듈 ID는 Move 모듈을 문자열로 표현한 값입니다.
+      형식: `{address}::{module name}`
+      address는 0x로 시작하는 32바이트(16진수) 계정 주소여야 합니다.
+      모듈 이름(module name)은 대소문자를 구분합니다.

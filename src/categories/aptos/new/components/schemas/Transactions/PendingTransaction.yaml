@@ -1,0 +1,50 @@
+title: Pending Transaction
+type: object
+description: |
+  대기 중인 트랜잭션을 나타냅니다.
+  대기 중인 트랜잭션은 아직 블록에 포함되지 않은 트랜잭션입니다.
+required:
+  - type
+  - hash
+  - sender
+  - sequence_number
+  - max_gas_amount
+  - gas_unit_price
+  - expiration_timestamp_secs
+  - payload
+properties:
+  type:
+    type: string
+    description: The type of the transaction
+    enum:
+      - pending_transaction
+  hash:
+    type: string
+    description: |
+      트랜잭션의 고유 식별자를 나타내는 필드로, 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+  sender:
+    $ref: ../Sender.yaml
+  sequence_number:
+    $ref: ../SequenceNumber.yaml
+  max_gas_amount:
+    $ref: ../MaxGasAmount.yaml
+  gas_unit_price:
+    $ref: ../GasUnitPrice.yaml
+  expiration_timestamp_secs:
+    $ref: ../ExpirationTimestampSecs.yaml
+  payload:
+    oneOf:
+      - $ref: ../Payloads/EntryFunctionPayload.yaml
+      - $ref: ../Payloads/ScriptPayload.yaml
+      - $ref: ../Payloads/ModuleBundlePayload.yaml
+      - $ref: ../Payloads/MultisigPayload.yaml
+  signature:
+    oneOf:
+      - $ref: ../TransactionSignatures/Ed25519Signature.yaml
+      - $ref: ../TransactionSignatures/MultiEd25519Signature.yaml
+      - $ref: ../TransactionSignatures/MultiAgentSignature.yaml
+      - $ref: ../TransactionSignatures/FeePayerSignature.yaml
+      - $ref: ../TransactionSignatures/AccountSignature.yaml
+      - $ref: ../TransactionSignatures/NoAccountSignature.yaml
+  replay_protection_nonce:
+    $ref: ../ReplayProtectionNonce.yaml

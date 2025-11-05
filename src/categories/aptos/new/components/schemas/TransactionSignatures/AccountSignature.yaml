@@ -1,0 +1,17 @@
+title: Account Signature
+type: object
+description: |
+  Account signature scheme
+
+  The account signature scheme allows you to have two types of accounts:
+
+  A single Ed25519 key account, one private key
+  A k-of-n multi-Ed25519 key account, multiple private keys, such that k-of-n must sign a transaction.
+  A single Secp256k1Ecdsa key account, one private key
+oneOf:
+  - $ref: ../AccountSignatures/Ed25519Signature.yaml
+  - $ref: ../AccountSignatures/MultiEd25519Signature.yaml
+  - $ref: ../AccountSignatures/SingleKeySignature.yaml
+  - $ref: ../AccountSignatures/MultiKeySignature.yaml
+  - $ref: ../AccountSignatures/NoAccountSignature.yaml
+  - $ref: ../AccountSignatures/AbstractSignature.yaml

@@ -1,0 +1,34 @@
+type: object
+title: Delete Table Item
+description: |
+  테이블 아이템 삭제를 나타내는 change입니다.
+required:
+  - type
+  - state_key_hash
+  - handle
+  - key
+  - data
+properties:
+  type:
+    type: string
+    description: Change의 타입
+    enum:
+      - delete_table_item
+  state_key_hash:
+    type: string
+    description: State key의 해시값입니다.
+  handle:
+    $ref: ../Bytecode.yaml
+  key:
+    $ref: ../Bytecode.yaml
+  data:
+    type: object
+    description: 삭제된 테이블 데이터입니다.
+    required:
+      - key
+      - key_type
+    properties:
+      key:
+        $ref: ../Any.yaml
+      key_type:
+        type: string

@@ -1,0 +1,98 @@
+title: Block Epilogue Transaction
+type: object
+description: |
+  Block epilogue transaction을 나타냅니다.
+required:
+  - type
+  - version
+  - hash
+  - state_change_hash
+  - event_root_hash
+  - gas_used
+  - success
+  - vm_status
+  - accumulator_root_hash
+  - changes
+  - timestamp
+properties:
+  type:
+    type: string
+    description: The type of the transaction
+    enum:
+      - block_epilogue_transaction
+  version:
+    $ref: ../Version.yaml
+  hash:
+    type: string
+    description: |
+      트랜잭션의 고유 식별자를 나타내는 필드로, 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+  state_change_hash:
+    type: string
+    description: |
+      트랜잭션의 상태 변경 해시를 나타내는 필드로, 트랜잭션의 상태 변경을 고유하게 식별하는 데 사용됩니다.
+  event_root_hash:
+    type: string
+    description: |
+      트랜잭션의 이벤트 루트 해시를 나타내는 필드입니다.
+  state_checkpoint_hash:
+    type: string
+    description: |
+      트랜잭션의 상태 체크포인트 해시를 나타내는 필드입니다.
+  gas_used:
+    type: string
+    description: |
+      트랜잭션에서 사용된 gas의 양을 나타내는 필드로, 트랜잭션의 실행 비용을 계산하는 데 사용됩니다.
+  success:
+    type: boolean
+    description: |
+      트랜잭션의 성공 여부를 나타내는 필드로, true인 경우 트랜잭션이 성공적으로 실행되었음을, false인 경우 실행 중 오류가 발생했음을 의미합니다.
+  vm_status:
+    type: string
+    description: |
+      트랜잭션의 VM 상태를 나타내는 필드로, 트랜잭션의 실행 결과를 나타내는 데 사용됩니다. 트랜잭션 실패의 원인을 분석하고 문제를 해결하는 데 도움을 줍니다.
+  accumulator_root_hash:
+    type: string
+    description: |
+      누적된 트랜잭션 상태의 루트 해시를 나타내는 필드입니다.
+  changes:
+    type: array
+    description: |
+      트랜잭션의 변경 내용을 나타내는 필드로, 트랜잭션의 실행 결과를 나타내는 데 사용됩니다.
+    items:
+      oneOf:
+        - $ref: ../Changes/DeleteModule.yaml
+        - $ref: ../Changes/DeleteResource.yaml
+        - $ref: ../Changes/DeleteTableItem.yaml
+        - $ref: ../Changes/WriteModule.yaml
+        - $ref: ../Changes/WriteResource.yaml
+        - $ref: ../Changes/WriteTableItem.yaml
+  timestamp:
+    type: string
+    description: |
+      트랜잭션의 타임스탬프를 나타내는 필드로, 트랜잭션의 발생 시간을 나타내는 데 사용됩니다.
+  block_end_info:
+    type: object
+    description: |
+      블록 종료 정보를 나타내는 필드로, 블록 종료 정보를 나타내는 데 사용됩니다.
+    required:
+      - block_gas_limit_reached
+      - block_output_limit_reached
+      - block_effective_block_gas_units
+      - block_approx_output_size
+    properties:
+      block_gas_limit_reached:
+        type: boolean
+        description: |
+          블록 가스 제한에 도달했는지 여부를 나타내는 필드로, 블록 종료 정보를 나타내는 데 사용됩니다.
+      block_output_limit_reached:
+        type: boolean
+        description: |
+          블록 출력 제한에 도달했는지 여부를 나타내는 필드로, 블록 종료 정보를 나타내는 데 사용됩니다.
+      block_effective_block_gas_units:
+        type: integer
+        description: |
+          블록 효율적 블록 가스 유닛을 나타내는 필드로, 블록 종료 정보를 나타내는 데 사용됩니다.
+      block_approx_output_size:
+        type: integer
+        description: |
+          블록 근사 출력 크기를 나타내는 필드로, 블록 종료 정보를 나타내는 데 사용됩니다.

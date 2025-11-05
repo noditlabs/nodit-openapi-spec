@@ -1,0 +1,35 @@
+{
+  "type": "0x1::account::Account",
+  "data":
+    {
+      "authentication_key": "0xca62eccbbdb22b5de18165d0bdf2d7127569b91498f0a7f6944028793cef8137",
+      "coin_register_events":
+        {
+          "counter": "1",
+          "guid":
+            {
+              "id":
+                {
+                  "addr": "0xca62eccbbdb22b5de18165d0bdf2d7127569b91498f0a7f6944028793cef8137",
+                  "creation_num": "0",
+                },
+            },
+        },
+      "guid_creation_num": "4",
+      "key_rotation_events":
+        {
+          "counter": "0",
+          "guid":
+            {
+              "id":
+                {
+                  "addr": "0xca62eccbbdb22b5de18165d0bdf2d7127569b91498f0a7f6944028793cef8137",
+                  "creation_num": "1",
+                },
+            },
+        },
+      "rotation_capability_offer": { "for": { "vec": [] } },
+      "sequence_number": "2581041",
+      "signer_capability_offer": { "for": { "vec": [] } },
+    },
+}

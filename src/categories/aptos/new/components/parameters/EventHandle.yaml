@@ -1,0 +1,9 @@
+name: event_handle
+in: path
+required: true
+schema:
+  type: string
+  pattern: ^0x[0-9a-zA-Z:_<>]+$
+  example: "0x1::account::Account"
+description: |
+  특정 event handle을 조회하기 위한 event handle struct의 이름

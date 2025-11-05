@@ -1,0 +1,6 @@
+description: Too Many Requests
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Errors/NoditError.yaml
+      example: { "code": "TOO_MANY_REQUESTS", "message": "Too many requests" }

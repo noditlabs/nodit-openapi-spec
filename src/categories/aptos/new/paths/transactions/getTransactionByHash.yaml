@@ -1,0 +1,43 @@
+security:
+  - api_key: []
+tags:
+  - Transactions
+description: |
+  트랜잭션 해시로 트랜잭션을 조회합니다. 이 해시는 트랜잭션 제출 시 API가 반환하는 값(Pending Transaction)과 동일합니다.
+
+  직접 트랜잭션 해시를 생성하는 방법:
+  1. 메시지 바이트 생성: "RawTransaction" 바이트 + 트랜잭션의 BCS 바이트를 연결
+  2. SHA3-256 해시 알고리즘을 메시지 바이트에 적용
+  3. 해시된 바이트를 0x 접두어와 함께 헥스 문자열로 인코딩
+summary: Get transaction by hash
+operationId: aptos_getTransactionByHash
+parameters:
+  - name: txn_hash
+    in: path
+    required: true
+    schema:
+      type: string
+      pattern: ^0[xX][0-9a-fA-F]{64}$|^[0-9a-fA-F]{64}$
+      example: "0xc70d759708e676c0464406c65acdc913b7b7d0228d4c7a44fd357903fdf44419"
+    description: 조회할 트랜잭션의 해시값
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Transactions/PendingTransaction.yaml
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

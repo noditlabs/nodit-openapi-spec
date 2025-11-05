@@ -1,0 +1,22 @@
+type: object
+title: Delete Resource
+description: |
+  리소스 삭제를 나타내는 change입니다.
+required:
+  - type
+  - address
+  - state_key_hash
+  - resource
+properties:
+  type:
+    type: string
+    description: Change의 타입
+    enum:
+      - delete_resource
+  address:
+    $ref: ../Address.yaml
+  state_key_hash:
+    type: string
+    description: State key의 해시값입니다.
+  resource:
+    $ref: ../ResourceType.yaml

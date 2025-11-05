@@ -1,0 +1,12 @@
+type: object
+properties:
+  type:
+    type: string
+    description: The type of the signature
+    enum:
+      - ed25519
+      - secp256k1_ecdsa
+      - web_authn
+      - keyless
+  value:
+    $ref: Bytecode.yaml

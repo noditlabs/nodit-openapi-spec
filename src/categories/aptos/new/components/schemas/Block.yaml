@@ -1,0 +1,50 @@
+type: object
+description: |
+  트랜잭션이 포함되었거나 포함되지 않은 블록.
+  요청시 관련된 트랜잭션 정보를 함께 포합합니다.
+required:
+  - block_height
+  - block_hash
+  - block_timestamp
+  - first_version
+  - last_version
+properties:
+  block_height:
+    type: string
+    description: |
+      64비트 부호 없는 정수를 문자열로 나타냅니다.
+      JSON에서 u64 값을 기본적으로 지원하지 않는 JavaScript와 같은 언어의 호환성을 위해 문자열로 표현합니다.
+  block_hash:
+    type: string
+    description: |
+      블록의 고유 식별 해시값을 나타내는 필드입니다.
+  block_timestamp:
+    type: string
+    description: |
+      블록이 생성된 시간을 나타내는 필드입니다.
+      마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공되며, 블록의 생성 순서와 시간 추적에 사용됩니다.
+      블록 타임스탬프는 트랜잭션의 시간 순서를 보장하고 블록 생성 간격을 측정하는 데 활용됩니다.
+  first_version:
+    type: string
+    description: |
+      블록에 포함된 트랜잭션들 중 가장 먼저 처리된 트랜잭션의 version 번호를 나타내는 필드입니다.
+      Aptos에서 각 트랜잭션은 고유한 version 번호를 가지며, 이는 트랜잭션의 전체 실행 순서를 나타냅니다.
+      first_version과 last_version을 통해 블록 내 트랜잭션들의 version 범위를 확인할 수 있습니다.
+  last_version:
+    type: string
+    description: |
+      블록에 포함된 트랜잭션들 중 마지막으로 처리된 트랜잭션의 version 번호를 나타내는 필드입니다.
+      first_version과 함께 블록 내 트랜잭션들의 version 범위를 정의하며, 이를 통해 블록 내 모든 트랜잭션을 순차적으로 조회할 수 있습니다.
+  transactions:
+    type: array
+    description: |
+      블록에 포함된 모든 트랜잭션의 목록입니다.
+    items:
+      oneOf:
+        - $ref: ./Transactions/PendingTransaction.yaml
+        - $ref: ./Transactions/UserTransaction.yaml
+        - $ref: ./Transactions/StateCheckpointTransaction.yaml
+        - $ref: ./Transactions/GenesisTransaction.yaml
+        - $ref: ./Transactions/BlockMetadataTransaction.yaml
+        - $ref: ./Transactions/BlockEpilogueTransaction.yaml
+        - $ref: ./Transactions/ValidatorTransaction.yaml

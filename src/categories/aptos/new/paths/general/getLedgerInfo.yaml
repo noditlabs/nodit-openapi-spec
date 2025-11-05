@@ -1,0 +1,69 @@
+security:
+  - api_key: []
+tags:
+  - General
+description: |
+  최신 원장의 정보를 가져옵니다. 체인 ID, 역할 유형, 원장 버전, 에포크 등의 데이터를 포함합니다.
+summary: Get ledger info
+operationId: aptos_getLedgerInfo
+parameters: []
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - chain_id
+            - epoch
+            - ledger_version
+            - oldest_ledger_version
+            - ledger_timestamp
+            - node_role
+            - oldest_block_height
+            - block_height
+          properties:
+            chain_id:
+              type: integer
+              description: 현재 체인의 식별 번호입니다.
+            epoch:
+              type: string
+              description: 현재 합의 에포크 번호로, 해당 기간 동안의 검증자 세트 기준입니다.
+            ledger_version:
+              type: string
+              description: 최신 트랜잭션의 원장 버전입니다.
+            oldest_ledger_version:
+              type: string
+              description: 가장 오래된 트랜잭션의 원장 버전입니다.
+            ledger_timestamp:
+              type: string
+              description: 원장 타임스탬프로, 현재 원장이 생성된 시간을 나타냅니다.
+            node_role:
+              type: string
+              description: 노드의 역할(full_node, validator)을 나타냅니다.
+            oldest_block_height:
+              type: string
+              description: 가장 오래된 블록 높이입니다.
+            block_height:
+              type: string
+              description: 최신 블록 높이입니다.
+            git_hash:
+              type: string
+              description: 빌드된 API 엔드포인트의 Git 해시입니다. API 엔드포인트에서 사용된 정확한 소프트웨어 버전을 확인하는 데 사용할 수 있습니다.
+        example:
+          $ref: ../../components/examples/getLedgerInfo.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

@@ -1,0 +1,12 @@
+type: array
+description: Move 함수에 연관된 제네릭 타입 파라미터입니다.
+items:
+  type: object
+  required:
+    - constraints
+  properties:
+    constraints:
+      type: array
+      description: 제네릭 타입 파라미터에 연결된 Move ability이며, 이 타입을 사용하는 타입에 연관됩니다.
+      items:
+        type: string

@@ -1,0 +1,49 @@
+security:
+  - api_key: []
+tags:
+  - Transactions
+description: |
+  아직 서명하지 않은 트랜잭션 정보를 JSON 형식으로 받아서 BCS(Binary Canonical Serialization) 형식으로 변환해주는 API입니다. 변환된 결과를 사용하여 트랜잭션에 서명한 후, Submit Transaction API를 통해 트랜잭션을 제출할 수 있습니다.
+
+  즉, 이 엔드포인트는 BCS를 지원하는 라이브러리가 없는 언어에서도 API에 트랜잭션 요청을 제출할 수 있게 해줍니다. 공식 Rust, TypeScript 또는 Python SDK와 같이 BCS를 지원하는 SDK를 사용하는 경우에는 이 엔드포인트를 사용할 필요가 없습니다.
+
+  이 엔드포인트의 응답을 사용하여 트랜잭션에 서명하는 방법은 다음과 같습니다:
+  - 응답의 16진수로 인코딩된 문자열을 바이트로 디코딩합니다.
+  - 디코딩된 바이트에 서명합니다.
+  - 서명된 바이트를 Ed25519 서명 형식으로 변환하고, 이를 활용하여 최종 트랜잭션 서명을 생성합니다.
+summary: Encode submission
+operationId: aptos_encodeSubmission
+parameters:
+  - $ref: ../../components/parameters/BSCAcceptHeader.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/parameters/Transaction.yaml
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: string
+          format: binary
+          description: |
+            0x로 시작하는 16진수 문자열로 인코딩된 BCS 형식의 트랜잭션을 반환합니다.
+            이 값을 서명하여 Submit Transaction API를 통해 트랜잭션을 제출할 수 있습니다.
+          example: "0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1"
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

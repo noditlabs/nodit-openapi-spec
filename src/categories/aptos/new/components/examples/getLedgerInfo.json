@@ -1,0 +1,11 @@
+{
+  chain_id: 1,
+  epoch: "3671",
+  ledger_version: "223505345",
+  oldest_ledger_version: "0",
+  ledger_timestamp: "1691977290941952",
+  node_role: "full_node",
+  oldest_block_height: "0",
+  block_height: "80602020",
+  git_hash: "ebfec6c8296848d00b69cc7bfa284d820a3c3566",
+}

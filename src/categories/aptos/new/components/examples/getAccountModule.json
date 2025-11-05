@@ -1,0 +1,39 @@
+{
+  "bytecode": "0xa11ceb0b0500000007010006030612041804051c4807646108c501200ce501980100000001000200030001010002040401010001040b010100010302030f0c050a050a030a010a040a020a010a0a020a040a020a010a040a020a010002030301090002060c0501050103010101040102010a020f060c050503010402010a02040201040201196f7261636c655f736176655f726573756c745f616374696f6e1d61676772656761746f725f736176655f726573756c745f616374696f6e176f7261636c655f6865617274626561745f616374696f6e0372756e0c72756e5f696e7465726e616c07d7e436f0b2aafde60774efb26ccc432cf881b677aca7faaf2a01879bd19fb800010400024a0e000a0138000e0241050c100600000000000000000c0f0a0f0a10230449050d0e000a010e020a0f4205140e030a0f4206140e040a0f4207140e050a0f4208140e060a0f4209140e070a0f4207140e080a0f420a140e090a0f4208140e0a0a0f4209140e0b0a0f4207140e0c0a0f4208140e0d0a0f4209140e0e0a0f42071438010b0f060100000000000000160c0f05080200",
+  "abi":
+    {
+      "address": "0x7d7e436f0b2aafde60774efb26ccc432cf881b677aca7faaf2a01879bd19fb8",
+      "name": "oracle_save_result_action",
+      "friends": [],
+      "exposed_functions":
+        [
+          {
+            "name": "run",
+            "visibility": "public",
+            "is_entry": true,
+            "is_view": false,
+            "generic_type_params": [{ "constraints": [] }],
+            "params":
+              [
+                "signer",
+                "address",
+                "vector<address>",
+                "vector<u64>",
+                "vector<bool>",
+                "vector<u128>",
+                "vector<u8>",
+                "vector<bool>",
+                "vector<vector<u8>>",
+                "vector<u128>",
+                "vector<u8>",
+                "vector<bool>",
+                "vector<u128>",
+                "vector<u8>",
+                "vector<bool>",
+              ],
+            "return": [],
+          },
+        ],
+      "structs": [],
+    },
+}

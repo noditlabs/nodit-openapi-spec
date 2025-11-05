@@ -1,0 +1,52 @@
+security:
+  - api_key: []
+tags:
+  - Transactions
+description: |
+  여러 개의 트랜잭션을 모아 제출하는 API입니다. 응답은 세 가지 결과를 가질 수 있습니다:
+  1. 모든 트랜잭션이 성공하면 202 코드가 반환됩니다
+  2. 일부 트랜잭션이 성공하면 실패한 트랜잭션과 함께 206 코드가 반환됩니다
+  3. 모든 트랜잭션이 실패하면 실패한 트랜잭션과 함께 206 코드가 반환됩니다
+
+  트랜잭션을 제출하는 방법은 두 가지가 있습니다.
+  1. **JSON 형식으로 제출하는 경우:**
+    - 먼저 트랜잭션을 BCS로 인코딩해야 합니다. 만약 사용하는 언어에 BCS를 지원하는 라이브러리가 있다면 해당 라이브러리를 사용하세요.
+    - BCS를 직접 인코딩할 수 없다면 Encode Submission API를 활용할 수 있습니다. 이 API를 사용할 때는, 신뢰할 수 있는 노드에만 요청을 보내야 합니다. 노드가 요청 내용을 조작할 수 있기 때문입니다.
+    - 인코딩된 트랜잭션에 서명합니다.
+    - 서명된 트랜잭션을 "application/json" Content-Type으로 제출합니다.
+
+  2. **BCS 형식으로 제출하는 경우:**
+    - BCS로 인코딩된 서명된 트랜잭션을 "application/x.aptos.signed_transaction+bcs" Content-Type으로 제출합니다.
+summary: Submit batch transactions
+operationId: aptos_submitBatchTransactions
+parameters:
+  - $ref: ../../components/parameters/BSCAcceptHeader.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: ../../components/parameters/Transaction.yaml
+responses:
+  "202":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Transactions/PendingTransaction.yaml
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

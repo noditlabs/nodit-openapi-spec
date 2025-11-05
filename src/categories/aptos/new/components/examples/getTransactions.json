@@ -1,0 +1,16 @@
+[
+  {
+    "version": "223509841",
+    "hash": "0x67c6d8698c3f41dc4fee191668301b753b57f8c4f2368c4795ee28ef1f283b81",
+    "state_change_hash": "0xafb6e14fe47d850fd0a7395bcfb997ffacf4715e0f895cc162c218e4a7564bc6",
+    "event_root_hash": "0x414343554d554c41544f525f504c414345484f4c4445525f4841534800000000",
+    "state_checkpoint_hash": "0x4bbcd8d72e714d2e019f669e119d73169f7d378950ba34b27900fb9199cc73ec",
+    "gas_used": "0",
+    "success": true,
+    "vm_status": "Executed successfully",
+    "accumulator_root_hash": "0x5232557c436793e73468483a5488d0d3825b08792050ef06e3a03dfb002d2b40",
+    "changes": [],
+    "timestamp": "1691977636550021",
+    "type": "state_checkpoint_transaction"
+  }
+]

@@ -1,0 +1,8 @@
+name: table_handle
+in: path
+required: true
+schema:
+  type: string
+  pattern: ^0[xX][0-9a-fA-F]{64}|^[0-9a-fA-F]{64}
+  example: "0x7d7561f38ada5eb9066f05c6e80df069208c4de472d6414482016d38448d1a7d"
+description: 테이블이 저장된 위치를 가리키는 포인터 값.

@@ -1,0 +1,8 @@
+name: module_name
+in: path
+required: true
+schema:
+  type: string
+  example: "fungible_asset"
+description: |
+  조회하고자 하는 특정 모듈의 이름.

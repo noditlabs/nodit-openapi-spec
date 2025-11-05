@@ -1,0 +1,9 @@
+name: resource_type
+in: path
+required: true
+schema:
+  type: string
+  pattern: ^0x[0-9a-zA-Z:_<>]+$
+  example: 0x1::account::Account
+  description: |
+    조회하고자 하는 대상 리소스(구조체)의 타입 이름

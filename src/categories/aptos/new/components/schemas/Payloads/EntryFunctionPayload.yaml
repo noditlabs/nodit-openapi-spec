@@ -1,0 +1,25 @@
+type: object
+description: |
+  단일 Entry Function을 실행하는 페이로드
+required:
+  - type
+  - function
+  - type_arguments
+  - arguments
+properties:
+  type:
+    type: string
+    description: The type of the payload
+    enum:
+      - entry_function_payload
+  function:
+    type: string
+    description: On-chain에 정의된 Entry Function의 식별자를 문자열로 나타낸 값입니다.
+    pattern:
+      ^0x[0-9a-fA-F]+::[A-Za-z_][A-Za-z0-9_]*::[A-Za-z_][A-Za-z0-9_]*$
+      # format: `{address}::{module_name}::{function_name}`
+    example: "0x1::coin::transfer"
+  type_arguments:
+    $ref: ../TypeArguments.yaml
+  arguments:
+    $ref: ../Arguments.yaml

@@ -1,0 +1,17 @@
+type: array
+description: Entry function의 인자들을 나타내는 필드입니다.
+items:
+  # Entry function의 인자값은 다양한 타입이 올 수 있습니다.
+  oneOf:
+    - type: string
+    - type: array
+example:
+  [
+    ["3"],
+    ["pts_1762134251280_impression_3119"],
+    "0x01",
+    "0x01",
+    ["Points event for user 04344295 - Type impression - Points 3"],
+    ["1762134251280"],
+    "batch_impression_1762134251280",
+  ]

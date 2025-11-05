@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: Aptos Node API
+  version: 1.2.18
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: https://{aptos-network}.nodit.io/v1
+    variables:
+      aptos-network:
+        enum: ["aptos-mainnet", "aptos-testnet"]
+        default: "aptos-mainnet"
+components:
+  securitySchemes:
+    api_key:
+      $ref: ./components/securitySchemes/X-API-KEY.yaml
+paths:
+  # Accounts
+  /accounts/{address}:
+    get:
+      $ref: ./paths/accounts/getAccount.yaml
+  /accounts/{address}/module/{module_name}:
+    get:
+      $ref: ./paths/accounts/getAccountModule.yaml
+  /accounts/{address}/modules:
+    get:
+      $ref: ./paths/accounts/getAccountModules.yaml
+  /accounts/{address}/resources/{resource_type}:
+    get:
+      $ref: ./paths/accounts/getAccountResource.yaml
+  /accounts/{address}/resources:
+    get:
+      $ref: ./paths/accounts/getAccountResources.yaml
+  /accounts/{address}/balance/{asset_type}:
+    get:
+      $ref: ./paths/accounts/getAccountBalance.yaml
+
+  # Blocks
+  /blocks/by_height/{block_height}:
+    get:
+      $ref: ./paths/blocks/getBlocksByHeight.yaml
+  /blocks/by_version/{version}:
+    get:
+      $ref: ./paths/blocks/getBlocksByVersion.yaml
+
+  # Events
+  /accounts/{address}/events/{event_handle}/{field_name}:
+    get:
+      $ref: ./paths/events/getEventsByEventHandle.yaml
+  /accounts/{address}/events/{creation_number}:
+    get:
+      $ref: ./paths/events/getEventsByCreationNumber.yaml
+
+  # General
+  /:
+    get:
+      $ref: ./paths/general/getLedgerInfo.yaml
+
+  # Tables
+  /tables/{table_handle}/item:
+    post:
+      $ref: ./paths/tables/getTableItem.yaml
+  /tables/{table_handle}/raw_item:
+    post:
+      $ref: ./paths/tables/getRawTableItem.yaml
+
+  # Transactions
+  /transactions:
+    get:
+      $ref: ./paths/transactions/getTransactions.yaml
+    post:
+      $ref: ./paths/transactions/submitTransaction.yaml
+  /transactions/by_hash/{txn_hash}:
+    get:
+      $ref: ./paths/transactions/getTransactionByHash.yaml
+  /transactions/by_version/{txn_version}:
+    get:
+      $ref: ./paths/transactions/getTransactionByVersion.yaml
+  /accounts/{address}/transactions:
+    get:
+      $ref: ./paths/transactions/getAccountTransactions.yaml
+  /accounts/{address}/transaction_summaries:
+    get:
+      $ref: ./paths/transactions/getTransactionSummaries.yaml
+  /transactions/batch:
+    post:
+      $ref: ./paths/transactions/submitBatchTransactions.yaml
+  /transactions/simulate:
+    post:
+      $ref: ./paths/transactions/simulateTransaction.yaml
+  /transactions/encode_submission:
+    post:
+      $ref: ./paths/transactions/encodeSubmission.yaml
+  /estimate_gas_price:
+    get:
+      $ref: ./paths/transactions/estimateGasPrice.yaml
+  /transactions/wait_by_hash/{txn_hash}:
+    get:
+      $ref: ./paths/transactions/waitForTransactionByHash.yaml

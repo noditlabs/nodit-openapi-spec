@@ -1,0 +1,39 @@
+security:
+  - api_key: []
+tags:
+  - Transactions
+description: |
+  트랜잭션의 버전을 이용하여 트랜잭션을 조회합니다. 만약 버전이 정리된 경우, 410 응답을 반환합니다.
+
+summary: Get transaction by version
+operationId: aptos_getTransactionByVersion
+parameters:
+  - name: txn_version
+    in: path
+    required: true
+    schema:
+      type: string
+      pattern: ^[0-9]+$
+      example: "3679250756"
+    description: 조회할 트랜잭션의 버전
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Transactions/PendingTransaction.yaml
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

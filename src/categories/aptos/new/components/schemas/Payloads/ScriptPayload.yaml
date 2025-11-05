@@ -1,0 +1,28 @@
+type: object
+description: |
+  여러 개의 함수를 실행할 수 있는 스크립트를 실행하는 페이로드입니다.
+required:
+  - type
+  - code
+  - type_arguments
+  - arguments
+properties:
+  type:
+    type: string
+    description: The type of the payload
+    enum:
+      - script_payload
+  code:
+    type: object
+    description: Move script bytecode
+    required:
+      - bytecode
+    properties:
+      bytecode:
+        $ref: ../Bytecode.yaml
+      abi:
+        $ref: ../Abi.yaml
+  type_arguments:
+    $ref: ../TypeArguments.yaml
+  arguments:
+    $ref: ../Arguments.yaml

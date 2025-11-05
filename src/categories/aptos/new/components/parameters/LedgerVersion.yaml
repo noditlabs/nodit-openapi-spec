@@ -1,0 +1,8 @@
+name: ledger_version
+in: query
+required: false
+schema:
+  type: integer
+description: |
+  계정의 상태를 가져올 트랜잭션의 원장 버전입니다. 
+  값이 제공되지 않으면 최신 버전이 사용됩니다.

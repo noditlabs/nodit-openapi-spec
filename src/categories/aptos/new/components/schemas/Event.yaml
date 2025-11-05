@@ -1,0 +1,22 @@
+type: object
+required:
+  - guid
+  - sequenceNumber
+  - type
+  - data
+properties:
+  guid:
+    type: object
+    properties:
+      creation_number:
+        type: string
+        description: 이벤트 핸들의 생성 번호를 나타내는 필드입니다.
+      account_address:
+        type: string
+        description: 이벤트를 발행한 리소스 소유자의 주소를 나타내는 필드입니다.
+  sequenceNumber:
+    $ref: ./SequenceNumber.yaml
+  type:
+    $ref: ./MoveTypeTag.yaml
+  data:
+    $ref: ./Any.yaml

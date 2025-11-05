@@ -1,0 +1,8 @@
+name: limit
+in: query
+required: false
+schema:
+  type: integer
+description: |
+  가져올 계정 모듈의 최대 개수입니다.
+  값이 제공되지 않으면 기본 페이지 크기가 사용됩니다.

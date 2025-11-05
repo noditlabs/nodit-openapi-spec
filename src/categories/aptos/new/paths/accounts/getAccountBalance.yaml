@@ -1,0 +1,38 @@
+security:
+  - api_key: []
+tags:
+  - Accounts
+description: |
+  지정된 계정, 자산 타입, 그리고 특정 트랜잭션의 원장 버전에 대해 coin/fungible asset (primary fungible asset store만 해당)의 잔액을 반환합니다. 원장 버전을 요청에 명시하지 않으면 최신 원장 버전이 사용됩니다.
+  Aptos 노드는 구성 가능한 기간에 따라 계정 상태 기록을 정리(pruning)합니다. 요청된 원장 버전이 정리된 경우 서버는 410 상태 코드로 응답합니다.
+
+summary: Get account balance
+operationId: aptos_getAccountBalance
+parameters:
+  - $ref: ../../components/parameters/Address.yaml
+  - $ref: ../../components/parameters/AssetType.yaml
+  - $ref: ../../components/parameters/LedgerVersion.yaml
+responses:
+  "200":
+    description: Successful Response
+    headers:
+      $ref: ../../components/schemas/ResponseHeaders.yaml
+    content:
+      application/json:
+        schema:
+          type: integer
+          description: Coin/fungible asset (primary fungible asset store만 해당)의 잔액
+        example:
+          $ref: ../../components/examples/getAccountBalance.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "410":
+    $ref: ../../components/responses/410.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml
