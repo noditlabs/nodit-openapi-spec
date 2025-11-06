@@ -1,0 +1,29 @@
+type: string
+description: |
+  {chain}-{network} 형식으로 표현되는 체인 구분자
+enum:
+  - aptos-mainnet
+  - aptos-testnet
+  - arbitrum-mainnet
+  - arbitrum-sepolia
+  - base-mainnet
+  - base-sepolia
+  - bitcoin-mainnet
+  - bnb-mainnet
+  - bnb-testnet
+  - chiliz-mainnet
+  - dogecoin-mainnet
+  - ethereum-mainnet
+  - ethereum-sepolia
+  - ethereum-hoodi
+  - ethereumclassic-mainnet
+  - giwa-sepolia
+  - kaia-mainnet
+  - kaia-kairos
+  - optimism-mainnet
+  - optimism-sepolia
+  - polygon-mainnet
+  - polygon-amoy
+  - luniverse-mainnet
+  - tron-mainnet
+  - xrpl-mainnet

@@ -1,0 +1,83 @@
+security:
+  - api_key: []
+tags:
+  - Multichain API
+summary: Lookup entities
+operationId: multichain_lookupEntities
+description: Lookup entities
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - input
+        properties:
+          input:
+            type: string
+            description: |
+              조회하고자 하는 문자열을 지정하는 파라미터
+            examples:
+              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" # Vitalik's address
+              - "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" # Satoshi's address
+              - "0x1" # Aptos address
+              - "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh" # XRPL address
+              - "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP" # Tron address
+              - "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f" # Bitcoin Genesis block hash
+              - "0x8d40f254d78ac7eda11815973e44012fda358ed3cd20db8eafc04e672e6e1f65" # Arbitrum Genesis block hash
+          chains:
+            type: array
+            items:
+              $ref: ../components/schemas/Chain.yaml
+            description: |
+              결과에 포함할 네트워크를 지정하는 파라미터로 {chain}-{network} 형식으로 지정합니다.
+              지정하지 않으면 모든 네트워크가 결과에 포함됩니다.
+            examples:
+              - ["ethereum-mainnet", "ethereum-sepolia", "ethereum-hoodi"]
+              - [
+                  "aptos-mainnet",
+                  "arbitrum-mainnet",
+                  "base-mainnet",
+                  "bnb-mainnet",
+                  "ethereum-mainnet",
+                  "optimism-mainnet",
+                ]
+responses:
+  "200":
+    description: Success
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                type: object
+                properties:
+                  chain:
+                    $ref: ../components/schemas/Chain.yaml
+                    description: 조회 대상 체인으로 {chain}-{network} 형식으로 반환됩니다.
+                  type:
+                    type: string
+                    description: 조회 대상 체인의 타입
+                  normalizedInput:
+                    type: string
+                    description: |
+                      입력한 값을 실제 조회 대상 체인의 형식으로 정규화한 값입니다. 
+                      예를 들어,
+                      - Aptos의 경우 account address는 zero-padded 64자리 16진수로 정규화됩니다. (e.g., "0x1" -> "0x0000000000000000000000000000000000000000000000000000000000000001")
+                      - Tron의 경우 account address는 base58 문자열로 정규화됩니다. (e.g., "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" -> "TVjpchRyV9wdpj6kmwqVsBDWY1J8PaFtnb")
+        example:
+          $ref: ../components/examples/lookupEntities.json
+  "400":
+    $ref: ../components/responses/400.yaml
+  "401":
+    $ref: ../components/responses/401.yaml
+  "403":
+    $ref: ../components/responses/403.yaml
+  "404":
+    $ref: ../components/responses/404.yaml
+  "429":
+    $ref: ../components/responses/429.yaml

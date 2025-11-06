@@ -1,0 +1,30 @@
+{
+  "input": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+  "items": [
+    {
+      "chain": "arbitrum-mainet",
+      "type": "account",
+      "normalizedInput": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    },
+    {
+      "chain": "avalanche-mainnet",
+      "type": "account",
+      "normalizedInput": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    },
+    {
+      "chain": "ethereum-mainnet",
+      "type": "account",
+      "normalizedInput": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    },
+    {
+      "chain": "ethereum-sepolia",
+      "type": "account",
+      "normalizedInput": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    },
+    {
+      "chain": "base-mainnet",
+      "type": "account",
+      "normalizedInput": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    }
+  ]
+}

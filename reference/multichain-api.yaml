@@ -1,0 +1,221 @@
+openapi: 3.1.0
+info:
+  title: Multichain API
+  version: 1.2.19
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: https://web3.nodit.io/v1/multichain
+paths:
+  /lookupEntities:
+    get:
+      security:
+        - api_key: []
+      tags:
+        - Multichain API
+      summary: Lookup entities
+      operationId: multichain_lookupEntities
+      description: Lookup entities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - input
+              properties:
+                input:
+                  type: string
+                  description: |
+                    조회하고자 하는 문자열을 지정하는 파라미터
+                  examples:
+                    - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                    - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                    - '0x1'
+                    - rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh
+                    - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
+                    - 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
+                    - '0x8d40f254d78ac7eda11815973e44012fda358ed3cd20db8eafc04e672e6e1f65'
+                chains:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Chain'
+                  description: |
+                    결과에 포함할 네트워크를 지정하는 파라미터로 {chain}-{network} 형식으로 지정합니다.
+                    지정하지 않으면 모든 네트워크가 결과에 포함됩니다.
+                  examples:
+                    - - ethereum-mainnet
+                      - ethereum-sepolia
+                      - ethereum-hoodi
+                    - - aptos-mainnet
+                      - arbitrum-mainnet
+                      - base-mainnet
+                      - bnb-mainnet
+                      - ethereum-mainnet
+                      - optimism-mainnet
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        chain:
+                          $ref: '#/components/schemas/Chain'
+                          description: 조회 대상 체인으로 {chain}-{network} 형식으로 반환됩니다.
+                        type:
+                          type: string
+                          description: 조회 대상 체인의 타입
+                        normalizedInput:
+                          type: string
+                          description: |
+                            입력한 값을 실제 조회 대상 체인의 형식으로 정규화한 값입니다. 
+                            예를 들어,
+                            - Aptos의 경우 account address는 zero-padded 64자리 16진수로 정규화됩니다. (e.g., "0x1" -> "0x0000000000000000000000000000000000000000000000000000000000000001")
+                            - Tron의 경우 account address는 base58 문자열로 정규화됩니다. (e.g., "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" -> "TVjpchRyV9wdpj6kmwqVsBDWY1J8PaFtnb")
+              example:
+                input: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                items:
+                  - chain: arbitrum-mainet
+                    type: account
+                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                  - chain: avalanche-mainnet
+                    type: account
+                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                  - chain: ethereum-mainnet
+                    type: account
+                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                  - chain: ethereum-sepolia
+                    type: account
+                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                  - chain: base-mainnet
+                    type: account
+                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: The default value, `nodit-demo`, is only for use in the developer documentation. For real applications or services, use the API key obtained from the Nodit console.
+  schemas:
+    Chain:
+      type: string
+      description: |
+        {chain}-{network} 형식으로 표현되는 체인 구분자
+      enum:
+        - aptos-mainnet
+        - aptos-testnet
+        - arbitrum-mainnet
+        - arbitrum-sepolia
+        - base-mainnet
+        - base-sepolia
+        - bitcoin-mainnet
+        - bnb-mainnet
+        - bnb-testnet
+        - chiliz-mainnet
+        - dogecoin-mainnet
+        - ethereum-mainnet
+        - ethereum-sepolia
+        - ethereum-hoodi
+        - ethereumclassic-mainnet
+        - giwa-sepolia
+        - kaia-mainnet
+        - kaia-kairos
+        - optimism-mainnet
+        - optimism-sepolia
+        - polygon-mainnet
+        - polygon-amoy
+        - luniverse-mainnet
+        - tron-mainnet
+        - xrpl-mainnet
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: |
+            에러가 발생한 상황을 식별하는 코드를 반환합니다.
+          enum:
+            - INVALID_PARAMETER
+            - AUTHENTICATION_FAILED
+            - PERMISSION_DENIED
+            - RESOURCE_NOT_FOUND
+            - TOO_MANY_REQUESTS
+        message:
+          type: string
+          description: |
+            에러의 상세 메시지를 반환합니다.
+      required:
+        - code
+        - message
+  responses:
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+            example:
+              code: INVALID_PARAMETER
+              message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE, PARAMETER2_NAME = PARAMETER2_VALUE, ... }'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
+    '429':
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests

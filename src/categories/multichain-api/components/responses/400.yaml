@@ -1,0 +1,15 @@
+description: Bad Request
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      example:
+        code: INVALID_PARAMETER
+        message: >-
+          Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE,
+          PARAMETER2_NAME = PARAMETER2_VALUE, ... }

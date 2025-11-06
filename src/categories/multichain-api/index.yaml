@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: Multichain API
+  version: 1.2.20
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: https://web3.nodit.io/v1/multichain
+components:
+  securitySchemes:
+    api_key:
+      $ref: ./components/securitySchemes/X-API-KEY.yaml
+paths:
+  /lookupEntities:
+    get:
+      $ref: ./paths/lookupEntities.yaml
