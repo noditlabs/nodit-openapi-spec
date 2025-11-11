@@ -4,6 +4,7 @@ import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
 import { getChainInfo } from "../../../../constants";
+import { optimismBedrockDataInfoMessage } from "../../../../callouts";
 
 const summary = "Get Internal Transactions By Transaction Hash";
 const endpoint = "getInternalTransactionsByTransactionHash";
@@ -247,6 +248,8 @@ function getRequestAndResponse(protocol: string): {
 function getCallouts(protocol: string): string {
   switch (protocol) {
     case "web3":
+    case "optimism":
+      return optimismBedrockDataInfoMessage;
     default:
       return "";
   }

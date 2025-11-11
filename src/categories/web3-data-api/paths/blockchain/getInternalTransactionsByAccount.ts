@@ -8,7 +8,10 @@ import {
   getChainInfo,
   TRON_ACCOUNTS,
 } from "../../../../constants";
-import { throughputLimitInfoMessage } from "../../../../callouts";
+import {
+  optimismBedrockDataInfoMessage,
+  throughputLimitInfoMessage,
+} from "../../../../callouts";
 
 const summary = "Get Internal Transactions By Account";
 const endpoint = "getInternalTransactionsByAccount";
@@ -267,7 +270,9 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 function getCallouts(protocol: string): string {
   switch (protocol) {
+    case "optimism":
     case "web3":
+      return optimismBedrockDataInfoMessage;
     default:
       return throughputLimitInfoMessage;
   }
