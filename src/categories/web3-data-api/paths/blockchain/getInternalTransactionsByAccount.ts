@@ -272,7 +272,7 @@ function getCallouts(protocol: string): string {
   switch (protocol) {
     case "optimism":
     case "web3":
-      return optimismBedrockDataInfoMessage;
+      return `${throughputLimitInfoMessage}\n${optimismBedrockDataInfoMessage}`;
     default:
       return throughputLimitInfoMessage;
   }
