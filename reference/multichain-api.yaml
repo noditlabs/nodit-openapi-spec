@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Multichain API
-  version: 1.2.19
+  version: 1.2.20
   license:
     name: MIT
     identifier: MIT
@@ -25,6 +25,7 @@ paths:
               type: object
               required:
                 - input
+                - chains
               properties:
                 input:
                   type: string
@@ -44,17 +45,6 @@ paths:
                     $ref: '#/components/schemas/Chain'
                   description: |
                     결과에 포함할 네트워크를 지정하는 파라미터로 {chain}-{network} 형식으로 지정합니다.
-                    지정하지 않으면 모든 네트워크가 결과에 포함됩니다.
-                  examples:
-                    - - ethereum-mainnet
-                      - ethereum-sepolia
-                      - ethereum-hoodi
-                    - - aptos-mainnet
-                      - arbitrum-mainnet
-                      - base-mainnet
-                      - bnb-mainnet
-                      - ethereum-mainnet
-                      - optimism-mainnet
       responses:
         '200':
           description: Success
@@ -62,7 +52,13 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - input
+                  - items
                 properties:
+                  input:
+                    type: string
+                    description: 조회시 입력한 문자열을 반환합니다.
                   items:
                     type: array
                     items:
@@ -84,10 +80,7 @@ paths:
               example:
                 input: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                 items:
-                  - chain: arbitrum-mainet
-                    type: account
-                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-                  - chain: avalanche-mainnet
+                  - chain: arbitrum-mainnet
                     type: account
                     normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                   - chain: ethereum-mainnet
@@ -124,7 +117,6 @@ components:
         {chain}-{network} 형식으로 표현되는 체인 구분자
       enum:
         - aptos-mainnet
-        - aptos-testnet
         - arbitrum-mainnet
         - arbitrum-sepolia
         - base-mainnet

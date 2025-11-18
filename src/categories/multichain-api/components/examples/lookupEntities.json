@@ -2,12 +2,7 @@
   "input": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
   "items": [
     {
-      "chain": "arbitrum-mainet",
-      "type": "account",
-      "normalizedInput": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-    },
-    {
-      "chain": "avalanche-mainnet",
+      "chain": "arbitrum-mainnet",
       "type": "account",
       "normalizedInput": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
     },
