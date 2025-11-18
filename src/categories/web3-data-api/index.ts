@@ -11,11 +11,11 @@ import { OasParams, ReadmeExtension } from "../../types";
 
 const apiTitle = "Web3 Data API";
 
-function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
+function oasDocs({ version, chain }: OasParams): OpenAPIV3.Document {
   return {
     openapi: "3.1.0",
     info: {
-      title: protocol === "web3" ? apiTitle : protocol,
+      title: chain === "web3" ? apiTitle : chain,
       version,
     },
     servers: [
@@ -36,13 +36,13 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
       },
     },
     paths: {
-      ...nftPaths(protocol),
-      ...tokenPaths(protocol),
-      ...nativeTokenPaths(protocol),
-      ...blockchainPaths(protocol),
-      ...ensPaths(protocol),
-      ...statsPaths(protocol),
-      ...assetPaths(protocol),
+      ...nftPaths(chain),
+      ...tokenPaths(chain),
+      ...nativeTokenPaths(chain),
+      ...blockchainPaths(chain),
+      ...ensPaths(chain),
+      ...statsPaths(chain),
+      ...assetPaths(chain),
     },
   };
 }

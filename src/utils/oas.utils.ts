@@ -2,17 +2,16 @@ import { OpenAPIV3 } from "openapi-types";
 import { ApiSpec } from "../types";
 
 export function createPath({
-  protocol,
+  chain,
   tagPage,
   apiSpec,
 }: {
-  protocol?: string;
+  chain?: string;
   tagPage: string;
   apiSpec: ApiSpec;
 }): OpenAPIV3.PathsObject {
   const path = {
-    [`/{protocol}/{network}/${tagPage}/${apiSpec.endpoint}`]:
-      apiSpec.info(protocol),
+    [`/{chain}/{network}/${tagPage}/${apiSpec.endpoint}`]: apiSpec.info(chain),
   };
 
   return path;

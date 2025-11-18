@@ -2,7 +2,7 @@ import { OpenAPIV3 } from "openapi-types";
 
 namespace Requests {
   export const baseObject = (
-    defaultMethod: string,
+    defaultMethod: string
   ): OpenAPIV3.SchemaObject => ({
     type: "object",
     required: ["id", "jsonrpc", "method"],
@@ -32,7 +32,7 @@ namespace Requests {
         type: "string",
         default: "aptos",
       },
-      description: "조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.",
+      description: "조회 대상 체인의 체인을 지정하기 위한 파라미터입니다.",
     };
 
     export const network: OpenAPIV3.ParameterObject = {
@@ -44,7 +44,7 @@ namespace Requests {
         default: "mainnet",
       },
       description:
-        "조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.",
+        "조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.",
     };
   }
 

@@ -14,9 +14,9 @@ const endpoint = "getNftTransfersWithinRange";
 const isPublic = true;
 const tags = ["NFT API"];
 
-// 프로토콜별 description을 반환하는 헬퍼 함수
-function getDescription(protocol: string): string {
-  switch (protocol) {
+// 체인별 description을 반환하는 헬퍼 함수
+function getDescription(chain: string): string {
+  switch (chain) {
     default:
       return `특정 기간동안 발생한 NFT 전송 목록을 조회합니다. 조회 결과에는 컨트랙트 메타데이터와 NFT 메타데이터가 포함됩니다. 
 > 📘 기간 설정 팁 
@@ -24,15 +24,15 @@ function getDescription(protocol: string): string {
   }
 }
 
-const info = (protocol: string): OpenAPIV3.PathItemObject => {
+const info = (chain: string): OpenAPIV3.PathItemObject => {
   // A. operationId, parameters 설정
-  const { operationId, parameters } = getOpIdAndParams(protocol);
+  const { operationId, parameters } = getOpIdAndParams(chain);
   // B. requestBody, successResponse 설정
-  const { requestBody, successResponse } = getRequestAndResponse(protocol);
+  const { requestBody, successResponse } = getRequestAndResponse(chain);
   // C. callouts 설정
-  const callouts = getCallouts(protocol);
-  // D. protocol에 따른 description 설정
-  const protocolDescription = getDescription(protocol);
+  const callouts = getCallouts(chain);
+  // D. chain에 따른 description 설정
+  const chainDescription = getDescription(chain);
 
   return {
     post: {
@@ -42,7 +42,7 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
         },
       ],
       tags,
-      description: `${protocolDescription}\n\n${callouts}`,
+      description: `${chainDescription}\n\n${callouts}`,
       summary,
       operationId,
       parameters,
@@ -72,15 +72,15 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
 // A. operationId, parameters 설정
 //   - none vs. 그 외
 // ─────────────────────────────────────
-function getOpIdAndParams(protocol: string): {
+function getOpIdAndParams(chain: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "web3") {
+  if (chain === "web3") {
     return {
       operationId: endpoint,
       parameters: [
-        Requests.protocol("ethereum", [
+        Requests.chain("ethereum", [
           // evm
           "arbitrum",
           "base",
@@ -104,11 +104,11 @@ function getOpIdAndParams(protocol: string): {
       ],
     };
   } else {
-    const chainInfo = getChainInfo(protocol);
+    const chainInfo = getChainInfo(chain);
     return {
-      operationId: `${protocol}-${endpoint}`,
+      operationId: `${chain}-${endpoint}`,
       parameters: [
-        Requests.protocol(protocol, [protocol]),
+        Requests.chain(chain, [chain]),
         Requests.network(
           chainInfo?.mainnet || chainInfo?.testnet?.[0] || null,
           chainInfo?.mainnet
@@ -122,13 +122,13 @@ function getOpIdAndParams(protocol: string): {
 
 // ─────────────────────────────────────
 // B. requestBody, successResponse 설정
-//   - 프로토콜별로 모두 다름
+//   - 체인별로 모두 다름
 // ─────────────────────────────────────
-function getRequestAndResponse(protocol: string): {
+function getRequestAndResponse(chain: string): {
   requestBody: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
-  switch (protocol) {
+  switch (chain) {
     case "web3":
     case "kaia":
       return {
@@ -229,8 +229,8 @@ function getRequestAndResponse(protocol: string): {
 // C. callouts 설정
 //   - none일 경우 모든 케이스의 callouts 처리
 // ─────────────────────────────────────
-function getCallouts(protocol: string): string {
-  switch (protocol) {
+function getCallouts(chain: string): string {
+  switch (chain) {
     case "web3":
     case "kaia":
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForNftTransfer)}`;

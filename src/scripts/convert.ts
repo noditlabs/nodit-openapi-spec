@@ -7,7 +7,7 @@ dotenv.config();
 function validateInputs(
   tsFilePathInput?: string,
   versionInput?: string,
-  protocolInput?: string
+  chainInput?: string
 ): [string, string, string] {
   if (!tsFilePathInput) {
     throw new Error(
@@ -25,17 +25,17 @@ function validateInputs(
     );
   }
 
-  if (!protocolInput) {
-    throw new Error("Error: A Protocol is required as the third argument.");
+  if (!chainInput) {
+    throw new Error("Error: A chain is required as the third argument.");
   }
 
-  return [tsFilePathInput, versionInput, protocolInput];
+  return [tsFilePathInput, versionInput, chainInput];
 }
 
 async function main() {
   try {
     const currentWorkingDir = process.cwd();
-    const [tsFilePathInput, versionInput, protocolInput] = validateInputs(
+    const [tsFilePathInput, versionInput, chainInput] = validateInputs(
       ...process.argv.slice(2)
     );
     const tsFilePath = path.resolve(currentWorkingDir, tsFilePathInput);
@@ -45,10 +45,10 @@ async function main() {
       version: versionInput,
       outputDir: outputDir,
       tsFilePath: tsFilePath,
-      protocol: protocolInput,
+      chain: chainInput,
     });
 
-    console.log(result);
+    // console.log(result);
 
     console.log("API documentation has been successfully generated.");
   } catch (err) {

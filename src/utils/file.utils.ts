@@ -4,59 +4,67 @@ import * as fs from "fs/promises";
 import { OpenAPIV3 } from "openapi-types";
 import slugify from "slugify";
 
-export async function getOasDocs(tsFilePath: string, version: string, protocol?: string): Promise<OpenAPIV3.Document> {
-	if (!tsFilePath.endsWith(".ts")) {
-		throw new Error("A valid TypeScript file path with a .ts extension must be provided as an argument.");
-	}
+export async function getOasDocs(
+  tsFilePath: string,
+  version: string,
+  chain?: string
+): Promise<OpenAPIV3.Document> {
+  if (!tsFilePath.endsWith(".ts")) {
+    throw new Error(
+      "A valid TypeScript file path with a .ts extension must be provided as an argument."
+    );
+  }
 
-	const module = await require(tsFilePath);
-	let oasDocs: OpenAPIV3.Document;
+  const module = await require(tsFilePath);
+  let oasDocs: OpenAPIV3.Document;
 
-	oasDocs = module.default({
-		protocol,
-		version,
-	});
+  oasDocs = module.default({
+    chain,
+    version,
+  });
 
-	return oasDocs;
+  return oasDocs;
 }
 
 export async function convertTsToYaml({
-	version,
-	outputDir,
-	tsFilePath,
-	protocol,
+  version,
+  outputDir,
+  tsFilePath,
+  chain,
 }: {
-	version: string;
-	outputDir: string;
-	tsFilePath: string;
-	protocol?: string;
+  version: string;
+  outputDir: string;
+  tsFilePath: string;
+  chain?: string;
 }) {
-	try {
-		if (!tsFilePath.endsWith(".ts")) {
-			throw Error("A valid TypeScript file path with a .ts extension must be provided as an argument.");
-		}
-		const oasDocs = await getOasDocs(tsFilePath, version, protocol);
-		const yamlData = yaml.dump({ ...oasDocs }); // yaml로 변환
+  try {
+    if (!tsFilePath.endsWith(".ts")) {
+      throw Error(
+        "A valid TypeScript file path with a .ts extension must be provided as an argument."
+      );
+    }
+    const oasDocs = await getOasDocs(tsFilePath, version, chain);
+    const yamlData = yaml.dump({ ...oasDocs }); // yaml로 변환
 
-		// if output directory does not exist, create it
-		await fs.mkdir(outputDir, { recursive: true });
+    // if output directory does not exist, create it
+    await fs.mkdir(outputDir, { recursive: true });
 
-		let baseFileName = `${slugify(oasDocs.info.title.toLowerCase())}`;
+    let baseFileName = `${slugify(oasDocs.info.title.toLowerCase())}`;
 
-		const outputPath = path.join(outputDir, `${baseFileName}.yaml`);
+    const outputPath = path.join(outputDir, `${baseFileName}.yaml`);
 
-		await fs.writeFile(outputPath, yamlData, "utf8");
-		console.log(`▶️ Successfully converted, Output File: ${baseFileName}.yaml`);
+    await fs.writeFile(outputPath, yamlData, "utf8");
+    console.log(`▶️ Successfully converted, Output File: ${baseFileName}.yaml`);
 
-		return { outputPath, oasDocs };
-	} catch (err) {
-		// 에러 객체가 Error 인스턴스인지 확인
-		if (err instanceof Error) {
-			console.error("Error processing the file:", err.message);
-		} else {
-			// 알 수 없는 타입의 에러 처리
-			console.error("An unknown error occurred.");
-		}
-		process.exit(1);
-	}
+    return { outputPath, oasDocs };
+  } catch (err) {
+    // 에러 객체가 Error 인스턴스인지 확인
+    if (err instanceof Error) {
+      console.error("Error processing the file:", err.message);
+    } else {
+      // 알 수 없는 타입의 에러 처리
+      console.error("An unknown error occurred.");
+    }
+    process.exit(1);
+  }
 }

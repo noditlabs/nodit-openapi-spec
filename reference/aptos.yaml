@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: aptos
-  version: 1.2.19
+  version: 1.2.20
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -16,7 +16,7 @@ components:
         documentation. For real applications or services, use the API key
         obtained from the Nodit console.
 paths:
-  /{protocol}/{network}/token/getTokenAccountsByAssetType:
+  /{chain}/{network}/token/getTokenAccountsByAssetType:
     post:
       security:
         - api_key: []
@@ -29,7 +29,7 @@ paths:
       summary: Get Token Accounts By Asset Type
       operationId: aptos-getTokenAccountsByAssetType
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -37,7 +37,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -46,7 +46,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -449,7 +449,7 @@ paths:
                 example:
                   code: TOO_MANY_REQUESTS
                   message: Too many requests
-  /{protocol}/{network}/token/getTokenBalanceChangesByAccount:
+  /{chain}/{network}/token/getTokenBalanceChangesByAccount:
     post:
       security:
         - api_key: []
@@ -461,7 +461,7 @@ paths:
       summary: Get Token Balance Changes by Account
       operationId: aptos-getTokenBalanceChangesByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -469,7 +469,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -478,7 +478,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -858,7 +858,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/token/getTokenBalanceChangesByAssetType:
+  /{chain}/{network}/token/getTokenBalanceChangesByAssetType:
     post:
       security:
         - api_key: []
@@ -870,7 +870,7 @@ paths:
       summary: Get Token Balance Changes By Asset Type
       operationId: aptos-getTokenBalanceChangesByAssetType
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -878,7 +878,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -887,7 +887,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1012,7 +1012,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/token/getTokenBalanceChangesWithinRange:
+  /{chain}/{network}/token/getTokenBalanceChangesWithinRange:
     post:
       security:
         - api_key: []
@@ -1024,7 +1024,7 @@ paths:
       summary: Get Token Balance Changes Within Range
       operationId: aptos-getTokenBalanceChangesWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1032,7 +1032,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1041,7 +1041,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1139,7 +1139,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/token/getTokenMetadataByAssetTypes:
+  /{chain}/{network}/token/getTokenMetadataByAssetTypes:
     post:
       security:
         - api_key: []
@@ -1151,7 +1151,7 @@ paths:
       summary: Get Token Metadata By Asset Types
       operationId: aptos-getTokenMetadataByAssetTypes
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1159,7 +1159,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1168,7 +1168,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1353,7 +1353,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/token/getTokenPairByAssetType:
+  /{chain}/{network}/token/getTokenPairByAssetType:
     post:
       security:
         - api_key: []
@@ -1366,7 +1366,7 @@ paths:
       summary: Get Token Pair By Asset Type
       operationId: aptos-getTokenPairByAssetType
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1374,7 +1374,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1383,7 +1383,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1446,7 +1446,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/token/getTokensOwnedByAccount:
+  /{chain}/{network}/token/getTokensOwnedByAccount:
     post:
       security:
         - api_key: []
@@ -1460,7 +1460,7 @@ paths:
       summary: Get Tokens Owned By Account
       operationId: aptos-getTokensOwnedByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1468,7 +1468,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1477,7 +1477,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1642,7 +1642,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getBlockByHashOrNumber:
+  /{chain}/{network}/blockchain/getBlockByHashOrNumber:
     post:
       security:
         - api_key: []
@@ -1654,7 +1654,7 @@ paths:
       summary: Get Block by Hash or Number
       operationId: aptos-getBlockByHashOrNumber
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1662,7 +1662,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1671,7 +1671,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1819,7 +1819,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getBlocksWithinRange:
+  /{chain}/{network}/blockchain/getBlocksWithinRange:
     post:
       security:
         - api_key: []
@@ -1831,7 +1831,7 @@ paths:
       summary: Get Blocks Within Range
       operationId: aptos-getBlocksWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1839,7 +1839,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1848,7 +1848,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1959,7 +1959,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTotalTransactionCountByAccount:
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
     post:
       security:
         - api_key: []
@@ -1971,7 +1971,7 @@ paths:
       summary: Get Total Transaction Count By Account
       operationId: aptos-getTotalTransactionCountByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1979,7 +1979,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1988,7 +1988,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -2025,7 +2025,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionByHash:
+  /{chain}/{network}/blockchain/getTransactionByHash:
     post:
       security:
         - api_key: []
@@ -2037,7 +2037,7 @@ paths:
       summary: Get Transaction By Hash
       operationId: aptos-getTransactionByHash
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -2045,7 +2045,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -2054,7 +2054,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -2532,7 +2532,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionByVersion:
+  /{chain}/{network}/blockchain/getTransactionByVersion:
     post:
       security:
         - api_key: []
@@ -2544,7 +2544,7 @@ paths:
       summary: Get Transaction By Version
       operationId: aptos-getTransactionByVersion
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -2552,7 +2552,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -2561,7 +2561,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -2751,7 +2751,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionsByAccount:
+  /{chain}/{network}/blockchain/getTransactionsByAccount:
     post:
       security:
         - api_key: []
@@ -2763,7 +2763,7 @@ paths:
       summary: Get Transactions By Account
       operationId: aptos-getTransactionsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -2771,7 +2771,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -2780,7 +2780,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -2987,7 +2987,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionsByHashes:
+  /{chain}/{network}/blockchain/getTransactionsByHashes:
     post:
       security:
         - api_key: []
@@ -3025,7 +3025,7 @@ paths:
       summary: Get Transactions By Hashes
       operationId: aptos-getTransactionsByHashes
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3033,7 +3033,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3042,7 +3042,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -3347,7 +3347,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionsByVersions:
+  /{chain}/{network}/blockchain/getTransactionsByVersions:
     post:
       security:
         - api_key: []
@@ -3375,7 +3375,7 @@ paths:
       summary: Get Transactions By Versions
       operationId: aptos-getTransactionsByVersions
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3383,7 +3383,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3392,7 +3392,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -3695,7 +3695,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionsInBlock:
+  /{chain}/{network}/blockchain/getTransactionsInBlock:
     post:
       security:
         - api_key: []
@@ -3719,7 +3719,7 @@ paths:
       summary: Get Transactions In Block
       operationId: aptos-getTransactionsInBlock
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3727,7 +3727,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3736,7 +3736,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4817,7 +4817,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/stats/getAccountStats:
+  /{chain}/{network}/stats/getAccountStats:
     post:
       security:
         - api_key: []
@@ -4830,7 +4830,7 @@ paths:
       summary: Get Account Stats
       operationId: aptos-getAccountStats
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4838,7 +4838,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4847,7 +4847,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:

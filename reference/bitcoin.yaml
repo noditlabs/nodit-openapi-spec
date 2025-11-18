@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: bitcoin
-  version: 1.2.18
+  version: 1.2.20
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -16,20 +16,20 @@ components:
         documentation. For real applications or services, use the API key
         obtained from the Nodit console.
 paths:
-  /{protocol}/{network}/native/getNativeTokenBalanceByAccount:
+  /{chain}/{network}/native/getNativeTokenBalanceByAccount:
     post:
       security:
         - api_key: []
       tags:
         - Native Token API
       description: >+
-        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다.
-        (e.g., Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
+        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 체인에 따라 토큰의 종류가 다를 수 있습니다. (e.g.,
+        Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
 
       summary: Get Native Token Balance by Account
       operationId: bitcoin-getNativeTokenBalanceByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -37,7 +37,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -46,7 +46,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -164,20 +164,20 @@ paths:
                 example:
                   code: TOO_MANY_REQUESTS
                   message: Too many requests
-  /{protocol}/{network}/native/getNativeTokenTransfersByAccount:
+  /{chain}/{network}/native/getNativeTokenTransfersByAccount:
     post:
       security:
         - api_key: []
       tags:
         - Native Token API
       description: >+
-        특정 주소와 관련된 네이티브 토큰 전송 내역을 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다. (e.g.,
+        특정 주소와 관련된 네이티브 토큰 전송 내역을 조회합니다. 선택한 체인에 따라 토큰의 종류가 다를 수 있습니다. (e.g.,
         Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
 
       summary: Get Native Token Transfers By Account
       operationId: bitcoin-getNativeTokenTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -185,7 +185,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -194,7 +194,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -701,7 +701,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getBlockByHashOrNumber:
+  /{chain}/{network}/blockchain/getBlockByHashOrNumber:
     post:
       security:
         - api_key: []
@@ -713,7 +713,7 @@ paths:
       summary: Get Block by Hash or Number
       operationId: bitcoin-getBlockByHashOrNumber
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -721,7 +721,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -730,7 +730,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -902,7 +902,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTotalTransactionCountByAccount:
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
     post:
       security:
         - api_key: []
@@ -914,7 +914,7 @@ paths:
       summary: Get Total Transaction Count By Account
       operationId: bitcoin-getTotalTransactionCountByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -922,7 +922,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -931,7 +931,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -969,7 +969,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionByTransactionId:
+  /{chain}/{network}/blockchain/getTransactionByTransactionId:
     post:
       security:
         - api_key: []
@@ -981,7 +981,7 @@ paths:
       summary: Get Transaction By Transaction ID
       operationId: bitcoin-getTransactionByTransactionId
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -989,7 +989,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -998,7 +998,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1295,7 +1295,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionsByAccount:
+  /{chain}/{network}/blockchain/getTransactionsByAccount:
     post:
       security:
         - api_key: []
@@ -1316,7 +1316,7 @@ paths:
       summary: Get Transactions By Account
       operationId: bitcoin-getTransactionsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1324,7 +1324,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1333,7 +1333,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1513,7 +1513,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getTransactionsByTransactionIds:
+  /{chain}/{network}/blockchain/getTransactionsByTransactionIds:
     post:
       security:
         - api_key: []
@@ -1539,7 +1539,7 @@ paths:
       summary: Get Transactions By Transaction IDs
       operationId: bitcoin-getTransactionsByTransactionIds
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1547,7 +1547,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1556,7 +1556,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1601,7 +1601,7 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
-  /{protocol}/{network}/blockchain/getUnspentTransactionOutputsByAccount:
+  /{chain}/{network}/blockchain/getUnspentTransactionOutputsByAccount:
     post:
       security:
         - api_key: []
@@ -1613,7 +1613,7 @@ paths:
       summary: Get Unspent Transaction Outputs By Account
       operationId: bitcoin-getUnspentTransactionOutputsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1621,7 +1621,7 @@ paths:
             enum:
               - bitcoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1630,7 +1630,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:

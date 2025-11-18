@@ -10,25 +10,25 @@ const endpoint = "createWebhook";
 const isPublic = true;
 const tags = ["Webhook API"];
 
-// 프로토콜별 description을 반환하는 헬퍼 함수
-function getDescription(protocol: string): string {
-  switch (protocol) {
+// 체인별 description을 반환하는 헬퍼 함수
+function getDescription(chain: string): string {
+  switch (chain) {
     default:
       return `Webhook을 생성하기 위한 API입니다. 구독 정보와 Webhook URL을 입력하여 Webhook을 생성합니다. Webhook을 생성하면 해당 Webhook URL로 이벤트가 전송됩니다. Webhook이 생성되면 Webhook의 Subscription ID를 반환하며, 이를 통해 Webhook 정보를 조회, 수정 및 삭제를 할 수 있습니다.`;
   }
 }
 
 const info = (
-  protocol: string
+  chain: string
 ): OpenAPIV3.PathItemObject<{ "x-readme": XReadmeObject }> => {
   // A. operationId, parameters 설정
   const { operationId, parameters } = getOpIdAndParams();
   // B. requestBody, successResponse 설정
-  const { requestBody, successResponse } = getRequestAndResponse(protocol);
+  const { requestBody, successResponse } = getRequestAndResponse(chain);
   // C. callouts 설정
-  const callouts = getCallouts(protocol);
+  const callouts = getCallouts(chain);
   // D. protocol에 따른 description 설정
-  const protocolDescription = getDescription(protocol);
+  const chainDescription = getDescription(chain);
 
   return {
     post: {
@@ -41,7 +41,7 @@ const info = (
         },
       ],
       tags,
-      description: `${protocolDescription}\n\n${callouts}`,
+      description: `${chainDescription}\n\n${callouts}`,
       summary,
       operationId,
       parameters,
@@ -78,7 +78,7 @@ function getOpIdAndParams(): {
   return {
     operationId: endpoint,
     parameters: [
-      Requests.protocol("ethereum", [
+      Requests.chain("ethereum", [
         // evm
         "arbitrum",
         "base",
@@ -102,13 +102,13 @@ function getOpIdAndParams(): {
 
 // ─────────────────────────────────────
 // B. requestBody, successResponse 설정
-//   - 프로토콜별로 모두 다름
+//   - 체인별로 모두 다름
 // ─────────────────────────────────────
-function getRequestAndResponse(protocol: string): {
+function getRequestAndResponse(chain: string): {
   requestBody: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
-  switch (protocol) {
+  switch (chain) {
     default:
       return {
         requestBody: {
@@ -157,10 +157,10 @@ function getRequestAndResponse(protocol: string): {
 
 // ─────────────────────────────────────
 // C. callouts 설정
-//   - 프로토콜별로 모두 다름
+//   - 체인별로 모두 다름
 // ─────────────────────────────────────
-function getCallouts(protocol: string): string {
-  switch (protocol) {
+function getCallouts(chain: string): string {
+  switch (chain) {
     default:
       return ""; // 해당 체인에서는 callouts가 없음
   }

@@ -4,12 +4,12 @@ import { ERC20, ETHEREUM_ACCOUNTS } from "../../../constants";
 
 namespace Requests {
   /** Path Parameters **/
-  export function protocol(
+  export function chain(
     example: string,
     list: string[]
   ): OpenAPIV3.ParameterObject {
     return {
-      name: "protocol",
+      name: "chain",
       in: "path",
       required: true,
       schema: {
@@ -17,7 +17,8 @@ namespace Requests {
         enum: list,
         default: example,
       },
-      description: "조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.",
+      description: `조회 대상 체인을 지정하기 위한 파라미터입니다. 
+<strong style="color: red;">*</strong> 응답 결과에는 지정한 체인명이 protocol 필드에 반환됩니다.`,
     };
   }
 
@@ -34,7 +35,7 @@ namespace Requests {
         default: example,
         enum: list,
       },
-      description: `조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      description: `조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
 
 - aptos: "mainnet", "testnet"
 - arbitrum: "mainnet", "sepolia"
@@ -62,7 +63,7 @@ namespace Requests {
         default: example,
         enum: list,
       },
-      description: `조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+      description: `조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
 
 - arbitrum: "mainnet", "sepolia"
 - base: "mainnet", "sepolia",

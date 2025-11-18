@@ -63,7 +63,7 @@ function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
             },
           ],
           tags: [title],
-          description: `현재 블록을 생성한 검증자(또는 블록 생성자)의 주소를 반환합니다. 이 메소드는 PoA 네트워크에서 블록을 생성한 노드를 식별하는 데 사용됩니다. 블록 생성자는 네트워크의 합의 프로토콜에 따라 선택되며, 이 메소드를 통해 해당 블록의 "author" 또는 "miner"의 주소를 알 수 있습니다.`,
+          description: `현재 블록을 생성한 검증자(또는 블록 생성자)의 주소를 반환합니다. 이 메소드는 PoA 네트워크에서 블록을 생성한 노드를 식별하는 데 사용됩니다. 블록 생성자는 네트워크의 합의 체인에 따라 선택되며, 이 메소드를 통해 해당 블록의 "author" 또는 "miner"의 주소를 알 수 있습니다.`,
           summary: method,
           operationId: slug,
           parameters: [],

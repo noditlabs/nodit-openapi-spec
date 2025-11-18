@@ -9,23 +9,23 @@ const endpoint = "deleteWebhook";
 const isPublic = true;
 const tags = ["Webhook API"];
 
-// 프로토콜별 description을 반환하는 헬퍼 함수
-function getDescription(protocol: string): string {
-  switch (protocol) {
+// 체인별 description을 반환하는 헬퍼 함수
+function getDescription(chain: string): string {
+  switch (chain) {
     default:
       return `Webhook을 삭제하기 위한 API입니다. Webhook을 삭제하면 해당 Webhook의 구독이 취소되며, 더 이상 이벤트를 받지 않습니다.`;
   }
 }
 
-const info = (protocol: string): OpenAPIV3.PathItemObject => {
+const info = (chain: string): OpenAPIV3.PathItemObject => {
   // A. operationId와 parameters 설정
-  const { operationId, parameters } = getOpIdAndParams(protocol);
+  const { operationId, parameters } = getOpIdAndParams(chain);
   // B. successResponse 설정
-  const { successResponse } = getRequestAndResponse(protocol);
+  const { successResponse } = getRequestAndResponse(chain);
   // C. callouts 설정
-  const callouts = getCallouts(protocol);
+  const callouts = getCallouts(chain);
   // D. protocol에 따른 description 설정
-  const protocolDescription = getDescription(protocol);
+  const chainDescription = getDescription(chain);
 
   return {
     delete: {
@@ -35,7 +35,7 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
         },
       ],
       tags,
-      description: `${protocolDescription}\n\n${callouts}`,
+      description: `${chainDescription}\n\n${callouts}`,
       summary,
       operationId,
       parameters,
@@ -56,15 +56,15 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
 // ─────────────────────────────────────
 // A. operationId, parameters 설정
 // ─────────────────────────────────────
-function getOpIdAndParams(protocol: string): {
+function getOpIdAndParams(chain: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "web3") {
+  if (chain === "web3") {
     return {
       operationId: endpoint,
       parameters: [
-        Requests.protocol("ethereum", [
+        Requests.chain("ethereum", [
           // evm
           "arbitrum",
           "base",
@@ -88,11 +88,11 @@ function getOpIdAndParams(protocol: string): {
       ],
     };
   } else {
-    const chainInfo = getChainInfo(protocol);
+    const chainInfo = getChainInfo(chain);
     return {
-      operationId: `${protocol}-${endpoint}`,
+      operationId: `${chain}-${endpoint}`,
       parameters: [
-        Requests.protocol(protocol, [protocol]),
+        Requests.chain(chain, [chain]),
         Requests.network(chainInfo?.mainnet || chainInfo?.testnet?.[0] || "", [
           ...(chainInfo?.mainnet || []),
           ...(chainInfo?.testnet || []),
@@ -106,11 +106,11 @@ function getOpIdAndParams(protocol: string): {
 // ─────────────────────────────────────
 // B. successResponse 설정
 // ─────────────────────────────────────
-function getRequestAndResponse(protocol: string): {
+function getRequestAndResponse(chain: string): {
   requestBody?: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
-  switch (protocol) {
+  switch (chain) {
     default:
       return {
         successResponse: {
@@ -129,8 +129,8 @@ function getRequestAndResponse(protocol: string): {
 // ─────────────────────────────────────
 // C. callouts 설정
 // ─────────────────────────────────────
-function getCallouts(protocol: string): string {
-  switch (protocol) {
+function getCallouts(chain: string): string {
+  switch (chain) {
     default:
       return ""; // 해당 체인에서는 callouts가 없음
   }

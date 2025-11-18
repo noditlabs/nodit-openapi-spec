@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.19
+  version: 1.2.20
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -16,7 +16,7 @@ components:
         documentation. For real applications or services, use the API key
         obtained from the Nodit console.
 paths:
-  /{protocol}/{network}/nft/getNftContractMetadataByContracts:
+  /{chain}/{network}/nft/getNftContractMetadataByContracts:
     post:
       security:
         - api_key: []
@@ -50,7 +50,7 @@ paths:
       summary: Get NFT Contract Metadata by Contracts
       operationId: getNftContractMetadataByContracts
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -67,7 +67,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -80,7 +80,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -277,7 +277,7 @@ paths:
                 example:
                   code: TOO_MANY_REQUESTS
                   message: Too many requests
-  /{protocol}/{network}/nft/getNftContractsByAccount:
+  /{chain}/{network}/nft/getNftContractsByAccount:
     post:
       security:
         - api_key: []
@@ -311,7 +311,7 @@ paths:
       summary: Get NFT Contracts by Account
       operationId: getNftContractsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -328,7 +328,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -341,7 +341,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -484,7 +484,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftHoldersByContract:
+  /{chain}/{network}/nft/getNftHoldersByContract:
     post:
       security:
         - api_key: []
@@ -517,7 +517,7 @@ paths:
       summary: Get NFT Holders by Contract
       operationId: getNftHoldersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -534,7 +534,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -547,7 +547,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -681,7 +681,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftHoldersByTokenId:
+  /{chain}/{network}/nft/getNftHoldersByTokenId:
     post:
       security:
         - api_key: []
@@ -714,7 +714,7 @@ paths:
       summary: Get NFT Holders by Token ID
       operationId: getNftHoldersByTokenId
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -731,7 +731,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -744,7 +744,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -817,7 +817,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftMetadataByContract:
+  /{chain}/{network}/nft/getNftMetadataByContract:
     post:
       security:
         - api_key: []
@@ -873,7 +873,7 @@ paths:
       summary: Get NFT Metadata by Contract
       operationId: getNftMetadataByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -890,7 +890,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -903,7 +903,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1377,7 +1377,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftMetadataByTokenIds:
+  /{chain}/{network}/nft/getNftMetadataByTokenIds:
     post:
       security:
         - api_key: []
@@ -1433,7 +1433,7 @@ paths:
       summary: Get NFT Metadata by Token IDs
       operationId: getNftMetadataByTokenIds
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1450,7 +1450,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1463,7 +1463,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1560,7 +1560,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersByAccount:
+  /{chain}/{network}/nft/getNftTransfersByAccount:
     post:
       security:
         - api_key: []
@@ -1593,7 +1593,7 @@ paths:
       summary: Get NFT Transfers By Account
       operationId: getNftTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1610,7 +1610,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1623,7 +1623,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -2406,7 +2406,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersByContract:
+  /{chain}/{network}/nft/getNftTransfersByContract:
     post:
       security:
         - api_key: []
@@ -2439,7 +2439,7 @@ paths:
       summary: Get NFT Transfers By Contract
       operationId: getNftTransfersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -2456,7 +2456,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -2469,7 +2469,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -3009,7 +3009,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersByTokenId:
+  /{chain}/{network}/nft/getNftTransfersByTokenId:
     post:
       security:
         - api_key: []
@@ -3042,7 +3042,7 @@ paths:
       summary: Get NFT Transfers By TokenId
       operationId: getNftTransfersByTokenId
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3059,7 +3059,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3072,7 +3072,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -3204,7 +3204,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersWithinRange:
+  /{chain}/{network}/nft/getNftTransfersWithinRange:
     post:
       security:
         - api_key: []
@@ -3241,7 +3241,7 @@ paths:
       summary: Get NFT Transfers Within Range
       operationId: getNftTransfersWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3258,7 +3258,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3271,7 +3271,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -3786,7 +3786,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftsOwnedByAccount:
+  /{chain}/{network}/nft/getNftsOwnedByAccount:
     post:
       security:
         - api_key: []
@@ -3860,7 +3860,7 @@ paths:
       summary: Get NFTs Owned By Account
       operationId: getNftsOwnedByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3877,7 +3877,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3890,7 +3890,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4219,7 +4219,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/searchNftContractMetadataByKeyword:
+  /{chain}/{network}/nft/searchNftContractMetadataByKeyword:
     post:
       security:
         - api_key: []
@@ -4269,7 +4269,7 @@ paths:
       summary: Search NFT Contract Metadata By Keyword
       operationId: searchNftContractMetadataByKeyword
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4286,7 +4286,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4299,7 +4299,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4541,7 +4541,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/syncNftMetadata:
+  /{chain}/{network}/nft/syncNftMetadata:
     post:
       security:
         - api_key: []
@@ -4598,7 +4598,7 @@ paths:
       summary: Sync Nft Metadata
       operationId: syncNftMetadata
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4615,7 +4615,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4628,7 +4628,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4685,7 +4685,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenAccountsByAssetType:
+  /{chain}/{network}/token/getTokenAccountsByAssetType:
     post:
       security:
         - api_key: []
@@ -4698,7 +4698,7 @@ paths:
       summary: Get Token Accounts By Asset Type
       operationId: getTokenAccountsByAssetType
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4706,7 +4706,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4716,7 +4716,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -5020,7 +5020,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenAllowance:
+  /{chain}/{network}/token/getTokenAllowance:
     post:
       security:
         - api_key: []
@@ -5032,7 +5032,7 @@ paths:
       summary: Get Token Allowance
       operationId: getTokenAllowance
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -5050,7 +5050,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -5063,7 +5063,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -5147,7 +5147,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenBalanceChangesByAccount:
+  /{chain}/{network}/token/getTokenBalanceChangesByAccount:
     post:
       security:
         - api_key: []
@@ -5159,7 +5159,7 @@ paths:
       summary: Get Token Balance Changes by Account
       operationId: getTokenBalanceChangesByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -5168,7 +5168,7 @@ paths:
               - xrpl
               - aptos
             default: xrpl
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -5178,7 +5178,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -5811,7 +5811,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenBalanceChangesByAssetType:
+  /{chain}/{network}/token/getTokenBalanceChangesByAssetType:
     post:
       security:
         - api_key: []
@@ -5823,7 +5823,7 @@ paths:
       summary: Get Token Balance Changes By Asset Type
       operationId: getTokenBalanceChangesByAssetType
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -5831,7 +5831,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -5841,7 +5841,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -5966,7 +5966,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenBalanceChangesWithinRange:
+  /{chain}/{network}/token/getTokenBalanceChangesWithinRange:
     post:
       security:
         - api_key: []
@@ -5978,7 +5978,7 @@ paths:
       summary: Get Token Balance Changes Within Range
       operationId: getTokenBalanceChangesWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -5986,7 +5986,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -5996,7 +5996,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6094,7 +6094,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenContractMetadataByContracts:
+  /{chain}/{network}/token/getTokenContractMetadataByContracts:
     post:
       security:
         - api_key: []
@@ -6128,7 +6128,7 @@ paths:
       summary: Get Token Contract Metadata by Contracts
       operationId: getTokenContractMetadataByContracts
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6146,7 +6146,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6159,7 +6159,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6329,7 +6329,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenHoldersByContract:
+  /{chain}/{network}/token/getTokenHoldersByContract:
     post:
       security:
         - api_key: []
@@ -6363,7 +6363,7 @@ paths:
       summary: Get Token Holders By Contract
       operationId: getTokenHoldersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6381,7 +6381,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6394,7 +6394,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6513,7 +6513,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenMetadataByAssetTypes:
+  /{chain}/{network}/token/getTokenMetadataByAssetTypes:
     post:
       security:
         - api_key: []
@@ -6525,7 +6525,7 @@ paths:
       summary: Get Token Metadata By Asset Types
       operationId: getTokenMetadataByAssetTypes
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6533,7 +6533,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6543,7 +6543,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6728,7 +6728,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenPairByAssetType:
+  /{chain}/{network}/token/getTokenPairByAssetType:
     post:
       security:
         - api_key: []
@@ -6741,7 +6741,7 @@ paths:
       summary: Get Token Pair By Asset Type
       operationId: getTokenPairByAssetType
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6749,7 +6749,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6759,7 +6759,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6822,7 +6822,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenPricesByContracts:
+  /{chain}/{network}/token/getTokenPricesByContracts:
     post:
       security:
         - api_key: []
@@ -6859,7 +6859,7 @@ paths:
       summary: Get Token Prices by Contracts
       operationId: getTokenPricesByContracts
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6876,7 +6876,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6885,7 +6885,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -7021,7 +7021,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenTransfersByAccount:
+  /{chain}/{network}/token/getTokenTransfersByAccount:
     post:
       security:
         - api_key: []
@@ -7054,7 +7054,7 @@ paths:
       summary: Get Token Transfers by Account
       operationId: getTokenTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -7073,7 +7073,7 @@ paths:
               - tron
               - xrpl
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -7086,7 +7086,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -7872,7 +7872,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenTransfersByContract:
+  /{chain}/{network}/token/getTokenTransfersByContract:
     post:
       security:
         - api_key: []
@@ -7906,7 +7906,7 @@ paths:
       summary: Get Token Transfers by Contract
       operationId: getTokenTransfersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -7924,7 +7924,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -7937,7 +7937,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8382,7 +8382,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenTransfersByCurrencyAndIssuer:
+  /{chain}/{network}/token/getTokenTransfersByCurrencyAndIssuer:
     post:
       security:
         - api_key: []
@@ -8394,7 +8394,7 @@ paths:
       summary: Get Token Transfers by Currency and Issuer
       operationId: getTokenTransfersByCurrencyAndIssuer
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8402,7 +8402,7 @@ paths:
             enum:
               - xrpl
             default: xrpl
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8411,7 +8411,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8534,7 +8534,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenTransfersWithinRange:
+  /{chain}/{network}/token/getTokenTransfersWithinRange:
     post:
       security:
         - api_key: []
@@ -8572,7 +8572,7 @@ paths:
       summary: Get Token Transfers Within Range
       operationId: getTokenTransfersWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8591,7 +8591,7 @@ paths:
               - tron
               - xrpl
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8604,7 +8604,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -9095,7 +9095,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokensOwnedByAccount:
+  /{chain}/{network}/token/getTokensOwnedByAccount:
     post:
       security:
         - api_key: []
@@ -9130,7 +9130,7 @@ paths:
       summary: Get Tokens Owned By Account
       operationId: getTokensOwnedByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -9149,7 +9149,7 @@ paths:
               - tron
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -9162,7 +9162,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -9748,7 +9748,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/searchTokenContractMetadataByKeyword:
+  /{chain}/{network}/token/searchTokenContractMetadataByKeyword:
     post:
       security:
         - api_key: []
@@ -9796,7 +9796,7 @@ paths:
       summary: Search Token Contract Metadata by Keyword
       operationId: searchTokenContractMetadataByKeyword
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -9814,7 +9814,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -9827,7 +9827,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -10233,19 +10233,19 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeBalanceByAccount:
+  /{chain}/{network}/native/getNativeBalanceByAccount:
     post:
       security:
         - api_key: []
       tags:
         - Native Token API
       description: |+
-        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다.
+        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 체인에 따라 토큰의 종류가 다를 수 있습니다.
 
       summary: Get Native Balance by Account
       operationId: getNativeBalanceByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -10263,7 +10263,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -10276,7 +10276,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -10337,7 +10337,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeHolders:
+  /{chain}/{network}/native/getNativeHolders:
     post:
       security:
         - api_key: []
@@ -10349,7 +10349,7 @@ paths:
       summary: Get Native Holders
       operationId: getNativeHolders
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -10357,7 +10357,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -10366,7 +10366,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -10427,20 +10427,20 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeTokenBalanceByAccount:
+  /{chain}/{network}/native/getNativeTokenBalanceByAccount:
     post:
       security:
         - api_key: []
       tags:
         - Native Token API
       description: >+
-        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다.
-        (e.g., Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
+        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 체인에 따라 토큰의 종류가 다를 수 있습니다. (e.g.,
+        Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
 
       summary: Get Native Token Balance by Account
       operationId: getNativeTokenBalanceByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -10450,7 +10450,7 @@ paths:
               - dogecoin
               - xrpl
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -10460,7 +10460,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -10541,7 +10541,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeTokenBalanceChangesByAccount:
+  /{chain}/{network}/native/getNativeTokenBalanceChangesByAccount:
     post:
       security:
         - api_key: []
@@ -10553,7 +10553,7 @@ paths:
       summary: Get Native Token Balance Changes by Account
       operationId: getNativeTokenBalanceChangesByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -10561,7 +10561,7 @@ paths:
             enum:
               - xrpl
             default: xrpl
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -10570,7 +10570,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -10675,20 +10675,20 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeTokenTransfersByAccount:
+  /{chain}/{network}/native/getNativeTokenTransfersByAccount:
     post:
       security:
         - api_key: []
       tags:
         - Native Token API
       description: >+
-        특정 주소와 관련된 네이티브 토큰 전송 내역을 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다. (e.g.,
+        특정 주소와 관련된 네이티브 토큰 전송 내역을 조회합니다. 선택한 체인에 따라 토큰의 종류가 다를 수 있습니다. (e.g.,
         Bitcoin의 경우, BTC 잔고를 조회할 수 있습니다.)
 
       summary: Get Native Token Transfers By Account
       operationId: getNativeTokenTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -10697,7 +10697,7 @@ paths:
               - bitcoin
               - dogecoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -10707,7 +10707,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -11175,7 +11175,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeTransfersByAccount:
+  /{chain}/{network}/native/getNativeTransfersByAccount:
     post:
       security:
         - api_key: []
@@ -11187,7 +11187,7 @@ paths:
       summary: Get Native Transfers by Account
       operationId: getNativeTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -11195,7 +11195,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -11204,7 +11204,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -11322,7 +11322,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeTransfersWithinRange:
+  /{chain}/{network}/native/getNativeTransfersWithinRange:
     post:
       security:
         - api_key: []
@@ -11336,7 +11336,7 @@ paths:
       summary: Get Native Transfers Within Range
       operationId: getNativeTransfersWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -11344,7 +11344,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -11353,7 +11353,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -11463,7 +11463,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getBlockByHashOrNumber:
+  /{chain}/{network}/blockchain/getBlockByHashOrNumber:
     post:
       security:
         - api_key: []
@@ -11496,7 +11496,7 @@ paths:
       summary: Get Block by Hash or Number
       operationId: getBlockByHashOrNumber
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -11516,7 +11516,7 @@ paths:
               - dogecoin
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -11529,7 +11529,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -12073,7 +12073,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getBlocksWithinRange:
+  /{chain}/{network}/blockchain/getBlocksWithinRange:
     post:
       security:
         - api_key: []
@@ -12106,7 +12106,7 @@ paths:
       summary: Get Blocks Within Range
       operationId: getBlocksWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -12124,7 +12124,7 @@ paths:
               - luniverse
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -12137,7 +12137,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -12870,7 +12870,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getGasPrice:
+  /{chain}/{network}/blockchain/getGasPrice:
     post:
       security:
         - api_key: []
@@ -12882,7 +12882,7 @@ paths:
       summary: Get Gas Price
       operationId: getGasPrice
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -12899,7 +12899,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -12912,7 +12912,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -12966,7 +12966,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getInternalTransactionsByAccount:
+  /{chain}/{network}/blockchain/getInternalTransactionsByAccount:
     post:
       security:
         - api_key: []
@@ -13014,7 +13014,7 @@ paths:
       summary: Get Internal Transactions By Account
       operationId: getInternalTransactionsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -13030,7 +13030,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -13039,7 +13039,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -13585,7 +13585,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getInternalTransactionsByTransactionHash:
+  /{chain}/{network}/blockchain/getInternalTransactionsByTransactionHash:
     post:
       security:
         - api_key: []
@@ -13608,7 +13608,7 @@ paths:
       summary: Get Internal Transactions By Transaction Hash
       operationId: getInternalTransactionsByTransactionHash
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -13624,7 +13624,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -13633,7 +13633,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -13889,7 +13889,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getLedgerByHashOrIndex:
+  /{chain}/{network}/blockchain/getLedgerByHashOrIndex:
     post:
       security:
         - api_key: []
@@ -13901,7 +13901,7 @@ paths:
       summary: Get Ledger by Hash or Index
       operationId: getLedgerByHashOrIndex
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -13909,7 +13909,7 @@ paths:
             enum:
               - xrpl
             default: xrpl
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -13919,7 +13919,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -14253,7 +14253,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getLedgersWithinRange:
+  /{chain}/{network}/blockchain/getLedgersWithinRange:
     post:
       security:
         - api_key: []
@@ -14265,7 +14265,7 @@ paths:
       summary: Get Ledgers Within Range
       operationId: getLedgersWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -14273,7 +14273,7 @@ paths:
             enum:
               - xrpl
             default: xrpl
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -14282,7 +14282,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -15154,7 +15154,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getNextNonceByAccount:
+  /{chain}/{network}/blockchain/getNextNonceByAccount:
     post:
       security:
         - api_key: []
@@ -15166,7 +15166,7 @@ paths:
       summary: Get Next Nonce by Account
       operationId: getNextNonceByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -15183,7 +15183,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -15196,7 +15196,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -15234,7 +15234,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTotalTransactionCountByAccount:
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
     post:
       security:
         - api_key: []
@@ -15246,7 +15246,7 @@ paths:
       summary: Get Total Transaction Count By Account
       operationId: getTotalTransactionCountByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -15268,7 +15268,7 @@ paths:
               - xrpl
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -15281,7 +15281,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -15352,7 +15352,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionByHash:
+  /{chain}/{network}/blockchain/getTransactionByHash:
     post:
       security:
         - api_key: []
@@ -15396,7 +15396,7 @@ paths:
       summary: Get Transaction By Hash
       operationId: getTransactionByHash
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -15415,7 +15415,7 @@ paths:
               - xrpl
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -15428,7 +15428,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -17338,7 +17338,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionByTransactionId:
+  /{chain}/{network}/blockchain/getTransactionByTransactionId:
     post:
       security:
         - api_key: []
@@ -17350,7 +17350,7 @@ paths:
       summary: Get Transaction By Transaction ID
       operationId: getTransactionByTransactionId
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -17359,7 +17359,7 @@ paths:
               - bitcoin
               - dogecoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -17369,7 +17369,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -17666,7 +17666,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionByVersion:
+  /{chain}/{network}/blockchain/getTransactionByVersion:
     post:
       security:
         - api_key: []
@@ -17678,7 +17678,7 @@ paths:
       summary: Get Transaction By Version
       operationId: getTransactionByVersion
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -17686,7 +17686,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -17696,7 +17696,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -17889,7 +17889,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsByAccount:
+  /{chain}/{network}/blockchain/getTransactionsByAccount:
     post:
       security:
         - api_key: []
@@ -17933,7 +17933,7 @@ paths:
       summary: Get Transactions By Account
       operationId: getTransactionsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -17955,7 +17955,7 @@ paths:
               - xrpl
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -17968,7 +17968,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -19149,8 +19149,8 @@ paths:
                                 typeUrl:
                                   type: string
                                   description: >-
-                                    트랜잭션 유형의 구체적인 경로를 지정하는 필드입니다. 이 필드는 프로토콜
-                                    버퍼(Protocol Buffers) 형식으로 정의된 트랜잭션 유형을 식별하는데
+                                    트랜잭션 유형의 구체적인 경로를 지정하는 필드입니다. 이 필드는 체인
+                                    버퍼(chain Buffers) 형식으로 정의된 트랜잭션 유형을 식별하는데
                                     사용됩니다. 
                                 isMultiSig:
                                   type: boolean
@@ -20193,7 +20193,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsByHashes:
+  /{chain}/{network}/blockchain/getTransactionsByHashes:
     post:
       security:
         - api_key: []
@@ -20252,7 +20252,7 @@ paths:
       summary: Get Transactions By Hashes
       operationId: getTransactionsByHashes
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -20271,7 +20271,7 @@ paths:
               - xrpl
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -20284,7 +20284,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -21347,7 +21347,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsByTransactionIds:
+  /{chain}/{network}/blockchain/getTransactionsByTransactionIds:
     post:
       security:
         - api_key: []
@@ -21373,7 +21373,7 @@ paths:
       summary: Get Transactions By Transaction IDs
       operationId: getTransactionsByTransactionIds
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -21382,7 +21382,7 @@ paths:
               - bitcoin
               - dogecoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -21392,7 +21392,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -21437,7 +21437,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsByVersions:
+  /{chain}/{network}/blockchain/getTransactionsByVersions:
     post:
       security:
         - api_key: []
@@ -21465,7 +21465,7 @@ paths:
       summary: Get Transactions By Versions
       operationId: getTransactionsByVersions
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -21473,7 +21473,7 @@ paths:
             enum:
               - aptos
             default: aptos
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -21483,7 +21483,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -21786,7 +21786,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsInBlock:
+  /{chain}/{network}/blockchain/getTransactionsInBlock:
     post:
       security:
         - api_key: []
@@ -21831,7 +21831,7 @@ paths:
       summary: Get Transactions In Block
       operationId: getTransactionsInBlock
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -21850,7 +21850,7 @@ paths:
               - tron
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -21864,7 +21864,7 @@ paths:
               - hoodi
               - amoy
               - shasta
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -24001,7 +24001,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsInLedger:
+  /{chain}/{network}/blockchain/getTransactionsInLedger:
     post:
       security:
         - api_key: []
@@ -24013,7 +24013,7 @@ paths:
       summary: Get Transactions In Ledger
       operationId: getTransactionsInLedger
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -24021,7 +24021,7 @@ paths:
             enum:
               - xrpl
             default: xrpl
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -24030,7 +24030,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -24261,7 +24261,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getUnspentTransactionOutputsByAccount:
+  /{chain}/{network}/blockchain/getUnspentTransactionOutputsByAccount:
     post:
       security:
         - api_key: []
@@ -24273,7 +24273,7 @@ paths:
       summary: Get Unspent Transaction Outputs By Account
       operationId: getUnspentTransactionOutputsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -24282,7 +24282,7 @@ paths:
               - bitcoin
               - dogecoin
             default: bitcoin
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -24292,7 +24292,7 @@ paths:
             enum:
               - mainnet
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -24525,7 +24525,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/isContract:
+  /{chain}/{network}/blockchain/isContract:
     post:
       security:
         - api_key: []
@@ -24537,7 +24537,7 @@ paths:
       summary: Is Contract
       operationId: isContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -24555,7 +24555,7 @@ paths:
               - luniverse
               - tron
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -24568,7 +24568,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -24620,7 +24620,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/searchEvents:
+  /{chain}/{network}/blockchain/searchEvents:
     post:
       security:
         - api_key: []
@@ -24669,7 +24669,7 @@ paths:
       summary: Search Events
       operationId: searchEvents
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -24686,7 +24686,7 @@ paths:
               - polygon
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -24699,7 +24699,7 @@ paths:
               - sepolia
               - hoodi
               - amoy
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -24922,7 +24922,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/ens/getAddressByEnsName:
+  /{chain}/{network}/ens/getAddressByEnsName:
     post:
       security:
         - api_key: []
@@ -24944,7 +24944,7 @@ paths:
       summary: Get Address By ENS Name
       operationId: getAddressByEnsName
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -24952,7 +24952,7 @@ paths:
             enum:
               - ethereum
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -24961,7 +24961,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -25003,7 +25003,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/ens/getEnsNameByAddress:
+  /{chain}/{network}/ens/getEnsNameByAddress:
     post:
       security:
         - api_key: []
@@ -25035,7 +25035,7 @@ paths:
       summary: Get ENS Name By Address
       operationId: getEnsNameByAddress
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -25043,7 +25043,7 @@ paths:
             enum:
               - ethereum
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -25052,7 +25052,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -25098,7 +25098,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/ens/getEnsRecordByName:
+  /{chain}/{network}/ens/getEnsRecordByName:
     post:
       security:
         - api_key: []
@@ -25108,7 +25108,7 @@ paths:
       summary: Get ENS Record By Name
       operationId: getEnsRecordByName
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -25116,7 +25116,7 @@ paths:
             enum:
               - ethereum
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -25125,7 +25125,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -25312,7 +25312,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/ens/getEnsRecordsByAccount:
+  /{chain}/{network}/ens/getEnsRecordsByAccount:
     post:
       security:
         - api_key: []
@@ -25322,7 +25322,7 @@ paths:
       summary: Get ENS Records By Account
       operationId: getEnsRecordsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -25330,7 +25330,7 @@ paths:
             enum:
               - ethereum
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -25339,7 +25339,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -25415,7 +25415,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getAccountStats:
+  /{chain}/{network}/stats/getAccountStats:
     post:
       security:
         - api_key: []
@@ -25437,7 +25437,7 @@ paths:
       summary: Get Account Stats
       operationId: getAccountStats
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -25456,7 +25456,7 @@ paths:
               - tron
               - aptos
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -25469,7 +25469,7 @@ paths:
               - hoodi
               - amoy
               - testnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -25648,7 +25648,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getDailyActiveAccountsStats:
+  /{chain}/{network}/stats/getDailyActiveAccountsStats:
     post:
       security:
         - api_key: []
@@ -25679,7 +25679,7 @@ paths:
       summary: Get Daily Active Accounts Stats
       operationId: getDailyActiveAccountsStats
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -25688,7 +25688,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -25697,7 +25697,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -25784,7 +25784,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getDailyActiveAccountsStatsByContract:
+  /{chain}/{network}/stats/getDailyActiveAccountsStatsByContract:
     post:
       security:
         - api_key: []
@@ -25816,7 +25816,7 @@ paths:
       summary: Get Daily Active Accounts Stats By Contract
       operationId: getDailyActiveAccountsStatsByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -25825,7 +25825,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -25834,7 +25834,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -25915,7 +25915,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getDailyTransactionsStats:
+  /{chain}/{network}/stats/getDailyTransactionsStats:
     post:
       security:
         - api_key: []
@@ -25946,7 +25946,7 @@ paths:
       summary: Get Daily Transactions Stats
       operationId: getDailyTransactionsStats
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -25955,7 +25955,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -25964,7 +25964,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -26037,7 +26037,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getDailyTransactionsStatsByContract:
+  /{chain}/{network}/stats/getDailyTransactionsStatsByContract:
     post:
       security:
         - api_key: []
@@ -26068,7 +26068,7 @@ paths:
       summary: Get Daily Transactions Stats By Contract
       operationId: getDailyTransactionsStatsByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -26077,7 +26077,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -26086,7 +26086,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -26167,7 +26167,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getHourlyActiveAccountsStats:
+  /{chain}/{network}/stats/getHourlyActiveAccountsStats:
     post:
       security:
         - api_key: []
@@ -26197,7 +26197,7 @@ paths:
       summary: Get Hourly Active Accounts Stats
       operationId: getHourlyActiveAccountsStats
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -26206,7 +26206,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -26215,7 +26215,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -26333,7 +26333,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getHourlyActiveAccountsStatsByContract:
+  /{chain}/{network}/stats/getHourlyActiveAccountsStatsByContract:
     post:
       security:
         - api_key: []
@@ -26363,7 +26363,7 @@ paths:
       summary: Get Hourly Active Accounts Stats By Contract
       operationId: getHourlyActiveAccountsStatsByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -26372,7 +26372,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -26381,7 +26381,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -26494,7 +26494,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getHourlyTransactionsStats:
+  /{chain}/{network}/stats/getHourlyTransactionsStats:
     post:
       security:
         - api_key: []
@@ -26524,7 +26524,7 @@ paths:
       summary: Get Hourly Transactions Stats
       operationId: getHourlyTransactionsStats
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -26533,7 +26533,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -26542,7 +26542,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -26617,7 +26617,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getHourlyTransactionsStatsByContract:
+  /{chain}/{network}/stats/getHourlyTransactionsStatsByContract:
     post:
       security:
         - api_key: []
@@ -26647,7 +26647,7 @@ paths:
       summary: Get Hourly Transactions Stats By Contract
       operationId: getHourlyTransactionsStatsByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -26656,7 +26656,7 @@ paths:
               - ethereum
               - luniverse
             default: ethereum
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -26665,7 +26665,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -26778,7 +26778,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/getAssetHoldersById:
+  /{chain}/{network}/asset/getAssetHoldersById:
     post:
       security:
         - api_key: []
@@ -26799,7 +26799,7 @@ paths:
       summary: Get Asset(TRC10) Holders by ID
       operationId: getAssetHoldersById
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -26807,7 +26807,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -26816,7 +26816,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -26885,7 +26885,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/getAssetMetadataByIds:
+  /{chain}/{network}/asset/getAssetMetadataByIds:
     post:
       security:
         - api_key: []
@@ -26907,7 +26907,7 @@ paths:
       summary: Get Asset(TRC10) Metadata by IDs
       operationId: getAssetMetadataByIds
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -26915,7 +26915,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -26924,7 +26924,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -27082,7 +27082,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/getAssetMetadataByIssuer:
+  /{chain}/{network}/asset/getAssetMetadataByIssuer:
     post:
       security:
         - api_key: []
@@ -27103,7 +27103,7 @@ paths:
       summary: Get Asset(TRC10) Metadata by Issuer
       operationId: getAssetMetadataByIssuer
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -27111,7 +27111,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -27120,7 +27120,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -27163,7 +27163,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/getAssetTransfersByAccount:
+  /{chain}/{network}/asset/getAssetTransfersByAccount:
     post:
       security:
         - api_key: []
@@ -27184,7 +27184,7 @@ paths:
       summary: Get Asset(TRC10) Transfers by Account
       operationId: getAssetTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -27192,7 +27192,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -27201,7 +27201,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -27414,7 +27414,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/getAssetTransfersById:
+  /{chain}/{network}/asset/getAssetTransfersById:
     post:
       security:
         - api_key: []
@@ -27435,7 +27435,7 @@ paths:
       summary: Get Asset(TRC10) Transfers by ID
       operationId: getAssetTransfersById
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -27443,7 +27443,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -27452,7 +27452,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -27658,7 +27658,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/getAssetTransfersWithinRange:
+  /{chain}/{network}/asset/getAssetTransfersWithinRange:
     post:
       security:
         - api_key: []
@@ -27679,7 +27679,7 @@ paths:
       summary: Get Asset(TRC10) Transfers within Range
       operationId: getAssetTransfersWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -27687,7 +27687,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -27696,7 +27696,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -27903,7 +27903,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/getAssetsOwnedByAccount:
+  /{chain}/{network}/asset/getAssetsOwnedByAccount:
     post:
       security:
         - api_key: []
@@ -27924,7 +27924,7 @@ paths:
       summary: Get Assets(TRC10) Owned by Account
       operationId: getAssetsOwnedByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -27932,7 +27932,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -27941,7 +27941,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -28028,7 +28028,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/asset/searchAssetMetadataByKeyword:
+  /{chain}/{network}/asset/searchAssetMetadataByKeyword:
     post:
       security:
         - api_key: []
@@ -28063,7 +28063,7 @@ paths:
       summary: Search Asset(TRC10) Metadata by Keyword
       operationId: searchAssetMetadataByKeyword
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -28071,7 +28071,7 @@ paths:
             enum:
               - tron
             default: tron
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -28080,7 +28080,7 @@ paths:
             default: mainnet
             enum:
               - mainnet
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:

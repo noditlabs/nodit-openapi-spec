@@ -2,12 +2,12 @@ import { OpenAPIV3 } from "openapi-types";
 import { Patterns } from "../../../../patterns";
 
 /** Path Parameters **/
-export function protocol(
+export function chain(
   example: string,
   list: string[]
 ): OpenAPIV3.ParameterObject {
   return {
-    name: "protocol",
+    name: "chain",
     in: "path",
     required: true,
     schema: {
@@ -15,7 +15,7 @@ export function protocol(
       enum: list,
       default: example,
     },
-    description: "조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.",
+    description: "조회 대상 체인을 지정하기 위한 파라미터입니다.",
   };
 }
 
@@ -33,7 +33,7 @@ export function network(
       enum: list,
     },
     description:
-      "조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.",
+      "조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.",
   };
 }
 

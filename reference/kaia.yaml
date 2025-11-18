@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: kaia
-  version: 1.2.18
+  version: 1.2.20
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -16,7 +16,7 @@ components:
         documentation. For real applications or services, use the API key
         obtained from the Nodit console.
 paths:
-  /{protocol}/{network}/nft/getNftContractMetadataByContracts:
+  /{chain}/{network}/nft/getNftContractMetadataByContracts:
     post:
       security:
         - api_key: []
@@ -50,7 +50,7 @@ paths:
       summary: Get NFT Contract Metadata by Contracts
       operationId: kaia-getNftContractMetadataByContracts
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -58,7 +58,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -68,7 +68,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -265,7 +265,7 @@ paths:
                 example:
                   code: TOO_MANY_REQUESTS
                   message: Too many requests
-  /{protocol}/{network}/nft/getNftContractsByAccount:
+  /{chain}/{network}/nft/getNftContractsByAccount:
     post:
       security:
         - api_key: []
@@ -299,7 +299,7 @@ paths:
       summary: Get NFT Contracts by Account
       operationId: kaia-getNftContractsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -307,7 +307,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -317,7 +317,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -460,7 +460,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftHoldersByContract:
+  /{chain}/{network}/nft/getNftHoldersByContract:
     post:
       security:
         - api_key: []
@@ -493,7 +493,7 @@ paths:
       summary: Get NFT Holders by Contract
       operationId: kaia-getNftHoldersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -501,7 +501,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -511,7 +511,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -645,7 +645,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftHoldersByTokenId:
+  /{chain}/{network}/nft/getNftHoldersByTokenId:
     post:
       security:
         - api_key: []
@@ -678,7 +678,7 @@ paths:
       summary: Get NFT Holders by Token ID
       operationId: kaia-getNftHoldersByTokenId
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -686,7 +686,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -696,7 +696,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -769,7 +769,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftMetadataByContract:
+  /{chain}/{network}/nft/getNftMetadataByContract:
     post:
       security:
         - api_key: []
@@ -825,7 +825,7 @@ paths:
       summary: Get NFT Metadata by Contract
       operationId: kaia-getNftMetadataByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -833,7 +833,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -843,7 +843,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1317,7 +1317,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftMetadataByTokenIds:
+  /{chain}/{network}/nft/getNftMetadataByTokenIds:
     post:
       security:
         - api_key: []
@@ -1373,7 +1373,7 @@ paths:
       summary: Get NFT Metadata by Token IDs
       operationId: kaia-getNftMetadataByTokenIds
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1381,7 +1381,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1391,7 +1391,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -1488,7 +1488,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersByAccount:
+  /{chain}/{network}/nft/getNftTransfersByAccount:
     post:
       security:
         - api_key: []
@@ -1521,7 +1521,7 @@ paths:
       summary: Get NFT Transfers By Account
       operationId: kaia-getNftTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -1529,7 +1529,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -1539,7 +1539,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -2322,7 +2322,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersByContract:
+  /{chain}/{network}/nft/getNftTransfersByContract:
     post:
       security:
         - api_key: []
@@ -2355,7 +2355,7 @@ paths:
       summary: Get NFT Transfers By Contract
       operationId: kaia-getNftTransfersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -2363,7 +2363,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -2373,7 +2373,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -2913,7 +2913,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersByTokenId:
+  /{chain}/{network}/nft/getNftTransfersByTokenId:
     post:
       security:
         - api_key: []
@@ -2946,7 +2946,7 @@ paths:
       summary: Get NFT Transfers By TokenId
       operationId: kaia-getNftTransfersByTokenId
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -2954,7 +2954,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -2964,7 +2964,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -3096,7 +3096,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftTransfersWithinRange:
+  /{chain}/{network}/nft/getNftTransfersWithinRange:
     post:
       security:
         - api_key: []
@@ -3133,7 +3133,7 @@ paths:
       summary: Get NFT Transfers Within Range
       operationId: kaia-getNftTransfersWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3141,7 +3141,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3151,7 +3151,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -3666,7 +3666,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/getNftsOwnedByAccount:
+  /{chain}/{network}/nft/getNftsOwnedByAccount:
     post:
       security:
         - api_key: []
@@ -3740,7 +3740,7 @@ paths:
       summary: Get NFTs Owned By Account
       operationId: kaia-getNftsOwnedByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -3748,7 +3748,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -3758,7 +3758,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4087,7 +4087,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/searchNftContractMetadataByKeyword:
+  /{chain}/{network}/nft/searchNftContractMetadataByKeyword:
     post:
       security:
         - api_key: []
@@ -4137,7 +4137,7 @@ paths:
       summary: Search NFT Contract Metadata By Keyword
       operationId: kaia-searchNftContractMetadataByKeyword
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4145,7 +4145,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4155,7 +4155,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4397,7 +4397,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/nft/syncNftMetadata:
+  /{chain}/{network}/nft/syncNftMetadata:
     post:
       security:
         - api_key: []
@@ -4454,7 +4454,7 @@ paths:
       summary: Sync Nft Metadata
       operationId: kaia-syncNftMetadata
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4462,7 +4462,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4472,7 +4472,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4529,7 +4529,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenAllowance:
+  /{chain}/{network}/token/getTokenAllowance:
     post:
       security:
         - api_key: []
@@ -4541,7 +4541,7 @@ paths:
       summary: Get Token Allowance
       operationId: kaia-getTokenAllowance
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4549,7 +4549,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4559,7 +4559,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4611,7 +4611,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenContractMetadataByContracts:
+  /{chain}/{network}/token/getTokenContractMetadataByContracts:
     post:
       security:
         - api_key: []
@@ -4645,7 +4645,7 @@ paths:
       summary: Get Token Contract Metadata by Contracts
       operationId: kaia-getTokenContractMetadataByContracts
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4653,7 +4653,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4663,7 +4663,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4714,7 +4714,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenHoldersByContract:
+  /{chain}/{network}/token/getTokenHoldersByContract:
     post:
       security:
         - api_key: []
@@ -4726,7 +4726,7 @@ paths:
       summary: Get Token Holders By Contract
       operationId: kaia-getTokenHoldersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4734,7 +4734,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4744,7 +4744,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -4826,7 +4826,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenPricesByContracts:
+  /{chain}/{network}/token/getTokenPricesByContracts:
     post:
       security:
         - api_key: []
@@ -4863,7 +4863,7 @@ paths:
       summary: Get Token Prices by Contracts
       operationId: kaia-getTokenPricesByContracts
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -4871,7 +4871,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -4881,7 +4881,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -5017,7 +5017,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenTransfersByAccount:
+  /{chain}/{network}/token/getTokenTransfersByAccount:
     post:
       security:
         - api_key: []
@@ -5051,7 +5051,7 @@ paths:
       summary: Get Token Transfers by Account
       operationId: kaia-getTokenTransfersByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -5059,7 +5059,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -5069,7 +5069,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -5359,7 +5359,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenTransfersByContract:
+  /{chain}/{network}/token/getTokenTransfersByContract:
     post:
       security:
         - api_key: []
@@ -5393,7 +5393,7 @@ paths:
       summary: Get Token Transfers by Contract
       operationId: kaia-getTokenTransfersByContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -5401,7 +5401,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -5411,7 +5411,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -5700,7 +5700,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokenTransfersWithinRange:
+  /{chain}/{network}/token/getTokenTransfersWithinRange:
     post:
       security:
         - api_key: []
@@ -5739,7 +5739,7 @@ paths:
       summary: Get Token Transfers Within Range
       operationId: kaia-getTokenTransfersWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -5747,7 +5747,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -5757,7 +5757,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6036,7 +6036,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/getTokensOwnedByAccount:
+  /{chain}/{network}/token/getTokensOwnedByAccount:
     post:
       security:
         - api_key: []
@@ -6071,7 +6071,7 @@ paths:
       summary: Get Tokens Owned By Account
       operationId: kaia-getTokensOwnedByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6079,7 +6079,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6089,7 +6089,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6443,7 +6443,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/token/searchTokenContractMetadataByKeyword:
+  /{chain}/{network}/token/searchTokenContractMetadataByKeyword:
     post:
       security:
         - api_key: []
@@ -6491,7 +6491,7 @@ paths:
       summary: Search Token Contract Metadata by Keyword
       operationId: kaia-searchTokenContractMetadataByKeyword
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6499,7 +6499,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6509,7 +6509,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6671,19 +6671,19 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/native/getNativeBalanceByAccount:
+  /{chain}/{network}/native/getNativeBalanceByAccount:
     post:
       security:
         - api_key: []
       tags:
         - Native Token API
       description: |+
-        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 프로토콜에 따라 토큰의 종류가 다를 수 있습니다.
+        특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다. 선택한 체인에 따라 토큰의 종류가 다를 수 있습니다.
 
       summary: Get Native Balance by Account
       operationId: kaia-getNativeBalanceByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6691,7 +6691,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6701,7 +6701,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -6740,7 +6740,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getBlockByHashOrNumber:
+  /{chain}/{network}/blockchain/getBlockByHashOrNumber:
     post:
       security:
         - api_key: []
@@ -6773,7 +6773,7 @@ paths:
       summary: Get Block by Hash or Number
       operationId: kaia-getBlockByHashOrNumber
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -6781,7 +6781,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -6791,7 +6791,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -7048,7 +7048,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getBlocksWithinRange:
+  /{chain}/{network}/blockchain/getBlocksWithinRange:
     post:
       security:
         - api_key: []
@@ -7081,7 +7081,7 @@ paths:
       summary: Get Blocks Within Range
       operationId: kaia-getBlocksWithinRange
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -7089,7 +7089,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -7099,7 +7099,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8015,7 +8015,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getGasPrice:
+  /{chain}/{network}/blockchain/getGasPrice:
     post:
       security:
         - api_key: []
@@ -8027,7 +8027,7 @@ paths:
       summary: Get Gas Price
       operationId: kaia-getGasPrice
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8035,7 +8035,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8045,7 +8045,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8099,7 +8099,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getInternalTransactionsByAccount:
+  /{chain}/{network}/blockchain/getInternalTransactionsByAccount:
     post:
       security:
         - api_key: []
@@ -8125,7 +8125,7 @@ paths:
       summary: Get Internal Transactions By Account
       operationId: kaia-getInternalTransactionsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8133,7 +8133,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8143,7 +8143,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8470,7 +8470,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getInternalTransactionsByTransactionHash:
+  /{chain}/{network}/blockchain/getInternalTransactionsByTransactionHash:
     post:
       security:
         - api_key: []
@@ -8482,7 +8482,7 @@ paths:
       summary: Get Internal Transactions By Transaction Hash
       operationId: kaia-getInternalTransactionsByTransactionHash
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8490,7 +8490,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8500,7 +8500,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8657,7 +8657,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getNextNonceByAccount:
+  /{chain}/{network}/blockchain/getNextNonceByAccount:
     post:
       security:
         - api_key: []
@@ -8669,7 +8669,7 @@ paths:
       summary: Get Next Nonce by Account
       operationId: kaia-getNextNonceByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8677,7 +8677,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8687,7 +8687,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8725,7 +8725,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTotalTransactionCountByAccount:
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
     post:
       security:
         - api_key: []
@@ -8737,7 +8737,7 @@ paths:
       summary: Get Total Transaction Count By Account
       operationId: kaia-getTotalTransactionCountByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8745,7 +8745,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8755,7 +8755,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -8791,7 +8791,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionByHash:
+  /{chain}/{network}/blockchain/getTransactionByHash:
     post:
       security:
         - api_key: []
@@ -8835,7 +8835,7 @@ paths:
       summary: Get Transaction By Hash
       operationId: kaia-getTransactionByHash
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -8843,7 +8843,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -8853,7 +8853,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -9414,7 +9414,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsByAccount:
+  /{chain}/{network}/blockchain/getTransactionsByAccount:
     post:
       security:
         - api_key: []
@@ -9458,7 +9458,7 @@ paths:
       summary: Get Transactions By Account
       operationId: kaia-getTransactionsByAccount
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -9466,7 +9466,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -9476,7 +9476,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -10288,7 +10288,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsByHashes:
+  /{chain}/{network}/blockchain/getTransactionsByHashes:
     post:
       security:
         - api_key: []
@@ -10347,7 +10347,7 @@ paths:
       summary: Get Transactions By Hashes
       operationId: kaia-getTransactionsByHashes
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -10355,7 +10355,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -10365,7 +10365,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -10661,7 +10661,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/getTransactionsInBlock:
+  /{chain}/{network}/blockchain/getTransactionsInBlock:
     post:
       security:
         - api_key: []
@@ -10706,7 +10706,7 @@ paths:
       summary: Get Transactions In Block
       operationId: kaia-getTransactionsInBlock
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -10714,7 +10714,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -10724,7 +10724,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -11568,7 +11568,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/isContract:
+  /{chain}/{network}/blockchain/isContract:
     post:
       security:
         - api_key: []
@@ -11580,7 +11580,7 @@ paths:
       summary: Is Contract
       operationId: kaia-isContract
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -11588,7 +11588,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -11598,7 +11598,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -11635,7 +11635,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/blockchain/searchEvents:
+  /{chain}/{network}/blockchain/searchEvents:
     post:
       security:
         - api_key: []
@@ -11684,7 +11684,7 @@ paths:
       summary: Search Events
       operationId: kaia-searchEvents
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -11692,7 +11692,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -11702,7 +11702,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:
@@ -11925,7 +11925,7 @@ paths:
         '403': *ref_5
         '404': *ref_6
         '429': *ref_7
-  /{protocol}/{network}/stats/getAccountStats:
+  /{chain}/{network}/stats/getAccountStats:
     post:
       security:
         - api_key: []
@@ -11938,7 +11938,7 @@ paths:
       summary: Get Account Stats
       operationId: kaia-getAccountStats
       parameters:
-        - name: protocol
+        - name: chain
           in: path
           required: true
           schema:
@@ -11946,7 +11946,7 @@ paths:
             enum:
               - kaia
             default: kaia
-          description: 조회 대상 체인의 프로토콜을 지정하기 위한 파라미터입니다.
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
         - name: network
           in: path
           required: true
@@ -11956,7 +11956,7 @@ paths:
             enum:
               - mainnet
               - kairos
-          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 프로토콜에 따라 지원되는 네트워크가 다를 수 있습니다.
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
       requestBody:
         required: true
         content:

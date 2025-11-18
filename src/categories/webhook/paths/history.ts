@@ -10,23 +10,23 @@ const isPublic = true;
 const tags = ["Webhook API"];
 const description = `Webhook의 호출 이력을 조회할 수 있는 API입니다. 이 API를 사용하면 Webhook의 실행 상태와 호출 결과를 확인할 수 있습니다. 호출 이력에는 Webhook 이벤트의 성공 여부와 각 호출에 대한 상세 정보가 포함됩니다.`;
 
-// 프로토콜별 description을 반환하는 헬퍼 함수
-function getDescription(protocol: string): string {
-  switch (protocol) {
+// 체인별 description을 반환하는 헬퍼 함수
+function getDescription(chain: string): string {
+  switch (chain) {
     default:
       return description;
   }
 }
 
-const info = (protocol: string): OpenAPIV3.PathItemObject => {
+const info = (chain: string): OpenAPIV3.PathItemObject => {
   // A. operationId 및 parameters 설정
-  const { operationId, parameters } = getOpIdAndParams(protocol);
+  const { operationId, parameters } = getOpIdAndParams(chain);
   // B. successResponse 설정 (GET 엔드포인트이므로 requestBody는 사용하지 않음)
-  const { successResponse } = getRequestAndResponse(protocol);
+  const { successResponse } = getRequestAndResponse(chain);
   // C. callouts 설정
-  const callouts = getCallouts(protocol);
-  // D. 프로토콜에 따른 description 설정
-  const protocolDescription = getDescription(protocol);
+  const callouts = getCallouts(chain);
+  // D. 체인에 따른 description 설정
+  const chainDescription = getDescription(chain);
 
   return {
     get: {
@@ -36,7 +36,7 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
         },
       ],
       tags,
-      description: `${protocolDescription}\n\n${callouts}`,
+      description: `${chainDescription}\n\n${callouts}`,
       summary,
       operationId,
       parameters,
@@ -57,15 +57,15 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
 // ─────────────────────────────────────
 // A. operationId 및 parameters 설정 (none vs. 그 외)
 // ─────────────────────────────────────
-function getOpIdAndParams(protocol: string): {
+function getOpIdAndParams(chain: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "web3") {
+  if (chain === "web3") {
     return {
       operationId: endpoint,
       parameters: [
-        Requests.protocol("ethereum", [
+        Requests.chain("ethereum", [
           // evm
           "arbitrum",
           "base",
@@ -96,11 +96,11 @@ function getOpIdAndParams(protocol: string): {
       ],
     };
   } else {
-    const chainInfo = getChainInfo(protocol);
+    const chainInfo = getChainInfo(chain);
     return {
-      operationId: `${protocol}-${endpoint}`,
+      operationId: `${chain}-${endpoint}`,
       parameters: [
-        Requests.protocol(protocol, [protocol]),
+        Requests.chain(chain, [chain]),
         Requests.network(chainInfo?.mainnet || chainInfo?.testnet?.[0] || "", [
           ...(chainInfo?.mainnet || []),
           ...(chainInfo?.testnet || []),
@@ -119,13 +119,13 @@ function getOpIdAndParams(protocol: string): {
 }
 
 // ─────────────────────────────────────
-// B. successResponse 설정 (프로토콜별로 다름)
+// B. successResponse 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getRequestAndResponse(protocol: string): {
+function getRequestAndResponse(chain: string): {
   requestBody?: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
-  switch (protocol) {
+  switch (chain) {
     default:
       return {
         successResponse: {
@@ -161,10 +161,10 @@ function getRequestAndResponse(protocol: string): {
 }
 
 // ─────────────────────────────────────
-// C. callouts 설정 (프로토콜별로 다름)
+// C. callouts 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getCallouts(protocol: string): string {
-  switch (protocol) {
+function getCallouts(chain: string): string {
+  switch (chain) {
     default:
       return `> 💡 히스토리 데이터 저장 기간
 > 최근 30일 동안의 Webhook 호출 이력만 적재됩니다. 30일을 초과한 데이터는 저장되지 않으므로, 필요한 이력은 그 기간 내에 조회하셔야 합니다.`;

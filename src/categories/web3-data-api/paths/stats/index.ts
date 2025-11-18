@@ -4,7 +4,7 @@ import { ApiSpec } from "../../../../types";
 import { createPath } from "../../../../utils";
 import { isEndpointSupported } from "../../../../constants";
 
-function createPathsForProtocol(protocol: string) {
+function createPathsForchain(chain: string) {
   let paths: OpenAPIV3.PathsObject = {};
   const tagPage = __dirname.split("/").pop(); // get tag page title from directory name
   if (!tagPage) return;
@@ -15,10 +15,10 @@ function createPathsForProtocol(protocol: string) {
     const apiSpec: ApiSpec = require(`./${file}`).default;
 
     if (!apiSpec?.isPublic) return; // isPublic false인 경우, 해당 API를 문서에 노출하지 않음
-    if (protocol !== "web3" && !isEndpointSupported(protocol, apiSpec.endpoint))
+    if (chain !== "web3" && !isEndpointSupported(chain, apiSpec.endpoint))
       return; // 해당 프로토h콜에서 지원하지 않는 endpoint는 문서에 노출하지 않음
 
-    const newPath = createPath({ protocol, tagPage, apiSpec });
+    const newPath = createPath({ chain, tagPage, apiSpec });
 
     paths = {
       ...paths,
@@ -29,4 +29,4 @@ function createPathsForProtocol(protocol: string) {
   return paths;
 }
 
-export default createPathsForProtocol;
+export default createPathsForchain;

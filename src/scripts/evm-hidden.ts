@@ -4,36 +4,34 @@ import { ReadmeApi } from "../connectors/readme.apis";
 
 function validateInputs(
   versionInput?: string,
-  protocolInput?: string,
+  chainInput?: string
 ): [string, string] {
   if (!versionInput) {
     throw new Error(
-      "Error: A version for API is required as the first argument.",
+      "Error: A version for API is required as the first argument."
     );
   }
 
   if (!Patterns.readme.docs.version.test(versionInput)) {
     throw new Error(
-      "Error: The version must be 'main' or in the format of x.x.x.",
+      "Error: The version must be 'main' or in the format of x.x.x."
     );
   }
 
-  if (!protocolInput) {
-    throw new Error("Error: A Protocol is required as the second argument.");
+  if (!chainInput) {
+    throw new Error("Error: A chain is required as the second argument.");
   }
 
-  return [versionInput, protocolInput];
+  return [versionInput, chainInput];
 }
 
 async function main() {
   try {
-    const [versionInput, protocolInput] = validateInputs(
-      ...process.argv.slice(2),
-    );
+    const [versionInput, chainInput] = validateInputs(...process.argv.slice(2));
 
     const allEvmDocs = await getAllDocs({
       version: versionInput,
-      slugs: [`evm-${protocolInput}`],
+      slugs: [`evm-${chainInput}`],
     });
 
     for (const doc of allEvmDocs) {
@@ -60,7 +58,7 @@ async function main() {
         });
         delay(1000);
         console.log(
-          `Set public: EVM API Docs ${doc.children[0].title}, ${doc.children[0]._id}`,
+          `Set public: EVM API Docs ${doc.children[0].title}, ${doc.children[0]._id}`
         );
       }
     }

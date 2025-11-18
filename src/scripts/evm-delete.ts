@@ -22,32 +22,30 @@ interface Category {
 
 function validateInputs(
   versionInput?: string,
-  protocolInput?: string,
+  chainInput?: string
 ): [string, string] {
   if (!versionInput) {
     throw new Error(
-      "Error: A version for API is required as the first argument.",
+      "Error: A version for API is required as the first argument."
     );
   }
 
   if (!Patterns.readme.docs.version.test(versionInput)) {
     throw new Error(
-      "Error: The version must be 'main' or in the format of x.x.x.",
+      "Error: The version must be 'main' or in the format of x.x.x."
     );
   }
 
-  if (!protocolInput) {
-    throw new Error("Error: A Protocol is required as the second argument.");
+  if (!chainInput) {
+    throw new Error("Error: A chain is required as the second argument.");
   }
 
-  return [versionInput, protocolInput];
+  return [versionInput, chainInput];
 }
 
 async function main() {
   try {
-    const [versionInput, protocolInput] = validateInputs(
-      ...process.argv.slice(2),
-    );
+    const [versionInput, chainInput] = validateInputs(...process.argv.slice(2));
 
     // 1. 모든 카테고리, API spec 가져오기
     const allCategories: Category[] = await getAllPageCategories({
@@ -56,17 +54,17 @@ async function main() {
     const allApiSpecs = await getAllApiSpecs({ version: versionInput });
 
     const targetCategories: Category[] = allCategories.filter((category) =>
-      category.title.startsWith(`evm-${protocolInput}`),
+      category.title.startsWith(`evm-${chainInput}`)
     );
     const targetApiSpecs: ReadmeApiSpec[] = allApiSpecs.filter((apiSpec) =>
-      apiSpec.title.startsWith(`evm-${protocolInput}`),
+      apiSpec.title.startsWith(`evm-${chainInput}`)
     );
 
     // 4. 삭제 작업
     let deletedApiSpecCount = 0;
     for (const apiSpec of targetApiSpecs) {
       console.log(
-        `Deleting API specification for: ${apiSpec.title}, ${apiSpec.id}`,
+        `Deleting API specification for: ${apiSpec.title}, ${apiSpec.id}`
       );
 
       const deleteApiSpecResult = await ReadmeApi.deleteApiSpec({
@@ -95,7 +93,7 @@ async function main() {
     }
 
     console.log(
-      `✅ Successfully deleted categories ${deletedCategoryCount}, API specifications: ${deletedApiSpecCount}`,
+      `✅ Successfully deleted categories ${deletedCategoryCount}, API specifications: ${deletedApiSpecCount}`
     );
   } catch (error: any) {
     if (error.response) {

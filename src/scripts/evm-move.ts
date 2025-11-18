@@ -5,37 +5,35 @@ import { supportedApisChains } from "../constants";
 
 function validateInputs(
   versionInput?: string,
-  protocolInput?: string,
+  chainInput?: string
 ): [string, string] {
   if (!versionInput) {
     throw new Error(
-      "Error: A version for API is required as the first argument.",
+      "Error: A version for API is required as the first argument."
     );
   }
 
   if (!Patterns.readme.docs.version.test(versionInput)) {
     throw new Error(
-      "Error: The version must be 'main' or in the format of x.x.x.",
+      "Error: The version must be 'main' or in the format of x.x.x."
     );
   }
 
-  if (!protocolInput) {
-    throw new Error("Error: A Protocol is required as the second argument.");
+  if (!chainInput) {
+    throw new Error("Error: A chain is required as the second argument.");
   }
 
-  return [versionInput, protocolInput];
+  return [versionInput, chainInput];
 }
 
 async function main() {
   try {
-    const [versionInput, protocolInput] = validateInputs(
-      ...process.argv.slice(2),
-    );
-    const isEthereum = protocolInput === "ethereum";
+    const [versionInput, chainInput] = validateInputs(...process.argv.slice(2));
+    const isEthereum = chainInput === "ethereum";
 
     const allEvmDocs = await getAllDocs({
       version: versionInput,
-      slugs: [`evm-${protocolInput}-`],
+      slugs: [`evm-${chainInput}-`],
     });
 
     const apiDocs = allEvmDocs.flatMap((doc) => doc.children);
@@ -52,8 +50,8 @@ async function main() {
         version: versionInput,
         slug: doc.slug,
         options: {
-          categorySlug: protocolInput,
-          parentDocSlug: `${protocolInput}-${namespace}`,
+          categorySlug: chainInput,
+          parentDocSlug: `${chainInput}-${namespace}`,
         },
       });
       delay(1000);

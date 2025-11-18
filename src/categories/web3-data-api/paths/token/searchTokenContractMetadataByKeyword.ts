@@ -15,9 +15,9 @@ const endpoint = "searchTokenContractMetadataByKeyword";
 const isPublic = true;
 const tags = ["Token API"];
 
-// 프로토콜별 description을 반환하는 헬퍼 함수
-function getDescription(protocol: string): string {
-  switch (protocol) {
+// 체인별 description을 반환하는 헬퍼 함수
+function getDescription(chain: string): string {
+  switch (chain) {
     case "web3":
       return `토큰 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다.`;
     case "tron":
@@ -27,13 +27,13 @@ function getDescription(protocol: string): string {
   }
 }
 
-const info = (protocol: string): OpenAPIV3.PathItemObject => {
+const info = (chain: string): OpenAPIV3.PathItemObject => {
   // A. operationId, parameters 설정
-  const { operationId, parameters } = getOpIdAndParams(protocol);
+  const { operationId, parameters } = getOpIdAndParams(chain);
   // B. requestBody, successResponse 설정
-  const { requestBody, successResponse } = getRequestAndResponse(protocol);
+  const { requestBody, successResponse } = getRequestAndResponse(chain);
   // C. callouts 설정
-  const callouts = getCallouts(protocol);
+  const callouts = getCallouts(chain);
 
   return {
     post: {
@@ -43,7 +43,7 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
         },
       ],
       tags,
-      description: `${getDescription(protocol)}\n\n${callouts}`,
+      description: `${getDescription(chain)}\n\n${callouts}`,
       summary,
       operationId,
       parameters,
@@ -73,15 +73,15 @@ const info = (protocol: string): OpenAPIV3.PathItemObject => {
 // A. operationId, parameters 설정
 //   - none vs. 그 외
 // ─────────────────────────────────────
-function getOpIdAndParams(protocol: string): {
+function getOpIdAndParams(chain: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (protocol === "web3") {
+  if (chain === "web3") {
     return {
       operationId: endpoint,
       parameters: [
-        Requests.protocol("ethereum", [
+        Requests.chain("ethereum", [
           // evm
           "arbitrum",
           "base",
@@ -106,11 +106,11 @@ function getOpIdAndParams(protocol: string): {
       ],
     };
   } else {
-    const chainInfo = getChainInfo(protocol);
+    const chainInfo = getChainInfo(chain);
     return {
-      operationId: `${protocol}-${endpoint}`,
+      operationId: `${chain}-${endpoint}`,
       parameters: [
-        Requests.protocol(protocol, [protocol]),
+        Requests.chain(chain, [chain]),
         Requests.network(
           chainInfo?.mainnet || chainInfo?.testnet?.[0] || null,
           chainInfo?.mainnet
@@ -124,13 +124,13 @@ function getOpIdAndParams(protocol: string): {
 
 // ─────────────────────────────────────
 // B. requestBody, successResponse 설정
-//   - 프로토콜별로 모두 다름
+//   - 체인별로 모두 다름
 // ─────────────────────────────────────
-function getRequestAndResponse(protocol: string): {
+function getRequestAndResponse(chain: string): {
   requestBody: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
-  switch (protocol) {
+  switch (chain) {
     case "web3":
       return {
         requestBody: {
@@ -233,10 +233,10 @@ function getRequestAndResponse(protocol: string): {
 
 // ─────────────────────────────────────
 // C. callouts 설정
-//   - 프로토콜별로 모두 다름
+//   - 체인별로 모두 다름
 // ─────────────────────────────────────
-function getCallouts(protocol: string): string {
-  switch (protocol) {
+function getCallouts(chain: string): string {
+  switch (chain) {
     case "web3":
     case "kaia":
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTokenContractMetadata)}

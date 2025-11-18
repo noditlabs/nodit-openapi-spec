@@ -6,25 +6,25 @@ import { supportedApisChains } from "../constants";
 // 입력값 검증 함수
 function validateInputs(
   versionInput?: string,
-  protocolInput?: string,
+  chainInput?: string
 ): [string, string?] {
   if (!versionInput) {
     throw new Error(
-      "Error: A version for API is required as the first argument.",
+      "Error: A version for API is required as the first argument."
     );
   }
 
   if (!Patterns.readme.docs.version.test(versionInput)) {
     throw new Error(
-      "Error: The version must be 'main' or in the format of x.x.x.",
+      "Error: The version must be 'main' or in the format of x.x.x."
     );
   }
 
-  if (!protocolInput) {
-    throw new Error("Error: A Protocol is required as the second argument.");
+  if (!chainInput) {
+    throw new Error("Error: A chain is required as the second argument.");
   }
 
-  return [versionInput, protocolInput];
+  return [versionInput, chainInput];
 }
 
 const REFERENCE_URL = "https://developer.nodit.io/reference";
@@ -32,9 +32,7 @@ const REFERENCE_URL = "https://developer.nodit.io/reference";
 // 메인 함수
 async function main() {
   try {
-    const [versionInput, protocolInput] = validateInputs(
-      ...process.argv.slice(2),
-    );
+    const [versionInput, chainInput] = validateInputs(...process.argv.slice(2));
 
     console.log(`🚀 Creating Node API links for Supported chains`);
 
@@ -45,7 +43,7 @@ async function main() {
       webhookApi,
       streamApi,
     } of supportedApisChains) {
-      if (protocolInput !== "all" && chain !== protocolInput) {
+      if (chainInput !== "all" && chain !== chainInput) {
         continue;
       }
 
@@ -88,7 +86,7 @@ async function main() {
         for (const api of nodeApi) {
           if (api.endpoints?.length > 0) {
             const namespace = api.category;
-            const namespaceDocName = `${protocolInput}-${namespace}`;
+            const namespaceDocName = `${chainInput}-${namespace}`;
             console.log(`  ⏵⏵ ${namespaceDocName}`);
 
             const namespaceDoc = await ReadmeApi.createDoc({

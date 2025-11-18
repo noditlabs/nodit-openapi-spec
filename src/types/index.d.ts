@@ -13,12 +13,12 @@ declare interface ApiSpec {
   summary: string;
   endpoint: string;
   isPublic?: boolean;
-  info: (protocol?: string) => OpenAPIV3.PathItemObject;
+  info: (chain?: string) => OpenAPIV3.PathItemObject;
 }
 
 declare interface OasParams {
   version: string;
-  protocol: string;
+  chain: string;
 }
 
 declare interface EvmDocsInfo {
