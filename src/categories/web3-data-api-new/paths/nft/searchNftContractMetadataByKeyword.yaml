@@ -1,0 +1,59 @@
+security:
+  - api_key: []
+tags:
+  - NFT API
+description: |
+  NFT 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다.
+  가장 최근에 배포된 컨트랙트부터 순서대로 정렬되어 반환됩니다.
+
+# TODO: 429 callout 추가
+# TODO: Kaia callout 추가
+summary: Search NFT Contract Metadata By Keyword
+operationId: searchNftContractMetadataByKeyword
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChain.yaml
+  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            properties:
+              keyword:
+                $ref: ../../components/parameters/evm/EvmKeyword.yaml
+                examples:
+                  - "BAYC"
+                  - "Bored Ape Yacht Club"
+          - $ref: ../../components/parameters/Pagination.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                      - $ref: ../../components/schemas/evm/EvmAssetMeta.yaml
+        example:
+          $ref: ../../components/examples/searchNftContractMetadataByKeyword.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

@@ -1,0 +1,261 @@
+openapi: 3.1.0
+info:
+  title: Web3 Data API
+  version: 1.2.20
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: https://web3.nodit.io/v1
+components:
+  securitySchemes:
+    api_key:
+      $ref: ./components/securitySchemes/X-API-KEY.yaml
+paths:
+  # NFT (ERC721, ERC1155)
+  /{chain}/{network}/nft/getNftContractMetadataByContracts:
+    post:
+      $ref: ./paths/nft/getNftContractMetadataByContracts.yaml
+  /{chain}/{network}/nft/getNftContractsByAccount:
+    post:
+      $ref: ./paths/nft/getNftContractsByAccount.yaml
+  /{chain}/{network}/nft/getNftHoldersByContract:
+    post:
+      $ref: ./paths/nft/getNftHoldersByContract.yaml
+  /{chain}/{network}/nft/getNftHoldersByTokenId:
+    post:
+      $ref: ./paths/nft/getNftHoldersByTokenId.yaml
+  /{chain}/{network}/nft/getNftMetadataByContract:
+    post:
+      $ref: ./paths/nft/getNftMetadataByContract.yaml
+  /{chain}/{network}/nft/getNftMetadataByTokenIds:
+    post:
+      $ref: ./paths/nft/getNftMetadataByTokenIds.yaml
+  /{chain}/{network}/nft/getNftTransfersByAccount:
+    post:
+      $ref: ./paths/nft/getNftTransfersByAccount.yaml
+  /{chain}/{network}/nft/getNftTransfersByContract:
+    post:
+      $ref: ./paths/nft/getNftTransfersByContract.yaml
+  /{chain}/{network}/nft/getNftTransfersByTokenId:
+    post:
+      $ref: ./paths/nft/getNftTransfersByTokenId.yaml
+  /{chain}/{network}/nft/getNftTransfersWithinRange:
+    post:
+      $ref: ./paths/nft/getNftTransfersWithinRange.yaml
+  /{chain}/{network}/nft/getNftsOwnedByAccount:
+    post:
+      $ref: ./paths/nft/getNftsOwnedByAccount.yaml
+  /{chain}/{network}/nft/searchNftContractMetadataByKeyword:
+    post:
+      $ref: ./paths/nft/searchNftContractMetadataByKeyword.yaml
+  /{chain}/{network}/nft/syncNftMetadata:
+    post:
+      $ref: ./paths/nft/syncNftMetadata.yaml
+
+  # # Token (ERC20)
+  /{chain}/{network}/token/getTokenAllowance:
+    post:
+      $ref: ./paths/token/getTokenAllowance.yaml
+  /{chain}/{network}/token/getTokenAccountsByAssetType:
+    post:
+      $ref: ./paths/token/getTokenAccountsByAssetType.yaml
+  /{chain}/{network}/token/getTokenBalanceChangesByAccount:
+    post:
+      $ref: ./paths/token/getTokenBalanceChangesByAccount.yaml
+  /{chain}/{network}/token/getTokenBalanceChangesByAssetType:
+    post:
+      $ref: ./paths/token/getTokenBalanceChangesByAssetType.yaml
+  /{chain}/{network}/token/getTokenBalanceChangesWithinRange:
+    post:
+      $ref: ./paths/token/getTokenBalanceChangesWithinRange.yaml
+  # /{chain}/{network}/token/getTokenContractMetadataByContracts:
+  #   post:
+  #     $ref: ./paths/token/getTokenContractMetadataByContracts.yaml
+  # /{chain}/{network}/token/getTokenHoldersByContract:
+  #   post:
+  #     $ref: ./paths/token/getTokenHoldersByContract.yaml
+  # /{chain}/{network}/token/getTokenMetadataByAssetTypes:
+  #   post:
+  #     $ref: ./paths/token/getTokenMetadataByAssetTypes.yaml
+  # /{chain}/{network}/token/getTokenPairByAssetType:
+  #   post:
+  #     $ref: ./paths/token/getTokenPairByAssetType.yaml
+  # /{chain}/{network}/token/getTokenPricesByContracts:
+  #   post:
+  #     $ref: ./paths/token/getTokenPricesByContracts.yaml
+  # /{chain}/{network}/token/getTokenTransfersByAccount:
+  #   post:
+  #     $ref: ./paths/token/getTokenTransfersByAccount.yaml
+  # /{chain}/{network}/token/getTokenTransfersByContract:
+  #   post:
+  #     $ref: ./paths/token/getTokenTransfersByContract.yaml
+  # /{chain}/{network}/token/getTokenTransfersByCurrencyAndIssuer:
+  #   post:
+  #     $ref: ./paths/token/getTokenTransfersByCurrencyAndIssuer.yaml
+  # /{chain}/{network}/token/getTokenTransfersWithinRange:
+  #   post:
+  #     $ref: ./paths/token/getTokenTransfersWithinRange.yaml
+  # /{chain}/{network}/token/getTokensOwnedByAccount:
+  #   post:
+  #     $ref: ./paths/token/getTokensOwnedByAccount.yaml
+  # /{chain}/{network}/token/searchTokenContractMetadataByKeyword:
+  #   post:
+  #     $ref: ./paths/token/searchTokenContractMetadataByKeyword.yaml
+
+  # # Native Token (ETH, BTC, BNB, etc.)
+  # /{chain}/{network}/native/getNativeBalanceByAccount:
+  #   post:
+  #     $ref: ./paths/native/getNativeBalanceByAccount.yaml
+  # /{chain}/{network}/native/getNativeHolders:
+  #   post:
+  #     $ref: ./paths/native/getNativeHolders.yaml
+  # /{chain}/{network}/native/getNativeTransfersByAccount:
+  #   post:
+  #     $ref: ./paths/native/getNativeTransfersByAccount.yaml
+  # /{chain}/{network}/native/getNativeTokenBalanceByAccount:
+  #   post:
+  #     $ref: ./paths/native/getNativeTokenBalanceByAccount.yaml
+  # /{chain}/{network}/native/getNativeTokenBalanceChangesByAccount:
+  #   post:
+  #     $ref: ./paths/native/getNativeTokenBalanceChangesByAccount.yaml
+  # /{chain}/{network}/native/getNativeTokenTransfersByAccount:
+  #   post:
+  #     $ref: ./paths/native/getNativeTokenTransfersByAccount.yaml
+  # /{chain}/{network}/native/getNativeTransfersWithinRange:
+  #   post:
+  #     $ref: ./paths/native/getNativeTransfersWithinRange.yaml
+
+  # # Blockchain (Block, Transaction, Internal Transaction, etc.)
+  # /{chain}/{network}/blockchain/getBlockByHashOrNumber:
+  #   post:
+  #     $ref: ./paths/blockchain/getBlockByHashOrNumber.yaml
+  # /{chain}/{network}/blockchain/getBlocksWithinRange:
+  #   post:
+  #     $ref: ./paths/blockchain/getBlocksWithinRange.yaml
+  # /{chain}/{network}/blockchain/getGasPrice:
+  #   post:
+  #     $ref: ./paths/blockchain/getGasPrice.yaml
+  # /{chain}/{network}/blockchain/getInternalTransactionsByAccount:
+  #   post:
+  #     $ref: ./paths/blockchain/getInternalTransactionsByAccount.yaml
+  # /{chain}/{network}/blockchain/getInternalTransactionsByTransactionHash:
+  #   post:
+  #     $ref: ./paths/blockchain/getInternalTransactionsByTransactionHash.yaml
+  # /{chain}/{network}/blockchain/getLedgerByHashOrIndex:
+  #   post:
+  #     $ref: ./paths/blockchain/getLedgerByHashOrIndex.yaml
+  # /{chain}/{network}/blockchain/getLedgersWithinRange:
+  #   post:
+  #     $ref: ./paths/blockchain/getLedgersWithinRange.yaml
+  # /{chain}/{network}/blockchain/getNextNonceByAccount:
+  #   post:
+  #     $ref: ./paths/blockchain/getNextNonceByAccount.yaml
+  # /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
+  #   post:
+  #     $ref: ./paths/blockchain/getTotalTransactionCountByAccount.yaml
+  # /{chain}/{network}/blockchain/getTransactionByHash:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionByHash.yaml
+  # /{chain}/{network}/blockchain/getTransactionByTransactionId:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionByTransactionId.yaml
+  # /{chain}/{network}/blockchain/getTransactionByVersion:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionByVersion.yaml
+  # /{chain}/{network}/blockchain/getTransactionsByAccount:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionsByAccount.yaml
+  # /{chain}/{network}/blockchain/getTransactionsByHashes:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionsByHashes.yaml
+  # /{chain}/{network}/blockchain/getTransactionsByTransactionIds:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionsByTransactionIds.yaml
+  # /{chain}/{network}/blockchain/getTransactionsByVersions:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionsByVersions.yaml
+  # /{chain}/{network}/blockchain/getTransactionsInBlock:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionsInBlock.yaml
+  # /{chain}/{network}/blockchain/getTransactionsInLedger:
+  #   post:
+  #     $ref: ./paths/blockchain/getTransactionsInLedger.yaml
+  # /{chain}/{network}/blockchain/getUnspentTransactionOutputsByAccount:
+  #   post:
+  #     $ref: ./paths/blockchain/getUnspentTransactionOutputsByAccount.yaml
+  # /{chain}/{network}/blockchain/isContract:
+  #   post:
+  #     $ref: ./paths/blockchain/isContract.yaml
+  # /{chain}/{network}/blockchain/searchEvents:
+  #   post:
+  #     $ref: ./paths/blockchain/searchEvents.yaml
+
+  # # ENS (Ethereum Only)
+  # /{chain}/{network}/ens/getAddressByEnsName:
+  #   post:
+  #     $ref: ./paths/ens/getAddressByEnsName.yaml
+  # /{chain}/{network}/ens/getEnsNameByAddress:
+  #   post:
+  #     $ref: ./paths/ens/getEnsNameByAddress.yaml
+  # /{chain}/{network}/ens/getEnsRecordByName:
+  #   post:
+  #     $ref: ./paths/ens/getEnsRecordByName.yaml
+  # /{chain}/{network}/ens/getEnsRecordsByAccount:
+  #   post:
+  #     $ref: ./paths/ens/getEnsRecordsByAccount.yaml
+
+  # # Stats
+  # /{chain}/{network}/stats/getAccountStats:
+  #   post:
+  #     $ref: ./paths/stats/getAccountStats.yaml
+  # /{chain}/{network}/stats/getDailyActiveAccountsStats:
+  #   post:
+  #     $ref: ./paths/stats/getDailyActiveAccountsStats.yaml
+  # /{chain}/{network}/stats/getDailyActiveAccountsStatsByContract:
+  #   post:
+  #     $ref: ./paths/stats/getDailyActiveAccountsStatsByContract.yaml
+  # /{chain}/{network}/stats/getDailyTransactionsStats:
+  #   post:
+  #     $ref: ./paths/stats/getDailyTransactionsStats.yaml
+  # /{chain}/{network}/stats/getDailyTransactionsStatsByContract:
+  #   post:
+  #     $ref: ./paths/stats/getDailyTransactionsStatsByContract.yaml
+  # /{chain}/{network}/stats/getHourlyActiveAccountsStats:
+  #   post:
+  #     $ref: ./paths/stats/getHourlyActiveAccountsStats.yaml
+  # /{chain}/{network}/stats/getHourlyActiveAccountsStatsByContract:
+  #   post:
+  #     $ref: ./paths/stats/getHourlyActiveAccountsStatsByContract.yaml
+  # /{chain}/{network}/stats/getHourlyTransactionsStats:
+  #   post:
+  #     $ref: ./paths/stats/getHourlyTransactionsStats.yaml
+  # /{chain}/{network}/stats/getHourlyTransactionsStatsByContract:
+  #   post:
+  #     $ref: ./paths/stats/getHourlyTransactionsStatsByContract.yaml
+
+  # # Asset-TRC10 (Tron Only)
+  # /{chain}/{network}/asset/getAssetHoldersById:
+  #   post:
+  #     $ref: ./paths/asset/getAssetHoldersById.yaml
+  # /{chain}/{network}/asset/getAssetMetadataByIds:
+  #   post:
+  #     $ref: ./paths/asset/getAssetMetadataByIds.yaml
+  # /{chain}/{network}/asset/getAssetMetadataByIssuer:
+  #   post:
+  #     $ref: ./paths/asset/getAssetMetadataByIssuer.yaml
+  # /{chain}/{network}/asset/getAssetTransfersByAccount:
+  #   post:
+  #     $ref: ./paths/asset/getAssetTransfersByAccount.yaml
+  # /{chain}/{network}/asset/getAssetTransfersById:
+  #   post:
+  #     $ref: ./paths/asset/getAssetTransfersById.yaml
+  # /{chain}/{network}/asset/getAssetTransfersWithinRange:
+  #   post:
+  #     $ref: ./paths/asset/getAssetTransfersWithinRange.yaml
+  # /{chain}/{network}/asset/getAssetsOwnedByAccount:
+  #   post:
+  #     $ref: ./paths/asset/getAssetsOwnedByAccount.yaml
+  # /{chain}/{network}/asset/searchAssetMetadataByKeyword:
+  #   post:
+  #     $ref: ./paths/asset/searchAssetMetadataByKeyword.yaml

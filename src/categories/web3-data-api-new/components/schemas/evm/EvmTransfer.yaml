@@ -1,0 +1,73 @@
+type: object
+required:
+  - from
+  - to
+  - value
+  - timestamp
+  - blockNumber
+  - transactionHash
+  - logIndex
+properties:
+  from:
+    $ref: ./EvmAccountAddress.yaml
+    description: |
+      토큰이 전송된 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 제공됩니다.
+  to:
+    $ref: ./EvmAccountAddress.yaml
+    description: |
+      토큰을 전송받은 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 제공됩니다.
+  value:
+    type: string
+    description: |
+      전송한 토큰의 수량을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  timestamp:
+    type: integer
+    description: |
+      토큰 전송이 발생한 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
+  blockNumber:
+    type: integer
+    description: |
+      토큰 전송이 발생한 블록 번호를 나타내는 필드입니다.
+  transactionHash:
+    type: string
+    description: |
+      토큰 전송 트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+  logIndex:
+    type: integer
+    description: |
+      토큰 전송 트랜잭션의 로그 인덱스를 나타내는 필드입니다. 트랜잭션에서 발생한 이벤트의 순서를 의미합니다.
+  batchIndex:
+    type: integer
+    description: |
+      토큰 전송 트랜잭션의 배치 인덱스를 나타내는 필드입니다. 이 필드는 ERC1155 토큰 전송에 대한 응답에만 포함됩니다.
+  function:
+    type: object
+    required:
+      - selector
+      - input
+    description: |
+      Transfer가 포함된 트랜잭션에서 호출된 함수의 정보를 나타내는 필드입니다. 이 필드는 withFunction 파라미터에 true를 입력한 경우에만 응답에 포함됩니다.
+    properties:
+      selector:
+        type: string
+        pattern: ^0[xX][0-9a-fA-F]{8}$
+        description: |
+          함수를 식별하는 4바이트 함수 셀렉터 값입니다. 함수 셀렉터는 함수 시그니처를 Keccak-256 해싱한 결과의 앞 4바이트를 의미합니다. 0x로 시작하는 8자리의 16진수 문자열 형태로 제공됩니다.
+      name:
+        type: string
+        description: |
+          함수의 이름을 나타내는 필드입니다.
+      signature:
+        type: string
+        description: |
+          함수의 시그니처를 나타내는 필드입니다.
+      args:
+        type: array
+        description: |
+          함수의 인자를 나타내는 필드입니다.
+        items:
+          $ref: ./EvmFunctionArg.yaml
+      input:
+        type: string
+        description: |
+          함수의 입력 데이터를 나타내는 필드입니다. 0x로 시작하는 16진수 문자열 형태로 제공됩니다.

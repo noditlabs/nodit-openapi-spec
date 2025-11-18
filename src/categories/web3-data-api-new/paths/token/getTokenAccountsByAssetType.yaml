@@ -1,0 +1,61 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 Asset Type을 가진 토큰의 목록을 조회합니다. 조회 결과는 Owner 주소 기준이 아닌 Object 주소를 기준으로 제공됩니다.
+summary: Get Token Accounts By Asset Type
+operationId: getTokenAccountsByAssetType
+parameters:
+  - $ref: ../../components/parameters/chains/AptosChain.yaml
+  - $ref: ../../components/parameters/chains/AptosNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - oneOf:
+              - title: With assetType
+                type: object
+                required:
+                  - assetType
+                properties:
+                  assetType:
+                    $ref: ../../components/parameters/aptos/AptosAssetType.yaml
+              - title: With linkedAssetType
+                type: object
+                required:
+                  - linkedAssetType
+                properties:
+                  linkedAssetType:
+                    $ref: ../../components/parameters/aptos/AptosLinkedAssetType.yaml
+          - $ref: ../../components/parameters/Pagination.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/aptos/AptosTokenAccount.yaml
+        example:
+          $ref: ../../components/examples/getTokenAccountsByAssetType.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

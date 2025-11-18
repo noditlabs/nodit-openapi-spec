@@ -1,0 +1,3 @@
+type: string
+description: |
+  조회하려는 컨트랙트의 name 혹은 symbol을 입력합니다. 대소문자를 구분하지 않는 exact match 검색을 지원합니다.

@@ -1,0 +1,56 @@
+{
+  "rpp": 10,
+  "cursor": "eyJ0b3RhbCI6IjIyMiIsInBrLmFkZHJlc3MiOiIweDg2MTEwNTg0MmFiMDhlMDAxZjNlZDYxNTJiZjcyOWZjZjY0ZGMwMWQifQ==",
+  "items": [
+    {
+      "ownerAddress": "0xD996B57F18DDa88Bc2c129696a7364C7DbC2f586",
+      "totalBalance": "1701",
+      "uniqueBalance": "1249"
+    },
+    {
+      "ownerAddress": "0x208b82B04449Cd51803fAE4B1561450ba13d9510",
+      "totalBalance": "1305",
+      "uniqueBalance": "1179"
+    },
+    {
+      "ownerAddress": "0x1EA85e9b3CD7f32882914459DdB21A1fe8354304",
+      "totalBalance": "1009",
+      "uniqueBalance": "717"
+    },
+    {
+      "ownerAddress": "0x53EEb57d5107E231C8882b5Ea2071F0A60c41AC9",
+      "totalBalance": "752",
+      "uniqueBalance": "564"
+    },
+    {
+      "ownerAddress": "0x68d3ebB11B174a61D48F59839249930F3a80dAd2",
+      "totalBalance": "421",
+      "uniqueBalance": "471"
+    },
+    {
+      "ownerAddress": "0xDEB4df4fC041e89737F389D36058F0518390Ade2",
+      "totalBalance": "303",
+      "uniqueBalance": "309"
+    },
+    {
+      "ownerAddress": "0xaCf060DF7C74294e2BaEC349EbEd26aF46A166d8",
+      "totalBalance": "301",
+      "uniqueBalance": "76"
+    },
+    {
+      "ownerAddress": "0x8f77D28c23479f2ABEB72a31C577aC0Ae5DE1ebF",
+      "totalBalance": "231",
+      "uniqueBalance": "202"
+    },
+    {
+      "ownerAddress": "0xD88DeDD75Cf6A68be787AE854E9c609528C30F41",
+      "totalBalance": "224",
+      "uniqueBalance": "211"
+    },
+    {
+      "ownerAddress": "0x861105842Ab08e001F3Ed6152Bf729Fcf64DC01D",
+      "totalBalance": "222",
+      "uniqueBalance": "776"
+    }
+  ]
+}

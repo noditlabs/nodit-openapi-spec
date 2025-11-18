@@ -1,0 +1,67 @@
+security:
+  - api_key: []
+tags:
+  - NFT API
+description: |
+  특정 Account가 보유한 NFT의 목록을 조회합니다. 조회 결과에는 각 토큰의 보유 수량과 토큰의 메타데이터가 포함됩니다.
+# TODO: Kaia callout 추가
+summary: Get NFTs Owned by Account
+operationId: getNftsOwnedByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChain.yaml
+  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            required:
+              - accountAddress
+            properties:
+              accountAddress:
+                $ref: ../../components/parameters/evm/EvmAccountAddress.yaml
+              contractAddresses:
+                $ref: ../../components/parameters/evm/EvmNftContractAddresses.yaml
+          - $ref: ../../components/parameters/Pagination.yaml
+          - type: object
+            properties:
+              withMetadata:
+                $ref: ../../components/parameters/WithMetadata.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: ../../components/schemas/evm/EvmBalanceWithLastTransferredAt.yaml
+                      - $ref: ../../components/schemas/evm/EvmNftMeta.yaml
+                      - type: object
+                        properties:
+                          contract:
+                            allOf:
+                              - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                              - $ref: ../../components/schemas/evm/EvmAssetMeta.yaml
+        example:
+          $ref: ../../components/examples/getNftsOwnedByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

@@ -1,0 +1,11 @@
+type: string
+description: |
+  조회한 계정 주소가 관련 있는 결과만 필터링하기 위한 파라미터입니다.
+  - from: 송신자로만 필터링.
+  - to: 수신자로만 필터링.
+  - both(기본값): 송신자 또는 수신자에 하나라도 포함된 모든 결과가 조회됩니다.
+enum:
+  - from
+  - to
+  - both
+default: both

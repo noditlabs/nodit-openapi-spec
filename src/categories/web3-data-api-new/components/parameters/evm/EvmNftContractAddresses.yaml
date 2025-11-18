@@ -1,0 +1,6 @@
+type: array
+maximum: 1000
+description: |
+  조회하고자 하는 컨트랙트 주소의 배열을 지정하는 파라미터입니다. 최대 1000개까지 지정할 수 있습니다.
+items:
+  $ref: EvmNftContractAddress.yaml

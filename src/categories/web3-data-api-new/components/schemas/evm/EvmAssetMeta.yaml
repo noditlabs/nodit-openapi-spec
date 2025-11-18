@@ -1,0 +1,13 @@
+type: object
+required:
+  - name
+  - symbol
+properties:
+  name:
+    type: string
+    description: |
+      컨트랙트의 이름을 나타내는 필드입니다. 표준을 따르지 않거나, 컨트랙트 생성 단계에서 name을 입력하지 않은 경우 빈 문자열을 반환합니다.
+  symbol:
+    type: string
+    description: |
+      컨트랙트의 심볼을 나타내는 필드입니다. 표준을 따르지 않거나, 컨트랙트 생성 단계에서 symbol을 입력하지 않은 경우 빈 문자열을 반환합니다.

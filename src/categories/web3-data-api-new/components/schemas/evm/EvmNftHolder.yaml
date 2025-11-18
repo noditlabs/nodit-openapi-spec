@@ -1,0 +1,8 @@
+allOf:
+  - type: object
+    required:
+      - ownerAddress
+    properties:
+      ownerAddress:
+        $ref: ./EvmOwnerAddress.yaml
+  - $ref: ./EvmNftBalance.yaml

@@ -1,0 +1,53 @@
+[
+  {
+    "contract": {
+      "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+      "deployedTransactionHash": "0x22199329b0aa1aa68902a78e3b32ca327c872fab166c7a2838273de6ad383eba",
+      "deployedAt": "2021-04-22T03:03:16.000Z",
+      "deployerAddress": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "BoredApeYachtClub",
+      "symbol": "BAYC"
+    },
+    "tokenId": "1",
+    "tokenUri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1",
+    "tokenUriSyncedAt": "2025-03-25T07:52:29.905Z",
+    "rawMetadata": "{\"image\":\"ipfs://QmPbxeGcXhYQQNgsC6a36dDyYUcHgMLnGKnF8pVFmGsvqi\",\"attributes\":[{\"trait_type\":\"Mouth\",\"value\":\"Grin\"},{\"trait_type\":\"Clothes\",\"value\":\"Vietnam Jacket\"},{\"trait_type\":\"Background\",\"value\":\"Orange\"},{\"trait_type\":\"Eyes\",\"value\":\"Blue Beams\"},{\"trait_type\":\"Fur\",\"value\":\"Robot\"}]}\n",
+    "metadataSyncedAt": "2025-03-25T07:52:34.054Z"
+  },
+  {
+    "contract": {
+      "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+      "deployedTransactionHash": "0x22199329b0aa1aa68902a78e3b32ca327c872fab166c7a2838273de6ad383eba",
+      "deployedAt": "2021-04-22T03:03:16.000Z",
+      "deployerAddress": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "BoredApeYachtClub",
+      "symbol": "BAYC"
+    },
+    "tokenId": "12",
+    "tokenUri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/12",
+    "tokenUriSyncedAt": "2024-03-12T11:51:34.731Z",
+    "rawMetadata": "{\"image\":\"ipfs://QmexFWUtmFNGQwVuRN8dLLwcucSFoLYjeHkv2uAyan5H8t\",\"attributes\":[{\"trait_type\":\"Background\",\"value\":\"Army Green\"},{\"trait_type\":\"Clothes\",\"value\":\"Black Holes T\"},{\"trait_type\":\"Hat\",\"value\":\"Seaman's Hat\"},{\"trait_type\":\"Eyes\",\"value\":\"Wide Eyed\"},{\"trait_type\":\"Fur\",\"value\":\"Brown\"},{\"trait_type\":\"Mouth\",\"value\":\"Discomfort\"}]}\n",
+    "metadataSyncedAt": "2024-03-12T11:51:34.740Z"
+  },
+  {
+    "contract": {
+      "address": "0x7E6027a6A84fC1F6Db6782c523EFe62c923e46ff",
+      "deployedTransactionHash": "0xb62641ab71658bc01733948bc308f3a86ae689466519ce64fb6f348eb02db7ff",
+      "deployedAt": "2023-01-31T18:34:11.000Z",
+      "deployerAddress": "0x2272ECf43A7481088FA2d4Ba9109804ED5A31901",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "",
+      "symbol": ""
+    },
+    "tokenId": "35454851340381403053777570024400663652390298901786737272698135080385313339362",
+    "tokenUri": "https://v2.emblemvault.io/v3/meta/0x7E6027a6A84fC1F6Db6782c523EFe62c923e46ff/35454851340381403053777570024400663652390298901786737272698135080385313339362",
+    "tokenUriSyncedAt": "2025-04-02T15:55:13.910Z",
+    "rawMetadata": null,
+    "metadataSyncedAt": null
+  }
+]

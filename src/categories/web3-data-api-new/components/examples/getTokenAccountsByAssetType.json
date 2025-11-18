@@ -1,0 +1,107 @@
+{
+  "rpp": 10,
+  "page": 1,
+  "count": 47678558,
+  "items": [
+    {
+      "ownerAddress": "0xed8c46bec9dbc2b23c60568f822b95b87ea395f7e3fdb5e3adc0a30c55c0a60e",
+      "objectAddress": "0xed8c46bec9dbc2b23c60568f822b95b87ea395f7e3fdb5e3adc0a30c55c0a60e",
+      "value": "4130687141100604",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0xcc03e04e08c028a4848ce270b8d8077ad9ec14f8586727b9ed7792039f1b207e",
+      "objectAddress": "0xcc03e04e08c028a4848ce270b8d8077ad9ec14f8586727b9ed7792039f1b207e",
+      "value": "1687357444789796",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0x84b1675891d370d5de8f169031f9c3116d7add256ecf50a4bc71e3135ddba6e0",
+      "objectAddress": "0x84b1675891d370d5de8f169031f9c3116d7add256ecf50a4bc71e3135ddba6e0",
+      "value": "1011151272736049",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0x10dbe04766a3809c911e865a88a87ff42956ba1edcd5798c861543548be4bad5",
+      "objectAddress": "0x10dbe04766a3809c911e865a88a87ff42956ba1edcd5798c861543548be4bad5",
+      "value": "1007342486517827",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0x23a2c6f1b3e14bcc90f6484eeeca318e23790879242b06c81ba33cb3ed84580c",
+      "objectAddress": "0x23a2c6f1b3e14bcc90f6484eeeca318e23790879242b06c81ba33cb3ed84580c",
+      "value": "1007342374474424",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0x6dd484cf0a72f61d2cb7cd0530633f8e1fe05dcb69b4c29dd0257d3d2639377d",
+      "objectAddress": "0x6dd484cf0a72f61d2cb7cd0530633f8e1fe05dcb69b4c29dd0257d3d2639377d",
+      "value": "612523016591784",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0x51c6abe562e755582d268340b2cf0e2d8895a155dc9b7a7fb5465000d62d770b",
+      "objectAddress": "0x0b17800fdd21fa68351b3793bad638b0764b1e72c01cb5af4af0ecfe3a787b57",
+      "value": "449621994572460",
+      "isFrozen": false,
+      "isPrimary": false,
+      "assetType": "0x000000000000000000000000000000000000000000000000000000000000000a",
+      "tokenStandard": "v2",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0x1d5cd3452e5f78b1696fa0c64d7ea9eb620b7292ccd395922517da5e07106963",
+      "objectAddress": "0x1d5cd3452e5f78b1696fa0c64d7ea9eb620b7292ccd395922517da5e07106963",
+      "value": "448698985679083",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0xdc7adffa09da5736ce1303f7441f4367fa423617c6822ad2fbc8522d9efd8fa4",
+      "objectAddress": "0xdc7adffa09da5736ce1303f7441f4367fa423617c6822ad2fbc8522d9efd8fa4",
+      "value": "425198055685366",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    },
+    {
+      "ownerAddress": "0xb51d9c2f2ace16e07edda15cd94148bea87be07e73f7f922bd4d631c9f5c852d",
+      "objectAddress": "0xb51d9c2f2ace16e07edda15cd94148bea87be07e73f7f922bd4d631c9f5c852d",
+      "value": "381634131669799",
+      "isFrozen": false,
+      "isPrimary": true,
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "tokenStandard": "v1",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a"
+    }
+  ]
+}

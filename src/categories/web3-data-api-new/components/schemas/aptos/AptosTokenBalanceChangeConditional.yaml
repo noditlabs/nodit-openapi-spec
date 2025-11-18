@@ -1,0 +1,31 @@
+allOf:
+  - type: object
+    required:
+      - blockHeight
+      - blockTimestamp
+      - transactionHash
+      - transactionVersion
+    properties:
+      blockHeight:
+        type: integer
+        description: |
+          해당 잔액 변화가 포함된 블록의 높이를 나타내는 필드입니다.
+        example: 1000000
+      blockTimestamp:
+        type: integer
+        description: |
+          블록 생성 시각을 나타내는 필드입니다.
+          마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공됩니다.
+        example: 1749003732416395
+      transactionHash:
+        type: string
+        description: |
+          잔액 변화가 발생한 트랜잭션의 해시를 나타내는 필드입니다.
+        example: "0x2a41cd44491bb92d4eb17d8487f82d9b43ab6289074c1986ee055be8105707c9"
+      transactionVersion:
+        type: integer
+        description: |
+          잔액 변화가 발생한 트랜잭션의 버전을 나타내는 필드입니다.
+          체인 상에서 트랜잭션의 순서를 나타내는 고유한 시퀀스 ID로, 0부터 시작하여 순차적으로 증가합니다.
+        example: 34872482
+  - $ref: ./AptosTokenBalanceChangeRequired.yaml

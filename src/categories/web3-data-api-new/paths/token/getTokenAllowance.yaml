@@ -1,0 +1,84 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 NFT 컨트랙트의 메타데이터를 동기화합니다. 최대 100개의 NFT를 동기화할 수 있으며, 동기화까지 최대 10초가 소요될 수 있습니다.
+
+summary: Get Token Allowance
+operationId: getTokenAllowance
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronChain.yaml
+  - $ref: ../../components/parameters/chains/EvmTronNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - title: EVM Chains (e.g. Ethereum, Arbitrum, Base, ...)
+            type: object
+            required:
+              - contractAddress
+              - ownerAddress
+              - spenderAddress
+            properties:
+              contractAddress:
+                $ref: ../../components/parameters/evm/EvmTokenContractAddress.yaml
+                example: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+              ownerAddress:
+                $ref: ../../components/schemas/evm/EvmAccountAddress.yaml
+                description: |
+                  토큰 소유자의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 입력할 수 있습니다.
+                example: "0x14d06788090769f669427b6aea1c0240d2321f34"
+              spenderAddress:
+                $ref: ../../components/schemas/evm/EvmAccountAddress.yaml
+                description: |
+                  토큰 사용을 허가받은 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 입력할 수 있습니다.
+                example: "0x61e2523f3e7895670be632600bf0d139453642f7"
+          - title: Tron
+            type: object
+            required:
+              - contractAddress
+              - ownerAddress
+              - spenderAddress
+            properties:
+              contractAddress:
+                $ref: ../../components/parameters/tron/TronTokenContractAddress.yaml
+                example: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+              ownerAddress:
+                $ref: ../../components/schemas/tron/TronAccountAddress.yaml
+                description: |
+                  토큰 소유자의 주소를 지정하는 파라미터입니다. "T"로 시작하는 34자리의 base58 문자열 형태로 입력할 수 있습니다.
+                example: "THLU47aojaiVg68atDTJzFv1E2CShJ1GNM"
+              spenderAddress:
+                $ref: ../../components/schemas/tron/TronAccountAddress.yaml
+                description: |
+                  토큰 사용을 허가받은 주소를 지정하는 파라미터입니다. "T"로 시작하는 34자리의 base58 문자열 형태로 입력할 수 있습니다.
+                example: "TWrEMSKgTZ1GsjJBaTfxGWuzcS6rQi4CjZ"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            allowance:
+              type: string
+              description: |
+                spender가 owner를 대신하여 transferFrom을 통해 사용할 수 있는 남은 토큰 수를 반환합니다.
+                approve나 transferFrom이 호출될 때 변경됩니다.
+              example: "1000000"
+        example:
+          $ref: ../../components/examples/getTokenAllowance.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

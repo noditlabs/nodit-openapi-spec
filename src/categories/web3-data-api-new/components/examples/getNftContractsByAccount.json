@@ -1,0 +1,19 @@
+{
+  "rpp": 20,
+  "items": [
+    {
+      "contract": {
+        "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+        "deployedTransactionHash": "0x22199329b0aa1aa68902a78e3b32ca327c872fab166c7a2838273de6ad383eba",
+        "deployedAt": "2021-04-22T03:03:16.000Z",
+        "deployerAddress": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+        "logoUrl": null,
+        "type": "ERC721",
+        "name": "BoredApeYachtClub",
+        "symbol": "BAYC"
+      },
+      "totalBalance": "5",
+      "uniqueBalance": "5"
+    }
+  ]
+}

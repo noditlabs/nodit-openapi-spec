@@ -1,0 +1,42 @@
+allOf:
+  - type: object
+    required:
+      - ledgerIndex
+      - ledgerTimestamp
+      - transactionIndex
+      - transactionHash
+      - transactionType
+    properties:
+      ledgerIndex:
+        type: integer
+        description: |
+          Ledger의 생성 순서를 나타내는 정수값으로, 네트워크 상에서 해당 Ledger의 위치(시퀀스 번호)를 확인하는 데 사용됩니다.
+        example: 95444296
+      ledgerTimestamp:
+        type: integer
+        description: |
+          Ledger의 close time을 실제 Unix 타임스탬프로 변환한 값입니다.
+          Ledger header에 기록된 close time은 Ripple Epoch(2000년 1월 1일 00:00 UTC)부터 경과한 초 단위로 표현되며, Unix Epoch(1970년 1월 1일 00:00 UTC) 기준과는 946,684,800초의 차이가 있습니다. 따라서 ledgerTimestamp는 기록된 close time에 946,684,800초를 더해 변환한 Unix 타임스탬프입니다.
+        example: 1744608171
+      transactionIndex:
+        type: integer
+        description: |
+          Ledger 내에서 해당 트랜잭션의 처리 순서를 나타내는 인덱스입니다. 이 값은 Ledger 내 트랜잭션들의 순서를 파악하는 데 사용됩니다.
+        example: 2
+      transactionHash:
+        type: string
+        description: |
+          트랜잭션을 고유하게 식별하는 256비트(64자리 16진수) 암호화 해시값입니다. 트랜잭션 데이터의 무결성 및 식별에 사용됩니다.
+        example: "8BAD7583234AC463E09D6CF160E352DFF5B008FC071DD5226A53809D89E7F409"
+      transactionType:
+        type: string
+        description: |
+          트랜잭션의 종류(Payment, OfferCreate, EscrowCreate 등)를 나타내는 문자열입니다.
+        examples:
+          - "AMMCreate"
+          - "CheckCreate"
+          - "EscrowCreate"
+          - "OfferCreate"
+          - "Payment"
+          - "PaymentChannelClaim"
+  - $ref: ./XrplTokenBalanceChangeRequired.yaml

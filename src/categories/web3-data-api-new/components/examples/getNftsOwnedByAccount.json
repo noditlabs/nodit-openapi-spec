@@ -1,0 +1,67 @@
+{
+  "rpp": 3,
+  "count": 4789,
+  "cursor": "eyJ2YWx1ZSI6IjE0MDQwMDAwIiwibmZ0SW52ZW50b3J5RW50aXR5SWQudG9rZW5JZCI6IjEifQ==",
+  "items": [
+    {
+      "contract": {
+        "address": "0x326490A8f5dCaEAa4a2Ad9ea902990c5b0834D9B",
+        "deployedTransactionHash": "0x6af13f9b94eed7b50baaf1712f5e9b4b065e52b73fc8d2445a1e18492d9edeca",
+        "deployedAt": "2023-11-29T07:04:59.000Z",
+        "deployerAddress": "0x77d234079Df8055e15E4F050dD91eF141A1eF090",
+        "logoUrl": null,
+        "type": "ERC1155",
+        "name": "Ethrunes",
+        "symbol": "ERS"
+      },
+      "ownerAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "balance": "10000000000000000000000",
+      "tokenId": "1154176857723061535322065504370124660086513746726",
+      "lastTransferredAt": "2025-01-03T08:36:35.000Z",
+      "tokenUri": "",
+      "tokenUriSyncedAt": "2025-02-14T05:31:01.809Z",
+      "rawMetadata": null,
+      "metadataSyncedAt": null
+    },
+    {
+      "contract": {
+        "address": "0x915A22A152654714FcecA3f4704fCf6bd314624c",
+        "deployedTransactionHash": "0x94da2c42c73770df604542fb77ebee2021a5b8b798ee1b008b9542e9d2fddf64",
+        "deployedAt": "2021-08-16T17:39:54.000Z",
+        "deployerAddress": "0xc5c85480Ac2e36A680bd0d53084DBaD0Cee9c29A",
+        "logoUrl": null,
+        "type": "ERC1155",
+        "name": "Items",
+        "symbol": "I"
+      },
+      "ownerAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "balance": "1000000001906792143",
+      "tokenId": "1448357374059271822963346111639752691725470234835",
+      "lastTransferredAt": "2024-01-31T00:00:11.000Z",
+      "tokenUri": "ipfs://ipfs/QmUfBUaFv41QEX5sLXQQFCTdz1Kw4uMcAoZ1anWoQWXrzz",
+      "tokenUriSyncedAt": "2024-09-04T01:37:30.865Z",
+      "rawMetadata": null,
+      "metadataSyncedAt": null
+    },
+    {
+      "contract": {
+        "address": "0x7aE8EC49DFa6d7A8351606b4DC9929Fe7bF6919d",
+        "deployedTransactionHash": "0xc9a8064031f67020e8d4b6a0a9ac4cbb7338daacabe0ecafbf060fd089db159d",
+        "deployedAt": "2022-11-28T10:14:59.000Z",
+        "deployerAddress": "0x1C3B3e70109cd92075F097aD54592ed40F0e6C6c",
+        "logoUrl": null,
+        "type": "ERC1155",
+        "name": "",
+        "symbol": ""
+      },
+      "ownerAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "balance": "14040000",
+      "tokenId": "1",
+      "lastTransferredAt": "2024-01-31T00:00:11.000Z",
+      "tokenUri": null,
+      "tokenUriSyncedAt": null,
+      "rawMetadata": null,
+      "metadataSyncedAt": null
+    }
+  ]
+}

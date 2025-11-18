@@ -1,0 +1,53 @@
+security:
+  - api_key: []
+tags:
+  - NFT API
+description: |
+  특정 NFT 컨트랙트의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 NFT의 수량이 포함됩니다.
+# TODO: Kaia callout 추가
+summary: Get NFT Holders by Contract
+operationId: getNftHoldersByContract
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChain.yaml
+  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            required:
+              - contractAddress
+            properties:
+              contractAddress:
+                $ref: ../../components/parameters/evm/EvmNftContractAddress.yaml
+          - $ref: ../../components/parameters/Pagination.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/evm/EvmNftHolder.yaml
+        example:
+          $ref: ../../components/examples/getNftHoldersByContract.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

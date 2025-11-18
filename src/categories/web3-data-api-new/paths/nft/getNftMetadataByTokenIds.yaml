@@ -1,0 +1,63 @@
+security:
+  - api_key: []
+tags:
+  - NFT API
+description: |
+  특정 NFT의 메타데이터를 조회합니다. 다수의 NFT를 조회할 수 있으며, 최대 1000개의 NFT를 조회할 수 있습니다.
+# TODO: Kaia callout 추가
+summary: Get NFT Metadata by Token IDs
+operationId: getNftMetadataByTokenIds
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChain.yaml
+  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - tokens
+        properties:
+          tokens:
+            type: array
+            items:
+              type: object
+              required:
+                - contractAddress
+                - tokenId
+              properties:
+                contractAddress:
+                  $ref: ../../components/parameters/evm/EvmNftContractAddress.yaml
+                tokenId:
+                  $ref: ../../components/parameters/evm/EvmNftTokenId.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            allOf:
+              - type: object
+                required:
+                  - contract
+                properties:
+                  contract:
+                    allOf:
+                      - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                      - $ref: ../../components/schemas/evm/EvmAssetMeta.yaml
+              - $ref: ../../components/schemas/evm/EvmNftMeta.yaml
+        example:
+          $ref: ../../components/examples/getNftMetadataByTokenIds.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

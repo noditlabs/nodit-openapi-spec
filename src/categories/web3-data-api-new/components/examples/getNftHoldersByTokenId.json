@@ -1,0 +1,56 @@
+{
+  "rpp": 10,
+  "cursor": "eyJ2YWx1ZSI6IjEiLCJhZGRyZXNzIjoiMHgwMTRmNWIwMmZiMzBjZTBkYTA5ZTc0YzQxMjZkMzMxYjIxMWZhZjAzIiwibmZ0SW52ZW50b3J5RW50aXR5SWQudG9rZW5JZCI6IjM1NDU0ODUxMzQwMzgxNDAzMDUzNzc3NTcwMDI0NDAwNjYzNjUyMzkwMjk4OTAxNzg2NzM3MjcyNjk4MTM1MDgwMzg1MzEzMzM5MzYyIn0=",
+  "items": [
+    {
+      "ownerAddress": "0x0454731eC97bf0d030406f9578687B0A4cf2fe82",
+      "totalBalance": "9",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x208b82B04449Cd51803fAE4B1561450ba13d9510",
+      "totalBalance": "5",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x1F558Fa1e453947c7317b37a9f816d449979A6a8",
+      "totalBalance": "2",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x22dd884DF8B5DEE9B44472f0472Dc42e56AbEE89",
+      "totalBalance": "2",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x74240f723b0AC4eb69D97c283d8f6609CD6FfCbF",
+      "totalBalance": "2",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x7FD2584729dBE0aA8A85F81550B4E7d3B28621F3",
+      "totalBalance": "2",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x80b8D5a8C3F8b5e977dB1569eAd5a8B72314C687",
+      "totalBalance": "2",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x848b2775af546143146C1c6F404dD807c79B3066",
+      "totalBalance": "2",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0xD996B57F18DDa88Bc2c129696a7364C7DbC2f586",
+      "totalBalance": "2",
+      "uniqueBalance": "1"
+    },
+    {
+      "ownerAddress": "0x014f5B02Fb30ce0Da09E74c4126d331b211Faf03",
+      "totalBalance": "1",
+      "uniqueBalance": "1"
+    }
+  ]
+}

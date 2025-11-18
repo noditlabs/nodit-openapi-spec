@@ -1,0 +1,9 @@
+type: object
+required:
+  - ownerAddress
+  - balance
+properties:
+  ownerAddress:
+    $ref: ./EvmOwnerAddress.yaml
+  balance:
+    $ref: ./EvmBalance.yaml

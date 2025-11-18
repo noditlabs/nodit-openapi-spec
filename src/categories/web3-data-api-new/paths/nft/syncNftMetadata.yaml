@@ -1,0 +1,65 @@
+security:
+  - api_key: []
+tags:
+  - NFT API
+description: |
+  특정 NFT 컨트랙트의 메타데이터를 동기화합니다. 최대 100개의 NFT를 동기화할 수 있으며, 동기화까지 최대 10초가 소요될 수 있습니다.
+
+# TODO: Kaia callout 추가
+summary: Sync NFT Metadata
+operationId: syncNftMetadata
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChain.yaml
+  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - tokens
+        properties:
+          tokens:
+            type: array
+            items:
+              type: object
+              required:
+                - contractAddress
+                - tokenId
+              properties:
+                contractAddress:
+                  $ref: ../../components/parameters/evm/EvmNftContractAddress.yaml
+                tokenId:
+                  $ref: ../../components/parameters/evm/EvmNftTokenId.yaml
+              examples:
+                - contractAddress: "0x1a9c8182c09f50c8318d769245bea529a223e992"
+                  tokenId: "1"
+                - contractAddress: "0x1a9c8182c09f50c8318d769245bea529a223e992"
+                  tokenId: "2"
+                - contractAddress: "0x1a9c8182c09f50c8318d769245bea529a223e992"
+                  tokenId: "3"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: "동기화 요청에 대한 결과 메시지를 반환합니다."
+              example: "NFT Metadata synchronization request has been successfully submitted."
+        example:
+          $ref: ../../components/examples/syncNftMetadata.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

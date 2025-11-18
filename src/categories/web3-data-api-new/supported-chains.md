@@ -1,0 +1,887 @@
+## Web3 Data API – API별 지원 체인 목록
+
+### blockchain
+
+- getBlockByHashOrNumber:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - bitcoin
+    - dogecoin
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getBlocksWithinRange:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getGasPrice:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getInternalTransactionsByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getInternalTransactionsByTransactionHash:
+  - chain
+    - ethereum
+    - polygon
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNextNonceByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTotalTransactionCountByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - bitcoin
+    - dogecoin
+    - tron
+    - xrpl
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTransactionByHash:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - xrpl
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTransactionsByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - bitcoin
+    - dogecoin
+    - tron
+    - xrpl
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTransactionsByHashes:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - tron
+    - xrpl
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTransactionsInBlock:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getUnspentTransactionOutputsByAccount:
+  - chain
+    - bitcoin
+    - dogecoin
+  - network
+    - mainnet
+- isContract:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- searchEvents:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+
+### ens
+
+- getAddressByEnsName:
+  - chain
+    - ethereum
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getEnsNameByAddress:
+  - chain
+    - ethereum
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getEnsRecordByName:
+  - chain
+    - ethereum
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getEnsRecordsByAccount:
+  - chain
+    - ethereum
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+
+### native
+
+- getNativeBalanceByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNativeTokenBalanceByAccount:
+  - chain
+    - bitcoin
+    - dogecoin
+    - xrpl
+  - network
+    - mainnet
+- getNativeTokenTransfersByAccount:
+  - chain
+    - bitcoin
+    - dogecoin
+  - network
+    - mainnet
+- getNativeTransfersWithinRange:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getNativeTransfersByAccount:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getNativeHolders:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getNativeTokenBalanceChangesByAccount:
+  - chain
+    - xrpl
+  - network
+    - mainnet
+
+### nft
+
+- getNftContractMetadataByContracts:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftsOwnedByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftTransfersByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftTransfersByContract:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftTransfersByTokenId:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftTransfersWithinRange:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftContractsByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftHoldersByTokenId:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftHoldersByContract:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftMetadataByContract:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getNftMetadataByTokenIds:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- searchNftContractMetadataByKeyword:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- syncNftMetadata:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+
+### stats
+
+- getAccountStats:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getDailyActiveAccountsStatsByContract:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getDailyActiveAccountStats:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getDailyTransactionsStats:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getDailyTransactionsStatsByContract:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getHourlyActiveAccountsStats:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getHourlyActiveAccountsStatsByContract:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getHourlyTransactionsStats:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+- getHourlyTransactionsStatsByContract:
+  - chain
+    - ethereum
+    - luniverse
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+
+### token
+
+- getTokenAllowance:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokenContractMetadataByContracts:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokenHoldersByContract:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokenPricesByContracts:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokensOwnedByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokenTransfersByAccount:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokenTransfersByContract:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokenTransfersWithinRange:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - aptos
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- searchTokenContractMetadataByKeyword:
+  - chain
+    - ethereum
+    - polygon
+    - optimism
+    - arbitrum
+    - base
+    - kaia
+    - luniverse
+    - tron
+    - chiliz
+    - giwa
+  - network
+    - mainnet
+    - sepolia
+    - hoodi
+    - amoy
+    - kairos
+- getTokenBalanceChangesByAccount:
+  - chain
+    - aptos
+    - xrpl
+  - network
+    - mainnet
+- getTokenBalanceChangesByAssetType:
+  - chain
+    - aptos
+  - network
+    - mainnet
+- getTokenBalanceChangesWithinRange:
+  - chain
+    - aptos
+  - network
+    - mainnet
+- getTokenAccountsByAssetType:
+  - chain
+    - aptos
+  - network
+    - mainnet
+- getTokenMetadataByAssetTypes:
+  - chain
+    - aptos
+  - network
+    - mainnet
+- getTokenPairByAssetType:
+  - chain
+    - aptos
+  - network
+    - mainnet
+
+### asset (tron)
+
+- getAssetMetadataByIssuer:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getAssetMetadataByIds:
+  - chain
+    - tron
+  - network
+    - mainnet
+- searchAssetMetadataByKeyword:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getAssetHoldersById:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getAssetTransfersById:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getAssetTransfersWithinRange:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getAssetTransfersByAccount:
+  - chain
+    - tron
+  - network
+    - mainnet
+- getAssetsOwnedByAccount:
+  - chain
+    - tron
+  - network
+    - mainnet

@@ -1,0 +1,19 @@
+type: object
+properties:
+  code:
+    type: string
+    description: |
+      에러가 발생한 상황을 식별하는 코드를 반환합니다.
+    enum:
+      - INVALID_PARAMETER
+      - AUTHENTICATION_FAILED
+      - PERMISSION_DENIED
+      - RESOURCE_NOT_FOUND
+      - TOO_MANY_REQUESTS
+  message:
+    type: string
+    description: |
+      에러의 상세 메시지를 반환합니다.
+required:
+  - code
+  - message

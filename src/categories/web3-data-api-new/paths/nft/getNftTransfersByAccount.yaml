@@ -1,0 +1,82 @@
+security:
+  - api_key: []
+tags:
+  - NFT API
+description: |
+  특정 Account가 전송 혹은 수신한 NFT 전송 목록을 조회합니다. 조회 결과에는 컨트랙트 메타데이터와 NFT 메타데이터가 포함됩니다.
+# TODO: Kaia callout 추가
+summary: Get NFT Transfers by Account
+operationId: getNftTransfersByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChain.yaml
+  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            required:
+              - accountAddress
+            properties:
+              accountAddress:
+                $ref: ../../components/parameters/evm/EvmAccountAddress.yaml
+              relation:
+                $ref: ../../components/parameters/Relation.yaml
+              contractAddresses:
+                $ref: ../../components/parameters/evm/EvmNftContractAddresses.yaml
+              fromBlock:
+                $ref: ../../components/parameters/evm/EvmFromBlock.yaml
+              toBlock:
+                $ref: ../../components/parameters/evm/EvmToBlock.yaml
+              fromDate:
+                $ref: ../../components/parameters/evm/EvmFromDate.yaml
+              toDate:
+                $ref: ../../components/parameters/evm/EvmToDate.yaml
+          - $ref: ../../components/parameters/Pagination.yaml
+          - type: object
+            properties:
+              withMetadata:
+                $ref: ../../components/parameters/WithMetadata.yaml
+              withZeroValue:
+                $ref: ../../components/parameters/WithZeroValue.yaml
+              withFunction:
+                $ref: ../../components/parameters/WithFunction.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: ../../components/schemas/evm/EvmTransfer.yaml
+                      - type: object
+                        properties:
+                          contract:
+                            allOf:
+                              - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                              - $ref: ../../components/schemas/evm/EvmAssetMeta.yaml
+                          nft:
+                            $ref: ../../components/schemas/evm/EvmNftMeta.yaml
+        example:
+          $ref: ../../components/examples/getNftTransfersByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

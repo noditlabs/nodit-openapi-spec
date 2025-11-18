@@ -1,0 +1,4 @@
+type: boolean
+description: |
+  응답에 value가 0인 결과를 포함하는지 여부를 지정하는 파라미터입니다. 더 빠른 응답을 원한다면 이 파라미터를 true로 설정하세요.
+default: false

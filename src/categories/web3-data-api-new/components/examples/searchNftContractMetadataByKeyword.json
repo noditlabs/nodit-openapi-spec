@@ -1,0 +1,206 @@
+{
+  "rpp": 20,
+  "cursor": "eyJjb250cmFjdC5ibG9ja051bWJlciI6MjA2MDgzMDIsInRva2VuQWRkcmVzcyI6IjB4NTJiOWNjZGExMDYyZjNiZDYyOWVmODRiYzI2M2NmNDNjMDk2NmJkYiJ9",
+  "items": [
+    {
+      "address": "0x4a677917Cf79544A1D92444D4Db26AA98e218ce0",
+      "deployedTransactionHash": "0xe2567338a403dfae5adfef56bc07b87f23a0d291c0180b6d9ac996cacf10b60d",
+      "deployedAt": "2025-11-02T11:03:47.000Z",
+      "deployerAddress": "0x04930b27dad99c2Fe269EE1498331EC9083A7792",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "Bored Ape Yacht Club ",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xd7Be7AcF62EcC03ddd238028956864E6b2377f59",
+      "deployedTransactionHash": "0x0422a9fe98ba813426fcdb79937157234019b34c7cb5b40b4d68d2dabc89c58d",
+      "deployedAt": "2025-11-02T11:00:59.000Z",
+      "deployerAddress": "0x04930b27dad99c2Fe269EE1498331EC9083A7792",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "Bored Ape Yacht Club ",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x859d9c939f4c91676D3E88Fb4ad73B8F2af6BE63",
+      "deployedTransactionHash": "0x93908c2e7497d77e602cd3daddc2fc9d2ef55ad13398698f227afc1d9e10f61d",
+      "deployedAt": "2025-10-27T05:24:35.000Z",
+      "deployerAddress": "0x9Af2AB486bf4803Ac9B39f4F69AA36365406d323",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x9f286Fc8A3b667b1BB0996F452dE136446900c19",
+      "deployedTransactionHash": "0x30b7d36bbb240032711a1940b8d6cedf677892511a82539119bb509b3e299acd",
+      "deployedAt": "2025-10-15T03:36:23.000Z",
+      "deployerAddress": "0x0AF5Ce964A83193df8399D991BcB225dFbBAba23",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "SHADOW BAYC",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xb21E802c779b36E353d7524D70976827D311b7E4",
+      "deployedTransactionHash": "0x3907b292443c23a64cbc41cff4e218b21aa65b27b0000ba08b5d8cac8de935c8",
+      "deployedAt": "2025-10-11T07:07:59.000Z",
+      "deployerAddress": "0x08F5491f89597809b97d19fbC079257B11e4c845",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "BYC18618647",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x1da2F0ee4617Cb7dB10eA5E066B12F82A0f3B46a",
+      "deployedTransactionHash": "0x19f0fb7078567001ccb84999effb1fb10be75c0444d6c0dd9292235d63c357f3",
+      "deployedAt": "2025-09-12T11:00:35.000Z",
+      "deployerAddress": "0x05C6b3E7093AAB7F553EC58eD889CEC41a7abBE9",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "BORED APE YATCH CLB",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xEbdd22d64A941aAd818452a7e4A04856633bdbBE",
+      "deployedTransactionHash": "0xc0f6864fe3b09c4370689aee85d839fe8fe9404e33407157aba524c99c8b4d18",
+      "deployedAt": "2025-09-09T18:03:35.000Z",
+      "deployerAddress": "0xA53eeB2Ba2c79F7f8B964c016D0C623D6f1dE394",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xeE4b00EF45099Df0b686d00d8D9af58884BDC8A3",
+      "deployedTransactionHash": "0x63346513400e9be83598cde4d4b2c9f9b947a170007efb55e0406387dcad2762",
+      "deployedAt": "2025-09-09T17:52:23.000Z",
+      "deployerAddress": "0xA53eeB2Ba2c79F7f8B964c016D0C623D6f1dE394",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xA36c7BDD0da01d99F7214aE4905B60f5aF2376Bc",
+      "deployedTransactionHash": "0xa9cde113156f574706bc6915a10b191db375448091cb77269afe18a1a6cc4f6e",
+      "deployedAt": "2025-08-31T07:21:59.000Z",
+      "deployerAddress": "0x3A461248f1b40f51506dDE55494ffbDBe7C8611a",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "MAGIC EDEN",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x07E82c314e455E4F5605A0e9D651E2A33F737c2B",
+      "deployedTransactionHash": "0x7e4e46b75076afc0e3722e7baf617c232ffa775f93100d2bb6610ae658821e0d",
+      "deployedAt": "2025-08-31T00:49:47.000Z",
+      "deployerAddress": "0x3A461248f1b40f51506dDE55494ffbDBe7C8611a",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "MAGIC EDEN",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xC186a13e1718f5Af0288cf17449B7F83876FC392",
+      "deployedTransactionHash": "0x6dd815f1b7f91fa3d590f8be9c4ebb5966c79253403ac9f62c372e4f3fab8165",
+      "deployedAt": "2025-08-21T05:26:59.000Z",
+      "deployerAddress": "0x05C6b3E7093AAB7F553EC58eD889CEC41a7abBE9",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "BORED APE YC",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xB0cF0A29F1143268dE0378dBcc0BFA6b65b9c14F",
+      "deployedTransactionHash": "0xf2df35d7e2f42329aa653331355e47a576881848512bcd4c54a52dbab203c8ca",
+      "deployedAt": "2025-05-26T19:32:35.000Z",
+      "deployerAddress": "0x9fcaE27C733d63539256B2E1319f57551fda1019",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xA98A01Ed5D6895f2A485Cd1E96EBA737d18B2615",
+      "deployedTransactionHash": "0xd983aa70f358c841bf33709aba418da0da18ec31cba05e770f829aa2070f31cd",
+      "deployedAt": "2025-05-13T16:41:47.000Z",
+      "deployerAddress": "0xDd0fA6b95cF5a034fE2967b8F372f490eBb89fDc",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "XSFG",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x01Eec0CE087ee563B166B40c5B6A386ef4EC3297",
+      "deployedTransactionHash": "0x2bed91523a33add72593c36e4cf8bed93c22bd0417a8b9b0e68fe6b05f5a3660",
+      "deployedAt": "2025-04-15T16:20:23.000Z",
+      "deployerAddress": "0x3e3d5f5c7eBf34f5d88618639Dc9FD632D0878A2",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "Pixel Explorer",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x1f6be08Ccc69B82008a1B578A3DE162369601DfA",
+      "deployedTransactionHash": "0xc4b4736e7f693162ec0dba8b124314ff44c5f5e7bae1843fef1bb577ddacd119",
+      "deployedAt": "2025-04-12T14:16:59.000Z",
+      "deployerAddress": "0x42a7967B8b06F8Fe516c7617C4d5eB64D12dE51D",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x22bEd6c826be18c1aEfF6c7aeDb203Ede0233306",
+      "deployedTransactionHash": "0x92c8d2cdd91d544658bb2f5ac0d131538662cb399d9dc757bec3ee74b60947f3",
+      "deployedAt": "2025-02-16T21:56:47.000Z",
+      "deployerAddress": "0x6e68226756De3fAa07D7d14a809f11F04A3c4E1F",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "it is her",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x1C674eC26eaa312841a48658c6D2d6e8Be5d8AaA",
+      "deployedTransactionHash": "0x76ceea990a5e325d0d7ac110729b6b6c2ce0c634399446e84595ce722b9a1741",
+      "deployedAt": "2025-01-08T22:56:35.000Z",
+      "deployerAddress": "0xa2Ec4Fc8bd2Abe6A9a8b3f3318e0FFCe952962b0",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x4B32923c95Ad825eDE2311Bd9F77cd7393526D72",
+      "deployedTransactionHash": "0x86dd1896981260e2c419c72165527d3e6c97914bbc65b6463a84fe091963b120",
+      "deployedAt": "2024-10-23T23:12:35.000Z",
+      "deployerAddress": "0x48CC98d54c307DC822f112E917F96Be2f04C6303",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "Bored ape yacht club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0xd26D37C59f45c02Ca86EFB6ef901EBA7cd78B445",
+      "deployedTransactionHash": "0x93f324775479b7d4df3516c4b7f899130de3474c3c03aea7576cff07291e1f94",
+      "deployedAt": "2024-09-05T00:32:59.000Z",
+      "deployerAddress": "0xcD959550B3cB59f4cd2373DA79f123faE5eB8506",
+      "logoUrl": null,
+      "type": "ERC1155",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    },
+    {
+      "address": "0x52b9ccDa1062F3bd629ef84BC263cf43c0966BdB",
+      "deployedTransactionHash": "0x91eb57ce56014fbbc3117fbb434d7b10aa80f0946b41f1b5624cd2ff72d8ab9f",
+      "deployedAt": "2024-08-25T21:30:47.000Z",
+      "deployerAddress": "0x8da6beCE1400D3D73Ff3c7B2DeF260Ca3b6cd9b9",
+      "logoUrl": null,
+      "type": "ERC721",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC"
+    }
+  ]
+}

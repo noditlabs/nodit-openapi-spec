@@ -1,0 +1,102 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 Asset Type을 가진 토큰의 목록을 조회합니다. 조회 결과는 Owner 주소 기준이 아닌 Object 주소를 기준으로 제공됩니다.
+summary: Get Token Balance Changes By Account
+operationId: getTokenBalanceChangesByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/AptosXrplChain.yaml
+  - $ref: ../../components/parameters/chains/AptosXrplNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - title: Aptos
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/aptos/AptosAccountAddress.yaml
+                  fromBlock:
+                    $ref: ../../components/parameters/aptos/AptosFromBlock.yaml
+                  toBlock:
+                    $ref: ../../components/parameters/aptos/AptosToBlock.yaml
+                  fromDate:
+                    $ref: ../../components/parameters/aptos/AptosFromDate.yaml
+                  toDate:
+                    $ref: ../../components/parameters/aptos/AptosToDate.yaml
+              - oneOf:
+                  - title: Aptos with assetTypes
+                    type: object
+                    required:
+                      - assetTypes
+                    properties:
+                      assetTypes:
+                        type: array
+                        items:
+                          $ref: ../../components/parameters/aptos/AptosAssetType.yaml
+                  - title: Aptos with linkedAssetTypes
+                    type: object
+                    required:
+                      - linkedAssetTypes
+                    properties:
+                      linkedAssetTypes:
+                        type: array
+                        items:
+                          $ref: ../../components/parameters/aptos/AptosLinkedAssetType.yaml
+              - $ref: ../../components/parameters/Pagination.yaml
+          - title: XRPL
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/xrpl/XrplAccountAddress.yaml
+                  fromLedger:
+                    $ref: ../../components/parameters/xrpl/XrplFromLedger.yaml
+                  toLedger:
+                    $ref: ../../components/parameters/xrpl/XrplToLedger.yaml
+                  fromDate:
+                    $ref: ../../components/parameters/xrpl/XrplFromDate.yaml
+                  toDate:
+                    $ref: ../../components/parameters/xrpl/XrplToDate.yaml
+              - $ref: ../../components/parameters/Pagination.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Aptos
+                        $ref: ../../components/schemas/aptos/AptosTokenBalanceChangeConditional.yaml
+                      - title: XRPL
+                        $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeConditional.yaml
+        example:
+          $ref: ../../components/examples/getTokenBalanceChangesByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

@@ -1,0 +1,13 @@
+type: object
+required:
+  - totalSupply
+  - decimals
+properties:
+  totalSupply:
+    type: string
+    description: |
+      컨트랙트의 총 공급량을 나타내는 필드입니다. 이 값은 토큰의 총 발행량을 의미하며, 10진수 문자열 형태로 제공됩니다. 컨트랙트 타입이 ERC20인 경우에만 응답에 포함됩니다.
+  decimals:
+    type: integer
+    description: |
+      컨트랙트의 소수점 자리수를 나타내는 필드입니다. 예를 들어, decimals가 6인 경우 100,000,000(10^6)은 100으로 표시됩니다.

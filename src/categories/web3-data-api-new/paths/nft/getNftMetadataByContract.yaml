@@ -1,0 +1,63 @@
+security:
+  - api_key: []
+tags:
+  - NFT API
+description: |
+  특정 컨트랙트에서 발행된 NFT의 메타데이터 목록을 조회합니다.
+
+# TODO: Kaia callout 추가
+summary: Get NFT Metadata by Contract
+operationId: getNftMetadataByContract
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChain.yaml
+  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            required:
+              - contractAddress
+            properties:
+              contractAddress:
+                $ref: ../../components/parameters/evm/EvmNftContractAddress.yaml
+          - $ref: ../../components/parameters/Pagination.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    allOf:
+                      - type: object
+                        required:
+                          - contract
+                        properties:
+                          contract:
+                            allOf:
+                              - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                              - $ref: ../../components/schemas/evm/EvmAssetMeta.yaml
+                      - $ref: ../../components/schemas/evm/EvmNftMeta.yaml
+        example:
+          $ref: ../../components/examples/getNftMetadataByContract.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

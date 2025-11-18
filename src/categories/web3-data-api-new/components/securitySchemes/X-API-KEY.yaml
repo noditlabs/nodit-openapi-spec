@@ -1,0 +1,7 @@
+type: apiKey
+name: X-API-KEY
+in: header
+x-default: nodit-demo
+description: The default value, `nodit-demo`, is only for use in the developer
+  documentation. For real applications or services, use the API key
+  obtained from the Nodit console.

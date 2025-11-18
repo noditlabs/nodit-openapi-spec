@@ -3,7 +3,6 @@ description: |
   {chain}-{network} 형식으로 표현되는 체인 구분자
 enum:
   - aptos-mainnet
-  - aptos-testnet
   - arbitrum-mainnet
   - arbitrum-sepolia
   - base-mainnet

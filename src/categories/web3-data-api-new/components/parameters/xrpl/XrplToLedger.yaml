@@ -1,0 +1,17 @@
+type: string
+description: |
+  조회 종료 원장을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:
+  - ledger index: 10진수 문자열로 원장 번호를 입력.
+  - ledger hash: 64자리 16진수("0x" 포함).
+  - ledger tag: "earliest" 또는 "latest"를 사용하여 첫 번째 원장 또는 최신 원장을 지정.
+
+  <strong style="color: red;">*</strong> 유의사항:
+  - toLedger의 default 값은 "latest"입니다.
+  - toLedger 값은 fromLedger 값보다 작거나 같아야 합니다. (toLedger >= fromLedger)
+  - fromLedger 없이 toLedger만 제공되면, 입력한 toLedger부터 최신 원장까지의 결과가 조회됩니다.
+  - fromLedger과 toLedger에 동일한 값을 입력하면, 입력한 원장 하나의 결과만 조회됩니다.
+  - toLedger에 "earliest"는 fromLedger가 "earliest"일 때만 허용됩니다.
+  - 이 필드는 fromDate, toDate와 함께 사용할 수 없습니다.
+
+pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+example: "latest"

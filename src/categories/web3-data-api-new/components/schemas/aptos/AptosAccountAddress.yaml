@@ -1,0 +1,11 @@
+type: string
+pattern: ^0[xX][0-9a-fA-F]{64}$
+description: |
+  0x로 시작하는 64자리 16진수 문자열 형태의 계정 주소입니다.
+examples:
+  - "0x0000000000000000000000000000000000000000000000000000000000000001" # Aptos Lab's Account Address
+  - "0x000000000000000000000000000000000000000000000000000000000000000a" # Aptos Lab's Fungible Asset Object Address
+  - "0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1" # Account Address
+  - "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b" # USDC Fungible Asset Object Address
+  - "0x357b0b74bc833e95a115ad22604854d6b0fca151cecd94111770e5d6ffc9dc2b" # USDT Fungible Asset Object Address
+  - "0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a" # USDC Owner Address

@@ -1,0 +1,37 @@
+type: object
+required:
+  - address
+  - deployedTransactionHash
+  - deployedAt
+  - deployerAddress
+  - logoUrl
+  - type
+properties:
+  address:
+    type: string
+    description: |
+      컨트랙트의 주소를 나타내는 필드입니다.
+  deployedTransactionHash:
+    type: string
+    description: |
+      컨트랙트가 배포된 트랜잭션의 해시를 나타내는 필드입니다.
+  deployedAt:
+    type: string
+    description: |
+      컨트랙트가 배포된 시간을 나타내는 필드입니다.
+  deployerAddress:
+    type: string
+    description: |
+      컨트랙트를 배포한 주소를 나타내는 필드입니다.
+  logoUrl:
+    type:
+      - string
+      - "null"
+    description: |
+      컨트랙트의 로고 URL을 나타내는 필드입니다.
+      <strong style='color: red;'>*</strong> 모든 컨트랙트의 로고 이미지가 제공되는 것은 아닙니다. 컨트랙트 로고가 없는 경우, 이 필드는 null로 제공됩니다.
+  type:
+    type: string
+    description: |
+      컨트랙트의 타입을 나타내는 필드입니다.
+      <strong style='color: red;'>*</strong> 컨트랙트 타입은 표준 규격의 이름이 표기됩니다. (e.g., ERC721, ERC1155, ERC20, ERC721, ERC1155, ERC20)

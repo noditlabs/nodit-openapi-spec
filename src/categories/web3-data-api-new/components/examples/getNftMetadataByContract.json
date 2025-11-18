@@ -1,0 +1,57 @@
+{
+  "rpp": 3,
+  "cursor": "eyJuZnRJbnZlbnRvcnlFbnRpdHlJZC50b2tlbklkIjoiMiJ9",
+  "items": [
+    {
+      "contract": {
+        "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+        "deployedTransactionHash": "0x22199329b0aa1aa68902a78e3b32ca327c872fab166c7a2838273de6ad383eba",
+        "deployedAt": "2021-04-22T03:03:16.000Z",
+        "deployerAddress": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+        "logoUrl": null,
+        "type": "ERC721",
+        "name": "BoredApeYachtClub",
+        "symbol": "BAYC"
+      },
+      "tokenId": "0",
+      "tokenUri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/0",
+      "tokenUriSyncedAt": "2024-03-12T11:51:35.480Z",
+      "rawMetadata": "{\"image\":\"ipfs://QmRRPWG96cmgTn2qSzjwr2qvfNEuhunv6FNeMFGa9bx6mQ\",\"attributes\":[{\"trait_type\":\"Earring\",\"value\":\"Silver Hoop\"},{\"trait_type\":\"Background\",\"value\":\"Orange\"},{\"trait_type\":\"Fur\",\"value\":\"Robot\"},{\"trait_type\":\"Clothes\",\"value\":\"Striped Tee\"},{\"trait_type\":\"Mouth\",\"value\":\"Discomfort\"},{\"trait_type\":\"Eyes\",\"value\":\"X Eyes\"}]}\n",
+      "metadataSyncedAt": "2024-03-12T11:51:35.561Z"
+    },
+    {
+      "contract": {
+        "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+        "deployedTransactionHash": "0x22199329b0aa1aa68902a78e3b32ca327c872fab166c7a2838273de6ad383eba",
+        "deployedAt": "2021-04-22T03:03:16.000Z",
+        "deployerAddress": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+        "logoUrl": null,
+        "type": "ERC721",
+        "name": "BoredApeYachtClub",
+        "symbol": "BAYC"
+      },
+      "tokenId": "1",
+      "tokenUri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1",
+      "tokenUriSyncedAt": "2025-03-25T07:52:29.905Z",
+      "rawMetadata": "{\"image\":\"ipfs://QmPbxeGcXhYQQNgsC6a36dDyYUcHgMLnGKnF8pVFmGsvqi\",\"attributes\":[{\"trait_type\":\"Mouth\",\"value\":\"Grin\"},{\"trait_type\":\"Clothes\",\"value\":\"Vietnam Jacket\"},{\"trait_type\":\"Background\",\"value\":\"Orange\"},{\"trait_type\":\"Eyes\",\"value\":\"Blue Beams\"},{\"trait_type\":\"Fur\",\"value\":\"Robot\"}]}\n",
+      "metadataSyncedAt": "2025-03-25T07:52:34.054Z"
+    },
+    {
+      "contract": {
+        "address": "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D",
+        "deployedTransactionHash": "0x22199329b0aa1aa68902a78e3b32ca327c872fab166c7a2838273de6ad383eba",
+        "deployedAt": "2021-04-22T03:03:16.000Z",
+        "deployerAddress": "0xaBA7161A7fb69c88e16ED9f455CE62B791EE4D03",
+        "logoUrl": null,
+        "type": "ERC721",
+        "name": "BoredApeYachtClub",
+        "symbol": "BAYC"
+      },
+      "tokenId": "2",
+      "tokenUri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/2",
+      "tokenUriSyncedAt": "2025-02-15T06:17:17.994Z",
+      "rawMetadata": "{\"image\":\"ipfs://QmcJYkCKK7QPmYWjp4FD2e3Lv5WCGFuHNUByvGKBaytif4\",\"attributes\":[{\"trait_type\":\"Eyes\",\"value\":\"3d\"},{\"trait_type\":\"Mouth\",\"value\":\"Bored Cigarette\"},{\"trait_type\":\"Fur\",\"value\":\"Robot\"},{\"trait_type\":\"Hat\",\"value\":\"Sea Captain's Hat\"},{\"trait_type\":\"Background\",\"value\":\"Aquamarine\"}]}\n",
+      "metadataSyncedAt": "2025-02-15T06:17:21.657Z"
+    }
+  ]
+}

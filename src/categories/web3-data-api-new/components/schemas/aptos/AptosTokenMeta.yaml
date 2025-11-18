@@ -1,0 +1,53 @@
+type:
+  - object
+  - "null"
+required:
+  - name
+  - symbol
+  - decimals
+  - totalSupply
+  - maximumSupply
+  - creatorAddress
+  - projectURI
+  - iconURI
+properties:
+  name:
+    type: string
+    description: |
+      자산의 이름을 나타내는 필드입니다.
+    example: "Aptos Coin"
+  symbol:
+    type: string
+    description: |
+      자산의 심볼을 나타내는 필드입니다.
+    example: "APT"
+  decimals:
+    type: integer
+    description: |
+      자산의 소수점 자리수를 나타내는 필드입니다.
+    example: 8
+  totalSupply:
+    type: string
+    description: |
+      자산의 총 공급량을 나타내는 필드입니다.
+    example: "1000000000000000000"
+  maximumSupply:
+    type: string
+    description: |
+      자산의 최대 공급량을 나타내는 필드입니다.
+    example: "1000000000000000000"
+  creatorAddress:
+    $ref: ./AccountAddress.yaml
+    description: |
+      자산을 생성한 계정의 주소를 나타내는 필드입니다.
+    example: "0x0000000000000000000000000000000000000000000000000000000000000001"
+  projectURI:
+    type: string
+    description: |
+      자산의 프로젝트 URI를 나타내는 필드입니다.
+    example: "https://aptos.dev"
+  iconURI:
+    type: string
+    description: |
+      자산의 아이콘 URI를 나타내는 필드입니다.
+    example: "https://aptos.dev/icon.png"

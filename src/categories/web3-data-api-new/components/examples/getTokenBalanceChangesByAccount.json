@@ -1,0 +1,77 @@
+{
+  "rpp": 5,
+  "page": 1,
+  "count": 3386,
+  "items": [
+    {
+      "ledgerIndex": 95498175,
+      "ledgerTimestamp": 1744818571,
+      "transactionIndex": 43,
+      "transactionHash": "8E3E8ABB59D7542F16F54888554B199061490F785EE2E3740ECD2DD43AF8FBAF",
+      "transactionType": "OfferCreate",
+      "affectedNodesIndex": 0,
+      "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "101429.9495588203",
+      "finalBalance": "101522.1919713255",
+      "balanceChange": "92.2424125052"
+    },
+    {
+      "ledgerIndex": 95490755,
+      "ledgerTimestamp": 1744789590,
+      "transactionIndex": 0,
+      "transactionHash": "F56440CCD5DE51A3A768990753BB753BC24FF5F2BE46E0AAF433FFF5C9E26FD9",
+      "transactionType": "OfferCreate",
+      "affectedNodesIndex": 0,
+      "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "101337.6426715855",
+      "finalBalance": "101429.9495588203",
+      "balanceChange": "92.3068872348"
+    },
+    {
+      "ledgerIndex": 95490738,
+      "ledgerTimestamp": 1744789521,
+      "transactionIndex": 66,
+      "transactionHash": "62604C3F2C05A997503D99F7232D19F2F62922B322267164B5D9C844CA83F35B",
+      "transactionType": "OfferCreate",
+      "affectedNodesIndex": 0,
+      "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "100875.4118290633",
+      "finalBalance": "101337.6426715855",
+      "balanceChange": "462.2308425222"
+    },
+    {
+      "ledgerIndex": 95490724,
+      "ledgerTimestamp": 1744789470,
+      "transactionIndex": 54,
+      "transactionHash": "8EDE378EEA2EC7B4EF6B3FDC0AE32A47BE6E12EFBA3576675502C614283EE949",
+      "transactionType": "OfferCreate",
+      "affectedNodesIndex": 0,
+      "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "100412.7052204981",
+      "finalBalance": "100875.4118290633",
+      "balanceChange": "462.7066085652"
+    },
+    {
+      "ledgerIndex": 95490710,
+      "ledgerTimestamp": 1744789411,
+      "transactionIndex": 4,
+      "transactionHash": "0BE6D52585ABE2C8A6DE9D768370F990278D45D53A0D08E816ECECFBADE77F7E",
+      "transactionType": "OfferCreate",
+      "affectedNodesIndex": 0,
+      "account": "rMRG6jyhEnDGz7GSGgnpkJvHDhqy5UuB54",
+      "currency": "SOLO",
+      "issuer": "rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz",
+      "previousBalance": "99485.12162402596",
+      "finalBalance": "100412.7052204981",
+      "balanceChange": "927.58359647214"
+    }
+  ]
+}

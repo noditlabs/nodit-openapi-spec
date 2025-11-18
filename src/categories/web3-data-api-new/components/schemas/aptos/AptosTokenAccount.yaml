@@ -1,0 +1,41 @@
+type: object
+required:
+  - ownerAddress
+  - objectAddress
+  - value
+  - isFrozen
+  - isPrimary
+  - assetType
+  - linkedAssetType
+  - tokenStandard
+properties:
+  ownerAddress:
+    $ref: ./AptosOwnerAddress.yaml
+  objectAddress:
+    $ref: ./AptosObjectAddress.yaml
+  value:
+    type: string
+    description: |
+      보유한 자산의 수량을 나타내는 필드입니다.
+      정수 형태의 문자열로 제공되며, 소수점은 포함되지 않습니다.
+      실제 값을 계산할 때는 자산의 decimals를 고려해야 합니다.
+    example: "1000000"
+  isFrozen:
+    type: boolean
+    description: |
+      자산의 전송 가능 여부를 나타내는 필드입니다.
+      true인 경우 자산이 동결되어 전송이 불가능함을 의미합니다.
+      false인 경우 자산이 전송 가능함을 의미합니다.
+    example: false
+  isPrimary:
+    type: boolean
+    description: |
+      해당 Object가 Owner 주소의 대표 Object인지 여부를 나타내는 필드입니다.
+      true인 경우 해당 Object가 Owner 주소의 대표 Object임을 의미합니다.
+    example: true
+  assetType:
+    $ref: ./AptosAssetType.yaml
+  linkedAssetType:
+    $ref: ./AptosLinkedAssetType.yaml
+  tokenStandard:
+    $ref: ./AptosTokenStandard.yaml
