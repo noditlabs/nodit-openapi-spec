@@ -10,6 +10,10 @@ import {
   TRON_ACCOUNTS,
   XRPL_ACCOUNTS,
 } from "../../../../constants";
+import {
+  kaiaUsingTipsForCommon,
+  kaiaUsingTipsForTransaction,
+} from "../../../../callouts";
 
 const summary = "Get Total Transaction Count By Account";
 const endpoint = "getTotalTransactionCountByAccount";
@@ -331,6 +335,9 @@ function getRequestAndResponse(chain: string): {
 // ─────────────────────────────────────
 function getCallouts(chain: string): string {
   switch (chain) {
+    case "web3":
+    case "kaia":
+      return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTransaction)}`;
     default:
       return ""; // 해당 체인에서는 callouts가 없음
   }

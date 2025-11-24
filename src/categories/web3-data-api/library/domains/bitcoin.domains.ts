@@ -430,9 +430,9 @@ export const UTXO: OpenAPIV3.SchemaObject = {
       example: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
     },
     value: {
-      type: "integer",
+      type: "string",
       description:
-        "UTXO의 값으로, 트랜잭션 출력의 잔액을 나타냅니다. 값은 Satoshi 단위로 표현되며, 1 BTC = 100,000,000 Satoshi입니다.",
+        "UTXO의 값으로, 트랜잭션 출력의 잔액을 나타냅니다. 값은 BTC 단위로 표현되며, 1 BTC = 100,000,000 Satoshi입니다.",
       example: 5000000000,
     },
     blockHeight: {
