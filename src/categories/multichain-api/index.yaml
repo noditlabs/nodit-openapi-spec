@@ -13,5 +13,5 @@ components:
       $ref: ./components/securitySchemes/X-API-KEY.yaml
 paths:
   /lookupEntities:
-    get:
+    post:
       $ref: ./paths/lookupEntities.yaml
