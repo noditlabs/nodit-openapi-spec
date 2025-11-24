@@ -15240,8 +15240,29 @@ paths:
         - api_key: []
       tags:
         - Blockchain API
-      description: |+
+      description: >+
         이 API는 특정 계정 주소가 송신자나 수신자로 포함된 트랜잭션의 총 개수를 반환합니다.
+
+
+
+        > 🚧 Kaia를 사용하시나요? 사용 전 꼭 확인하세요!
+
+        >
+
+        > Kaia는 Klaytn과 Finschia의 합병으로 탄생한 체인으로, 기존 Klaytn에서 하드포크된 체인입니다. 본 API는
+        하드포크 이후 데이터에 대한 정합성을 보장하지만, 하드포크 이전의 Klaytn 데이터는 조회 및 정합성을 보장하지 않습니다.
+
+        > Kaia 네트워크의 하드포크 블록은 아래와 같습니다.
+
+        > - Mainnet: 162,900,480 (Aug 29, 2024 11:08:01 UTC+9)
+
+        > - Kairos(Testnet): 156,660,000 (June 13, 2024 10:15:19 UTC+9)
+
+        >
+
+        > 예를 들어, 다음과 같은 동작은 정상 동작으로 간주됩니다. 
+
+        > - 하드포크 시점 이전에 발생한 트랜잭션은 조회 결과에 포함되지 않을 수 있습니다.
 
       summary: Get Total Transaction Count By Account
       operationId: getTotalTransactionCountByAccount
@@ -24375,10 +24396,10 @@ paths:
                             P2PKH, P2SH, Bech32, 또는 Bech32m 형식을 따릅니다.
                           example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
                         value:
-                          type: integer
+                          type: string
                           description: >-
-                            UTXO의 값으로, 트랜잭션 출력의 잔액을 나타냅니다. 값은 Satoshi 단위로 표현되며,
-                            1 BTC = 100,000,000 Satoshi입니다.
+                            UTXO의 값으로, 트랜잭션 출력의 잔액을 나타냅니다. 값은 BTC 단위로 표현되며, 1
+                            BTC = 100,000,000 Satoshi입니다.
                           example: 5000000000
                         blockHeight:
                           type: integer
