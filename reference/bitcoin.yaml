@@ -1158,11 +1158,11 @@ paths:
                             example: >-
                               c2976d591a92cc39f2bb1f367afbc2d6ae6e3c940b640eb245dfbeef75d340db
                           voutIndex:
-                            type: string
+                            type: integer
                             description: >-
                               Vin(입력)이 참조하는 이전 Vout(출력)의 인덱스를 나타냅니다. Coinbase
                               트랜잭션의 경우 null로 표기됩니다.
-                            example: '0'
+                            example: 0
                           scriptSig:
                             type: object
                             required:
