@@ -9,6 +9,7 @@ enum:
   - base-mainnet
   - base-sepolia
   - bitcoin-mainnet
+  - bitcoincash-mainnet
   # - bnb-mainnet
   # - bnb-testnet
   - chiliz-mainnet

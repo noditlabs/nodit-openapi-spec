@@ -82,6 +82,7 @@ function getOpIdAndParams(chain: string): {
           // UTXO
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
 
           // XRPL
           "xrpl",
@@ -123,6 +124,7 @@ function getRequestAndResponse(chain: string): {
   switch (chain) {
     case "bitcoin":
     case "dogecoin":
+    case "bitcoincash":
       return {
         requestBody: {
           additionalProperties: false,
@@ -173,6 +175,7 @@ function getRequestAndResponse(chain: string): {
           additionalProperties: false,
           oneOf: [
             {
+              title: "Bitcoin, Dogecoin, Bitcoincash",
               type: "object",
               properties: {
                 accountAddress: {
@@ -183,6 +186,7 @@ function getRequestAndResponse(chain: string): {
               required: ["accountAddress"],
             },
             {
+              title: "XRP Ledger (XRPL)",
               type: "object",
               properties: {
                 accountAddress: {
@@ -198,7 +202,7 @@ function getRequestAndResponse(chain: string): {
           schema: {
             oneOf: [
               {
-                title: "Bitcoin, Dogecoin",
+                title: "Bitcoin, Dogecoin, Bitcoincash",
                 ...Domains.Bitcoin.Balance,
                 example: Examples.Bitcoin[endpoint],
               },

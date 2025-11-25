@@ -87,6 +87,7 @@ function getOpIdAndParams(chain: string): {
       operationId: endpoint,
       parameters: [
         Requests.chain("ethereum", [
+          // evm
           "arbitrum",
           "base",
           // "bnb",
@@ -99,9 +100,15 @@ function getOpIdAndParams(chain: string): {
           "polygon",
           "luniverse",
           "tron",
+
+          // utxo
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
+
           "xrpl",
+
+          // Move 기반 체인
           "aptos",
         ]),
         Requests.network("mainnet", [
@@ -158,7 +165,7 @@ function getRequestAndResponse(chain: string): {
                   default: TRON_ACCOUNTS.JUSTIN_SUN,
                 },
                 {
-                  title: "Bitcoin, Dogecoin",
+                  title: "Bitcoin, Dogecoin, Bitcoincash",
                   ...Requests.Bitcoin.accountAddress,
                   default: BITCOIN_ACCOUNTS.SATOSHI,
                 },
@@ -216,6 +223,7 @@ function getRequestAndResponse(chain: string): {
       };
     case "bitcoin":
     case "dogecoin":
+    case "bitcoincash":
       return {
         requestBody: {
           additionalProperties: false,

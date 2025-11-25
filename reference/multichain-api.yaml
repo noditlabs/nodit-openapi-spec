@@ -134,6 +134,7 @@ components:
         - base-mainnet
         - base-sepolia
         - bitcoin-mainnet
+        - bitcoincash-mainnet
         - chiliz-mainnet
         - dogecoin-mainnet
         - ethereum-mainnet

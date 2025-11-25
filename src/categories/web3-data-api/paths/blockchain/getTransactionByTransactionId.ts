@@ -78,6 +78,7 @@ function getOpIdAndParams(chain: string): {
           // utxo
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
         ]),
         Requests.network("mainnet", ["mainnet", "testnet"]),
       ],
@@ -108,6 +109,44 @@ function getRequestAndResponse(chain: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (chain) {
+    case "bitcoincash":
+      return {
+        requestBody: {
+          additionalProperties: false,
+          allOf: [
+            {
+              type: "object",
+              properties: {
+                transactionId: {
+                  ...Requests.Bitcoin.transactionId,
+                  default:
+                    "0028e50ae5021b84597a32e6174c2f636b334457a41b0bdd872ba4d7b4f120f6",
+                },
+              },
+              required: ["transactionId"],
+            },
+          ],
+        },
+        successResponse: {
+          schema: {
+            allOf: [
+              Domains.Bitcoin.Transaction,
+              {
+                type: "object",
+                properties: {
+                  vin: {
+                    allOf: [Domains.Bitcoin.Vin, Domains.BitcoinCash.Token],
+                  },
+                  vout: {
+                    allOf: [Domains.Bitcoin.Vout, Domains.BitcoinCash.Token],
+                  },
+                },
+              },
+            ],
+          },
+          example: Examples.BitcoinCash[endpoint],
+        },
+      };
     default:
       return {
         requestBody: {

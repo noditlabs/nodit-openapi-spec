@@ -216,7 +216,7 @@ export const Transaction: OpenAPIV3.SchemaObject = {
     weight: {
       type: "integer",
       description:
-        "트랜잭션의 가중치로, BIP-141에 따라 계산된 트랜잭션의 네트워크 비용을 나타냅니다. `(non-witness 크기 * 3) + total 크기`로 계산됩니다.",
+        "트랜잭션의 가중치로, BIP-141에 따라 계산된 트랜잭션의 네트워크 비용을 나타냅니다. `(non-witness size * 3) + total size`로 계산됩니다.",
       example: 565,
     },
     fee: {
@@ -475,7 +475,7 @@ export const Transfer: OpenAPIV3.SchemaObject = {
         "트랜잭션에 포함된 각 송신자의 세부 정보를 포함한 배열입니다. 각 객체는 송신자의 주소, 송금 금액, 송신자의 인덱스를 포함합니다.",
       items: {
         type: "object",
-        required: ["index", "address", "amount"],
+        required: ["index", "address", "value"],
         properties: {
           index: {
             type: "integer",
@@ -489,7 +489,7 @@ export const Transfer: OpenAPIV3.SchemaObject = {
               "송신자의 주소입니다. 송신자가 트랜잭션에서 비트코인을 보내기 위해 사용하는 주소이며, P2PKH, P2SH, Bech32, 또는 Bech32m 형식을 따릅니다.",
             example: "2N5PcdirZUzKF9bWuGdugNuzcQrCbBudxv1",
           },
-          amount: {
+          value: {
             type: "string",
             description:
               "송신자가 트랜잭션에서 보낸 금액으로, BTC 단위로 표시됩니다. 금액은 소수점 8자리까지 허용됩니다.",
@@ -511,7 +511,7 @@ export const Transfer: OpenAPIV3.SchemaObject = {
         "트랜잭션에 포함된 각 수신자의 세부 정보를 포함한 배열입니다. 각 객체는 수신자의 주소, 수령 금액, 수신자의 인덱스를 포함합니다.",
       items: {
         type: "object",
-        required: ["index", "address", "amount"],
+        required: ["index", "address", "value"],
         properties: {
           index: {
             type: "integer",
@@ -525,7 +525,7 @@ export const Transfer: OpenAPIV3.SchemaObject = {
               "수신자의 주소입니다. 수신자가 비트코인을 받기 위해 사용하는 주소이며, P2PKH, P2SH, Bech32, 또는 Bech32m 형식을 따릅니다.",
             example: "2MzakdGTEp8SMWEHKwKM4HYv6uNCBXtHpkV",
           },
-          amount: {
+          value: {
             type: "string",
             description:
               "수신자가 트랜잭션에서 받은 금액으로, BTC 단위로 표시됩니다. 금액은 소수점 8자리까지 허용됩니다.",

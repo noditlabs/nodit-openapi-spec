@@ -104,11 +104,12 @@ function getOpIdAndParams(chain: string): {
           // utxo
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
 
           // xrpl
           "xrpl",
 
-          // aptos
+          // Move 기반 체인
           "aptos",
         ]),
         Requests.network("mainnet", [
@@ -181,7 +182,7 @@ function getRequestAndResponse(chain: string): {
               ],
             },
             {
-              title: "Bitcoin, Dogecoin",
+              title: "Bitcoin, Dogecoin, Bitcoincash",
               allOf: [
                 {
                   type: "object",
@@ -324,6 +325,27 @@ function getRequestAndResponse(chain: string): {
                 example: Examples.Bitcoin[endpoint],
               },
               {
+                title: "Bitcoincash",
+                allOf: [
+                  Domains.Bitcoin.Transaction,
+                  {
+                    type: "object",
+                    properties: {
+                      vin: {
+                        allOf: [Domains.Bitcoin.Vin, Domains.BitcoinCash.Token],
+                      },
+                      vout: {
+                        allOf: [
+                          Domains.Bitcoin.Vout,
+                          Domains.BitcoinCash.Token,
+                        ],
+                      },
+                    },
+                  },
+                ],
+                example: Examples.BitcoinCash[endpoint],
+              },
+              {
                 title: "Tron",
                 allOf: [
                   Domains.Tron.Transaction,
@@ -394,6 +416,51 @@ function getRequestAndResponse(chain: string): {
           example: Examples.Bitcoin[endpoint],
         },
       };
+    case "bitcoincash":
+      return {
+        requestBody: {
+          additionalProperties: false,
+          type: "object",
+          allOf: [
+            {
+              type: "object",
+              properties: {
+                accountAddress: {
+                  ...Requests.Bitcoin.accountAddress,
+                  default: BITCOIN_ACCOUNTS.SATOSHI,
+                },
+                relation: Requests.relation,
+                fromBlock: Requests.Bitcoin.fromBlock,
+                toBlock: Requests.Bitcoin.toBlock,
+                fromDate: Requests.Bitcoin.fromDate,
+                toDate: Requests.Bitcoin.toDate,
+              },
+              required: ["accountAddress"],
+            },
+            Requests.PaginationSet,
+          ],
+        },
+        successResponse: {
+          schema: Domains.Pagination({
+            allOf: [
+              Domains.Bitcoin.Transaction,
+              {
+                type: "object",
+                properties: {
+                  vin: {
+                    allOf: [Domains.Bitcoin.Vin, Domains.BitcoinCash.Token],
+                  },
+                  vout: {
+                    allOf: [Domains.Bitcoin.Vout, Domains.BitcoinCash.Token],
+                  },
+                },
+              },
+            ],
+          }),
+          example: Examples.Bitcoin[endpoint],
+        },
+      };
+
     case "kaia":
       return {
         requestBody: {
@@ -629,13 +696,25 @@ function getCallouts(chain: string): string {
       return `${kaiaUsingTipsForCommon(kaiaUsingTipsForTransaction)}
 
 ${decodeInfoMessage}`;
+    case "arbitrum":
+    case "base":
+    case "chiliz":
+    case "ethereum":
+    case "ethereumclassic":
+    case "giwa":
+    case "optimism":
+    case "polygon":
+    case "luniverse":
+    case "tron":
+      return `${decodeInfoMessage}`; // 해당 체인에서는 callouts가 없음
 
     case "xrpl":
     case "aptos":
-      return ``;
-
+    case "bitcoin":
+    case "dogecoin":
+    case "bitcoincash":
     default:
-      return `${decodeInfoMessage}`; // 해당 체인에서는 callouts가 없음
+      return ``;
   }
 }
 

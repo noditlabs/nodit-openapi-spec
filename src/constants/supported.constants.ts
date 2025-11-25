@@ -12,18 +12,16 @@ export interface SupportedApis {
 }
 
 export interface ChainInfo {
-  protocol: string;
+  chain: string;
   mainnet?: string;
   testnet?: string[];
 }
 
-export function getChainInfo(protocol: string): ChainInfo {
-  const chainInfo = supportedChains.find(
-    (chain) => chain.protocol === protocol
-  );
+export function getChainInfo(chain: string): ChainInfo {
+  const chainInfo = supportedChains.find((c) => c.chain === chain);
 
   if (!chainInfo) {
-    throw Error(`${protocol} is not supported.`);
+    throw Error(`${chain} is not supported.`);
   }
 
   return chainInfo;
@@ -47,86 +45,91 @@ export function isEndpointSupported(chain: string, endpoint: string): boolean {
 
 export const supportedChains: ChainInfo[] = [
   {
-    protocol: "ethereum",
+    chain: "ethereum",
     mainnet: "mainnet",
     testnet: ["sepolia", "hoodi"],
   },
   {
-    protocol: "polygon",
+    chain: "polygon",
     mainnet: "mainnet",
     testnet: ["amoy"],
   },
   {
-    protocol: "arbitrum",
+    chain: "arbitrum",
     mainnet: "mainnet",
     testnet: ["sepolia"],
   },
   {
-    protocol: "optimism",
+    chain: "optimism",
     mainnet: "mainnet",
     testnet: ["sepolia"],
   },
   {
-    protocol: "base",
+    chain: "base",
     mainnet: "mainnet",
     testnet: ["sepolia"],
   },
   {
-    protocol: "kaia",
+    chain: "kaia",
     mainnet: "mainnet",
     testnet: ["kairos"],
   },
   {
-    protocol: "luniverse",
+    chain: "luniverse",
     mainnet: "mainnet",
     testnet: [],
   },
   {
-    protocol: "avalanche",
+    chain: "avalanche",
     mainnet: "mainnet",
     testnet: ["fuji"],
   },
   {
-    protocol: "aptos",
+    chain: "aptos",
     mainnet: "mainnet",
     testnet: [],
   },
   {
-    protocol: "bitcoin",
+    chain: "bitcoin",
     mainnet: "mainnet",
     testnet: [],
   },
   {
-    protocol: "dogecoin",
+    chain: "dogecoin",
     mainnet: "mainnet",
     testnet: [],
   },
   {
-    protocol: "tron",
+    chain: "tron",
     mainnet: "mainnet",
     testnet: [],
   },
   {
-    protocol: "xrpl",
+    chain: "xrpl",
     mainnet: "mainnet",
     testnet: [],
   },
   {
-    protocol: "chiliz",
+    chain: "chiliz",
     mainnet: "mainnet",
     testnet: [],
   },
   {
-    protocol: "bnb",
+    chain: "bnb",
     mainnet: "mainnet",
     testnet: ["testnet"],
   },
   {
-    protocol: "giwa",
+    chain: "giwa",
     testnet: ["sepolia"],
   },
   {
-    protocol: "ethereumclassic",
+    chain: "ethereumclassic",
+    mainnet: "mainnet",
+    testnet: [],
+  },
+  {
+    chain: "bitcoincash",
     mainnet: "mainnet",
     testnet: [],
   },
@@ -1412,6 +1415,33 @@ export const supportedApisChains: SupportedApis[] = [
   },
   {
     chain: "dogecoin",
+    nodeApi: [],
+    web3DataApi: [
+      {
+        category: "blockchain",
+        endpoints: [
+          "getBlockByHashOrNumber",
+          "getTotalTransactionCountByAccount",
+          "getTransactionByTransactionId",
+          "getTransactionsByAccount",
+          "getTransactionsByTransactionIds",
+          "getUnspentTransactionOutputsByAccount",
+        ],
+      },
+      {
+        category: "native",
+        endpoints: [
+          // "getNativeBalanceByAccount",
+          "getNativeTokenBalanceByAccount",
+          "getNativeTokenTransfersByAccount",
+        ],
+      },
+    ],
+    webhookApi: [],
+    streamApi: false,
+  },
+  {
+    chain: "bitcoincash",
     nodeApi: [],
     web3DataApi: [
       {

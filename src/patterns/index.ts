@@ -48,6 +48,8 @@ export const Patterns = {
     hexaDecimal8: new RegExp(`^${HEXA}{8}`),
     hexaDecimal32: new RegExp(`^${HEXA}{32}`),
     hexaDecimal64: new RegExp(`^${HEXA}{64}`),
+    hexaDecimal80: new RegExp(`^${HEXA}{80}`),
+    hexaDecimal128: new RegExp(`^${HEXA}{128}`),
     hexaDecimal512: new RegExp(`^${HEXA}{512}`),
     prefixedHexaDecimal: new RegExp(`${HEXA_PREFIX}${HEXA}+$`),
     prefixedHexaDecimal8: new RegExp(`${HEXA_PREFIX}${HEXA}{8}`),

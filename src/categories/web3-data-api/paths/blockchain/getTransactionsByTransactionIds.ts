@@ -4,6 +4,7 @@ import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import { getChainInfo } from "../../../../constants";
 import { throughputLimitInfoMessage } from "../../../../callouts";
+import Examples from "../../library/examples";
 
 const summary = "Get Transactions By Transaction IDs";
 const endpoint = "getTransactionsByTransactionIds";
@@ -78,6 +79,7 @@ function getOpIdAndParams(chain: string): {
           // utxo
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
         ]),
         Requests.network("mainnet", ["mainnet", "testnet"]),
       ],
@@ -108,7 +110,124 @@ function getRequestAndResponse(chain: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (chain) {
+    case "bitcoincash":
+      return {
+        requestBody: {
+          additionalProperties: false,
+          allOf: [
+            {
+              type: "object",
+              properties: {
+                transactionIds: {
+                  type: "array",
+                  items: {
+                    ...Requests.Bitcoin.transactionId,
+                  },
+                  minItems: 1,
+                  maxItems: 1000,
+                  description: "조회할 트랜잭션 ID를 배열로 입력합니다.",
+                  default: [
+                    "0028e50ae5021b84597a32e6174c2f636b334457a41b0bdd872ba4d7b4f120f6",
+                    "01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4",
+                  ],
+                },
+              },
+              required: ["transactionIds"],
+            },
+          ],
+        },
+        successResponse: {
+          schema: {
+            type: "array",
+            items: {
+              allOf: [
+                Domains.Bitcoin.Transaction,
+                {
+                  type: "object",
+                  properties: {
+                    vin: {
+                      allOf: [Domains.Bitcoin.Vin, Domains.BitcoinCash.Token],
+                    },
+                    vout: {
+                      allOf: [Domains.Bitcoin.Vout, Domains.BitcoinCash.Token],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          example: Examples.BitcoinCash[endpoint],
+        },
+      };
+
     case "web3":
+      return {
+        requestBody: {
+          additionalProperties: false,
+          allOf: [
+            {
+              type: "object",
+              properties: {
+                transactionIds: {
+                  type: "array",
+                  items: {
+                    ...Requests.Bitcoin.transactionId,
+                  },
+                  minItems: 1,
+                  maxItems: 1000,
+                  description: "조회할 트랜잭션 ID를 배열로 입력합니다.",
+                  default: [
+                    "b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef",
+                  ],
+                },
+              },
+              required: ["transactionIds"],
+            },
+          ],
+        },
+        successResponse: {
+          schema: {
+            oneOf: [
+              {
+                title: "Bitcoin, Dogecoin",
+                allOf: [
+                  Domains.Bitcoin.Transaction,
+                  {
+                    type: "object",
+                    properties: {
+                      vin: Domains.Bitcoin.Vin,
+                      vout: Domains.Bitcoin.Vout,
+                    },
+                  },
+                ],
+                example: Examples.Bitcoin[endpoint],
+              },
+              {
+                title: "Bitcoincash",
+                allOf: [
+                  Domains.Bitcoin.Transaction,
+                  {
+                    type: "object",
+                    properties: {
+                      vin: {
+                        allOf: [Domains.Bitcoin.Vin, Domains.BitcoinCash.Token],
+                      },
+                      vout: {
+                        allOf: [
+                          Domains.Bitcoin.Vout,
+                          Domains.BitcoinCash.Token,
+                        ],
+                      },
+                    },
+                  },
+                ],
+                example: Examples.BitcoinCash[endpoint],
+              },
+            ],
+          },
+        },
+      };
+
     default:
       return {
         requestBody: {
@@ -150,6 +269,7 @@ function getRequestAndResponse(chain: string): {
               ],
             },
           },
+          example: Examples.Bitcoin[endpoint],
         },
       };
   }

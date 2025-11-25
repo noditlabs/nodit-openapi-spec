@@ -78,6 +78,7 @@ function getOpIdAndParams(chain: string): {
           // UTXO
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
         ]),
         Requests.network("mainnet", ["mainnet", "testnet"]),
       ],

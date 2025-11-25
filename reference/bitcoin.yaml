@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: bitcoin
-  version: 1.2.20
+  version: 1.2.21
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -1086,7 +1086,7 @@ paths:
                         type: integer
                         description: >-
                           트랜잭션의 가중치로, BIP-141에 따라 계산된 트랜잭션의 네트워크 비용을 나타냅니다.
-                          `(non-witness 크기 * 3) + total 크기`로 계산됩니다.
+                          `(non-witness size * 3) + total size`로 계산됩니다.
                         example: 565
                       fee:
                         type: integer
@@ -1301,18 +1301,9 @@ paths:
         - api_key: []
       tags:
         - Blockchain API
-      description: >
+      description: |+
         특정 계정이 전송 혹은 수신한 트랜잭션 목록을 조회합니다.
 
-
-
-        > 🚧 decodeInput 사용 시 주의사항
-
-        >
-
-        > decodeInput 필드는 트랜잭션의 input 필드를 해석하여 결과를 제공합니다. 그러나 서로 다른 함수가 같은 함수
-        선택자(function selector)를 사용할 수 있기 때문에, 제공된 결과가 실제로 호출된 함수와 일치하지 않을 가능성이
-        있습니다. 따라서, ERC 표준 규격과 다른 함수의 경우 추가적인 검증 과정을 거치는 것을 권장 드립니다.
       summary: Get Transactions By Account
       operationId: bitcoin-getTransactionsByAccount
       parameters:
@@ -1596,6 +1587,89 @@ paths:
                       properties:
                         vin: *ref_13
                         vout: *ref_14
+              example:
+                - id: >-
+                    01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+                  index: 0
+                  hash: >-
+                    01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+                  version: 1
+                  lockTime: 0
+                  size: 134
+                  vsize: 134
+                  weight: 536
+                  fee: '0'
+                  vinCount: 1
+                  voutCount: 1
+                  blockHeight: 20000
+                  blockHash: >-
+                    00000000770ebe897270ca5f6d539d8afb4ea4f4e757761a34ca82e17207d886
+                  blockTimestamp: 1248291739
+                  vin:
+                    - index: 0
+                      address: coinbase
+                      value: '0'
+                      coinbase: 04ffff001d016b
+                      voutTransactionId: null
+                      voutIndex: null
+                      scriptSig:
+                        asm: ''
+                        hex: ''
+                        type: coinbase
+                      sequence: 4294967295
+                      witness: []
+                  vout:
+                    - index: 0
+                      address: 1Gtj5h1u8yZJe32neQZB5C7efP9XeMd9SW
+                      value: '50'
+                      scriptPubKey:
+                        asm: >-
+                          04370295d27dc032142af46515c4251ac7053f947546ada27b530bb11ffc65ea9b81be8758d6218d24448d2f9293620e43cf6e8220da09819d52f85474bc29238a
+                          OP_CHECKSIG
+                        hex: >-
+                          4104370295d27dc032142af46515c4251ac7053f947546ada27b530bb11ffc65ea9b81be8758d6218d24448d2f9293620e43cf6e8220da09819d52f85474bc29238aac
+                        type: pubkey
+                - id: >-
+                    72a731899e1399670ff4cd99913ff3f9527aff41eface9b5913612c7f5b816f1
+                  index: 0
+                  hash: >-
+                    72a731899e1399670ff4cd99913ff3f9527aff41eface9b5913612c7f5b816f1
+                  version: 1
+                  lockTime: 0
+                  size: 134
+                  vsize: 134
+                  weight: 536
+                  fee: '0'
+                  vinCount: 1
+                  voutCount: 1
+                  blockHeight: 20002
+                  blockHash: >-
+                    0000000027ac72976acaf634feab58664628032f36e9034539f3240972ec1e1d
+                  blockTimestamp: 1248292883
+                  vin:
+                    - index: 0
+                      address: coinbase
+                      value: '0'
+                      coinbase: 04ffff001d012e
+                      voutTransactionId: null
+                      voutIndex: null
+                      scriptSig:
+                        asm: ''
+                        hex: ''
+                        type: coinbase
+                      sequence: 4294967295
+                      witness: []
+                  vout:
+                    - index: 0
+                      address: 196ey4cHer4LTQ5iAMfDN1TdSKAPQUf3UY
+                      value: '50'
+                      scriptPubKey:
+                        asm: >-
+                          0454639adf648cae8c3e94118822f013aacc1d3a1d5f2de25d8c3e7f018a4f96f6eca597dc46dc96246394578fe12f957ca0d4d57e9342d4f00a573d1559233c9c
+                          OP_CHECKSIG
+                        hex: >-
+                          410454639adf648cae8c3e94118822f013aacc1d3a1d5f2de25d8c3e7f018a4f96f6eca597dc46dc96246394578fe12f957ca0d4d57e9342d4f00a573d1559233c9cac
+                        type: pubkey
         '400': *ref_1
         '401': *ref_2
         '403': *ref_3

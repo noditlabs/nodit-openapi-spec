@@ -95,6 +95,7 @@ function getOpIdAndParams(chain: string): {
           // UTXO
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
 
           // Move 기반 체인
           "aptos",
@@ -149,7 +150,7 @@ function getRequestAndResponse(chain: string): {
               required: ["block"],
             },
             {
-              title: "Bitcoin, Dogecoin",
+              title: "Bitcoin, Dogecoin, Bitcoincash",
               type: "object",
               properties: {
                 block: {
@@ -174,6 +175,19 @@ function getRequestAndResponse(chain: string): {
                 title: "Bitcoin, Dogecoin",
                 ...Domains.Bitcoin.Block,
                 example: Examples.Bitcoin[endpoint],
+              },
+              {
+                title: "Bitcoincash",
+                allOf: [
+                  Domains.Bitcoin.Block,
+                  {
+                    type: "object",
+                    properties: {
+                      ablastate: Domains.BitcoinCash.Ablastate,
+                    },
+                  },
+                ],
+                example: Examples.BitcoinCash[endpoint],
               },
               {
                 title: "Aptos",
@@ -205,6 +219,37 @@ function getRequestAndResponse(chain: string): {
           schema: {
             // Bitcoin, Dogecoin 공통 응답
             ...Domains.Bitcoin.Block,
+            example: Examples.Bitcoin[endpoint],
+          },
+        },
+      };
+
+    case "bitcoincash":
+      return {
+        requestBody: {
+          additionalProperties: false,
+          // 비트코인/도지코인용 스키마
+          type: "object",
+          properties: {
+            block: {
+              ...Requests.Bitcoin.block,
+              default:
+                "00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af",
+            },
+          },
+          required: ["block"],
+        },
+        successResponse: {
+          schema: {
+            allOf: [
+              Domains.Bitcoin.Block,
+              {
+                type: "object",
+                properties: {
+                  ablastate: Domains.BitcoinCash.Ablastate,
+                },
+              },
+            ],
             example: Examples.Bitcoin[endpoint],
           },
         },
