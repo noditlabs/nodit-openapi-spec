@@ -486,7 +486,6 @@ paths:
               - kaia
               - optimism
               - polygon
-              - luniverse
             default: ethereum
           description: >-
             조회 대상 체인을 지정하기 위한 파라미터입니다. 
@@ -515,7 +514,6 @@ paths:
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
-            - luniverse(the balance): "mainnet"
       requestBody:
         required: true
         content:
@@ -942,7 +940,6 @@ paths:
               - kaia
               - optimism
               - polygon
-              - luniverse
               - aptos
             default: ethereum
           description: >-
@@ -973,7 +970,6 @@ paths:
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
-            - luniverse(the balance): "mainnet"
         - name: subscriptionId
           in: query
           required: false
@@ -1162,7 +1158,6 @@ paths:
               - kaia
               - optimism
               - polygon
-              - luniverse
             default: ethereum
           description: >-
             조회 대상 체인을 지정하기 위한 파라미터입니다. 
@@ -1191,7 +1186,6 @@ paths:
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
-            - luniverse(the balance): "mainnet"
         - *ref_20
       requestBody:
         required: true
@@ -1246,7 +1240,6 @@ paths:
               - kaia
               - optimism
               - polygon
-              - luniverse
               - aptos
             default: ethereum
           description: >-
@@ -1277,7 +1270,6 @@ paths:
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
-            - luniverse(the balance): "mainnet"
         - *ref_20
       responses:
         '200':
@@ -1325,7 +1317,6 @@ paths:
               - kaia
               - optimism
               - polygon
-              - luniverse
               - aptos
             default: ethereum
           description: >-
@@ -1356,7 +1347,6 @@ paths:
             - kaia: "mainnet", "kairos"
             - optimism: "mainnet", "sepolia"
             - polygon: "mainnet", "amoy"
-            - luniverse(the balance): "mainnet"
         - name: subscriptionId
           in: query
           required: true

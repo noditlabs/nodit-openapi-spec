@@ -45,7 +45,6 @@ namespace Requests {
 - kaia: "mainnet", "kairos"
 - optimism: "mainnet", "sepolia"
 - polygon: "mainnet", "amoy"
-- luniverse(the balance): "mainnet"
 `,
     };
   }
@@ -72,7 +71,6 @@ namespace Requests {
 - kaia: "mainnet", "kairos"
 - optimism: "mainnet", "sepolia"
 - polygon: "mainnet", "amoy"
-- luniverse(the balance): "mainnet"
 `,
     };
   }

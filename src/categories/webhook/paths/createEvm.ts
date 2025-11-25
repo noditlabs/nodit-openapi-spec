@@ -87,7 +87,6 @@ function getOpIdAndParams(): {
         "kaia",
         "optimism",
         "polygon",
-        "luniverse",
       ]),
       Requests.networkForEvm("mainnet", [
         "mainnet",

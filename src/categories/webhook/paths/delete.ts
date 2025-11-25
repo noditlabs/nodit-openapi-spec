@@ -73,7 +73,6 @@ function getOpIdAndParams(chain: string): {
           "kaia",
           "optimism",
           "polygon",
-          "luniverse",
           // non-evm
           "aptos",
         ]),

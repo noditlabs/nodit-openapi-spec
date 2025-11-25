@@ -81,7 +81,6 @@ function getOpIdAndParams(chain: string): {
         "kaia",
         "optimism",
         "polygon",
-        "luniverse",
       ]),
       Requests.networkForEvm("mainnet", [
         "mainnet",
