@@ -4590,6 +4590,105 @@ paths:
           $ref: '#/components/responses/410'
         '429':
           $ref: '#/components/responses/429'
+  /view:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - View
+      description: view로 정의된 함수를 호출할 수 있습니다.
+      summary: Execute view function of a module
+      operationId: aptos_executeViewFunctionOfAModule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - function
+                - type_arguments
+                - arguments
+              properties:
+                function:
+                  type: string
+                  description: |-
+                    배포된 module에서 정의한 view 함수를 입력하는 필드입니다. 아래의 형식에 맞게 입력하세요.
+                    - 형식: {address}::{module_name}::{function_name}
+                type_arguments:
+                  type: array
+                  description: 함수의 type arguments를 입력하는 필드입니다. gerneric type을 인자로 받지 않는 함수의 경우, 빈 배열을 입력합니다.
+                  items:
+                    type: string
+                    pattern: ^(bool|u8|u64|u128|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+)$
+                arguments:
+                  type: array
+                  description: 함수의 arguments를 입력하는 필드입니다. 인자를 갖지 않는 함수의 경우, 이 필드는 빈 배열로 입력합니다.
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Successful Response
+          headers:
+            X-APTOS-BLOCK-HEIGHT:
+              description: 체인의 현재 블록 높이
+              schema:
+                type: integer
+              required: true
+            X-APTOS-CHAIN-ID:
+              description: 현재 체인의 체인 ID
+              schema:
+                type: integer
+              required: true
+            X-APTOS-EPOCH:
+              description: 체인의 현재 에포크
+              schema:
+                type: integer
+              required: true
+            X-APTOS-LEDGER-OLDEST-VERSION:
+              description: 체인의 정리되지 않은 원장 중 가장 오래된 버전
+              schema:
+                type: integer
+              required: true
+            X-APTOS-LEDGER-TIMESTAMPUSEC:
+              description: 체인의 현재 타임스탬프
+              schema:
+                type: integer
+              required: true
+            X-APTOS-LEDGER-VERSION:
+              description: 체인의 현재 원장 버전
+              schema:
+                type: integer
+              required: true
+            X-APTOS-OLDEST-BLOCK-HEIGHT:
+              description: 체인의 정리되지 않은 블록 중 가장 오래된 블록 높이
+              schema:
+                type: integer
+              required: true
+            X-APTOS-CURSOR:
+              description: 다음 페이지를 위한 커서
+              schema:
+                type: string
+            X-APTOS-GAS-USED:
+              description: 트랜잭션 실행에 실제로 사용된 가스의 양
+              schema:
+                type: integer
+          content:
+            application/json:
+              example:
+                - 4000000000
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '410':
+          $ref: '#/components/responses/410'
+        '429':
+          $ref: '#/components/responses/429'
 components:
   securitySchemes:
     api_key:

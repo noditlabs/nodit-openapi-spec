@@ -98,3 +98,8 @@ paths:
   /transactions/wait_by_hash/{txn_hash}:
     get:
       $ref: ./paths/transactions/waitForTransactionByHash.yaml
+
+  # View
+  /view:
+    post:
+      $ref: ./paths/view/executeViewFunctionOfAModule.yaml
