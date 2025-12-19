@@ -3,6 +3,3 @@ description: |
   자산의 고유 식별자를 나타내는 필드로, 다음 두 가지 형식 중 하나로 제공됩니다.
   - Coin: Struct 형식의 자산 ID (e.g. "0x1::aptos_coin::AptosCoin")
   - Fungible Asset: Token Metadata를 소유한 Object 주소 (e.g. "0xbae2...6f3b")
-examples:
-  - "0x1::aptos_coin::AptosCoin"
-  - "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b"

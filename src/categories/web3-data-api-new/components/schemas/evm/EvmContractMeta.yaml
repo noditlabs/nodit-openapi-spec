@@ -32,6 +32,10 @@ properties:
       <strong style='color: red;'>*</strong> 모든 컨트랙트의 로고 이미지가 제공되는 것은 아닙니다. 컨트랙트 로고가 없는 경우, 이 필드는 null로 제공됩니다.
   type:
     type: string
+    enum:
+      - ERC20
+      - ERC721
+      - ERC1155
     description: |
       컨트랙트의 타입을 나타내는 필드입니다.
       <strong style='color: red;'>*</strong> 컨트랙트 타입은 표준 규격의 이름이 표기됩니다. (e.g., ERC721, ERC1155, ERC20, ERC721, ERC1155, ERC20)

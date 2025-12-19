@@ -37,7 +37,7 @@ properties:
       자산의 최대 공급량을 나타내는 필드입니다.
     example: "1000000000000000000"
   creatorAddress:
-    $ref: ./AccountAddress.yaml
+    $ref: ./AptosAccountAddress.yaml
     description: |
       자산을 생성한 계정의 주소를 나타내는 필드입니다.
     example: "0x0000000000000000000000000000000000000000000000000000000000000001"

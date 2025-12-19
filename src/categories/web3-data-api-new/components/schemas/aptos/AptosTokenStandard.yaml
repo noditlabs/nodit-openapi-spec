@@ -3,6 +3,6 @@ description: |
   자산의 표준 유형을 나타내는 필드입니다.
   - "v1": Coin 표준을 따르는 자산
   - "v2": Fungible Asset 표준을 따르는 자산
-examples:
-  - "v1"
-  - "v2"
+enum:
+  - v1
+  - v2

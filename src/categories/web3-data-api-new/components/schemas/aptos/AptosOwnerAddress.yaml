@@ -1,10 +1,8 @@
-$ref: ./AptosAccountAddress.yaml
+type: string
+pattern: ^0[xX][0-9a-fA-F]{64}$
 description: |
   자산을 보유한 실질적인 소유자의 계정 주소를 나타내는 필드입니다.
 
   자산의 유형에 따라 소유자의 계정 주소가 다르며, 다음과 같이 제공됩니다:
   - Coin: 보유 계정 주소
   - Fungible Asset: 자산이 저장된 Object의 소유자의 계정 주소
-examples:
-  - "0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a" # Coin Owner Address
-  - "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b" # Fungible Asset Object Address

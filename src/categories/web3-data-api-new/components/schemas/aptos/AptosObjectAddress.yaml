@@ -1,9 +1,8 @@
-$ref: ./AptosAccountAddress.yaml
+type: string
+pattern: ^0[xX][0-9a-fA-F]{64}$
 description: |
   자산이 저장된 Object의 주소를 나타내는 필드입니다.
 
   자산의 유형에 따라 자산의 저장 위치가 다르며, 해당 필드의 값은 다음과 같이 제공됩니다.
   - Coin: 자산이 계정에 직접 저장되므로 Object가 필요하지 않습니다. 이 경우 빈 문자열("")이 반환됩니다.
   - Fungible Asset: 계정이 소유하고 있는 Object에 자산이 저장됩니다. 이 경우 해당 Object의 주소 (0x로 시작하는 64자리 16진수 문자열)가 반환됩니다.
-examples:
-  - "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b" # Fungible Asset Object Address
