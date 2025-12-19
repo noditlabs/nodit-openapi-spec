@@ -1,0 +1,12 @@
+type: object
+required:
+  - ownerAddress
+  - balance
+properties:
+  ownerAddress:
+    $ref: ./EvmOwnerAddress.yaml
+  balance:
+    type: string
+    description: |
+      잔고를 나타내는 필드입니다.
+    pattern: ^[0-9]+$

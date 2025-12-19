@@ -1,0 +1,23 @@
+type: object
+required:
+  - name
+  - symbol
+  - totalSupply
+  - decimals
+properties:
+  name:
+    type: string
+    description: |
+      컨트랙트의 이름을 나타내는 필드입니다. 표준을 따르지 않거나, 컨트랙트 생성 단계에서 name을 입력하지 않은 경우 빈 문자열을 반환합니다.
+  symbol:
+    type: string
+    description: |
+      컨트랙트의 심볼을 나타내는 필드입니다. 표준을 따르지 않거나, 컨트랙트 생성 단계에서 symbol을 입력하지 않은 경우 빈 문자열을 반환합니다.
+  totalSupply:
+    type: string
+    description: |
+      컨트랙트의 총 공급량을 나타내는 필드입니다. 이 값은 토큰의 총 발행량을 의미하며, 10진수 문자열 형태로 제공됩니다.
+  decimals:
+    type: integer
+    description: |
+      컨트랙트의 소수점 자리수를 나타내는 필드입니다.

@@ -1,0 +1,37 @@
+type: object
+required:
+  - affectedNodesIndex
+  - from
+  - to
+  - currency
+  - issuer
+  - value
+properties:
+  affectedNodesIndex:
+    type: integer
+    description: |
+      AffectedNodes 배열 내에서 해당 노드의 인덱스를 나타내는 필드입니다.
+    example: 1
+  from:
+    type: string
+    description: |
+      트랜잭션을 발생시킨 주소를 나타내는 필드입니다.
+    example: "rLuSZRKfW2oFVDEHab6U7tBSfnzSovzcw4"
+  to:
+    type: string
+    description: |
+      트랜잭션의 수신 주소를 나타내는 필드입니다.
+    example: "rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De"
+  currency:
+    type: string
+    description: |
+      트랜잭션의 통화를 나타내는 필드입니다.
+    example: "USD"
+  issuer:
+    type: string
+    description: |
+      트랜잭션의 발행자를 나타내는 필드입니다.
+  value:
+    type: string
+    description: |
+      트랜잭션의 값을 나타내는 필드입니다.

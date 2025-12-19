@@ -1,0 +1,35 @@
+allOf:
+  - type: object
+    required:
+      - ledgerIndex
+      - ledgerTimestamp
+      - transactionIndex
+      - transactionHash
+      - transactionType
+    properties:
+      ledgerIndex:
+        type: integer
+        description: |
+          Ledger의 생성 순서를 나타내는 정수값으로, 네트워크 상에서 해당 Ledger의 위치(시퀀스 번호)를 확인하는 데 사용됩니다.
+        example: 95444296
+      ledgerTimestamp:
+        type: integer
+        description: |
+          Ledger의 close time을 실제 Unix 타임스탬프로 변환한 값입니다.
+        example: 1744608171
+      transactionIndex:
+        type: integer
+        description: |
+          Ledger 내에서 해당 트랜잭션의 처리 순서를 나타내는 인덱스를 나타내는 필드입니다.
+        example: 0
+      transactionHash:
+        type: string
+        description: |
+          Transaction의 해시를 나타내는 필드입니다.
+        example: "4770851929AD74B3EF36D818C7100564B2F3333AE60FA1B05BFAA95020D18D5B"
+      transactionType:
+        type: string
+        description: |
+          Transaction의 타입을 나타내는 필드입니다.
+        example: "Payment"
+  - $ref: ./XrplTransferInTransaction.yaml

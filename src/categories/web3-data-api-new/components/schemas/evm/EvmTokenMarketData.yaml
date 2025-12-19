@@ -1,0 +1,45 @@
+type: object
+properties:
+  currency:
+    type: string
+    description: |
+      거래에 사용되는 통화의 종류를 나타냅니다. ISO 4217 통화코드 형식으로 제공됩니다.
+  price:
+    type: string
+    description: |
+      토큰의 현재 가격을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  volumeFor24h:
+    type: string
+    description: |
+      지난 24시간 동안의 총 거래량을 나타내는 필드입니다. 이 필드는 활발한 거래 활동을 나타내는
+      지표로 사용됩니다. 10진수 문자열 형태로 제공됩니다.
+  volumeChangeFor24h:
+    type: string
+    description: |
+      지난 24시간 동안의 거래량 변동을 나타내는 필드입니다. 이 필드는 시장의 변동성을 나타내는 지표로 사용됩니다. 10진수 문자열 형태로 제공됩니다.
+  percentChangeFor1h:
+    type: string
+    description: |
+      지난 1시간 동안의 가격 변화 비율을 나타내는 필드입니다. 이 필드는 단기적 시장 동향을 나타내는 지표로 사용됩니다.
+  percentChangeFor24h:
+    type: string
+    description: |
+      지난 24시간 동안의 가격 변화 비율을 나타내는 필드입니다. 이 필드는 중기적 시장 동향을 나타내는 지표로 사용됩니다.
+  percentChangeFor7d:
+    type: string
+    description: |
+      지난 7일 동안의 가격 변화 비율을 나타내는 필드입니다. 이 필드는 장기적 시장 동향을 나타내는 지표로 사용됩니다.
+  marketCap:
+    type: string
+    description: |
+      토큰의 시가총액을 나타내는 필드입니다. 이 필드는 자산의 총 시장 가치를 반영합니다. 10진수 문자열 형태로 제공됩니다.
+  updatedAt:
+    type: string
+    description: |
+      데이터가 업데이트된 시간을 나타내는 필드입니다. ISO 8601 형식으로 제공됩니다.
+  listings:
+    type: array
+    items:
+      type: string
+    description: |
+      토큰이 상장된 거래소 목록을 나타내는 필드입니다.
