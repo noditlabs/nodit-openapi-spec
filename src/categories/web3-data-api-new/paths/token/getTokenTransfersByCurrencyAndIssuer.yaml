@@ -1,0 +1,67 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 토큰의 전송 목록을 조회합니다.
+summary: Get Token Transfers by Currency and Issuer
+operationId: getTokenTransfersByCurrencyAndIssuer
+parameters:
+  - $ref: ../../components/parameters/chains/XrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/XrplNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            required:
+              - currency
+            properties:
+              currency:
+                $ref: ../../components/parameters/xrpl/XrplCurrencyParameter.yaml
+              issuer:
+                $ref: ../../components/parameters/xrpl/XrplIssuerParameter.yaml
+              fromLedger:
+                $ref: ../../components/parameters/xrpl/XrplFromLedgerParameter.yaml
+              toLedger:
+                $ref: ../../components/parameters/xrpl/XrplToLedgerParameter.yaml
+              fromDate:
+                $ref: ../../components/parameters/xrpl/XrplFromDateParameter.yaml
+              toDate:
+                $ref: ../../components/parameters/xrpl/XrplToDateParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
+        default:
+          currency: "USD"
+          issuer: "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"
+          fromDate: "2025-05-01T00:00:00+00:00"
+          toDate: "2025-07-01T00:00:00+00:00"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/xrpl/XrplTransfer.yaml
+        example:
+          $ref: ../../components/examples/getTokenTransfersByCurrencyAndIssuer.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

@@ -1,0 +1,60 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 토큰 컨트랙트의 메타데이터를 조회합니다. 다수의 컨트랙트를 조회할 수 있으며, 최대 1000개의 컨트랙트를 조회할 수 있습니다.
+summary: Get Token Contract Metadata by Contracts
+operationId: getTokenContractMetadataByContracts
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmTronNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - title: EVM (Ethereum, Optimism, ...)
+            type: object
+            required:
+              - contractAddresses
+            properties:
+              contractAddresses:
+                $ref: ../../components/parameters/evm/EvmTokenContractAddressesParameter.yaml
+          - title: Tron
+            type: object
+            required:
+              - contractAddresses
+            properties:
+              contractAddresses:
+                $ref: ../../components/parameters/tron/TronTokenContractAddressesParameter.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            oneOf:
+              - title: EVM (Ethereum, Optimism, ...)
+                allOf:
+                  - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                  - $ref: ../../components/schemas/evm/EvmTokenMeta.yaml
+              - title: Tron
+                allOf:
+                  - $ref: ../../components/schemas/tron/TronContractMeta.yaml
+                  - $ref: ../../components/schemas/tron/TronTokenMeta.yaml
+        example:
+          $ref: ../../components/examples/getTokenContractMetadataByContracts.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

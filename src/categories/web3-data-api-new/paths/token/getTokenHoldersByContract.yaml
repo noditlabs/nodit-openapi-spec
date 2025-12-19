@@ -1,0 +1,75 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 토큰 컨트랙트의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 토큰의 수량이 포함됩니다.
+summary: Get Token Holders by Contract
+operationId: getTokenHoldersByContract
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmTronNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - oneOf:
+              - title: EVM (Ethereum, Optimism, ...)
+                type: object
+                required:
+                  - contractAddress
+                properties:
+                  contractAddress:
+                    $ref: ../../components/parameters/evm/EvmTokenContractAddressParameter.yaml
+                default:
+                  contractAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+              - title: Tron
+                type: object
+                required:
+                  - contractAddress
+                properties:
+                  contractAddress:
+                    $ref: ../../components/parameters/tron/TronTokenContractAddressParameter.yaml
+                default:
+                  contractAddress: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - oneOf:
+                - title: EVM (Ethereum, Optimism, ...)
+                  type: object
+                  required:
+                    - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: ../../components/schemas/evm/EvmBalanceWithLastTransferredAt.yaml
+                - title: Tron
+                  type: object
+                  required:
+                    - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: ../../components/schemas/tron/TronBalance.yaml
+        example:
+          $ref: ../../components/examples/getTokenHoldersByContract.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

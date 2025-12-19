@@ -1,0 +1,51 @@
+security:
+  - api_key: []
+tags:
+  - Native Token API
+description: |
+  특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다.
+summary: Get Native Balance By Account
+operationId: getNativeBalanceByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmTronNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - accountAddress
+        properties:
+          accountAddress:
+            oneOf:
+              - title: Evm (Ethereum, Optimism, ...)
+                $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
+                default: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              - title: Tron
+                $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+                default: "TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - title: EVM (Ethereum, Optimism, ...)
+              $ref: ../../components/schemas/evm/EvmBalance.yaml
+            - title: Tron
+              $ref: ../../components/schemas/tron/TronBalance.yaml
+        example:
+          $ref: ../../components/examples/getNativeBalanceByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

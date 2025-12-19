@@ -1,0 +1,59 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  입력한 토큰 컨트랙트에서 발행한 Token의 온체인 마켓 가격을 조회합니다. 다수의 컨트랙트를 조회할 수 있으며, 최대 1000개의 컨트랙트를 조회할 수 있습니다.
+
+# TODO: Token price 조회 시 알아두어야 할 사항 callout 추가
+summary: Get Token Prices by Contracts
+operationId: getTokenPricesByContracts
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - contractAddresses
+        properties:
+          contractAddresses:
+            $ref: ../../components/parameters/evm/EvmTokenContractAddressesParameter.yaml
+          currency:
+            $ref: ../../components/parameters/common/CurrencyParameter.yaml
+        default:
+          contractAddresses:
+            - "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+            - "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+          currency: "USD"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            allOf:
+              - $ref: ../../components/schemas/evm/EvmTokenMarketData.yaml
+              - type: object
+                properties:
+                  contract:
+                    allOf:
+                      - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                      - $ref: ../../components/schemas/evm/EvmTokenMeta.yaml
+        example:
+          $ref: ../../components/examples/getTokenPricesByContracts.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

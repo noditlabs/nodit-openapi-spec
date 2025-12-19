@@ -1,0 +1,52 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 Asset Type의 토큰 메타데이터를 조회합니다.
+summary: Get Token Metadata By Asset Types
+operationId: getTokenMetadataByAssetTypes
+parameters:
+  - $ref: ../../components/parameters/chains/AptosChainParameter.yaml
+  - $ref: ../../components/parameters/chains/AptosNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - assetTypes
+        properties:
+          assetTypes:
+            type: array
+            items:
+              $ref: ../../components/parameters/aptos/AptosAssetTypeParameter.yaml
+            description: |
+              조회하고자 하는 자산의 타입을 배열로 입력합니다.
+            minItems: 1
+            maxItems: 1000
+            default:
+              - "0x1::aptos_coin::AptosCoin"
+              - "0x000000000000000000000000000000000000000000000000000000000000000a"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            $ref: ../../components/schemas/aptos/AptosTokenMeta.yaml
+        example:
+          $ref: ../../components/examples/getTokenMetadataByAssetTypes.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

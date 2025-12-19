@@ -1,0 +1,149 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 주소가 전송 혹은 수신한 토큰 전송 목록을 조회합니다. 요청한 체인에 따라 토큰의 타입 및 응답이 다를 수 있습니다.
+summary: Get Token Transfers by Account
+operationId: getTokenTransfersByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronXrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmTronXrplNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - title: Evm (Ethereum, Optimism, ...)
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
+                  relation:
+                    $ref: ../../components/parameters/common/RelationParameter.yaml
+                  contractAddresses:
+                    $ref: ../../components/parameters/evm/EvmTokenContractAddressesParameter.yaml
+
+                  #  Web3 Data API 통합, Kaia에만 적용되는 파라미터 (fromBlock, toBlock) - 체인별 파일에서는 변경 필요
+                  fromBlock:
+                    $ref: ../../components/parameters/kaia/KaiaFromBlockParameter.yaml
+                  toBlock:
+                    $ref: ../../components/parameters/kaia/KaiaToBlockParameter.yaml
+
+                  fromDate:
+                    $ref: ../../components/parameters/evm/EvmFromDateParameter.yaml
+                  toDate:
+                    $ref: ../../components/parameters/evm/EvmToDateParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+              - type: object
+                properties:
+                  withZeroValue:
+                    $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
+                  withFunction:
+                    $ref: ../../components/parameters/common/WithFunctionParameter.yaml
+            default:
+              accountAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+              fromDate: "2025-05-01T00:00:00+00:00"
+              toDate: "2025-07-01T00:00:00+00:00"
+              withZeroValue: true
+              withFunction: true
+          - title: Tron
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+                  fromBlock:
+                    $ref: ../../components/parameters/tron/TronFromBlockParameter.yaml
+                  toBlock:
+                    $ref: ../../components/parameters/tron/TronToBlockParameter.yaml
+                  fromDate:
+                    $ref: ../../components/parameters/tron/TronFromDateParameter.yaml
+                  toDate:
+                    $ref: ../../components/parameters/tron/TronToDateParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+              - type: object
+                properties:
+                  withZeroValue:
+                    $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
+            default:
+              accountAddress: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+              fromDate: "2025-05-01T00:00:00+00:00"
+              toDate: "2025-07-01T00:00:00+00:00"
+              withZeroValue: true
+              withFunction: true
+          - title: XRPL
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/xrpl/XrplAccountAddressParameter.yaml
+                  fromLedger:
+                    $ref: ../../components/parameters/xrpl/XrplFromLedgerParameter.yaml
+                  toLedger:
+                    $ref: ../../components/parameters/xrpl/XrplToLedgerParameter.yaml
+                  fromDate:
+                    $ref: ../../components/parameters/xrpl/XrplFromDateParameter.yaml
+                  toDate:
+                    $ref: ../../components/parameters/xrpl/XrplToDateParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+            default:
+              accountAddress: "rMwjYedjc7qqsPS4i5J2Ps9vcyQKqJ4Ao"
+              fromDate: "2025-05-01T00:00:00+00:00"
+              toDate: "2025-07-01T00:00:00+00:00"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Evm (Ethereum, Optimism, ...)
+                        allOf:
+                          - $ref: ../../components/schemas/evm/EvmTransfer.yaml
+                          - type: object
+                            properties:
+                              contract:
+                                allOf:
+                                  - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                                  - $ref: ../../components/schemas/evm/EvmTokenMeta.yaml
+                      - title: Tron
+                        allOf:
+                          - $ref: ../../components/schemas/tron/TronTransfer.yaml
+                          - type: object
+                            properties:
+                              contract:
+                                allOf:
+                                  - $ref: ../../components/schemas/tron/TronContractMeta.yaml
+                                  - $ref: ../../components/schemas/tron/TronTokenMeta.yaml
+                      - title: XRPL
+                        $ref: ../../components/schemas/xrpl/XrplTransfer.yaml
+        example:
+          $ref: ../../components/examples/getTokenTransfersByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

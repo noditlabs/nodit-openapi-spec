@@ -1,0 +1,38 @@
+security:
+  - api_key: []
+tags:
+  - Native Token API
+description: |
+  특정 네이티브 토큰의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 네이티브 토큰의 수량이 포함됩니다.
+summary: Get Native Holders
+operationId: getNativeHolders
+parameters:
+  - $ref: ../../components/parameters/chains/TronChainParameter.yaml
+  - $ref: ../../components/parameters/chains/TronNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/parameters/common/PaginationParameter.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - $ref: ../../components/schemas/tron/TronBalance.yaml
+        example:
+          $ref: ../../components/examples/getNativeHolders.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

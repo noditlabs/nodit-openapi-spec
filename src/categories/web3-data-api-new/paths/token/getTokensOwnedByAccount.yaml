@@ -1,0 +1,110 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  특정 Account가 보유한 토큰의 목록을 조회합니다. 조회 결과에는 각 토큰의 보유 수량과 토큰 컨트랙트의 메타데이터가 포함됩니다.
+summary: Get Tokens Owned By Account
+operationId: getTokensOwnedByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronAptosChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmTronAptosNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - title: Evm (Ethereum, Optimism, ...)
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
+                  contractAddresses:
+                    $ref: ../../components/parameters/evm/EvmTokenContractAddressesParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+            default:
+              accountAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              contractAddresses: ["0xdAC17F958D2ee523a2206206994597C13D831ec7"]
+          - title: Tron
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+                  contractAddresses:
+                    $ref: ../../components/parameters/tron/TronTokenContractAddressesParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+            default:
+              accountAddress: "TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N"
+              contractAddresses: ["TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"] # USDT
+          - title: Aptos
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/aptos/AptosAccountAddressParameter.yaml
+                  assetTypes:
+                    type: array
+                    description: |
+                      조회하고자 하는 자산 타입을 배열로 입력합니다.
+                      <strong style="color: red;">*</strong> assetTypes과 linkedAssetTypes는 동시에 사용할 수 없습니다.
+                    minItems: 1
+                    maxItems: 1000
+                    items:
+                      $ref: ../../components/parameters/aptos/AptosAssetTypeParameter.yaml
+                  linkedAssetTypes:
+                    type: array
+                    description: |
+                      조회하고자 하는 자산 타입을 배열로 입력합니다.
+                      <strong style="color: red;">*</strong> assetTypes과 linkedAssetTypes는 동시에 사용할 수 없습니다.
+                    minItems: 1
+                    maxItems: 1000
+                    items:
+                      $ref: ../../components/parameters/aptos/AptosLinkedAssetTypeParameter.yaml
+                default:
+                  accountAddress: "0x51c6abe562e755582d268340b2cf0e2d8895a155dc9b7a7fb5465000d62d770b"
+                  linkedAssetTypes:
+                    [
+                      "0x000000000000000000000000000000000000000000000000000000000000000a",
+                    ]
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Aptos
+                        $ref: ../../components/schemas/aptos/AptosTokenBalanceChangeConditional.yaml
+                      - title: XRPL
+                        $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeConditional.yaml
+        example:
+          $ref: ../../components/examples/getTokenBalanceChangesByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

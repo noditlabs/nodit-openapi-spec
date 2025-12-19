@@ -1,0 +1,60 @@
+security:
+  - api_key: []
+tags:
+  - Token API
+description: |
+  Token 컨트랙트의 name 혹은 symbol과 일치하는 컨트랙트 목록을 조회합니다.
+  가장 최근에 배포된 컨트랙트부터 순서대로 정렬되어 반환됩니다.
+summary: Search Token Contract Metadata By Keyword
+operationId: searchTokenContractMetadataByKeyword
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            properties:
+              keyword:
+                $ref: ../../components/parameters/evm/EvmKeywordParameter.yaml
+                examples:
+                  - "USDT"
+                  - "USDC"
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
+        default:
+          keyword: "USDT"
+          page: 1
+          rpp: 20
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                      - $ref: ../../components/schemas/evm/EvmTokenMeta.yaml
+        example:
+          $ref: ../../components/examples/searchTokenContractMetadataByKeyword.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml
