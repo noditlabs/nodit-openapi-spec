@@ -4,12 +4,11 @@ tags:
   - NFT API
 description: |
   특정 Account가 보유한 NFT의 목록을 조회합니다. 조회 결과에는 각 토큰의 보유 수량과 토큰의 메타데이터가 포함됩니다.
-# TODO: Kaia callout 추가
 summary: Get NFTs Owned by Account
 operationId: getNftsOwnedByAccount
 parameters:
-  - $ref: ../../components/parameters/chains/EvmChain.yaml
-  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -21,14 +20,14 @@ requestBody:
               - accountAddress
             properties:
               accountAddress:
-                $ref: ../../components/parameters/evm/EvmAccountAddress.yaml
+                $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
               contractAddresses:
-                $ref: ../../components/parameters/evm/EvmNftContractAddresses.yaml
-          - $ref: ../../components/parameters/Pagination.yaml
+                $ref: ../../components/parameters/evm/EvmNftContractAddressesParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
           - type: object
             properties:
               withMetadata:
-                $ref: ../../components/parameters/WithMetadata.yaml
+                $ref: ../../components/parameters/common/WithMetadataParameter.yaml
 responses:
   "200":
     description: Successful Response
@@ -36,7 +35,7 @@ responses:
       application/json:
         schema:
           allOf:
-            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
             - type: object
               required:
                 - items

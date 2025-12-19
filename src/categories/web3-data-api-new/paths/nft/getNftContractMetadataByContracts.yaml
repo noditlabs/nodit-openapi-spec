@@ -3,13 +3,12 @@ security:
 tags:
   - NFT API
 description: |
-  특정 NFT 컨트랙트의 메타데이터를 조회합니다. 컨트랙트 메타데이터에는 컨트랙트의 이름, 심볼, 주소, 토큰 수량 등이 포함됩니다.
-# TODO: Kaia callout 추가
+  특정 NFT 컨트랙트의 메타데이터를 조회합니다. 컨트랙트 메타데이터에는 컨트랙트의 이름, 심볼, 주소, 토큰 수량 등이 포함되며, 최대 1000개의 컨트랙트를 조회할 수 있습니다.
 summary: Get NFT Contract Metadata by Contracts
 operationId: getNftContractMetadataByContracts
 parameters:
-  - $ref: ../../components/parameters/chains/EvmChain.yaml
-  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -20,7 +19,7 @@ requestBody:
           - contractAddresses
         properties:
           contractAddresses:
-            $ref: ../../components/parameters/evm/EvmNftContractAddresses.yaml
+            $ref: ../../components/parameters/evm/EvmNftContractAddressesParameter.yaml
 responses:
   "200":
     description: Successful Response

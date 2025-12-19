@@ -4,13 +4,11 @@ tags:
   - NFT API
 description: |
   특정 컨트랙트에서 발행된 NFT의 메타데이터 목록을 조회합니다.
-
-# TODO: Kaia callout 추가
 summary: Get NFT Metadata by Contract
 operationId: getNftMetadataByContract
 parameters:
-  - $ref: ../../components/parameters/chains/EvmChain.yaml
-  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -22,8 +20,8 @@ requestBody:
               - contractAddress
             properties:
               contractAddress:
-                $ref: ../../components/parameters/evm/EvmNftContractAddress.yaml
-          - $ref: ../../components/parameters/Pagination.yaml
+                $ref: ../../components/parameters/evm/EvmNftContractAddressParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
 responses:
   "200":
     description: Successful Response
@@ -31,7 +29,7 @@ responses:
       application/json:
         schema:
           allOf:
-            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
             - type: object
               required:
                 - items

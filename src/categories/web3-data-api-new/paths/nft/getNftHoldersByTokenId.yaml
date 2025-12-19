@@ -4,12 +4,11 @@ tags:
   - NFT API
 description: |
   특정 NFT의 홀더 리스트를 조회합니다. 홀더 리스트에는 홀더의 주소와 홀더가 보유한 NFT의 수량이 포함됩니다.
-# TODO: Kaia callout 추가
 summary: Get NFT Holders by Token ID
 operationId: getNftHoldersByTokenId
 parameters:
-  - $ref: ../../components/parameters/chains/EvmChain.yaml
-  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -22,10 +21,10 @@ requestBody:
               - tokenId
             properties:
               contractAddress:
-                $ref: ../../components/parameters/evm/EvmNftContractAddress.yaml
+                $ref: ../../components/parameters/evm/EvmNftContractAddressParameter.yaml
               tokenId:
-                $ref: ../../components/parameters/evm/EvmNftTokenId.yaml
-          - $ref: ../../components/parameters/Pagination.yaml
+                $ref: ../../components/parameters/evm/EvmNftTokenIdParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
 responses:
   "200":
     description: Successful Response
@@ -33,7 +32,7 @@ responses:
       application/json:
         schema:
           allOf:
-            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
             - type: object
               required:
                 - items

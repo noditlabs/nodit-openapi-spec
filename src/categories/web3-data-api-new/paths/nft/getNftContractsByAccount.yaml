@@ -5,12 +5,11 @@ tags:
 description: |
   특정 Account가 보유한 NFT 잔고를 컨트랙트별로 요약하여 조회합니다. 
   소유한 NFT의 개별 수량 및 메타데이터가 필요한 경우, Get NFT Owned by Account API를 사용하세요.
-# TODO: Kaia callout 추가
 summary: Get NFT Contracts by Account
 operationId: getNftContractsByAccount
 parameters:
-  - $ref: ../../components/parameters/chains/EvmChain.yaml
-  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -22,7 +21,7 @@ requestBody:
               - accountAddress
             properties:
               accountAddress:
-                $ref: ../../components/parameters/evm/EvmAccountAddress.yaml
+                $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
 responses:
   "200":
     description: Successful Response
@@ -30,7 +29,7 @@ responses:
       application/json:
         schema:
           allOf:
-            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
             - type: object
               required:
                 - items

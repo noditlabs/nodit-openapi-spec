@@ -14,7 +14,7 @@ const tags = ["Token API"];
 function getDescription(chain: string): string {
   switch (chain) {
     default:
-      return ``;
+      return `특정 토큰의 전송 목록을 통화(Currency)와 발행자(Issuer)로 필터링하여 조회합니다.`;
   }
 }
 

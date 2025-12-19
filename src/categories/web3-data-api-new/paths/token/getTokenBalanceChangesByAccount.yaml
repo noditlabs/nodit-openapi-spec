@@ -7,8 +7,8 @@ description: |
 summary: Get Token Balance Changes By Account
 operationId: getTokenBalanceChangesByAccount
 parameters:
-  - $ref: ../../components/parameters/chains/AptosXrplChain.yaml
-  - $ref: ../../components/parameters/chains/AptosXrplNetwork.yaml
+  - $ref: ../../components/parameters/chains/AptosXrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/AptosXrplNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -22,15 +22,15 @@ requestBody:
                   - accountAddress
                 properties:
                   accountAddress:
-                    $ref: ../../components/parameters/aptos/AptosAccountAddress.yaml
+                    $ref: ../../components/parameters/aptos/AptosAccountAddressParameter.yaml
                   fromBlock:
-                    $ref: ../../components/parameters/aptos/AptosFromBlock.yaml
+                    $ref: ../../components/parameters/aptos/AptosFromBlockParameter.yaml
                   toBlock:
-                    $ref: ../../components/parameters/aptos/AptosToBlock.yaml
+                    $ref: ../../components/parameters/aptos/AptosToBlockParameter.yaml
                   fromDate:
-                    $ref: ../../components/parameters/aptos/AptosFromDate.yaml
+                    $ref: ../../components/parameters/aptos/AptosFromDateParameter.yaml
                   toDate:
-                    $ref: ../../components/parameters/aptos/AptosToDate.yaml
+                    $ref: ../../components/parameters/aptos/AptosToDateParameter.yaml
               - oneOf:
                   - title: Aptos with assetTypes
                     type: object
@@ -40,7 +40,7 @@ requestBody:
                       assetTypes:
                         type: array
                         items:
-                          $ref: ../../components/parameters/aptos/AptosAssetType.yaml
+                          $ref: ../../components/parameters/aptos/AptosAssetTypeParameter.yaml
                   - title: Aptos with linkedAssetTypes
                     type: object
                     required:
@@ -49,8 +49,14 @@ requestBody:
                       linkedAssetTypes:
                         type: array
                         items:
-                          $ref: ../../components/parameters/aptos/AptosLinkedAssetType.yaml
-              - $ref: ../../components/parameters/Pagination.yaml
+                          $ref: ../../components/parameters/aptos/AptosLinkedAssetTypeParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+            default:
+              accountAddress: "0x51c6abe562e755582d268340b2cf0e2d8895a155dc9b7a7fb5465000d62d770b"
+              linkedAssetTypes:
+                - "0x000000000000000000000000000000000000000000000000000000000000000a"
+              fromDate: "2025-01-01T00:00:00+00:00"
+              toDate: "2025-04-01T00:00:00+00:00"
           - title: XRPL
             allOf:
               - type: object
@@ -58,16 +64,26 @@ requestBody:
                   - accountAddress
                 properties:
                   accountAddress:
-                    $ref: ../../components/parameters/xrpl/XrplAccountAddress.yaml
+                    $ref: ../../components/parameters/xrpl/XrplAccountAddressParameter.yaml
+                  currency:
+                    $ref: ../../components/parameters/xrpl/XrplCurrencyParameter.yaml
+                  issuer:
+                    $ref: ../../components/parameters/xrpl/XrplIssuerParameter.yaml
                   fromLedger:
-                    $ref: ../../components/parameters/xrpl/XrplFromLedger.yaml
+                    $ref: ../../components/parameters/xrpl/XrplFromLedgerParameter.yaml
                   toLedger:
-                    $ref: ../../components/parameters/xrpl/XrplToLedger.yaml
+                    $ref: ../../components/parameters/xrpl/XrplToLedgerParameter.yaml
                   fromDate:
-                    $ref: ../../components/parameters/xrpl/XrplFromDate.yaml
+                    $ref: ../../components/parameters/xrpl/XrplFromDateParameter.yaml
                   toDate:
-                    $ref: ../../components/parameters/xrpl/XrplToDate.yaml
-              - $ref: ../../components/parameters/Pagination.yaml
+                    $ref: ../../components/parameters/xrpl/XrplToDateParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+            default:
+              accountAddress: "rMwjYedjc7qqsPS4i5J2Ps9vcyQKqJ4Ao"
+              currency: "USD"
+              issuer: "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"
+              fromDate: "2025-01-01T00:00:00+00:00"
+              toDate: "2025-04-01T00:00:00+00:00"
 responses:
   "200":
     description: Successful Response
@@ -75,7 +91,7 @@ responses:
       application/json:
         schema:
           allOf:
-            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
             - type: object
               required:
                 - items

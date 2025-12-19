@@ -4,12 +4,11 @@ tags:
   - NFT API
 description: |
   특정 기간동안 발생한 NFT 전송 목록을 조회합니다. 조회 결과에는 컨트랙트 메타데이터와 NFT 메타데이터가 포함됩니다.
-# TODO: Kaia callout 추가
 summary: Get NFT Transfers Within Range
 operationId: getNftTransfersWithinRange
 parameters:
-  - $ref: ../../components/parameters/chains/EvmChain.yaml
-  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -18,23 +17,25 @@ requestBody:
         allOf:
           - type: object
             properties:
+              #  Web3 Data API 통합, Kaia에만 적용되는 파라미터 (fromBlock, toBlock) - 체인별 파일에서는 변경 필요
               fromBlock:
-                $ref: ../../components/parameters/evm/EvmFromBlock.yaml
+                $ref: ../../components/parameters/kaia/KaiaFromBlockParameter.yaml
               toBlock:
-                $ref: ../../components/parameters/evm/EvmToBlock.yaml
+                $ref: ../../components/parameters/kaia/KaiaToBlockParameter.yaml
+
               fromDate:
-                $ref: ../../components/parameters/evm/EvmFromDate.yaml
+                $ref: ../../components/parameters/evm/EvmFromDateParameter.yaml
               toDate:
-                $ref: ../../components/parameters/evm/EvmToDate.yaml
-          - $ref: ../../components/parameters/Pagination.yaml
+                $ref: ../../components/parameters/evm/EvmToDateParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
           - type: object
             properties:
               withMetadata:
-                $ref: ../../components/parameters/WithMetadata.yaml
+                $ref: ../../components/parameters/common/WithMetadataParameter.yaml
               withZeroValue:
-                $ref: ../../components/parameters/WithZeroValue.yaml
+                $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
               withFunction:
-                $ref: ../../components/parameters/WithFunction.yaml
+                $ref: ../../components/parameters/common/WithFunctionParameter.yaml
 responses:
   "200":
     description: Successful Response
@@ -42,7 +43,7 @@ responses:
       application/json:
         schema:
           allOf:
-            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
             - type: object
               required:
                 - items

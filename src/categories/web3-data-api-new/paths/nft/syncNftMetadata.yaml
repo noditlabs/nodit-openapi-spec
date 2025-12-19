@@ -4,13 +4,11 @@ tags:
   - NFT API
 description: |
   특정 NFT 컨트랙트의 메타데이터를 동기화합니다. 최대 100개의 NFT를 동기화할 수 있으며, 동기화까지 최대 10초가 소요될 수 있습니다.
-
-# TODO: Kaia callout 추가
 summary: Sync NFT Metadata
 operationId: syncNftMetadata
 parameters:
-  - $ref: ../../components/parameters/chains/EvmChain.yaml
-  - $ref: ../../components/parameters/chains/EvmNetwork.yaml
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -29,9 +27,9 @@ requestBody:
                 - tokenId
               properties:
                 contractAddress:
-                  $ref: ../../components/parameters/evm/EvmNftContractAddress.yaml
+                  $ref: ../../components/parameters/evm/EvmNftContractAddressParameter.yaml
                 tokenId:
-                  $ref: ../../components/parameters/evm/EvmNftTokenId.yaml
+                  $ref: ../../components/parameters/evm/EvmNftTokenIdParameter.yaml
               examples:
                 - contractAddress: "0x1a9c8182c09f50c8318d769245bea529a223e992"
                   tokenId: "1"

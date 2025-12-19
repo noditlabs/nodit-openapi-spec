@@ -7,8 +7,8 @@ description: |
 summary: Get Token Accounts By Asset Type
 operationId: getTokenAccountsByAssetType
 parameters:
-  - $ref: ../../components/parameters/chains/AptosChain.yaml
-  - $ref: ../../components/parameters/chains/AptosNetwork.yaml
+  - $ref: ../../components/parameters/chains/AptosChainParameter.yaml
+  - $ref: ../../components/parameters/chains/AptosNetworkParameter.yaml
 requestBody:
   required: true
   content:
@@ -22,15 +22,19 @@ requestBody:
                   - assetType
                 properties:
                   assetType:
-                    $ref: ../../components/parameters/aptos/AptosAssetType.yaml
+                    $ref: ../../components/parameters/aptos/AptosAssetTypeParameter.yaml
+                default:
+                  assetType: "0x1::aptos_coin::AptosCoin"
               - title: With linkedAssetType
                 type: object
                 required:
                   - linkedAssetType
                 properties:
                   linkedAssetType:
-                    $ref: ../../components/parameters/aptos/AptosLinkedAssetType.yaml
-          - $ref: ../../components/parameters/Pagination.yaml
+                    $ref: ../../components/parameters/aptos/AptosLinkedAssetTypeParameter.yaml
+                default:
+                  linkedAssetType: "0x000000000000000000000000000000000000000000000000000000000000000a"
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
 responses:
   "200":
     description: Successful Response
@@ -38,7 +42,7 @@ responses:
       application/json:
         schema:
           allOf:
-            - $ref: ../../components/schemas/PaginationResponse.yaml
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
             - type: object
               required:
                 - items
