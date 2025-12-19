@@ -2,6 +2,6 @@ description: Unauthorized
 content:
   application/json:
     schema:
-      $ref: ../schemas/Error.yaml
+      $ref: ../schemas/common/Error.yaml
       example:
         { "code": "AUTHENTICATION_FAILED", "message": "Authentication failed" }

@@ -2,5 +2,5 @@ description: Too Many Requests
 content:
   application/json:
     schema:
-      $ref: ../schemas/Error.yaml
+      $ref: ../schemas/common/Error.yaml
       example: { "code": "TOO_MANY_REQUESTS", "message": "Too many requests" }
