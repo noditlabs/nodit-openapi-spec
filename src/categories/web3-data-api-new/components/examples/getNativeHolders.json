@@ -1,0 +1,27 @@
+{
+  "rpp": 5,
+  "page": 1,
+  "count": 173230654,
+  "items": [
+    {
+      "ownerAddress": "TNMcQVGPzqH9ZfMCSY4PNrukevtDgp24dK",
+      "balance": "8997562062313495"
+    },
+    {
+      "ownerAddress": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+      "balance": "7055238372852047"
+    },
+    {
+      "ownerAddress": "THUE6WTLaEGytFyuGJQUcKc3r245UKypoi",
+      "balance": "1763109998966628"
+    },
+    {
+      "ownerAddress": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+      "balance": "1753313611181136"
+    },
+    {
+      "ownerAddress": "TRzQrtxrEJbSbQNwAsgAHkBMxTX47yNmjo",
+      "balance": "1700079996070209"
+    }
+  ]
+}

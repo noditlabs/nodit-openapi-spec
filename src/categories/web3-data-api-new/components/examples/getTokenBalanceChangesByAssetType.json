@@ -1,0 +1,37 @@
+{
+  "rpp": 2,
+  "page": 1,
+  "count": 3145474938,
+  "items": [
+    {
+      "eventIndex": 0,
+      "subEventIndex": 0,
+      "accountAddress": "0x31deb490728ae8e1a89675ee4c1877af8e5849c526d2c9a64238c49d8ece08a0",
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "changeValue": "-19482",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a",
+      "tokenStandard": "v1",
+      "transferType": "gas_fee",
+      "eventType": "0x1::transaction_fee::FeeStatement",
+      "transactionVersion": 3102713187,
+      "blockHeight": 389662497,
+      "blockTimestamp": 1753172463548,
+      "transactionHash": "0x3ed0f74bca2c44567c746bac39045aa8c9b52d23f88e88a61b26a47f0d697d2c"
+    },
+    {
+      "eventIndex": 0,
+      "subEventIndex": 0,
+      "accountAddress": "0x31deb490728ae8e1a89675ee4c1877af8e5849c526d2c9a64238c49d8ece08a0",
+      "assetType": "0x1::aptos_coin::AptosCoin",
+      "changeValue": "-17952",
+      "linkedAssetType": "0x000000000000000000000000000000000000000000000000000000000000000a",
+      "tokenStandard": "v1",
+      "transferType": "gas_fee",
+      "eventType": "0x1::transaction_fee::FeeStatement",
+      "transactionVersion": 3102713186,
+      "blockHeight": 389662497,
+      "blockTimestamp": 1753172463548,
+      "transactionHash": "0xab24ee038fa7e6ea6f37d6f4c8a062720de23d6424d5a7264d31ffa8c9e20714"
+    }
+  ]
+}

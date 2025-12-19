@@ -1,0 +1,46 @@
+{
+  "rpp": 3,
+  "count": 63552,
+  "cursor": "eyJsZWRnZXJJbmRleCI6OTM4MTgwNzYsInRyYW5zYWN0aW9uSW5kZXgiOjQ3LCJ0cmFuc2FjdGlvbk1ldGFJbmRleCI6NCwidHJhbnNhY3Rpb25NZXRhU3ViSW5kZXgiOjB9",
+  "items": [
+    {
+      "ledgerIndex": 93818076,
+      "ledgerTimestamp": 1738281491,
+      "transactionIndex": 48,
+      "transactionHash": "6810B7781C45BA4D5DF657EDC41BD5DDEBCED89D6722B5D00CC0C32733DBED1D",
+      "transactionType": "Payment",
+      "affectedNodesIndex": 3,
+      "from": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+      "to": "rM7XX128rYPpsQKvo3qd31xtjatQFSijiw",
+      "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+      "currency": "USD",
+      "value": "95.320296406243"
+    },
+    {
+      "ledgerIndex": 93818076,
+      "ledgerTimestamp": 1738281491,
+      "transactionIndex": 48,
+      "transactionHash": "6810B7781C45BA4D5DF657EDC41BD5DDEBCED89D6722B5D00CC0C32733DBED1D",
+      "transactionType": "Payment",
+      "affectedNodesIndex": 1,
+      "from": "rhubarbMVC2nzASf3qSGQcUKtLnAzqcBjp",
+      "to": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+      "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+      "currency": "USD",
+      "value": "95.51093699905538"
+    },
+    {
+      "ledgerIndex": 93818076,
+      "ledgerTimestamp": 1738281491,
+      "transactionIndex": 47,
+      "transactionHash": "38ED29994F80797419EE81B351A3F0EAE09DFC1B8B9637A343EF741F19F0551E",
+      "transactionType": "Payment",
+      "affectedNodesIndex": 4,
+      "from": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+      "to": "rhubarbMVC2nzASf3qSGQcUKtLnAzqcBjp",
+      "issuer": "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+      "currency": "USD",
+      "value": "95.51093699905538"
+    }
+  ]
+}

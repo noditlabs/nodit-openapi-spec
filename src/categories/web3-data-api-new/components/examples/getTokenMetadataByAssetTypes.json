@@ -1,0 +1,26 @@
+[
+  {
+    "assetType": "0x1::aptos_coin::AptosCoin",
+    "tokenStandard": "v1",
+    "name": "Aptos Coin",
+    "symbol": "APT",
+    "decimals": 8,
+    "totalSupply": "",
+    "maximumSupply": null,
+    "creatorAddress": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "projectURI": "",
+    "iconURI": ""
+  },
+  {
+    "assetType": "0x000000000000000000000000000000000000000000000000000000000000000a",
+    "tokenStandard": "v2",
+    "name": "Aptos Coin",
+    "symbol": "APT",
+    "decimals": 8,
+    "totalSupply": "1553556591615492",
+    "maximumSupply": "340282366920938463463374607431768211455",
+    "creatorAddress": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "projectURI": "",
+    "iconURI": ""
+  }
+]

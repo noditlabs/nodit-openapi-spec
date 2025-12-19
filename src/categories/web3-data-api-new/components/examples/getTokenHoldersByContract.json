@@ -1,0 +1,106 @@
+{
+  "rpp": 20,
+  "cursor": "eyJ2YWx1ZSI6IjUwMDAwMDAxMTAwMDAwMCIsInBrLmFkZHJlc3MiOiIweDY5YTcyMmYwYjVkYTNhZjAyYjRhMjA1ZDZmMGMyODVmNGVkOGYzOTYifQ==",
+  "items": [
+    {
+      "balance": "26975103842768374",
+      "ownerAddress": "0xF977814e90dA44bFA03b6295A0616a897441aceC",
+      "lastTransferredAt": "2025-12-05T20:19:47.000Z"
+    },
+    {
+      "balance": "8984997789442122",
+      "ownerAddress": "0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503",
+      "lastTransferredAt": "2025-10-13T13:24:59.000Z"
+    },
+    {
+      "balance": "4241581591770872",
+      "ownerAddress": "0x6C96dE32CEa08842dcc4058c14d3aaAD7Fa41dee",
+      "lastTransferredAt": "2025-12-17T09:48:59.000Z"
+    },
+    {
+      "balance": "2226003727380451",
+      "ownerAddress": "0x23878914EFE38d27C4D67Ab83ed1b93A74D4086a",
+      "lastTransferredAt": "2025-12-17T09:50:11.000Z"
+    },
+    {
+      "balance": "1952848333854256",
+      "ownerAddress": "0x835678a611B28684005a5e2233695fB6cbbB0007",
+      "lastTransferredAt": "2025-12-16T08:53:35.000Z"
+    },
+    {
+      "balance": "1478053428034663",
+      "ownerAddress": "0xB0A27099582833c0Cb8C7A0565759fF145113d64",
+      "lastTransferredAt": "2025-12-17T03:11:59.000Z"
+    },
+    {
+      "balance": "1351664707826991",
+      "ownerAddress": "0xccDCFC4598F539408fc0393B42905c1e0D24A91E",
+      "lastTransferredAt": "2025-12-17T03:25:35.000Z"
+    },
+    {
+      "balance": "1149272921008092",
+      "ownerAddress": "0x5754284f345afc66a98fbB0a0Afe71e0F007B949",
+      "lastTransferredAt": "2025-12-17T09:37:23.000Z"
+    },
+    {
+      "balance": "1070701603414147",
+      "ownerAddress": "0x28C6c06298d514Db089934071355E5743bf21d60",
+      "lastTransferredAt": "2025-12-17T09:51:23.000Z"
+    },
+    {
+      "balance": "911342593109775",
+      "ownerAddress": "0x5a52E96BAcdaBb82fd05763E25335261B270Efcb",
+      "lastTransferredAt": "2025-12-16T08:47:47.000Z"
+    },
+    {
+      "balance": "882639745602627",
+      "ownerAddress": "0xa7C0D36c4698981FAb42a7d8c783674c6Fe2592d",
+      "lastTransferredAt": "2025-12-12T15:07:23.000Z"
+    },
+    {
+      "balance": "600000027792705",
+      "ownerAddress": "0x6Fb624B48d9299674022a23d92515e76Ba880113",
+      "lastTransferredAt": "2024-12-19T08:33:23.000Z"
+    },
+    {
+      "balance": "600000022292256",
+      "ownerAddress": "0xf59869753f41Db720127Ceb8DbB8afAF89030De4",
+      "lastTransferredAt": "2025-09-07T15:58:59.000Z"
+    },
+    {
+      "balance": "600000002000000",
+      "ownerAddress": "0xc708A1c712bA26DC618f972ad7A187F76C8596Fd",
+      "lastTransferredAt": "2024-12-19T08:33:23.000Z"
+    },
+    {
+      "balance": "580088526627472",
+      "ownerAddress": "0x98ADeF6F2ac8572ec48965509d69A8Dd5E8BbA9D",
+      "lastTransferredAt": "2025-12-17T06:36:47.000Z"
+    },
+    {
+      "balance": "553969276770581",
+      "ownerAddress": "0x18E296053CbDF986196903e889b7DcA7A73882F6",
+      "lastTransferredAt": "2025-12-17T09:51:35.000Z"
+    },
+    {
+      "balance": "535194402450000",
+      "ownerAddress": "0x611f7bF868a6212f871e89F7e44684045DdFB09d",
+      "lastTransferredAt": "2025-11-22T02:41:11.000Z"
+    },
+    {
+      "balance": "500000101010000",
+      "ownerAddress": "0xc5451b523d5FFfe1351337a221688a62806ad91a",
+      "lastTransferredAt": "2024-05-06T08:45:35.000Z"
+    },
+    {
+      "balance": "500000014345000",
+      "ownerAddress": "0x42436286A9c8d63AAfC2eEbBCA193064d68068f2",
+      "lastTransferredAt": "2025-08-18T09:41:11.000Z"
+    },
+    {
+      "balance": "500000011000000",
+      "ownerAddress": "0x69a722f0B5Da3aF02b4a205D6F0c285F4ed8F396",
+      "lastTransferredAt": "2024-05-17T11:41:11.000Z"
+    }
+  ]
+}

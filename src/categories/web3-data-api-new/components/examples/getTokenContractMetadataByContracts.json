@@ -1,0 +1,14 @@
+[
+  {
+    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "deployedTransactionHash": "0x2f1c5c2b44f771e942a8506148e256f94f1a464babc938ae0690c6e34cd79190",
+    "deployedAt": "2017-11-28T00:41:21.000Z",
+    "deployerAddress": "0x36928500Bc1dCd7af6a2B4008875CC336b927D57",
+    "logoUrl": "https://cdn.luniverse.io/img/crypto-currencies/ethereum/mainnet/0xdac17f958d2ee523a2206206994597c13d831ec7/64x64.png",
+    "type": "ERC20",
+    "name": "Tether USD",
+    "symbol": "USDT",
+    "totalSupply": "44005847706828943",
+    "decimals": 18
+  }
+]
