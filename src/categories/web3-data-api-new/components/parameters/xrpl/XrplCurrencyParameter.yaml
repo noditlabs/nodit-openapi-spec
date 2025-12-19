@@ -1,0 +1,15 @@
+type: string
+description: |
+  조회하고자 하는 화폐의 심볼을 지정하는 파라미터로, 예를 들어 "USD"나 "EUR"처럼 ISO-4217 형식의 문자열을 입력할 수 있습니다.
+examples:
+  - "USD"
+  - "EUR"
+  - "KRW"
+  - "JPY"
+  - "CNY"
+  - "GBP"
+  - "AUD"
+  - "CAD"
+  - "CHF"
+  - "NZD"
+  - "SEK"

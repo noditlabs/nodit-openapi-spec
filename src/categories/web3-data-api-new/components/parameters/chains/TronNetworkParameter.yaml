@@ -1,0 +1,10 @@
+name: network
+in: path
+required: true
+schema:
+  type: string
+  description: |
+    조회할 네트워크를 지정하는 파라미터입니다. API에 따라 지원되는 네트워크가 다를 수 있습니다.
+  enum:
+    - mainnet
+  default: mainnet

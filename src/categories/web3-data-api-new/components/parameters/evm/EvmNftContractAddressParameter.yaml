@@ -1,0 +1,9 @@
+type: string
+description: |
+  조회하고자 하는 컨트랙트 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 입력할 수 있습니다.
+pattern: ^0[xX][0-9a-fA-F]{40}$
+examples:
+  - "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D" # BAYC
+  - "0x60E4d786628Fea6478F785A6d7e704777c86a7c6" # MAYC
+  - "0x7E6027a6A84fC1F6Db6782c523EFe62c923e46ff" # RARE_PEPE
+

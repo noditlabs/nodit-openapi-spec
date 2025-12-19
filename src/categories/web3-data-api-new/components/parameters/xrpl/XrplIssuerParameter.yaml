@@ -1,0 +1,8 @@
+type: string
+description: |
+  조회하고자 하는 화폐의 발행자를 지정하는 파라미터로, 25~35자리 길이의 Base58 인코딩 문자열("r"로 시작)을 사용해 발행자 계정 주소를 입력합니다.
+default: "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"
+examples:
+  - "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"
+  - "rMwjYedjc7qqsPS4i5J2Ps9vcyQKqJ4Ao"
+  - "rU95DuX5EzB27h66pQ387CwoPpDd89CnC"

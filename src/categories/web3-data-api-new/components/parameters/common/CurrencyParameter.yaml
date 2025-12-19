@@ -1,0 +1,7 @@
+type: string
+description: |
+  조회하는 Token Price의 화폐 단위를 선택하는 파라미터입니다. USD와 KRW를 지원합니다. 기본 설정 값은 USD 입니다.
+enum:
+  - USD
+  - KRW
+default: "USD"

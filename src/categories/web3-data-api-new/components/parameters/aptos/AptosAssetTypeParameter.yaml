@@ -1,0 +1,10 @@
+type: string
+description: |
+  조회하고자 하는 자산의 타입을 지정하는 파라미터입니다.
+  - Coin: Struct 형식의 자산 ID (e.g. "0x1::aptos_coin::AptosCoin")
+  - Fungible Asset: Token Metadata를 소유한 Object 주소 (e.g. "0xa")
+
+  <strong style="color: red;">*</strong> assetType과 linkedAssetType 중 하나는 필수로 입력해야 하며, 두 파라미터를 동시에 사용할 수 없습니다.
+examples:
+  - "0x1::aptos_coin::AptosCoin"
+  - "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b"

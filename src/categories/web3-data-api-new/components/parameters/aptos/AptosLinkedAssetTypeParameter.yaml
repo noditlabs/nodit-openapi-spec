@@ -1,0 +1,10 @@
+type: string
+pattern: ^0[xX][0-9a-fA-F]{64}$
+description: |
+  Coin과 Fungible Asset를 하나의 자산 단위로 조회하기 위한 공통 식별자입니다.
+
+  linkedAssetType에는 마이그레이션된 FA의 Object 주소를 입력해야 하며, 64자리 16진수("0x" 포함) 형식으로 입력해야 합니다.
+  <strong style="color: red;">*</strong> assetType과 linkedAssetType 중 하나는 필수로 입력해야 하며, 두 파라미터를 동시에 사용할 수 없습니다.
+examples:
+  - "0x000000000000000000000000000000000000000000000000000000000000000a"
+  - "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b"

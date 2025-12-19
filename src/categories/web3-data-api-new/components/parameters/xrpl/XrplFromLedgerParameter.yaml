@@ -1,0 +1,17 @@
+type: string
+description: |
+  조회 시작 원장을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:
+  - ledger index: 10진수 문자열로 원장 번호를 입력.
+  - ledger hash: 64자리 16진수("0x" 포함).
+  - ledger tag: "earliest" 또는 "latest"를 사용하여 첫 번째 원장 또는 최신 원장을 지정.
+
+  <strong style="color: red;">*</strong> 유의사항:
+  - fromLedger의 default 값은 "earliest"입니다.
+  - fromLedger 값은 toLedger 값보다 작거나 같아야 합니다. (fromLedger <= toLedger)
+  - toLedger 없이 fromLedger만 제공되면, 입력한 fromLedger부터 최신 원장까지의 결과가 조회됩니다.
+  - toLedger과 fromLedger에 동일한 값을 입력하면, 입력한 원장 하나의 결과만 조회됩니다.
+  - fromLedger에 "latest"는 toLedger이 "latest"일 때만 허용됩니다.
+
+pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+example: "earliest"
+

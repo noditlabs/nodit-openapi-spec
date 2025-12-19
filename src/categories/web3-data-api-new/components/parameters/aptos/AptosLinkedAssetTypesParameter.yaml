@@ -1,0 +1,8 @@
+type: array
+items:
+  $ref: ./AptosLinkedAssetTypeParameter.yaml
+description: |
+  조회하고자 하는 자산 타입을 배열로 입력합니다.
+  <strong style="color: red;">*</strong> assetTypes과 linkedAssetTypes는 동시에 사용할 수 없습니다.
+minItems: 1
+maxItems: 1000
