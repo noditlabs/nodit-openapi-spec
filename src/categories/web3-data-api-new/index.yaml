@@ -54,12 +54,12 @@ paths:
       $ref: ./paths/nft/syncNftMetadata.yaml
 
   # # Token (ERC20)
-  /{chain}/{network}/token/getTokenAllowance:
-    post:
-      $ref: ./paths/token/getTokenAllowance.yaml
   /{chain}/{network}/token/getTokenAccountsByAssetType:
     post:
       $ref: ./paths/token/getTokenAccountsByAssetType.yaml
+  /{chain}/{network}/token/getTokenAllowance:
+    post:
+      $ref: ./paths/token/getTokenAllowance.yaml
   /{chain}/{network}/token/getTokenBalanceChangesByAccount:
     post:
       $ref: ./paths/token/getTokenBalanceChangesByAccount.yaml
@@ -69,47 +69,47 @@ paths:
   /{chain}/{network}/token/getTokenBalanceChangesWithinRange:
     post:
       $ref: ./paths/token/getTokenBalanceChangesWithinRange.yaml
-  # /{chain}/{network}/token/getTokenContractMetadataByContracts:
-  #   post:
-  #     $ref: ./paths/token/getTokenContractMetadataByContracts.yaml
-  # /{chain}/{network}/token/getTokenHoldersByContract:
-  #   post:
-  #     $ref: ./paths/token/getTokenHoldersByContract.yaml
-  # /{chain}/{network}/token/getTokenMetadataByAssetTypes:
-  #   post:
-  #     $ref: ./paths/token/getTokenMetadataByAssetTypes.yaml
-  # /{chain}/{network}/token/getTokenPairByAssetType:
-  #   post:
-  #     $ref: ./paths/token/getTokenPairByAssetType.yaml
-  # /{chain}/{network}/token/getTokenPricesByContracts:
-  #   post:
-  #     $ref: ./paths/token/getTokenPricesByContracts.yaml
-  # /{chain}/{network}/token/getTokenTransfersByAccount:
-  #   post:
-  #     $ref: ./paths/token/getTokenTransfersByAccount.yaml
-  # /{chain}/{network}/token/getTokenTransfersByContract:
-  #   post:
-  #     $ref: ./paths/token/getTokenTransfersByContract.yaml
-  # /{chain}/{network}/token/getTokenTransfersByCurrencyAndIssuer:
-  #   post:
-  #     $ref: ./paths/token/getTokenTransfersByCurrencyAndIssuer.yaml
-  # /{chain}/{network}/token/getTokenTransfersWithinRange:
-  #   post:
-  #     $ref: ./paths/token/getTokenTransfersWithinRange.yaml
-  # /{chain}/{network}/token/getTokensOwnedByAccount:
-  #   post:
-  #     $ref: ./paths/token/getTokensOwnedByAccount.yaml
-  # /{chain}/{network}/token/searchTokenContractMetadataByKeyword:
-  #   post:
-  #     $ref: ./paths/token/searchTokenContractMetadataByKeyword.yaml
+  /{chain}/{network}/token/getTokenContractMetadataByContracts:
+    post:
+      $ref: ./paths/token/getTokenContractMetadataByContracts.yaml
+  /{chain}/{network}/token/getTokenHoldersByContract:
+    post:
+      $ref: ./paths/token/getTokenHoldersByContract.yaml
+  /{chain}/{network}/token/getTokenMetadataByAssetTypes:
+    post:
+      $ref: ./paths/token/getTokenMetadataByAssetTypes.yaml
+  /{chain}/{network}/token/getTokenPairByAssetType:
+    post:
+      $ref: ./paths/token/getTokenPairByAssetType.yaml
+  /{chain}/{network}/token/getTokenPricesByContracts:
+    post:
+      $ref: ./paths/token/getTokenPricesByContracts.yaml
+  /{chain}/{network}/token/getTokensOwnedByAccount:
+    post:
+      $ref: ./paths/token/getTokensOwnedByAccount.yaml
+  /{chain}/{network}/token/getTokenTransfersByAccount:
+    post:
+      $ref: ./paths/token/getTokenTransfersByAccount.yaml
+  /{chain}/{network}/token/getTokenTransfersByContract:
+    post:
+      $ref: ./paths/token/getTokenTransfersByContract.yaml
+  /{chain}/{network}/token/getTokenTransfersByCurrencyAndIssuer:
+    post:
+      $ref: ./paths/token/getTokenTransfersByCurrencyAndIssuer.yaml
+  /{chain}/{network}/token/getTokenTransfersWithinRange:
+    post:
+      $ref: ./paths/token/getTokenTransfersWithinRange.yaml
+  /{chain}/{network}/token/searchTokenContractMetadataByKeyword:
+    post:
+      $ref: ./paths/token/searchTokenContractMetadataByKeyword.yaml
 
   # # Native Token (ETH, BTC, BNB, etc.)
-  # /{chain}/{network}/native/getNativeBalanceByAccount:
-  #   post:
-  #     $ref: ./paths/native/getNativeBalanceByAccount.yaml
-  # /{chain}/{network}/native/getNativeHolders:
-  #   post:
-  #     $ref: ./paths/native/getNativeHolders.yaml
+  /{chain}/{network}/native/getNativeBalanceByAccount:
+    post:
+      $ref: ./paths/native/getNativeBalanceByAccount.yaml
+  /{chain}/{network}/native/getNativeHolders:
+    post:
+      $ref: ./paths/native/getNativeHolders.yaml
   # /{chain}/{network}/native/getNativeTransfersByAccount:
   #   post:
   #     $ref: ./paths/native/getNativeTransfersByAccount.yaml

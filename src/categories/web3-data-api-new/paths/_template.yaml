@@ -3,7 +3,6 @@ security:
 tags:
   -
 description: |
-
 summary:
 operationId:
 parameters:
