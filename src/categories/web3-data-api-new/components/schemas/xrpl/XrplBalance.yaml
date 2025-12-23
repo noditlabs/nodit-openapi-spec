@@ -1,0 +1,9 @@
+type: object
+required:
+  - ownerAddress
+  - balance
+properties:
+  ownerAddress:
+    $ref: ./XrplOwnerAddress.yaml
+  balance:
+    $ref: ./XrplBalance.yaml

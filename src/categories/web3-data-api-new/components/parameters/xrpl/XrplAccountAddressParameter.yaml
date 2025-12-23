@@ -3,5 +3,5 @@ pattern: ^r[1-9A-HJ-NP-Za-km-z]{25,35}$
 description: |
   조회하고자 하는 Account의 주소를 지정하는 파라미터입니다. "r"로 시작하는 25~35자리 길이의 Base58 인코딩 문자열 형태로 입력할 수 있습니다.
 examples:
-  - "r34HbW9GjC6bUY46VhxR3qJE314YbYjZ1" #
-
+  - "rLs5S1ey8SPnRYeisjMAsJCHYve9yiaUeT"
+  - "rfpG8NYHuMKdCWx8T275rvZBV1wFypudHV"
