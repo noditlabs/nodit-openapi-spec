@@ -1,0 +1,81 @@
+type: object
+required:
+  - senders
+  - recipients
+  - fee
+  - transactionHash
+  - transactionId
+  - blockHeight
+  - blockHash
+  - blockTimestamp
+properties:
+  senders:
+    type: array
+    description: |
+      트랜잭션에 포함된 각 송신자의 세부 정보를 포함한 배열입니다. 각 객체는 송신자의 주소, 송금 금액, 송신자의 인덱스를 포함합니다.
+    items:
+      type: object
+      required:
+        - index
+        - address
+        - value
+      properties:
+        index:
+          type: integer
+          description: |
+            송신자의 인덱스로, 트랜잭션에서 송신자를 고유하게 식별합니다. 0부터 시작하며, 송신자가 여러 명일 경우 순차적으로 부여됩니다.
+        address:
+          type: string
+          description: |
+            송신자의 주소입니다. 송신자가 트랜잭션에서 비트코인을 보내기 위해 사용하는 주소이며, P2PKH, P2SH, Bech32, 또는 Bech32m 등의 형식을 따릅니다.
+        value:
+          type: string
+          description: |
+            송신자가 트랜잭션에서 보낸 금액으로, BTC 단위로 표시됩니다. 금액은 소수점 8자리까지 허용됩니다.
+  recipients:
+    type: array
+    description: |
+      트랜잭션에 포함된 각 수신자의 세부 정보를 포함한 배열입니다. 각 객체는 수신자의 주소, 수령 금액, 수신자의 인덱스를 포함합니다.
+    items:
+      type: object
+      required:
+        - index
+        - address
+        - value
+      properties:
+        index:
+          type: integer
+          description: |
+            수신자의 인덱스로, 트랜잭션에서 수신자를 고유하게 식별합니다. 0부터 시작하며, 수신자가 여러 명일 경우 순차적으로 부여됩니다.
+        address:
+          type: string
+          description: |
+            수신자의 주소입니다. 수신자가 비트코인을 받기 위해 사용하는 주소이며, P2PKH, P2SH, Bech32, 또는 Bech32m 등의 형식을 따릅니다.
+        value:
+          type: string
+          description: |
+            수신자가 트랜잭션에서 받은 금액으로, BTC 단위로 표시됩니다. 금액은 소수점 8자리까지 허용됩니다.
+  fee:
+    type: string
+    description: |
+      트랜잭션 수수료로, 송신자가 트랜잭션을 블록체인 네트워크에 포함시키기 위해 지불한 금액입니다. 금액은 BTC 단위로 표시됩니다.
+  transactionHash:
+    type: string
+    description: |
+      트랜잭션의 고유 해시 값입니다. 트랜잭션 데이터를 기반으로 생성된 64자리 16진수 문자열로, 트랜잭션을 고유하게 식별합니다.
+  transactionId:
+    type: string
+    description: |
+      트랜잭션의 고유 ID입니다. 각 트랜잭션을 고유하게 식별할 수 있는 값으로, 64자리 16진수 문자열로 나타납니다.
+  blockHeight:
+    type: integer
+    description: |
+      트랜잭션이 포함된 블록의 높이를 나타냅니다. 블록체인에서 순서를 나타내는 정수 값입니다.
+  blockHash:
+    type: string
+    description: |
+      트랜잭션이 포함된 블록의 고유 해시 값입니다. SHA-256 알고리즘을 기반으로 생성된 64자리 16진수 문자열로, 블록을 고유하게 식별합니다.
+  blockTimestamp:
+    type: integer
+    description: |
+      트랜잭션이 포함된 블록의 생성 시간입니다. 값은 UNIX 타임스탬프 형식으로, 블록이 생성된 UTC 시간을 초 단위로 나타냅니다.

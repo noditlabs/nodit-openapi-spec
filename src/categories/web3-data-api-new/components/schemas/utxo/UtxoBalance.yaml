@@ -1,0 +1,9 @@
+type: object
+required:
+  - ownerAddress
+  - balance
+properties:
+  ownerAddress:
+    $ref: ./UtxoOwnerAddress.yaml
+  balance:
+    $ref: ./UtxoBalance.yaml
