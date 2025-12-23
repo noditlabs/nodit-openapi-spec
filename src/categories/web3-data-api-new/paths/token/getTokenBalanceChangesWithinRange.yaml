@@ -44,7 +44,7 @@ responses:
                 items:
                   type: array
                   items:
-                    $ref: ../../components/schemas/aptos/AptosTokenBalanceChangeConditional.yaml
+                    $ref: ../../components/schemas/aptos/AptosTokenBalanceChangeInTransaction.yaml
         example:
           $ref: ../../components/examples/getTokenBalanceChangesWithinRange.json
   "400":

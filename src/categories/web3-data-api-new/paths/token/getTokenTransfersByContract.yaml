@@ -101,7 +101,7 @@ responses:
                                   - $ref: ../../components/schemas/evm/EvmTokenMeta.yaml
                       - title: Tron
                         allOf:
-                          - $ref: ../../components/schemas/tron/TronTransfer.yaml
+                          - $ref: ../../components/schemas/tron/TronTokenTransferTrc20.yaml
                           - type: object
                             properties:
                               contract:

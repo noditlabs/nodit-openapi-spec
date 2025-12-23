@@ -59,6 +59,8 @@ requestBody:
                 properties:
                   accountAddress:
                     $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+                  relation:
+                    $ref: ../../components/parameters/common/RelationParameter.yaml
                   fromBlock:
                     $ref: ../../components/parameters/tron/TronFromBlockParameter.yaml
                   toBlock:
@@ -77,7 +79,6 @@ requestBody:
               fromDate: "2025-05-01T00:00:00+00:00"
               toDate: "2025-07-01T00:00:00+00:00"
               withZeroValue: true
-              withFunction: true
           - title: XRPL
             allOf:
               - type: object
@@ -86,6 +87,8 @@ requestBody:
                 properties:
                   accountAddress:
                     $ref: ../../components/parameters/xrpl/XrplAccountAddressParameter.yaml
+                  relation:
+                    $ref: ../../components/parameters/common/RelationParameter.yaml
                   fromLedger:
                     $ref: ../../components/parameters/xrpl/XrplFromLedgerParameter.yaml
                   toLedger:
@@ -126,7 +129,7 @@ responses:
                                   - $ref: ../../components/schemas/evm/EvmTokenMeta.yaml
                       - title: Tron
                         allOf:
-                          - $ref: ../../components/schemas/tron/TronTransfer.yaml
+                          - $ref: ../../components/schemas/tron/TronTokenTransferTrc20.yaml
                           - type: object
                             properties:
                               contract:
