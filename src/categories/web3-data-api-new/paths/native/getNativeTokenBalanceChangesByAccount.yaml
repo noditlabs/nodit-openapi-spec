@@ -1,0 +1,64 @@
+security:
+  - api_key: []
+tags:
+  - Native Token API
+description: |
+  특정 계정의 네이티브 토큰(XRP) 잔고 변동 내역을 조회합니다.
+summary: Get Native Token Balance Changes By Account
+operationId: getNativeTokenBalanceChangesByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/XrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/XrplNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            required:
+              - accountAddress
+            properties:
+              accountAddress:
+                $ref: ../../components/parameters/xrpl/XrplAccountAddressParameter.yaml
+              fromLedger:
+                $ref: ../../components/parameters/xrpl/XrplFromLedgerParameter.yaml
+              toLedger:
+                $ref: ../../components/parameters/xrpl/XrplToLedgerParameter.yaml
+              fromDate:
+                $ref: ../../components/parameters/xrpl/XrplFromDateParameter.yaml
+              toDate:
+                $ref: ../../components/parameters/xrpl/XrplToDateParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
+        default:
+          accountAddress: "rLs5S1ey8SPnRYeisjMAsJCHYve9yiaUeT"
+          fromDate: "2025-01-01T00:00:00+00:00"
+          toDate: "2025-04-01T00:00:00+00:00"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeRequired.yaml
+        example:
+          $ref: ../../components/examples/getTokenBalanceChangesByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

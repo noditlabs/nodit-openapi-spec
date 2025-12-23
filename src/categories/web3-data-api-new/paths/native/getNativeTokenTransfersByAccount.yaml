@@ -1,0 +1,72 @@
+security:
+  - api_key: []
+tags:
+  - Native Token API
+description: |
+  특정 주소와 관련된 네이티브 토큰 전송 내역을 조회합니다.
+summary: Get Native Token Transfers by Account
+operationId: getNativeTokenTransfersByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/UtxoChainParameter.yaml
+  - $ref: ../../components/parameters/chains/UtxoNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            required:
+              - accountAddress
+            properties:
+              accountAddress:
+                $ref: ../../components/parameters/utxo/UtxoAccountAddressParameter.yaml
+              relation:
+                $ref: ../../components/parameters/common/RelationParameter.yaml
+              fromBlock:
+                $ref: ../../components/parameters/utxo/UtxoFromBlockParameter.yaml
+              toBlock:
+                $ref: ../../components/parameters/utxo/UtxoToBlockParameter.yaml
+              fromDate:
+                $ref: ../../components/parameters/utxo/UtxoFromDateParameter.yaml
+              toDate:
+                $ref: ../../components/parameters/utxo/UtxoToDateParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
+          - type: object
+            properties:
+              withZeroValue:
+                $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
+        default:
+          accountAddress: "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+          relation: "both"
+          fromDate: "2025-05-01T00:00:00+00:00"
+          toDate: "2025-07-01T00:00:00+00:00"
+          withZeroValue: true
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/utxo/UtxoTokenTransfer.yaml
+        example:
+          $ref: ../../components/examples/getNativeTokenTransfersByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

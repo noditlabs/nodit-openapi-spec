@@ -1,0 +1,51 @@
+security:
+  - api_key: []
+tags:
+  - Native Token API
+description: |
+  특정 Account가 보유한 네이티브 토큰의 잔고를 조회합니다.
+summary: Get Native Token Balance By Account
+operationId: getNativeTokenBalanceByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/UtxoXrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/UtxoXrplNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - accountAddress
+        properties:
+          accountAddress:
+            oneOf:
+              - title: UTXO (Bitcoin, Dogecoin, Bitcoin Cash, ...)
+                $ref: ../../components/parameters/utxo/UtxoAccountAddressParameter.yaml
+                default: "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+              - title: XRPL
+                $ref: ../../components/parameters/xrpl/XrplAccountAddressParameter.yaml
+                default: "rLs5S1ey8SPnRYeisjMAsJCHYve9yiaUeT"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - title: UTXO (Bitcoin, Dogecoin, Bitcoin Cash, ...)
+              $ref: ../../components/schemas/utxo/UtxoBalance.yaml
+            - title: XRPL
+              $ref: ../../components/schemas/xrpl/XrplBalance.yaml
+        example:
+          $ref: ../../components/examples/getNativeBalanceByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml
