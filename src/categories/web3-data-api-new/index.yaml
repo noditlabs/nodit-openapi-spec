@@ -110,18 +110,18 @@ paths:
   /{chain}/{network}/native/getNativeHolders:
     post:
       $ref: ./paths/native/getNativeHolders.yaml
-  # /{chain}/{network}/native/getNativeTransfersByAccount:
-  #   post:
-  #     $ref: ./paths/native/getNativeTransfersByAccount.yaml
-  # /{chain}/{network}/native/getNativeTokenBalanceByAccount:
-  #   post:
-  #     $ref: ./paths/native/getNativeTokenBalanceByAccount.yaml
-  # /{chain}/{network}/native/getNativeTokenBalanceChangesByAccount:
-  #   post:
-  #     $ref: ./paths/native/getNativeTokenBalanceChangesByAccount.yaml
-  # /{chain}/{network}/native/getNativeTokenTransfersByAccount:
-  #   post:
-  #     $ref: ./paths/native/getNativeTokenTransfersByAccount.yaml
+  /{chain}/{network}/native/getNativeTransfersByAccount:
+    post:
+      $ref: ./paths/native/getNativeTransfersByAccount.yaml
+  /{chain}/{network}/native/getNativeTokenBalanceByAccount:
+    post:
+      $ref: ./paths/native/getNativeTokenBalanceByAccount.yaml
+  /{chain}/{network}/native/getNativeTokenBalanceChangesByAccount:
+    post:
+      $ref: ./paths/native/getNativeTokenBalanceChangesByAccount.yaml
+  /{chain}/{network}/native/getNativeTokenTransfersByAccount:
+    post:
+      $ref: ./paths/native/getNativeTokenTransfersByAccount.yaml
   # /{chain}/{network}/native/getNativeTransfersWithinRange:
   #   post:
   #     $ref: ./paths/native/getNativeTransfersWithinRange.yaml
