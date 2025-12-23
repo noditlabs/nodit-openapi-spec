@@ -1,0 +1,51 @@
+type: object
+required:
+  - from
+  - to
+  - value
+  - blockTimestamp
+  - blockNumber
+  - transactionHash
+  - transactionIndex
+  - internalTransactionIndex
+  - exchangeId
+properties:
+  from:
+    $ref: ./TronAccountAddress.yaml
+    description: |
+      토큰을 전송한 주소를 나타내는 필드입니다. 이 필드는 "T"로 시작하는 34자리 base58 문자열 형식을 가집니다.
+  to:
+    $ref: ./TronAccountAddress.yaml
+    description: |
+      토큰을 전송받은 주소를 나타내는 필드입니다. 이 필드는 "T"로 시작하는 34자리 base58 문자열 형식을 가집니다.
+  value:
+    type: string
+    description: |
+      전송된 자산의 양 또는 데이터를 나타냅니다. TRC10, TRC20의 경우 전송된 금액을 의미합니다.
+  blockTimestamp:
+    type: integer
+    description: |
+      토큰 전송이 포함된 블록이 생성된 시간을 나타내는 필드입니다. 밀리초 단위의 UNIX 타임스탬프 형식으로 기록되며, 이를 통해 트랜잭션 발생 시점을 확인할 수 있습니다.
+  blockNumber:
+    type: integer
+    description: |
+      토큰 전송이 포함된 블록 번호를 나타내는 필드입니다.
+  transactionHash:
+    type: string
+    description: |
+      토큰 전송 트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형식으로 제공됩니다.
+  transactionIndex:
+    type: integer
+    description: |
+      토큰 전송 트랜잭션이 포함된 블록 내에서의 위치를 나타냅니다. 여러 트랜잭션이 있는 블록에서 해당 트랜잭션의 순서를 식별하는 데 사용됩니다.
+  internalTransactionIndex:
+    type: integer
+    description: |
+      TRX 또는 TRC10 전송과 관련된 내부 트랜잭션의 인덱스를 나타냅니다. 블록 내에서 여러 내부 트랜잭션이 있는 경우 이를 구분하는 데 사용됩니다.
+      <strong style='color: red;'>*</strong> 이 값이 "-1"인 경우, Root Transaction을 의미합니다.
+  exchangeId:
+    type:
+      - integer
+      - "null"
+    description: |
+      트론 네트워크에서 제공하는 탈중앙화 거래소(DEX)의 교환 거래(Swap)를 식별하는 고유 ID입니다. 이 ID를 통해 특정 교환 트랜잭션을 구분하고, 어떤 자산 페어에서 거래가 이루어졌는지 추적할 수 있습니다. 교환 거래로 인한 전송이 아닌 경우, null을 반환합니다.
