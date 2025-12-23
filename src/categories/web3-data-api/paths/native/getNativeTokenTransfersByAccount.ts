@@ -87,13 +87,14 @@ function getOpIdAndParams(chain: string): {
           // utxo
           "bitcoin",
           "dogecoin",
+          "bitcoincash",
         ]),
         Requests.network("mainnet", [
           "mainnet",
           // "sepolia",
           // "hoodi",
           // "amoy",
-          "testnet",
+          // "testnet",
         ]),
       ],
     };
@@ -148,7 +149,7 @@ function getRequestAndResponse(chain: string): {
           ],
         },
         successResponse: {
-          schema: Domains.Bitcoin.Balance,
+          schema: Domains.Bitcoin.Transfer,
           example: Examples.Bitcoin[endpoint],
         },
       };

@@ -3,16 +3,14 @@ import { Patterns } from "../../../../patterns";
 
 export const address: OpenAPIV3.SchemaObject = {
   type: "string",
-  description:
-    "조회하고자 하는 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 입력할 수 있습니다.",
+  description: "조회하고자 하는 주소를 지정하는 파라미터입니다.",
   pattern: Patterns.bitcoin.address.source,
   example: "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
 };
 
 export const accountAddress: OpenAPIV3.SchemaObject = {
   type: "string",
-  description:
-    "조회하고자 하는 계정의 주소를 지정하는 파라미터입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 입력할 수 있습니다.",
+  description: "조회하고자 하는 계정의 주소를 지정하는 파라미터입니다.",
   pattern: Patterns.bitcoin.address.source,
   example: "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
 };
