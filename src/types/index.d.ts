@@ -167,6 +167,7 @@ declare interface ReadmeApiSpec {
   lastSynced: string;
   type: string;
   id: string;
+  filename?: string; // v2 API uses filename for updates
   category: {
     title: string;
     slug: string;

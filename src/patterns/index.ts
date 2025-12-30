@@ -16,7 +16,7 @@ export const Patterns = {
   // Readme Docs
   readme: {
     docs: {
-      version: new RegExp(`^(main|\\d+\\.\\d+\\.\\d+)$`),
+      version: new RegExp(`^(main|\\d+(?:\\.\\d+){0,2})$`), // main, x, x.x, or x.x.x
       id: new RegExp(`^${HEXA}{24}$`),
     },
   },

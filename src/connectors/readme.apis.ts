@@ -13,8 +13,21 @@ import FormData from "form-data";
 import fs from "fs";
 dotenv.config();
 
-const baseUrl = "https://dash.readme.com/api/v1";
+const baseUrl = "https://api.readme.com/v2";
 const readmeApiKey = process.env.README_API_KEY;
+
+// Helper function to normalize version for URL path
+function getVersionPath(version: string): string {
+  // "stable" or version number handling
+  if (version === "main" || version === "stable") {
+    return "stable";
+  }
+  // Remove 'v' prefix if present, but keep the version as-is (e.g., "0.2.21")
+  const cleaned = version.replace(/^v/, "");
+  // For v2 API, versions might need to be URL encoded or formatted differently
+  // Try the version as-is first
+  return cleaned;
+}
 
 export class ReadmeApi {
   /* API Specification */
@@ -29,23 +42,102 @@ export class ReadmeApi {
     version: string;
   }): Promise<ReadmeApiSpec[]> {
     try {
+      const versionPath = getVersionPath(version);
       const response = await axios.request({
         baseURL: baseUrl,
-        url: "/api-specification",
+        url: `/branches/${versionPath}/apis`,
         method: "GET",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
-          "x-readme-version": `${version}`,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
         params: {
           page,
           perPage,
         },
       });
-      return response.data;
+
+      // Debug: log response structure
+      if (process.env.DEBUG) {
+        console.log(
+          "API Response structure:",
+          JSON.stringify(response.data, null, 2)
+        );
+      }
+
+      // v2 API returns data wrapped in a data object or items array
+      // Try different possible response structures
+      const data = response.data as any;
+      let specs: any[] = [];
+
+      if (data?.data && Array.isArray(data.data)) {
+        specs = data.data;
+      } else if (data?.items && Array.isArray(data.items)) {
+        specs = data.items;
+      } else if (Array.isArray(data)) {
+        specs = data;
+      }
+
+      // Debug: log first spec structure (always log if specs found but titles are empty)
+      if (specs.length > 0) {
+        const firstSpec = specs[0];
+        // If title is missing, log the structure to help debug
+        if (!firstSpec.title && !firstSpec.name) {
+          console.log(
+            "First spec structure (no title found):",
+            JSON.stringify(firstSpec, null, 2)
+          );
+        }
+      }
+
+      // v2 API uses different structure:
+      // - filename instead of title (e.g., "web3-data-api.json")
+      // - uri instead of _id (e.g., "/branches/0.2.21/apis/web3-data-api.json")
+      // - No direct _id or id field
+      return specs.map((spec: any) => {
+        // Extract title from filename (remove .json extension)
+        const filename = spec.filename || "";
+        const title = filename.replace(/\.(json|yaml|yml)$/i, "");
+
+        // Extract ID from URI (last part - keep extension for v2 API)
+        const uri = spec.uri || "";
+        const uriFilename = uri.split("/").pop() || "";
+
+        // For v2 API, we need to store the full filename with extension for updates
+        // But also keep the base name for matching
+        const baseId = uriFilename.replace(/\.(json|yaml|yml)$/i, "");
+        const fullFilename = filename || uriFilename;
+
+        // Use legacy_id if available, otherwise use full filename
+        const id = spec.legacy_id || fullFilename;
+
+        return {
+          title: spec.title || title || "",
+          source:
+            typeof spec.source === "string"
+              ? spec.source
+              : spec.source?.current || "",
+          // Store full filename for v2 API updates
+          _id: spec._id || spec.legacy_id || fullFilename || baseId || "",
+          version: spec.version || "",
+          lastSynced:
+            spec.lastSynced || spec.last_synced || spec.updated_at || "",
+          type: spec.type || "",
+          id: id || baseId || "",
+          category: spec.category || {},
+          // Store original filename for reference
+          filename: fullFilename,
+        };
+      });
     } catch (error: any) {
       console.error("Error getting metadata:", error.message);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+      }
       return [];
     }
   }
@@ -60,25 +152,61 @@ export class ReadmeApi {
   }): Promise<ReadmeApiSpecResponse | null> {
     const formData = new FormData();
     const fileData = fs.createReadStream(filePath);
-    formData.append("spec", fileData, {});
+    // v2 API uses "schema" field instead of "spec"
+    formData.append("schema", fileData, {});
 
     try {
-      const response: AxiosResponse<ReadmeApiSpecResponse> =
-        await axios.request({
-          baseURL: baseUrl,
-          url: "/api-specification",
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: readmeApiKey,
-            "content-type": "multipart/form-data",
-            "x-readme-version": `${version}`,
-          },
-          data: formData,
-        });
-      return response.data;
+      const versionPath = getVersionPath(version);
+      const response: AxiosResponse<any> = await axios.request({
+        baseURL: baseUrl,
+        url: `/branches/${versionPath}/apis`,
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${readmeApiKey}`,
+          ...formData.getHeaders(), // Let FormData set the content-type with boundary
+        },
+        data: formData,
+      });
+
+      // Debug: log response structure
+      if (process.env.DEBUG) {
+        console.log(
+          "Upload API Response structure:",
+          JSON.stringify(response.data, null, 2)
+        );
+      }
+
+      // v2 API returns data wrapped in a data object
+      const data = (response.data as any)?.data || response.data;
+
+      // v2 API response structure: filename, uri, legacy_id, etc.
+      // Extract ID from various possible fields
+      const result: any = {
+        _id:
+          data?._id ||
+          data?.legacy_id ||
+          data?.filename ||
+          data?.uri?.split("/").pop() ||
+          "",
+        title:
+          data?.title ||
+          data?.filename?.replace(/\.(json|yaml|yml)$/i, "") ||
+          "",
+        filename: data?.filename || "",
+        uri: data?.uri || "",
+      };
+
+      return result;
     } catch (error: any) {
       console.error("Error uploading specification:", error.message);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+      }
       return null;
     }
   }
@@ -87,45 +215,84 @@ export class ReadmeApi {
   static async updateSpecification({
     filePath,
     id,
+    version,
   }: {
     filePath: string;
     id: string;
+    version?: string;
   }): Promise<ReadmeApiSpecResponse | null> {
-    const formData = new FormData();
-    const fileData = fs.createReadStream(filePath);
-    formData.append("spec", fileData);
-
     try {
+      // For update, we need version to construct the URL
+      // v2 API uses filename with extension in the URL
+      const versionPath = version ? getVersionPath(version) : "stable";
+
+      // Ensure ID has extension for v2 API
+      // v2 API requires the full filename with extension in the URL
+      let apiId = id;
+      if (!apiId.includes(".")) {
+        apiId = `${apiId}.json`;
+      }
+
+      // Always log for debugging
+      console.log(`Updating API spec: /branches/${versionPath}/apis/${apiId}`);
+      console.log(`ID received: "${id}", API ID used: "${apiId}"`);
+
+      const formData = new FormData();
+      const fileData = fs.createReadStream(filePath);
+
+      // v2 API uses "schema" field instead of "spec"
+      // Use the apiId (with extension) as the filename
+      formData.append("schema", fileData, {
+        filename: apiId,
+      });
+
       const response: AxiosResponse<ReadmeApiSpecResponse> =
         await axios.request({
           baseURL: baseUrl,
-          url: `/api-specification/${id}`,
+          url: `/branches/${versionPath}/apis/${apiId}`,
           method: "PUT",
           headers: {
             Accept: "application/json",
-            Authorization: readmeApiKey,
-            "content-type": "multipart/form-data",
+            Authorization: `Bearer ${readmeApiKey}`,
+            ...formData.getHeaders(), // Let FormData set the content-type with boundary
           },
           data: formData,
         });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error("Error updating specification:", error.message);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+        console.error("Request URL:", error.config?.url);
+        console.error("Request method:", error.config?.method);
+      }
       return null;
     }
   }
 
   // Delete API specification(https://docs.readme.com/main/reference/deleteapispecification)
-  static async deleteApiSpec({ id }: { id: string }) {
+  static async deleteApiSpec({
+    id,
+    version,
+  }: {
+    id: string;
+    version?: string;
+  }) {
     try {
+      const versionPath = version ? getVersionPath(version) : "stable";
       await axios.request({
         baseURL: baseUrl,
-        url: `/api-specification/${id}`,
+        url: `/branches/${versionPath}/apis/${id}`,
         method: "DELETE",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: readmeApiKey,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
       });
       console.log(`Deleted API Specification: ${id}`);
@@ -139,26 +306,30 @@ export class ReadmeApi {
   // Validate API Spec(https://docs.readme.com/main/reference/validateapispecification)
   static async validateSpecification({
     filePath,
+    version,
   }: {
     filePath: string;
+    version?: string;
   }): Promise<any> {
     const formData = new FormData();
     const fileData = fs.createReadStream(filePath);
     formData.append("spec", fileData, {});
 
     try {
+      const versionPath = version ? getVersionPath(version) : "stable";
       const response = await axios.request({
         baseURL: baseUrl,
-        url: "/api-validation",
+        url: `/branches/${versionPath}/apis/validate`,
         method: "POST",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
+          Authorization: `Bearer ${readmeApiKey}`,
           "content-type": "multipart/form-data",
         },
         data: formData,
       });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error("Error validating specification:", error.message);
       return null;
@@ -177,18 +348,19 @@ export class ReadmeApi {
     version: string;
   }): Promise<Category[]> {
     try {
+      const versionPath = getVersionPath(version);
       const response: AxiosResponse<Category[]> = await axios.request({
         baseURL: baseUrl,
-        url: `/categories`,
+        url: `/branches/${versionPath}/categories`,
         method: "GET",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
-          "x-readme-version": `${version}`,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
         params: { page, perPage },
       });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data || [];
     } catch (error: any) {
       console.error("Error getting all categories:", error.message);
       return [];
@@ -204,17 +376,18 @@ export class ReadmeApi {
     version: string;
   }): Promise<Category | null> {
     try {
+      const versionPath = getVersionPath(version);
       const response: AxiosResponse<Category> = await axios.request({
         baseURL: baseUrl,
-        url: `/categories/${slug}`,
+        url: `/branches/${versionPath}/categories/${slug}`,
         method: "GET",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
-          "x-readme-version": `${version}`,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
       });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error(`The category ${slug} does not exist.`, error.message);
       return null;
@@ -230,14 +403,14 @@ export class ReadmeApi {
     version: string;
   }) {
     try {
+      const versionPath = getVersionPath(version);
       await axios.request({
         baseURL: baseUrl,
-        url: `/categories/${slug}`,
+        url: `/branches/${versionPath}/categories/${slug}`,
         method: "DELETE",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
-          "x-readme-version": `${version}`,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
       });
       console.log(`Deleted Category: ${slug}`);
@@ -257,21 +430,22 @@ export class ReadmeApi {
     version: string;
   }): Promise<DocInfo[]> {
     try {
+      const versionPath = getVersionPath(version);
       const response: AxiosResponse<DocInfo[]> = await axios.request({
         baseURL: baseUrl,
-        url: `/categories/${slug}/docs`,
+        url: `/branches/${versionPath}/categories/${slug}/docs`,
         method: "GET",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
-          "x-readme-version": `${version}`,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
       });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data || [];
     } catch (error: any) {
       console.error(
         `The docs for category ${slug} does not exist.`,
-        error.message,
+        error.message
       );
       return [];
     }
@@ -288,22 +462,23 @@ export class ReadmeApi {
     version: string;
   }): Promise<Category | null> {
     try {
+      const versionPath = getVersionPath(version);
       const response: AxiosResponse<Category> = await axios.request({
         baseURL: baseUrl,
-        url: `/categories/`,
+        url: `/branches/${versionPath}/categories`,
         method: "POST",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
+          Authorization: `Bearer ${readmeApiKey}`,
           "content-type": "application/json",
-          "x-readme-version": `${version}`,
         },
         data: {
           title,
           type,
         },
       });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error(`Error creating category ${title}:`, error.message);
       return null;
@@ -320,19 +495,20 @@ export class ReadmeApi {
     options: ReadmeDocOption;
   }): Promise<ReadmeDocResponse.RootObject | null> {
     try {
+      const versionPath = getVersionPath(version);
       const response: AxiosResponse<ReadmeDocResponse.RootObject> =
         await axios.request({
           baseURL: baseUrl,
-          url: `/docs`,
+          url: `/branches/${versionPath}/docs`,
           method: "POST",
           headers: {
             Accept: "application/json",
-            Authorization: readmeApiKey,
-            "x-readme-version": `${version}`,
+            Authorization: `Bearer ${readmeApiKey}`,
           },
           data: options,
         });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error(`Error creating doc ${options.title}:`, error.message);
       return null;
@@ -348,18 +524,19 @@ export class ReadmeApi {
     version: string;
   }): Promise<ReadmeDocResponse.RootObject | null> {
     try {
+      const versionPath = getVersionPath(version);
       const response: AxiosResponse<ReadmeDocResponse.RootObject> =
         await axios.request({
           baseURL: baseUrl,
-          url: `/docs/${slug}`,
+          url: `/branches/${versionPath}/docs/${slug}`,
           method: "GET",
           headers: {
             Accept: "application/json",
-            Authorization: readmeApiKey,
-            "x-readme-version": `${version}`,
+            Authorization: `Bearer ${readmeApiKey}`,
           },
         });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error(`The doc ${slug} does not exist.`, error.message);
       return null;
@@ -377,19 +554,20 @@ export class ReadmeApi {
     options: ReadmeDocOption;
   }): Promise<ReadmeDocResponse.RootObject | null> {
     try {
+      const versionPath = getVersionPath(version);
       const response: AxiosResponse<ReadmeDocResponse.RootObject> =
         await axios.request({
           baseURL: baseUrl,
-          url: `/docs/${slug}`,
+          url: `/branches/${versionPath}/docs/${slug}`,
           method: "PUT",
           headers: {
             Accept: "application/json",
-            Authorization: readmeApiKey,
-            "x-readme-version": `${version}`,
+            Authorization: `Bearer ${readmeApiKey}`,
           },
           data: options,
         });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error(`Error updating doc ${slug}:`, error.message);
       return null;
@@ -399,14 +577,14 @@ export class ReadmeApi {
   // delete doc (https://docs.readme.com/main/reference/deletedoc)
   static async deleteDoc({ slug, version }: { slug: string; version: string }) {
     try {
+      const versionPath = getVersionPath(version);
       await axios.request({
         baseURL: baseUrl,
-        url: `/docs/${slug}`,
+        url: `/branches/${versionPath}/docs/${slug}`,
         method: "DELETE",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
-          "x-readme-version": `${version}`,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
       });
       console.log(`Deleted Doc: ${slug}`);
@@ -421,14 +599,15 @@ export class ReadmeApi {
     try {
       const response: AxiosResponse<ReadmeVersionData[]> = await axios.request({
         baseURL: baseUrl,
-        url: `/versions`,
+        url: `/branches`,
         method: "GET",
         headers: {
           Accept: "application/json",
-          Authorization: readmeApiKey,
+          Authorization: `Bearer ${readmeApiKey}`,
         },
       });
-      return response.data;
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data || [];
     } catch (error: any) {
       console.error("Error getting all versions:", error.message);
       return [];

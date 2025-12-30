@@ -148,12 +148,36 @@ export async function getAllFlattenedDocs({
 
 // 모든 API 스펙을 불러오는 함수
 export async function getAllApiSpecs({ version }: { version: string }) {
-  const allSpecs = await fetchAllPages<ReadmeApiSpec>({
-    fetchFunction: (params) => ReadmeApi.getMetadata(params),
-    params: { version },
-  });
+  try {
+    const allSpecs = await fetchAllPages<ReadmeApiSpec>({
+      fetchFunction: (params) => ReadmeApi.getMetadata(params),
+      params: { version },
+    });
 
-  return allSpecs;
+    // Debug: log fetched specs
+    if (process.env.DEBUG) {
+      console.log(
+        `Fetched ${allSpecs.length} API specs for version ${version}`
+      );
+      if (allSpecs.length > 0) {
+        console.log("Sample spec:", JSON.stringify(allSpecs[0], null, 2));
+      }
+    }
+
+    return allSpecs;
+  } catch (error: any) {
+    console.error("Error in getAllApiSpecs:", error.message);
+    return [];
+  }
+}
+
+// Normalize title for comparison (convert to lowercase, remove special chars)
+function normalizeTitle(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 // API Spec의 ID를 찾는 함수
@@ -165,14 +189,62 @@ export async function findApiSpecId({
   title: string;
 }) {
   const allSpecs = await getAllApiSpecs({ version });
-  const spec = allSpecs.find((spec) => spec.title === title);
+
+  // Normalize the search title
+  const normalizedSearchTitle = normalizeTitle(title);
+
+  // Debug: log all spec titles when not found or in debug mode
+  if (process.env.DEBUG || allSpecs.length === 0) {
+    console.log(`Found ${allSpecs.length} API specs for version ${version}`);
+    if (allSpecs.length > 0) {
+      // Log first few specs for debugging
+      console.log(
+        "First 3 specs:",
+        JSON.stringify(allSpecs.slice(0, 3), null, 2)
+      );
+      const titles = allSpecs.map((s) => s.title).filter((t) => t);
+      console.log(
+        `Available titles (${titles.length} non-empty):`,
+        titles.slice(0, 10).join(", ") || "NONE"
+      );
+      console.log(`Searching for normalized title: "${normalizedSearchTitle}"`);
+    }
+  }
+
+  // Try exact match first
+  let spec = allSpecs.find((spec) => spec.title === title);
+
+  // If not found, try normalized comparison
+  if (!spec) {
+    spec = allSpecs.find(
+      (spec) => normalizeTitle(spec.title) === normalizedSearchTitle
+    );
+  }
 
   if (!spec) {
     console.log(`API specification with the title "${title}" not found.`);
+    if (allSpecs.length > 0) {
+      const titles = allSpecs
+        .map((s) => s.title)
+        .filter((t) => t)
+        .slice(0, 20);
+      console.log(`Available titles (first 20): ${titles.join(", ")}`);
+    }
     return null;
   }
 
-  return spec._id;
+  // v2 API uses filename-based ID, need to return the full filename with extension
+  // The ID should be the filename (e.g., "web3-data-api.json")
+  const id = spec._id || spec.id || "";
+  // If we have filename stored, use it (includes extension)
+  if (spec.filename) {
+    return spec.filename;
+  }
+  // Otherwise, try to add .json extension if not present
+  if (id && !id.match(/\.(json|yaml|yml)$/i)) {
+    return `${id}.json`;
+  }
+  return id;
 }
 
 // 메인 버전을 불러오는 함수
