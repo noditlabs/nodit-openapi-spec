@@ -31,7 +31,11 @@
     "sui-bundle": "ts-node ./src/categories/sui-node-api/scripts/bundle_methods.ts",
     "sui-validate": "ts-node ./src/categories/sui-node-api/scripts/validate_oas.ts",
     "create-links": "ts-node ./src/scripts/create-links.ts",
-    "delete-links": "ts-node ./src/scripts/delete-links.ts"
+    "delete-links": "ts-node ./src/scripts/delete-links.ts",
+    "bundle": "ts-node ./src/scripts-new/bundle.ts",
+    "upload": "ts-node ./src/scripts-new/upload.ts",
+    "update-new": "ts-node ./src/scripts-new/update.ts",
+    "delete-new": "ts-node ./src/scripts-new/delete.ts"
   },
   "keywords": [],
   "author": "",
