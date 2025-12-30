@@ -92,7 +92,7 @@ function getOpIdAndParams(chain: string): {
           // "sepolia",
           // "hoodi",
           // "amoy",
-          "testnet",
+          // "testnet",
         ]),
       ],
     };
