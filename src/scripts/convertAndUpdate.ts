@@ -65,6 +65,7 @@ async function main() {
     const result = await ReadmeApi.updateSpecification({
       filePath: outputPath,
       id: apiDefinitionId,
+      version: versionInput,
     });
 
     if (!result) {

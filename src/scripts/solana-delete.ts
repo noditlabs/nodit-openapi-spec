@@ -90,6 +90,7 @@ async function main() {
 
       const deleteApiSpecResult = await ReadmeApi.deleteApiSpec({
         id: apiSpec.id,
+        version: versionInput,
       });
 
       if (deleteApiSpecResult) {
