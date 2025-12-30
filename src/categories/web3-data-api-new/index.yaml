@@ -122,9 +122,9 @@ paths:
   /{chain}/{network}/native/getNativeTokenTransfersByAccount:
     post:
       $ref: ./paths/native/getNativeTokenTransfersByAccount.yaml
-  # /{chain}/{network}/native/getNativeTransfersWithinRange:
-  #   post:
-  #     $ref: ./paths/native/getNativeTransfersWithinRange.yaml
+  /{chain}/{network}/native/getNativeTransfersWithinRange:
+    post:
+      $ref: ./paths/native/getNativeTransfersWithinRange.yaml
 
   # # Blockchain (Block, Transaction, Internal Transaction, etc.)
   # /{chain}/{network}/blockchain/getBlockByHashOrNumber:
