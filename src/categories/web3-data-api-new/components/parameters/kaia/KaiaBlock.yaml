@@ -1,4 +1,0 @@
-allOf:
-  - $ref: ../evm/EvmBlock.yaml
-  - type: object
-    properties:
