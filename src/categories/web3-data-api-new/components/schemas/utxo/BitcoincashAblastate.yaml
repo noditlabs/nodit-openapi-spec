@@ -1,0 +1,30 @@
+type: object
+description: |
+  ABLA(Adaptive Block Limit Algorithm) 상태값입니다. ABLA 활성화 이후 블록에서만 제공될 수 있으며, 제공되는 경우 내부 필드는 모두 존재합니다.
+required:
+  - epsilon
+  - beta
+  - blockSize
+  - blockSizeLimit
+  - nextBlockSizeLimit
+properties:
+  epsilon:
+    type: integer
+    description: |
+      ABLA(Adaptive Block Limit Algorithm) 알고리즘의 엡실론 파라미터입니다. 블록 크기 조정의 민감도를 제어하는 값입니다.
+  beta:
+    type: integer
+    description: |
+      ABLA 알고리즘의 베타 파라미터입니다. 블록 크기 증가율을 제한하는 감쇠 계수입니다.
+  blockSize:
+    type: integer
+    description: |
+      현재 블록의 실제 크기(바이트 단위)입니다. 블록에 포함된 트랜잭션 데이터의 총 크기를 나타냅니다.
+  blockSizeLimit:
+    type: integer
+    description: |
+      현재 블록에 적용되는 최대 크기 제한(바이트 단위)입니다. ABLA 알고리즘에 의해 동적으로 조정됩니다.
+  nextBlockSizeLimit:
+    type: integer
+    description: |
+      다음 블록에 적용될 예상 최대 크기 제한(바이트 단위)입니다. 현재 블록의 사용률을 기반으로 ABLA가 계산한 값입니다.

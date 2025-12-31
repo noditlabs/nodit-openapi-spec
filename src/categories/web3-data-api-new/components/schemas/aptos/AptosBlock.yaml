@@ -1,0 +1,57 @@
+type: object
+description: |
+  Aptos 블록 정보입니다.
+required:
+  - hash
+  - height
+  - timestamp
+  - firstVersion
+  - lastVersion
+  - transactionsCount
+  - transactions
+properties:
+  hash:
+    type: string
+    description: |
+      블록의 고유 식별 해시값을 나타내는 필드입니다.
+      해당 블록의 모든 데이터를 포함하여 계산된 암호학적 해시값으로, 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+      블록의 무결성을 검증하고 블록을 고유하게 식별하는 데 사용됩니다.
+  height:
+    type: integer
+    description: |
+      블록의 높이를 나타내는 필드입니다.
+      제네시스 블록(0)부터 시작하여 순차적으로 증가하는 정수값으로, 블록체인의 길이와 특정 블록의 위치를 나타내는 지표로 사용됩니다.
+      블록 높이는 체인 내에서 블록의 상대적 위치를 식별하고 블록 순서를 결정하는 데 사용됩니다.
+  timestamp:
+    type: integer
+    description: |
+      블록이 생성된 시간을 나타내는 필드입니다.
+      마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공되며, 블록의 생성 순서와 시간 추적에 사용됩니다.
+      블록 타임스탬프는 트랜잭션의 시간 순서를 보장하고 블록 생성 간격을 측정하는 데 활용됩니다.
+  firstVersion:
+    type: integer
+    description: |
+      블록에 포함된 트랜잭션들 중 가장 먼저 처리된 트랜잭션의 version 번호를 나타내는 필드입니다.
+      Aptos에서 각 트랜잭션은 고유한 version 번호를 가지며, 이는 트랜잭션의 전체 실행 순서를 나타냅니다.
+      firstVersion과 lastVersion을 통해 블록 내 트랜잭션들의 version 범위를 확인할 수 있습니다.
+  lastVersion:
+    type: integer
+    description: |
+      블록에 포함된 트랜잭션들 중 마지막으로 처리된 트랜잭션의 version 번호를 나타내는 필드입니다.
+      firstVersion과 함께 블록 내 트랜잭션들의 version 범위를 정의하며, 이를 통해 블록 내 모든 트랜잭션을 순차적으로 조회할 수 있습니다.
+  transactionsCount:
+    type: integer
+    description: |
+      블록에 포함된 총 트랜잭션의 개수를 나타내는 필드입니다.
+      블록의 크기와 처리량을 이해하는 데 중요한 지표가 되며, 블록 내 모든 유형의 트랜잭션(사용자 트랜잭션, 시스템 트랜잭션 등)을 포함합니다.
+      이 값은 lastVersion - firstVersion + 1과 동일합니다.
+  transactions:
+    type: array
+    description: |
+      블록에 포함된 모든 트랜잭션의 version 번호 목록을 나타내는 필드입니다.
+      각 version 번호는 해당 트랜잭션의 고유 식별자로 사용되며, firstVersion부터 lastVersion까지 순차적으로 정렬되어 있습니다.
+      이 목록을 통해 블록 내 개별 트랜잭션의 상세 정보를 조회할 수 있습니다.
+    items:
+      type: integer
+      description: |
+        각 트랜잭션의 version 번호를 나타내는 필드입니다.

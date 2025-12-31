@@ -1,0 +1,87 @@
+type: object
+required:
+  - hash
+  - height
+  - version
+  - timestamp
+  - nonce
+  - bits
+  - difficulty
+  - merkleRoot
+  - transactionCount
+  - size
+  - weight
+  - previousBlockHash
+  - nextBlockHash
+  - medianTime
+  - strippedSize
+  - transactions
+properties:
+  hash:
+    type: string
+    description: |
+      블록을 고유하게 식별하는 SHA-256 해시 값입니다. 블록 헤더의 정보를 조합하여 생성되며, 블록체인 내에서 중복되지 않는 식별자입니다.
+  height:
+    type: integer
+    description: |
+      블록체인에서 블록의 위치를 나타내는 번호입니다. 제네시스 블록은 0번으로 시작하며, 이후 블록들은 1씩 증가합니다.
+  version:
+    type: integer
+    description: |
+      블록의 버전 번호로, 네트워크에서 사용되는 블록 검증 규칙을 식별하는 데 사용됩니다. 새로운 기능이 추가되면 버전이 업데이트됩니다.
+  timestamp:
+    type: integer
+    description: |
+      블록 생성 시간을 나타내며, UNIX 타임스탬프로 표시됩니다.
+  nonce:
+    type: integer
+    description: |
+      작업증명(Proof-of-Work) 알고리즘에서 사용되는 값으로, 유효한 블록 해시를 찾기 위해 여러 번 변경되는 변수입니다.
+  bits:
+    type: string
+    description: |
+      블록 해시가 만족해야 하는 난이도 목표 값으로, 압축된 32비트 16진수로 표현됩니다. 이 값은 네트워크의 채굴 난이도에 따라 변합니다.
+  difficulty:
+    type: string
+    description: |
+      블록의 난이도를 나타내며, 초기 목표 값과 현재 목표 값의 비율로 계산됩니다. 이 값은 채굴의 상대적인 난이도를 반영합니다.
+  merkleRoot:
+    type: string
+    description: |
+      블록에 포함된 모든 트랜잭션들의 해시를 조합하여 생성된 머클 루트 해시 값입니다. 이 값은 블록 검증 과정에서 블록 내용의 무결성을 확인하는 데 사용됩니다.
+  transactionCount:
+    type: integer
+    description: |
+      블록에 포함된 트랜잭션의 개수를 나타내는 필드입니다.
+  size:
+    type: integer
+    description: |
+      블록의 전체 크기로, 헤더와 트랜잭션 데이터를 포함한 바이트 단위 값입니다. 이 값은 블록 데이터를 저장하는 데 필요한 실제 디스크 공간을 나타냅니다.
+  weight:
+    type: integer
+    description: |
+      SegWit 데이터를 고려하여 BIP-141에 정의된 방식으로 계산된 블록의 가중치입니다.
+  previousBlockHash:
+    type: string
+    description: |
+      이전 블록의 해시 값으로, 블록체인 내에서 블록 간의 연결을 유지합니다. 제네시스 블록의 경우 이 값은 null입니다.
+  nextBlockHash:
+    type: string
+    description: |
+      다음 블록의 해시 값으로, 가장 최신 블록의 경우 이 값은 null입니다. 이는 체인의 끝을 나타냅니다.
+  medianTime:
+    type: integer
+    description: |
+      최근 11개의 블록 타임스탬프의 중간값입니다. 시간의 변동성을 줄이고 보다 안정적인 블록 시간을 제공하기 위해 사용됩니다.
+  strippedSize:
+    type: integer
+    description: |
+      SegWit 데이터를 제외한 블록의 크기입니다. 바이트 단위로 측정되며, 순수한 트랜잭션 데이터와 헤더 크기를 나타냅니다.
+  transactions:
+    type: array
+    description: |
+      블록에 포함된 트랜잭션의 해시 값 배열입니다. 각 트랜잭션은 고유한 해시 값으로 식별됩니다.
+    items:
+      type: string
+      description: |
+        각 트랜잭션을 고유하게 식별하는 SHA-256 해시 값입니다.
