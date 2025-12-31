@@ -15,7 +15,7 @@ schema:
     - kaia
     - optimism
     - polygon
-    - tron
     - luniverse
+    - tron
     - xrpl
   default: ethereum

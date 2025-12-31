@@ -14,8 +14,8 @@ schema:
     - `kaia`: mainnet, kairos
     - `optimism`: mainnet, sepolia
     - `polygon`: mainnet, amoy
-    - `tron`: mainnet
     - `luniverse`: mainnet
+    - `tron`: mainnet
   enum:
     - mainnet
     - sepolia
