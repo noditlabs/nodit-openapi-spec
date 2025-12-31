@@ -13,7 +13,9 @@ async function getYamlTitle(yamlFilePath: string): Promise<string> {
     return doc.info?.title || "";
   } catch (error) {
     throw new Error(
-      `Error reading YAML file: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Error reading YAML file: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
     );
   }
 }
@@ -28,10 +30,11 @@ function validateInputs(
     );
   }
 
-  if (!yamlFilePathInput.endsWith(".yaml") && !yamlFilePathInput.endsWith(".yml")) {
-    throw new Error(
-      "Error: The file must have a .yaml or .yml extension."
-    );
+  if (
+    !yamlFilePathInput.endsWith(".yaml") &&
+    !yamlFilePathInput.endsWith(".yml")
+  ) {
+    throw new Error("Error: The file must have a .yaml or .yml extension.");
   }
 
   if (!versionInput) {
@@ -104,11 +107,12 @@ async function main() {
     );
   } catch (error) {
     console.error(
-      `Error: ${error instanceof Error ? error.message : "An unknown error occurred."}`
+      `Error: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
     );
     process.exit(1);
   }
 }
 
 main();
-

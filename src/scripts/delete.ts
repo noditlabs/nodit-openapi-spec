@@ -13,25 +13,28 @@ async function getYamlTitle(yamlFilePath: string): Promise<string> {
     return doc.info?.title || "";
   } catch (error) {
     throw new Error(
-      `Error reading YAML file: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Error reading YAML file: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
     );
   }
 }
 
 function validateInputs(
   yamlFilePathInput?: string,
-  versionInput?: string,
+  versionInput?: string
 ): [string, string] {
   if (!yamlFilePathInput) {
     throw new Error(
-      "Error: A '.yaml' file path is required as the first argument.",
+      "Error: A '.yaml' file path is required as the first argument."
     );
   }
 
-  if (!yamlFilePathInput.endsWith(".yaml") && !yamlFilePathInput.endsWith(".yml")) {
-    throw new Error(
-      "Error: The file must have a .yaml or .yml extension."
-    );
+  if (
+    !yamlFilePathInput.endsWith(".yaml") &&
+    !yamlFilePathInput.endsWith(".yml")
+  ) {
+    throw new Error("Error: The file must have a .yaml or .yml extension.");
   }
 
   if (!versionInput) {
@@ -51,7 +54,7 @@ async function main() {
   try {
     const currentWorkingDir = process.cwd();
     const [yamlFilePathInput, versionInput] = validateInputs(
-      ...process.argv.slice(2),
+      ...process.argv.slice(2)
     );
 
     const yamlFilePath = path.resolve(currentWorkingDir, yamlFilePathInput);
@@ -106,7 +109,9 @@ async function main() {
       console.error("API Error Response Data:", error.response.data);
     }
     console.error(
-      `Error: ${error instanceof Error ? error.message : "An unknown error occurred."}`
+      `Error: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
     );
     process.exit(1);
   }

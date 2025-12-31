@@ -13,7 +13,9 @@ async function getYamlTitle(yamlFilePath: string): Promise<string> {
     return doc.info?.title || "";
   } catch (error) {
     throw new Error(
-      `Error reading YAML file: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Error reading YAML file: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
     );
   }
 }
@@ -28,10 +30,11 @@ function validateInputs(
     );
   }
 
-  if (!yamlFilePathInput.endsWith(".yaml") && !yamlFilePathInput.endsWith(".yml")) {
-    throw new Error(
-      "Error: The file must have a .yaml or .yml extension."
-    );
+  if (
+    !yamlFilePathInput.endsWith(".yaml") &&
+    !yamlFilePathInput.endsWith(".yml")
+  ) {
+    throw new Error("Error: The file must have a .yaml or .yml extension.");
   }
 
   if (!versionInput) {
@@ -80,8 +83,10 @@ async function main() {
 
     // If upload fails with 409 (already exists), try to update instead
     if (!result) {
-      console.log(`⚠️  API specification already exists. Attempting to update...`);
-      
+      console.log(
+        `⚠️  API specification already exists. Attempting to update...`
+      );
+
       // Find API specification ID by title
       const apiDefinitionId = await findApiSpecId({
         version: versionInput,
@@ -117,7 +122,11 @@ async function main() {
       );
     } else {
       // Extract ID from various possible fields (v2 API structure)
-      const id = result._id || (result as any).filename || (result as any).uri?.split("/").pop() || "N/A";
+      const id =
+        result._id ||
+        (result as any).filename ||
+        (result as any).uri?.split("/").pop() ||
+        "N/A";
 
       console.log(
         `✅ Successfully uploaded API specification: ${title} (ID: ${id})!`
@@ -125,11 +134,12 @@ async function main() {
     }
   } catch (error) {
     console.error(
-      `Error: ${error instanceof Error ? error.message : "An unknown error occurred."}`
+      `Error: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
     );
     process.exit(1);
   }
 }
 
 main();
-
