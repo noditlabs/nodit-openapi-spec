@@ -1,0 +1,64 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 해시 혹은 블록넘버로 조회한 블록의 특정 정보를 반환합니다.
+summary: Get Block by Hash or Number
+operationId: getBlockByHashOrNumber
+parameters:
+  - $ref: ../../components/parameters/chains/EvmUtxoAptosChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmUtxoAptosNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - block
+        properties:
+          block:
+            oneOf:
+              - title: Aptos
+                $ref: ../../components/parameters/aptos/AptosBlockParameter.yaml
+              - title: Bitcoin, Dogecoin
+                $ref: ../../components/parameters/utxo/UtxoBlockParameter.yaml
+              - title: Bitcoincash
+                $ref: ../../components/parameters/utxo/UtxoBlockParameter.yaml
+              - title: Evm (Ethereum, Optimism, ...)
+                $ref: ../../components/parameters/kaia/KaiaBlockParameter.yaml # Kaia 하드포크로 인한 안내 문구 포함
+        default:
+          block: "latest"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - title: Aptos
+              $ref: ../../components/schemas/aptos/AptosBlock.yaml
+            - title: Bitcoin, Dogecoin
+              $ref: ../../components/schemas/utxo/UtxoBlock.yaml
+            - title: Bitcoincash
+              allOf:
+                - $ref: ../../components/schemas/utxo/UtxoBlock.yaml
+                - type: object
+                  properties:
+                    ablastate:
+                      $ref: ../../components/schemas/utxo/BitcoincashAblastate.yaml
+            - title: EVM (Ethereum, Optimism, ...)
+              $ref: ../../components/schemas/evm/EvmBlock.yaml
+        example:
+          $ref: ../../components/examples/getBlockByHashOrNumber.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml
