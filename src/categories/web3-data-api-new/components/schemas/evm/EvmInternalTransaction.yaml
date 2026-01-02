@@ -1,0 +1,75 @@
+type: object
+required:
+  - traceId
+  - traceIndex
+  - transactionHash
+  - transactionIndex
+  - from
+  - to
+  - value
+  - traceType
+  - callType
+  - gas
+  - gasUsed
+  - status
+  - blockNumber
+  - timestamp
+properties:
+  traceId:
+    type: string
+    description: |
+      트랜잭션의 트레이스 ID를 나타내는 필드입니다. 트랜잭션의 깊이와 호출 순서에 따라 고유한 값을 가집니다.
+
+      네이밍 규칙: \`call_{blockNumber}_{transactionIndex}_{depth1's callOrder}_{depth2's callOrder}_{...}\`
+  traceIndex:
+    type: integer
+    description: |
+      트랜잭션의 트레이스 인덱스를 나타내는 필드입니다. external transaction의 경우 0을 반환합니다.
+  transactionHash:
+    type: string
+    description: |
+      트랜잭션의 해시를 나타내는 필드입니다. 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+  transactionIndex:
+    type: string
+    description: |
+      트랜잭션의 인덱스를 나타내는 필드입니다. 블록 내에서의 순서를 나타냅니다. 10진수 문자열 형태로 제공됩니다.
+  from:
+    type: string
+    description: |
+      트랜잭션을 발생시킨 주소를 나타내는 필드입니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 제공됩니다.
+  to:
+    type: string
+    description: |
+      트랜잭션의 수신 주소를 나타내는 필드입니다. 컨트랙트 생성 트랜잭션의 경우, 이 필드는 생성된 컨트랙트 주소를 반환합니다. 0x로 시작하는 40자리의 16진수 문자열 형태로 제공됩니다.
+  value:
+    type: string
+    description: |
+      트랜잭션의 값을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  traceType:
+    type: string
+    description: |
+      트랜잭션의 트레이스 타입을 나타내는 필드입니다. 예를 들어, 'call', 'create', 'selfdestruct' 등의 값이 반환될 수 있습니다
+  callType:
+    type: string
+    description: |
+      트랜잭션의 호출 타입을 나타내는 필드입니다. 예를 들어, 'call', 'delegatecall', 'staticcall' 등의 값이 반환될 수 있습니다.
+  gas:
+    type: string
+    description: |
+      트랜잭션의 가스 사용량을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  gasUsed:
+    type: string
+    description: |
+      트랜잭션의 가스 사용량을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  status:
+    type: string
+    description: |
+      트랜잭션의 상태를 나타내는 필드입니다. 1이면 성공, 0이면 실패를 나타냅니다. 10진수 문자열 형태로 제공됩니다.
+  blockNumber:
+    type: integer
+    description: |
+      트랜잭션이 포함된 블록 번호를 나타내는 필드입니다.
+  timestamp:
+    type: integer
+    description: |
+      트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.

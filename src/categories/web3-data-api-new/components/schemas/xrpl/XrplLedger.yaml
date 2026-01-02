@@ -1,0 +1,66 @@
+type: object
+required:
+  - ledgerHash
+  - ledgerIndex
+  - ledgerIndex
+  - ledgerTimestamp
+  - parentLedgerHash
+  - accountHash
+  - totalCoins
+  - transactionHash
+  - transactionsCount
+  - transactions
+properties:
+  ledgerHash:
+    type: string
+    description: |
+      Ledger의 고유 식별 값으로, 256비트(64자리 16진수) 암호화 해시값입니다. Ledger의 데이터 무결성 검증 및 식별에 사용됩니다.
+    example: "655EB9D740CC572BFFEC725ABB0AA0D813AAF01C91F8577076F29258794D9445"
+  ledgerIndex:
+    type: integer
+    description: |
+      Ledger의 생성 순서를 나타내는 정수값으로, 네트워크 상에서 해당 Ledger의 위치(시퀀스 번호)를 확인하는 데 사용됩니다.
+    example: 95444296
+  ledgerTimestamp:
+    type: integer
+    description: |
+      Ledger의 close time을 실제 타임스탬프로 변환한 값입니다.
+      Ledger header에 기록된 close time은 Ripple Epoch(2000년 1월 1일 00:00 UTC)부터 경과한 초 단위로 표현되며, Unix Epoch(1970년 1월 1일 00:00 UTC) 기준과는 946,684,800초의 차이가 있습니다. 따라서 ledgerTimestamp는 기록된 close time에 946,684,800초를 더해 변환한 Unix 타임스탬프입니다.
+    example: 1744608171
+  parentLedgerHash:
+    type: string
+    description: |
+      해당 Ledger의 직전 Ledger를 식별하는 256비트(64자리 16진수) 해시값입니다. 체인 구조의 무결성 유지를 위해 이전 Ledger의 해시값을 참조합니다.
+    example: "45E963AA7A3BB017D626D088C91E6C646B6BBF558DD027AAD974CBBE9A3977D3"
+  accountHash:
+    type: string
+    description: |
+      Ledger에 기록된 모든 계정 상태 정보를 요약한 256비트(64자리 16진수) 해시값입니다. 계정 상태 정보의 무결성 검증 및 식별에 활용됩니다.
+    example: "43DA3A81948A7392D14E4DDFB8215372C4B0590E3B28691C599296E4478B12AC"
+  totalCoins:
+    type: string
+    description: |
+      Ledger에 기록된 계정들이 소유한 XRP의 총 수량(XRP 단위)를 나타냅니다. 이 값은 트랜잭션 수수료로 소각된 XRP를 제외한 값이며, 일부 계정이 '블랙홀'(키가 존재하지 않는 계정) 상태이기 때문에 실제 유통 중인 XRP의 수는 이 값보다 더 낮을 수 있습니다.
+    example: "99986231517.566048"
+  transactionHash:
+    type: string
+    description: |
+      Ledger 내 포함된 모든 트랜잭션 데이터를 요약한 256비트(64자리 16진수) Merkle tree 루트 해시값입니다. 트랜잭션 내역의 무결성 검증에 사용됩니다.
+    example: "8BAD7583234AC463E09D6CF160E352DFF5B008FC071DD5226A53809D89E7F409"
+  transactionsCount:
+    type: integer
+    description: |
+      Ledger에 포함된 트랜잭션의 총 개수를 나타내는 정수값입니다. Ledger 내 트랜잭션 내역의 규모 및 활성도를 파악하는 데 활용됩니다.
+    example: 40
+  transactions:
+    type: array
+    description: |
+      Ledger에 포함된 트랜잭션의 해시값들의 배열입니다. 각 해시값은 트랜잭션을 고유하게 식별하는 256비트(64자리 16진수) 암호화 해시값이며, 트랜잭션 데이터의 무결성 및 식별에 사용됩니다.
+    items:
+      type: string
+    example:
+      [
+        "044CD9B107E209F24F5342393F34493E7AFE99AE6F5051F2D75E186F07E1EAE8",
+        "0D1DDF6974EA31918EB531F9212FC76BC47BCE9193839496474010D133C0BB1E",
+        "1069423CDB7F19E082E6F418C779B19A0126B593832016D134A679EFB752CF0A",
+      ]

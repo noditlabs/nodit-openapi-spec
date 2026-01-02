@@ -1,0 +1,28 @@
+type: object
+required:
+  - high
+  - average
+  - low
+  - latestBlock
+  - baseFee
+properties:
+  high:
+    type: string
+    description: |
+      현재 Gas Price의 최고가를 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  average:
+    type: string
+    description: |
+      현재 Gas Price의 평균가를 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  low:
+    type: string
+    description: |
+      현재 Gas Price의 최저가를 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  latestBlock:
+    type: string
+    description: |
+      최신 블록을 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
+  baseFee:
+    type: string
+    description: |
+      최신 블록의 기본 수수료를 나타내는 필드입니다. 10진수 문자열 형태로 제공됩니다.
