@@ -1,0 +1,30 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  현재 Gas Price를 조회합니다.
+summary: Get Gas Price
+operationId: getGasPrice
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/evm/EvmGasPrice.yaml
+        example:
+          $ref: ../../components/examples/getGasPrice.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

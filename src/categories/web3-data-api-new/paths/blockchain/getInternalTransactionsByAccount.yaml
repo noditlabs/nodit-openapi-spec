@@ -1,0 +1,117 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 Account와 관련된 internal transaction 리스트를 조회합니다.
+summary: Get Internal Transactions By Account
+operationId: getInternalTransactionsByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmTronNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - title: EVM (Ethereum, Optimism, ...)
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
+                  relation:
+                    $ref: ../../components/parameters/common/RelationParameter.yaml
+
+                  #  Web3 Data API 통합, Kaia에만 적용되는 파라미터 (fromBlock, toBlock) - 체인별 파일에서는 변경 필요
+                  fromBlock:
+                    $ref: ../../components/parameters/evm/AllEvmFromBlockParameter.yaml
+                  toBlock:
+                    $ref: ../../components/parameters/evm/AllEvmToBlockParameter.yaml
+
+                  fromDate:
+                    $ref: ../../components/parameters/evm/EvmFromDateParameter.yaml
+                  toDate:
+                    $ref: ../../components/parameters/evm/EvmToDateParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+              - type: object
+                properties:
+                  withZeroValue:
+                    $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
+                  withExternalTransaction:
+                    $ref: ../../components/parameters/common/WithExternalTransactionParameter.yaml
+            default:
+              accountAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+              fromDate: "2025-05-01T00:00:00+00:00"
+              toDate: "2025-07-01T00:00:00+00:00"
+              withZeroValue: true
+              withFunction: true
+          - title: Tron
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+                  relation:
+                    $ref: ../../components/parameters/common/RelationParameter.yaml
+
+                  #  Web3 Data API 통합, Kaia에만 적용되는 파라미터 (fromBlock, toBlock) - 체인별 파일에서는 변경 필요
+                  fromBlock:
+                    $ref: ../../components/parameters/tron/TronFromBlockParameter.yaml
+                  toBlock:
+                    $ref: ../../components/parameters/tron/TronToBlockParameter.yaml
+
+                  fromDate:
+                    $ref: ../../components/parameters/tron/TronFromDateParameter.yaml
+                  toDate:
+                    $ref: ../../components/parameters/tron/TronToDateParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+              - type: object
+                properties:
+                  withZeroValue:
+                    $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
+                  withExternalTransaction:
+                    $ref: ../../components/parameters/common/WithExternalTransactionParameter.yaml
+            default:
+              accountAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+              fromDate: "2025-05-01T00:00:00+00:00"
+              toDate: "2025-07-01T00:00:00+00:00"
+              withZeroValue: true
+              withFunction: true
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: EVM (Ethereum, Optimism, ...)
+                        $ref: ../../components/schemas/evm/EvmInternalTransaction.yaml
+                      - title: Tron
+                        $ref: ../../components/schemas/tron/TronInternalTransaction.yaml
+        example:
+          $ref: ../../components/examples/getInternalTransactionsByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

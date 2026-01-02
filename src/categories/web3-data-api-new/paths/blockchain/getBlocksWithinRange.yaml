@@ -1,0 +1,76 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 기간, 특정 구간의 블록 리스트 정보를 조회합니다.
+summary: Get Blocks Within Range
+operationId: getBlocksWithinRange
+parameters:
+  - $ref: ../../components/parameters/chains/EvmAptosChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmAptosNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - oneOf:
+              - title: Aptos
+                type: object
+                properties:
+                  fromBlock:
+                    $ref: ../../components/parameters/aptos/AptosFromBlockParameter.yaml
+                  toBlock:
+                    $ref: ../../components/parameters/aptos/AptosToBlockParameter.yaml
+                  fromDate:
+                    $ref: ../../components/parameters/aptos/AptosFromDateParameter.yaml
+                  toDate:
+                    $ref: ../../components/parameters/aptos/AptosToDateParameter.yaml
+              - title: EVM (Ethereum, Optimism, ...)
+                type: object
+                properties:
+                  fromBlock:
+                    $ref: ../../components/parameters/evm/AllEvmFromBlockParameter.yaml
+                  toBlock:
+                    $ref: ../../components/parameters/evm/AllEvmToBlockParameter.yaml
+                  fromDate:
+                    $ref: ../../components/parameters/evm/EvmFromDateParameter.yaml
+                  toDate:
+                    $ref: ../../components/parameters/evm/EvmToDateParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
+        default:
+          fromDate: "2025-01-01T00:00:00+00:00"
+          toDate: "2025-04-01T00:00:00+00:00"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Aptos
+                        $ref: ../../components/schemas/aptos/AptosBlock.yaml
+                      - title: EVM (Ethereum, Optimism, ...)
+                        $ref: ../../components/schemas/evm/EvmBlock.yaml
+        example:
+          $ref: ../../components/examples/getBlocksWithinRange.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

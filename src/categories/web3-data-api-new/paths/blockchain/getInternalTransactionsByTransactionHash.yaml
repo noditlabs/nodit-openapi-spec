@@ -1,0 +1,83 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 트랜잭션에서 발생한 internal transaction 리스트를 조회합니다.
+summary: Get Internal Transactions By Transaction Hash
+operationId: getInternalTransactionsByTransactionHash
+parameters:
+  - $ref: ../../components/parameters/chains/EvmTronChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmTronNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - title: EVM (Ethereum, Optimism, ...)
+            allOf:
+              - type: object
+                required:
+                  - transactionHash
+                properties:
+                  transactionHash:
+                    $ref: ../../components/parameters/evm/EvmTransactionHashParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+              - type: object
+                properties:
+                  withZeroValue:
+                    $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
+                  withExternalTransaction:
+                    $ref: ../../components/parameters/common/WithExternalTransactionParameter.yaml
+            default:
+              transactionHash: "0xe63e77aae7d36723e08e2c38eb7ed9cedca1d402c624173661918345c31a3982"
+          - title: Tron
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+              - type: object
+                properties:
+                  withZeroValue:
+                    $ref: ../../components/parameters/common/WithZeroValueParameter.yaml
+                  withExternalTransaction:
+                    $ref: ../../components/parameters/common/WithExternalTransactionParameter.yaml
+            default:
+              transactionHash: "0279a3b4d0e90af3632171aa3d4a82d99c97ccc7eeeea203a705901cff788308"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: EVM (Ethereum, Optimism, ...)
+                        $ref: ../../components/schemas/evm/EvmInternalTransaction.yaml
+                      - title: Tron
+                        $ref: ../../components/schemas/tron/TronInternalTransaction.yaml
+        example:
+          $ref: ../../components/examples/getInternalTransactionsByTransactionHash.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

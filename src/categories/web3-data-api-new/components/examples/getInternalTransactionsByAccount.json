@@ -1,0 +1,39 @@
+{
+  "rpp": 2,
+  "count": 24110872,
+  "cursor": "eyJibG9ja1RpbWVzdGFtcCI6MTc1MTMyNzk5OSwiYmxvY2tOdW1iZXIiOjIyODIwNjczLCJ0cmFuc2FjdGlvbkluZGV4Ijo5NiwidHJhY2VJbmRleCI6MH0=",
+  "items": [
+    {
+      "traceId": "call_22820673_108_",
+      "traceIndex": 0,
+      "transactionHash": "0x5cd7b1e7e1a8e72f0488fe12fd4aa701a5c7cdc91900c1fa570dc3aa7a85d5dd",
+      "transactionIndex": "108",
+      "from": "0x9DA805b2d794d0376d301Af28eF60130330AbF09",
+      "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "value": "0",
+      "traceType": "call",
+      "callType": "call",
+      "gas": "76208",
+      "gasUsed": "58421",
+      "status": "1",
+      "blockNumber": 22820673,
+      "timestamp": 1751327999
+    },
+    {
+      "traceId": "call_22820673_96_",
+      "traceIndex": 0,
+      "transactionHash": "0x850013f0cbcac5c56ffe7d9c9dcb872286a4f9ca6d35549ae49db43bef7c1230",
+      "transactionIndex": "96",
+      "from": "0xCfcc81FdFC3dA1D4aB3e65Acf705122785433718",
+      "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "value": "0",
+      "traceType": "call",
+      "callType": "call",
+      "gas": "110000",
+      "gasUsed": "58409",
+      "status": "1",
+      "blockNumber": 22820673,
+      "timestamp": 1751327999
+    }
+  ]
+}

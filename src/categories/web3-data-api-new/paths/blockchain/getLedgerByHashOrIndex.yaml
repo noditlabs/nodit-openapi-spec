@@ -1,0 +1,43 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 해시 혹은 인덱스로 조회한 원장의 특정 정보를 반환합니다.
+summary: Get Ledger by Hash or Index
+operationId: getLedgerByHashOrIndex
+parameters:
+  - $ref: ../../components/parameters/chains/XrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/XrplNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - ledger
+        properties:
+          ledger:
+            $ref: ../../components/parameters/xrpl/XrplLedgerParameter.yaml
+        default:
+          ledger: "latest"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/xrpl/XrplLedger.yaml
+        example:
+          $ref: ../../components/examples/getLedgerByHashOrIndex.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

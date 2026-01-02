@@ -1,0 +1,59 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 기간 또는 특정 원장 범위 내의 원장(ledger) 목록을 조회합니다.
+summary: Get Ledgers Within Range
+operationId: getLedgersWithinRange
+parameters:
+  - $ref: ../../components/parameters/chains/XrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/XrplNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        allOf:
+          - type: object
+            properties:
+              fromLedger:
+                $ref: ../../components/parameters/xrpl/XrplFromLedgerParameter.yaml
+              toLedger:
+                $ref: ../../components/parameters/xrpl/XrplToLedgerParameter.yaml
+              fromDate:
+                $ref: ../../components/parameters/xrpl/XrplFromDateParameter.yaml
+              toDate:
+                $ref: ../../components/parameters/xrpl/XrplToDateParameter.yaml
+          - $ref: ../../components/parameters/common/PaginationParameter.yaml
+        default:
+          fromDate: "2025-01-01T00:00:00+00:00"
+          toDate: "2025-04-01T00:00:00+00:00"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/common/PaginationResponse.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/xrpl/XrplLedger.yaml
+        example:
+          $ref: ../../components/examples/getLedgersWithinRange.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml
