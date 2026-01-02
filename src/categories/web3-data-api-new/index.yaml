@@ -130,24 +130,24 @@ paths:
   /{chain}/{network}/blockchain/getBlockByHashOrNumber:
     post:
       $ref: ./paths/blockchain/getBlockByHashOrNumber.yaml
-  # /{chain}/{network}/blockchain/getBlocksWithinRange:
-  #   post:
-  #     $ref: ./paths/blockchain/getBlocksWithinRange.yaml
-  # /{chain}/{network}/blockchain/getGasPrice:
-  #   post:
-  #     $ref: ./paths/blockchain/getGasPrice.yaml
-  # /{chain}/{network}/blockchain/getInternalTransactionsByAccount:
-  #   post:
-  #     $ref: ./paths/blockchain/getInternalTransactionsByAccount.yaml
-  # /{chain}/{network}/blockchain/getInternalTransactionsByTransactionHash:
-  #   post:
-  #     $ref: ./paths/blockchain/getInternalTransactionsByTransactionHash.yaml
-  # /{chain}/{network}/blockchain/getLedgerByHashOrIndex:
-  #   post:
-  #     $ref: ./paths/blockchain/getLedgerByHashOrIndex.yaml
-  # /{chain}/{network}/blockchain/getLedgersWithinRange:
-  #   post:
-  #     $ref: ./paths/blockchain/getLedgersWithinRange.yaml
+  /{chain}/{network}/blockchain/getBlocksWithinRange:
+    post:
+      $ref: ./paths/blockchain/getBlocksWithinRange.yaml
+  /{chain}/{network}/blockchain/getGasPrice:
+    post:
+      $ref: ./paths/blockchain/getGasPrice.yaml
+  /{chain}/{network}/blockchain/getInternalTransactionsByAccount:
+    post:
+      $ref: ./paths/blockchain/getInternalTransactionsByAccount.yaml
+  /{chain}/{network}/blockchain/getInternalTransactionsByTransactionHash:
+    post:
+      $ref: ./paths/blockchain/getInternalTransactionsByTransactionHash.yaml
+  /{chain}/{network}/blockchain/getLedgerByHashOrIndex:
+    post:
+      $ref: ./paths/blockchain/getLedgerByHashOrIndex.yaml
+  /{chain}/{network}/blockchain/getLedgersWithinRange:
+    post:
+      $ref: ./paths/blockchain/getLedgersWithinRange.yaml
   # /{chain}/{network}/blockchain/getNextNonceByAccount:
   #   post:
   #     $ref: ./paths/blockchain/getNextNonceByAccount.yaml

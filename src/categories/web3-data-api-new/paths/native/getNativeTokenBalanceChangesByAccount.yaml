@@ -49,9 +49,9 @@ responses:
                 items:
                   type: array
                   items:
-                    $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeRequired.yaml
+                    $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeInTransaction.yaml
         example:
-          $ref: ../../components/examples/getTokenBalanceChangesByAccount.json
+          $ref: ../../components/examples/getNativeTokenBalanceChangesByAccount.json
   "400":
     $ref: ../../components/responses/400.yaml
   "401":

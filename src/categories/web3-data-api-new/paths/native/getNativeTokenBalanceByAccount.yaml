@@ -38,7 +38,7 @@ responses:
             - title: XRPL
               $ref: ../../components/schemas/xrpl/XrplBalance.yaml
         example:
-          $ref: ../../components/examples/getNativeBalanceByAccount.json
+          $ref: ../../components/examples/getNativeTokenBalanceByAccount.json
   "400":
     $ref: ../../components/responses/400.yaml
   "401":

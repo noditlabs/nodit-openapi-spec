@@ -37,7 +37,17 @@ responses:
         schema:
           type: array
           items:
-            $ref: ../../components/schemas/aptos/AptosTokenMeta.yaml
+            allOf:
+              - type: object
+                required:
+                  - assetType
+                  - tokenStandard
+                properties:
+                  assetType:
+                    $ref: ../../components/schemas/aptos/AptosAssetType.yaml
+                  tokenStandard:
+                    $ref: ../../components/schemas/aptos/AptosTokenStandard.yaml
+              - $ref: ../../components/schemas/aptos/AptosTokenMeta.yaml
         example:
           $ref: ../../components/examples/getTokenMetadataByAssetTypes.json
   "400":

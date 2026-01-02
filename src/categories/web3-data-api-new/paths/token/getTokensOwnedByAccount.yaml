@@ -15,34 +15,6 @@ requestBody:
     application/json:
       schema:
         oneOf:
-          - title: Evm (Ethereum, Optimism, ...)
-            allOf:
-              - type: object
-                required:
-                  - accountAddress
-                properties:
-                  accountAddress:
-                    $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
-                  contractAddresses:
-                    $ref: ../../components/parameters/evm/EvmTokenContractAddressesParameter.yaml
-              - $ref: ../../components/parameters/common/PaginationParameter.yaml
-            default:
-              accountAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-              contractAddresses: ["0xdAC17F958D2ee523a2206206994597C13D831ec7"]
-          - title: Tron
-            allOf:
-              - type: object
-                required:
-                  - accountAddress
-                properties:
-                  accountAddress:
-                    $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
-                  contractAddresses:
-                    $ref: ../../components/parameters/tron/TronTokenContractAddressesParameter.yaml
-              - $ref: ../../components/parameters/common/PaginationParameter.yaml
-            default:
-              accountAddress: "TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N"
-              contractAddresses: ["TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"] # USDT
           - title: Aptos
             allOf:
               - type: object
@@ -76,6 +48,34 @@ requestBody:
                       "0x000000000000000000000000000000000000000000000000000000000000000a",
                     ]
               - $ref: ../../components/parameters/common/PaginationParameter.yaml
+          - title: EVM (Ethereum, Optimism, ...)
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
+                  contractAddresses:
+                    $ref: ../../components/parameters/evm/EvmTokenContractAddressesParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+            default:
+              accountAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              contractAddresses: ["0xdAC17F958D2ee523a2206206994597C13D831ec7"]
+          - title: Tron
+            allOf:
+              - type: object
+                required:
+                  - accountAddress
+                properties:
+                  accountAddress:
+                    $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+                  contractAddresses:
+                    $ref: ../../components/parameters/tron/TronTokenContractAddressesParameter.yaml
+              - $ref: ../../components/parameters/common/PaginationParameter.yaml
+            default:
+              accountAddress: "TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N"
+              contractAddresses: ["TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"] # USDT
 responses:
   "200":
     description: Successful Response
@@ -93,11 +93,32 @@ responses:
                   items:
                     oneOf:
                       - title: Aptos
-                        $ref: ../../components/schemas/aptos/AptosTokenBalanceChangeInTransaction.yaml
-                      - title: XRPL
-                        $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeInTransaction.yaml
+                        allOf:
+                          - $ref: ../../components/schemas/aptos/AptosTokenAccount.yaml
+                          - type: object
+                            properties:
+                              metadata:
+                                $ref: ../../components/schemas/aptos/AptosTokenMeta.yaml
+                      - title: EVM (Ethereum, Optimism, ...)
+                        allOf:
+                          - $ref: ../../components/schemas/evm/EvmBalanceWithLastTransferredAt.yaml
+                          - type: object
+                            properties:
+                              contract:
+                                allOf:
+                                  - $ref: ../../components/schemas/evm/EvmContractMeta.yaml
+                                  - $ref: ../../components/schemas/evm/EvmAssetMeta.yaml
+                      - title: Tron
+                        allOf:
+                          - $ref: ../../components/schemas/tron/TronBalance.yaml
+                          - type: object
+                            properties:
+                              contract:
+                                allOf:
+                                  - $ref: ../../components/schemas/tron/TronContractMeta.yaml
+                                  - $ref: ../../components/schemas/tron/TronTokenMeta.yaml
         example:
-          $ref: ../../components/examples/getTokenBalanceChangesByAccount.json
+          $ref: ../../components/examples/getTokensOwnedByAccount.json
   "400":
     $ref: ../../components/responses/400.yaml
   "401":

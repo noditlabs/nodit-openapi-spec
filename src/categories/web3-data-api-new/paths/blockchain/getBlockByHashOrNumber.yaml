@@ -26,8 +26,8 @@ requestBody:
                 $ref: ../../components/parameters/utxo/UtxoBlockParameter.yaml
               - title: Bitcoincash
                 $ref: ../../components/parameters/utxo/UtxoBlockParameter.yaml
-              - title: Evm (Ethereum, Optimism, ...)
-                $ref: ../../components/parameters/kaia/KaiaBlockParameter.yaml # Kaia 하드포크로 인한 안내 문구 포함
+              - title: EVM (Ethereum, Optimism, ...)
+                $ref: ../../components/parameters/evm/AllEvmBlockParameter.yaml
         default:
           block: "latest"
 responses:

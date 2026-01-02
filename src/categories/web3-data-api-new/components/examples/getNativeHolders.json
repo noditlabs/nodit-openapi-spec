@@ -1,27 +1,87 @@
 {
-  "rpp": 5,
-  "page": 1,
-  "count": 173230654,
+  "rpp": 20,
+  "count": 217968990,
+  "cursor": "W3sia2V5IjoidmFsdWUiLCJvcmRlciI6IkRFU0MiLCJlcXVhbCI6dHJ1ZSwicG9pbnQiOjg5NTg2Nzc0MTk3MzU3OX0seyJrZXkiOiJhZGRyZXNzIiwib3JkZXIiOiJBU0MiLCJlcXVhbCI6ZmFsc2UsInBvaW50IjoiVExudFc5WjU5TFlZNUtFaTljbXdrM1BLalFnYTgyOGlyZCJ9XQ==",
   "items": [
     {
-      "ownerAddress": "TNMcQVGPzqH9ZfMCSY4PNrukevtDgp24dK",
-      "balance": "8997562062313495"
+      "ownerAddress": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+      "balance": "2102070699049103"
     },
     {
-      "ownerAddress": "TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
-      "balance": "7055238372852047"
+      "ownerAddress": "TPcnRbpuB89eKKkfH2E7iJooAqeEZPpdGb",
+      "balance": "1964181490769850"
+    },
+    {
+      "ownerAddress": "TXCu9ivZfybabh7r3aSmDPfLH6YybLjuvX",
+      "balance": "1890002559590023"
+    },
+    {
+      "ownerAddress": "THdUXD3mZqT5aMnPQMtBSJX9ANGjaeUwQK",
+      "balance": "1874043016079661"
+    },
+    {
+      "ownerAddress": "TXZafZLKKgcXWTAq4YpLp3oCD4T9smsgmV",
+      "balance": "1847563590583935"
+    },
+    {
+      "ownerAddress": "TBEp1Gndqp88SUWnS4NQH5CAMhduHgpoNY",
+      "balance": "1780002068405611"
+    },
+    {
+      "ownerAddress": "TPyjyZfsYaXStgz2NmAraF1uZcMtkgNan5",
+      "balance": "1772451411803013"
     },
     {
       "ownerAddress": "THUE6WTLaEGytFyuGJQUcKc3r245UKypoi",
-      "balance": "1763109998966628"
-    },
-    {
-      "ownerAddress": "TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
-      "balance": "1753313611181136"
+      "balance": "1763110000743633"
     },
     {
       "ownerAddress": "TRzQrtxrEJbSbQNwAsgAHkBMxTX47yNmjo",
-      "balance": "1700079996070209"
+      "balance": "1700079993070210"
+    },
+    {
+      "ownerAddress": "TJNtFduS4oebw3jgGKCYmgSpTdyPieb6Ha",
+      "balance": "1551521471947926"
+    },
+    {
+      "ownerAddress": "TAuUCiH4JVNBZmDnEDZkXEUXDARdGpXTmX",
+      "balance": "1434482060204136"
+    },
+    {
+      "ownerAddress": "TXjbXLdJ5LHYd23rYhddoZXffi3PJUtw5R",
+      "balance": "1388598610529875"
+    },
+    {
+      "ownerAddress": "TKpiitwGUuW5WgsBMg5w5QWUpC6nUTroqa",
+      "balance": "1184370281084218"
+    },
+    {
+      "ownerAddress": "TScVwVTjqoqPEJ6atnvGCtErWnCyNbzmUL",
+      "balance": "1121932480593983"
+    },
+    {
+      "ownerAddress": "TLbkcH7QLcULY8dpPAbD9EYGLUWKbeRxuB",
+      "balance": "1063309520494087"
+    },
+    {
+      "ownerAddress": "TFKSWmnRJkzCfWUr56DQ1zqGCxZLW9dKSv",
+      "balance": "1062603801695343"
+    },
+    {
+      "ownerAddress": "TYL7z7VSVRShLoJ6YRQMA4t9pSECt9ZLmz",
+      "balance": "950029982368296"
+    },
+    {
+      "ownerAddress": "TXNL4eGs4QkXdaBVhcedRkaV6KoydPD752",
+      "balance": "940170320098581"
+    },
+    {
+      "ownerAddress": "TT4gTiH5RszUB8rWHfZQ84oC3gaT4Mxrmx",
+      "balance": "910163403388056"
+    },
+    {
+      "ownerAddress": "TLntW9Z59LYY5KEi9cmwk3PKjQga828ird",
+      "balance": "895867741973579"
     }
   ]
 }

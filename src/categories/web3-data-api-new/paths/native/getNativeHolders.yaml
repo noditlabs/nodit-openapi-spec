@@ -23,7 +23,14 @@ responses:
         schema:
           allOf:
             - $ref: ../../components/schemas/common/PaginationResponse.yaml
-            - $ref: ../../components/schemas/tron/TronBalance.yaml
+            - type: object
+              required:
+                - items
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/tron/TronBalance.yaml
         example:
           $ref: ../../components/examples/getNativeHolders.json
   "400":

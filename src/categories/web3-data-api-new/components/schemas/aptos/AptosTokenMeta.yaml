@@ -32,7 +32,9 @@ properties:
       자산의 총 공급량을 나타내는 필드입니다.
     example: "1000000000000000000"
   maximumSupply:
-    type: string
+    type:
+      - string
+      - "null"
     description: |
       자산의 최대 공급량을 나타내는 필드입니다.
     example: "1000000000000000000"

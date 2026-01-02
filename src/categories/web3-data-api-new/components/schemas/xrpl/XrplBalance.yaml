@@ -6,4 +6,6 @@ properties:
   ownerAddress:
     $ref: ./XrplOwnerAddress.yaml
   balance:
-    $ref: ./XrplBalance.yaml
+    type: string
+    description: |
+      계정이 보유한 잔고의 총량을 나타내는 필수 응답 필드로, XRP의 최소 단위인 drop 대신 표준 XRP 단위(1 XRP =1,000,000 drop)로 값을 제공합니다.

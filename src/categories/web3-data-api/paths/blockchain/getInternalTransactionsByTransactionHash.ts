@@ -84,6 +84,8 @@ function getOpIdAndParams(chain: string): {
           "ethereumclassic",
           "giwa",
           "kaia",
+          "optimism",
+          "polygon",
           "luniverse",
           "tron",
         ]),

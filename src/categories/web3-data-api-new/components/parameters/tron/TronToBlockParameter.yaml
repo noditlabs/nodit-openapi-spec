@@ -3,7 +3,7 @@ description: |
   조회 종료 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:
   - block number: 10진수 문자열로 블록 번호를 입력.
   - block hash: 64자리 16진수("0x" 포함).
-  - block tag: "earliest" 또는 "latest"를 사용하여 첫 번째 블록 또는 최신 블록을 지정.
+  - block tag: "earliest" 또는 "latest"를 사용하여 조회 가능한 가장 오래된 블록 또는 최신 블록을 지정.
 
   <strong style="color: red;">*</strong> 유의사항:
   - toBlock의 default 값은 "latest"입니다.

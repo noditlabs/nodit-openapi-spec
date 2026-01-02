@@ -15,7 +15,7 @@ requestBody:
     application/json:
       schema:
         oneOf:
-          - title: Evm (Ethereum, Optimism, ...)
+          - title: EVM (Ethereum, Optimism, ...)
             allOf:
               - type: object
                 required:
@@ -26,9 +26,9 @@ requestBody:
 
                   #  Web3 Data API 통합, Kaia에만 적용되는 파라미터 (fromBlock, toBlock) - 체인별 파일에서는 변경 필요
                   fromBlock:
-                    $ref: ../../components/parameters/kaia/KaiaFromBlockParameter.yaml
+                    $ref: ../../components/parameters/evm/AllEvmFromBlockParameter.yaml
                   toBlock:
-                    $ref: ../../components/parameters/kaia/KaiaToBlockParameter.yaml
+                    $ref: ../../components/parameters/evm/AllEvmToBlockParameter.yaml
 
                   fromDate:
                     $ref: ../../components/parameters/evm/EvmFromDateParameter.yaml
@@ -111,7 +111,7 @@ responses:
                   type: array
                   items:
                     oneOf:
-                      - title: Evm (Ethereum, Optimism, ...)
+                      - title: EVM (Ethereum, Optimism, ...)
                         allOf:
                           - $ref: ../../components/schemas/evm/EvmTransfer.yaml
                           - type: object

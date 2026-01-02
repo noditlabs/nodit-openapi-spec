@@ -6,4 +6,6 @@ properties:
   ownerAddress:
     $ref: ./UtxoOwnerAddress.yaml
   balance:
-    $ref: ./UtxoBalance.yaml
+    type: string
+    description: |
+      잔고를 나타내는 필드입니다.
