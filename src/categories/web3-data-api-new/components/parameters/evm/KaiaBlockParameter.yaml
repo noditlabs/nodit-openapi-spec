@@ -1,0 +1,19 @@
+type: string
+description: |
+  잔고 조회 시점을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:
+  - block hash: "0x"로 시작하는 64자리 16진수 문자열. 해당 블록 해시를 기준으로 조회됩니다.
+  - block number: 10진수 문자열. 해당 블록 높이를 기준으로 조회됩니다.
+  - block tag: "earliest" 또는 "latest"를 입력하여 조회 가능한 가장 오래된 블록 또는 최신 블록을 조회합니다.
+
+  **Notes**
+  - **Earliest Block (Kaia Mainnet)**
+    - 체인을 Kaia Mainnet으로 선택한 경우, "earliest"는 Kaia 하드포크 시점의 블록을 의미합니다.
+    - Kaia Hardfork Block: 162,900,480 (Aug 29, 2024 11:08:01 UTC+9)
+
+  - **Testnet Data Retention Policy**
+    - 테스트넷 데이터는 일정 기간 이후 삭제될 수 있습니다.
+    - 과거 블록을 기준으로 조회할 경우 데이터가 존재하지 않을 수 있습니다.
+    - 자세한 내용은 Testnet Data Availability 페이지를 참고하세요. (https://developer.nodit.io/reference/web3-data-api-testnet-data-availability)
+pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+default: "latest"
+example: "latest"
