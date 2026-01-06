@@ -1,0 +1,7 @@
+type: boolean
+description: |
+  응답에 balanceChanges 필드의 포함 여부를 지정하는 파라미터입니다.
+
+  - balanceChanges 필드는 Native token(APT)와 Token의 잔고 변화를 포함하는 필드입니다.
+  - 이 파라미터에 true를 입력한 경우, 응답속도가 느려질 수 있습니다.
+default: false

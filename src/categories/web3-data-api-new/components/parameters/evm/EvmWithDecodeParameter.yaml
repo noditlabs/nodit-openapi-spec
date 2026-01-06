@@ -1,0 +1,9 @@
+type: boolean
+description: |
+  응답에 decodedInput, decodedLog 필드의 포함 여부를 지정하는 파라미터입니다.
+  - 이 파라미터에 true를 입력한 경우, 응답속도가 느려질 수 있습니다.
+  - decodedLog는 logs에 종속된 필드입니다. withLogs=false인 경우, withDecode의 값과 관계없이 decodedLog는 반환되지 않습니다.
+
+  <strong style="color: red;">*</strong> 유의사항:
+  - decodedInput은 제한된 ABI 정보를 기반으로 디코딩됩니다. 동일한 function selector를 사용하는 서로 다른 함수가 존재할 수 있으며, ERC 표준과 일치하는 selector인 경우 표준 기준으로 표시되므로 실제 호출된 함수와 decodedInput이 일치하지 않을 수 있습니다.
+default: false
