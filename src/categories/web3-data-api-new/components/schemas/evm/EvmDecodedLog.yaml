@@ -1,0 +1,28 @@
+type: object
+description: |
+  스마트 컨트랙트의 이벤트 정의에 따라 디코딩된 정보를 제공하며,
+required:
+  - name
+  - eventFragment
+  - signature
+  - eventHash
+  - args
+properties:
+  name:
+    type: string
+    description: |
+      로그의 이벤트 이름을 나타내는 필드입니다.
+  eventFragment:
+    type: string
+    description: |
+      로그의 이벤트 프래그먼트를 나타내는 필드입니다.
+  signature:
+    type: string
+    description: |
+      로그의 이벤트 시그니처를 나타내는 필드입니다.
+  eventHash:
+    type: string
+    description: |
+      로그의 이벤트 해시를 나타내는 필드입니다.
+  args:
+    $ref: ./EvmArgs.yaml

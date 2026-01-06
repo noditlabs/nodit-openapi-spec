@@ -1,0 +1,21 @@
+type: object
+required:
+  - currency
+  - issuer
+  - value
+properties:
+  currency:
+    type: string
+    description: |
+      자산의 통화 코드를 나타냅니다. 일반적으로 ISO 4217 표준 코드(예: "USD", "EUR")를 사용하지만, 필요에 따라 160비트 커스텀 코드도 사용할 수 있습니다. 커스텀 코드는 40자리 길이의 16진수 문자열로 표현되며, 특정 프로젝트나 플랫폼에서 정의한 독자적인 자산(예: "SOLO")을 나타낼 때 사용됩니다. 한편, XRP의 경우에는 "XRP"라는 고정된 문자열이 currency 필드에 사용되며, IOU 자산과 동일한 구조로 반환됩니다.
+    example: "USD"
+  issuer:
+    type: string
+    description: |
+      자산을 발행한 계정의 주소입니다. 동일한 통화 코드(currency)라 하더라도, 발행자에 따라 자산의 신뢰도와 위험성이 달라질 수 있습니다. 따라서 XRP Ledger에서는 통화 코드와 발행자(issuer)의 조합으로 자산을 고유하게 식별합니다. 각 자산의 신뢰성은 발행자의 평판에 크게 좌우됩니다. 이 필드는 25~35자리 길이의 Base58 인코딩 문자열이며, 항상 'r'로 시작합니다. 단, XRP는 네이티브 자산이므로 발행자가 없으며, 이 경우 issuer는 빈 문자열("")로 표시됩니다.
+    example: "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq"
+  value:
+    type: string
+    description: |
+      자산의 수량을 문자열(string) 형태로 반환합니다. 수량 표현 방식은 currency 값에 따라 달라집니다. currency가 "XRP"인 경우, 이 값은 표준 XRP 단위로 표기되며, 1 XRP는 1,000,000 drop에 해당합니다. IOU 자산의 경우에도 발행자가 정의한 정밀도(precision)를 기반으로 표현됩니다.
+    example: "100.5"

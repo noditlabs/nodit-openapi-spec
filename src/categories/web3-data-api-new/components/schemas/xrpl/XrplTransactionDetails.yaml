@@ -1,0 +1,127 @@
+type: object
+description: |
+  트랜잭션과 관련된 상세 정보를 포함하는 객체입니다. 이 객체는 트랜잭션 처리에 필요한 추가 데이터 및 세부 필드들을 포함할 수 있습니다.
+oneOf:
+  - title: "AMM"
+    required:
+      - asset
+      - asset2
+      - amount
+      - amount2
+      - tradingFee
+      - effectivePrice
+      - lpTokenIn
+      - lpTokenOut
+      - bidMin
+      - bidMax
+      - authAccounts
+    description: |
+      AMM 트랜잭션의 상세 정보를 나타내는 객체입니다.
+    properties:
+      asset:
+        description: |
+          AMM 풀에서 사용되는 첫 번째 자산을 나타냅니다. Asset2와 함께 구성되며, 같은 통화 코드와 발행자를 가질 수 없습니다.
+        $ref: ./XrplAsset.yaml
+      asset2:
+        description: |
+          AMM 풀에서 사용되는 두 번째 자산을 나타냅니다. Asset과 함께 구성되며, 같은 통화 코드와 발행자를 가질 수 없습니다.
+        $ref: ./XrplAsset.yaml
+      amount:
+        description: |
+          AMM 풀에 추가되는 첫 번째 자산의 양을 나타냅니다. AMMWithdraw에서는 인출할 첫 번째 자산을 나타냅니다.
+        $ref: ./XrplAmount.yaml
+      amount2:
+        description: |
+          AMM 풊에 추가되는 두 번째 자산의 양을 나타냅니다. AMMWithdraw에서는 인출할 두 번째 자산을 나타냅니다.
+        $ref: ./XrplAmount.yaml
+      tradingFee:
+        type: integer
+        description: |
+          1/100,000 단위로 설정되는 거래 수수료 비율을 나타냅니다. 1은 0.001%, 최대값은 1000(1%)입니다.
+        example: 250
+      effectivePrice:
+        description: |
+          AMMDeposit에서 유효한 최대 가격을 설정합니다. AMMWithdraw에서는 최소 보장 가격을 설정합니다.
+        $ref: ./XrplAmount.yaml
+      lpTokenIn:
+        description: |
+          AMM 풀에서 반환하는 LP 토큰의 수량을 나타냅니다.
+        $ref: ./XrplAmount.yaml
+      lpTokenOut:
+        description: |
+          AMM 풊에 유동성을 공급한 대가로 발행되는 LP 토큰의 수량을 나타냅니다.
+        $ref: ./XrplAmount.yaml
+      bidMin:
+        description: |
+          AMM 풊에서 설정한 최소 입찰 금액을 나타냅니다.
+        $ref: ./XrplAmount.yaml
+      bidMax:
+        description: |
+          AMM 풊에서 설정한 최대 입찰 금액을 나타냅니다.
+        $ref: ./XrplAmount.yaml
+      authAccounts:
+        type: array
+        description: |
+          할인된 수수료를 적용할 수 있는 최대 4개의 추가 계정을 정의합니다. 이 목록에는 트랜잭션 발신자의 주소를 포함할 수 없습니다. 각 계정 주소는 25~35자리 길이의 Base58 인코딩 문자열로, 'r'로 시작하는 형식을 가집니다.
+        items:
+          type: string
+        example:
+          [
+            "rEqFohwoXqGFVik15uqF5nBdzfd5qEFh1X",
+            "rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah",
+          ]
+      holder:
+        type: string
+        description: |
+          AMMClawback 트랜잭션에서 회수 대상이 되는 계정 주소를 나타냅니다. 이는 AMM 풀 내 특정 자산을 보유하고 있는 계정으로, 발행자가 해당 계정에서 자산을 회수할 수 있도록 지정됩니다.
+        example: "rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah"
+  - title: "Check"
+    required:
+      - destination
+      - sendMax
+      - destinationTag
+      - expiration
+      - invoiceId
+      - amount
+      - deliverMin
+      - checkId
+    description: |
+      Check 트랜잭션의 상세 정보를 나타내는 객체입니다.
+    properties:
+      destination:
+        type: string
+        description: |
+          수표의 수취인 계정 주소가 표시됩니다. 주소는 Base58로 인코딩된 문자열이며, 항상 'r'로 시작하고 25~35자의 길이를 가집니다.
+        example: "rBTwLga3i2gz3doX6Gva3MgEV8ZCD8jjah"
+      sendMax:
+        description: |
+          수표 발행자가 해당 수표를 통해 송금할 수 있도록 설정한 최대 자산 수량입니다. 수취인은 이 값과 동일한 통화 및 발행자의 자산만 받을 수 있으며, 수수료를 포함한 총 금액은 이 값을 초과할 수 없습니다.
+        $ref: ./XrplAmount.yaml
+      destinationTag:
+        type: integer
+        description: |
+          수신자 계정 내에서 특정 사용자를 식별하기 위한 태그입니다. 거래소, 호스팅 지갑 등 여러 사용자가 하나의 주소를 공유할 때 사용됩니다.
+        example: 1337
+      expiration:
+        type: integer
+        description: |
+          수표의 만료 시간이 초 단위 정수로 표시됩니다. 이 값은 Ripple Epoch(2000년 1월 1일 00:00 UTC)를 기준으로 경과한 시간이며, 실제 Unix 타임스탬프로 변환하려면 여기에 946,684,800초를 더해야 합니다. 수표는 만료 시간 이후에는 사용할 수 없습니다.
+        example: 673094400
+      invoiceId:
+        type: string
+        description: |
+          이 수표와 관련된 외부 거래나 청구서를 식별하기 위해 사용되는 256비트 해시값(64자리 16진수 문자열)입니다. 응답에 포함될 경우, 수표가 특정 외부 요청과 연결되어 있음을 나타냅니다.
+        example: "6F1DFD1D0FE8A32E40E1F2C05CF1C15545BAB56B617F9C6C2D63A6B704BEF59B"
+      amount:
+        description: |
+          수표를 현금화할 때 실제로 적용된 자산의 수량이 표시됩니다. 이 값은 수표의 sendMax 필드와 동일한 자산 코드 및 발행자를 가져야 하며, 그 범위 내에서 정해집니다. CheckCash 트랜잭션에서는 amount 또는 deliverMin 중 하나만 포함되며, 두 필드가 동시에 존재할 수는 없습니다.
+        $ref: ./XrplAmount.yaml
+      deliverMin:
+        description: |
+          수취인이 수령한 최소 보장 자산 수량이 표시됩니다. CheckCash 트랜잭션에서 가능한 최대한 많은 금액을 수령하는 방식에서 사용되며, amount 필드와는 상호 배타적으로, 두 필드를 함께 포함할 수 없습니다. CheckCash 트랜잭션에서는 deliverMin 또는 amount 중 하나만 포함되며, 두 필드는 동시에 포함되지 않습니다.
+        $ref: ./XrplAmount.yaml
+      checkId:
+        type: string
+        description: |
+          해당 수표의 고유 ID가 64자리 16진수 문자열로 표시됩니다. 수표를 취소하거나 현금화할 때 이 값을 참조합니다.
+        example: "49647F0D748DC3FE26BDACBC57F251AADEFFF391403EC9BF87C97F67E9977FB0"

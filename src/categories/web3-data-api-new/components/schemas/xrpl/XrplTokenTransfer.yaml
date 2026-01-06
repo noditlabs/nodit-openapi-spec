@@ -32,4 +32,4 @@ allOf:
         description: |
           Transaction의 타입을 나타내는 필드입니다.
         example: "Payment"
-  - $ref: ./XrplTransferInTransaction.yaml
+  - $ref: ./XrplTokenTransferRequired.yaml
