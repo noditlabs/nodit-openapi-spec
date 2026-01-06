@@ -137,7 +137,7 @@ responses:
                                   - $ref: ../../components/schemas/tron/TronContractMeta.yaml
                                   - $ref: ../../components/schemas/tron/TronTokenMeta.yaml
                       - title: XRPL
-                        $ref: ../../components/schemas/xrpl/XrplTransfer.yaml
+                        $ref: ../../components/schemas/xrpl/XrplTokenTransfer.yaml
         example:
           $ref: ../../components/examples/getTokenTransfersByAccount.json
   "400":

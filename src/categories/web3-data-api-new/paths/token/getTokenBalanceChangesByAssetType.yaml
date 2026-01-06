@@ -63,7 +63,7 @@ responses:
                 items:
                   type: array
                   items:
-                    $ref: ../../components/schemas/aptos/AptosTokenBalanceChangeInTransaction.yaml
+                    $ref: ../../components/schemas/aptos/AptosTokenBalanceChange.yaml
         example:
           $ref: ../../components/examples/getTokenBalanceChangesByAssetType.json
   "400":

@@ -52,7 +52,7 @@ responses:
                 items:
                   type: array
                   items:
-                    $ref: ../../components/schemas/xrpl/XrplTransfer.yaml
+                    $ref: ../../components/schemas/xrpl/XrplTokenTransferRequired.yaml
         example:
           $ref: ../../components/examples/getTokenTransfersByCurrencyAndIssuer.json
   "400":

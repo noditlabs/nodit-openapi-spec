@@ -101,9 +101,9 @@ responses:
                   items:
                     oneOf:
                       - title: Aptos
-                        $ref: ../../components/schemas/aptos/AptosTokenBalanceChangeInTransaction.yaml
+                        $ref: ../../components/schemas/aptos/AptosTokenBalanceChange.yaml
                       - title: XRPL
-                        $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeInTransaction.yaml
+                        $ref: ../../components/schemas/xrpl/XrplTokenBalanceChange.yaml
         example:
           $ref: ../../components/examples/getTokenBalanceChangesByAccount.json
   "400":

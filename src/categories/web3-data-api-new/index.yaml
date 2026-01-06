@@ -148,15 +148,15 @@ paths:
   /{chain}/{network}/blockchain/getLedgersWithinRange:
     post:
       $ref: ./paths/blockchain/getLedgersWithinRange.yaml
-  # /{chain}/{network}/blockchain/getNextNonceByAccount:
-  #   post:
-  #     $ref: ./paths/blockchain/getNextNonceByAccount.yaml
-  # /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
-  #   post:
-  #     $ref: ./paths/blockchain/getTotalTransactionCountByAccount.yaml
-  # /{chain}/{network}/blockchain/getTransactionByHash:
-  #   post:
-  #     $ref: ./paths/blockchain/getTransactionByHash.yaml
+  /{chain}/{network}/blockchain/getNextNonceByAccount:
+    post:
+      $ref: ./paths/blockchain/getNextNonceByAccount.yaml
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
+    post:
+      $ref: ./paths/blockchain/getTotalTransactionCountByAccount.yaml
+  /{chain}/{network}/blockchain/getTransactionByHash:
+    post:
+      $ref: ./paths/blockchain/getTransactionByHash.yaml
   # /{chain}/{network}/blockchain/getTransactionByTransactionId:
   #   post:
   #     $ref: ./paths/blockchain/getTransactionByTransactionId.yaml

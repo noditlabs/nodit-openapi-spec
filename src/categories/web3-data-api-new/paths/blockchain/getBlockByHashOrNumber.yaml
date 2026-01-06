@@ -7,8 +7,8 @@ description: |
 summary: Get Block by Hash or Number
 operationId: getBlockByHashOrNumber
 parameters:
-  - $ref: ../../components/parameters/chains/EvmUtxoAptosChainParameter.yaml
-  - $ref: ../../components/parameters/chains/EvmUtxoAptosNetworkParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmAptosUtxoChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmAptosUtxoNetworkParameter.yaml
 requestBody:
   required: true
   content:

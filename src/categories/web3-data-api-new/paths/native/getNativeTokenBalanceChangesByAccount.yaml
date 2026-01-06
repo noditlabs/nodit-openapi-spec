@@ -49,7 +49,7 @@ responses:
                 items:
                   type: array
                   items:
-                    $ref: ../../components/schemas/xrpl/XrplTokenBalanceChangeInTransaction.yaml
+                    $ref: ../../components/schemas/xrpl/XrplTokenBalanceChange.yaml
         example:
           $ref: ../../components/examples/getNativeTokenBalanceChangesByAccount.json
   "400":
