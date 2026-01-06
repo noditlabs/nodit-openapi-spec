@@ -1,0 +1,62 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 Account의 총 트랜잭션 수를 조회합니다.
+summary: Get Total Transaction Count by Account
+operationId: getTotalTransactionCountByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/AllChainParameter.yaml
+  - $ref: ../../components/parameters/chains/AllNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - accountAddress
+        properties:
+          accountAddress:
+            oneOf:
+              - title: EVM (Ethereum, Optimism, ...)
+                $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
+                default: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+              - title: Tron
+                $ref: ../../components/parameters/tron/TronAccountAddressParameter.yaml
+                default: "TT2T17KZhoDu47i2E4FWxfG79zdkEWkU9N"
+              - title: Bitcoin, Dogecoin, Bitcoincash
+                $ref: ../../components/parameters/utxo/UtxoAccountAddressParameter.yaml
+                default: "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+              - title: XRPL
+                $ref: ../../components/parameters/xrpl/XrplAccountAddressParameter.yaml
+                default: "rLuz2EkgayHgx2UNtr1sjw6RvW9FdZr"
+              - title: Aptos
+                $ref: ../../components/parameters/aptos/AptosAccountAddressParameter.yaml
+                default: "0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1"
+        default:
+          accountAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            transactionCount:
+              type: integer
+              description: 조회한 계정의 총 트랜잭션 수를 나타냅니다.
+        example:
+          $ref: ../../components/examples/getTotalTransactionCountByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

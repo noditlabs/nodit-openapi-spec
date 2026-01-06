@@ -1,0 +1,76 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 트랜잭션의 정보를 조회합니다.
+summary: Get Transaction By Hash
+operationId: getTransactionByHash
+parameters:
+  - $ref: ../../components/parameters/chains/EvmAptosXrplChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmAptosXrplNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - transactionHash
+        properties:
+          transactionHash:
+            oneOf:
+              - title: Aptos
+                allOf:
+                  - $ref: ../../components/parameters/aptos/AptosTransactionHashParameter.yaml
+                  - $ref: ../../components/parameters/aptos/AptosWithBalanceChangesParameter.yaml
+                default: "0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005"
+              - title: EVM (Ethereum, Optimism, ...)
+                allOf:
+                  - $ref: ../../components/parameters/evm/EvmTransactionHashParameter.yaml
+                  - $ref: ../../components/parameters/evm/EvmWithLogsParameter.yaml
+                  - $ref: ../../components/parameters/evm/EvmWithDecodeParameter.yaml
+                default: "0xe63e77aae7d36723e08e2c38eb7ed9cedca1d402c624173661918345c31a3982"
+              - title: XRPL
+                allOf:
+                  - $ref: ../../components/parameters/xrpl/XrplTransactionHashParameter.yaml
+                  - $ref: ../../components/parameters/xrpl/XrplWithBalanceChangesParameter.yaml
+                  - $ref: ../../components/parameters/xrpl/XrplWithTokenTransfersParameter.yaml
+                default: "0279a3b4d0e90af3632171aa3d4a82d99c97ccc7eeeea203a705901cff788308"
+        default:
+          transactionHash: "0xe63e77aae7d36723e08e2c38eb7ed9cedca1d402c624173661918345c31a3982"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - title: Aptos
+              $ref: ../../components/schemas/aptos/AptosTransaction.yaml
+            - title: EVM (Ethereum, Optimism, ...)
+              allOf:
+                - $ref: ../../components/schemas/evm/EvmTransactionWithReceipt.yaml
+                - type: object
+                  properties:
+                    logs:
+                      allOf:
+                        - $ref: ../../components/schemas/evm/EvmLog.yaml
+                        - type: object
+                          properties:
+                            decodedLog:
+                              $ref: ../../components/schemas/evm/EvmDecodedLog.yaml
+            - title: XRPL
+              $ref: ../../components/schemas/xrpl/XrplTransaction.yaml
+        example:
+          $ref: ../../components/examples/getTransactionByHash.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

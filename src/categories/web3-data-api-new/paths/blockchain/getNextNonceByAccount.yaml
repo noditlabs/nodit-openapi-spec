@@ -1,0 +1,48 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 Account의 다음 nonce를 조회합니다.
+summary: Get Next Nonce by Account
+operationId: getNextNonceByAccount
+parameters:
+  - $ref: ../../components/parameters/chains/EvmChainParameter.yaml
+  - $ref: ../../components/parameters/chains/EvmNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - accountAddress
+        properties:
+          accountAddress:
+            $ref: ../../components/parameters/evm/EvmAccountAddressParameter.yaml
+        default:
+          accountAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            nonce:
+              type: string
+              description: 조회한 계정의 다음 nonce 값을 나타냅니다. 이 값은 트랜잭션을 생성할 때 사용됩니다.
+              pattern: ^[0-9]+$
+        example:
+          $ref: ../../components/examples/getNextNonceByAccount.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml
