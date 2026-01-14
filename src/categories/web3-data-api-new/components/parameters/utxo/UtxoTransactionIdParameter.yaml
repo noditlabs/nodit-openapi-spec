@@ -1,0 +1,8 @@
+type: string
+description: |
+  조회하고자 하는 트랜잭션의 ID를 지정하는 파라미터입니다. 0x를 제외한 64자리 16진수 문자열 형태로 입력할 수 있습니다.
+pattern: ^[0-9a-fA-F]{64}$
+examples:
+  - "b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef" # Bitcoin Mainnet Transaction ID
+  - "0e285df9d6a218be913b30dd4185efce37d17a8b036a21ca8496bead75f1011f" # Dogecoin Mainnet Transaction ID
+  - "0028e50ae5021b84597a32e6174c2f636b334457a41b0bdd872ba4d7b4f120f6" # BitcoinCash Mainnet Transaction ID

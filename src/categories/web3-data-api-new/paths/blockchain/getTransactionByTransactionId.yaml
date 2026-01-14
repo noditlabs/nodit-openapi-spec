@@ -1,0 +1,79 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 트랜잭션의 정보를 조회합니다.
+summary: Get Transaction By Transaction ID
+operationId: getTransactionByTransactionId
+parameters:
+  - $ref: ../../components/parameters/chains/UtxoChainParameter.yaml
+  - $ref: ../../components/parameters/chains/UtxoNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - transactionId
+        properties:
+          transactionId:
+            $ref: ../../components/parameters/utxo/UtxoTransactionIdParameter.yaml
+        default:
+          transactionId: "b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef"
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - title: Bitcoin, Dogecoin
+              allOf:
+                - $ref: ../../components/schemas/utxo/UtxoTransaction.yaml
+                - type: object
+                  properties:
+                    vin:
+                      type: array
+                      items:
+                        $ref: ../../components/schemas/utxo/UtxoVin.yaml
+                    vout:
+                      type: array
+                      items:
+                        $ref: ../../components/schemas/utxo/UtxoVout.yaml
+            - title: BitcoinCash
+              allOf:
+                - $ref: ../../components/schemas/utxo/UtxoTransaction.yaml
+                - type: object
+                  properties:
+                    vin:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: ../../components/schemas/utxo/UtxoVin.yaml
+                          - type: object
+                            properties:
+                              token:
+                                $ref: ../../components/schemas/utxo/BitcioncashCashToken.yaml
+                    vout:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: ../../components/schemas/utxo/UtxoVout.yaml
+                          - type: object
+                            properties:
+                              token:
+                                $ref: ../../components/schemas/utxo/BitcioncashCashToken.yaml
+        example:
+          $ref: ../../components/examples/getTransactionByTransactionId.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml

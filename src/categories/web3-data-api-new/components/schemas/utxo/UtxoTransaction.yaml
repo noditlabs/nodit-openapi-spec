@@ -1,0 +1,73 @@
+type: object
+required:
+  - id
+  - index
+  - hash
+  - version
+  - lockTime
+  - size
+  - vsize
+  - weight
+  - fee
+  - vinCount
+  - voutCount
+  - blockHeight
+  - blockHash
+  - blockTimestamp
+properties:
+  id:
+    type: string
+    description: |
+      트랜잭션의 고유 식별자로, 각 트랜잭션을 유일하게 식별할 수 있는 값입니다.
+  index:
+    type: integer
+    description: |
+      블록 내 트랜잭션의 인덱스를 나타냅니다. 0부터 시작하며, 블록에 포함된 트랜잭션의 순서를 의미합니다.
+  hash:
+    type: string
+    description: |
+      트랜잭션의 해시 값으로, 트랜잭션 데이터를 기반으로 계산된 고유한 식별자입니다. SegWit 데이터를 포함하여 계산됩니다.
+  version:
+    type: integer
+    description: |
+      트랜잭션의 버전을 나타내는 값으로, 트랜잭션 형식을 정의합니다.
+  lockTime:
+    type: integer
+    description: |
+      트랜잭션의 락타임으로, 트랜잭션이 유효해지는 조건(블록 높이 또는 UNIX 타임스탬프)을 나타냅니다. 값이 `0`이면 트랜잭션은 즉시 유효합니다.
+  size:
+    type: integer
+    description: |
+      트랜잭션의 실제 크기(바이트)로, 트랜잭션의 데이터 길이를 나타냅니다.
+  vsize:
+    type: integer
+    description: |
+      트랜잭션의 가상 크기(바이트)로, SegWit 데이터를 포함하여 블록에 포함되는 트랜잭션의 유효 크기를 나타냅니다. BIP-141에 따라 가중치(weight)를 4로 나눈 후 올림 처리한 값입니다.
+  weight:
+    type: integer
+    description: |
+      트랜잭션의 가중치를 나타냅니다. BIP-141에 따라 가중치(weight)를 4로 나눈 후 올림 처리한 값입니다.
+  fee:
+    type: string
+    description: |
+      트랜잭션의 수수료(BTC 단위)로, 입력 값에서 출력 값을 뺀 나머지 값입니다.
+  vinCount:
+    type: integer
+    description: |
+      입력(Vin) 트랜잭션의 개수를 나타냅니다.
+  voutCount:
+    type: integer
+    description: |
+      출력(Vout) 트랜잭션의 개수를 나타냅니다.
+  blockHeight:
+    type: integer
+    description: |
+      트랜잭션이 포함된 블록의 높이를 나타냅니다.
+  blockHash:
+    type: string
+    description: |
+      트랜잭션이 포함된 블록의 해시 값입니다.
+  blockTimestamp:
+    type: integer
+    description: |
+      트랜잭션이 포함된 블록의 생성 시간을 나타내며, UNIX 타임스탬프 형식으로 표시됩니다.

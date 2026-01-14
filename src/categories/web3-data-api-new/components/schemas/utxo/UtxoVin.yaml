@@ -1,0 +1,68 @@
+type: object
+required:
+  - index
+  - address
+  - value
+  - coinbase
+  - voutTransactionId
+  - voutIndex
+  - scriptSig
+  - sequence
+  - witness
+properties:
+  index:
+    type: integer
+    description: |
+      포함된 트랜잭션에서 Vin(입력)의 인덱스를 나타냅니다.
+  address:
+    type: string
+    description: |
+      Vin(입력)이 참조하는 이전 Vout(출력)의 주소로, 비트코인을 전송한 발송자의 주소를 나타냅니다.
+  value:
+    type: string
+    description: |
+      Vin(입력)에서 참조된 이전 Vout(출력)의 출력 값으로, 전송되는 비트코인의 양을 나타냅니다 (BTC 단위).
+  coinbase:
+    type:
+      - string
+      - "null"
+    description: |
+      Coinbase 트랜잭션(채굴 보상 트랜잭션)에서 사용되며, 채굴자가 정의한 임의의 데이터를 포함합니다. 일반 트랜잭션에서는 null로 설정됩니다.
+  voutTransactionId:
+    type: string
+    description: |
+      Vin(입력)이 참조하는 이전 트랜잭션(Vout)의 ID를 나타냅니다. Coinbase 트랜잭션의 경우 이 필드는 null로 표기됩니다.
+  voutIndex:
+    type: integer
+    description: |
+      Vin(입력)이 참조하는 이전 Vout(출력)의 인덱스를 나타냅니다. Coinbase 트랜잭션의 경우 null로 표기됩니다.
+  scriptSig:
+    type: object
+    description: |
+      Vin(입력)의 서명 스크립트로, 참조된 이전 Vout(출력)의 잠금 스크립트를 해제하는 데 사용됩니다.
+    properties:
+      hex:
+        type: string
+        description: |
+          16진수 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit 트랜잭션에서는 빈 문자열로 제공됩니다.
+        example: 3045022100b228e33e8b62f825...
+      asm:
+        type: string
+        description: |
+          어셈블리 형식으로 표현된 Vin(입력)의 서명 스크립트입니다. SegWit 트랜잭션에서는 빈 문자열로 제공됩니다.
+        example: OP_HASH160 OP_PUSHBYTES_20 000000...
+      type:
+        type: string
+        description: |
+          Vin(입력)의 서명 스크립트 유형을 나타냅니다 (예: `p2pkh`, `p2sh` 등).
+        example: witness_v0_keyhash
+  sequence:
+    type: integer
+    description: |
+      Vin(입력)의 시퀀스 번호로, 트랜잭션의 유효성을 제어하거나 `locktime`과 함께 작동합니다. RBF 기능 제어에도 사용됩니다.
+  witness:
+    type: array
+    description: |
+      SegWit 트랜잭션의 경우 포함되는 Vin(입력)의 스크립트 서명 데이터 배열입니다.
+    items:
+      type: string

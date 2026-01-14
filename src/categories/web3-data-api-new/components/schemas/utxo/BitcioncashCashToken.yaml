@@ -1,0 +1,23 @@
+type: object
+required:
+  - tokenCategory
+  - tokenAmount
+  - tokenNftCapability
+  - tokenNftCommitment
+properties:
+  tokenCategory:
+    type: string
+    description: |
+      CashTokens의 카테고리 ID입니다. 토큰 카테고리를 생성한 첫 번째 입력(outpoint)의 txid를 big-endian 16진수 문자열로 표현한 값이며, 동일 카테고리의 FT/NFT를 구분하는 고유 식별자입니다.
+  tokenAmount:
+    type: string
+    description: |
+      Fungible 토큰(FT)의 수량입니다. FT가 포함된 경우에만 존재하며, 10진수 문자열 형태로 표현한 값입니다.
+  tokenNftCapability:
+    type: string
+    description: |
+      Non-Fungible 토큰(NFT)의 권한입니다. NFT가 포함된 경우에만 존재하며, 'none'(변경/발행 불가), 'mutable'(commitment 변경 가능), 'minting'(추가 NFT 발행 가능) 중 하나입니다.
+  tokenNftCommitment:
+    type: string
+    description: |
+      NFT에 첨부된 commitment 데이터입니다. NFT가 포함되고 commitment 길이가 1바이트 이상일 때만 존재합니다. 최대 40바이트의 16진수 문자열로, NFT의 메타데이터나 고유 속성을 표현하는 데 사용됩니다.
