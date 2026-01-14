@@ -16,6 +16,7 @@ schema:
     - `optimism`: mainnet, sepolia
     - `polygon`: mainnet, amoy
     - `luniverse`: mainnet
+    - `xrpl`: mainnet
   enum:
     - mainnet
     - sepolia

@@ -19,4 +19,6 @@ schema:
     - optimism
     - polygon
     - luniverse
+    # XRPL
+    - xrpl
   default: ethereum
