@@ -82,7 +82,7 @@ function getOpIdAndParams(chain: string): {
           // EVM
           "arbitrum",
           "base",
-          // "bnb",
+          "bnb",
           "chiliz",
           "ethereum",
           "ethereumclassic",

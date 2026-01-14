@@ -58,6 +58,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -319,6 +320,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -525,6 +527,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -722,6 +725,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -881,6 +885,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -1441,6 +1446,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -1601,6 +1607,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -2447,6 +2454,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -3050,6 +3058,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -3249,6 +3258,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -3868,6 +3878,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -4277,6 +4288,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -4606,6 +4618,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -5040,6 +5053,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -6136,6 +6150,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -6371,6 +6386,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -6867,6 +6883,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -7062,6 +7079,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -7914,6 +7932,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -8580,6 +8599,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -9138,6 +9158,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -9804,6 +9825,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -10253,6 +10275,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -11617,6 +11640,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -12359,6 +12383,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -13135,6 +13160,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -13267,6 +13293,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -13841,6 +13868,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -15401,6 +15429,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -15502,6 +15531,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -15651,6 +15681,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -18189,6 +18220,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -20889,6 +20921,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -22933,6 +22966,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -25638,6 +25672,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -25770,6 +25805,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
@@ -26538,6 +26574,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - chiliz
               - ethereum
               - ethereumclassic
