@@ -25,4 +25,6 @@ properties:
     description: |
       로그의 이벤트 해시를 나타내는 필드입니다.
   args:
-    $ref: ./EvmArgs.yaml
+    type: array
+    items:
+      $ref: ./EvmArgs.yaml
