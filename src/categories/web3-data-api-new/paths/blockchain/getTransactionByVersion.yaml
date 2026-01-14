@@ -1,0 +1,43 @@
+security:
+  - api_key: []
+tags:
+  - Blockchain API
+description: |
+  특정 트랜잭션의 정보를 조회합니다.
+summary: Get Transaction By Version
+operationId: getTransactionByVersion
+parameters:
+  - $ref: ../../components/parameters/chains/AptosChainParameter.yaml
+  - $ref: ../../components/parameters/chains/AptosNetworkParameter.yaml
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - transactionVersion
+        properties:
+          transactionVersion:
+            $ref: ../../components/parameters/aptos/AptosTransactionVersionParameter.yaml
+          withBalanceChanges:
+            $ref: ../../components/parameters/aptos/AptosWithBalanceChangesParameter.yaml
+responses:
+  "200":
+    description: Successful Response
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/aptos/AptosTransaction.yaml
+        example:
+          $ref: ../../components/examples/getTransactionByVersion.json
+  "400":
+    $ref: ../../components/responses/400.yaml
+  "401":
+    $ref: ../../components/responses/401.yaml
+  "403":
+    $ref: ../../components/responses/403.yaml
+  "404":
+    $ref: ../../components/responses/404.yaml
+  "429":
+    $ref: ../../components/responses/429.yaml
