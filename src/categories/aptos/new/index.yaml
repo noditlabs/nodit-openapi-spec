@@ -3,8 +3,9 @@ info:
   title: Aptos Node API
   version: 1.2.18
   license:
-    name: MIT
-    identifier: MIT
+    name: CC-BY-NC-ND-4.0
+    identifier: CC-BY-NC-ND-4.0
+    url: https://creativecommons.org/licenses/by-nc-nd/4.0/
 servers:
   - url: https://{aptos-network}.nodit.io/v1
     variables:
