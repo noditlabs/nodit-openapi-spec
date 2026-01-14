@@ -14,31 +14,60 @@ requestBody:
   content:
     application/json:
       schema:
-        type: object
-        required:
-          - transactionHash
-        properties:
-          transactionHash:
-            oneOf:
-              - title: Aptos
-                allOf:
-                  - $ref: ../../components/parameters/aptos/AptosTransactionHashParameter.yaml
-                  - $ref: ../../components/parameters/aptos/AptosWithBalanceChangesParameter.yaml
-                default: "0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005"
-              - title: EVM (Ethereum, Optimism, ...)
-                allOf:
-                  - $ref: ../../components/parameters/evm/EvmTransactionHashParameter.yaml
-                  - $ref: ../../components/parameters/evm/EvmWithLogsParameter.yaml
-                  - $ref: ../../components/parameters/evm/EvmWithDecodeParameter.yaml
-                default: "0xe63e77aae7d36723e08e2c38eb7ed9cedca1d402c624173661918345c31a3982"
-              - title: XRPL
-                allOf:
-                  - $ref: ../../components/parameters/xrpl/XrplTransactionHashParameter.yaml
-                  - $ref: ../../components/parameters/xrpl/XrplWithBalanceChangesParameter.yaml
-                  - $ref: ../../components/parameters/xrpl/XrplWithTokenTransfersParameter.yaml
-                default: "0279a3b4d0e90af3632171aa3d4a82d99c97ccc7eeeea203a705901cff788308"
+        oneOf:
+          - title: Aptos
+            allOf:
+              - type: object
+                properties:
+                  transactionHash:
+                    $ref: ../../components/parameters/aptos/AptosTransactionHashParameter.yaml
+              - type: object
+                properties:
+                  withBalanceChanges:
+                    $ref: ../../components/parameters/aptos/AptosWithBalanceChangesParameter.yaml
+            default:
+              transactionHash: "0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005"
+              withBalanceChanges: false
+          - title: EVM (Ethereum, Optimism, ...)
+            allOf:
+              - type: object
+                properties:
+                  transactionHash:
+                    $ref: ../../components/parameters/evm/EvmTransactionHashParameter.yaml
+              - type: object
+                properties:
+                  withLogs:
+                    $ref: ../../components/parameters/evm/EvmWithLogsParameter.yaml
+              - type: object
+                properties:
+                  withDecode:
+                    $ref: ../../components/parameters/evm/EvmWithDecodeParameter.yaml
+            default:
+              transactionHash: "0xe63e77aae7d36723e08e2c38eb7ed9cedca1d402c624173661918345c31a3982"
+              withLogs: false
+              withDecode: false
+          - title: XRPL
+            allOf:
+              - type: object
+                properties:
+                  transactionHash:
+                    $ref: ../../components/parameters/xrpl/XrplTransactionHashParameter.yaml
+              - type: object
+                properties:
+                  withBalanceChanges:
+                    $ref: ../../components/parameters/xrpl/XrplWithBalanceChangesParameter.yaml
+              - type: object
+                properties:
+                  withTokenTransfers:
+                    $ref: ../../components/parameters/xrpl/XrplWithTokenTransfersParameter.yaml
+            default:
+              transactionHash: "F8E2B034CDB4EE7D6C65A59098F730699887B4727860C1A6922C85BFA3EF8BBC"
+              withBalanceChanges: false
+              withTokenTransfers: false
         default:
           transactionHash: "0xe63e77aae7d36723e08e2c38eb7ed9cedca1d402c624173661918345c31a3982"
+          withLogs: false
+          withDecode: false
 responses:
   "200":
     description: Successful Response
@@ -54,12 +83,14 @@ responses:
                 - type: object
                   properties:
                     logs:
-                      allOf:
-                        - $ref: ../../components/schemas/evm/EvmLog.yaml
-                        - type: object
-                          properties:
-                            decodedLog:
-                              $ref: ../../components/schemas/evm/EvmDecodedLog.yaml
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: ../../components/schemas/evm/EvmLog.yaml
+                          - type: object
+                            properties:
+                              decodedLog:
+                                $ref: ../../components/schemas/evm/EvmDecodedLog.yaml
             - title: XRPL
               $ref: ../../components/schemas/xrpl/XrplTransaction.yaml
         example:
