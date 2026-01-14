@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Web3 Data API
-  version: 1.2.21
+  version: 1.2.22
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -13272,6 +13272,8 @@ paths:
               - ethereumclassic
               - giwa
               - kaia
+              - optimism
+              - polygon
               - luniverse
               - tron
             default: ethereum
@@ -13304,29 +13306,7 @@ paths:
                           pattern: ^0[xX][0-9a-fA-F]{40}$
                           default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
                         relation: *ref_32
-                        fromBlock:
-                          type: string
-                          description: >
-                            조회 시작 블록을 지정하는 파라미터입니다. 다음 형식 중 하나를 입력할 수 있습니다:  
-
-                            - block number: 10진수 문자열로 블록 번호를 입력.  
-
-                            - block hash: 64자리 16진수("0x" 포함).  
-
-                            - block tag: "earliest" 또는 "latest"를 사용하여 첫 번째 블록 또는
-                            최신 블록을 지정.
-
-
-                            유의사항: 
-
-                            - toBlock 없이 제공하면, 해당 블록부터 최신 블록까지 결과를 조회합니다.  
-
-                            - fromBlock 값은 toBlock 값보다 클 수 없습니다.  
-
-                            - fromBlock과 toBlock에 동일한 값을 입력하면, 해당 블록만 조회됩니다.  
-
-                            - fromBlock에 "latest"는 toBlock이 "latest"일 때만 허용됩니다.
-                          pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+                        fromBlock: *ref_14
                         toBlock: *ref_15
                         fromDate: *ref_16
                         toDate: *ref_17
@@ -13866,6 +13846,8 @@ paths:
               - ethereumclassic
               - giwa
               - kaia
+              - optimism
+              - polygon
               - luniverse
               - tron
             default: ethereum
