@@ -69,6 +69,7 @@ function getOpIdAndParams(chain: string): {
           // evm
           "arbitrum",
           "base",
+          "bnb",
           "ethereum",
           "kaia",
           "optimism",

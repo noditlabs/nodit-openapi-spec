@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Webhook
-  version: 1.2.20
+  version: 1.2.22
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -481,6 +481,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - ethereum
               - giwa
               - kaia
@@ -936,6 +937,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - ethereum
               - kaia
               - optimism
@@ -1153,6 +1155,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - ethereum
               - giwa
               - kaia
@@ -1235,6 +1238,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - ethereum
               - giwa
               - kaia
@@ -1313,6 +1317,7 @@ paths:
             enum:
               - arbitrum
               - base
+              - bnb
               - ethereum
               - kaia
               - optimism

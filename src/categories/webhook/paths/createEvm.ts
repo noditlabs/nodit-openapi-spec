@@ -82,6 +82,7 @@ function getOpIdAndParams(): {
         // evm
         "arbitrum",
         "base",
+        "bnb",
         "ethereum",
         "giwa",
         "kaia",
