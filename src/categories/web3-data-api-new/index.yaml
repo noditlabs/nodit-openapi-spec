@@ -3,8 +3,9 @@ info:
   title: Web3 Data API
   version: 1.2.20
   license:
-    name: MIT
-    identifier: MIT
+    name: CC-BY-NC-ND-4.0
+    identifier: CC-BY-NC-ND-4.0
+    url: https://creativecommons.org/licenses/by-nc-nd/4.0/
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -157,12 +158,12 @@ paths:
   /{chain}/{network}/blockchain/getTransactionByHash:
     post:
       $ref: ./paths/blockchain/getTransactionByHash.yaml
-  # /{chain}/{network}/blockchain/getTransactionByTransactionId:
-  #   post:
-  #     $ref: ./paths/blockchain/getTransactionByTransactionId.yaml
-  # /{chain}/{network}/blockchain/getTransactionByVersion:
-  #   post:
-  #     $ref: ./paths/blockchain/getTransactionByVersion.yaml
+  /{chain}/{network}/blockchain/getTransactionByTransactionId:
+    post:
+      $ref: ./paths/blockchain/getTransactionByTransactionId.yaml
+  /{chain}/{network}/blockchain/getTransactionByVersion:
+    post:
+      $ref: ./paths/blockchain/getTransactionByVersion.yaml
   # /{chain}/{network}/blockchain/getTransactionsByAccount:
   #   post:
   #     $ref: ./paths/blockchain/getTransactionsByAccount.yaml
