@@ -9,11 +9,11 @@ import {
   ETHEREUM_ACCOUNTS,
   getChainInfo,
 } from "../../../../constants";
-import { OasParams, ReadmeExtension } from "../../../../types";
+import { OasParamsWithProtocol, ReadmeExtension } from "../../../../types";
 import { protocolNetwork } from "../../library/serverVariables";
 import { fromBlockToBlockInfoMessage } from "../../../../callouts";
 
-function oasDocs({ version, protocol }: OasParams): OpenAPIV3.Document {
+function oasDocs({ version, protocol }: OasParamsWithProtocol): OpenAPIV3.Document {
   const fileName = __filename.split("/").slice(-1)[0]?.split(".")[0];
   const method = fileName;
   const title = `evm-${protocol}-${method}`;

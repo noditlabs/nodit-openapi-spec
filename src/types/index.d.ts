@@ -18,7 +18,13 @@ declare interface ApiSpec {
 
 declare interface OasParams {
   version: string;
-  chain: string;
+  chain?: string;
+  protocol?: string;
+}
+
+declare interface OasParamsWithProtocol {
+  version: string;
+  protocol: string;
 }
 
 declare interface EvmDocsInfo {
@@ -60,7 +66,7 @@ declare interface ReadmeDocOption {
   title?: string;
   type?: "basic" | "error" | "link";
   body?: string;
-  category?: string;
+  category?: string | { slug: string } | { uri: string };
   hidden?: boolean;
   order?: number;
   parentDoc?: string;
