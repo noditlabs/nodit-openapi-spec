@@ -6,35 +6,49 @@ import { ReadmeApi } from "../connectors/readme.apis";
 import { findApiSpecId } from "../utils";
 import { OpenAPIV3 } from "openapi-types";
 
-async function getYamlTitle(yamlFilePath: string): Promise<string> {
+async function getSpecTitle(specFilePath: string): Promise<string> {
   try {
-    const fileContent = await fs.readFile(yamlFilePath, "utf8");
-    const doc = yaml.load(fileContent) as OpenAPIV3.Document;
+    const fileContent = await fs.readFile(specFilePath, "utf8");
+    let doc: OpenAPIV3.Document;
+
+    if (specFilePath.endsWith(".json")) {
+      doc = JSON.parse(fileContent) as OpenAPIV3.Document;
+    } else {
+      doc = yaml.load(fileContent) as OpenAPIV3.Document;
+    }
+
     return doc.info?.title || "";
   } catch (error) {
     throw new Error(
-      `Error reading YAML file: ${
+      `Error reading spec file: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
 }
 
+function isValidSpecFile(filePath: string): boolean {
+  return (
+    filePath.endsWith(".yaml") ||
+    filePath.endsWith(".yml") ||
+    filePath.endsWith(".json")
+  );
+}
+
 function validateInputs(
-  yamlFilePathInput?: string,
+  specFilePathInput?: string,
   versionInput?: string
 ): [string, string] {
-  if (!yamlFilePathInput) {
+  if (!specFilePathInput) {
     throw new Error(
-      "Error: A YAML file path is required as the first argument."
+      "Error: A spec file path (YAML or JSON) is required as the first argument."
     );
   }
 
-  if (
-    !yamlFilePathInput.endsWith(".yaml") &&
-    !yamlFilePathInput.endsWith(".yml")
-  ) {
-    throw new Error("Error: The file must have a .yaml or .yml extension.");
+  if (!isValidSpecFile(specFilePathInput)) {
+    throw new Error(
+      "Error: The file must have a .yaml, .yml, or .json extension."
+    );
   }
 
   if (!versionInput) {
@@ -47,37 +61,37 @@ function validateInputs(
     );
   }
 
-  return [yamlFilePathInput, versionInput];
+  return [specFilePathInput, versionInput];
 }
 
 async function main() {
   try {
     const currentWorkingDir = process.cwd();
-    const [yamlFilePathInput, versionInput] = validateInputs(
+    const [specFilePathInput, versionInput] = validateInputs(
       ...process.argv.slice(2)
     );
 
-    const yamlFilePath = path.resolve(currentWorkingDir, yamlFilePathInput);
+    const specFilePath = path.resolve(currentWorkingDir, specFilePathInput);
 
     // Check if file exists
     try {
-      await fs.access(yamlFilePath);
+      await fs.access(specFilePath);
     } catch {
-      throw new Error(`Error: File not found: ${yamlFilePath}`);
+      throw new Error(`Error: File not found: ${specFilePath}`);
     }
 
-    // Get title from YAML file
-    const title = await getYamlTitle(yamlFilePath);
+    // Get title from spec file (YAML or JSON)
+    const title = await getSpecTitle(specFilePath);
     if (!title) {
-      throw new Error("Error: Could not find 'info.title' in the YAML file.");
+      throw new Error("Error: Could not find 'info.title' in the spec file.");
     }
 
     console.log(`📤 Uploading API specification: ${title}`);
-    console.log(`   File: ${yamlFilePath}`);
+    console.log(`   File: ${specFilePath}`);
     console.log(`   Version: ${versionInput}`);
 
     let result = await ReadmeApi.uploadSpecification({
-      filePath: yamlFilePath,
+      filePath: specFilePath,
       version: versionInput,
     });
 
@@ -103,7 +117,7 @@ async function main() {
       console.log(`🔄 Updating instead of uploading...`);
 
       result = await ReadmeApi.updateSpecification({
-        filePath: yamlFilePath,
+        filePath: specFilePath,
         id: apiDefinitionId,
         version: versionInput,
       });

@@ -5,32 +5,69 @@ import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
-function validateInputs(
-  yamlFilePathInput?: string,
-  outputPathInput?: string
-): [string, string | undefined] {
-  if (!yamlFilePathInput) {
+type OutputFormat = "yaml" | "json";
+
+interface ParsedArgs {
+  yamlFilePath: string;
+  outputPath?: string;
+  format: OutputFormat;
+}
+
+function parseArgs(args: string[]): ParsedArgs {
+  let yamlFilePath: string | undefined;
+  let outputPath: string | undefined;
+  let format: OutputFormat = "yaml";
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+
+    if (arg === "--format" || arg === "-f") {
+      const formatValue = args[++i];
+      if (formatValue !== "yaml" && formatValue !== "json") {
+        throw new Error(
+          `Error: Invalid format "${formatValue}". Must be "yaml" or "json".`
+        );
+      }
+      format = formatValue;
+    } else if (arg === "--json") {
+      format = "json";
+    } else if (arg === "--yaml") {
+      format = "yaml";
+    } else if (!yamlFilePath) {
+      yamlFilePath = arg;
+    } else if (!outputPath) {
+      outputPath = arg;
+    }
+  }
+
+  if (!yamlFilePath) {
     throw new Error(
       "Error: A YAML file path is required as the first argument."
     );
   }
 
-  if (
-    !yamlFilePathInput.endsWith(".yaml") &&
-    !yamlFilePathInput.endsWith(".yml")
-  ) {
+  if (!yamlFilePath.endsWith(".yaml") && !yamlFilePath.endsWith(".yml")) {
     throw new Error("Error: The file must have a .yaml or .yml extension.");
   }
 
-  return [yamlFilePathInput, outputPathInput];
+  return { yamlFilePath, outputPath, format };
+}
+
+function changeExtension(filePath: string, format: OutputFormat): string {
+  const ext = format === "json" ? ".json" : ".yaml";
+  const baseName = path.basename(filePath, path.extname(filePath));
+  const dirName = path.dirname(filePath);
+  return path.join(dirName, baseName + ext);
 }
 
 async function main() {
   try {
     const currentWorkingDir = process.cwd();
-    const [yamlFilePathInput, outputPathInput] = validateInputs(
-      ...process.argv.slice(2)
-    );
+    const {
+      yamlFilePath: yamlFilePathInput,
+      outputPath: outputPathInput,
+      format,
+    } = parseArgs(process.argv.slice(2));
 
     const yamlFilePath = path.resolve(currentWorkingDir, yamlFilePathInput);
 
@@ -49,13 +86,17 @@ async function main() {
       const stats = await fs.stat(resolvedOutput).catch(() => null);
 
       if (stats && stats.isDirectory()) {
-        // It's a directory, use input filename
+        // It's a directory, use input filename with format extension
         const fileName = path.basename(yamlFilePath);
-        outputPath = path.join(resolvedOutput, fileName);
+        outputPath = changeExtension(
+          path.join(resolvedOutput, fileName),
+          format
+        );
         await fs.ensureDir(resolvedOutput);
       } else {
         // It's a file path (or doesn't exist yet)
-        outputPath = resolvedOutput;
+        // If format is specified, change extension; otherwise use provided path
+        outputPath = changeExtension(resolvedOutput, format);
         const outputDir = path.dirname(outputPath);
         await fs.ensureDir(outputDir);
       }
@@ -63,12 +104,13 @@ async function main() {
       // Default: use reference directory with same filename
       const outputDir = path.resolve(currentWorkingDir, "./reference");
       const fileName = path.basename(yamlFilePath);
-      outputPath = path.join(outputDir, fileName);
+      outputPath = changeExtension(path.join(outputDir, fileName), format);
       await fs.ensureDir(outputDir);
     }
 
     console.log(`📦 Bundling ${yamlFilePath}...`);
     console.log(`   Output: ${outputPath}`);
+    console.log(`   Format: ${format.toUpperCase()}`);
 
     // Bundle using redocly
     const { stdout, stderr } = await execAsync(
