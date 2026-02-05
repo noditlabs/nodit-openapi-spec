@@ -133,6 +133,10 @@ export const supportedChains: ChainInfo[] = [
     mainnet: "mainnet",
     testnet: [],
   },
+  {
+    chain: "arc",
+    testnet: ["testnet"],
+  },
 ];
 
 export const supportedApisChains: SupportedApis[] = [
@@ -1350,6 +1354,8 @@ export const supportedApisChains: SupportedApis[] = [
         endpoints: [
           "getBlockByHashOrNumber",
           "getBlocksWithinRange",
+          // "getEventsByAccount",
+          // "getEventsByEventType",
           "getTransactionsInBlock",
           "getTransactionsByAccount",
           "getTotalTransactionCountByAccount",
@@ -1656,7 +1662,7 @@ export const supportedApisChains: SupportedApis[] = [
   },
   {
     chain: "bnb",
-    streamApi: false,
+    streamApi: true,
     web3DataApi: [
       {
         category: "blockchain",
@@ -2003,6 +2009,79 @@ export const supportedApisChains: SupportedApis[] = [
     // ethereum classic
     nodeApi: [],
     // ethereum classic
+    webhookApi: [],
+  },
+  {
+    chain: "arc",
+    streamApi: false,
+    web3DataApi: [],
+    // arc
+    nodeApi: [
+      {
+        category: "eth",
+        endpoints: [
+          "eth_blockNumber",
+          "eth_call",
+          "eth_chainId",
+          "eth_createAccessList",
+          "eth_estimateGas",
+          "eth_feeHistory",
+          "eth_gasPrice",
+          "eth_getBalance",
+          "eth_getBlockByHash",
+          "eth_getBlockByNumber",
+          "eth_getBlockReceipts",
+          "eth_getBlockTransactionCountByHash",
+          "eth_getBlockTransactionCountByNumber",
+          "eth_getCode",
+          "eth_getFilterChanges",
+          "eth_getFilterLogs",
+          "eth_getLogs",
+          "eth_getProof",
+          "eth_getStorageAt",
+          "eth_getTransactionByBlockHashAndIndex",
+          "eth_getTransactionByBlockNumberAndIndex",
+          "eth_getTransactionByHash",
+          "eth_getTransactionCount",
+          "eth_getTransactionReceipt",
+          "eth_getUncleByBlockHashAndIndex",
+          "eth_getUncleByBlockNumberAndIndex",
+          "eth_getUncleCountByBlockHash",
+          "eth_getUncleCountByBlockNumber",
+          "eth_maxPriorityFeePerGas",
+          "eth_newBlockFilter",
+          "eth_newFilter",
+          "eth_newPendingTransactionFilter",
+          "eth_sendRawTransaction",
+          "eth_uninstallFilter",
+          "eth_subscribe",
+          "eth_unsubscribe",
+        ],
+      },
+      {
+        category: "net",
+        endpoints: [
+          "net_version",
+          // "net_listening",
+        ],
+      },
+      { category: "web3", endpoints: ["web3_clientVersion", "web3_sha3"] },
+      { category: "trace", endpoints: [] },
+      {
+        category: "debug",
+        endpoints: [
+          "debug_traceBlockByHash",
+          "debug_traceBlockByNumber",
+          "debug_traceCall",
+          "debug_traceTransaction",
+        ],
+      },
+      { category: "bor", endpoints: [] },
+      { category: "optimism", endpoints: [] },
+      { category: "kaia", endpoints: [] },
+      { category: "klay", endpoints: [] },
+    ],
+    // arc
     webhookApi: [],
   },
 ];

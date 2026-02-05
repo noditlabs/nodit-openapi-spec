@@ -33,7 +33,7 @@ export const Block: OpenAPIV3.SchemaObject = {
       type: "integer",
       description: `블록이 생성된 시간을 나타내는 필드입니다.
 
-마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공되며, 블록의 생성 순서와 시간 추적에 사용됩니다.
+UNIX 타임스탬프로 제공되며, 블록의 생성 순서와 시간 추적에 사용됩니다.
 블록 타임스탬프는 트랜잭션의 시간 순서를 보장하고 블록 생성 간격을 측정하는 데 활용됩니다.`,
       example: 1749003732416395,
     },
@@ -101,7 +101,7 @@ export const BalanceChange: OpenAPIV3.SchemaObject = {
       type: "integer",
       description: `블록 생성 시각을 나타내는 필드입니다.
 
-마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공됩니다.`,
+UNIX 타임스탬프로 제공됩니다.`,
       example: 1749003732416395,
     },
     transactionHash: {
@@ -207,7 +207,7 @@ Move 모듈에서 정의된 이벤트 구조체의 전체 경로(주소::모듈:
   },
 };
 
-export const Event: OpenAPIV3.SchemaObject = {
+export const EventInTransaction: OpenAPIV3.SchemaObject = {
   type: "object",
   required: [
     "eventIndex",
@@ -294,6 +294,55 @@ Object의 소유권 추적과 권한 확인에 사용됩니다.`,
   },
 };
 
+export const Event: OpenAPIV3.SchemaObject = {
+  allOf: [
+    {
+      type: "object",
+      required: [
+        "transactionHash",
+        "transactionVersion",
+        "blockHeight",
+        "blockTimestamp",
+      ],
+      properties: {
+        transactionHash: {
+          type: "string",
+          description: `이벤트가 포함된 트랜잭션의 해시를 나타내는 필드입니다.
+
+트랜잭오래잭션의 모든 데이터를 포함하여 계산된 암호학적 해시값으로, 0x로 시작하는 64자리 16진수 문자열 형태로 제공됩니다.
+이 해시를 통해 이벤트와 관련된 트랜잭션의 전체 정보를 조회할 수 있습니다.`,
+          example:
+            "0x2a41cd44491bb92d4eb17d8487f82d9b43ab6289074c1986ee055be8105707c9",
+        },
+        transactionVersion: {
+          type: "integer",
+          description: `트랜잭션의 버전을 나타내는 필드입니다.
+
+체인 상에서 트랜잭션의 순서를 나타내는 고유한 시퀀스 ID로, 0부터 시작하여 순차적으로 증가합니다.
+트랜잭션의 실행 순서를 보장하고 특정 트랜잭션의 상태를 조회하는 데 사용됩니다.`,
+          example: 2854257037,
+        },
+        blockHeight: {
+          type: "integer",
+          description: `트랜잭션이 포함된 블록의 높이를 나타내는 필드입니다.
+
+제네시스 블록(0)부터 시작하여 순차적으로 증가하는 정수값으로 제공됩니다.
+이 값은 트랜잭션이 어느 블록에 포함되었는지를 식별하고, 해당 트랜잭션이 확정되었는지를 확인하는 데 사용됩니다.`,
+          example: 160155267,
+        },
+        blockTimestamp: {
+          type: "integer",
+          description: `트랜잭션이 포함된 블록의 생성 시각을 나타내는 필드입니다.
+
+UNIX 타임스탬프로 제공되며, 이 값은 블록이 생성된 시점이자 해당 블록에 포함된 트랜잭션들이 처리된 시점을 의미합니다.`,
+          example: 1749003732416395,
+        },
+      },
+    },
+    EventInTransaction,
+  ],
+};
+
 export const Transaction: OpenAPIV3.SchemaObject = {
   type: "object",
   required: [
@@ -334,19 +383,19 @@ export const Transaction: OpenAPIV3.SchemaObject = {
       example: 2854257037,
     },
     blockHeight: {
-      type: "string",
+      type: "integer",
       description: `트랜잭션이 포함된 블록의 높이를 나타내는 필드입니다.
 
 제네시스 블록(0)부터 시작하여 순차적으로 증가하는 정수값으로 제공됩니다.
 이 값은 트랜잭션이 어느 블록에 포함되었는지를 식별하고, 해당 트랜잭션이 확정되었는지를 확인하는 데 사용됩니다.`,
-      example: "160155267",
+      example: 160155267,
     },
     blockTimestamp: {
-      type: "string",
+      type: "integer",
       description: `트랜잭션이 포함된 블록의 생성 시각을 나타내는 필드입니다.
 
-마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공되며, 이 값은 블록이 생성된 시점이자 해당 블록에 포함된 트랜잭션들이 처리된 시점을 의미합니다.`,
-      example: "1749003732416395",
+UNIX 타임스탬프로 제공되며, 이 값은 블록이 생성된 시점이자 해당 블록에 포함된 트랜잭션들이 처리된 시점을 의미합니다.`,
+      example: 1749003732416395,
     },
     expirationTimestampSecs: {
       type: "integer",
@@ -432,13 +481,7 @@ true인 경우 트랜잭션이 성공적으로 실행되었음을, false인 경�
 
 각 이벤트는 트랜잭션으로 인한 상태 변화나 중요 작업의 실행을 기록합니다.
 트랜잭션의 영향을 추적하고 외부 시스템과의 연동을 위한 정보를 제공합니다.`,
-      items: Event,
-      example: [
-        {
-          type: "0x1::coin::DepositEvent",
-          data: { amount: "1000000" },
-        },
-      ],
+      items: EventInTransaction,
     },
     balanceInAccounts: {
       type: "array",

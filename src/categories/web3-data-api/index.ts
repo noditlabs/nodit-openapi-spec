@@ -11,7 +11,7 @@ import { OasParams, ReadmeExtension } from "../../types";
 
 const apiTitle = "Web3 Data API";
 
-function oasDocs({ version, chain }: OasParams): OpenAPIV3.Document {
+function oasDocs({ version, chain = "web3" }: OasParams): OpenAPIV3.Document {
   return {
     openapi: "3.1.0",
     info: {

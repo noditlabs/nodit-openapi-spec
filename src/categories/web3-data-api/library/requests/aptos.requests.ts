@@ -128,3 +128,10 @@ export const linkedAssetType: OpenAPIV3.SchemaObject = {
 linkedAssetType에는 마이그레이션된 FA의 Object 주소를 입력해야 하며, 64자리 16진수("0x" 포함) 형식으로 입력해야 합니다.`,
   pattern: Patterns.string.prefixedHexaDecimal64.source,
 };
+
+export const eventType: OpenAPIV3.SchemaObject = {
+  type: "string",
+  description: `조회하고자 하는 이벤트 타입을 지정하는 파라미터입니다. 이벤트 타입은 모듈에서 정의한 event struct의 이름을 의미합니다. 이 필드는 \`module_address::module_name::event_name\` 형식으로 입력해야 합니다.`,
+  example: "0x1::coin::CoinDeposit",
+  pattern: `${Patterns.aptos.address.source}::${Patterns.aptos.resourceType.source}::${Patterns.string.text.source}`,
+};

@@ -2692,6 +2692,162 @@ const Examples = {
       tokens: 2,
     },
   },
+  getEventsByAccount: {
+    page: 1,
+    rpp: 2,
+    count: 2930146,
+    items: [
+      {
+        blockHeight: 599423645,
+        blockTimestamp: 1770021277945,
+        transactionHash:
+          "0x70367bc8a7341996a41e578e1f38ad975ca23ee1d70abb688fc8d6f03b6ac7b8",
+        transactionVersion: 4235651487,
+        eventIndex: 6,
+        accountAddress:
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+        eventType: "0x1::fungible_asset::Deposit",
+        creationNumber: 0,
+        sequenceNumber: 0,
+        data: {
+          amount: "300000",
+          store:
+            "0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79",
+        },
+        objectOwnerAddress:
+          "0x7a17ee0e26f1a8a09a5379d1daa0eb41b2b7c185b101d00f733f2dc5da43e59f",
+        objectAddress:
+          "0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79",
+      },
+      {
+        blockHeight: 599423540,
+        blockTimestamp: 1770021271790,
+        transactionHash:
+          "0x4f255217d53741878a9c50566019184eaa96c875e72fb8372a0f7339c2b4dabb",
+        transactionVersion: 4235651116,
+        eventIndex: 4,
+        accountAddress:
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+        eventType: "0x1::fungible_asset::Deposit",
+        creationNumber: 0,
+        sequenceNumber: 0,
+        data: {
+          amount: "772000000",
+          store:
+            "0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79",
+        },
+        objectOwnerAddress:
+          "0x7a17ee0e26f1a8a09a5379d1daa0eb41b2b7c185b101d00f733f2dc5da43e59f",
+        objectAddress:
+          "0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79",
+      },
+    ],
+  },
+  getEventsByEventType: {
+    page: 1,
+    rpp: 2,
+    count: 5114581,
+    items: [
+      {
+        blockHeight: 550513856,
+        blockTimestamp: 1767139195465,
+        transactionHash:
+          "0x84784546a8b0ae5fb9ee76734ac4b0ca28491d56112721bcc6bf4ff555dda00b",
+        transactionVersion: 4022134250,
+        eventIndex: 2,
+        accountAddress:
+          "0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387",
+        eventType:
+          "0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387::event::PriceFeedUpdate",
+        creationNumber: 2,
+        sequenceNumber: 611805882,
+        data: {
+          price_feed: {
+            ema_price: {
+              conf: "55118668",
+              expo: {
+                magnitude: "8",
+                negative: true,
+              },
+              price: {
+                magnitude: "52741874000",
+                negative: false,
+              },
+              timestamp: "1767139192",
+            },
+            price: {
+              conf: "50364324",
+              expo: {
+                magnitude: "8",
+                negative: true,
+              },
+              price: {
+                magnitude: "52916463193",
+                negative: false,
+              },
+              timestamp: "1767139192",
+            },
+            price_identifier: {
+              bytes:
+                "0xbe9b59d178f0d6a97ab4c343bff2aa69caa1eaae3e9048a65788c529b125bb24",
+            },
+          },
+          timestamp: "1767139195465631",
+        },
+        objectOwnerAddress: null,
+        objectAddress: null,
+      },
+      {
+        blockHeight: 550513800,
+        blockTimestamp: 1767139192275,
+        transactionHash:
+          "0x28f023b963bc65e1582366faa4cda6d9f9eaa74a639ba2835e666063afa338eb",
+        transactionVersion: 4022134063,
+        eventIndex: 1,
+        accountAddress:
+          "0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387",
+        eventType:
+          "0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387::event::PriceFeedUpdate",
+        creationNumber: 2,
+        sequenceNumber: 611805881,
+        data: {
+          price_feed: {
+            ema_price: {
+              conf: "1",
+              expo: {
+                magnitude: "8",
+                negative: true,
+              },
+              price: {
+                magnitude: "106220287",
+                negative: false,
+              },
+              timestamp: "1767139190",
+            },
+            price: {
+              conf: "1",
+              expo: {
+                magnitude: "8",
+                negative: true,
+              },
+              price: {
+                magnitude: "106229000",
+                negative: false,
+              },
+              timestamp: "1767139190",
+            },
+            price_identifier: {
+              bytes:
+                "0x12aa9a44a5f0695ccf5a9e3ded5c646b13b4013047182ca6db0aacfea8b252ef",
+            },
+          },
+          timestamp: "1767139192275571",
+        },
+        objectOwnerAddress: null,
+        objectAddress: null,
+      },
+    ],
+  },
 };
 
 export default Examples;
