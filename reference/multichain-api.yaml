@@ -2,10 +2,6 @@ openapi: 3.1.0
 info:
   title: Multichain API
   version: 1.2.20
-  license:
-    name: CC-BY-NC-ND-4.0
-    identifier: CC-BY-NC-ND-4.0
-    url: https://creativecommons.org/licenses/by-nc-nd/4.0/
 servers:
   - url: https://web3.nodit.io/v1/multichain
 paths:
@@ -33,18 +29,18 @@ paths:
                   description: |
                     조회하고자 하는 문자열을 지정하는 파라미터
                   examples:
-                    - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                    - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
                     - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-                    - '0x1'
+                    - "0x1"
                     - rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh
                     - TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP
                     - 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
-                    - '0x8d40f254d78ac7eda11815973e44012fda358ed3cd20db8eafc04e672e6e1f65'
-                  default: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                    - "0x8d40f254d78ac7eda11815973e44012fda358ed3cd20db8eafc04e672e6e1f65"
+                  default: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
                 chains:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Chain'
+                    $ref: "#/components/schemas/Chain"
                   default:
                     - ethereum-mainnet
                     - base-mainnet
@@ -52,7 +48,7 @@ paths:
                   description: |
                     결과에 포함할 체인과 네트워크를 지정하는 파라미터로 {chain}-{network} 형식으로 지정합니다.
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
@@ -90,30 +86,30 @@ paths:
                             - Aptos의 경우 account address는 zero-padded 64자리 16진수로 정규화됩니다. (e.g., "0x1" -> "0x0000000000000000000000000000000000000000000000000000000000000001")
                             - Tron의 경우 account address는 base58 문자열로 정규화됩니다. (e.g., "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" -> "TVjpchRyV9wdpj6kmwqVsBDWY1J8PaFtnb")
               example:
-                input: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                input: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
                 items:
                   - chain: arbitrum-mainnet
                     type: account
-                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                    normalizedInput: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
                   - chain: ethereum-mainnet
                     type: account
-                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                    normalizedInput: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
                   - chain: ethereum-sepolia
                     type: account
-                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+                    normalizedInput: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
                   - chain: base-mainnet
                     type: account
-                    normalizedInput: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '429':
-          $ref: '#/components/responses/429'
+                    normalizedInput: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
 components:
   securitySchemes:
     api_key:
@@ -175,7 +171,7 @@ components:
         - code
         - message
   responses:
-    '400':
+    "400":
       description: Bad Request
       content:
         application/json:
@@ -188,40 +184,40 @@ components:
                 type: string
             example:
               code: INVALID_PARAMETER
-              message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE, PARAMETER2_NAME = PARAMETER2_VALUE, ... }'
-    '401':
+              message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE, PARAMETER2_NAME = PARAMETER2_VALUE, ... }"
+    "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
-    '403':
+    "403":
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: PERMISSION_DENIED
               message: Permission denied
-    '404':
+    "404":
       description: Not Found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: RESOURCE_NOT_FOUND
-              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
-    '429':
+              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+    "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
