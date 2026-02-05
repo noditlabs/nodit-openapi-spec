@@ -53,11 +53,11 @@ async function main() {
 
         if (!nodeApi) continue;
         console.log(`⏵⏵⏵ ${chain} Node API`);
-        const nodeApiDoc = await ReadmeApi.createDoc({
+        const nodeApiDoc = await ReadmeApi.createReference({
           version: versionInput,
           options: {
             title: nodeApiDocName,
-            categorySlug: chain,
+            category: { slug: chain },
             hidden: false,
           },
         });
@@ -68,7 +68,7 @@ async function main() {
         }
         console.log(`ㄴ Successfully Created`);
 
-        const updateNodeApiDoc = await ReadmeApi.updateDoc({
+        const updateNodeApiDoc = await ReadmeApi.updateReference({
           slug: nodeApiDoc.slug,
           version: versionInput,
           options: {
@@ -89,12 +89,12 @@ async function main() {
             const namespaceDocName = `${chainInput}-${namespace}`;
             console.log(`  ⏵⏵ ${namespaceDocName}`);
 
-            const namespaceDoc = await ReadmeApi.createDoc({
+            const namespaceDoc = await ReadmeApi.createReference({
               version: versionInput,
               options: {
                 title: namespaceDocName,
-                categorySlug: chain,
-                parentDocSlug: updateNodeApiDoc.slug,
+                category: { slug: chain },
+                parentDocSlug: updateNodeApiDoc?.slug,
                 hidden: false,
               },
             });
@@ -105,7 +105,7 @@ async function main() {
             }
             console.log(`  ㄴ Successfully Created`);
 
-            const updateNamespaceDoc = await ReadmeApi.updateDoc({
+            const updateNamespaceDoc = await ReadmeApi.updateReference({
               slug: namespaceDoc.slug,
               version: versionInput,
               options: {

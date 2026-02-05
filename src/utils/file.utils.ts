@@ -4,6 +4,8 @@ import * as fs from "fs/promises";
 import { OpenAPIV3 } from "openapi-types";
 import slugify from "slugify";
 
+export type OutputFormat = "yaml" | "json";
+
 export async function getOasDocs(
   tsFilePath: string,
   version: string,
@@ -20,22 +22,25 @@ export async function getOasDocs(
 
   oasDocs = module.default({
     chain,
+    protocol: chain, // EVM methods use 'protocol' instead of 'chain'
     version,
   });
 
   return oasDocs;
 }
 
-export async function convertTsToYaml({
+export async function convertTsToSpec({
   version,
   outputDir,
   tsFilePath,
   chain,
+  format = "yaml",
 }: {
   version: string;
   outputDir: string;
   tsFilePath: string;
   chain?: string;
+  format?: OutputFormat;
 }) {
   try {
     if (!tsFilePath.endsWith(".ts")) {
@@ -44,17 +49,24 @@ export async function convertTsToYaml({
       );
     }
     const oasDocs = await getOasDocs(tsFilePath, version, chain);
-    const yamlData = yaml.dump({ ...oasDocs }); // yaml로 변환
+
+    // Convert to specified format
+    const outputData =
+      format === "json"
+        ? JSON.stringify(oasDocs, null, 2)
+        : yaml.dump({ ...oasDocs });
 
     // if output directory does not exist, create it
     await fs.mkdir(outputDir, { recursive: true });
 
-    let baseFileName = `${slugify(oasDocs.info.title.toLowerCase())}`;
+    const baseFileName = `${slugify(oasDocs.info.title.toLowerCase())}`;
+    const extension = format === "json" ? ".json" : ".yaml";
+    const outputPath = path.join(outputDir, `${baseFileName}${extension}`);
 
-    const outputPath = path.join(outputDir, `${baseFileName}.yaml`);
-
-    await fs.writeFile(outputPath, yamlData, "utf8");
-    console.log(`▶️ Successfully converted, Output File: ${baseFileName}.yaml`);
+    await fs.writeFile(outputPath, outputData, "utf8");
+    console.log(
+      `▶️ Successfully converted, Output File: ${baseFileName}${extension}`
+    );
 
     return { outputPath, oasDocs };
   } catch (err) {
@@ -67,4 +79,16 @@ export async function convertTsToYaml({
     }
     process.exit(1);
   }
+}
+
+/**
+ * @deprecated Use convertTsToSpec instead. This function is kept for backward compatibility.
+ */
+export async function convertTsToYaml(params: {
+  version: string;
+  outputDir: string;
+  tsFilePath: string;
+  chain?: string;
+}) {
+  return convertTsToSpec({ ...params, format: "yaml" });
 }

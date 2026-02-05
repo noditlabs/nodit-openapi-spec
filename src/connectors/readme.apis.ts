@@ -285,9 +285,10 @@ export class ReadmeApi {
   }) {
     try {
       const versionPath = version ? getVersionPath(version) : "stable";
+      const url = `/branches/${versionPath}/apis/${id}`;
       await axios.request({
         baseURL: baseUrl,
-        url: `/branches/${versionPath}/apis/${id}`,
+        url,
         method: "DELETE",
         headers: {
           Accept: "application/json",
@@ -295,10 +296,18 @@ export class ReadmeApi {
           Authorization: `Bearer ${readmeApiKey}`,
         },
       });
-      console.log(`Deleted API Specification: ${id}`);
+      console.log(`  ✅ Deleted: ${id}`);
       return true;
     } catch (error: any) {
-      console.error("Error deleting API specification:", error.message);
+      console.error(`  ❌ Failed to delete ${id}:`, error.message);
+      if (error.response) {
+        console.error(`     Status: ${error.response.status}`);
+        if (error.response.status === 500) {
+          console.error(
+            `     This might be a ReadMe API issue or the spec is in use`
+          );
+        }
+      }
       return false;
     }
   }
@@ -349,9 +358,13 @@ export class ReadmeApi {
   }): Promise<Category[]> {
     try {
       const versionPath = getVersionPath(version);
+      const url = `/branches/${versionPath}/categories`;
+      if (process.env.DEBUG) {
+        console.log(`[DEBUG] Fetching categories from: ${baseUrl}${url}`);
+      }
       const response: AxiosResponse<Category[]> = await axios.request({
         baseURL: baseUrl,
-        url: `/branches/${versionPath}/categories`,
+        url,
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -363,6 +376,10 @@ export class ReadmeApi {
       return (response.data as any)?.data || response.data || [];
     } catch (error: any) {
       console.error("Error getting all categories:", error.message);
+      if (error.response) {
+        console.error(`  Status: ${error.response.status}`);
+        console.error(`  URL: ${error.config?.baseURL}${error.config?.url}`);
+      }
       return [];
     }
   }
@@ -511,6 +528,202 @@ export class ReadmeApi {
       return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error(`Error creating doc ${options.title}:`, error.message);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+        console.error("Request URL:", error.config?.url);
+      }
+      return null;
+    }
+  }
+
+  /* Reference API (Readme Refactored only) */
+  // create guide page (https://docs.readme.com/main/reference/createguide) - fallback when reference fails
+  static async createGuide({
+    version,
+    options,
+  }: {
+    version: string;
+    options: ReadmeDocOption;
+  }): Promise<ReadmeDocResponse.RootObject | null> {
+    try {
+      const versionPath = getVersionPath(version);
+      const data: any = { ...options };
+      if (data.category && typeof data.category === "object") {
+        if ("slug" in data.category) {
+          data.category = {
+            uri: `https://api.readme.com/v2/branches/${versionPath}/categories/${data.category.slug}`,
+          };
+        }
+      }
+      const response: AxiosResponse<ReadmeDocResponse.RootObject> =
+        await axios.request({
+          baseURL: baseUrl,
+          url: `/branches/${versionPath}/guides`,
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${readmeApiKey}`,
+            "Content-Type": "application/json",
+          },
+          data,
+        });
+      return (response.data as any)?.data || response.data;
+    } catch (error: any) {
+      console.error(`Error creating guide ${options.title}:`, error.message);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+      }
+      return null;
+    }
+  }
+
+  // update guide page
+  static async updateGuide({
+    slug,
+    version,
+    options,
+  }: {
+    slug: string;
+    version: string;
+    options: ReadmeDocOption;
+  }): Promise<ReadmeDocResponse.RootObject | null> {
+    try {
+      const versionPath = getVersionPath(version);
+      const response: AxiosResponse<ReadmeDocResponse.RootObject> =
+        await axios.request({
+          baseURL: baseUrl,
+          url: `/branches/${versionPath}/guides/${slug}`,
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${readmeApiKey}`,
+            "Content-Type": "application/json",
+          },
+          data: options,
+        });
+      return (response.data as any)?.data || response.data;
+    } catch (error: any) {
+      console.error(`Error updating guide ${slug}:`, error.message);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+      }
+      return null;
+    }
+  }
+
+  // create reference page (https://docs.readme.com/main/reference/createreference)
+  static async createReference({
+    version,
+    options,
+  }: {
+    version: string;
+    options: ReadmeDocOption;
+  }): Promise<ReadmeDocResponse.RootObject | null> {
+    try {
+      const versionPath = getVersionPath(version);
+      const data: any = { ...options };
+      if (data.category && typeof data.category === "object") {
+        if ("slug" in data.category) {
+          data.category = {
+            uri: `https://api.readme.com/v2/branches/${versionPath}/categories/${data.category.slug}`,
+          };
+        }
+      }
+      const response: AxiosResponse<ReadmeDocResponse.RootObject> =
+        await axios.request({
+          baseURL: baseUrl,
+          url: `/branches/${versionPath}/reference`,
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${readmeApiKey}`,
+            "Content-Type": "application/json",
+          },
+          data,
+        });
+      return (response.data as any)?.data || response.data;
+    } catch (error: any) {
+      console.error(
+        `Error creating reference ${options.title}:`,
+        error.message
+      );
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+        console.error("Request URL:", error.config?.url);
+      }
+      return null;
+    }
+  }
+
+  // update reference page (https://docs.readme.com/main/reference/updatereference)
+  static async updateReference({
+    slug,
+    version,
+    options,
+  }: {
+    slug: string;
+    version: string;
+    options: ReadmeDocOption;
+  }): Promise<ReadmeDocResponse.RootObject | null> {
+    try {
+      const versionPath = getVersionPath(version);
+      const data: any = { ...options };
+      // Convert category slug to URI format if needed
+      if (data.category && typeof data.category === "object") {
+        if ("slug" in data.category) {
+          data.category = {
+            uri: `https://api.readme.com/v2/branches/${versionPath}/categories/${data.category.slug}`,
+          };
+        }
+      }
+      // Debug: log request data
+      console.log(`   [DEBUG] Request data:`, JSON.stringify(data, null, 2));
+
+      const response: AxiosResponse<ReadmeDocResponse.RootObject> =
+        await axios.request({
+          baseURL: baseUrl,
+          url: `/branches/${versionPath}/reference/${slug}`,
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${readmeApiKey}`,
+            "Content-Type": "application/json",
+          },
+          data: data,
+        });
+
+      // Debug: log full response data to see available fields
+      const result = (response.data as any)?.data || response.data;
+      console.log(`   [DEBUG] Response status:`, response.status);
+      console.log(`   [DEBUG] Full response keys:`, Object.keys(result));
+      console.log(`   [DEBUG] Full response:`, JSON.stringify(result, null, 2));
+
+      return result;
+    } catch (error: any) {
+      console.error(`Error updating reference ${slug}:`, error.message);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error(
+          "Response data:",
+          JSON.stringify(error.response.data, null, 2)
+        );
+      }
       return null;
     }
   }
@@ -570,6 +783,34 @@ export class ReadmeApi {
       return (response.data as any)?.data || response.data;
     } catch (error: any) {
       console.error(`Error updating doc ${slug}:`, error.message);
+      return null;
+    }
+  }
+
+  // get reference (API spec generated doc)
+  static async getReference({
+    slug,
+    version,
+  }: {
+    slug: string;
+    version: string;
+  }): Promise<ReadmeDocResponse.RootObject | null> {
+    try {
+      const versionPath = getVersionPath(version);
+      const response: AxiosResponse<ReadmeDocResponse.RootObject> =
+        await axios.request({
+          baseURL: baseUrl,
+          url: `/branches/${versionPath}/reference/${slug}`,
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${readmeApiKey}`,
+          },
+        });
+      // v2 API returns data wrapped in a data object
+      return (response.data as any)?.data || response.data;
+    } catch (error: any) {
+      console.error(`The reference ${slug} does not exist.`, error.message);
       return null;
     }
   }

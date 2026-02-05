@@ -58,6 +58,7 @@ export const Patterns = {
     prefixedHexaDecimal512: new RegExp(`${HEXA_PREFIX}${HEXA}{512}`),
     uint32: new RegExp(`^[0-9]{1,10}$`),
     uint64: new RegExp(`^[0-9]{1,20}$`),
+    text: new RegExp(`^[a-zA-Z0-9_-]+$`),
   },
 
   // Ethereum
