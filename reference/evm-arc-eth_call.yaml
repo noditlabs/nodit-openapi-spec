@@ -1,0 +1,232 @@
+openapi: 3.1.0
+info:
+  title: evm-arc-eth_call
+  version: 1.2.23
+servers:
+  - url: https://{arc-network}.nodit.io
+    variables:
+      arc-network:
+        default: arc-testnet
+        enum:
+          - arc-testnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-arc-eth_call
+      description: "실제로 트랜잭션을 생성하여 발행하지 않고 컨트랙트의 읽기 method를 실행한 결과를 조회할 수 있습니다. 주로 특정 스마트 컨트랙트의 현재 상태를 읽기 위해 사용됩니다. call로 인한 상태 변경은 일어나지 않습니다.\n\t\t\t\t\t\n\n> 🚧 응답 시간이 오래 걸리나요? 함수 복잡성에 따라 응답 시간이 길어질 수 있습니다!\n>\n> 특정 상태에서의 스마트 컨트랙트 함수를 실행할 때, 함수의 복잡성에 따라 응답 시간이 길어질 수 있습니다.\n> 만약 빠른 응답을 원한다면 실행할 함수를 최적화하고, 함수의 실행 결과를 최소화하세요.\n"
+      summary: eth_call
+      operationId: arc-eth_call
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: eth_call
+                params:
+                  type: array
+                  minItems: 2
+                  maxItems: 3
+                  items:
+                    oneOf:
+                      - title: Call Object
+                        type: object
+                        properties:
+                          from:
+                            type: string
+                            description: 트랜잭션의 from 주소를 문자열 형식으로 입력합니다.
+                          to:
+                            type: string
+                            description: 트랜잭션의 to 주소를 문자열 형식으로 입력합니다.
+                            default: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                          gas:
+                            type: string
+                            description: >-
+                              해당 트랜잭션을 처리하기 위해 필요한 가스의 소모량을 hex형식의 문자열로 입력합니다.
+                              스마트 컨트랙트 call을 수행하는 경우 소모되는 가스가 없으므로 0x0로 입력할 수
+                              있습니다.
+                          gasPrice:
+                            type: string
+                            description: 설정하고자 하는 가스당 비용을 hex 형식의 문자열로 입력합니다.
+                          value:
+                            type: string
+                            description: 트랜잭션의 value 값입니다.
+                          data:
+                            type: string
+                            description: >-
+                              실행하고자 하는 트랜잭션의 method signature 해시값입니다. ABI에서 참고할
+                              수 있습니다.
+                            default: >-
+                              0x70a08231000000000000000000000000d8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+                        description: >-
+                          트랜잭션을 시뮬레이션하기 위한 call object입니다. 다음 필드를 포함할 수 있습니다.
+
+                          * `from`: 트랜잭션의 from 주소를 문자열 형식으로 입력합니다.
+
+                          * `to` : 트랜잭션의 to 주소를 문자열 형식으로 입력합니다.
+
+                          * `gas` : 해당 트랜잭션을 처리하기 위해 필요한 가스의 소모량을 hex형식의 문자열로
+                          입력합니다. 스마트 컨트랙트 call을 수행하는 경우 소모되는 가스가 없으므로 0x0로 입력할 수
+                          있습니다.
+
+                          * `gasPrice` : 설정하고자 하는 가스당 비용을 hex 형식의 문자열로 입력합니다.
+
+                          * `value` : 트랜잭션의 value 값입니다.
+
+                          * `data` : 실행하고자 하는 트랜잭션의 method signature 해시값입니다.
+                          ABI에서 참고할 수 있습니다.
+                      - title: Block Identifier
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Hash
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]{64}
+                            default: >-
+                              0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48
+                            description: >-
+                              블록 해시는 블록의 고유 식별자입니다. 블록 해시값은 64자리 16진수 문자열로
+                              표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `finalized`: 최근에 확정된 블록을 나타내며, 이는 더 이상 변경될 수 없는
+                              안정적인 상태의 블록을 의미합니다. 이 용어는 주로 지분 증명(PoS) 블록체인에서
+                              사용되며, 블록이 최종적으로 확정되었음을 나타냅니다.
+
+                              * `safe`: 네트워크에 의해 안전하게 간주되는 최근 블록을 나타냅니다. '안전'한
+                              블록은 네트워크 재조직(reorgs)의 위험 없이 신뢰할 수 있는 것으로 간주됩니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 해시, 블록 넘버, 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 해시: 64자리 16진수 문자열 (ex.
+                          "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                      - title: State Override Set
+                        type: object
+                        default: {}
+                        description: >-
+                          호출하는 스마트 컨트랙트의 잔고, nonce, 코드, 상태 등을 실제 블록체인 상의 값 변경 없이
+                          call 시점에 임의의 값으로 시뮬레이션 할 수 있도록 override할 수 있습니다. 이는 다음
+                          필드를 포함할 수 있습니다.
+
+                          * `balance`: 계정의 잔액을 override할 hex 형식의 문자열입니다.
+
+                          * `nonce`: 계정의 nonce 값을 override할 hex 형식의 문자열입니다.
+
+                          * `code`: 계정에 주입할 가짜 EVM 바이트코드를 hex 형식의 문자열로 입력합니다.
+
+                          * `state`: 계정의 스토리지 상태를 override할 키-값 쌍의 집합입니다. 각 키와
+                          값은 hex 형식의 문자열로 표현됩니다.
+
+                          * `stateDiff`: 계정의 스토리지 상태 중 개별 슬롯을 override할 키-값 쌍의
+                          집합입니다. 이는 state와 유사하지만, 특정 슬롯의 변경만을 목표로 할 때 사용됩니다.
+                  default:
+                    - to: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                      data: >-
+                        0x70a08231000000000000000000000000d8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+                    - latest
+                  description: >-
+                    다음 파라미터들을 타입에 맞게 배열로 입력합니다.
+
+                    1. `call object` - 호출할 컨트랙트의 주소와 호출할 함수의 데이터를 입력합니다.
+
+                    2. `block identifier` - 조회 대상 블록 식별자로 블록 넘버, 블록 해시, 블록 태그 중
+                    하나를 입력할 수 있습니다. 
+
+                    3. `state override set` - 상태 변경을 위한 트랜잭션의 state override
+                    set을 입력합니다.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: '1'
+                result: >-
+                  0x0000000000000000000000000000000000000000000000000000028ec55d5a09
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.
