@@ -73,7 +73,7 @@ Solana의 slotsUpdatesSubscribe 메서드는 검증자가 각 슬롯에서 발�
 | stats.numFailedTransactions     | u64 \| undefined    | 실패한 트랜잭션 수.                                                                                                                                                   |
 | stats.numSuccessfulTransactions | u64 \| undefined    | 성공한 트랜잭션 수.                                                                                                                                                   |
 | stats.numTransactionEntries     | u64 \| undefined    | 트랜잭션 엔트리 수.                                                                                                                                                   |
-| timestamp                       | i64                 | 업데이트의 Unix 타임스탬프 (밀리초)                                                                                                                                   |
+| timestamp                       | i64                 | 업데이트의 Unix 타임스탬프                                                                                                                                            |
 | type                            | string              | 업데이트 타입. <br>다음 중 하나의 값을 반환합니다: `"firstShredReceived"`, `"completed"`, `"createdBank"`, `"frozen"`, `"dead"`, `"optimisticConfirmation"`, `"root"` |
 
 #### Slots Updates Notification Example
