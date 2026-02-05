@@ -35,7 +35,12 @@
     "bundle": "ts-node ./src/scripts-new/bundle.ts",
     "upload": "ts-node ./src/scripts-new/upload.ts",
     "update-new": "ts-node ./src/scripts-new/update.ts",
-    "delete-new": "ts-node ./src/scripts-new/delete.ts"
+    "delete-new": "ts-node ./src/scripts-new/delete.ts",
+    "evm:create": "ts-node ./src/scripts-new/evm/create.ts",
+    "evm:create-websocket": "ts-node ./src/scripts-new/evm/create-websocket.ts",
+    "evm:update": "ts-node ./src/scripts-new/evm/update.ts",
+    "evm:move": "ts-node ./src/scripts-new/evm/move.ts",
+    "evm:hidden": "ts-node ./src/scripts-new/evm/hidden.ts"
   },
   "keywords": [],
   "author": "",
