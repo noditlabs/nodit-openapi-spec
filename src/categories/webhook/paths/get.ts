@@ -10,14 +10,14 @@ const isPublic = true;
 const tags = ["Webhook API"];
 
 // 체인별 description을 반환하는 헬퍼 함수
-function getDescription(chain: string): string {
+function getDescription(chain?: string): string {
   switch (chain) {
     default:
       return `Webhook의 Subscription ID로 Webhook 정보를 조회하기 위한 API입니다.`;
   }
 }
 
-const info = (chain: string): OpenAPIV3.PathItemObject => {
+const info = (chain?: string): OpenAPIV3.PathItemObject => {
   // A. operationId, parameters 설정
   const { operationId, parameters } = getOpIdAndParams(chain);
   // B. successResponse 설정
@@ -56,11 +56,11 @@ const info = (chain: string): OpenAPIV3.PathItemObject => {
 // ─────────────────────────────────────
 // A. operationId, parameters 설정 (none vs. 그 외)
 // ─────────────────────────────────────
-function getOpIdAndParams(chain: string): {
+function getOpIdAndParams(chain?: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (chain === "web3") {
+  if (!chain || chain === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -93,7 +93,7 @@ function getOpIdAndParams(chain: string): {
       parameters: [
         Requests.chain(chain, [chain]),
         Requests.network(chainInfo?.mainnet || chainInfo?.testnet?.[0] || "", [
-          ...(chainInfo?.mainnet || []),
+          ...(chainInfo?.mainnet ? [chainInfo.mainnet] : []),
           ...(chainInfo?.testnet || []),
         ]),
       ],
@@ -104,7 +104,7 @@ function getOpIdAndParams(chain: string): {
 // ─────────────────────────────────────
 // B. successResponse 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getRequestAndResponse(chain: string): {
+function getRequestAndResponse(chain?: string): {
   requestBody?: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
@@ -162,7 +162,7 @@ function getRequestAndResponse(chain: string): {
 // ─────────────────────────────────────
 // C. callouts 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getCallouts(chain: string): string {
+function getCallouts(chain?: string): string {
   switch (chain) {
     default:
       return ""; // 해당 체인에서는 callouts가 없음

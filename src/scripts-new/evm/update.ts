@@ -19,7 +19,7 @@ function validateInputs(
 
   if (!Patterns.readme.docs.version.test(versionInput)) {
     throw new Error(
-      "Error: The version must be 'main' or in the format of x.x.x."
+      "Error: The version must be 'main' or in the format of x.x.x or x.x.x_\"string\"."
     );
   }
 
@@ -111,7 +111,7 @@ async function main() {
           }
 
           console.log(`ᄂ Updated API specification for ${endpoint}.`);
-          await delay(1000);
+          await delay(30000);
         }
       }
     }

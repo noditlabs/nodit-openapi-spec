@@ -246,20 +246,34 @@ export class ReadmeApi {
         filename: apiId,
       });
 
-      const response: AxiosResponse<ReadmeApiSpecResponse> =
-        await axios.request({
-          baseURL: baseUrl,
-          url: `/branches/${versionPath}/apis/${apiId}`,
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${readmeApiKey}`,
-            ...formData.getHeaders(), // Let FormData set the content-type with boundary
-          },
-          data: formData,
-        });
-      // v2 API returns data wrapped in a data object
-      return (response.data as any)?.data || response.data;
+      const response: AxiosResponse<any> = await axios.request({
+        baseURL: baseUrl,
+        url: `/branches/${versionPath}/apis/${apiId}`,
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${readmeApiKey}`,
+          ...formData.getHeaders(), // Let FormData set the content-type with boundary
+        },
+        data: formData,
+      });
+
+      // v2 API returns data wrapped in a data object, and may not include _id
+      const data = (response.data as any)?.data || response.data;
+      // v2 API response may have filename, uri, legacy_id instead of _id
+      const result: ReadmeApiSpecResponse = {
+        _id:
+          data?._id ||
+          data?.legacy_id ||
+          data?.filename ||
+          data?.uri?.split("/").pop() ||
+          apiId,
+        title:
+          data?.title ||
+          data?.filename?.replace(/\.(json|yaml|yml)$/i, "") ||
+          apiId.replace(/\.(json|yaml|yml)$/i, ""),
+      };
+      return result;
     } catch (error: any) {
       console.error("Error updating specification:", error.message);
       if (error.response) {

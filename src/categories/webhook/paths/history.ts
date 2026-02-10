@@ -11,14 +11,14 @@ const tags = ["Webhook API"];
 const description = `Webhook의 호출 이력을 조회할 수 있는 API입니다. 이 API를 사용하면 Webhook의 실행 상태와 호출 결과를 확인할 수 있습니다. 호출 이력에는 Webhook 이벤트의 성공 여부와 각 호출에 대한 상세 정보가 포함됩니다.`;
 
 // 체인별 description을 반환하는 헬퍼 함수
-function getDescription(chain: string): string {
+function getDescription(chain?: string): string {
   switch (chain) {
     default:
       return description;
   }
 }
 
-const info = (chain: string): OpenAPIV3.PathItemObject => {
+const info = (chain?: string): OpenAPIV3.PathItemObject => {
   // A. operationId 및 parameters 설정
   const { operationId, parameters } = getOpIdAndParams(chain);
   // B. successResponse 설정 (GET 엔드포인트이므로 requestBody는 사용하지 않음)
@@ -57,11 +57,11 @@ const info = (chain: string): OpenAPIV3.PathItemObject => {
 // ─────────────────────────────────────
 // A. operationId 및 parameters 설정 (none vs. 그 외)
 // ─────────────────────────────────────
-function getOpIdAndParams(chain: string): {
+function getOpIdAndParams(chain?: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
-  if (chain === "web3") {
+  if (!chain || chain === "web3") {
     return {
       operationId: endpoint,
       parameters: [
@@ -102,7 +102,7 @@ function getOpIdAndParams(chain: string): {
       parameters: [
         Requests.chain(chain, [chain]),
         Requests.network(chainInfo?.mainnet || chainInfo?.testnet?.[0] || "", [
-          ...(chainInfo?.mainnet || []),
+          ...(chainInfo?.mainnet ? [chainInfo.mainnet] : []),
           ...(chainInfo?.testnet || []),
         ]),
         { ...Requests.subscriptionIdQuery, required: true },
@@ -121,7 +121,7 @@ function getOpIdAndParams(chain: string): {
 // ─────────────────────────────────────
 // B. successResponse 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getRequestAndResponse(chain: string): {
+function getRequestAndResponse(chain?: string): {
   requestBody?: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
@@ -163,7 +163,7 @@ function getRequestAndResponse(chain: string): {
 // ─────────────────────────────────────
 // C. callouts 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getCallouts(chain: string): string {
+function getCallouts(chain?: string): string {
   switch (chain) {
     default:
       return `> 💡 히스토리 데이터 저장 기간

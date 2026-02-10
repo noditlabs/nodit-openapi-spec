@@ -1010,6 +1010,7 @@ export const supportedApisChains: SupportedApis[] = [
           "kaia_getBlockByHash",
           "kaia_getBlockByNumber",
           "kaia_getBlockReceipts",
+          "kaia_getRewards",
           "kaia_getBlockTransactionCountByHash",
           "kaia_getBlockTransactionCountByNumber",
           "kaia_getCode",

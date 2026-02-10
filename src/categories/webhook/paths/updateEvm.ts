@@ -11,14 +11,14 @@ const tags = ["Webhook API"];
 const description = `Webhook의 구독 조건(condition)을 변경하거나 Webhook을 활성화, 또는 비활성화 할 수 있습니다.`;
 
 // 체인별 description을 반환하는 헬퍼 함수
-function getDescription(chain: string): string {
+function getDescription(chain?: string): string {
   switch (chain) {
     default:
       return description;
   }
 }
 
-const info = (chain: string): OpenAPIV3.PathItemObject => {
+const info = (chain?: string): OpenAPIV3.PathItemObject => {
   // A. operationId 및 parameters 설정
   const { operationId, parameters } = getOpIdAndParams(chain);
   // B. requestBody, successResponse 설정
@@ -65,7 +65,7 @@ const info = (chain: string): OpenAPIV3.PathItemObject => {
 // ─────────────────────────────────────
 // A. operationId, parameters 설정 (none vs. 그 외)
 // ─────────────────────────────────────
-function getOpIdAndParams(chain: string): {
+function getOpIdAndParams(chain?: string): {
   operationId: string;
   parameters: OpenAPIV3.ParameterObject[];
 } {
@@ -98,7 +98,7 @@ function getOpIdAndParams(chain: string): {
 // ─────────────────────────────────────
 // B. requestBody, successResponse 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getRequestAndResponse(chain: string): {
+function getRequestAndResponse(chain?: string): {
   requestBody: OpenAPIV3.SchemaObject;
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
@@ -131,7 +131,7 @@ function getRequestAndResponse(chain: string): {
 // ─────────────────────────────────────
 // C. callouts 설정 (체인별로 다름)
 // ─────────────────────────────────────
-function getCallouts(chain: string): string {
+function getCallouts(chain?: string): string {
   switch (chain) {
     default:
       return ""; // 해당 체인에서는 별도 callouts가 없음

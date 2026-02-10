@@ -1,0 +1,160 @@
+openapi: 3.1.0
+info:
+  title: evm-kaia-kaia_getRewards
+  version: 1.2.23
+servers:
+  - url: https://{kaia-network}.nodit.io
+    variables:
+      kaia-network:
+        default: kaia-mainnet
+        enum:
+          - kaia-mainnet
+          - kaia-kairos
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: >-
+        The default value, `nodit-demo`, is only for use in the developer
+        documentation. For real applications or services, use the API key
+        obtained from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - evm-kaia-kaia_getRewards
+      description: >-
+        블록 넘버를 기준으로 해당 블록의 리워드 분배 결과를 조회합니다. 리워드 수혜자와 각자의 지분이 포함됩니다. 파라미터를 생략하면
+        최신 블록의 리워드 분배 결과를 반환합니다.
+      summary: kaia_getRewards
+      operationId: kaia-kaia_getRewards
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+              properties:
+                id:
+                  type: integer
+                  default: 1
+                jsonrpc:
+                  type: string
+                  default: '2.0'
+                method:
+                  type: string
+                  default: kaia_getRewards
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Block Number or Tag
+                        type: string
+                        oneOf:
+                          - title: Block Number
+                            type: string
+                            pattern: ^0[xX][0-9a-fA-F]+$
+                            default: '0x1076B5A'
+                            description: 블록 넘버는 블록의 순서를 나타내는 숫자입니다. 블록 넘버는 16진수 문자열로 표현됩니다.
+                          - title: Block Tag
+                            type: string
+                            pattern: ^(latest|earliest|pending|safe|finalized)$
+                            default: latest
+                            description: >-
+                              블록 태그는 다음 중 하나를 사용하여 블록을 지정할 수 있습니다.
+
+                              * `earliest`: 체인에서 사용 가능한 가장 오래된 블록을 나타냅니다.
+
+                              * `latest`: 현재 체인의 가장 최근 블록을 나타내며, 아직 최종 확정되지 않았을
+                              수 있어 재조직(reorgs)될 가능성이 있습니다. 이는 일반적으로 가장 최신의 상태를
+                              조회할 때 사용됩니다.
+
+                              * `pending`: 아직 채굴되지 않은, 메모리 풀에 있는 트랜잭션들을 포함할 예정인
+                              다음 블록을 나타냅니다. 이는 주로 예정된 트랜잭션들의 상태를 확인할 때 사용됩니다.
+                        default: '0x12C1A00'
+                        description: >-
+                          블록 지정을 위해 블록 넘버 또는 블록 태그 중 하나를 사용할 수 있습니다.
+
+                          * 블록 넘버: 16진수 문자열 (ex. "0x1") 
+
+                          * 블록 태그: enum 문자열 (ex. "latest", "earliest",
+                          "pending")
+                  minItems: 0
+                  maxItems: 1
+                  default: []
+                  description: "다음 파라미터들을 타입에 맞게 배열로 입력합니다. 생략 시 최신 블록의 리워드 분배 결과를 반환합니다.\n1. `block number or block tag` - 조회 대상 블록 식별자로 블록 넘버 또는 블록 태그를 입력할 수 있습니다.\n\t- 블록 넘버: 정수 또는 16진수 문자열 (ex. \"0x1\")\n\t- 블록 태그: enum 문자열 (ex. \"latest\", \"earliest\", \"pending\")"
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: '2.0'
+                id: 1
+                result:
+                  minted: 9600000000000000000
+                  totalFee: 0
+                  burntFee: 0
+                  proposer: 960000000000000000
+                  stakers: 3840000000000000000
+                  kif: 2400000000000000000
+                  kef: 2400000000000000000
+                  rewards:
+                    '0x21689e0b32e8c9bde382457b38c3af4b70b08997': 1339335350786263600
+                    '0x2bf231a2c3d49e86997a328596eaff9b37af06e0': 401797926565177500
+                    '0x4d7ff4251c1755fdc08d393a2aca2feaed9664a1': 428587312251604300
+                    '0x52b5798bbef5c3c00abb3a7be71285874b20af10': 133933802945696500
+                    '0x5bb2b2977a29ad85994f601f45802f514bb5e2a1': 45775910766000980
+                    '0x5c2293e49682b82c66985673d813707723c845be': 27705705360020772
+                    '0x819d4b7245164e6a94341f4b5c2ae587372bb669': 2400000000000000000
+                    '0x8436e5bd1a6d622c278c946e2f8988a26136a16f': 2400000000000000000
+                    '0x85a4803c43f434eb8db149d2ea2e2f7b1568bb9f': 262509755540814660
+                    '0x88b08385c26bb06b88648c226d06b492ca82968d': 26786707015
+                    '0x9afa6b429e737edea3854cbdf32bda324563d3ac': 23901055429042230
+                    '0xb942d0c72073ab75d5654004625387e106d61ed1': 58509186239582104
+                    '0xef33b74083a6241af2c0be9188d911d70b9e1060': 337232801603480200
+                    '0xf708a34dfae166043d45eb91ad76ad13204cb1b6': 111043436759064590
+                    '0xf80ae839567a4f4a1eb78fb6cedf9814fec14a4b': 1629667728966545700
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - error_code
+                properties:
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+                    description: >-
+                      These codes provide more granular error information beyond
+                      just the HTTP status code of the response.
+
+
+                      Allowed values: account_not_found, resource_not_found,
+                      module_not_found, struct_field_not_found,
+                      version_not_found, transaction_not_found,
+                      table_item_not_found, block_not_found,
+                      state_value_not_found, version_pruned, block_pruned,
+                      invalid_input, invalid_transaction_update,
+                      sequence_number_too_old, vm_error, health_check_failed,
+                      mempool_is_full, internal_error, web_framework_error,
+                      bcs_not_supported, api_disabled
+                  vm_error_code:
+                    type: integer
+                    description: >-
+                      A code providing VM error details when submitting
+                      transactions to the VM.
