@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: aptos
-  version: 1.2.20
+  version: 1.2.24
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -694,7 +694,7 @@ paths:
                           description: |-
                             블록 생성 시각을 나타내는 필드입니다.
 
-                            마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공됩니다.
+                            UNIX 타임스탬프로 제공됩니다.
                           example: 1749003732416395
                         transactionHash:
                           type: string
@@ -1732,13 +1732,10 @@ paths:
                     example: 160155267
                   timestamp:
                     type: integer
-                    description: >-
+                    description: |-
                       블록이 생성된 시간을 나타내는 필드입니다.
 
-
-                      마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공되며, 블록의 생성 순서와 시간
-                      추적에 사용됩니다.
-
+                      UNIX 타임스탬프로 제공되며, 블록의 생성 순서와 시간 추적에 사용됩니다.
                       블록 타임스탬프는 트랜잭션의 시간 순서를 보장하고 블록 생성 간격을 측정하는 데 활용됩니다.
                     example: 1749003732416395
                   firstVersion:
@@ -1959,6 +1956,480 @@ paths:
         '403': *ref_3
         '404': *ref_4
         '429': *ref_5
+  /{chain}/{network}/blockchain/getEventsByAccount:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: >+
+        특정 계정과 관련된 이벤트 목록을 조회합니다. 지정한 주소가 이벤트의 accountAddress, objectAddress, 또는
+        objectOwnerAddress와 일치하는 경우 조회 결과에 포함됩니다.
+
+      summary: Get Events By Account
+      operationId: aptos-getEventsByAccount
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    accountAddress:
+                      type: string
+                      description: >-
+                        조회하고자 하는 계정 주소를 지정하는 파라미터입니다. 계정 주소는 64자리 16진수("0x" 포함)로
+                        입력해야 합니다.
+                      pattern: ^0[xX][0-9a-fA-F]{64}
+                      default: >-
+                        0x51c6abe562e755582d268340b2cf0e2d8895a155dc9b7a7fb5465000d62d770b
+                    eventTypes:
+                      type: array
+                      items:
+                        type: string
+                        description: >-
+                          조회하고자 하는 이벤트 타입을 지정하는 파라미터입니다. 이벤트 타입은 모듈에서 정의한 event
+                          struct의 이름을 의미합니다. 이 필드는
+                          `module_address::module_name::event_name` 형식으로 입력해야
+                          합니다.
+                        example: 0x1::coin::CoinDeposit
+                        pattern: >-
+                          ^0[xX]?[0-9a-fA-F]{0,64}$::^0x[0-9a-zA-Z:_<>]+$::^[a-zA-Z0-9_-]+$
+                    fromBlock: *ref_6
+                    toBlock: *ref_7
+                    fromDate: *ref_8
+                    toDate: *ref_9
+                - *ref_0
+              required:
+                - accountAddress
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  page:
+                    type: integer
+                    description: >-
+                      page 파라미터에 지정된 페이지 번호를 나타내는 필드입니다. 이 필드는 page 파라미터에 0보다 큰
+                      값을 입력한 경우에만 응답에 포함됩니다.
+                  rpp:
+                    type: integer
+                    description: rpp 파라미터에 지정된 페이지당 결과 수를 나타내는 필드입니다.
+                  cursor:
+                    type: string
+                    description: >-
+                      cursor 페이지네이션을 위한 필드로, 다음 페이지의 데이터를 로드하기 위해 다음 요청에 제공해야 하는
+                      값입니다.
+                  count:
+                    type: integer
+                    description: >-
+                      요청한 데이터의 총 개수를 나타내는 필드입니다. 이 필드는 withCount 파라미터에 true를 입력한
+                      경우에만 응답에 포함됩니다.
+                  items:
+                    type: array
+                    description: 조회된 데이터의 목록을 나타내는 필드입니다.
+                    items: &ref_24
+                      allOf:
+                        - type: object
+                          required:
+                            - transactionHash
+                            - transactionVersion
+                            - blockHeight
+                            - blockTimestamp
+                          properties:
+                            transactionHash:
+                              type: string
+                              description: >-
+                                이벤트가 포함된 트랜잭션의 해시를 나타내는 필드입니다.
+
+
+                                트랜잭오래잭션의 모든 데이터를 포함하여 계산된 암호학적 해시값으로, 0x로 시작하는
+                                64자리 16진수 문자열 형태로 제공됩니다.
+
+                                이 해시를 통해 이벤트와 관련된 트랜잭션의 전체 정보를 조회할 수 있습니다.
+                              example: >-
+                                0x2a41cd44491bb92d4eb17d8487f82d9b43ab6289074c1986ee055be8105707c9
+                            transactionVersion:
+                              type: integer
+                              description: >-
+                                트랜잭션의 버전을 나타내는 필드입니다.
+
+
+                                체인 상에서 트랜잭션의 순서를 나타내는 고유한 시퀀스 ID로, 0부터 시작하여
+                                순차적으로 증가합니다.
+
+                                트랜잭션의 실행 순서를 보장하고 특정 트랜잭션의 상태를 조회하는 데 사용됩니다.
+                              example: 2854257037
+                            blockHeight:
+                              type: integer
+                              description: >-
+                                트랜잭션이 포함된 블록의 높이를 나타내는 필드입니다.
+
+
+                                제네시스 블록(0)부터 시작하여 순차적으로 증가하는 정수값으로 제공됩니다.
+
+                                이 값은 트랜잭션이 어느 블록에 포함되었는지를 식별하고, 해당 트랜잭션이 확정되었는지를
+                                확인하는 데 사용됩니다.
+                              example: 160155267
+                            blockTimestamp:
+                              type: integer
+                              description: >-
+                                트랜잭션이 포함된 블록의 생성 시각을 나타내는 필드입니다.
+
+
+                                UNIX 타임스탬프로 제공되며, 이 값은 블록이 생성된 시점이자 해당 블록에 포함된
+                                트랜잭션들이 처리된 시점을 의미합니다.
+                              example: 1749003732416395
+                        - &ref_25
+                          type: object
+                          required:
+                            - eventIndex
+                            - eventType
+                            - accountAddress
+                            - data
+                            - creationNumber
+                            - sequenceNumber
+                            - objectAddress
+                            - objectOwnerAddress
+                          properties:
+                            eventIndex:
+                              type: integer
+                              description: >-
+                                트랜잭션 내 이벤트의 순서 인덱스를 나타내는 필드입니다.
+
+
+                                하나의 트랜잭션에서 발생한 여러 이벤트들 중 현재 이벤트의 순서를 나타냅니다.
+
+                                0부터 시작하여 이벤트 발생 순서대로 증가하며, 동일 트랜잭션 내 이벤트의 순서를
+                                식별하는 데 사용됩니다.
+                              example: 0
+                            eventType:
+                              type: string
+                              description: >-
+                                이벤트의 타입을 나타내는 필드입니다.
+
+
+                                Move 모듈에서 정의된 이벤트 구조체의 전체 경로로,
+                                '계정주소::모듈이름::이벤트구조체명' 형식으로 제공됩니다.
+
+                                이벤트의 종류를 식별하고 이벤트 데이터의 구조를 결정하는 데 사용됩니다.
+                              example: 0x1::coin::DepositEvent
+                            accountAddress:
+                              type: string
+                              description: >-
+                                이벤트를 발행한 리소스 소유자의 주소를 나타내는 필드입니다.
+
+
+                                0x로 시작하는 64자리 16진수 문자열 형태로 제공되며, 이벤트가 발생한 리소스의
+                                소유자를 식별합니다.
+
+                                이벤트 핸들을 소유한 계정으로, 이벤트 조회 시 필터링 조건으로 사용될 수 있습니다.
+                              example: >-
+                                0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a
+                            data:
+                              type: object
+                              description: |-
+                                이벤트의 구체적인 데이터를 나타내는 필드입니다.
+
+                                eventType에 정의된 이벤트 구조체의 필드들이 JSON 객체 형태로 제공됩니다.
+                                이벤트의 세부 정보를 담고 있으며, 이벤트 타입에 따라 다른 구조를 가질 수 있습니다.
+                              example:
+                                amount: '1000000'
+                                from: >-
+                                  0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a
+                                to: >-
+                                  0xa1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2
+                            creationNumber:
+                              type: integer
+                              description: >-
+                                이벤트 핸들의 생성 번호를 나타내는 필드입니다.
+
+
+                                계정이 생성한 이벤트 핸들들을 구분하기 위한 고유 식별자로, 0부터 시작하여 순차적으로
+                                증가합니다.
+
+                                동일 계정에서 발생한 서로 다른 종류의 이벤트들을 구분하는 데 사용됩니다.
+                              example: 2
+                            sequenceNumber:
+                              type: integer
+                              description: >-
+                                해당 이벤트 핸들에서 발생한 이벤트의 순번을 나타내는 필드입니다.
+
+
+                                동일한 이벤트 핸들에서 발생한 이벤트들의 순서를 나타냅니다.
+
+                                0부터 시작하여 순차적으로 증가하며, 특정 이벤트 핸들에서 발생한 이벤트들의 시간
+                                순서를 보장합니다.
+                              example: 12345
+                            objectAddress:
+                              type: string
+                              description: >-
+                                Object 리소스에 대한 이벤트일 경우 해당 object의 주소를 나타내는
+                                필드입니다.
+
+
+                                0x로 시작하는 64자리 16진수 문자열 형태로 제공되며, Object 기반 리소스의
+                                고유 식별자입니다.
+
+                                Object 리소스와 관련된 이벤트를 추적하고 조회하는 데 사용됩니다.
+                              example: >-
+                                0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b
+                            objectOwnerAddress:
+                              type: string
+                              description: >-
+                                objectAddress로 식별되는 Object의 소유자 주소를 나타내는 필드입니다.
+
+
+                                0x로 시작하는 64자리 16진수 문자열 형태로 제공되며, Object의 현재 소유자를
+                                식별합니다.
+
+                                Object의 소유권 추적과 권한 확인에 사용됩니다.
+                              example: >-
+                                0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a
+              example:
+                page: 1
+                rpp: 2
+                count: 2930146
+                items:
+                  - blockHeight: 599423645
+                    blockTimestamp: 1770021277945
+                    transactionHash: >-
+                      0x70367bc8a7341996a41e578e1f38ad975ca23ee1d70abb688fc8d6f03b6ac7b8
+                    transactionVersion: 4235651487
+                    eventIndex: 6
+                    accountAddress: >-
+                      0x0000000000000000000000000000000000000000000000000000000000000000
+                    eventType: 0x1::fungible_asset::Deposit
+                    creationNumber: 0
+                    sequenceNumber: 0
+                    data:
+                      amount: '300000'
+                      store: >-
+                        0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79
+                    objectOwnerAddress: >-
+                      0x7a17ee0e26f1a8a09a5379d1daa0eb41b2b7c185b101d00f733f2dc5da43e59f
+                    objectAddress: >-
+                      0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79
+                  - blockHeight: 599423540
+                    blockTimestamp: 1770021271790
+                    transactionHash: >-
+                      0x4f255217d53741878a9c50566019184eaa96c875e72fb8372a0f7339c2b4dabb
+                    transactionVersion: 4235651116
+                    eventIndex: 4
+                    accountAddress: >-
+                      0x0000000000000000000000000000000000000000000000000000000000000000
+                    eventType: 0x1::fungible_asset::Deposit
+                    creationNumber: 0
+                    sequenceNumber: 0
+                    data:
+                      amount: '772000000'
+                      store: >-
+                        0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79
+                    objectOwnerAddress: >-
+                      0x7a17ee0e26f1a8a09a5379d1daa0eb41b2b7c185b101d00f733f2dc5da43e59f
+                    objectAddress: >-
+                      0x6d5bfa430a2d689ab1698a51ef4f473d323704f536169fd9afdd20196d8eeb79
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
+  /{chain}/{network}/blockchain/getEventsByType:
+    post:
+      security:
+        - api_key: []
+      tags:
+        - Blockchain API
+      description: |+
+        특정 이벤트 타입과 관련있는 이벤트 목록을 조회합니다.
+
+      summary: Get Events By Type
+      operationId: aptos-getEventsByType
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: 조회 대상 체인을 지정하기 위한 파라미터입니다.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            default: mainnet
+            enum:
+              - mainnet
+          description: 조회 대상 체인의 네트워크를 지정하기 위한 파라미터입니다. 체인에 따라 지원되는 네트워크가 다를 수 있습니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              allOf:
+                - type: object
+                  properties:
+                    eventType:
+                      type: string
+                      description: >-
+                        조회하고자 하는 이벤트 타입을 지정하는 파라미터입니다. 이벤트 타입은 모듈에서 정의한 event
+                        struct의 이름을 의미합니다. 이 필드는
+                        `module_address::module_name::event_name` 형식으로 입력해야 합니다.
+                      example: 0x1::coin::CoinDeposit
+                      pattern: >-
+                        ^0[xX]?[0-9a-fA-F]{0,64}$::^0x[0-9a-zA-Z:_<>]+$::^[a-zA-Z0-9_-]+$
+                      default: 0x1::fungible_asset::Deposit
+                - *ref_0
+              required:
+                - eventType
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  page:
+                    type: integer
+                    description: >-
+                      page 파라미터에 지정된 페이지 번호를 나타내는 필드입니다. 이 필드는 page 파라미터에 0보다 큰
+                      값을 입력한 경우에만 응답에 포함됩니다.
+                  rpp:
+                    type: integer
+                    description: rpp 파라미터에 지정된 페이지당 결과 수를 나타내는 필드입니다.
+                  cursor:
+                    type: string
+                    description: >-
+                      cursor 페이지네이션을 위한 필드로, 다음 페이지의 데이터를 로드하기 위해 다음 요청에 제공해야 하는
+                      값입니다.
+                  count:
+                    type: integer
+                    description: >-
+                      요청한 데이터의 총 개수를 나타내는 필드입니다. 이 필드는 withCount 파라미터에 true를 입력한
+                      경우에만 응답에 포함됩니다.
+                  items:
+                    type: array
+                    description: 조회된 데이터의 목록을 나타내는 필드입니다.
+                    items: *ref_24
+              example:
+                page: 1
+                rpp: 2
+                count: 5114581
+                items:
+                  - blockHeight: 550513856
+                    blockTimestamp: 1767139195465
+                    transactionHash: >-
+                      0x84784546a8b0ae5fb9ee76734ac4b0ca28491d56112721bcc6bf4ff555dda00b
+                    transactionVersion: 4022134250
+                    eventIndex: 2
+                    accountAddress: >-
+                      0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387
+                    eventType: >-
+                      0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387::event::PriceFeedUpdate
+                    creationNumber: 2
+                    sequenceNumber: 611805882
+                    data:
+                      price_feed:
+                        ema_price:
+                          conf: '55118668'
+                          expo:
+                            magnitude: '8'
+                            negative: true
+                          price:
+                            magnitude: '52741874000'
+                            negative: false
+                          timestamp: '1767139192'
+                        price:
+                          conf: '50364324'
+                          expo:
+                            magnitude: '8'
+                            negative: true
+                          price:
+                            magnitude: '52916463193'
+                            negative: false
+                          timestamp: '1767139192'
+                        price_identifier:
+                          bytes: >-
+                            0xbe9b59d178f0d6a97ab4c343bff2aa69caa1eaae3e9048a65788c529b125bb24
+                      timestamp: '1767139195465631'
+                    objectOwnerAddress: null
+                    objectAddress: null
+                  - blockHeight: 550513800
+                    blockTimestamp: 1767139192275
+                    transactionHash: >-
+                      0x28f023b963bc65e1582366faa4cda6d9f9eaa74a639ba2835e666063afa338eb
+                    transactionVersion: 4022134063
+                    eventIndex: 1
+                    accountAddress: >-
+                      0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387
+                    eventType: >-
+                      0x7e783b349d3e89cf5931af376ebeadbfab855b3fa239b7ada8f5a92fbea6b387::event::PriceFeedUpdate
+                    creationNumber: 2
+                    sequenceNumber: 611805881
+                    data:
+                      price_feed:
+                        ema_price:
+                          conf: '1'
+                          expo:
+                            magnitude: '8'
+                            negative: true
+                          price:
+                            magnitude: '106220287'
+                            negative: false
+                          timestamp: '1767139190'
+                        price:
+                          conf: '1'
+                          expo:
+                            magnitude: '8'
+                            negative: true
+                          price:
+                            magnitude: '106229000'
+                            negative: false
+                          timestamp: '1767139190'
+                        price_identifier:
+                          bytes: >-
+                            0x12aa9a44a5f0695ccf5a9e3ded5c646b13b4013047182ca6db0aacfea8b252ef
+                      timestamp: '1767139192275571'
+                    objectOwnerAddress: null
+                    objectAddress: null
+        '400': *ref_1
+        '401': *ref_2
+        '403': *ref_3
+        '404': *ref_4
+        '429': *ref_5
   /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
     post:
       security:
@@ -2076,7 +2547,7 @@ paths:
                     - transactionHash
                 - type: object
                   properties:
-                    withBalanceChanges: &ref_24
+                    withBalanceChanges: &ref_26
                       type: boolean
                       description: >-
                         응답에 balanceChanges 필드의 포함 여부를 지정하는 파라미터입니다.
@@ -2094,7 +2565,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - &ref_25
+                  - &ref_27
                     type: object
                     required:
                       - transactionHash
@@ -2139,7 +2610,7 @@ paths:
                           트랜잭션의 실행 순서를 보장하고 특정 트랜잭션의 상태를 조회하는 데 사용됩니다.
                         example: 2854257037
                       blockHeight:
-                        type: string
+                        type: integer
                         description: >-
                           트랜잭션이 포함된 블록의 높이를 나타내는 필드입니다.
 
@@ -2148,16 +2619,16 @@ paths:
 
                           이 값은 트랜잭션이 어느 블록에 포함되었는지를 식별하고, 해당 트랜잭션이 확정되었는지를 확인하는
                           데 사용됩니다.
-                        example: '160155267'
+                        example: 160155267
                       blockTimestamp:
-                        type: string
+                        type: integer
                         description: >-
                           트랜잭션이 포함된 블록의 생성 시각을 나타내는 필드입니다.
 
 
-                          마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공되며, 이 값은 블록이 생성된
-                          시점이자 해당 블록에 포함된 트랜잭션들이 처리된 시점을 의미합니다.
-                        example: '1749003732416395'
+                          UNIX 타임스탬프로 제공되며, 이 값은 블록이 생성된 시점이자 해당 블록에 포함된 트랜잭션들이
+                          처리된 시점을 의미합니다.
+                        example: 1749003732416395
                       expirationTimestampSecs:
                         type: integer
                         description: >-
@@ -2257,116 +2728,7 @@ paths:
 
                           각 이벤트는 트랜잭션으로 인한 상태 변화나 중요 작업의 실행을 기록합니다.
                           트랜잭션의 영향을 추적하고 외부 시스템과의 연동을 위한 정보를 제공합니다.
-                        items:
-                          type: object
-                          required:
-                            - eventIndex
-                            - eventType
-                            - accountAddress
-                            - data
-                            - creationNumber
-                            - sequenceNumber
-                            - objectAddress
-                            - objectOwnerAddress
-                          properties:
-                            eventIndex:
-                              type: integer
-                              description: >-
-                                트랜잭션 내 이벤트의 순서 인덱스를 나타내는 필드입니다.
-
-
-                                하나의 트랜잭션에서 발생한 여러 이벤트들 중 현재 이벤트의 순서를 나타냅니다.
-
-                                0부터 시작하여 이벤트 발생 순서대로 증가하며, 동일 트랜잭션 내 이벤트의 순서를
-                                식별하는 데 사용됩니다.
-                              example: 0
-                            eventType:
-                              type: string
-                              description: >-
-                                이벤트의 타입을 나타내는 필드입니다.
-
-
-                                Move 모듈에서 정의된 이벤트 구조체의 전체 경로로,
-                                '계정주소::모듈이름::이벤트구조체명' 형식으로 제공됩니다.
-
-                                이벤트의 종류를 식별하고 이벤트 데이터의 구조를 결정하는 데 사용됩니다.
-                              example: 0x1::coin::DepositEvent
-                            accountAddress:
-                              type: string
-                              description: >-
-                                이벤트를 발행한 리소스 소유자의 주소를 나타내는 필드입니다.
-
-
-                                0x로 시작하는 64자리 16진수 문자열 형태로 제공되며, 이벤트가 발생한 리소스의
-                                소유자를 식별합니다.
-
-                                이벤트 핸들을 소유한 계정으로, 이벤트 조회 시 필터링 조건으로 사용될 수 있습니다.
-                              example: >-
-                                0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a
-                            data:
-                              type: object
-                              description: |-
-                                이벤트의 구체적인 데이터를 나타내는 필드입니다.
-
-                                eventType에 정의된 이벤트 구조체의 필드들이 JSON 객체 형태로 제공됩니다.
-                                이벤트의 세부 정보를 담고 있으며, 이벤트 타입에 따라 다른 구조를 가질 수 있습니다.
-                              example:
-                                amount: '1000000'
-                                from: >-
-                                  0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a
-                                to: >-
-                                  0xa1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2
-                            creationNumber:
-                              type: integer
-                              description: >-
-                                이벤트 핸들의 생성 번호를 나타내는 필드입니다.
-
-
-                                계정이 생성한 이벤트 핸들들을 구분하기 위한 고유 식별자로, 0부터 시작하여 순차적으로
-                                증가합니다.
-
-                                동일 계정에서 발생한 서로 다른 종류의 이벤트들을 구분하는 데 사용됩니다.
-                              example: 2
-                            sequenceNumber:
-                              type: integer
-                              description: >-
-                                해당 이벤트 핸들에서 발생한 이벤트의 순번을 나타내는 필드입니다.
-
-
-                                동일한 이벤트 핸들에서 발생한 이벤트들의 순서를 나타냅니다.
-
-                                0부터 시작하여 순차적으로 증가하며, 특정 이벤트 핸들에서 발생한 이벤트들의 시간
-                                순서를 보장합니다.
-                              example: 12345
-                            objectAddress:
-                              type: string
-                              description: >-
-                                Object 리소스에 대한 이벤트일 경우 해당 object의 주소를 나타내는
-                                필드입니다.
-
-
-                                0x로 시작하는 64자리 16진수 문자열 형태로 제공되며, Object 기반 리소스의
-                                고유 식별자입니다.
-
-                                Object 리소스와 관련된 이벤트를 추적하고 조회하는 데 사용됩니다.
-                              example: >-
-                                0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b
-                            objectOwnerAddress:
-                              type: string
-                              description: >-
-                                objectAddress로 식별되는 Object의 소유자 주소를 나타내는 필드입니다.
-
-
-                                0x로 시작하는 64자리 16진수 문자열 형태로 제공되며, Object의 현재 소유자를
-                                식별합니다.
-
-                                Object의 소유권 추적과 권한 확인에 사용됩니다.
-                              example: >-
-                                0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a
-                        example:
-                          - type: 0x1::coin::DepositEvent
-                            data:
-                              amount: '1000000'
+                        items: *ref_25
                       balanceInAccounts:
                         type: array
                         description: |-
@@ -2582,13 +2944,13 @@ paths:
                     - transactionVersion
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_24
+                    withBalanceChanges: *ref_26
       responses:
         '200':
           description: Successful Response
           content:
             application/json:
-              schema: *ref_25
+              schema: *ref_27
               example:
                 transactionHash: >-
                   0x45e9e15d2475eb6f38b843aedb66fb893d368ca86d1aae10e92317471cbe3aaa
@@ -2820,7 +3182,7 @@ paths:
                 - *ref_0
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_24
+                    withBalanceChanges: *ref_26
               required:
                 - accountAddress
       responses:
@@ -2854,7 +3216,7 @@ paths:
                   items:
                     type: array
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
-                    items: *ref_25
+                    items: *ref_27
               example:
                 rpp: 1
                 page: 1
@@ -3072,7 +3434,7 @@ paths:
                     - transactionHashes
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_24
+                    withBalanceChanges: *ref_26
       responses:
         '200':
           description: Successful Response
@@ -3080,7 +3442,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: *ref_25
+                items: *ref_27
                 example:
                   - transactionHash: >-
                       0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005
@@ -3420,7 +3782,7 @@ paths:
                     - transactionVersions
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_24
+                    withBalanceChanges: *ref_26
       responses:
         '200':
           description: Successful Response
@@ -3428,7 +3790,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: *ref_25
+                items: *ref_27
                 example:
                   - transactionHash: >-
                       0xaf2fba4b6190c4b87d9479f3eb62c093f452f27c388dab4afeae98ae8ec00005
@@ -3760,7 +4122,7 @@ paths:
                 - *ref_0
                 - type: object
                   properties:
-                    withBalanceChanges: *ref_24
+                    withBalanceChanges: *ref_26
       responses:
         '200':
           description: Successful Response
@@ -3794,7 +4156,7 @@ paths:
                     description: 조회된 데이터의 목록을 나타내는 필드입니다.
                     items:
                       allOf:
-                        - *ref_25
+                        - *ref_27
               example:
                 rpp: 10
                 page: 1

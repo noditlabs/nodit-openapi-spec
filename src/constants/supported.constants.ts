@@ -1355,8 +1355,8 @@ export const supportedApisChains: SupportedApis[] = [
         endpoints: [
           "getBlockByHashOrNumber",
           "getBlocksWithinRange",
-          // "getEventsByAccount",
-          // "getEventsByEventType",
+          "getEventsByAccount",
+          "getEventsByType",
           "getTransactionsInBlock",
           "getTransactionsByAccount",
           "getTotalTransactionCountByAccount",

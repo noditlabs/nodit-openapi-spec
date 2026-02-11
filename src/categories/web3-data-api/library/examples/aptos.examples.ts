@@ -2743,7 +2743,7 @@ const Examples = {
       },
     ],
   },
-  getEventsByEventType: {
+  getEventsByType: {
     page: 1,
     rpp: 2,
     count: 5114581,

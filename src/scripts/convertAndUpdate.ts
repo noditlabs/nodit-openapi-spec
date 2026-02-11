@@ -20,7 +20,7 @@ function validateInputs(
 
   if (!Patterns.readme.docs.version.test(versionInput)) {
     throw new Error(
-      "Error: The version must be 'main' or in the format of x.x.x."
+      "Error: The version must be 'main' or in the format of x.x.x or x.x.x_suffix (e.g. 1.2.23_add-events-api)."
     );
   }
 

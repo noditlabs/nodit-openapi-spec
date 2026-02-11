@@ -5,8 +5,8 @@ import Domains from "../../library/domains";
 import Examples from "../../library/examples";
 import { getChainInfo, APTOS_ACCOUNTS } from "../../../../constants";
 
-const summary = "Get Events By Event Type";
-const endpoint = "getEventsByEventType";
+const summary = "Get Events By Type";
+const endpoint = "getEventsByType";
 const isPublic = true;
 const tags = ["Blockchain API"];
 
