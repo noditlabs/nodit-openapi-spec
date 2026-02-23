@@ -2015,7 +2015,70 @@ export const supportedApisChains: SupportedApis[] = [
   {
     chain: "arc",
     streamApi: false,
-    web3DataApi: [],
+    web3DataApi: [
+      {
+        category: "blockchain",
+        endpoints: [
+          "getBlockByHashOrNumber",
+          "getBlocksWithinRange",
+          "getGasPrice",
+          "getInternalTransactionsByAccount",
+          "getInternalTransactionsByTransactionHash",
+          "getNextNonceByAccount",
+          "getTotalTransactionCountByAccount",
+          "getTransactionByHash",
+          // "getTransactionByTransactionId",
+          "getTransactionsByAccount",
+          "getTransactionsByHashes",
+          // "getTransactionsByTransactionIds",
+          "getTransactionsInBlock",
+          // "getUnspentTransactionOutputsByAccount",
+          "isContract",
+          "searchEvents",
+        ],
+      },
+      {
+        category: "native",
+        endpoints: [
+          "getNativeBalanceByAccount",
+          "getNativeTransfersWithinRange",
+          "getNativeTransfersByAccount",
+        ],
+      },
+      {
+        category: "token",
+        endpoints: [
+          "getTokenAllowance",
+          "getTokenContractMetadataByContracts",
+          "getTokenHoldersByContract",
+          "getTokenPricesByContracts",
+          "getTokensOwnedByAccount",
+          "getTokenTransfersByAccount",
+          "getTokenTransfersByContract",
+          "getTokenTransfersWithinRange", 
+          "searchTokenContractMetadataByKeyword",
+        ],
+      },
+      { 
+        category: "nft", 
+        endpoints: [
+          "getNftContractMetadataByContracts",
+          "getNftsOwnedByAccount",
+          "getNftTransfersByAccount",
+          "getNftTransfersByContract",
+          "getNftTransfersByTokenId",
+          "getNftTransfersWithinRange",
+          "getNftContractsByAccount",
+          "getNftHoldersByTokenId",
+          "getNftHoldersByContract",
+          "getNftMetadataByContract",
+          "getNftMetadataByTokenIds",
+          "searchNftContractMetadataByKeyword",
+          "syncNftMetadata",
+        ],
+      },
+      { category: "stats", endpoints: ["getAccountStats"] },
+    ],
     // arc
     nodeApi: [
       {

@@ -6,6 +6,7 @@ enum:
   - aptos-mainnet
   - arbitrum-mainnet
   - arbitrum-sepolia
+  - arc-testnet
   - base-mainnet
   - base-sepolia
   - bitcoin-mainnet

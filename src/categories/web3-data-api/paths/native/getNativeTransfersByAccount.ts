@@ -3,7 +3,7 @@ import Requests from "../../library/requests";
 import Responses from "../../library/responses";
 import Domains from "../../library/domains";
 import Examples from "../../library/examples";
-import { getChainInfo, TRON_ACCOUNTS } from "../../../../constants";
+import { ETHEREUM_ACCOUNTS, getChainInfo, TRON_ACCOUNTS } from "../../../../constants";
 
 const summary = "Get Native Transfers by Account";
 const endpoint = "getNativeTransfersByAccount";
@@ -104,8 +104,40 @@ function getRequestAndResponse(chain: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (chain) {
+    case "arc": 
+      return {
+        requestBody: {
+          additionalProperties: false,
+          allOf: [
+            {
+              type: "object",
+              properties: {
+                accountAddress: {
+                  ...Requests.Ethereum.accountAddress,
+                  default: ETHEREUM_ACCOUNTS.VITALIK_BUTERIN,
+                },
+                relation: Requests.relation,
+                fromBlock: Requests.Ethereum.fromBlock,
+                toBlock: Requests.Ethereum.toBlock,
+                fromDate: Requests.Ethereum.fromDate,
+                toDate: Requests.Ethereum.toDate,
+              },
+            },
+            Requests.PaginationSet,
+            // {
+            //   type: "object",
+            //   properties: {
+            //     withZeroValue: Requests.withZeroValue,
+            //   },
+            // },
+          ],
+        },
+        successResponse: {
+          schema: Domains.Pagination(Domains.Ethereum.Transfer),
+          example: Examples.Arc[endpoint],
+        },
+      };
     case "tron":
-    default:
       return {
         requestBody: {
           additionalProperties: false,
@@ -138,8 +170,78 @@ function getRequestAndResponse(chain: string): {
           example: Examples.Tron[endpoint],
         },
       };
+    case "web3":
+    default:
+      return {
+        requestBody: {
+          additionalProperties: false,
+          oneOf: [
+            {
+              title: "Arc",
+              allOf: [
+                {
+                  type: "object",
+                  properties: {
+                    accountAddress: {
+                      ...Requests.Ethereum.accountAddress,
+                      default: ETHEREUM_ACCOUNTS.VITALIK_BUTERIN,
+                    },
+                  },
+                },
+                Requests.PaginationSet,
+                // {
+                //   type: "object",
+                //   properties: {
+                //     withZeroValue: Requests.withZeroValue,
+                //   },
+                // },
+              ],
+              example: Examples.Arc[endpoint],
+            },
+            {
+              title: "Tron",
+              allOf: [
+                {
+                  type: "object",
+                  properties: {
+                    accountAddress: {
+                      ...Requests.Tron.accountAddress,
+                      default: TRON_ACCOUNTS.JUSTIN_SUN,
+                    },
+                  },
+                },
+                Requests.PaginationSet,
+                {
+                  type: "object",
+                  properties: {
+                    withZeroValue: Requests.withZeroValue,
+                  },
+                },
+              ],
+              example: Examples.Tron[endpoint],
+            },
+          ],
+        },
+        successResponse: {
+          schema: 
+          {
+            oneOf: [
+              {
+                title: "Arc",
+                ...Domains.Ethereum.Transfer,
+                example: Examples.Arc[endpoint],
+              },
+              {
+                title: "Tron",
+                ...Domains.Tron.Transfer,
+                example: Examples.Tron[endpoint],
+              },
+            ],
+          },
+        },
+      };
+    }
   }
-}
 
 // ─────────────────────────────────────
 // C. callouts 설정

@@ -106,8 +106,29 @@ function getRequestAndResponse(chain: string): {
   successResponse: OpenAPIV3.MediaTypeObject;
 } {
   switch (chain) {
+    case "arc":
+      return {
+        requestBody: {
+          additionalProperties: false,
+          allOf: [
+            {
+              type: "object",
+              properties: {
+                fromBlock: Requests.Ethereum.fromBlock,
+                toBlock: Requests.Ethereum.toBlock,
+                fromDate: Requests.Ethereum.fromDate,
+                toDate: Requests.Ethereum.toDate,
+              },
+            },
+            Requests.PaginationSet,
+          ],
+        },
+        successResponse: {
+          schema: Domains.Pagination(Domains.Arc.NativeTransfer),
+          example: Examples.Arc[endpoint],
+        },
+      };
     case "tron":
-    default:
       return {
         requestBody: {
           additionalProperties: false,
@@ -132,6 +153,63 @@ function getRequestAndResponse(chain: string): {
         },
         successResponse: {
           schema: Domains.Pagination(Domains.Tron.Transfer),
+          example: Examples.Tron[endpoint],
+        },
+      };
+    case "web3":
+    default:
+      return {
+        requestBody: {
+          additionalProperties: false,
+          oneOf: [
+            {
+              title: "Arc",
+              allOf: [
+                {
+                  type: "object",
+                  properties: {
+                    fromBlock: Requests.Ethereum.fromBlock,
+                    toBlock: Requests.Ethereum.toBlock,
+                    fromDate: Requests.Ethereum.fromDate,
+                    toDate: Requests.Ethereum.toDate,
+                  },
+                },
+                Requests.PaginationSet,
+              ],
+            },
+            {
+              title: "Tron",
+              allOf: [
+                {
+                  type: "object",
+                  properties: {
+                    fromBlock: Requests.Tron.fromBlock,
+                    toBlock: Requests.Tron.toBlock,
+                    fromDate: Requests.Tron.fromDate,
+                    toDate: Requests.Tron.toDate,
+                  },
+                },
+                Requests.PaginationSet,
+              ],
+            },
+          ],
+        },
+        successResponse: {
+          schema: 
+          {
+            oneOf: [
+              {
+                title: "Arc",
+                ...Domains.Arc.NativeTransfer,
+                example: Examples.Arc[endpoint],
+              },
+              {
+                title: "Tron",
+                ...Domains.Tron.Transfer,
+                example: Examples.Tron[endpoint],
+              },
+            ],
+          },
           example: Examples.Tron[endpoint],
         },
       };

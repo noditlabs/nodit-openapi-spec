@@ -4,6 +4,7 @@ import Ethereum from "./ethereum.examples";
 import Tron from "./tron.examples";
 import XRPL from "./xrpl.examples";
 import Aptos from "./aptos.examples";
+import Arc from "./arc.examples";
 
 const Examples = {
   Ethereum,
@@ -12,6 +13,7 @@ const Examples = {
   Tron,
   XRPL,
   Aptos,
+  Arc,
 };
 
 export default Examples;
