@@ -2146,6 +2146,12 @@ export const supportedApisChains: SupportedApis[] = [
       { category: "klay", endpoints: [] },
     ],
     // arc
-    webhookApi: [],
+    webhookApi: [
+      "createWebhook",
+      "updateWebhook",
+      "getWebhook",
+      "deleteWebhook",
+      "getWebhookHistory",
+    ],
   },
 ];

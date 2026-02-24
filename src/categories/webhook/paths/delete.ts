@@ -67,6 +67,7 @@ function getOpIdAndParams(chain?: string): {
         Requests.chain("ethereum", [
           // evm
           "arbitrum",
+          "arc",
           "base",
           "bnb",
           "ethereum",
