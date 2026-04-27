@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: kaia
-  version: 1.2.20
+  version: main
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -7895,8 +7895,7 @@ paths:
                                 블록이 생성된 시간을 나타내는 필드입니다.
 
 
-                                마이크로초(microseconds) 단위의 UNIX 타임스탬프로 제공되며, 블록의 생성
-                                순서와 시간 추적에 사용됩니다.
+                                UNIX 타임스탬프로 제공되며, 블록의 생성 순서와 시간 추적에 사용됩니다.
 
                                 블록 타임스탬프는 트랜잭션의 시간 순서를 보장하고 블록 생성 간격을 측정하는 데
                                 활용됩니다.
@@ -11748,13 +11747,35 @@ paths:
                       default:
                         - Transfer
                     abi:
-                      type: string
-                      format: json
+                      type: array
+                      items:
+                        type: object
+                        additionalProperties: true
                       description: >-
-                        조회하고자 하는 컨트랙트의 ABI를 지정하는 파라미터입니다. JSON 형태의 ABI 문자열을 입력할
-                        수 있습니다.
-                      default: >-
-                        [{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[],"name":"Pause","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpause","type":"event"}]
+                        조회하고자 하는 컨트랙트의 ABI를 지정하는 파라미터입니다. ABI JSON 배열 자체를 그대로
+                        입력합니다 (문자열로 stringify하지 않습니다).
+                      default:
+                        - anonymous: false
+                          inputs:
+                            - indexed: true
+                              name: from
+                              type: address
+                            - indexed: true
+                              name: to
+                              type: address
+                            - indexed: false
+                              name: value
+                              type: uint256
+                          name: Transfer
+                          type: event
+                        - anonymous: false
+                          inputs: []
+                          name: Pause
+                          type: event
+                        - anonymous: false
+                          inputs: []
+                          name: Unpause
+                          type: event
                     fromBlock: *ref_14
                     toBlock: *ref_15
                     fromDate: *ref_16

@@ -59,9 +59,12 @@ export const eventNames: OpenAPIV3.SchemaObject = {
 };
 
 export const abi: OpenAPIV3.SchemaObject = {
-	type: "string",
-	format: "json",
-	description: "조회하고자 하는 컨트랙트의 ABI를 지정하는 파라미터입니다. JSON 형태의 ABI 문자열을 입력할 수 있습니다.",
+	type: "array",
+	items: {
+		type: "object",
+		additionalProperties: true,
+	},
+	description: "조회하고자 하는 컨트랙트의 ABI를 지정하는 파라미터입니다. ABI JSON 배열 자체를 그대로 입력합니다 (문자열로 stringify하지 않습니다).",
 };
 
 /* Range */

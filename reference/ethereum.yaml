@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: ethereum
-  version: 1.2.20
+  version: main
 servers:
   - url: https://web3.nodit.io/v1
 components:
@@ -10902,13 +10902,35 @@ paths:
                       default:
                         - Transfer
                     abi:
-                      type: string
-                      format: json
+                      type: array
+                      items:
+                        type: object
+                        additionalProperties: true
                       description: >-
-                        조회하고자 하는 컨트랙트의 ABI를 지정하는 파라미터입니다. JSON 형태의 ABI 문자열을 입력할
-                        수 있습니다.
-                      default: >-
-                        [{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[],"name":"Pause","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpause","type":"event"}]
+                        조회하고자 하는 컨트랙트의 ABI를 지정하는 파라미터입니다. ABI JSON 배열 자체를 그대로
+                        입력합니다 (문자열로 stringify하지 않습니다).
+                      default:
+                        - anonymous: false
+                          inputs:
+                            - indexed: true
+                              name: from
+                              type: address
+                            - indexed: true
+                              name: to
+                              type: address
+                            - indexed: false
+                              name: value
+                              type: uint256
+                          name: Transfer
+                          type: event
+                        - anonymous: false
+                          inputs: []
+                          name: Pause
+                          type: event
+                        - anonymous: false
+                          inputs: []
+                          name: Unpause
+                          type: event
                     fromBlock: *ref_14
                     toBlock: *ref_15
                     fromDate: *ref_16
