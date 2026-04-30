@@ -1,8 +1,0 @@
-{
-  "jsonrpc": "2.0",
-  "result": {
-    "solana-core": "1.16.7",
-    "feature-set": 2891131721
-  },
-  "id": 1
-}

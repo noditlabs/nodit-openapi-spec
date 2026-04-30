@@ -1,3 +1,0 @@
-description: "A wrapper struct to retrofit in [enum PublicKey] for zkLogin. Useful to construct [struct MultiSigPublicKey]."
-allOf:
-  - $ref: "./Base64.yaml"

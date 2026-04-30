@@ -1,3 +1,0 @@
-description: "Defines the compressed version of the public key that we pass around in Sui"
-allOf:
-  - $ref: "./Base64.yaml"

@@ -1,8 +1,0 @@
-type: object
-properties:
-  id:
-    type: integer
-    description: The request ID
-  jsonrpc:
-    type: string
-    description: The JSON-RPC version

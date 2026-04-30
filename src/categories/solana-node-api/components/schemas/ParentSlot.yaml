@@ -1,3 +1,0 @@
-type: integer
-format: uint64
-description: The slot index of the parent block.

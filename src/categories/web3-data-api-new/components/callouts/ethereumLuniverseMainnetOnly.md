@@ -1,3 +1,0 @@
-> 🚧 사용 시 네트워크를 확인하세요!
->
-> 이 API는 오직 Ethereum Mainnet, TheBalance Mainnet 에서만 지원되며, 다른 네트워크에서는 사용할 수 없습니다. 사용 시 네트워크를 확인해주세요.

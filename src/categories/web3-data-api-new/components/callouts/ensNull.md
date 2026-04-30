@@ -1,3 +1,0 @@
-> 🚧 ENS 도메인 이름이 있는 주소인데도 null이 표기되나요?
->
-> 여러 도메인 이름이 하나의 주소를 가리키고 있을 수 있습니다. 이 API에서는 Primary Name으로 등록된 이름만 응답을 반환합니다. 만약 모든 이름을 확인하고 싶다면, [Get Ens Records By Account](ref:getensrecordsbyaccount)를 이용해보세요!

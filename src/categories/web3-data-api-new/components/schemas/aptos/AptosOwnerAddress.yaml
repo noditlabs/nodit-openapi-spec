@@ -1,8 +1,0 @@
-type: string
-pattern: ^0[xX][0-9a-fA-F]{64}$
-description: |
-  자산을 보유한 실질적인 소유자의 계정 주소를 나타내는 필드입니다.
-
-  자산의 유형에 따라 소유자의 계정 주소가 다르며, 다음과 같이 제공됩니다:
-  - Coin: 보유 계정 주소
-  - Fungible Asset: 자산이 저장된 Object의 소유자의 계정 주소
