@@ -1,0 +1,71 @@
+openapi: 3.1.0
+info:
+  title: Hippo - cosmos_distribution_v1beta1_delegators_{delegator_address}_withdraw_address
+  version: 1.0.0
+servers:
+  - url: https://rest-hippo-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address:
+    get:
+      description: DelegatorWithdrawAddress queries withdraw address of a delegator.
+      operationId: cosmos_distribution_v1beta1_delegators_{delegator_address}_withdraw_address
+      tags:
+        - distribution
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  withdraw_address:
+                    type: string
+                    description: withdraw_address defines the delegator address to query for.
+                description: |-
+                  QueryDelegatorWithdrawAddressResponse is the response type for the
+                  Query/DelegatorWithdrawAddress RPC method.
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      parameters:
+        - name: delegator_address
+          description: delegator_addr defines the delegator address to query for.
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - api_key: []
+      summary: /cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address

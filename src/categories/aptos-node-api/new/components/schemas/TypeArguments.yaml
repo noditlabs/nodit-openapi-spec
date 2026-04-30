@@ -1,6 +1,0 @@
-type: array
-description: Entry function의 제네릭 타입 인자들을 나타내는 필드입니다.
-items:
-  type: string
-  pattern: ^(bool|u8|u64|u128|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+)$
-  example: "0x1::coin::AptosCoin"

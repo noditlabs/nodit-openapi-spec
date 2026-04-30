@@ -1,0 +1,60 @@
+openapi: 3.1.0
+info:
+  title: Initia - NumUnconfirmedTxs
+  version: 1.0.0
+servers:
+  - url: https://rpc-initia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /num_unconfirmed_txs:
+    get:
+      security:
+        - api_key: []
+      operationId: num_unconfirmed_txs
+      summary: NumUnconfirmedTxs
+      description: Retrieves the count and total size of unconfirmed transactions.
+      tags:
+        - rest-api
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      n_txs:
+                        type: string
+                      total:
+                        type: string
+                      total_bytes:
+                        type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  n_txs: "5"
+                  total: "5"
+                  total_bytes: "2560"

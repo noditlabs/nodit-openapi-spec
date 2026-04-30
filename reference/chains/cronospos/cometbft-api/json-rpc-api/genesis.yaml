@@ -1,0 +1,160 @@
+openapi: 3.1.0
+info:
+  title: CronosPOS - Genesis
+  version: 1.0.0
+servers:
+  - url: https://rpc-cronospos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: genesis
+      summary: Genesis
+      description: Retrieves the genesis document of the chain. An error may occur if the response is too large; genesis_chunked is recommended in that case.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: genesis
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: genesis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      genesis:
+                        type: object
+                        additionalProperties: true
+                        properties:
+                          genesis_time:
+                            type: string
+                          chain_id:
+                            type: string
+                          initial_height:
+                            type: string
+                          consensus_params:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              block:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  max_bytes:
+                                    type: string
+                                  max_gas:
+                                    type: string
+                                  time_iota_ms:
+                                    type: string
+                              evidence:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  max_age:
+                                    type: string
+                              validator:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  pub_key_types:
+                                    type: array
+                                    items:
+                                      type: string
+                          validators:
+                            type: array
+                            items:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                address:
+                                  type: string
+                                pub_key:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    type:
+                                      type: string
+                                    value:
+                                      type: string
+                                power:
+                                  type: string
+                                name:
+                                  type: string
+                          app_hash:
+                            type: string
+                          app_state:
+                            type: object
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  genesis:
+                    genesis_time: "2019-12-11T16:11:34Z"
+                    chain_id: cosmoshub-4
+                    initial_height: "1"
+                    consensus_params:
+                      block:
+                        max_bytes: "22020096"
+                        max_gas: "-1"
+                        time_iota_ms: "1000"
+                      evidence:
+                        max_age: "100000"
+                      validator:
+                        pub_key_types:
+                          - ed25519
+                    validators:
+                      - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                        pub_key:
+                          type: tendermint/PubKeyEd25519
+                          value: oX8HyvloaslMOq50t0UjM5WkxaB3VJFQ/E3AYkM/GKE=
+                        power: "1000000"
+                        name: validator-1
+                    app_hash: ""
+                    app_state: {}

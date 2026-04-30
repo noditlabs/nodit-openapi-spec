@@ -1,0 +1,151 @@
+openapi: 3.1.0
+info:
+  title: Celestia - cosmos_bank_v1beta1_balances_{address}
+  version: 1.0.0
+servers:
+  - url: https://rest-celestia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/bank/v1beta1/balances/{address}:
+    get:
+      description: AllBalances queries the balance of all coins for a single account.
+      operationId: cosmos_bank_v1beta1_balances_{address}
+      tags:
+        - bank
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  balances:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: |-
+                        Coin defines a token with a denomination and an amount.
+
+                        NOTE: The amount field is an Int which implements the custom method
+                        signatures required by gogoproto.
+                    description: balances is the balances of all the coins.
+                  pagination:
+                    description: pagination defines an pagination for the response.
+                    type: object
+                    properties:
+                      next_key:
+                        type: string
+                        format: byte
+                        description: |-
+                          next_key is the key to be passed to PageRequest.key to
+                          query the next page most efficiently. It will be empty if
+                          there are no more results.
+                      total:
+                        type: string
+                        format: uint64
+                        title: |-
+                          total is total number of results available if PageRequest.count_total
+                          was set, its value is undefined otherwise
+                description: |-
+                  QueryAllBalancesResponse is the response type for the Query/AllBalances RPC
+                  method.
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      parameters:
+        - name: address
+          description: address is the address to query balances for.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: byte
+        - name: pagination.offset
+          description: |-
+            offset is a numeric offset that can be used when key is unavailable.
+            It is less efficient than using key. Only one of offset or key should
+            be set.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uint64
+        - name: pagination.limit
+          description: |-
+            limit is the total number of results to be returned in the result page.
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uint64
+        - name: pagination.count_total
+          description: |-
+            count_total is set to true  to indicate that the result set should include
+            a count of the total number of items available for pagination in UIs.
+            count_total is only respected when offset is used. It is ignored when key
+            is set.
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: pagination.reverse
+          description: Set to true to return results in descending order.
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: resolve_denom
+          description: Whether to resolve denom metadata into a human-readable form.
+          in: query
+          required: false
+          schema:
+            type: boolean
+      security:
+        - api_key: []
+      summary: /cosmos/bank/v1beta1/balances/{address}

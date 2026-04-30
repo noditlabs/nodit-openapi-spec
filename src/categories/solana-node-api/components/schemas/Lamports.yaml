@@ -1,3 +1,0 @@
-type: integer
-format: uint64
-description: Number of lamports assigned to this account

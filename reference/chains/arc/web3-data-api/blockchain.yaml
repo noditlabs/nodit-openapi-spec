@@ -1,0 +1,2335 @@
+openapi: 3.1.0
+info:
+  title: Arc - Web3 Data API
+  version: 1.0.0
+servers:
+  - url: https://web3.nodit.io/v1
+    description: Web3 Data API
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - MISSING_REQUIRED_PARAMETER
+                  - INVALID_PARAMETER
+                  - WRONG_RANGE_PARAMETER
+                  - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+              - code
+              - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: When a required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: "Missing required parameter: { PARAMETER_NAME }"
+            INVALID_PARAMETER:
+              summary: When an invalid value is provided for a parameter
+              value:
+                code: INVALID_PARAMETER
+                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+            WRONG_RANGE_PARAMETER:
+              summary: When a value outside the query range is provided
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: "Wrong range parameter: { PARAMETER_NAME }"
+            DEPRECATED_OPERATION:
+              summary: When a deprecated API is requested
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - NO_AUTHENTICATION_FOUND
+                  - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+              - code
+              - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: When authentication credentials are not included
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found
+            AUTHENTICATION_FAILED:
+              summary: When authentication credentials are mismatched or invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+              - code
+              - message
+          examples:
+            PERMISSION_DENIED:
+              summary: When accessing an unauthorized resource
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - WRONG_ENDPOINT
+                  - NOT_SUPPORTED_CHAIN
+                  - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+              - code
+              - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: When requesting a non-existent API path
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: When requesting an unsupported chain
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: When requesting a resource that does not exist on the server
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+              - code
+              - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: When requesting with an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+              - code
+              - message
+          examples:
+            TIMEOUT:
+              summary: When processing is not completed within the specified time
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - RESOURCE_ALREADY_EXISTS
+                  - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+              - code
+              - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: When attempting to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: When the request is rejected by the server
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+              - code
+              - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: When the payload exceeds the server's maximum limit
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+              - code
+              - message
+          examples:
+            TOO_LONG_URI:
+              summary: When the request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_MANY_REQUESTS
+                  - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+              - code
+              - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: When the rate limit is exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: When the quota limit is exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_SERVER_ERROR
+                  - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+              - code
+              - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: When an internal server error occurs
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: When processing fails temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+              - code
+              - message
+          examples:
+            UNAVAILABLE:
+              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /{chain}/{network}/blockchain/getBlockByHashOrNumber:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getBlockByHashOrNumber
+      summary: Get Block by Hash or Number
+      description: |+
+        Returns specific information about a block queried by block hash or block number.
+
+      x-seo-description: Retrieve full block data by its hash or block number, including transactions and metadata.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - block
+              properties:
+                block:
+                  type: string
+                  description: |+
+                    Parameter specifying the block to query. The default value is latest. You can input block number (decimal string), block hash (64-character hexadecimal string starting with 0x), or block tag (earliest, latest). "earliest" refers to the first block, "latest" refers to the most recent block.
+
+                  pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+                  default: latest
+            example:
+              block: latest
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - hash
+                  - number
+                  - timestamp
+                  - parentHash
+                  - nonce
+                  - stateRoot
+                  - receiptsRoot
+                  - transactionsRoot
+                  - miner
+                  - difficulty
+                  - totalDifficulty
+                  - mixHash
+                  - gasLimit
+                  - gasUsed
+                  - size
+                  - logsBloom
+                  - extraData
+                  - sha3Uncles
+                  - transactionCount
+                  - transactions
+                properties:
+                  hash:
+                    type: string
+                    description: A field representing the block hash. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  number:
+                    type: integer
+                    description: A field representing the block number or block height. Provided as a decimal string.
+                  timestamp:
+                    type: integer
+                    description: A field representing the time when the block was created. This field is provided as a UNIX timestamp.
+                  parentHash:
+                    type: string
+                    description: A field representing the hash of the parent block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  nonce:
+                    type: string
+                    description: A value used to prove block validity in Proof of Work (PoW). Returns 0x0000000000000000 for blocks after the transition to Proof of Stake (PoS).
+                  stateRoot:
+                    type: string
+                    description: A field representing the root hash of the block state. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  receiptsRoot:
+                    type: string
+                    description: A field representing the root hash of all transaction receipts in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  transactionsRoot:
+                    type: string
+                    description: A field representing the root hash of all transactions in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  miner:
+                    type: string
+                    description: A field representing the address of the miner who created the block. Provided as a 40-character hexadecimal string prefixed with 0x.
+                  difficulty:
+                    type: string
+                    description: A field representing the block creation difficulty. Returns the difficulty value for Proof of Work (PoW), and 0 for blocks after the transition to Proof of Stake (PoS).
+                  totalDifficulty:
+                    type: string
+                    description: A field representing the cumulative block creation difficulty. Returns the sum of difficulty from block 0 to the current block. Provided as a hexadecimal string prefixed with 0x.
+                  mixHash:
+                    type: string
+                    description: A value used to prove block validity in Proof of Work (PoW). Provided as a 64-character hexadecimal string prefixed with 0x.
+                  gasLimit:
+                    type: string
+                    description: A field representing the maximum gas allowed for the block. The sum of gas used by all transactions in the block must be less than this value. Provided as a hexadecimal string prefixed with 0x.
+                  gasUsed:
+                    type: string
+                    description: A field representing the total gas used by all transactions in the block. Provided as a hexadecimal string prefixed with 0x.
+                  baseFeePerGas:
+                    type: string
+                    description: A field representing the block base gas fee. Part of the variable fee model introduced in EIP-1559 (London Hard fork). This field is not provided for blocks before this introduction. Provided as a hexadecimal string prefixed with 0x.
+                  size:
+                    type: string
+                    description: A field representing the size of the block in bytes. Provided as a hexadecimal string prefixed with 0x.
+                  logsBloom:
+                    type: string
+                    description: A field representing the logs bloom of all transactions in the block. Provided as a 512-character hexadecimal string prefixed with 0x.
+                  extraData:
+                    type: string
+                    description: A field representing additional data added by the block creator. Returns 0x when no value was added. Provided as a hexadecimal string prefixed with 0x.
+                  sha3Uncles:
+                    type: string
+                    description: A field representing the hash of all uncle blocks in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  transactionCount:
+                    type: integer
+                    description: A field representing the number of transactions in the block.
+                  transactions:
+                    type: array
+                    description: A field representing the list of transactions in the block.
+                    items:
+                      type: string
+                      description: A field representing the hash of a transaction in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  withdrawalRoot:
+                    type: string
+                    description: A field representing the root hash of all withdrawal transactions in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  withdrawals:
+                    type: array
+                    description: A field representing the list of withdrawals of staked assets by validators.
+                    items:
+                      type: object
+                      required:
+                        - index
+                        - validatorIndex
+                        - address
+                        - amount
+                      properties:
+                        index:
+                          type: string
+                          description: A field representing the index of the withdrawal transaction. Provided as an integer starting from 0, in decimal string format.
+                        validatorIndex:
+                          type: string
+                          description: A field representing the index of the validator who requested the withdrawal. Provided in decimal string format.
+                        address:
+                          type: string
+                          description: A field representing the address that receives the withdrawn Native Token. Provided as a 40-character hexadecimal string prefixed with 0x.
+                        amount:
+                          type: string
+                          description: A field representing the withdrawn amount. Provided in decimal string format.
+                  requestHash:
+                    type: string
+                    description: A field in the block header that is a cryptographic commitment of the order and content of all requests in the block. This allows verification of the integrity of the request list within the block without downloading the full data.
+                example:
+                  hash: "0x91c90676cab257a59cd956d7cb0bceb9b1a71d79755c23c7277a0697ccfaf8c4"
+                  number: 100000
+                  timestamp: 1439799138
+                  parentHash: "0xfbafb4b7b6f6789338d15ff046f40dc608a42b1a33b093e109c6d7a36cd76f61"
+                  nonce: "0x9f63aafeec219854"
+                  stateRoot: "0x209230089ff328b2d87b721c48dbede5fd163c3fae29920188a7118275ab2013"
+                  receiptsRoot: "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+                  transactionsRoot: "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+                  miner: "0xe6a7a1d47ff21b6321162aea7c6cb457d5476bca"
+                  difficulty: "0x37f5c0b3e61"
+                  totalDifficulty: "0x259ec16a4e5ec78"
+                  mixHash: "0x9769104bc21358e422d8b0938334c16072e5168cfdbba49614e4cb821ff26176"
+                  gasLimit: "0x2fefd8"
+                  gasUsed: "0x0"
+                  size: "0x225"
+                  logsBloom: "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                  extraData: "0x476574682f76312e302e312d38326566323666362f6c696e75782f676f312e34"
+                  sha3Uncles: "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347"
+                  transactionsCount: 0
+                  transactions: []
+                  withdrawals: null
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getBlocksWithinRange:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getBlocksWithinRange
+      summary: Get Blocks Within Range
+      description: |+
+        Retrieves the list of blocks within a specific period or block range.
+
+
+      x-seo-description: Fetch all blocks produced within a specified block number range, with detailed block data.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    fromBlock:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/fromBlock"
+                    toBlock:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/toBlock"
+                    fromDate:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/fromDate"
+                    toDate:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/toDate"
+                - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/1"
+            example:
+              page: 1
+              rpp: 10
+              fromDate: "2026-01-01T00:00:00Z"
+              toDate: "2026-02-01T00:00:00Z"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/responses/200/content/application~1json/schema/allOf/0"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getBlockByHashOrNumber/post/responses/200/content/application~1json/schema"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getGasPrice:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getGasPrice
+      summary: Get Gas Price
+      description: |+
+        Retrieves the current Gas Price.
+
+      x-seo-description: Get the current recommended gas price for submitting transactions on the blockchain.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - high
+                  - average
+                  - low
+                  - latestBlock
+                  - baseFee
+                properties:
+                  high:
+                    type: string
+                    description: Indicates the highest price of the current Gas Price. Provided as a decimal string.
+                  average:
+                    type: string
+                    description: Indicates the average price of the current Gas Price. Provided as a decimal string.
+                  low:
+                    type: string
+                    description: Indicates the lowest price of the current Gas Price. Provided as a decimal string.
+                  latestBlock:
+                    type: string
+                    description: Indicates the latest block. Provided as a decimal string.
+                  baseFee:
+                    type: string
+                    description: Indicates the base fee of the latest block. Provided as a decimal string.
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getInternalTransactionsByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getInternalTransactionsByAccount
+      summary: Get Internal Transactions By Account
+      description: |
+        Retrieves the list of internal transactions related to a specific account.
+
+
+        > 🚧 Getting a 429 error? Check your subscription plan!
+        > A 429 error may occur when the throughput limit of your subscribed plan is exceeded.
+        > For example, the Starter plan has a limit of 300 CU per second, so calling an API that consumes 350 CU while on the Starter plan may result in a 429 error.
+        > Check the CU consumption of the API you are using on the Compute Unit Costs page, and consider upgrading to a higher plan if you need more throughput!
+        > 👉 [Go to Compute Unit Costs page](/guides/compute-unit)
+      x-seo-description: Retrieve internal transactions initiated by or sent to a specific account address.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - accountAddress
+                  properties:
+                    accountAddress:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getNextNonceByAccount/post/requestBody/content/application~1json/schema/properties/accountAddress"
+                    relation:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionsByAccount/post/requestBody/content/application~1json/schema/allOf/0/properties/relation"
+                    fromBlock:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/fromBlock"
+                    toBlock:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/toBlock"
+                    fromDate:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/fromDate"
+                    toDate:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/toDate"
+                - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/1"
+                - type: object
+                  properties:
+                    withZeroValue:
+                      type: boolean
+                      description: Parameter specifying whether to include results with value 0 in the response. Set to true for faster responses.
+                      default: false
+                    withExternalTransaction:
+                      type: boolean
+                      description: Parameter determining whether to include external transactions in the response. External transactions are returned in the same format as internal transactions with trace index 0. When set to true, external transactions are included and response speed may be slower.
+                      default: false
+            example:
+              accountAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              relation: both
+              fromDate: "2026-01-01T00:00:00Z"
+              toDate: "2026-02-01T00:00:00Z"
+              withZeroValue: false
+              withExternalTransaction: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/responses/200/content/application~1json/schema/allOf/0"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            traceId:
+                              type: string
+                              description: |-
+                                A field representing the trace ID of the transaction. Has a unique value based on the depth and call order of the transaction.
+
+                                Naming convention: `call_{blockNumber}_{transactionIndex}_{depth1's callOrder}_{depth2's callOrder}_{...}`
+                            traceIndex:
+                              type: integer
+                              description: A field representing the trace index of the transaction. Returns 0 for external transactions.
+                            transactionHash:
+                              type: string
+                              description: A field representing the hash of the transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
+                            transactionIndex:
+                              type: integer
+                              description: A field representing the index of the transaction. Indicates the order within the block. Provided in decimal string format.
+                            from:
+                              type: string
+                              description: A field representing the address that initiated the transaction. Provided as a 40-character hexadecimal string prefixed with 0x.
+                            to:
+                              type: string
+                              description: A field representing the recipient address of the transaction. For contract creation transactions, this field returns the created contract address. Provided as a 40-character hexadecimal string prefixed with 0x.
+                            value:
+                              type: string
+                              description: A field representing the amount transferred in the transaction. Provided in decimal string format.
+                            traceType:
+                              type: string
+                              description: A field representing the trace type of the transaction. Includes call, create, etc.
+                            callType:
+                              type: string
+                              description: A field representing the call type of the transaction. Includes call, delegatecall, staticcall, etc.
+                            gas:
+                              type: string
+                              description: A field representing the amount of gas allocated to the transaction. Provided in decimal string format.
+                            gasUsed:
+                              type: string
+                              description: A field representing the amount of gas actually used in transaction execution. Provided in decimal string format.
+                            status:
+                              type: string
+                              description: A field representing the status of the transaction. 1 indicates success; 0 indicates failure. Provided in decimal string format.
+                            blockNumber:
+                              type: integer
+                              description: A field representing the block number that contains the transaction.
+                            timestamp:
+                              type: integer
+                              description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
+                          example:
+                            traceId: call_21466252_48_
+                            traceIndex: 0
+                            transactionHash: "0xd746bd1b26b7cc1ab78de4acc835589dc2ed1ca12fd90e742f423e7870ef6181"
+                            transactionIndex: "48"
+                            from: "0x9872F9cFD51dD9f5CF45a54F96a16eeE238A056a"
+                            to: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+                            value: "0"
+                            traceType: call
+                            callType: call
+                            gas: "69736"
+                            gasUsed: "46109"
+                            status: "1"
+                            blockNumber: 21466252
+                            timestamp: 1734969803
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getInternalTransactionsByTransactionHash:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getInternalTransactionsByTransactionHash
+      summary: Get Internal Transactions By Transaction Hash
+      description: |+
+        Retrieves the list of internal transactions that occurred in a specific transaction.
+
+      x-seo-description: Fetch all internal transactions associated with a specific transaction hash.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - transactionHash
+                  properties:
+                    transactionHash:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/transactionHash"
+                - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/1"
+                - type: object
+                  properties:
+                    withZeroValue:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getInternalTransactionsByAccount/post/requestBody/content/application~1json/schema/allOf/2/properties/withZeroValue"
+                    withExternalTransaction:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getInternalTransactionsByAccount/post/requestBody/content/application~1json/schema/allOf/2/properties/withExternalTransaction"
+            example:
+              page: 1
+              rpp: 10
+              transactionHash: "0xdcfd39025f4c17b2633b42a3592cda9e0b783ee01acad8ee1a3a5130991692ff"
+              withZeroValue: false
+              withExternalTransaction: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/responses/200/content/application~1json/schema/allOf/0"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getInternalTransactionsByAccount/post/responses/200/content/application~1json/schema/allOf/1/properties/items/items"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getNextNonceByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getNextNonceByAccount
+      summary: Get Next Nonce by Account
+      description: |+
+        Retrieves the next nonce for a specific account.
+
+      x-seo-description: Get the next available transaction nonce for a specific account address on the blockchain.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountAddress
+              properties:
+                accountAddress:
+                  type: string
+                  description: Parameter specifying the account address to query. Can be entered as a 40-character hexadecimal string starting with 0x.
+                  pattern: ^0[xX][0-9a-fA-F]{40}$
+                  example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            example:
+              accountAddress: "0x1234567890123456789012345678901234567890"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - nonce
+                properties:
+                  nonce:
+                    type: string
+                    description: |
+                      Returns the next nonce value for the queried account.
+                      This value increments by 1 for each transaction created. Before creating a new transaction, check this value and use it to specify the transaction's nonce.
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getTotalTransactionCountByAccount
+      summary: Get Total Transaction Count By Account
+      description: |+
+        This API returns the total count of transactions in which a specific account address is included as the sender or recipient.
+
+      x-seo-description: Retrieve the total number of transactions sent or received by a specific account address.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountAddress
+              properties:
+                accountAddress:
+                  $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getNextNonceByAccount/post/requestBody/content/application~1json/schema/properties/accountAddress"
+            example:
+              accountAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionCount:
+                    type: integer
+                    description: Indicates the total count of transactions in which the account participated as sender or recipient. For XRPL and Aptos, it indicates the total count of transactions created by the specific account.
+                example:
+                  transactionCount: 8124
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTransactionByHash:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getTransactionByHash
+      summary: Get Transaction By Hash
+      description: |
+        Retrieves information about a specific transaction.
+      x-seo-description: Fetch detailed transaction data including status, gas, and logs by its transaction hash.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - transactionHash
+              properties:
+                transactionHash:
+                  type: string
+                  description: Parameter specifying the transaction hash to query. Can be entered as a 64-character hexadecimal string starting with 0x.
+                  pattern: ^0[xX][0-9a-fA-F]{64}$
+                withLogs:
+                  type: boolean
+                  description: Parameter specifying whether to include the logs field in the response. Response speed may be slower when set to true.
+                  default: false
+                withDecode:
+                  type: boolean
+                  description: |-
+                    Parameter specifying whether to include decodedInput and decodedLog fields in the response. Response speed may be slower when set to true.
+
+                    decodedLog is part of logs, so it is not included when withLogs is false even if withDecode is true.
+                    decodedInput interprets the transaction input field and provides the result. However, different functions may use the same function selector, so the result may not match the actually called function. Additional verification is recommended for non-standard ERC functions.
+                  default: false
+            example:
+              transactionHash: "0x45d5ca108b4bf1e11e2ca6e92c6ee34911cd458726400ebb9810a4e2a51eaa98"
+              withLogs: false
+              withDecode: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - transactionHash
+                  - transactionIndex
+                  - blockHash
+                  - blockNumber
+                  - from
+                  - to
+                  - value
+                  - input
+                  - functionSelector
+                  - nonce
+                  - gas
+                  - gasPrice
+                  - gasUsed
+                  - cumulativeGasUsed
+                  - effectiveGasPrice
+                  - contractAddress
+                  - logsBloom
+                  - timestamp
+                properties:
+                  transactionHash:
+                    type: string
+                    description: A field representing the hash of the transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  transactionIndex:
+                    type: integer
+                    description: A field representing the index of the transaction. Indicates the order within the block. Provided in decimal string format.
+                  blockHash:
+                    type: string
+                    description: A field representing the hash of the block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  blockNumber:
+                    type: integer
+                    description: A field representing the block number.
+                  from:
+                    type: string
+                    description: A field representing the address that initiated the transaction. Provided as a 40-character hexadecimal string prefixed with 0x.
+                  to:
+                    type: string
+                    description: A field representing the recipient address of the transaction. For contract creation transactions, this field returns null. Provided as a 40-character hexadecimal string prefixed with 0x.
+                  value:
+                    type: string
+                    description: A field representing the amount of tokens transferred in the transaction. Provided in decimal string format.
+                  input:
+                    type: string
+                    description: "A field representing the data of the transaction. For Native Token (ETH, MATIC, etc.) transfers, this field is empty. Provided as a hexadecimal string prefixed with 0x. "
+                  decodedInput:
+                    type: object
+                    description: A field representing the decoded result of the transaction input. Included in the response only when the withDecode parameter is set to true, providing function data executed based on the decoded input. This field is not provided even when withDecode is true if the function cannot be identified.
+                    properties:
+                      type:
+                        type: string
+                        description: A field representing the function type of the transaction.
+                      name:
+                        type: string
+                        description: A field representing the function name of the transaction.
+                      signature:
+                        type: string
+                        description: A field representing the function signature of the transaction.
+                      args:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: A field representing the name of the argument.
+                            type:
+                              type: string
+                              description: A field representing the type of the argument.
+                            value:
+                              type: string
+                              description: A field representing the value of the argument.
+                  functionSelector:
+                    type: string
+                    description: A 4-byte function selector value that identifies the called function. The function selector is the first 4 bytes of the Keccak-256 hash of the function signature. Provided as an 8-character hexadecimal string prefixed with 0x.
+                  nonce:
+                    type: string
+                    description: A field representing the nonce value of the transaction. Used for transaction deduplication and ordering. Provided in decimal string format.
+                  gas:
+                    type: string
+                    description: A field representing the maximum amount of gas the user intends to allocate for transaction execution. Provided in decimal string format.
+                  gasPrice:
+                    type: string
+                    description: A field representing the amount the user is willing to pay per unit of gas. Used in the transaction model before EIP-1559 (London Hard fork) with fixed fees; users can manually set the price based on network congestion. Provided in decimal string format.
+                  maxFeePerGas:
+                    type: string
+                    description: A field representing the maximum fee the user is willing to pay per unit of gas. Must be greater than or equal to the sum of baseFeePerGas and maxPriorityFeePerGas. Part of the variable fee model introduced in EIP-1559 (London Hard fork). This field is not provided for transactions before this introduction. Provided in decimal string format.
+                  maxPriorityFeePerGas:
+                    type: string
+                    description: The maximum fee per unit of gas that the user wants to pay directly to the block builder. Higher values cause the block builder to prioritize the transaction. Part of the variable fee model introduced in EIP-1559 (London Hard fork). This field is not provided for transactions before this introduction. Provided in decimal string format.
+                  gasUsed:
+                    type: string
+                    description: A field representing the amount of gas actually used in transaction execution. Provided in decimal string format.
+                  cumulativeGasUsed:
+                    type: string
+                    description: A field representing the total gas used by all transactions in the block up to and including the current transaction. Provided in decimal string format.
+                  effectGasPrice:
+                    type: string
+                    description: A field representing the average price actually paid per unit of gas by the transaction. Part of the variable fee model introduced in EIP-1559 (London Hard fork). This field is not provided for transactions before this introduction. Provided in decimal string format.
+                  contractAddress:
+                    type: string
+                    description: A field representing the created contract address when the transaction is a contract creation transaction. Provided as a 40-character hexadecimal string prefixed with 0x.
+                  type:
+                    type: string
+                    description: |
+                      A field representing the type of the transaction. This field may not be provided depending on the block context. Provided in decimal string format.
+                      0: Represents a standard Ethereum transaction. This is the traditional transaction format before EIP-2718.
+                      1: Represents the 'Access List' transaction introduced in EIP-2930. This type includes an access list for specific addresses and storage slots to optimize gas costs.
+                      2: Represents the 'Fee Market' transaction introduced in EIP-1559. This type uses a variable gas cost model and includes maxFeePerGas and maxPriorityFeePerGas fields.
+                      3: Represents the 'Blob Transaction' introduced in EIP-4844. This type includes additional blob data separate from the body, improving data availability and supporting scalability in conjunction with Layer2 solutions such as Rollups.
+                      4: An extended transaction type introduced in EIP-7702, containing an authorizationList field with signature/authorization information. Used when multi-signature or additional authentication procedures are required.
+                  status:
+                    type: string
+                    description: A field representing the status of the transaction. 1 indicates success; 0 indicates failure. This field is not provided for transactions before the Byzantium Hard Fork. Provided in decimal string format.
+                  logsBloom:
+                    type: string
+                    description: A field representing all logs bloom of the transaction. Provided as a 512-character hexadecimal string prefixed with 0x.
+                  accessList:
+                    type: array
+                    description: A field representing the access list of the transaction.
+                    items:
+                      type: object
+                      required:
+                        - address
+                        - storageKeys
+                      properties:
+                        address:
+                          type: string
+                          description: A field representing the contract address accessed in the transaction. Provided as a 40-character hexadecimal string prefixed with 0x.
+                        storageKeys:
+                          type: array
+                          description: A field representing the list of storage keys of the contract accessed in the transaction.
+                          items:
+                            type: string
+                            description: A field representing a storage key of the contract accessed in the transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  timeStamp:
+                    type: integer
+                    description: A field representing when the transaction was created. This field is provided as a UNIX timestamp.
+                  authorizationList:
+                    type: array
+                    description: This field is a list containing the transaction's signature and authorization information. Each item includes chain ID, nonce, signature values, etc. required for signature verification. Provided after EIP-7702. Support and adoption may vary by network, and this field may not be present depending on the transaction type (e.g., type 4 or higher).
+                    items:
+                      type: object
+                      properties:
+                        chainId:
+                          type: string
+                          description: A field representing the ID of the chain for which the authorization is valid. Used for signature verification and replay attack prevention. Expressed in decimal string format.
+                        nonce:
+                          type: string
+                          description: A nonce value to ensure the uniqueness of this authorization item and prevent replay attacks. Expressed in decimal string format.
+                        address:
+                          type: string
+                          description: The address of the account that provided the authorization (signature).
+                        yParity:
+                          type: string
+                          description: A 1-bit parity value used to select the y-coordinate of the signed public key. Typically 0 or 1, used for public key recovery. Expressed in decimal string format.
+                        r:
+                          type: string
+                          description: The first value of the ECDSA signature, generated through the nonce used for signing and curve operations. Used for public key recovery and signature verification.
+                        s:
+                          type: string
+                          description: The second value of the ECDSA signature, calculated based on the message hash and private key. Essential for verifying signature validity.
+                  logs:
+                    type: array
+                    description: A field representing the list of logs included in the transaction. Provided only when the withLogs parameter is true.
+                    items:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionsInBlock/post/responses/200/content/application~1json/schema/allOf/1/properties/items/items/allOf/1/properties/logs/items"
+                example:
+                  transactionHash: "0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4"
+                  transactionIndex: "6"
+                  blockHash: "0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8"
+                  blockNumber: 21309845
+                  from: "0xae2Fc483527B8EF99EB5D9B44875F005ba1FaE13"
+                  to: "0x1f2F10D1C40777AE1Da742455c65828FF36Df387"
+                  value: "25809147711"
+                  input: "0x59fba26c3f9c8ecef989def3c5c8ad037487462d83c0410ba900b1f1ee126e9c96231cc3d3fad7c08b4cf873b1f10bb8"
+                  functionSelector: "0x59fba26c"
+                  nonce: "3908954"
+                  gas: "136930"
+                  gasPrice: "17716724232"
+                  maxFeePerGas: "17716724232"
+                  maxPriorityFeePerGas: "1"
+                  gasUsed: "95851"
+                  cumulativeGasUsed: "1602350"
+                  effectiveGasPrice: "17716724232"
+                  contractAddress: null
+                  type: "2"
+                  status: "1"
+                  logsBloom: "0x00040000000000000000000000000000000000000000000800000000000000000000000000000000000010000000000002000000080020000000000000000000000000000000000800000008000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000010000800000000000000000001000040000000000000000000000010000000000000000000040000000000000000000000000000000000000000000040000000000000000000000002000000000000000000000000000000000000000000000000080000000000202000000000000000000000008000000000000000000000000000000000"
+                  accessList:
+                    - storageKeys:
+                        - "0x0000000000000000000000000000000000000000000000000000000000000002"
+                        - "0x9c04773acff4c5c42718bd0120c72761f458e43068a3961eb935577d1ed4effb"
+                        - "0x000000000000000000000000000000000000000000000000000000000000004c"
+                        - "0x000000000000000000000000000000000000000000000000000000000000004d"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000000"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000004"
+                      address: "0xfba26c3f9c8ecef989def3c5c8ad037487462d83"
+                    - storageKeys:
+                        - "0xa5533e53a8bb0cc43dd0fcc3460eba5629e7373d9977a4dc5094a3f36e1dfa3a"
+                        - "0xe2eb0e48c234efbf3a46eecd032658a631dc8c81678d34452f2bc4e36fa35c88"
+                      address: "0xb1f1ee126e9c96231cc3d3fad7c08b4cf873b1f1"
+                    - storageKeys:
+                        - "0xbd5af5151dcb9feb2c4ef23509c863dd4415e4d2c27b5c08786933a8ed41acc7"
+                        - "0x29a02af4bc820597ed371018254b6b3519f55009a450e372cca58ead735350fd"
+                      address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  timestamp: 1733082431
+                  logs:
+                    - contractAddress: "0xB1F1ee126e9c96231Cc3d3fAD7C08b4cf873b1f1"
+                      transactionHash: "0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4"
+                      transactionIndex: 6
+                      blockHash: "0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8"
+                      blockNumber: 21309845
+                      data: "0x000000000000000000000000000000000000000000000000410ba9e7b561fe8e"
+                      logIndex: 72
+                      removed: false
+                      topics:
+                        - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                        - "0x000000000000000000000000fba26c3f9c8ecef989def3c5c8ad037487462d83"
+                        - "0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387"
+                      decodedLog:
+                        name: Transfer
+                        eventFragment: Transfer
+                        signature: Transfer(address,address,uint256)
+                        eventHash: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                        args:
+                          - name: from
+                            type: address
+                            value: "0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83"
+                          - name: to
+                            type: address
+                            value: "0x1f2F10D1C40777AE1Da742455c65828FF36Df387"
+                          - name: value
+                            type: uint256
+                            value: "4687026649854770830"
+                    - contractAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+                      transactionHash: "0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4"
+                      transactionIndex: 6
+                      blockHash: "0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8"
+                      blockNumber: 21309845
+                      data: "0x000000000000000000000000000000000000000000000000060258573f000000"
+                      logIndex: 73
+                      removed: false
+                      topics:
+                        - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                        - "0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387"
+                        - "0x000000000000000000000000fba26c3f9c8ecef989def3c5c8ad037487462d83"
+                      decodedLog:
+                        name: Transfer
+                        eventFragment: Transfer
+                        signature: Transfer(address,address,uint256)
+                        eventHash: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                        args:
+                          - name: from
+                            type: address
+                            value: "0x1f2F10D1C40777AE1Da742455c65828FF36Df387"
+                          - name: to
+                            type: address
+                            value: "0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83"
+                          - name: value
+                            type: uint256
+                            value: "433005645923352576"
+                    - contractAddress: "0xfBa26C3F9C8eCeF989def3C5c8aD037487462d83"
+                      transactionHash: "0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4"
+                      transactionIndex: 6
+                      blockHash: "0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8"
+                      blockNumber: 21309845
+                      data: "0xffffffffffffffffffffffffffffffffffffffffffffffffbef456184a9e0172000000000000000000000000000000000000000000000000060258573f00000000000000000000000000000000000000000000004ddaa276e10f69992f50c7ab000000000000000000000000000000000000000000000012b29af6787d922533ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa2ff"
+                      logIndex: 74
+                      removed: false
+                      topics:
+                        - "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67"
+                        - "0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387"
+                        - "0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387"
+                      decodedLog:
+                        name: Swap
+                        eventFragment: Swap
+                        signature: Swap(address,address,int256,int256,uint160,uint128,int24)
+                        eventHash: "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67"
+                        args:
+                          - name: sender
+                            type: address
+                            value: "0x1f2F10D1C40777AE1Da742455c65828FF36Df387"
+                          - name: recipient
+                            type: address
+                            value: "0x1f2F10D1C40777AE1Da742455c65828FF36Df387"
+                          - name: deltaQty0
+                            type: int256
+                            value: "-4687026649854770830"
+                          - name: deltaQty1
+                            type: int256
+                            value: "433005645923352576"
+                          - name: sqrtP
+                            type: uint160
+                            value: "24094658801222881921974978475"
+                          - name: liquidity
+                            type: uint128
+                            value: "344911263209299780915"
+                          - name: currentTick
+                            type: int24
+                            value: "-23809"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTransactionsByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getTransactionsByAccount
+      summary: Get Transactions By Account
+      description: |
+        Retrieves the list of transactions sent or received by a specific account.
+      x-seo-description: Get a paginated list of all transactions associated with a specific account address.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - accountAddress
+                  properties:
+                    accountAddress:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getNextNonceByAccount/post/requestBody/content/application~1json/schema/properties/accountAddress"
+                    relation:
+                      type: string
+                      description: |-
+                        Parameter for filtering transactions where the queried account address is the sender or recipient.
+                        - from: Filter by sender only.
+                        - to: Filter by recipient only.
+                        - both (default): Returns all transactions where the queried address appears in from or to.
+                      enum:
+                        - from
+                        - to
+                        - both
+                      pattern: from|to|both
+                      default: both
+                    fromBlock:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/fromBlock"
+                    toBlock:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/toBlock"
+                    fromDate:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/fromDate"
+                    toDate:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/0/properties/toDate"
+                - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/1"
+                - type: object
+                  properties:
+                    withLogs:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/withLogs"
+                    withDecode:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/withDecode"
+            example:
+              accountAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              relation: both
+              fromDate: "2026-01-01T00:00:00Z"
+              toDate: "2026-02-01T00:00:00Z"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/responses/200/content/application~1json/schema/allOf/0"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/responses/200/content/application~1json/schema"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTransactionsByHashes:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getTransactionsByHashes
+      summary: Get Transactions By Hashes
+      description: |+
+        Retrieves information for multiple transactions. Up to 1,000 transactions can be queried.
+
+
+        > 🚧 Getting a 429 error? Check your subscription plan!
+        > A 429 error may occur when the throughput limit of your subscribed plan is exceeded.
+        > For example, the Starter plan has a limit of 300 CU per second, so calling an API that consumes 350 CU while on the Starter plan may result in a 429 error.
+        > Check the CU consumption of the API you are using on the Compute Unit Costs page, and consider upgrading to a higher plan if you need more throughput!
+        > 👉 [Go to Compute Unit Costs page](/guides/compute-unit)
+
+      x-seo-description: Retrieve detailed data for multiple transactions in a single request using their hashes.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - transactionHashes
+              properties:
+                transactionHashes:
+                  type: array
+                  items:
+                    $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/transactionHash"
+                withLogs:
+                  $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/withLogs"
+                withDecode:
+                  $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/withDecode"
+            example:
+              transactionHashes:
+                - "0x45d5ca108b4bf1e11e2ca6e92c6ee34911cd458726400ebb9810a4e2a51eaa98"
+                - "0x57703b1e8e372ae1d84362d6687102237199604ef72a27b9127ca307ea746c18"
+              withLogs: false
+              withDecode: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/responses/200/content/application~1json/schema"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTransactionsInBlock:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-getTransactionsInBlock
+      summary: Get Transactions In Block
+      description: |+
+        Retrieves the list of transactions within a specific block.
+
+
+        > 🚧 Caution when using decodeInput
+        >
+        > The decodeInput field decodes the transaction's input field and provides the result. However, different functions can use the same function selector, so the provided result may not match the actually called function. Therefore, additional verification is recommended for functions that differ from ERC standard specifications.
+
+      x-seo-description: Retrieve all transactions included in a specific block, identified by hash or block number.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - block
+                  properties:
+                    block:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getBlockByHashOrNumber/post/requestBody/content/application~1json/schema/properties/block"
+                - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/requestBody/content/application~1json/schema/allOf/1"
+                - type: object
+                  properties:
+                    withLogs:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/withLogs"
+                    withDecode:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/requestBody/content/application~1json/schema/properties/withDecode"
+            example:
+              block: "17530000"
+              withLogs: false
+              withDecode: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1searchEvents/post/responses/200/content/application~1json/schema/allOf/0"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByHash/post/responses/200/content/application~1json/schema"
+                            - type: object
+                              properties:
+                                logs:
+                                  type: array
+                                  items:
+                                    type: object
+                                    required:
+                                      - contractAddress
+                                      - transactionHash
+                                      - transactionIndex
+                                      - blockHash
+                                      - blockNumber
+                                      - data
+                                      - logIndex
+                                      - removed
+                                      - topics
+                                    properties:
+                                      contractAddress:
+                                        type: string
+                                        description: A field representing the contract address that generated the log. Provided as a 40-character hexadecimal string prefixed with 0x.
+                                      transactionHash:
+                                        type: string
+                                        description: A field representing the hash of the transaction that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                                      transactionIndex:
+                                        type: integer
+                                        description: A field representing the index of the transaction that generated the log. Indicates the order within the block. Provided in decimal string format.
+                                      blockHash:
+                                        type: string
+                                        description: A field representing the hash of the block that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                                      blockNumber:
+                                        type: integer
+                                        description: A field representing the block number that generated the log.
+                                      data:
+                                        type: string
+                                        description: A field representing the data of the log. Provided as a hexadecimal string prefixed with 0x. This field represents the event data of the log.
+                                      logIndex:
+                                        type: integer
+                                        description: A field representing the index of the log. Indicates the order of events in the transaction. Provided in decimal string format.
+                                      removed:
+                                        type: boolean
+                                        description: A field indicating whether the log was removed. Returns true if the log was removed due to chain reorganization (Reorg).
+                                      topics:
+                                        type: array
+                                        description: A field representing the indexed arguments of the log. Can have up to 4 topics.
+                                        items:
+                                          type: string
+                                          description: A field representing a topic of the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                                      decodedLog:
+                                        type: object
+                                        description: A field representing the event data of the log. Included in the response only when the withDecode parameter is set to true.
+                                        required:
+                                          - name
+                                          - eventFragment
+                                          - signature
+                                          - eventHash
+                                          - args
+                                        properties:
+                                          name:
+                                            type: string
+                                            description: A field representing the event name of the log.
+                                          eventFragment:
+                                            type: string
+                                            description: A field representing the event fragment of the log.
+                                          signature:
+                                            type: string
+                                            description: A field representing the event signature of the log.
+                                          eventHash:
+                                            type: string
+                                            description: A field representing the event hash of the log.
+                                          args:
+                                            type: array
+                                            description: A field representing the arguments of the log.
+                                            items:
+                                              type: object
+                                              properties:
+                                                name:
+                                                  type: string
+                                                  description: A field representing the name of the argument.
+                                                type:
+                                                  type: string
+                                                  description: A field representing the type of the argument.
+                                                value:
+                                                  type: string
+                                                  description: A field representing the value of the argument.
+                                        example:
+                                          name: Swap
+                                          eventFragment: Swap
+                                          signature: Swap(address,address,int256,int256,uint160,uint128,int24)
+                                          eventHash: "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67"
+                                          args:
+                                            - name: sender
+                                              type: address
+                                              value: "0x1f2F10D1C40777AE1Da742455c65828FF36Df387"
+                                            - name: recipient
+                                              type: address
+                                              value: "0x1f2F10D1C40777AE1Da742455c65828FF36Df387"
+                                            - name: deltaQty0
+                                              type: int256
+                                              value: "-4687026649854770830"
+                                            - name: deltaQty1
+                                              type: int256
+                                              value: "433005645923352576"
+                                            - name: sqrtP
+                                              type: uint160
+                                              value: "24094658801222881921974978475"
+                                            - name: liquidity
+                                              type: uint128
+                                              value: "344911263209299780915"
+                                            - name: currentTick
+                                              type: int24
+                                              value: "-23809"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/isContract:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-isContract
+      summary: Is Contract
+      description: |+
+        Checks whether the input address is a contract address or not.
+
+      x-seo-description: Check whether a given address is a smart contract or an externally owned account (EOA).
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - address
+              properties:
+                address:
+                  type: string
+                  description: Parameter specifying the address to query. Can be entered as a 40-character hexadecimal string starting with 0x.
+                  pattern: ^0[xX][0-9a-fA-F]{40}$
+            example:
+              address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: Returns true if the input address is a contract, false otherwise.
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/searchEvents:
+    post:
+      security:
+        - api_key: []
+      operationId: arc-searchEvents
+      summary: Search Events
+      description: |+
+        Searches for specific events within a specified range.
+
+
+        > 🚧 Getting a 429 error? Check your subscription plan!
+        > A 429 error may occur when the throughput limit of your subscribed plan is exceeded.
+        > For example, the Starter plan has a limit of 300 CU per second, so calling an API that consumes 350 CU while on the Starter plan may result in a 429 error.
+        > Check the CU consumption of the API you are using on the Compute Unit Costs page, and consider upgrading to a higher plan if you need more throughput!
+        > 👉 [Go to Compute Unit Costs page](/guides/compute-unit)
+
+      x-seo-description: Search for on-chain contract events by topic, address, and block range with pagination support.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arc
+            default: arc
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - testnet
+            default: testnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - contractAddress
+                    - eventNames
+                    - abi
+                  properties:
+                    contractAddress:
+                      type: string
+                      description: Parameter specifying the contract address to query. Can be entered as a 40-character hexadecimal string starting with 0x.
+                      pattern: ^0[xX][0-9a-fA-F]{40}$
+                    eventNames:
+                      type: array
+                      items:
+                        type: string
+                        description: Parameter specifying the name of the event to query.
+                    abi:
+                      type: string
+                      format: json
+                      description: Parameter specifying the ABI of the contract to query. Can be entered as a JSON-formatted ABI string.
+                    fromBlock:
+                      type: string
+                      description: |
+                        Parameter specifying the starting block for the query. You can enter one of the following formats:
+                        - block number: Enter block number as a decimal string.
+                        - block hash: 64-character hexadecimal (including "0x").
+                        - block tag: Use "earliest" or "latest" to specify the first block or the most recent block.
+
+                        Notes:
+                        - If provided without toBlock, results are queried from this block to the latest block.
+                        - fromBlock value cannot be greater than toBlock value.
+                        - If fromBlock and toBlock have the same value, only that block is queried.
+                        - "latest" for fromBlock is only allowed when toBlock is "latest".
+                      pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+                    toBlock:
+                      type: string
+                      description: |-
+                        Parameter specifying the ending block for the query. You can enter one of the following formats:
+                        - block number: Enter block number as a decimal string.
+                        - block hash: 64-character hexadecimal (including "0x").
+                        - block tag: Use "earliest" or "latest" to specify the first block or the most recent block.
+
+                        Notes:
+                        - If provided without fromBlock, results are queried from genesis block to this block.
+                        - toBlock value cannot be less than fromBlock value.
+                        - If fromBlock and toBlock have the same value, only that block is queried.
+                        - "earliest" for toBlock is only allowed when fromBlock is "earliest".
+                      pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+                    fromDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the start date for the query. Date must follow ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) including seconds.
+
+                        Notes:
+                        - If provided without toDate, results are queried from this date to the latest block.
+                        - fromDate value must be equal to or earlier than toDate value.
+                        - If fromDate and toDate have the same value, only blocks from that date are queried.
+                        - This field cannot be used together with fromBlock and toBlock.  
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      example: "2025-01-01T00:00:00+00:00"
+                    toDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the end date for the query. Date must follow ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) including seconds.
+
+                        Notes:
+                        - If provided without fromDate, results are queried from genesis block to this date.
+                        - toDate value must be equal to or later than fromDate value.
+                        - If fromDate and toDate have the same value, only blocks from that date are queried.
+                        - This field cannot be used together with fromBlock and toBlock.  
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      example: "2025-01-31T00:00:00+00:00"
+                - type: object
+                  properties:
+                    page:
+                      type: integer
+                      description: |-
+                        The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                      pattern: ^(?:[1-9][0-9]?|100)$
+                    rpp:
+                      type: integer
+                      description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                      pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                    cursor:
+                      type: string
+                      description: |-
+                        The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    withCount:
+                      type: boolean
+                      description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                      default: false
+            example:
+              contractAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              eventNames:
+                - Transfer
+              abi: "0x1234567890123456789012345678901234567890"
+              fromDate: "2026-01-01T00:00:00Z"
+              toDate: "2026-02-01T00:00:00Z"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - items
+                    properties:
+                      page:
+                        type: integer
+                        description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                      rpp:
+                        type: integer
+                        description: Field representing the number of results per page specified in the rpp parameter.
+                      cursor:
+                        type: string
+                        description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                      count:
+                        type: integer
+                        description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                      items:
+                        type: array
+                        description: Field representing the list of queried data.
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - contractAddress
+                            - transactionHash
+                            - transactionIndex
+                            - blockHash
+                            - blockNumber
+                            - data
+                            - logIndex
+                            - removed
+                            - topics
+                          properties:
+                            contractAddress:
+                              type: string
+                              description: A field representing the contract address that generated the log. Provided as a 40-character hexadecimal string prefixed with 0x.
+                            transactionHash:
+                              type: string
+                              description: A field representing the hash of the transaction that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                            transactionIndex:
+                              type: integer
+                              description: A field representing the index of the transaction that generated the log. Indicates the order within the block. Provided in decimal string format.
+                            blockHash:
+                              type: string
+                              description: A field representing the hash of the block that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                            blockNumber:
+                              type: integer
+                              description: A field representing the block number that generated the log.
+                            data:
+                              type: string
+                              description: A field representing the data of the log. Provided as a hexadecimal string prefixed with 0x. This field represents the event data of the log.
+                            logIndex:
+                              type: integer
+                              description: A field representing the index of the log. Indicates the order of events in the transaction. Provided in decimal string format.
+                            removed:
+                              type: boolean
+                              description: A field indicating whether the log was removed. Returns true if the log was removed due to chain reorganization (Reorg).
+                            topics:
+                              type: array
+                              description: A field representing the indexed arguments of the log. Can have up to 4 topics.
+                              items:
+                                type: string
+                                description: A field representing a topic of the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                          example:
+                            contractAddress: "0xB1F1ee126e9c96231Cc3d3fAD7C08b4cf873b1f1"
+                            transactionHash: "0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4"
+                            transactionIndex: 6
+                            blockHash: "0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8"
+                            blockNumber: 21309845
+                            data: "0x000000000000000000000000000000000000000000000000410ba9e7b561fe8e"
+                            logIndex: 72
+                            removed: false
+                            topics:
+                              - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                              - "0x000000000000000000000000fba26c3f9c8ecef989def3c5c8ad037487462d83"
+                              - "0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"

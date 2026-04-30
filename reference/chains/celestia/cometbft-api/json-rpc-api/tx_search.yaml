@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: Celestia - Tx Search
+  version: 1.0.0
+servers:
+  - url: https://rpc-celestia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: tx_search
+      summary: Tx Search
+      description: Searches for transactions matching the query conditions.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: tx_search
+                params:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - query
+                  properties:
+                    query:
+                      type: string
+                      description: Transaction search query string.
+                    prove:
+                      type: string
+                      description: String boolean indicating whether to include the transaction's block inclusion proof in the result.
+                    page:
+                      type: string
+                      description: Page number (starting from 1).
+                    per_page:
+                      type: string
+                      description: Number of items to return per page (maximum 100).
+                    order_by:
+                      type: string
+                      description: Sort order. "asc" or "desc". Defaults to the default sort order if omitted.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: tx_search
+              params:
+                query: tx.height=1000
+                prove: "false"
+                page: "1"
+                per_page: "30"
+                order_by: asc
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    required:
+                      - txs
+                      - total_count
+                    properties:
+                      txs:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: false
+                          properties:
+                            hash:
+                              type: string
+                            height:
+                              type: string
+                            index:
+                              type: integer
+                            tx_result:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                log:
+                                  type: string
+                                gas_wanted:
+                                  type: string
+                                gas_used:
+                                  type: string
+                                tags:
+                                  type: array
+                                  items:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      key:
+                                        type: string
+                                      value:
+                                        type: string
+                                      index:
+                                        type: boolean
+                            tx:
+                              type: string
+                            proof:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                RootHash:
+                                  type: string
+                                Data:
+                                  type: string
+                                Proof:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    total:
+                                      type: string
+                                    index:
+                                      type: string
+                                    leaf_hash:
+                                      type: string
+                                    aunts:
+                                      type: array
+                                      items:
+                                        type: string
+                      total_count:
+                        type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  txs:
+                    - hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                      height: "1000"
+                      index: 0
+                      tx_result:
+                        log: "[{\"msg_index\":\"0\",\"success\":true,\"log\":\"\"}]"
+                        gas_wanted: "200000"
+                        gas_used: "28596"
+                        tags:
+                          - key: action
+                            value: send
+                            index: true
+                      tx: a/encoded_tx/c
+                  total_count: "1"

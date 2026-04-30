@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: Cosmos - cosmos_distribution_v1beta1_validators_{validator_address}_commission
+  version: 1.0.0
+servers:
+  - url: https://rest-cosmos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/distribution/v1beta1/validators/{validator_address}/commission:
+    get:
+      description: Retrieves the accumulated commission of the validator.
+      operationId: cosmos_distribution_v1beta1_validators_{validator_address}_commission
+      tags:
+        - distribution
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  commission:
+                    description: Commission received by the validator.
+                    type: object
+                    properties:
+                      commission:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            denom:
+                              type: string
+                            amount:
+                              type: string
+                          description: |-
+                            DecCoin defines a token with a denomination and a decimal amount.
+
+                            NOTE: The amount field is an Dec which implements the custom method
+                            signatures required by gogoproto.
+                title: |-
+                  QueryValidatorCommissionResponse is the response type for the
+                  Query/ValidatorCommission RPC method
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      parameters:
+        - name: validator_address
+          description: Validator address to query.
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - api_key: []
+      summary: /cosmos/distribution/v1beta1/validators/{validator_address}/commission

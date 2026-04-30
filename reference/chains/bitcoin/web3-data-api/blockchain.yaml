@@ -1,0 +1,1326 @@
+openapi: 3.1.0
+info:
+  title: Bitcoin - Web3 Data API
+  version: 1.0.0
+servers:
+  - url: https://web3.nodit.io/v1
+    description: Web3 Data API
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - MISSING_REQUIRED_PARAMETER
+                  - INVALID_PARAMETER
+                  - WRONG_RANGE_PARAMETER
+                  - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+              - code
+              - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: When a required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: "Missing required parameter: { PARAMETER_NAME }"
+            INVALID_PARAMETER:
+              summary: When an invalid value is provided for a parameter
+              value:
+                code: INVALID_PARAMETER
+                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+            WRONG_RANGE_PARAMETER:
+              summary: When a value outside the query range is provided
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: "Wrong range parameter: { PARAMETER_NAME }"
+            DEPRECATED_OPERATION:
+              summary: When a deprecated API is requested
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - NO_AUTHENTICATION_FOUND
+                  - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+              - code
+              - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: When authentication credentials are not included
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found
+            AUTHENTICATION_FAILED:
+              summary: When authentication credentials are mismatched or invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+              - code
+              - message
+          examples:
+            PERMISSION_DENIED:
+              summary: When accessing an unauthorized resource
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - WRONG_ENDPOINT
+                  - NOT_SUPPORTED_CHAIN
+                  - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+              - code
+              - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: When requesting a non-existent API path
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: When requesting an unsupported chain
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: When requesting a resource that does not exist on the server
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+              - code
+              - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: When requesting with an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+              - code
+              - message
+          examples:
+            TIMEOUT:
+              summary: When processing is not completed within the specified time
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - RESOURCE_ALREADY_EXISTS
+                  - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+              - code
+              - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: When attempting to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: When the request is rejected by the server
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+              - code
+              - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: When the payload exceeds the server's maximum limit
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+              - code
+              - message
+          examples:
+            TOO_LONG_URI:
+              summary: When the request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_MANY_REQUESTS
+                  - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+              - code
+              - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: When the rate limit is exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: When the quota limit is exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_SERVER_ERROR
+                  - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+              - code
+              - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: When an internal server error occurs
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: When processing fails temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+              - code
+              - message
+          examples:
+            UNAVAILABLE:
+              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /{chain}/{network}/blockchain/getBlockByHashOrNumber:
+    post:
+      security:
+        - api_key: []
+      operationId: bitcoin-getBlockByHashOrNumber
+      summary: Get Block by Hash or Number
+      description: |+
+        Returns specific information about a block queried by block hash or block number.
+
+      x-seo-description: Retrieve full block data by its hash or block number, including transactions and metadata.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - block
+              properties:
+                block:
+                  type: string
+                  description: |-
+                    Parameter specifying the point in time for balance query. You can enter one of the following formats:
+                    - block hash: 64-character hexadecimal string (256-bit). Queries based on the specified block hash.
+                    - block number: Decimal string. Queries based on the specified block height.
+                    - block tag: Enter "earliest" or "latest" to query the first block or the most recent block.
+                  pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
+                  default: latest
+            example:
+              block: latest
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - hash
+                  - height
+                  - version
+                  - timestamp
+                  - nonce
+                  - bits
+                  - difficulty
+                  - merkleRoot
+                  - transactionCount
+                  - size
+                  - weight
+                  - previousBlockHash
+                  - nextBlockHash
+                  - medianTime
+                  - strippedSize
+                  - transactions
+                example:
+                  hash: 00000000770ebe897270ca5f6d539d8afb4ea4f4e757761a34ca82e17207d886
+                  height: 20000
+                  version: 1
+                  timestamp: 1248291739
+                  nonce: 2406314246
+                  bits: 1d00ffff
+                  difficulty: "1"
+                  merkleRoot: 01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+                  transactionCount: 1
+                  size: 215
+                  weight: 860
+                  previousBlockHash: 00000000ba36eb929dc90170a96ee3efb76cbebee0e0e5c4da9eb0b6e74d9124
+                  nextBlockHash: 000000002434a3edf8dee4fe506d306c59d3bf41f73d979f30ed3f7b7c34d06c
+                  medianTime: 1248287332
+                  strippedSize: 215
+                  transactions:
+                    - 01f8255cad4f0060170f5cca22a5e0ca99fa62b3d26b89a34ac3100d876d14a4
+                properties:
+                  hash:
+                    type: string
+                    description: SHA-256 hash value that uniquely identifies the block. Generated by combining block header information; serves as a unique identifier within the blockchain with no duplicates.
+                  height:
+                    type: integer
+                    description: Number indicating the position of the block in the blockchain. The genesis block starts at 0, and subsequent blocks increment by 1.
+                  version:
+                    type: integer
+                    description: Block version number, used to identify the block validation rules used by the network. Updated when new features are added.
+                  timestamp:
+                    type: integer
+                    description: Represents when the block was created, displayed as a UNIX timestamp.
+                  nonce:
+                    type: integer
+                    description: Value used in the Proof-of-Work algorithm; a variable that is changed multiple times to find a valid block hash.
+                  bits:
+                    type: string
+                    description: Compressed 32-bit hexadecimal value representing the difficulty target that the block hash must satisfy. This value varies according to the network's mining difficulty.
+                    example: "386097818"
+                  difficulty:
+                    type: string
+                    description: Represents the difficulty of the block, calculated as the ratio between the initial target value and the current target value. Reflects the relative difficulty of mining.
+                  merkleRoot:
+                    type: string
+                    description: Root hash value calculated by constructing a Merkle tree from the hashes of all transactions included in the block. Used to verify data integrity.
+                  transactionCount:
+                    type: integer
+                    description: Indicates the total number of transactions included in the block. Used to check the volume of transactions in a mined block.
+                  size:
+                    type: integer
+                    description: Total size of the block including header and transaction data, in bytes. Represents the actual disk space required to store the block data.
+                  weight:
+                    type: integer
+                    description: Block weight calculated according to BIP-141, taking SegWit data into account.
+                  previousBlockHash:
+                    type: string
+                    description: Hash of the previous block; maintains the linkage between blocks in the blockchain. Null for the genesis block.
+                  nextBlockHash:
+                    type: string
+                    description: Hash of the next block; null for the most recent block. Indicates the end of the chain.
+                  medianTime:
+                    type: integer
+                    description: Median of the timestamps of the most recent 11 blocks. Used to reduce time volatility and provide a more stable block time.
+                  strippedSize:
+                    type: integer
+                    description: Size of the block excluding SegWit data. Measured in bytes; represents the raw transaction data and header size.
+                  transactions:
+                    type: array
+                    description: Array of transaction hash values included in the block. Each transaction is identified by its unique hash.
+                    items:
+                      type: string
+                      description: SHA-256 hash value that uniquely identifies each transaction.
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: bitcoin-getTotalTransactionCountByAccount
+      summary: Get Total Transaction Count By Account
+      description: |+
+        This API returns the total count of transactions in which a specific account address is included as the sender or recipient.
+
+      x-seo-description: Retrieve the total number of transactions sent or received by a specific account address.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountAddress
+              properties:
+                accountAddress:
+                  type: string
+                  description: Parameter specifying the account address to query.
+                  pattern: ^(1[a-km-zA-HJ-NP-Z1-9]{25,33}|3[a-km-zA-HJ-NP-Z1-9]{25,33}|bc1q[a-z0-9]{38,59}|bc1p[a-z0-9]{58})$
+                  example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+            example:
+              accountAddress: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactionCount:
+                    type: integer
+                    description: Indicates the total count of transactions in which the account participated as sender or recipient. For XRPL and Aptos, it indicates the total count of transactions created by the specific account.
+                example:
+                  transactionCount: 8124
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTransactionByTransactionId:
+    post:
+      security:
+        - api_key: []
+      operationId: bitcoin-getTransactionByTransactionId
+      summary: Get Transaction By Transaction ID
+      description: |
+        Retrieves information about a specific transaction.
+      x-seo-description: Retrieve full transaction details by a specific transaction ID on the blockchain.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - transactionId
+              properties:
+                transactionId:
+                  type: string
+                  description: Parameter specifying the transaction ID to query. Can be entered as a 64-character hexadecimal string (excluding 0x).
+                  pattern: ^[0-9a-fA-F]{64}$
+            example:
+              transactionId: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - id
+                      - index
+                      - hash
+                      - version
+                      - lockTime
+                      - size
+                      - vsize
+                      - weight
+                      - fee
+                      - vinCount
+                      - voutCount
+                      - blockHeight
+                      - blockHash
+                      - blockTimestamp
+                    example:
+                      id: 3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                      index: 0
+                      hash: 3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                      version: 2
+                      lockTime: 0
+                      size: 223
+                      vsize: 300
+                      weight: 565
+                      fee: 1840
+                      vinCount: 1
+                      voutCount: 1
+                      blockHeight: 844237
+                      blockHash: 00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af
+                      blockTimestamp: 1716177005
+                    properties:
+                      id:
+                        type: string
+                        description: Unique identifier of the transaction; a value that uniquely identifies each transaction.
+                        example: 3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                      index:
+                        type: integer
+                        description: Indicates the index of the transaction within the block. Starts at 0; represents the order of transactions included in the block.
+                        example: 0
+                      hash:
+                        type: string
+                        description: Hash value of the transaction; a unique identifier calculated from the transaction data. Computed including SegWit data.
+                        example: 3954b135801a24fec00b28d23c8ebda69ca963f16bf38e00e0e02405964a40e2
+                      version:
+                        type: integer
+                        description: Value indicating the transaction version; defines the transaction format.
+                        example: 2
+                      lockTime:
+                        type: integer
+                        description: Lock time of the transaction; indicates the condition (block height or UNIX timestamp) under which the transaction becomes valid. A value of `0` means the transaction is immediately valid.
+                        example: 0
+                      size:
+                        type: integer
+                        description: Actual size of the transaction in bytes; represents the length of the transaction data.
+                        example: 223
+                      vsize:
+                        type: integer
+                        description: Virtual size of the transaction in bytes; represents the effective size of the transaction as included in a block when SegWit data is included. Calculated by dividing weight by 4 and rounding up, per BIP-141.
+                        example: 300
+                      weight:
+                        type: integer
+                        description: Weight of the transaction; represents the network cost of the transaction as calculated per BIP-141. Calculated as `(non-witness size * 3) + total size`.
+                        example: 565
+                      fee:
+                        type: integer
+                        description: Transaction fee (in BTC units); the remainder when output value is subtracted from input value.
+                        example: 1840
+                      vinCount:
+                        type: integer
+                        description: Indicates the number of input (Vin) transactions.
+                        example: 1
+                      voutCount:
+                        type: integer
+                        description: Indicates the number of output (Vout) transactions.
+                        example: 1
+                      blockHeight:
+                        type: integer
+                        description: Indicates the height of the block containing the transaction.
+                        example: 844237
+                      blockHash:
+                        type: string
+                        description: Hash of the block containing the transaction.
+                        example: 00000000000000000002a30c53b8f371d4ebba1434cffa32716e6e84eb33b2af
+                      blockTimestamp:
+                        type: integer
+                        description: Indicates when the block containing the transaction was created; displayed in UNIX timestamp format.
+                        example: 1716177005
+                  - type: object
+                    properties:
+                      vin:
+                        type: object
+                        required:
+                          - index
+                          - address
+                          - value
+                          - coinbase
+                          - voutTransactionId
+                          - voutIndex
+                          - scriptSig
+                          - sequence
+                          - witness
+                        example:
+                          index: 0
+                          address: bc1q0a7h7sa94e8svscf8sxmhyj8fujgy423fzjjfr
+                          value: "0.00506140"
+                          coinbase: null
+                          voutTransactionId: c2976d591a92cc39f2bb1f367afbc2d6ae6e3c940b640eb245dfbeef75d340db
+                          voutIndex: 0
+                          scriptSig:
+                            hex: 3045022100b228e33e8b62f825...
+                            asm: OP_HASH160 OP_PUSHBYTES_20 000000...
+                            type: witness_v0_keyhash
+                          sequence: 4294967295
+                          witness:
+                            - 3045022100b228e33e8b62f825...
+                        properties:
+                          index:
+                            type: integer
+                            description: Indicates the index of the Vin (input) within the containing transaction.
+                            example: 0
+                          address:
+                            type: string
+                            description: Address of the previous Vout (output) referenced by the Vin (input); represents the sender address that transferred the Bitcoin.
+                            example: bc1q0a7h7sa94e8svscf8sxmhyj8fujgy423fzjjfr
+                          value:
+                            type: string
+                            description: Output value of the previous Vout (output) referenced by the Vin (input); represents the amount of Bitcoin being transferred (in BTC units).
+                            example: "0.00506140"
+                          coinbase:
+                            type: string
+                            description: Used in coinbase transactions (mining reward transactions); contains arbitrary data defined by the miner. Set to null for regular transactions.
+                          voutTransactionId:
+                            type: string
+                            description: ID of the previous transaction (Vout) referenced by the Vin (input). This field is null for coinbase transactions.
+                            example: c2976d591a92cc39f2bb1f367afbc2d6ae6e3c940b640eb245dfbeef75d340db
+                          voutIndex:
+                            type: integer
+                            description: Index of the previous Vout (output) referenced by the Vin (input). Null for coinbase transactions.
+                            example: 0
+                          scriptSig:
+                            type: object
+                            required:
+                              - hex
+                              - asm
+                              - type
+                            description: Signature script of the Vin (input); used to unlock the lock script of the referenced previous Vout (output).
+                            properties:
+                              hex:
+                                type: string
+                                description: Signature script of the Vin (input) in hexadecimal format. Provided as an empty string for SegWit transactions.
+                                example: 3045022100b228e33e8b62f825...
+                              asm:
+                                type: string
+                                description: Signature script of the Vin (input) in assembly format. Provided as an empty string for SegWit transactions.
+                                example: OP_HASH160 OP_PUSHBYTES_20 000000...
+                              type:
+                                type: string
+                                description: Indicates the signature script type of the Vin (input) (e.g., `p2pkh`, `p2sh`).
+                                example: witness_v0_keyhash
+                          sequence:
+                            type: integer
+                            description: Sequence number of the Vin (input); controls transaction validity or works with `locktime`. Also used for RBF (Replace-By-Fee) control.
+                            example: 4294967295
+                          witness:
+                            type: array
+                            description: Array of script signature data for the Vin (input), included for SegWit transactions.
+                            items:
+                              type: string
+                              example: 3045022100b228e33e8b62f825...
+                      vout:
+                        type: object
+                        required:
+                          - index
+                          - address
+                          - value
+                          - scriptPubKey
+                        example:
+                          index: 0
+                          address: D5Vz9PwaMdPfFCxXPCbBt84s3ZJQ5wd2Gw
+                          value: "0.00016400"
+                          scriptPubKey:
+                            hex: 21025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75ac
+                            asm: 025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75 OP_CHECKSIG
+                            type: pubkey
+                        properties:
+                          index:
+                            type: integer
+                            description: Indicates the index of the Vout (output) within the containing transaction.
+                            example: 0
+                          address:
+                            type: string
+                            description: Represents the recipient address that will receive the Bitcoin from the Vout (output).
+                            example: D5Vz9PwaMdPfFCxXPCbBt84s3ZJQ5wd2Gw
+                          value:
+                            type: string
+                            description: Represents the amount of Bitcoin transferred in the Vout (output) (in BTC units).
+                            example: "0.00016400"
+                          scriptPubKey:
+                            type: object
+                            required:
+                              - hex
+                              - asm
+                              - type
+                            description: Script of the Vout (output); defines the conditions (lock script) required to spend the Bitcoin.
+                            properties:
+                              hex:
+                                type: string
+                                description: Script of the Vout (output) in hexadecimal format.
+                                example: 21025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75ac
+                              asm:
+                                type: string
+                                description: Script of the Vout (output) in assembly format.
+                                example: 025ac17459519db3146065c5a1738cd45315c38951e978d792492a6633c9cd6e75 OP_CHECKSIG
+                              type:
+                                type: string
+                                description: Indicates the script type of the Vout (output) (e.g., pubkey, p2sh, p2pkh).
+                                example: pubkey
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTransactionsByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: bitcoin-getTransactionsByAccount
+      summary: Get Transactions By Account
+      description: |
+        Retrieves the list of transactions sent or received by a specific account.
+      x-seo-description: Get a paginated list of all transactions associated with a specific account address.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - accountAddress
+                  properties:
+                    accountAddress:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTotalTransactionCountByAccount/post/requestBody/content/application~1json/schema/properties/accountAddress"
+                    relation:
+                      type: string
+                      description: |-
+                        Parameter for filtering transactions where the queried account address is the sender or recipient.
+                        - from: Filter by sender only.
+                        - to: Filter by recipient only.
+                        - both (default): Returns all transactions where the queried address appears in from or to.
+                      enum:
+                        - from
+                        - to
+                        - both
+                      pattern: from|to|both
+                      default: both
+                    fromBlock:
+                      type: string
+                      description: |
+                        Parameter specifying the starting block for the query. You can enter one of the following formats:
+                        - block number: Enter block number as a decimal string.
+                        - block hash: 64-character hexadecimal (excluding "0x").
+                        - block tag: Use "earliest" or "latest" to specify the first block or the most recent block.
+
+                        Notes:
+                        - If provided without toBlock, results are queried from this block to the latest block.
+                        - fromBlock value cannot be greater than toBlock value.
+                        - If fromBlock and toBlock have the same value, only that block is queried.
+                        - "latest" for fromBlock is only allowed when toBlock is "latest".
+                      pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
+                    toBlock:
+                      type: string
+                      description: |
+                        Parameter specifying the ending block for the query. You can enter one of the following formats:
+                        - block number: Enter block number as a decimal string.
+                        - block hash: 64-character hexadecimal (excluding "0x").
+                        - block tag: Use "earliest" or "latest" to specify the first block or the most recent block.
+
+                        Notes:
+                        - If provided without fromBlock, results are queried from genesis block to this block.
+                        - toBlock value cannot be less than fromBlock value.
+                        - If fromBlock and toBlock have the same value, only that block is queried.
+                        - "earliest" for toBlock is only allowed when fromBlock is "earliest".
+                      pattern: ^[0-9]+$|^[0-9a-fA-F]{64}|latest|earliest
+                    fromDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the start date for the query. Date must follow ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) including seconds.
+
+                        Notes:
+                        - If provided without toDate, results are queried from this date to the latest block.
+                        - fromDate value must be equal to or earlier than toDate value.
+                        - If fromDate and toDate have the same value, only blocks from that date are queried.
+                        - This field cannot be used together with fromBlock and toBlock.  
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      example: "2025-01-01T00:00:00+00:00"
+                    toDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the end date for the query. Date must follow ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) including seconds.
+
+                        Notes:
+                        - If provided without fromDate, results are queried from genesis block to this date.
+                        - toDate value must be equal to or later than fromDate value.
+                        - If fromDate and toDate have the same value, only blocks from that date are queried.
+                        - This field cannot be used together with fromBlock and toBlock.  
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      example: "2025-01-31T00:00:00+00:00"
+                - type: object
+                  properties:
+                    page:
+                      type: integer
+                      description: |-
+                        The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                      pattern: ^(?:[1-9][0-9]?|100)$
+                    rpp:
+                      type: integer
+                      description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                      pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                    cursor:
+                      type: string
+                      description: |-
+                        The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    withCount:
+                      type: boolean
+                      description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                      default: false
+            example:
+              accountAddress: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+              relation: both
+              fromDate: "2026-01-01T00:00:00Z"
+              toDate: "2026-02-01T00:00:00Z"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - items
+                    properties:
+                      page:
+                        type: integer
+                        description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                      rpp:
+                        type: integer
+                        description: Field representing the number of results per page specified in the rpp parameter.
+                      cursor:
+                        type: string
+                        description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                      count:
+                        type: integer
+                        description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                      items:
+                        type: array
+                        description: Field representing the list of queried data.
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByTransactionId/post/responses/200/content/application~1json/schema/allOf/0"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getTransactionsByTransactionIds:
+    post:
+      security:
+        - api_key: []
+      operationId: bitcoin-getTransactionsByTransactionIds
+      summary: Get Transactions By Transaction IDs
+      description: |+
+        Retrieves information for multiple transactions. Up to 1,000 transactions can be queried.
+
+
+        > 🚧 Getting a 429 error? Check your subscription plan!
+        > A 429 error may occur when the throughput limit of your subscribed plan is exceeded.
+        > For example, the Starter plan has a limit of 300 CU per second, so calling an API that consumes 350 CU while on the Starter plan may result in a 429 error.
+        > Check the CU consumption of the API you are using on the Compute Unit Costs page, and consider upgrading to a higher plan if you need more throughput!
+        > 👉 [Go to Compute Unit Costs page](/guides/compute-unit)
+
+      x-seo-description: Fetch detailed data for multiple transactions in one request using their transaction IDs.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - transactionIds
+              properties:
+                transactionIds:
+                  type: array
+                  items:
+                    $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByTransactionId/post/requestBody/content/application~1json/schema/properties/transactionId"
+                  minItems: 1
+                  maxItems: 1000
+                  description: Enter the transaction IDs to query as an array.
+            example:
+              transactionIds:
+                - b3554fe6689fddb99446c78a3bb1d08f59cfa479505e87e9b948e14b42ea9aef
+                - 4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByTransactionId/post/responses/200/content/application~1json/schema/allOf/0"
+                    - type: object
+                      properties:
+                        vin:
+                          $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByTransactionId/post/responses/200/content/application~1json/schema/allOf/1/properties/vin"
+                        vout:
+                          $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionByTransactionId/post/responses/200/content/application~1json/schema/allOf/1/properties/vout"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/blockchain/getUnspentTransactionOutputsByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: bitcoin-getUnspentTransactionOutputsByAccount
+      summary: Get Unspent Transaction Outputs By Account
+      description: |
+        Retrieves the list of UTXOs (Unspent Transaction Outputs) for a specific account.
+      x-seo-description: Get unspent transaction outputs (UTXOs) associated with a specific account address.
+      tags:
+        - Blockchain API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - bitcoin
+            default: bitcoin
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - accountAddress
+                  properties:
+                    accountAddress:
+                      $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTotalTransactionCountByAccount/post/requestBody/content/application~1json/schema/properties/accountAddress"
+                - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionsByAccount/post/requestBody/content/application~1json/schema/allOf/1"
+            example:
+              accountAddress: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/paths/~1{chain}~1{network}~1blockchain~1getTransactionsByAccount/post/responses/200/content/application~1json/schema/allOf/0"
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - transactionId
+                            - voutIndex
+                            - address
+                            - value
+                            - blockHeight
+                            - blockHash
+                            - blockTimestamp
+                          example:
+                            transactionId: 6b1e04c59a1e42d30af4cdac20e1a9e4d22e947b
+                            voutIndex: 1
+                            address: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                            value: 5000000000
+                            blockHeight: 100000
+                            blockHash: 0000000000000000000a8ed7f3e6c1c2d21cbb5f
+                            blockTimestamp: 1400000000
+                          properties:
+                            transactionId:
+                              type: string
+                              description: Unique identifier of the transaction in which the UTXO was created. A unique hash value calculated from transaction data; uniquely identifies the transaction.
+                              example: 6b1e04c59a1e42d30af4cdac20e1a9e4d22e947b
+                            voutIndex:
+                              type: integer
+                              description: Output (Vout) index of the transaction in which the UTXO was created. Indicates which output in the transaction output array; starts at 0.
+                              example: 1
+                            address:
+                              type: string
+                              description: Address that received the transaction output. The recipient owns the UTXO using this address; follows P2PKH, P2SH, Bech32, or Bech32m format.
+                              example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                            value:
+                              type: string
+                              description: Value of the UTXO; represents the balance of the transaction output. Value is expressed in satoshis; 1 BTC = 100,000,000 satoshis.
+                              example: 5000000000
+                            blockHeight:
+                              type: integer
+                              description: Indicates the height of the block containing the UTXO. Integer value representing the order of this block in the blockchain.
+                              example: 100000
+                            blockHash:
+                              type: string
+                              description: Hash value of the block containing the UTXO. A unique 64-character hexadecimal value generated by the SHA-256 algorithm; uniquely identifies the block.
+                              example: 0000000000000000000a8ed7f3e6c1c2d21cbb5f
+                            blockTimestamp:
+                              type: integer
+                              description: Indicates when the block containing the UTXO was created. Value in UNIX timestamp format (in seconds); represents when the block was created.
+                              example: 1400000000
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"

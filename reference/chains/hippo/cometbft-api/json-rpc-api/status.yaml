@@ -1,0 +1,177 @@
+openapi: 3.1.0
+info:
+  title: Hippo - Status
+  version: 1.0.0
+servers:
+  - url: https://rpc-hippo-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: status
+      summary: Status
+      description: Retrieves the CometBFT status, including node information, public key, latest block hash, app hash, block height, and time.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: status
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: status
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      node_info:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          protocol_version:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              p2p:
+                                type: string
+                              block:
+                                type: string
+                              app:
+                                type: string
+                          id:
+                            type: string
+                          listen_addr:
+                            type: string
+                          network:
+                            type: string
+                          version:
+                            type: string
+                          channels:
+                            type: string
+                          moniker:
+                            type: string
+                          other:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              tx_index:
+                                type: string
+                              rpc_address:
+                                type: string
+                      sync_info:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          latest_block_hash:
+                            type: string
+                          latest_app_hash:
+                            type: string
+                          latest_block_height:
+                            type: string
+                          latest_block_time:
+                            type: string
+                          earliest_block_hash:
+                            type: string
+                          earliest_app_hash:
+                            type: string
+                          earliest_block_height:
+                            type: string
+                          earliest_block_time:
+                            type: string
+                          catching_up:
+                            type: boolean
+                      validator_info:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          address:
+                            type: string
+                          pub_key:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              type:
+                                type: string
+                              value:
+                                type: string
+                          voting_power:
+                            type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  node_info:
+                    protocol_version:
+                      p2p: "8"
+                      block: "11"
+                      app: "0"
+                    id: a8019df80d3d32e770e5b32cf98c68b6b16d1a1
+                    listen_addr: tcp://0.0.0.0:26656
+                    network: cosmoshub-4
+                    version: 0.38.0
+                    channels: "40202122233038606100"
+                    moniker: my-node
+                    other:
+                      tx_index: "on"
+                      rpc_address: tcp://0.0.0.0:26657
+                  sync_info:
+                    latest_block_hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                    latest_app_hash: 21DFF0C4F53168D5C82D99B1E76D4C5A62AE7D7A3B1C40D7E6F8A9B0C1D2E3F4
+                    latest_block_height: "12345678"
+                    latest_block_time: "2024-01-15T12:00:00Z"
+                    earliest_block_hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
+                    earliest_app_hash: ""
+                    earliest_block_height: "1"
+                    earliest_block_time: "2019-12-11T16:11:34Z"
+                    catching_up: false
+                  validator_info:
+                    address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                    pub_key:
+                      type: tendermint/PubKeyEd25519
+                      value: oX8HyvloaslMOq50t0UjM5WkxaB3VJFQ/E3AYkM/GKE=
+                    voting_power: "1000000"

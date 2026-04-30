@@ -1,0 +1,186 @@
+openapi: 3.1.0
+info:
+  title: Celestia - Commit
+  version: 1.0.0
+servers:
+  - url: https://rpc-celestia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /commit:
+    get:
+      security:
+        - api_key: []
+      operationId: commit
+      summary: Commit
+      description: Retrieves the commit at the specified block height. Returns the latest commit if height is omitted.
+      tags:
+        - rest-api
+      parameters:
+        - name: height
+          in: query
+          description: Target block height.
+          schema:
+            type: string
+          example: "1"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      signed_header:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          header:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              version:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  block:
+                                    type: string
+                                  app:
+                                    type: string
+                              chain_id:
+                                type: string
+                              height:
+                                type: string
+                              time:
+                                type: string
+                              last_block_id:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  hash:
+                                    type: string
+                                  parts:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      total:
+                                        type: integer
+                                      hash:
+                                        type: string
+                              last_commit_hash:
+                                type: string
+                              data_hash:
+                                type: string
+                              validators_hash:
+                                type: string
+                              next_validators_hash:
+                                type: string
+                              consensus_hash:
+                                type: string
+                              app_hash:
+                                type: string
+                              last_results_hash:
+                                type: string
+                              evidence_hash:
+                                type: string
+                              proposer_address:
+                                type: string
+                          commit:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              height:
+                                type: string
+                              round:
+                                type: integer
+                              block_id:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  hash:
+                                    type: string
+                                  parts:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      total:
+                                        type: integer
+                                      hash:
+                                        type: string
+                              signatures:
+                                type: array
+                                items:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    block_id_flag:
+                                      type: integer
+                                    validator_address:
+                                      type: string
+                                    timestamp:
+                                      type: string
+                                    signature:
+                                      type: string
+                      canonical:
+                        type: boolean
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  signed_header:
+                    header:
+                      version:
+                        block: "11"
+                        app: "0"
+                      chain_id: cosmoshub-4
+                      height: "1"
+                      time: "2019-12-11T16:11:34Z"
+                      last_block_id:
+                        hash: ""
+                        parts:
+                          total: 0
+                          hash: ""
+                      last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
+                      app_hash: ""
+                      last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                    commit:
+                      height: "1"
+                      round: 0
+                      block_id:
+                        hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                        parts:
+                          total: 1
+                          hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
+                      signatures:
+                        - block_id_flag: 2
+                          validator_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                          timestamp: "2019-12-11T16:11:40Z"
+                          signature: WkqFVjGaVFIQMAbClHXHSBOQW0V5RM3PKpFqmSX/I2wkAlhbzPCHm/DCNj6LNrWnKoKY0M+ypzLKVpPpkM4SDg==
+                  canonical: true

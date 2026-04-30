@@ -1,0 +1,292 @@
+openapi: 3.1.0
+info:
+  title: Cosmos - BlockByHash
+  version: 1.0.0
+servers:
+  - url: https://rpc-cosmos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: block_by_hash
+      summary: BlockByHash
+      description: Retrieves a block by its hash.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: block_by_hash
+                params:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - hash
+                  properties:
+                    hash:
+                      type: string
+                      description: Hash value to query.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: block_by_hash
+              params:
+                hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      block_id:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          hash:
+                            type: string
+                          parts:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              total:
+                                type: integer
+                              hash:
+                                type: string
+                      block:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          header:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              version:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  block:
+                                    type: string
+                                  app:
+                                    type: string
+                              chain_id:
+                                type: string
+                              height:
+                                type: string
+                              time:
+                                type: string
+                              last_block_id:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  hash:
+                                    type: string
+                                  parts:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      total:
+                                        type: integer
+                                      hash:
+                                        type: string
+                              last_commit_hash:
+                                type: string
+                              data_hash:
+                                type: string
+                              validators_hash:
+                                type: string
+                              next_validators_hash:
+                                type: string
+                              consensus_hash:
+                                type: string
+                              app_hash:
+                                type: string
+                              last_results_hash:
+                                type: string
+                              evidence_hash:
+                                type: string
+                              proposer_address:
+                                type: string
+                          data:
+                            type: array
+                            items:
+                              type: string
+                          evidence:
+                            type: array
+                            items:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                type:
+                                  oneOf:
+                                    - type: string
+                                    - type: integer
+                                height:
+                                  oneOf:
+                                    - type: integer
+                                    - type: string
+                                time:
+                                  oneOf:
+                                    - type: integer
+                                    - type: string
+                                total_voting_power:
+                                  oneOf:
+                                    - type: integer
+                                    - type: string
+                                validator:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    pub_key:
+                                      type: object
+                                      additionalProperties: false
+                                      properties:
+                                        type:
+                                          type: string
+                                        value:
+                                          type: string
+                                    voting_power:
+                                      oneOf:
+                                        - type: integer
+                                        - type: string
+                                    address:
+                                      type: string
+                          last_commit:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              height:
+                                type: integer
+                              round:
+                                type: integer
+                              block_id:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  hash:
+                                    type: string
+                                  parts:
+                                    type: object
+                                    additionalProperties: false
+                                    properties:
+                                      total:
+                                        type: integer
+                                      hash:
+                                        type: string
+                              signatures:
+                                type: array
+                                items:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    type:
+                                      type: integer
+                                    height:
+                                      type: string
+                                    round:
+                                      type: integer
+                                    block_id:
+                                      type: object
+                                      additionalProperties: false
+                                      properties:
+                                        hash:
+                                          type: string
+                                        parts:
+                                          type: object
+                                          additionalProperties: false
+                                          properties:
+                                            total:
+                                              type: integer
+                                            hash:
+                                              type: string
+                                    timestamp:
+                                      type: string
+                                    validator_address:
+                                      type: string
+                                    validator_index:
+                                      type: integer
+                                    signature:
+                                      type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  block_id:
+                    hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                    parts:
+                      total: 1
+                      hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
+                  block:
+                    header:
+                      version:
+                        block: "11"
+                        app: "0"
+                      chain_id: cosmoshub-4
+                      height: "1"
+                      time: "2019-12-11T16:11:34Z"
+                      last_block_id:
+                        hash: ""
+                        parts:
+                          total: 0
+                          hash: ""
+                      last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
+                      app_hash: ""
+                      last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                    data: []
+                    evidence: []
+                    last_commit:
+                      height: 0
+                      round: 0
+                      block_id:
+                        hash: ""
+                        parts:
+                          total: 0
+                          hash: ""
+                      signatures: []

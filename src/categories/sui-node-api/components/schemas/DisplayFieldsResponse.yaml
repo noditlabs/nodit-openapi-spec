@@ -1,8 +1,0 @@
-type: object
-properties:
-  data:
-    type: object
-    additionalProperties:
-      type: string
-  error:
-    $ref: "./ObjectResponseError.yaml"

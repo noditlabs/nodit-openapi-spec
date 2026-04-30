@@ -1,3 +1,0 @@
-description: "Representation of a Checkpoint's digest"
-allOf:
-  - $ref: "./Digest.yaml"

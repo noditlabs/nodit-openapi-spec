@@ -1,9 +1,0 @@
-type: object
-required:
-  - address
-  - name
-properties:
-  address:
-    type: string
-  name:
-    type: string

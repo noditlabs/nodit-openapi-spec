@@ -1,6 +1,0 @@
-type: string
-enum:
-  - "Copy"
-  - "Drop"
-  - "Store"
-  - "Key"

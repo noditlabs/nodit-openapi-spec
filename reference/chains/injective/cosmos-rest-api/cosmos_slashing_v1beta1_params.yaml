@@ -1,0 +1,77 @@
+openapi: 3.1.0
+info:
+  title: Injective - cosmos_slashing_v1beta1_params
+  version: 1.0.0
+servers:
+  - url: https://rest-injective-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/slashing/v1beta1/params:
+    get:
+      description: Params queries the parameters of slashing module
+      operationId: cosmos_slashing_v1beta1_params
+      tags:
+        - slashing
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  params:
+                    type: object
+                    properties:
+                      signed_blocks_window:
+                        type: string
+                        format: int64
+                      min_signed_per_window:
+                        type: string
+                        format: byte
+                      downtime_jail_duration:
+                        type: string
+                      slash_fraction_double_sign:
+                        type: string
+                        format: byte
+                      slash_fraction_downtime:
+                        type: string
+                        format: byte
+                    description: Params represents the parameters used for by the slashing module.
+                title: QueryParamsResponse is the response type for the Query/Params RPC method
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      security:
+        - api_key: []
+      summary: /cosmos/slashing/v1beta1/params

@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: CronosPOS - cosmos_mint_v1beta1_inflation
+  version: 1.0.0
+servers:
+  - url: https://rest-cronospos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/mint/v1beta1/inflation:
+    get:
+      description: Inflation returns the current minting inflation value.
+      operationId: cosmos_mint_v1beta1_inflation
+      tags:
+        - mint
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  inflation:
+                    type: string
+                    format: byte
+                    description: inflation is the current minting inflation value.
+                description: |-
+                  QueryInflationResponse is the response type for the Query/Inflation RPC
+                  method.
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      security:
+        - api_key: []
+      summary: /cosmos/mint/v1beta1/inflation

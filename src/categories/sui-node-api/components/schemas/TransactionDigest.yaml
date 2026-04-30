@@ -1,3 +1,0 @@
-allOf:
-  - $ref: "./Digest.yaml"
-description: "A transaction will have a (unique) digest."

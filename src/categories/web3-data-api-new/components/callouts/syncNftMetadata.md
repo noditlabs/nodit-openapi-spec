@@ -1,6 +1,0 @@
-> 🚧 Token URI 혹은 NFT Metadata 데이터가 실제 데이터와 다른가요?
->
-> Token URI(tokenUri)와 NFT Metadata(rawMetadata)는 프로젝트의 컨트랙트 로직에 따라 동적으로 변경될 수 있습니다. 예를 들어, Dynamic NFT는 온체인 혹은 오프체인 조건에 따라 NFT 데이터가 업데이트될 수 있습니다. 이러한 변경은 자동으로 기록되지 않기 때문에, 최신 데이터를 확인하기 위해서는 Sync NFT Metadata를 사용해 동기화 요청을 보내는 것을 권장합니다.
-> Sync NFT Metadata는 메타데이터와 Token URI를 최신화하는 API입니다. 동기화 요청을 보내면 NFT Metadata와 Token URI의 데이터를 최신 상태로 업데이트하여 현재 상태에 맞는 정확한 정보를 확인할 수 있습니다. 이 과정은 데이터 크기와 네트워크 상태에 따라 최대 10초가 소요될 수 있습니다.
-> [▶ Link to Sync NFT Metadata](https://developer.nodit.io/reference/syncnftmetadata)
-

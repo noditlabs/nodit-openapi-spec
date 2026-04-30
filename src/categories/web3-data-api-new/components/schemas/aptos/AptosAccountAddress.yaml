@@ -1,4 +1,0 @@
-type: string
-pattern: ^0[xX][0-9a-fA-F]{64}$
-description: |
-  0x로 시작하는 64자리 16진수 문자열 형태의 계정 주소입니다.

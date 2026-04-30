@@ -1,0 +1,155 @@
+openapi: 3.1.0
+info:
+  title: Cosmos - Header
+  version: 1.0.0
+servers:
+  - url: https://rpc-cosmos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: header
+      summary: Header
+      description: Retrieves the header at the specified block height. Returns the latest header if height is omitted.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: header
+                params:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    height:
+                      type: string
+                      description: Target block height. Returns the latest header if omitted.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: header
+              params:
+                height: "1"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      header:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          version:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              block:
+                                type: string
+                              app:
+                                type: string
+                          chain_id:
+                            type: string
+                          height:
+                            type: string
+                          time:
+                            type: string
+                          last_block_id:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              hash:
+                                type: string
+                              parts:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  total:
+                                    type: integer
+                                  hash:
+                                    type: string
+                          last_commit_hash:
+                            type: string
+                          data_hash:
+                            type: string
+                          validators_hash:
+                            type: string
+                          next_validators_hash:
+                            type: string
+                          consensus_hash:
+                            type: string
+                          app_hash:
+                            type: string
+                          last_results_hash:
+                            type: string
+                          evidence_hash:
+                            type: string
+                          proposer_address:
+                            type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  header:
+                    version:
+                      block: "11"
+                      app: "0"
+                    chain_id: cosmoshub-4
+                    height: "1"
+                    time: "2019-12-11T16:11:34Z"
+                    last_block_id:
+                      hash: ""
+                      parts:
+                        total: 0
+                        hash: ""
+                    last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                    data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                    validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                    next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                    consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
+                    app_hash: ""
+                    last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                    evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                    proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A

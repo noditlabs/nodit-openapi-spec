@@ -1,6 +1,0 @@
-description: Forbidden
-content:
-  application/json:
-    schema:
-      $ref: ../schemas/Errors/NoditError.yaml
-      example: { "code": "PERMISSION_DENIED", "message": "Permission denied" }
