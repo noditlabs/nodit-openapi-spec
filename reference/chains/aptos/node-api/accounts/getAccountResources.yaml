@@ -1,0 +1,2063 @@
+openapi: 3.1.0
+info:
+  title: Aptos - Get account resources
+  version: 1.0.0
+servers:
+  - url: https://aptos-mainnet.nodit.io/v1
+    description: Aptos Mainnet
+  - url: https://aptos-testnet.nodit.io/v1
+    description: Aptos Testnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters:
+    Address:
+      name: address
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0[xX]?[0-9a-fA-F]{0,64}$
+        example: "0x1"
+        examples:
+          - "0x1"
+          - "0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa"
+      description: |
+        The address of the account to retrieve. Account addresses without the hexadecimal prefix can also be queried.
+    AssetType:
+      name: asset_type
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 0x1::aptos_coin::AptosCoin
+        examples:
+          - 0x1::aptos_coin::AptosCoin
+          - "0xa"
+      description: |
+        A parameter used to specify the type of asset to retrieve.
+        The asset type must be provided in one of the following formats:
+        - Coin: Struct-form asset ID (e.g., `0x1::aptos_coin::AptosCoin`)
+        - Fungible Asset: Object address that owns the Token Metadata (e.g., `0xa`)
+    BSCAcceptHeader:
+      in: header
+      name: accept
+      required: false
+      description: |
+        The content type that the client can receive. The API works correctly only when application/x-bcs is specified.
+      schema:
+        type: string
+        example: application/x-bcs
+    BlockHeight:
+      name: block_height
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 160155267
+      description: The height of the block to query. Starts from 0.
+    CreationNumber:
+      name: creation_number
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 2
+      description: |
+        The creation number corresponding to the event stream that occurred on the specified account.
+    EventHandle:
+      name: event_handle
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[0-9a-zA-Z:_<>]+$
+        example: 0x1::account::Account
+      description: |
+        The name of the event handle struct for querying a specific event handle.
+    FieldName:
+      name: field_name
+      in: path
+      required: true
+      schema:
+        type: string
+        example: coin_register_events
+      description: |
+        The name of the field within the event_handle that specifies the event to query.
+    LedgerVersion:
+      name: ledger_version
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: |
+        The ledger version of the transaction to fetch account state from.
+        If no value is provided, the latest version is used.
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: |
+        The maximum number of account modules to fetch.
+        If no value is provided, the default page size is used.
+    ModuleName:
+      name: module_name
+      in: path
+      required: true
+      schema:
+        type: string
+        example: fungible_asset
+      description: |
+        The name of the specific module to query.
+    ResourceType:
+      name: resource_type
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[0-9a-zA-Z:_<>]+$
+        example: 0x1::account::Account
+      description: |
+        The type name of the target resource (struct) to retrieve.
+    Start:
+      name: start
+      in: query
+      required: false
+      schema:
+        type: string
+      description: |
+        A cursor that specifies the starting position for pagination.
+
+        This cursor cannot be arbitrarily generated on the client side. You must first call this endpoint without specifying this query parameter, then use the cursor returned in the X-Aptos-Cursor header of the response.
+      example: 0000000000000000000000000000000000000000000000000000000000000000012f0000000000000000000000000000000000000000000000000000000000000000010d7374616b696e675f70726f7879
+    TableHandle:
+      name: table_handle
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0[xX][0-9a-fA-F]{64}|^[0-9a-fA-F]{64}
+        example: "0x7d7561f38ada5eb9066f05c6e80df069208c4de472d6414482016d38448d1a7d"
+      description: A pointer value indicating where the table is stored.
+    Version:
+      name: version
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: |
+        The ledger version of the transaction to query for block information.
+    WithTransactions:
+      name: with_transactions
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: |
+        If set to true, all transactions within the block are included.
+        If not provided, transactions are not returned.
+  schemas:
+    Abi:
+      type: object
+      description: |
+        A Move module
+      required:
+        - address
+        - name
+        - friends
+        - exposed_functions
+        - structs
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+        name:
+          type: string
+        friends:
+          type: array
+          description: Friends of the module
+          items:
+            type: string
+        exposed_functions:
+          type: array
+          items:
+            $ref: "#/components/schemas/MoveFunction"
+        structs:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - is_native
+              - abilities
+              - generic_type_params
+              - fields
+            properties:
+              name:
+                type: string
+              is_native:
+                type: boolean
+              is_event:
+                type: boolean
+                description: Whether the struct is an event struct
+              is_enum:
+                type: boolean
+                description: Whether the struct is an enum
+              abilities:
+                type: array
+                description: Ability associated with the Move struct
+                items:
+                  type: string
+              generic_type_params:
+                $ref: "#/components/schemas/GenericTypeParams"
+              fields:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - name
+                    - type
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      $ref: "#/components/schemas/MoveTypeTag"
+    AbstractSignature:
+      type: object
+      description: |
+        An abstract signature
+      required:
+        - type
+        - function_info
+        - auth_data
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - abstract_signature
+        function_info:
+          type: string
+        auth_data:
+          $ref: "#/components/schemas/Bytecode"
+    AccountSignature:
+      title: Account Signature
+      type: object
+      description: |
+        Account signature scheme
+
+        The account signature scheme allows you to have two types of accounts:
+
+        A single Ed25519 key account, one private key
+        A k-of-n multi-Ed25519 key account, multiple private keys, such that k-of-n must sign a transaction.
+        A single Secp256k1Ecdsa key account, one private key
+      oneOf:
+        - $ref: "#/components/schemas/Ed25519Signature"
+        - $ref: "#/components/schemas/MultiEd25519Signature"
+        - $ref: "#/components/schemas/SingleKeySignature"
+        - $ref: "#/components/schemas/MultiKeySignature"
+        - $ref: "#/components/schemas/NoAccountSignature"
+        - $ref: "#/components/schemas/AbstractSignature"
+    Address:
+      type: string
+      description: |
+        A 32-byte Aptos account address encoded in hexadecimal.
+        When expressed as a string, it is a 64-character hexadecimal string. It may be abbreviated by omitting leading zeros and adding 0x prefix.
+        For example, the address 0x0000000000000000000000000000000000000000000000000000000000000001 can be expressed as 0x1.
+      pattern: ^0[xX]?[0-9a-fA-F]{0,64}$
+      example: "0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1"
+    Any:
+      oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+        - type: object
+        - type: array
+    AptosError:
+      type: object
+      required:
+        - message
+        - error_code
+      properties:
+        message:
+          type: string
+        error_code:
+          type: string
+          description: |
+            These codes provide more detailed error information that cannot be determined from the HTTP status code alone.
+
+            - Error codes that may be included in the response: `account_not_found`, `resource_not_found`, `module_not_found`, `struct_field_not_found`, `version_not_found`, `transaction_not_found`, `table_item_not_found`, `block_not_found`, `state_value_not_found`, `version_pruned`, `block_pruned`, `invalid_input`, `invalid_transaction_update`, `sequence_number_too_old`, `vm_error`, `health_check_failed`
+        vm_error_code:
+          type: integer
+          description: |
+            Provides the detailed VM error code that occurs when submitting a transaction to the VM.
+    Arguments:
+      type: array
+      description: Field representing the arguments of the Entry function.
+      items:
+        oneOf:
+          - type: string
+          - type: array
+      example:
+        - - "3"
+        - - pts_1762134251280_impression_3119
+        - "0x01"
+        - "0x01"
+        - - Points event for user 04344295 - Type impression - Points 3
+        - - "1762134251280"
+        - batch_impression_1762134251280
+    AuthenticationKey:
+      type: string
+      description: |
+        All byte (Vec) data is expressed as a hex-encoded string starting with 0x, with two hex digits per byte.
+        Unlike the Address type, HexEncodedBytes does not omit any zeros.
+      pattern: ^0[xX]?[0-9a-fA-F]{0,64}$
+      example: "0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1"
+    Block:
+      type: object
+      description: |
+        A block that may or may not contain transactions.
+        When requested, includes the associated transaction information.
+      required:
+        - block_height
+        - block_hash
+        - block_timestamp
+        - first_version
+        - last_version
+      properties:
+        block_height:
+          type: string
+          description: |
+            Represents a 64-bit unsigned integer as a string.
+            Expressed as a string for compatibility with languages such as JavaScript that do not natively support u64 values in JSON.
+        block_hash:
+          type: string
+          description: |
+            A field representing the unique hash identifier of the block.
+        block_timestamp:
+          type: string
+          description: |
+            A field representing when the block was created.
+            Provided as a UNIX timestamp in microseconds, used to track block creation order and timing.
+            The block timestamp is used to guarantee transaction ordering and measure block creation intervals.
+        first_version:
+          type: string
+          description: |
+            A field representing the version number of the first processed transaction among those included in the block.
+            In Aptos, each transaction has a unique version number indicating the overall execution order.
+            first_version and last_version allow you to determine the version range of transactions within the block.
+        last_version:
+          type: string
+          description: |
+            A field representing the version number of the last processed transaction among those included in the block.
+            Together with first_version, defines the version range of transactions within the block, enabling sequential lookup of all transactions in the block.
+        transactions:
+          type: array
+          description: |
+            A list of all transactions included in the block.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/PendingTransaction"
+              - $ref: "#/components/schemas/UserTransaction"
+              - $ref: "#/components/schemas/StateCheckpointTransaction"
+              - $ref: "#/components/schemas/GenesisTransaction"
+              - $ref: "#/components/schemas/BlockMetadataTransaction"
+              - $ref: "#/components/schemas/BlockEpilogueTransaction"
+              - $ref: "#/components/schemas/ValidatorTransaction"
+    BlockEpilogueTransaction:
+      title: Block Epilogue Transaction
+      type: object
+      description: |
+        Represents a block epilogue transaction.
+      required:
+        - type
+        - version
+        - hash
+        - state_change_hash
+        - event_root_hash
+        - gas_used
+        - success
+        - vm_status
+        - accumulator_root_hash
+        - changes
+        - timestamp
+      properties:
+        type:
+          type: string
+          description: The type of the transaction
+          enum:
+            - block_epilogue_transaction
+        version:
+          $ref: "#/components/schemas/Version"
+        hash:
+          type: string
+          description: |
+            A field representing the unique identifier of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        state_change_hash:
+          type: string
+          description: |
+            A field representing the state change hash of the transaction, used to uniquely identify the transaction's state changes.
+        event_root_hash:
+          type: string
+          description: |
+            A field representing the event root hash of the transaction.
+        state_checkpoint_hash:
+          type: string
+          description: |
+            A field representing the state checkpoint hash of the transaction.
+        gas_used:
+          type: string
+          description: |
+            A field representing the amount of gas used in the transaction, used to calculate the execution cost of the transaction.
+        success:
+          type: boolean
+          description: |
+            A field indicating whether the transaction succeeded; true means the transaction executed successfully, false means an error occurred during execution.
+        vm_status:
+          type: string
+          description: |
+            A field representing the VM status of the transaction, used to represent the execution result. Helps analyze the cause of transaction failures and troubleshoot issues.
+        accumulator_root_hash:
+          type: string
+          description: |
+            A field representing the root hash of the accumulated transaction state.
+        changes:
+          type: array
+          description: |
+            A field representing the changes made by the transaction, used to represent the execution result.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/DeleteModule"
+              - $ref: "#/components/schemas/DeleteResource"
+              - $ref: "#/components/schemas/DeleteTableItem"
+              - $ref: "#/components/schemas/WriteModule"
+              - $ref: "#/components/schemas/WriteResource"
+              - $ref: "#/components/schemas/WriteTableItem"
+        timestamp:
+          type: string
+          description: |
+            A field representing the timestamp of the transaction, used to indicate when the transaction occurred.
+        block_end_info:
+          type: object
+          description: |
+            A field representing block end information.
+          required:
+            - block_gas_limit_reached
+            - block_output_limit_reached
+            - block_effective_block_gas_units
+            - block_approx_output_size
+          properties:
+            block_gas_limit_reached:
+              type: boolean
+              description: |
+                A field indicating whether the block gas limit was reached.
+            block_output_limit_reached:
+              type: boolean
+              description: |
+                A field indicating whether the block output limit was reached.
+            block_effective_block_gas_units:
+              type: integer
+              description: |
+                A field representing the effective block gas units of the block.
+            block_approx_output_size:
+              type: integer
+              description: |
+                A field representing the approximate output size of the block.
+    BlockMetadataTransaction:
+      title: Block Metadata Transaction
+      type: object
+      description: |
+        Represents a block metadata transaction.
+      required:
+        - type
+        - version
+        - hash
+        - state_change_hash
+        - event_root_hash
+        - gas_used
+        - success
+        - vm_status
+        - accumulator_root_hash
+        - changes
+        - id
+        - epoch
+        - round
+        - events
+        - previous_block_votes_bitvec
+        - proposer
+        - failed_proposer_indices
+        - timestamp
+        - block_metadata_extension
+      properties:
+        type:
+          type: string
+          description: The type of the transaction
+          enum:
+            - block_metadata_transaction
+        version:
+          $ref: "#/components/schemas/Version"
+        hash:
+          type: string
+          description: |
+            A field representing the unique identifier of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        state_change_hash:
+          type: string
+          description: |
+            A field representing the state change hash of the transaction, used to uniquely identify the transaction's state changes.
+        event_root_hash:
+          type: string
+          description: |
+            A field representing the event root hash of the transaction.
+        state_checkpoint_hash:
+          type: string
+          description: |
+            A field representing the state checkpoint hash of the transaction.
+        gas_used:
+          type: string
+          description: |
+            A field representing the amount of gas used in the transaction, used to calculate the execution cost of the transaction.
+        success:
+          type: boolean
+          description: |
+            A field indicating whether the transaction succeeded; true means the transaction executed successfully, false means an error occurred during execution.
+        vm_status:
+          type: string
+          description: |
+            A field representing the VM status of the transaction, used to represent the execution result. Helps analyze the cause of transaction failures and troubleshoot issues.
+        accumulator_root_hash:
+          type: string
+          description: |
+            A field representing the root hash of the accumulated transaction state.
+        changes:
+          type: array
+          description: |
+            A field representing the changes made by the transaction, used to represent the execution result.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/DeleteModule"
+              - $ref: "#/components/schemas/DeleteResource"
+              - $ref: "#/components/schemas/DeleteTableItem"
+              - $ref: "#/components/schemas/WriteModule"
+              - $ref: "#/components/schemas/WriteResource"
+              - $ref: "#/components/schemas/WriteTableItem"
+        id:
+          type: string
+        epoch:
+          type: string
+          description: |
+            A field representing the epoch of the transaction.
+        round:
+          type: string
+          description: |
+            A field representing the round of the transaction.
+        events:
+          type: array
+          description: |
+            A field representing the events of the transaction, used to represent the execution result.
+          items:
+            $ref: "#/components/schemas/Event"
+        previous_block_votes_bitvec:
+          type: array
+          description: |
+            A field representing the previous block votes bitvector of the transaction.
+          items:
+            type: integer
+        proposer:
+          $ref: "#/components/schemas/Address"
+        failed_proposer_indices:
+          type: array
+          description: |
+            A field representing the failed proposer indices of the transaction.
+          items:
+            type: integer
+        timestamp:
+          type: string
+          description: |
+            A field representing the timestamp of the transaction, used to indicate when the transaction occurred.
+        block_metadata_extension:
+          type: object
+          description: |
+            A field representing the block metadata extension.
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              description: |
+                When a value exists, the internal transaction type refers to aptos_types::transaction::Transaction::BlockMetadataExt. When absent, it refers to aptos_types::transaction::Transaction::BlockMetadata.
+              enum:
+                - v0
+                - v1
+            randomness:
+              $ref: "#/components/schemas/Bytecode"
+    Bytecode:
+      type: string
+      description: |
+        All byte (Vec) data is expressed as a hex-encoded string starting with 0x, with two hex digits per byte.
+        Unlike the Address type, HexEncodedBytes does not omit any zeros.
+    DeleteModule:
+      type: object
+      title: Delete Module
+      description: |
+        Represents a change for deleting a Move module.
+      required:
+        - type
+        - address
+        - state_key_hash
+        - module
+      properties:
+        type:
+          type: string
+          description: The type of the change
+          enum:
+            - delete_module
+        address:
+          $ref: "#/components/schemas/Address"
+        state_key_hash:
+          type: string
+          description: The hash value of the state key.
+        module:
+          type: string
+          description: |
+            The Move module ID is the string representation of the Move module.
+            Format: `{address}::{module name}`
+            address must be a 32-byte (hex) account address starting with 0x.
+            The module name is case-sensitive.
+    DeleteResource:
+      type: object
+      title: Delete Resource
+      description: |
+        Represents a change for deleting a resource.
+      required:
+        - type
+        - address
+        - state_key_hash
+        - resource
+      properties:
+        type:
+          type: string
+          description: The type of the change
+          enum:
+            - delete_resource
+        address:
+          $ref: "#/components/schemas/Address"
+        state_key_hash:
+          type: string
+          description: The hash value of the state key.
+        resource:
+          $ref: "#/components/schemas/ResourceType"
+    DeleteTableItem:
+      type: object
+      title: Delete Table Item
+      description: |
+        Represents a change for deleting a table item.
+      required:
+        - type
+        - state_key_hash
+        - handle
+        - key
+        - data
+      properties:
+        type:
+          type: string
+          description: The type of the change
+          enum:
+            - delete_table_item
+        state_key_hash:
+          type: string
+          description: The hash value of the state key.
+        handle:
+          $ref: "#/components/schemas/Bytecode"
+        key:
+          $ref: "#/components/schemas/Bytecode"
+        data:
+          type: object
+          description: The deleted table data.
+          required:
+            - key
+            - key_type
+          properties:
+            key:
+              $ref: "#/components/schemas/Any"
+            key_type:
+              type: string
+    DirectWriteSet:
+      title: Direct Write Set
+      type: object
+      description: |
+        Represents a direct write set.
+      required:
+        - type
+        - changes
+        - events
+      properties:
+        type:
+          type: string
+          description: The type of the write set
+          enum:
+            - direct_write_set
+        changes:
+          type: array
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/DeleteModule"
+              - $ref: "#/components/schemas/DeleteResource"
+              - $ref: "#/components/schemas/DeleteTableItem"
+              - $ref: "#/components/schemas/WriteModule"
+              - $ref: "#/components/schemas/WriteResource"
+              - $ref: "#/components/schemas/WriteTableItem"
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+    Ed25519Signature:
+      title: Ed25519 Signature
+      type: object
+      description: |
+        Represents a single Ed25519 signature.
+      required:
+        - type
+        - public_key
+        - signature
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - ed25519_signature
+        public_key:
+          $ref: "#/components/schemas/Bytecode"
+        signature:
+          $ref: "#/components/schemas/Bytecode"
+    EntryFunctionPayload:
+      type: object
+      description: |
+        Payload that executes a single Entry Function
+      required:
+        - type
+        - function
+        - type_arguments
+        - arguments
+      properties:
+        type:
+          type: string
+          description: The type of the payload
+          enum:
+            - entry_function_payload
+        function:
+          type: string
+          description: String representation of the Entry Function identifier defined on-chain.
+          pattern: ^0x[0-9a-fA-F]+::[A-Za-z_][A-Za-z0-9_]*::[A-Za-z_][A-Za-z0-9_]*$
+          example: 0x1::coin::transfer
+        type_arguments:
+          $ref: "#/components/schemas/TypeArguments"
+        arguments:
+          $ref: "#/components/schemas/Arguments"
+    Event:
+      type: object
+      required:
+        - guid
+        - sequenceNumber
+        - type
+        - data
+      properties:
+        guid:
+          type: object
+          properties:
+            creation_number:
+              type: string
+              description: A field representing the creation number of the event handle.
+            account_address:
+              type: string
+              description: A field representing the address of the resource owner that emitted the event.
+        sequenceNumber:
+          $ref: "#/components/schemas/SequenceNumber"
+        type:
+          $ref: "#/components/schemas/MoveTypeTag"
+        data:
+          $ref: "#/components/schemas/Any"
+    ExpirationTimestampSecs:
+      type: string
+      description: |
+        A field representing the transaction expiration time.
+        Represents a 64-bit unsigned integer as a string.
+      pattern: ^[0-9]+$
+      example: "1634567890"
+    FeePayerSignature:
+      title: Fee Payer Signature
+      type: object
+      description: |
+        Signature for Fee Payer transactions.
+        This structure enables transactions involving multiple accounts with a separate fee payer.
+      required:
+        - type
+        - sender
+        - secondary_signer_addresses
+        - secondary_signers
+        - fee_payer_address
+        - fee_payer_signature
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - fee_payer_signature
+        sender:
+          $ref: "#/components/schemas/AccountSignature"
+        secondary_signer_addresses:
+          type: array
+          description: List of addresses of accounts that signed the transaction in addition to the primary signer (sender).
+          items:
+            type: string
+        secondary_signers:
+          type: array
+          description: List of signatures from accounts that signed the transaction in addition to the primary signer (sender).
+          items:
+            $ref: "#/components/schemas/AccountSignature"
+        fee_payer_address:
+          type: string
+          description: The address of the account that pays the fee.
+        fee_payer_signature:
+          $ref: "#/components/schemas/AccountSignature"
+    GasUnitPrice:
+      type: string
+      description: |
+        A field representing the gas price to use when the transaction occurs.
+        Represents a 64-bit unsigned integer as a string.
+      pattern: ^[0-9]+$
+      example: "1"
+    GenericTypeParams:
+      type: array
+      description: Generic type parameters associated with the Move function.
+      items:
+        type: object
+        required:
+          - constraints
+        properties:
+          constraints:
+            type: array
+            description: The Move ability linked to the generic type parameter, associated with types that use this type.
+            items:
+              type: string
+    GenesisTransaction:
+      title: Genesis Transaction
+      type: object
+      description: |
+        Represents a genesis transaction.
+        A genesis transaction is the first transaction that sets the initial state of the block.
+      required:
+        - type
+        - version
+        - hash
+        - state_change_hash
+        - event_root_hash
+        - gas_used
+        - success
+        - vm_status
+        - accumulator_root_hash
+        - changes
+        - payload
+        - events
+      properties:
+        type:
+          type: string
+          description: The type of the transaction
+          enum:
+            - genesis_transaction
+        version:
+          $ref: "#/components/schemas/Version"
+        hash:
+          type: string
+          description: |
+            A field representing the unique identifier of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        state_change_hash:
+          type: string
+          description: |
+            A field representing the state change hash of the transaction, used to uniquely identify the transaction's state changes.
+        event_root_hash:
+          type: string
+          description: |
+            A field representing the event root hash of the transaction.
+        state_checkpoint_hash:
+          type: string
+          description: |
+            A field representing the state checkpoint hash of the transaction.
+        gas_used:
+          type: string
+          description: |
+            A field representing the amount of gas used in the transaction, used to calculate the execution cost of the transaction.
+        success:
+          type: boolean
+          description: |
+            A field indicating whether the transaction succeeded; true means the transaction executed successfully, false means an error occurred during execution.
+        vm_status:
+          type: string
+          description: |
+            A field representing the VM status of the transaction, used to represent the execution result. Helps analyze the cause of transaction failures and troubleshoot issues.
+        accumulator_root_hash:
+          type: string
+          description: |
+            A field representing the root hash of the accumulated transaction state.
+        changes:
+          type: array
+          description: |
+            A field representing the changes made by the transaction, used to represent the execution result.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/DeleteModule"
+              - $ref: "#/components/schemas/DeleteResource"
+              - $ref: "#/components/schemas/DeleteTableItem"
+              - $ref: "#/components/schemas/WriteModule"
+              - $ref: "#/components/schemas/WriteResource"
+              - $ref: "#/components/schemas/WriteTableItem"
+        payload:
+          $ref: "#/components/schemas/WriteSetPayload"
+        events:
+          type: array
+          description: |
+            A field representing the events of the transaction.
+          items:
+            $ref: "#/components/schemas/Event"
+        timestamp:
+          type: string
+          description: |
+            A field representing the timestamp of the transaction, used to indicate when the transaction occurred.
+    MaxGasAmount:
+      type: string
+      description: |
+        A field representing the maximum amount of gas to use when the transaction occurs.
+        Represents a 64-bit unsigned integer as a string.
+      pattern: ^[0-9]+$
+      example: "1000000"
+    Module:
+      type: object
+      properties:
+        bytecode:
+          $ref: "#/components/schemas/Bytecode"
+        abi:
+          $ref: "#/components/schemas/Abi"
+    ModuleBundlePayload:
+      type: object
+      description: |
+        Payload for transactions that deploy new modules on-chain.
+        <strong style="color: red;">*</strong>Deprecated: This payload type is no longer supported.
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: The type of the payload
+          enum:
+            - module_bundle_payload
+    MoveFunction:
+      type: array
+      description: Move function
+      items:
+        type: object
+        required:
+          - name
+          - visibility
+          - is_entry
+          - is_view
+          - generic_type_params
+          - params
+          - return
+        properties:
+          name:
+            type: string
+          visibility:
+            type: string
+            description: Move function visibility
+            enum:
+              - private
+              - public
+              - friend
+          is_entry:
+            type: boolean
+            description: Whether the function is an entry function that can be directly called from a transaction
+          is_view:
+            type: boolean
+            description: Whether the function is a view function
+          generic_type_params:
+            $ref: "#/components/schemas/GenericTypeParams"
+          params:
+            type: array
+            description: Parameters associated with the Move function
+            items:
+              type: string
+          return:
+            type: array
+            description: Return types of the Move function
+            items:
+              type: string
+    MoveTypeTag:
+      type: string
+      description: |
+        String representation of the Move type tag exposed in the transaction payload.
+        Values:
+          - `bool`
+          - `u8`
+          - `u16`,`u32`,`u64`,`u128`,`u256`
+          - `i8`,`i16`,`i32`,`i64`,`i128`,`i256`
+          - `address`
+          - `signer`
+          - `vector: vector<{non-reference MoveTypeId}>`
+          - `struct: {address}::{module_name}::{struct_name}::<{generic types}>`
+        Vector type value examples:
+        - `vector<u8>`
+        - `vector<vector<u64>>`
+        - `vector<0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>>`
+        Struct type value examples:
+        - `0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>`
+        - `0x1::account::Account`
+        Note:
+        1. Whitespace should be ignored when comparing two struct tag ids.
+        2. In URL paths, it must be encoded using url-encoding (AKA percent-encoding).
+      pattern: ^(bool|u8|u16|u32|u64|u128|u256|i8|i16|i32|i64|i128|i256|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+)$
+    MultiAgentSignature:
+      title: Multi Agent Signature
+      type: object
+      description: |
+        Multi-agent signature for multi-agent transactions.
+        Enables transactions spanning multiple accounts.
+      required:
+        - type
+        - sender
+        - secondary_signer_addresses
+        - secondary_signers
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - multi_agent_signature
+        sender:
+          $ref: "#/components/schemas/AccountSignature"
+        secondary_signer_addresses:
+          type: array
+          description: List of addresses of accounts that signed the transaction in addition to the primary signer (sender).
+          items:
+            type: string
+        secondary_signers:
+          type: array
+          description: List of signatures from accounts that signed the transaction in addition to the primary signer (sender).
+          items:
+            $ref: "#/components/schemas/AccountSignature"
+    MultiEd25519Signature:
+      title: Multi Ed25519 Signature
+      type: object
+      description: |
+        Represents an Ed25519 multi-signature.
+        This allows k-of-n signatures for transactions.
+      required:
+        - type
+        - public_keys
+        - signatures
+        - threshold
+        - bitmap
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - multi_ed25519_signature
+        public_keys:
+          type: array
+          description: List of public keys used for the Ed25519 signature.
+          items:
+            type: string
+        signatures:
+          type: array
+          description: List of signatures mapped in the same order as the public keys.
+          items:
+            type: string
+        threshold:
+          type: integer
+          description: The number of signatures required for a successful transaction.
+        bitmap:
+          $ref: "#/components/schemas/Bytecode"
+    MultiKeySignature:
+      title: Multi Key Signature
+      type: object
+      description: |
+        Represents a multi-key signature.
+      required:
+        - type
+        - public_keys
+        - signatures
+        - signatures_required
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - multi_key_signature
+        public_keys:
+          type: array
+          items:
+            $ref: "#/components/schemas/PublicKey"
+        signatures:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Public key index
+              signature:
+                $ref: "#/components/schemas/Signature"
+        signatures_required:
+          type: integer
+          description: Minimum number of signatures required for a successful transaction
+    MultisigPayload:
+      type: object
+      description: |
+        A transaction that allows owners of a multisig account to execute pre-approved transactions on behalf of the multisig account.
+      required:
+        - type
+        - multisig_address
+      properties:
+        type:
+          type: string
+          description: The type of the payload
+          enum:
+            - multisig_payload
+        multisig_address:
+          type: string
+          description: |
+            Aptos account address expressed as a hexadecimal string.
+            This is represented as a 64-character hexadecimal string, sometimes abbreviated as a 64-character hex string with a 0x prefix.
+            For example, the address 0x0000000000000000000000000000000000000000000000000000000000000001 can be expressed as 0x1.
+        transaction_payload:
+          $ref: "#/components/schemas/EntryFunctionPayload"
+    NoAccountSignature:
+      title: No Account Signature
+      type: object
+      description: |
+        Represents the case when there is no account signature.
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - no_account_signature
+    NoditError:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Returns a code that identifies the situation where the error occurred.
+        message:
+          type: string
+          description: Returns a detailed message explaining the cause of the error.
+      required:
+        - code
+        - message
+    PendingTransaction:
+      title: Pending Transaction
+      type: object
+      description: |
+        Represents a pending transaction.
+        A pending transaction is one that has not yet been included in a block.
+      required:
+        - type
+        - hash
+        - sender
+        - sequence_number
+        - max_gas_amount
+        - gas_unit_price
+        - expiration_timestamp_secs
+        - payload
+      properties:
+        type:
+          type: string
+          description: The type of the transaction
+          enum:
+            - pending_transaction
+        hash:
+          type: string
+          description: |
+            A field representing the unique identifier of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        sender:
+          $ref: "#/components/schemas/Sender"
+        sequence_number:
+          $ref: "#/components/schemas/SequenceNumber"
+        max_gas_amount:
+          $ref: "#/components/schemas/MaxGasAmount"
+        gas_unit_price:
+          $ref: "#/components/schemas/GasUnitPrice"
+        expiration_timestamp_secs:
+          $ref: "#/components/schemas/ExpirationTimestampSecs"
+        payload:
+          oneOf:
+            - $ref: "#/components/schemas/EntryFunctionPayload"
+            - $ref: "#/components/schemas/ScriptPayload"
+            - $ref: "#/components/schemas/ModuleBundlePayload"
+            - $ref: "#/components/schemas/MultisigPayload"
+        signature:
+          oneOf:
+            - $ref: "#/components/schemas/Ed25519Signature"
+            - $ref: "#/components/schemas/MultiEd25519Signature"
+            - $ref: "#/components/schemas/MultiAgentSignature"
+            - $ref: "#/components/schemas/FeePayerSignature"
+            - $ref: "#/components/schemas/AccountSignature"
+            - $ref: "#/components/schemas/NoAccountSignature"
+        replay_protection_nonce:
+          $ref: "#/components/schemas/ReplayProtectionNonce"
+    PublicKey:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of the public key
+          enum:
+            - ed25519
+            - secp256k1_ecdsa
+            - secp256r1_ecdsa
+            - keyless
+            - federated_keyless
+        value:
+          $ref: "#/components/schemas/Bytecode"
+    ReplayProtectionNonce:
+      type: string
+      description: |
+        A field representing the nonce used to prevent transaction replay attacks.
+        Represents a 64-bit unsigned integer as a string.
+      pattern: ^[0-9]+$
+      example: "590"
+    ResourceData:
+      type: object
+      description: |
+        Partial data from within an account resource, displayed in JSON representation.
+        Specifically, a map with the top-level field keys of the given resource as keys and arbitrary JSON values/objects as values.
+
+        - Move bool type: Converted to boolean.
+        - u8~i32: Converted to integer.
+        - u64~i256: Converted to string.
+        - address: Converted to HexEncodedBytes string (e.g. 0x1).
+        - Struct: Converted to object.
+        - vector: Converted to array.
+          - However, vector<u8> is converted to a HexEncodedBytes string starting with 0x.
+        - 0x1::string::String: Converted to regular string.
+      example:
+        authentication_key: "0x0000000000000000000000000000000000000000000000000000000000000001"
+        coin_register_events:
+          counter: "0"
+          guid:
+            id:
+              addr: "0x1"
+              creation_num: "0"
+        self_address: "0x1"
+        sequence_number: "0"
+    ResourceType:
+      type: string
+      pattern: ^0x[0-9a-zA-Z:_<>]+$
+      description: |
+        String representation of a Move struct tag.
+        This type exists to allow MoveStructTag to be specified as a path or query parameter (e.g. used in get_events_by_event_handle).
+        This value is composed of:
+        1. move_module_address, module_name, struct_name joined by two colons (::)
+        2. Generic type parameters of the struct specified as comma-separated values
+        Examples:
+        - `0x1::coin::CoinStore<0x1::aptos_coin::aptosCoin>`
+        - `0x1::account::Account`
+    ScriptPayload:
+      type: object
+      description: |
+        Payload that executes a script capable of running multiple functions.
+      required:
+        - type
+        - code
+        - type_arguments
+        - arguments
+      properties:
+        type:
+          type: string
+          description: The type of the payload
+          enum:
+            - script_payload
+        code:
+          type: object
+          description: Move script bytecode
+          required:
+            - bytecode
+          properties:
+            bytecode:
+              $ref: "#/components/schemas/Bytecode"
+            abi:
+              $ref: "#/components/schemas/Abi"
+        type_arguments:
+          $ref: "#/components/schemas/TypeArguments"
+        arguments:
+          $ref: "#/components/schemas/Arguments"
+    ScriptWriteSet:
+      title: Script Write Set
+      type: object
+      description: |
+        Represents a script write set.
+      required:
+        - type
+        - execute_as
+        - script
+      properties:
+        type:
+          type: string
+          description: The type of the write set
+          enum:
+            - script_write_set
+        execute_as:
+          $ref: "#/components/schemas/Address"
+        script:
+          type: object
+          description: Payload which runs a script that can run multiple functions.
+          required:
+            - code
+            - type_arguments
+            - arguments
+          properties:
+            code:
+              type: object
+              description: |
+                Move script bytecode
+                It contains both bytecode and ABI.
+              required:
+                - bytecode
+              properties:
+                bytecode:
+                  $ref: "#/components/schemas/Bytecode"
+                abi:
+                  $ref: "#/components/schemas/Abi"
+            type_arguments:
+              $ref: "#/components/schemas/TypeArguments"
+            arguments:
+              $ref: "#/components/schemas/Arguments"
+    Sender:
+      type: string
+      description: |
+        A field representing the address of the account that sent the transaction.
+        When expressed as a string, it is displayed as a 64-character hexadecimal string, and may be abbreviated by omitting leading zeros and adding 0x.
+      example: "0x1"
+    SequenceNumber:
+      type: string
+      description: |
+        A field representing the transaction occurrence order.
+        Represents a 64-bit unsigned integer as a string.
+      pattern: ^[0-9]+$
+      example: "1234567890"
+    Signature:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - ed25519
+            - secp256k1_ecdsa
+            - web_authn
+            - keyless
+        value:
+          $ref: "#/components/schemas/Bytecode"
+    SingleKeySignature:
+      title: Single Key Signature
+      type: object
+      description: |
+        Represents a single key signature.
+      required:
+        - type
+        - public_key
+        - signature
+      properties:
+        type:
+          type: string
+          description: The type of the signature
+          enum:
+            - single_key_signature
+        public_key:
+          $ref: "#/components/schemas/PublicKey"
+        signature:
+          $ref: "#/components/schemas/Signature"
+    StateCheckpointTransaction:
+      title: State Checkpoint Transaction
+      type: object
+      description: |
+        Represents a state checkpoint transaction.
+      required:
+        - type
+        - version
+        - hash
+        - state_change_hash
+        - event_root_hash
+        - state_checkpoint_hash
+        - gas_used
+        - success
+        - vm_status
+        - accumulator_root_hash
+        - changes
+        - timestamp
+      properties:
+        type:
+          type: string
+          description: The type of the transaction
+          enum:
+            - state_checkpoint_transaction
+        version:
+          $ref: "#/components/schemas/Version"
+        hash:
+          type: string
+          description: |
+            A field representing the hash of the transaction.
+        state_change_hash:
+          type: string
+          description: |
+            A field representing the state change hash of the transaction.
+        event_root_hash:
+          type: string
+          description: |
+            A field representing the event root hash of the transaction.
+        state_checkpoint_hash:
+          type: string
+          description: |
+            A field representing the state checkpoint hash of the transaction.
+        gas_used:
+          type: string
+          description: |
+            A field representing the amount of gas used in the transaction.
+        success:
+          type: boolean
+          description: |
+            A field indicating whether the transaction succeeded.
+        vm_status:
+          type: string
+          description: |
+            A field representing the VM status of the transaction.
+        accumulator_root_hash:
+          type: string
+          description: |
+            A field representing the root hash of the accumulated transaction state.
+        changes:
+          type: array
+          description: |
+            A field representing the changes made by the transaction.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/DeleteModule"
+              - $ref: "#/components/schemas/DeleteResource"
+              - $ref: "#/components/schemas/DeleteTableItem"
+              - $ref: "#/components/schemas/WriteModule"
+              - $ref: "#/components/schemas/WriteResource"
+              - $ref: "#/components/schemas/WriteTableItem"
+        timestamp:
+          type: string
+          description: |
+            A field representing the timestamp of the transaction, used to indicate when the transaction occurred.
+    Transaction:
+      title: Transaction
+      type: object
+      required:
+        - sender
+        - sequence_number
+        - max_gas_amount
+        - gas_unit_price
+        - expiration_timestamp_secs
+        - payload
+        - replay_protection_nonce
+        - signature
+      properties:
+        sender:
+          $ref: "#/components/schemas/Sender"
+        sequence_number:
+          $ref: "#/components/schemas/SequenceNumber"
+        max_gas_amount:
+          $ref: "#/components/schemas/MaxGasAmount"
+        gas_unit_price:
+          $ref: "#/components/schemas/GasUnitPrice"
+        expiration_timestamp_secs:
+          $ref: "#/components/schemas/ExpirationTimestampSecs"
+        payload:
+          type: object
+          description: |
+            A field representing the payload to use when the transaction occurs.
+          oneOf:
+            - $ref: "#/components/schemas/EntryFunctionPayload"
+            - $ref: "#/components/schemas/ScriptPayload"
+            - $ref: "#/components/schemas/ModuleBundlePayload"
+            - $ref: "#/components/schemas/MultisigPayload"
+        replay_protection_nonce:
+          $ref: "#/components/schemas/ReplayProtectionNonce"
+        signature:
+          type: object
+          description: |
+            A field representing the transaction signature.
+            One of Ed25519, MultiEd25519, MultiAgent, FeePayer, Account, or NoAccount can be selected.
+          oneOf:
+            - $ref: "#/components/schemas/Ed25519Signature"
+            - $ref: "#/components/schemas/MultiEd25519Signature"
+            - $ref: "#/components/schemas/MultiAgentSignature"
+            - $ref: "#/components/schemas/FeePayerSignature"
+            - $ref: "#/components/schemas/AccountSignature"
+            - $ref: "#/components/schemas/NoAccountSignature"
+    TypeArguments:
+      type: array
+      description: Field representing the generic type arguments of the Entry function.
+      items:
+        type: string
+        pattern: ^(bool|u8|u64|u128|address|signer|vector<.+>|0x[0-9a-zA-Z:_<, >]+)$
+        example: 0x1::coin::AptosCoin
+    UserTransaction:
+      title: User Transaction
+      type: object
+      description: |
+        Represents a user transaction.
+        A user transaction is one that is directly initiated by a user.
+      required:
+        - type
+        - version
+        - hash
+        - state_change_hash
+        - event_root_hash
+        - gas_used
+        - success
+        - vm_status
+        - accumulator_root_hash
+        - changes
+        - sender
+        - sequence_number
+        - max_gas_amount
+        - gas_unit_price
+        - expiration_timestamp_secs
+        - payload
+        - events
+        - timestamp
+      properties:
+        type:
+          type: string
+          description: The type of the transaction
+          enum:
+            - user_transaction
+        version:
+          $ref: "#/components/schemas/Version"
+        hash:
+          type: string
+          description: |
+            A field representing the unique identifier of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        state_change_hash:
+          type: string
+          description: |
+            A field representing the state change hash of the transaction, used to uniquely identify the transaction's state changes.
+        event_root_hash:
+          type: string
+          description: |
+            A field representing the event root hash of the transaction.
+        state_checkpoint_hash:
+          type: string
+          description: |
+            A field representing the state checkpoint hash of the transaction.
+        gas_used:
+          type: string
+          description: |
+            A field representing the amount of gas used in the transaction, used to calculate the execution cost of the transaction.
+        success:
+          type: boolean
+          description: |
+            A field indicating whether the transaction succeeded; true means the transaction executed successfully, false means an error occurred during execution.
+        vm_status:
+          type: string
+          description: |
+            A field representing the VM status of the transaction, used to represent the execution result. Helps analyze the cause of transaction failures and troubleshoot issues.
+        accumulator_root_hash:
+          type: string
+          description: |
+            A field representing the root hash of the accumulated transaction state.
+        changes:
+          type: array
+          description: |
+            A field representing the changes made by the transaction, used to represent the execution result.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/DeleteModule"
+              - $ref: "#/components/schemas/DeleteResource"
+              - $ref: "#/components/schemas/DeleteTableItem"
+              - $ref: "#/components/schemas/WriteModule"
+              - $ref: "#/components/schemas/WriteResource"
+              - $ref: "#/components/schemas/WriteTableItem"
+        sender:
+          $ref: "#/components/schemas/Sender"
+        sequence_number:
+          $ref: "#/components/schemas/SequenceNumber"
+        max_gas_amount:
+          $ref: "#/components/schemas/MaxGasAmount"
+        gas_unit_price:
+          $ref: "#/components/schemas/GasUnitPrice"
+        expiration_timestamp_secs:
+          $ref: "#/components/schemas/ExpirationTimestampSecs"
+        payload:
+          oneOf:
+            - $ref: "#/components/schemas/EntryFunctionPayload"
+            - $ref: "#/components/schemas/ScriptPayload"
+            - $ref: "#/components/schemas/ModuleBundlePayload"
+            - $ref: "#/components/schemas/MultisigPayload"
+        signature:
+          oneOf:
+            - $ref: "#/components/schemas/Ed25519Signature"
+            - $ref: "#/components/schemas/MultiEd25519Signature"
+            - $ref: "#/components/schemas/MultiAgentSignature"
+            - $ref: "#/components/schemas/FeePayerSignature"
+            - $ref: "#/components/schemas/AccountSignature"
+            - $ref: "#/components/schemas/NoAccountSignature"
+        replay_protection_nonce:
+          $ref: "#/components/schemas/ReplayProtectionNonce"
+        events:
+          type: array
+          description: A field representing the events of the transaction.
+          items:
+            $ref: "#/components/schemas/Event"
+        timestamp:
+          type: string
+          description: A field representing the timestamp of the transaction.
+    ValidatorTransaction:
+      title: Validator Transaction
+      type: object
+      description: |
+        Represents a validator transaction.
+      required:
+        - type
+        - version
+        - hash
+        - state_change_hash
+        - event_root_hash
+        - gas_used
+        - success
+        - vm_status
+        - accumulator_root_hash
+        - changes
+        - events
+        - timestamp
+        - quorum_certified_update
+      properties:
+        type:
+          type: string
+          description: The type of the transaction
+          enum:
+            - validator_transaction
+        version:
+          $ref: "#/components/schemas/Version"
+        hash:
+          type: string
+          description: |
+            A field representing the hash of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        state_change_hash:
+          type: string
+          description: |
+            A field representing the state change hash of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        event_root_hash:
+          type: string
+          description: |
+            A field representing the event root hash of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        state_checkpoint_hash:
+          type: string
+          description: |
+            A field representing the state checkpoint hash of the transaction, provided as a 64-character hexadecimal string starting with 0x.
+        gas_used:
+          type: string
+          description: |
+            A field representing the amount of gas used in the transaction, used to calculate the execution cost of the transaction.
+        success:
+          type: boolean
+          description: |
+            A field indicating whether the transaction succeeded; true means the transaction executed successfully, false means an error occurred during execution.
+        vm_status:
+          type: string
+          description: |
+            A field representing the VM status of the transaction, used to represent the execution result. Helps analyze the cause of transaction failures and troubleshoot issues.
+        accumulator_root_hash:
+          type: string
+          description: |
+            A field representing the root hash of the accumulated transaction state, provided as a 64-character hexadecimal string starting with 0x.
+        changes:
+          type: array
+          description: |
+            A field representing the changes made by the transaction, used to represent the execution result.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/DeleteModule"
+              - $ref: "#/components/schemas/DeleteResource"
+              - $ref: "#/components/schemas/DeleteTableItem"
+              - $ref: "#/components/schemas/WriteModule"
+              - $ref: "#/components/schemas/WriteResource"
+              - $ref: "#/components/schemas/WriteTableItem"
+        events:
+          type: array
+          description: |
+            A field representing the events of the transaction.
+          items:
+            $ref: "#/components/schemas/Event"
+        timestamp:
+          type: string
+          description: |
+            A field representing the timestamp of the transaction, used to indicate when the transaction occurred.
+        quorum_certified_update:
+          type: object
+          description: |
+            A field representing the quorum certified update of the transaction.
+          required:
+            - update
+            - multi_sig
+          properties:
+            update:
+              type: object
+              description: |
+                An API-friendly representation of the on-chain aptos_types::jwks::ProviderJWKs object.
+              required:
+                - issuer
+                - version
+                - jwks
+              properties:
+                issuer:
+                  type: string
+                version:
+                  type: string
+                jwks:
+                  type: array
+                  items:
+                    type: object
+            multi_sig:
+              type: object
+              description: |
+                An API-friendly representation of the on-chain aptos_types::aggregate_signature::AggregateSignature.
+              required:
+                - signer_indices
+                - sig
+              properties:
+                signer_indices:
+                  type: array
+                  items:
+                    type: integer
+                sig:
+                  $ref: "#/components/schemas/Bytecode"
+    Version:
+      type: string
+      description: |
+        A unique sequence ID representing the transaction version, starting from 0 and incrementing sequentially.
+        Transaction version is used to guarantee transaction execution order and to query the state of a specific transaction.
+      example: "3679250756"
+    WriteModule:
+      type: object
+      title: Write Module
+      description: |
+        Represents a change for writing a Move module.
+      required:
+        - type
+        - address
+        - state_key_hash
+        - data
+      properties:
+        type:
+          type: string
+          description: The type of the change
+          enum:
+            - write_module
+          example: write_module
+        address:
+          $ref: "#/components/schemas/Address"
+        state_key_hash:
+          type: string
+          description: The hash value of the state key.
+        data:
+          $ref: "#/components/schemas/Module"
+    WriteResource:
+      type: object
+      title: Write Resource
+      description: |
+        Represents a change for writing a resource.
+      required:
+        - type
+        - address
+        - state_key_hash
+        - data
+      properties:
+        type:
+          type: string
+          description: The type of the change
+          enum:
+            - write_resource
+          example: write_resource
+        address:
+          $ref: "#/components/schemas/Address"
+        state_key_hash:
+          type: string
+          description: The hash value of the state key.
+        data:
+          type: object
+          description: The parsed Move resource.
+          required:
+            - type
+            - data
+          properties:
+            type:
+              $ref: "#/components/schemas/ResourceType"
+            data:
+              $ref: "#/components/schemas/ResourceData"
+    WriteSetPayload:
+      type: object
+      description: |
+        Represents the write set payload used only in genesis transactions.
+      required:
+        - type
+        - write_set
+      properties:
+        type:
+          type: string
+          description: The type of the payload
+          enum:
+            - write_set_payload
+        write_set:
+          type: object
+          oneOf:
+            - $ref: "#/components/schemas/DirectWriteSet"
+            - $ref: "#/components/schemas/ScriptWriteSet"
+    WriteTableItem:
+      type: object
+      title: Write Table Item
+      description: |
+        Represents a change for writing a table item.
+      required:
+        - type
+        - state_key_hash
+        - handle
+        - key
+        - value
+        - data
+      properties:
+        type:
+          type: string
+          description: The type of the change
+          enum:
+            - write_table_item
+          example: write_table_item
+        state_key_hash:
+          type: string
+          description: The hash value of the state key.
+        handle:
+          $ref: "#/components/schemas/Bytecode"
+        key:
+          $ref: "#/components/schemas/Bytecode"
+        value:
+          $ref: "#/components/schemas/Bytecode"
+        data:
+          type: object
+          required:
+            - key
+            - key_type
+            - value
+            - value_type
+          properties:
+            key:
+              $ref: "#/components/schemas/Any"
+            key_type:
+              type: string
+            value:
+              $ref: "#/components/schemas/Any"
+            value_type:
+              type: string
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AptosError"
+            example:
+              message: "Failed to read raw transactions from storage: AptosDB Other Error: Transaction at version 3 is pruned, min available version is 3133900526."
+              error_code: internal_error
+              vm_error_code: null
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NoditError"
+            example:
+              code: AUTHENTICATION_FAILED
+              message: Authentication failed
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NoditError"
+            example:
+              code: PERMISSION_DENIED
+              message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NoditError"
+            example:
+              code: RESOURCE_NOT_FOUND
+              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+    "410":
+      description: Block Pruned
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AptosError"
+            example:
+              message: Block(160155267) has been pruned
+              error_code: block_pruned
+              vm_error_code: null
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NoditError"
+            example:
+              code: TOO_MANY_REQUESTS
+              message: Too many requests
+paths:
+  /accounts/{address}/resources:
+    get:
+      security:
+        - api_key: []
+      operationId: aptos-getAccountResources
+      summary: Get account resources
+      description: |
+        Retrieves all resources for a given account at the ledger version of a specific transaction. If no ledger version is specified, the latest ledger version is used.
+        Aptos nodes prune account state history according to a configurable retention period. If the requested ledger version has been pruned, the server responds with a 410 status code.
+
+        > ⚠️ Notice regarding some API calls
+        > 
+        > As the latest version of the Aptos node client excludes the Legacy Indexer, Indexer-related errors may occur when making some API calls. 
+        > We are currently reviewing options to restore this functionality or provide alternative APIs, and will provide updates as related measures are completed.
+        > We apologize for any inconvenience.
+      x-seo-description: Retrieve all Move resources stored at a specific account address on the Aptos blockchain.
+      tags:
+        - Accounts
+      parameters:
+        - $ref: "#/components/parameters/Address"
+        - $ref: "#/components/parameters/LedgerVersion"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Start"
+      responses:
+        "200":
+          description: Successful Response
+          headers:
+            X-APTOS-BLOCK-HEIGHT:
+              description: Current block height of the chain
+              schema:
+                type: integer
+              required: true
+            X-APTOS-CHAIN-ID:
+              description: Chain ID of the current chain
+              schema:
+                type: integer
+              required: true
+            X-APTOS-EPOCH:
+              description: Current epoch of the chain
+              schema:
+                type: integer
+              required: true
+            X-APTOS-LEDGER-OLDEST-VERSION:
+              description: Oldest unpruned ledger version of the chain
+              schema:
+                type: integer
+              required: true
+            X-APTOS-LEDGER-TIMESTAMPUSEC:
+              description: Current timestamp of the chain
+              schema:
+                type: integer
+              required: true
+            X-APTOS-LEDGER-VERSION:
+              description: Current ledger version of the chain
+              schema:
+                type: integer
+              required: true
+            X-APTOS-OLDEST-BLOCK-HEIGHT:
+              description: Oldest unpruned block height of the chain
+              schema:
+                type: integer
+              required: true
+            X-APTOS-CURSOR:
+              description: Cursor for the next page
+              schema:
+                type: string
+            X-APTOS-GAS-USED:
+              description: Amount of gas actually used for transaction execution
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      $ref: "#/components/schemas/ResourceType"
+                    data:
+                      $ref: "#/components/schemas/ResourceData"
+              example:
+                - type: 0x1::account::Account
+                  data:
+                    authentication_key: "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c"
+                    coin_register_events:
+                      counter: "1"
+                      guid:
+                        id:
+                          addr: "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c"
+                          creation_num: "0"
+                    guid_creation_num: "4"
+                    key_rotation_events:
+                      counter: "0"
+                      guid:
+                        id:
+                          addr: "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c"
+                          creation_num: "1"
+                    rotation_capability_offer:
+                      for:
+                        vec: []
+                    sequence_number: "1645002"
+                    signer_capability_offer:
+                      for:
+                        vec: []
+                - type: 0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>
+                  data:
+                    coin:
+                      value: "1767711144"
+                    deposit_events:
+                      counter: "137"
+                      guid:
+                        id:
+                          addr: "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c"
+                          creation_num: "2"
+                    frozen: false
+                    withdraw_events:
+                      counter: "13"
+                      guid:
+                        id:
+                          addr: "0xf92bc956b9e25f38a2e4829b58f03ca9724233985cdda3f818bc3e62d6ed7d9c"
+                          creation_num: "3"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "410":
+          $ref: "#/components/responses/410"
+        "429":
+          $ref: "#/components/responses/429"

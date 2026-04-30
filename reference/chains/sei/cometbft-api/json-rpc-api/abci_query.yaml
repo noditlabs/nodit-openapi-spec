@@ -1,0 +1,124 @@
+openapi: 3.1.0
+info:
+  title: SEI - ABCIQuery
+  version: 1.0.0
+servers:
+  - url: https://rpc-sei-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: abci_query
+      summary: ABCIQuery
+      description: Queries the application with a specific path and data.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: abci_query
+                params:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    path:
+                      type: string
+                      description: Application request path.
+                    data:
+                      type: string
+                      description: Hex-encoded serialized byte data.
+                    height:
+                      type: string
+                      description: Block height for the query.
+                    prove:
+                      type: string
+                      description: String boolean indicating whether to include proof.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: abci_query
+              params:
+                path: /store/foo/key
+                data: 636f6d6574626674
+                height: "1"
+                prove: "true"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  error:
+                    type: string
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      response:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          log:
+                            type: string
+                          height:
+                            type: string
+                          proof:
+                            type: string
+                          key:
+                            type: string
+                          value:
+                            type: string
+                          index:
+                            type: string
+                          code:
+                            type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  response:
+                    log: exists
+                    height: "1"
+                    proof: CgMIARIFCgNmb28=
+                    key: Zm9v
+                    value: YmFy
+                    index: "0"
+                    code: "0"

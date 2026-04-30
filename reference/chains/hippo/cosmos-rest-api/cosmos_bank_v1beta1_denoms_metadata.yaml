@@ -1,0 +1,183 @@
+openapi: 3.1.0
+info:
+  title: Hippo - cosmos_bank_v1beta1_denoms_metadata
+  version: 1.0.0
+servers:
+  - url: https://rest-hippo-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/bank/v1beta1/denoms_metadata:
+    get:
+      description: |-
+        DenomsMetadata queries the client metadata for all registered coin
+        denominations.
+      operationId: cosmos_bank_v1beta1_denoms_metadata
+      tags:
+        - bank
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  metadatas:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        description:
+                          type: string
+                        denom_units:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              denom:
+                                type: string
+                                description: denom represents the string name of the given denom unit (e.g uatom).
+                              exponent:
+                                type: integer
+                                format: int64
+                                description: |-
+                                  exponent represents power of 10 exponent that one must
+                                  raise the base_denom to in order to equal the given DenomUnit's denom
+                                  1 denom = 10^exponent base_denom
+                                  (e.g. with a base_denom of uatom, one can create a DenomUnit of 'atom' with
+                                  exponent = 6, thus: 1 atom = 10^6 uatom).
+                              aliases:
+                                type: array
+                                items:
+                                  type: string
+                                title: aliases is a list of string aliases for the given denom
+                            description: |-
+                              DenomUnit represents a struct that describes a given
+                              denomination unit of the basic token.
+                          title: denom_units represents the list of DenomUnit's for a given coin
+                        base:
+                          type: string
+                          description: base represents the base denom (should be the DenomUnit with exponent = 0).
+                        display:
+                          type: string
+                          description: |-
+                            display indicates the suggested denom that should be
+                            displayed in clients.
+                        name:
+                          type: string
+                          title: "name defines the name of the token (eg: Cosmos Atom)"
+                        symbol:
+                          type: string
+                          description: Token symbol primarily displayed on exchanges (e.g., ATOM). May be the same as display.
+                        uri:
+                          type: string
+                          description: URI of a document (on-chain or off-chain) containing additional information. Optional.
+                        uri_hash:
+                          type: string
+                          description: SHA256 hash of the document the URI points to. Used to verify document integrity. Optional.
+                      description: |-
+                        Metadata represents a struct that describes
+                        a basic token.
+                    description: metadata provides the client information for all the registered tokens.
+                  pagination:
+                    description: pagination defines an pagination for the response.
+                    type: object
+                    properties:
+                      next_key:
+                        type: string
+                        format: byte
+                        description: |-
+                          next_key is the key to be passed to PageRequest.key to
+                          query the next page most efficiently. It will be empty if
+                          there are no more results.
+                      total:
+                        type: string
+                        format: uint64
+                        title: |-
+                          total is total number of results available if PageRequest.count_total
+                          was set, its value is undefined otherwise
+                description: |-
+                  QueryDenomsMetadataResponse is the response type for the Query/DenomsMetadata RPC
+                  method.
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: byte
+        - name: pagination.offset
+          description: |-
+            offset is a numeric offset that can be used when key is unavailable.
+            It is less efficient than using key. Only one of offset or key should
+            be set.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uint64
+        - name: pagination.limit
+          description: |-
+            limit is the total number of results to be returned in the result page.
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uint64
+        - name: pagination.count_total
+          description: |-
+            count_total is set to true  to indicate that the result set should include
+            a count of the total number of items available for pagination in UIs.
+            count_total is only respected when offset is used. It is ignored when key
+            is set.
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: pagination.reverse
+          description: Set to true to return results in descending order.
+          in: query
+          required: false
+          schema:
+            type: boolean
+      security:
+        - api_key: []
+      summary: /cosmos/bank/v1beta1/denoms_metadata

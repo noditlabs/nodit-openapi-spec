@@ -1,0 +1,61 @@
+openapi: 3.1.0
+info:
+  title: Initia - initia_mstaking_v1_delegators_{delegator_address}_validators
+  version: 1.0.0
+servers:
+  - url: https://rest-initia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /initia/mstaking/v1/delegators/{delegator_address}/validators:
+    get:
+      description: Returns all validators the given delegator has delegated to.
+      operationId: initia_mstaking_v1_delegators_{delegator_address}_validators
+      tags:
+        - mstaking
+      responses:
+        "200":
+          description: Successful Response
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+      parameters:
+        - name: delegator_address
+          description: Delegator address (bech32).
+          in: path
+          required: true
+          example: init1qx02ephfxq6vp3eku8p36mful0xxk8cq74jw8p
+          schema:
+            type: string
+        - name: pagination.limit
+          description: Maximum number of results to return per page.
+          in: query
+          required: false
+          example: "10"
+          schema:
+            type: string
+            format: uint64
+      security:
+        - api_key: []
+      summary: /initia/mstaking/v1/delegators/{delegator_address}/validators

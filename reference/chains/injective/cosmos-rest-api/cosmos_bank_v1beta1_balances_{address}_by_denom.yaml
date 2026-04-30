@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  title: Injective - cosmos_bank_v1beta1_balances_{address}_by_denom
+  version: 1.0.0
+servers:
+  - url: https://rest-injective-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/bank/v1beta1/balances/{address}/by_denom:
+    get:
+      description: Balance queries the balance of a single coin for a single account.
+      operationId: cosmos_bank_v1beta1_balances_{address}_by_denom
+      tags:
+        - bank
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: |-
+                      Coin defines a token with a denomination and an amount.
+
+                      NOTE: The amount field is an Int which implements the custom method
+                      signatures required by gogoproto.
+                description: QueryBalanceResponse is the response type for the Query/Balance RPC method.
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      parameters:
+        - name: address
+          description: address is the address to query balances for.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: denom
+          description: denom is the coin denom to query balances for.
+          in: query
+          required: false
+          schema:
+            type: string
+      security:
+        - api_key: []
+      summary: /cosmos/bank/v1beta1/balances/{address}/by_denom

@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: Cosmos - cosmos_slashing_v1beta1_signing_infos
+  version: 1.0.0
+servers:
+  - url: https://rest-cosmos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /cosmos/slashing/v1beta1/signing_infos:
+    get:
+      description: Retrieves signing information for all validators.
+      operationId: cosmos_slashing_v1beta1_signing_infos
+      tags:
+        - slashing
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        start_height:
+                          type: string
+                          format: int64
+                          title: Height at which validator was first a candidate OR was un-jailed
+                        index_offset:
+                          type: string
+                          format: int64
+                          description: Index that increments each time the validator enters bonded state in a block, regardless of whether a pre-commit signature was included. Used with the signed_blocks_window parameter to determine the index in the missed block bitmap.
+                        jailed_until:
+                          type: string
+                          format: date-time
+                          description: Timestamp at which the validator will be jailed due to liveness downtime.
+                        tombstoned:
+                          type: boolean
+                          description: Whether the validator is tombstoned (removed from the validator set). Set when the validator commits equivocation or other configured misconduct.
+                        missed_blocks_counter:
+                          type: string
+                          format: int64
+                          description: |-
+                            A counter of missed (unsigned) blocks. It is used to avoid unnecessary
+                            reads in the missed block bitmap.
+                      description: |-
+                        ValidatorSigningInfo defines a validator's signing info for monitoring their
+                        liveness activity.
+                    title: info is the signing info of all validators
+                  pagination:
+                    type: object
+                    properties:
+                      next_key:
+                        type: string
+                        format: byte
+                        description: |-
+                          next_key is the key to be passed to PageRequest.key to
+                          query the next page most efficiently. It will be empty if
+                          there are no more results.
+                      total:
+                        type: string
+                        format: uint64
+                        title: |-
+                          total is total number of results available if PageRequest.count_total
+                          was set, its value is undefined otherwise
+                    description: |-
+                      PageResponse is to be embedded in gRPC response messages where the
+                      corresponding request message has used PageRequest.
+
+                       message SomeResponse {
+                               repeated Bar results = 1;
+                               PageResponse page = 2;
+                       }
+                title: |-
+                  QuerySigningInfosResponse is the response type for the Query/SigningInfos RPC
+                  method
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type_url:
+                          type: string
+                        value:
+                          type: string
+                          format: byte
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: byte
+        - name: pagination.offset
+          description: |-
+            offset is a numeric offset that can be used when key is unavailable.
+            It is less efficient than using key. Only one of offset or key should
+            be set.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uint64
+        - name: pagination.limit
+          description: |-
+            limit is the total number of results to be returned in the result page.
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uint64
+        - name: pagination.count_total
+          description: |-
+            count_total is set to true  to indicate that the result set should include
+            a count of the total number of items available for pagination in UIs.
+            count_total is only respected when offset is used. It is ignored when key
+            is set.
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: pagination.reverse
+          description: Set to true to return results in descending order.
+          in: query
+          required: false
+          schema:
+            type: boolean
+      security:
+        - api_key: []
+      summary: /cosmos/slashing/v1beta1/signing_infos

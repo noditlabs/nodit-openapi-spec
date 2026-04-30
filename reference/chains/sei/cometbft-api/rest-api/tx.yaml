@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: SEI - Tx
+  version: 1.0.0
+servers:
+  - url: https://rpc-sei-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /tx:
+    get:
+      security:
+        - api_key: []
+      operationId: tx
+      summary: Tx
+      description: Retrieves a specific transaction by its hash.
+      tags:
+        - rest-api
+      parameters:
+        - name: hash
+          in: query
+          required: true
+          description: Transaction hash to query.
+          schema:
+            type: string
+          example: "0xD70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED"
+        - name: prove
+          in: query
+          description: String boolean indicating whether to include proof.
+          schema:
+            type: string
+          example: "true"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      hash:
+                        type: string
+                      height:
+                        type: string
+                      index:
+                        type: integer
+                      tx_result:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          log:
+                            type: string
+                          gas_wanted:
+                            type: string
+                          gas_used:
+                            type: string
+                          tags:
+                            type: array
+                            items:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                key:
+                                  type: string
+                                value:
+                                  type: string
+                                index:
+                                  type: boolean
+                      tx:
+                        type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                  height: "1000"
+                  index: 0
+                  tx_result:
+                    log: "[]"
+                    gas_wanted: "200000"
+                    gas_used: "123456"
+                    tags:
+                      - key: action
+                        value: send
+                        index: true
+                  tx: a/encoded_tx/c

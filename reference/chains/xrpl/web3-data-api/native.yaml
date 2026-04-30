@@ -1,0 +1,702 @@
+openapi: 3.1.0
+info:
+  title: XRP Ledger - Web3 Data API
+  version: 1.0.0
+servers:
+  - url: https://web3.nodit.io/v1
+    description: Web3 Data API
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - MISSING_REQUIRED_PARAMETER
+                  - INVALID_PARAMETER
+                  - WRONG_RANGE_PARAMETER
+                  - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+              - code
+              - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: When a required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: "Missing required parameter: { PARAMETER_NAME }"
+            INVALID_PARAMETER:
+              summary: When an invalid value is provided for a parameter
+              value:
+                code: INVALID_PARAMETER
+                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+            WRONG_RANGE_PARAMETER:
+              summary: When a value outside the query range is provided
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: "Wrong range parameter: { PARAMETER_NAME }"
+            DEPRECATED_OPERATION:
+              summary: When a deprecated API is requested
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - NO_AUTHENTICATION_FOUND
+                  - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+              - code
+              - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: When authentication credentials are not included
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found
+            AUTHENTICATION_FAILED:
+              summary: When authentication credentials are mismatched or invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+              - code
+              - message
+          examples:
+            PERMISSION_DENIED:
+              summary: When accessing an unauthorized resource
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - WRONG_ENDPOINT
+                  - NOT_SUPPORTED_CHAIN
+                  - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+              - code
+              - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: When requesting a non-existent API path
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: When requesting an unsupported chain
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: When requesting a resource that does not exist on the server
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+              - code
+              - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: When requesting with an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+              - code
+              - message
+          examples:
+            TIMEOUT:
+              summary: When processing is not completed within the specified time
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - RESOURCE_ALREADY_EXISTS
+                  - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+              - code
+              - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: When attempting to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: When the request is rejected by the server
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+              - code
+              - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: When the payload exceeds the server's maximum limit
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+              - code
+              - message
+          examples:
+            TOO_LONG_URI:
+              summary: When the request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_MANY_REQUESTS
+                  - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+              - code
+              - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: When the rate limit is exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: When the quota limit is exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_SERVER_ERROR
+                  - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+              - code
+              - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: When an internal server error occurs
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: When processing fails temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+              - code
+              - message
+          examples:
+            UNAVAILABLE:
+              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /{chain}/{network}/native/getNativeTokenBalanceByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: xrpl-getNativeTokenBalanceByAccount
+      summary: Get Native Token Balance by Account
+      description: |
+        Retrieves the native token balance held by a specific account. The token type may vary depending on the selected chain. (e.g.,
+        For Bitcoin, you can query the BTC balance.)
+      x-seo-description: Retrieve the native token balance for a specific account on non-EVM chains like Aptos.
+      tags:
+        - Native Token API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - xrpl
+            default: xrpl
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - accountAddress
+              properties:
+                accountAddress:
+                  type: string
+                  description: Parameter specifying the account address for balance query. It is a Base58-encoded string of 25-35 characters, always starting with "r".
+                  pattern: ^r[1-9A-HJ-NP-Za-km-z]{25,35}$
+            example:
+              accountAddress: rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - ownerAddress
+                  - balance
+                properties:
+                  ownerAddress:
+                    type: string
+                    description: Required response field that returns the address of the account that owns the balance, a Base58-encoded string 25-35 characters in length, always starting with "r".
+                  balance:
+                    type: string
+                    description: Required response field indicating the total balance held by the account, providing the value in standard XRP units (1 XRP = 1,000,000 drops) instead of drops, the smallest XRP unit.
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/native/getNativeTokenBalanceChangesByAccount:
+    post:
+      security:
+        - api_key: []
+      operationId: xrpl-getNativeTokenBalanceChangesByAccount
+      summary: Get Native Token Balance Changes By Account
+      description: |
+        Retrieves the native token balance change history for a specific account.
+      x-seo-description: Track native token balance changes for an account over a specified time or block range.
+      tags:
+        - Native Token API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - xrpl
+            default: xrpl
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  required:
+                    - accountAddress
+                  properties:
+                    accountAddress:
+                      $ref: "#/paths/~1{chain}~1{network}~1native~1getNativeTokenBalanceByAccount/post/requestBody/content/application~1json/schema/properties/accountAddress"
+                    fromLedger:
+                      type: string
+                      description: |-
+                        Parameter specifying the starting ledger for the query. You can enter one of the following formats:
+                        - **ledger index**: Enter ledger number as a decimal string
+                        - **ledger hash**: 64-character hexadecimal string (excluding 0x prefix)
+                        - **ledger tag**: Enter "earliest" or "latest" (oldest or most recent ledger)
+
+                        Notes:
+                        - If provided without toLedger, results are queried from this ledger to the latest ledger.
+                        - fromLedger value cannot be greater than toLedger value.
+                        - If fromLedger and toLedger have the same value, only that ledger is queried.
+                        - "latest" for fromLedger is only allowed when toLedger is "latest".
+                      pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+                    toLedger:
+                      type: string
+                      description: |-
+                        Parameter specifying the ending ledger for the query. You can enter one of the following formats:
+                        - **ledger index**: Enter ledger number as a decimal string
+                        - **ledger hash**: 64-character hexadecimal string (excluding 0x prefix)
+                        - **ledger tag**: Enter "earliest" or "latest" (oldest or most recent ledger)
+
+                        Notes:
+                        - If provided without fromLedger, results are queried from genesis ledger to this ledger.
+                        - toLedger value cannot be less than fromLedger value.
+                        - If fromLedger and toLedger have the same value, only that ledger is queried.
+                        - "earliest" for toLedger is only allowed when fromLedger is "earliest".
+                      pattern: ^[0-9]+$|^0[xX][0-9a-fA-F]{64}|latest|earliest
+                    fromDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the start date for the query. Date must follow ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) including seconds.
+
+                        Notes:
+                        - If provided without toDate, results are queried from this date to the latest ledger.
+                        - fromDate value must be equal to or earlier than toDate value.
+                        - If fromDate and toDate are the same, only ledgers from that date are queried.
+                        - This field cannot be used together with fromLedger and toLedger.
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      default: "2025-01-01T00:00:00+00:00"
+                    toDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the end date for the query. Date must follow ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) including seconds.
+
+                        Notes:
+                        - If provided without fromDate, results are queried from genesis ledger creation to this date.
+                        - toDate value must be equal to or later than fromDate value.
+                        - If fromDate and toDate are the same, only ledgers from that date are queried.
+                        - This field cannot be used together with fromLedger and toLedger.
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                      default: "2025-01-31T00:00:00+00:00"
+                - type: object
+                  properties:
+                    page:
+                      type: integer
+                      description: |-
+                        The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                      pattern: ^(?:[1-9][0-9]?|100)$
+                    rpp:
+                      type: integer
+                      description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                      pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                    cursor:
+                      type: string
+                      description: |-
+                        The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    withCount:
+                      type: boolean
+                      description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                      default: false
+            example:
+              accountAddress: rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn
+              fromDate: "2026-01-01T00:00:00Z"
+              toDate: "2026-02-01T00:00:00Z"
+              page: 1
+              rpp: 10
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    required:
+                      - items
+                    properties:
+                      page:
+                        type: integer
+                        description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                      rpp:
+                        type: integer
+                        description: Field representing the number of results per page specified in the rpp parameter.
+                      cursor:
+                        type: string
+                        description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                      count:
+                        type: integer
+                        description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                      items:
+                        type: array
+                        description: Field representing the list of queried data.
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - ledgerIndex
+                            - ledgerTimestamp
+                            - transactionIndex
+                            - transactionHash
+                            - transactionType
+                            - affectedNodesIndex
+                            - account
+                            - currency
+                            - issuer
+                            - previousBalance
+                            - finalBalance
+                            - changeValue
+                          example:
+                            ledgerIndex: 95444296
+                            ledgerTimestamp: 1744608171
+                            transactionIndex: 2
+                            transactionHash: 8BAD7583234AC463E09D6CF160E352DFF5B008FC071DD5226A53809D89E7F409
+                            transactionType: OfferCreate
+                            affectedNodesIndex: 1
+                            account: rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn
+                            currency: USD
+                            issuer: rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq
+                            previousBalance: "1000.34"
+                            finalBalance: "900.12"
+                            balanceChange: "-100.22"
+                          properties:
+                            ledgerIndex:
+                              type: integer
+                              description: Integer value indicating the creation order of the ledger, used to identify its position (sequence number) on the network. Required field in the Balance Changes query API.
+                              example: 95444296
+                            ledgerTimestamp:
+                              type: integer
+                              description: The ledger's close time converted to a Unix timestamp. The close time recorded in the ledger header is expressed in seconds since the Ripple Epoch (January 1, 2000 00:00 UTC), which differs from the Unix Epoch (January 1, 1970 00:00 UTC) by 946,684,800 seconds. Thus ledgerTimestamp is the recorded close time plus 946,684,800 seconds. Required field in the Transfer query API.
+                              example: 1744608171
+                            transactionIndex:
+                              type: integer
+                              description: Index indicating the processing order of the transaction within the ledger. Used to determine the order of transactions in the ledger. Required field in the Balance Changes query API.
+                              example: 2
+                            transactionHash:
+                              type: string
+                              description: A 256-bit (64-digit hexadecimal) cryptographic hash that uniquely identifies the transaction. Used for transaction data integrity and identification. Required field in the Balance Changes query API.
+                              example: 8BAD7583234AC463E09D6CF160E352DFF5B008FC071DD5226A53809D89E7F409
+                            transactionType:
+                              type: string
+                              description: String indicating the transaction type (Payment, OfferCreate, EscrowCreate, etc.). Required field in the Transfer query API.
+                              example: OfferCreate
+                            affectedNodesIndex:
+                              type: integer
+                              description: Index of the node within the AffectedNodes array.
+                              example: 1
+                            account:
+                              type: string
+                              description: Account address whose balance was changed by the transaction. The account address is a Base58-encoded string 25-35 characters in length, starting with 'r'.
+                              example: rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn
+                            currency:
+                              type: string
+                              description: Indicates the currency code of the asset. Typically uses ISO 4217 standard codes (e.g. "USD", "EUR"), but 160-bit custom codes may also be used. Custom codes are expressed as 40-character hexadecimal strings and are used for proprietary assets defined by specific projects or platforms (e.g. "SOLO"). For XRP, the fixed string "XRP" is used in the currency field and is returned in the same structure as IOU assets.
+                              example: USD
+                            issuer:
+                              type: string
+                              description: The address of the account that issued the asset. Even with the same currency code, asset credibility and risk may vary by issuer. Thus, the XRP Ledger uniquely identifies assets by the combination of currency code and issuer. Each asset's trustworthiness largely depends on the issuer's reputation. This field is a Base58-encoded string 25-35 characters in length, always starting with 'r'. XRP is a native asset with no issuer; in that case, issuer is shown as an empty string ("").
+                              example: rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq
+                            previousBalance:
+                              type: string
+                              description: Amount of the asset before the change. For XRP, expressed in XRP units where 1 XRP equals 1,000,000 drops.
+                              example: "1000.34"
+                            finalBalance:
+                              type: string
+                              description: Amount of the asset after the change. For XRP, expressed in XRP units where 1 XRP equals 1,000,000 drops.
+                              example: "900.12"
+                            balanceChange:
+                              type: string
+                              description: Amount changed by the transaction, including whether it increased or decreased. For XRP, expressed in XRP units where 1 XRP equals 1,000,000 drops.
+                              example: "-100.22"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"

@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: Initia - ABCIInfo
+  version: 1.0.0
+servers:
+  - url: https://rpc-initia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /abci_info:
+    get:
+      security:
+        - api_key: []
+      operationId: abci_info
+      summary: ABCIInfo
+      description: Retrieves basic information about the ABCI application.
+      tags:
+        - rest-api
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      response:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          data:
+                            type: string
+                          version:
+                            type: string
+                          app_version:
+                            type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  response:
+                    data: gaiad
+                    version: 0.38.0
+                    app_version: "10"

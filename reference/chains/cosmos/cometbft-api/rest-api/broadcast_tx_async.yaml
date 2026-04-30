@@ -1,0 +1,76 @@
+openapi: 3.1.0
+info:
+  title: Cosmos - BroadCastTxAsync
+  version: 1.0.0
+servers:
+  - url: https://rpc-cosmos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /broadcast_tx_async:
+    get:
+      security:
+        - api_key: []
+      operationId: broadcast_tx_async
+      summary: BroadCastTxAsync
+      description: Broadcasts a transaction asynchronously and returns immediately. Does not wait for CheckTx or DeliverTx results.
+      tags:
+        - rest-api
+      parameters:
+        - name: tx
+          in: query
+          required: true
+          description: Encoded transaction.
+          schema:
+            type: string
+          example: a/encoded_tx/c
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  error:
+                    type: string
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      code:
+                        type: string
+                      data:
+                        type: string
+                      log:
+                        type: string
+                      codespace:
+                        type: string
+                      hash:
+                        type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  code: "0"
+                  data: ""
+                  log: ""
+                  codespace: ""
+                  hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED

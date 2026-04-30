@@ -1,0 +1,1358 @@
+openapi: 3.1.0
+info:
+  title: Aptos - Webhook API
+  version: 1.0.0
+servers:
+  - url: https://web3.nodit.io/v1
+    description: Webhook API
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - MISSING_REQUIRED_PARAMETER
+                  - INVALID_PARAMETER
+                  - WRONG_RANGE_PARAMETER
+                  - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+              - code
+              - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: When a required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: "Missing required parameter: { PARAMETER_NAME }"
+            INVALID_PARAMETER:
+              summary: When an invalid value is provided for a parameter
+              value:
+                code: INVALID_PARAMETER
+                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+            WRONG_RANGE_PARAMETER:
+              summary: When a value outside the query range is provided
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: "Wrong range parameter: { PARAMETER_NAME }"
+            DEPRECATED_OPERATION:
+              summary: When a deprecated API is requested
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - NO_AUTHENTICATION_FOUND
+                  - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+              - code
+              - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: When authentication credentials are not included
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found
+            AUTHENTICATION_FAILED:
+              summary: When authentication credentials are mismatched or invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+              - code
+              - message
+          examples:
+            PERMISSION_DENIED:
+              summary: When accessing an unauthorized resource
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - WRONG_ENDPOINT
+                  - NOT_SUPPORTED_CHAIN
+                  - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+              - code
+              - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: When requesting a non-existent API path
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: When requesting an unsupported chain
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: When requesting a resource that does not exist on the server
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+              - code
+              - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: When requesting with an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+              - code
+              - message
+          examples:
+            TIMEOUT:
+              summary: When processing is not completed within the specified time
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - RESOURCE_ALREADY_EXISTS
+                  - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+              - code
+              - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: When attempting to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: When the request is rejected by the server
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+              - code
+              - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: When the payload exceeds the server's maximum limit
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+              - code
+              - message
+          examples:
+            TOO_LONG_URI:
+              summary: When the request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_MANY_REQUESTS
+                  - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+              - code
+              - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: When the rate limit is exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: When the quota limit is exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_SERVER_ERROR
+                  - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+              - code
+              - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: When an internal server error occurs
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: When processing fails temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+              - code
+              - message
+          examples:
+            UNAVAILABLE:
+              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /{chain}/{network}/webhooks:
+    post:
+      security:
+        - api_key: []
+      operationId: aptos-createWebhook
+      summary: Create Webhook
+      description: |+
+        API for creating a Webhook. Create a Webhook by providing subscription details and Webhook URL. Once created, events will be sent to the Webhook URL. On creation, the API returns the Webhook's Subscription ID, which you can use to query, update, and delete the Webhook.
+
+      x-seo-description: Create a new webhook subscription to receive real-time blockchain event notifications to your endpoint.
+      tags:
+        - Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - testnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                eventType:
+                  type: string
+                  description: Parameter that specifies the event type identifier to subscribe to via Webhook. For information on supported event types, refer to the Event Types page.
+                  enum:
+                    - EVENT
+                    - TRANSACTION
+                description:
+                  type: string
+                  description: Parameter that specifies the description of the event.
+                notification:
+                  type: object
+                  description: Parameter that specifies the information required to receive notifications when events occur.
+                  properties:
+                    webhookUrl:
+                      type: string
+                      description: Parameter that specifies the webhook URL to receive notifications when subscribed events occur. Must be a publicly accessible URL.
+                isInstant:
+                  type: boolean
+                  description: |-
+                    Parameter that specifies whether to enable the Instant Webhook option. Defaults to false when not specified.
+                    - true: Enables the Instant Webhook option. You can receive Webhook messages immediately when the event is detected, regardless of block confirmation status.
+                    - false: Disables the Instant Webhook option. Messages are sent only after the block containing the event transaction has been confirmed.
+                condition:
+                  type: object
+                  description: Field for defining detailed conditions of the events you want to subscribe to. Available conditions vary by event type, so refer to the Webhook Types page for usage.
+                  oneOf:
+                    - title: EVENT
+                      description: Sends a notification whenever a specified event occurs. Users can quickly identify important activities happening on the network.
+                      type: object
+                      required:
+                        - eventType
+                        - eventAccountAddress
+                      properties:
+                        eventType:
+                          type: string
+                          description: |
+                            The event type to monitor. Event types refer to the name of the event struct defined in the module. Enter in the format `module_address::module_name::event_name`.
+                            > 📘 Can't `0x1::transaction_fee::FeeStatement` be used in eventType?
+                            > No. This event is included in all user transactions that consume gas fees.
+                            > Therefore, there is no need to subscribe to it as a separate event. We recommend subscribing to the Transaction event instead.
+                          default: 0x1::account::CoinRegisterEvent
+                          example:
+                            - 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                            - 0x1::coin::CoinDeposit
+                        eventAccountAddress:
+                          type: string
+                          description: |
+                            The address that emits the event you want to monitor.
+                            > 📘 Must eventAccountAddress be 0x0 for Module Events?
+                            > Yes. When eventType is "Module Events", you must set eventAccountAddress to "0x0". For "Event-Handler Events", enter the account address that emitted the event. For more details on event types, see the [Aptos official documentation](https://aptos.dev/en/network/blockchain/events).
+                          default: "0x0"
+                          example:
+                            - "0x1"
+                            - "0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d"
+                        eventData:
+                          type: string
+                          format: json
+                          description: Object specifying event data filtering conditions. Use this field to filter for specific events by specifying key-value pairs. Supports JSON object format with up to 3 levels of nesting. Filtering applies only when the specified keys and values exactly match the event data.
+                          example:
+                            - "{ transfer: { sender: \"0xcafe\", receiver: \"0xface\" } }"
+                    - title: TRANSACTION
+                      description: When you configure the API with a specific event type (eventType) and the account that emits the event (eventAccountAddress), this feature returns all details of the transaction containing that event type whenever it occurs. When an event occurs, you can view the full transaction details including sender, receiver, amount, called functions, and related data, making it useful for system monitoring.
+                      type: object
+                      oneOf:
+                        - title: function condition set
+                          required:
+                            - payloadFunction
+                          properties:
+                            payloadFunction:
+                              type: string
+                              description: The function to monitor. Enter in the format `module_address::module_name::function_name`.
+                              default: 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
+                              example:
+                                - 0x1::aptos_account::transfer
+                                - 0x1::aptos_account::transfer_coins
+                                - 0x1::primary_fungible_store::transfer
+                        - title: event condition set
+                          required:
+                            - eventType
+                            - eventAccountAddress
+                          properties:
+                            eventType:
+                              type: string
+                              description: |
+                                The event type to monitor. Event types refer to the name of the event struct defined in the module. Enter in the format `module_address::module_name::event_name`.
+                                > 📘 Can't `0x1::transaction_fee::FeeStatement` be used in eventType?
+                                > No. This event is included in all user transactions that consume gas fees.
+                                > Therefore, there is no need to subscribe to it as a separate event. We recommend subscribing to the Transaction event instead.
+                              default: 0x1::account::CoinRegisterEvent
+                              example:
+                                - 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                                - 0x1::coin::CoinDeposit
+                            eventAccountAddress:
+                              type: string
+                              description: |
+                                The address that emits the event you want to monitor.
+                                > 📘 Must eventAccountAddress be 0x0 for Module Events?
+                                > Yes. When eventType is "Module Events", you must set eventAccountAddress to "0x0". For "Event-Handler Events", enter the account address that emitted the event. For more details on event types, see the [Aptos official documentation](https://aptos.dev/en/network/blockchain/events).
+                              default: "0x0"
+                              example:
+                                - "0x1"
+                                - "0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d"
+                            eventData:
+                              type: string
+                              format: json
+                              description: Object specifying event data filtering conditions. Use this field to filter for specific events by specifying key-value pairs. Supports JSON object format with up to 3 levels of nesting. Filtering applies only when the specified keys and values exactly match the event data.
+                              example:
+                                - "{ transfer: { sender: \"0xcafe\", receiver: \"0xface\" } }"
+                        - title: function and event condition set
+                          required:
+                            - payloadFunction
+                            - eventType
+                            - eventAccountAddress
+                          properties:
+                            payloadFunction:
+                              type: string
+                              description: The function to monitor. Enter in the format `module_address::module_name::function_name`.
+                              default: 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
+                              example:
+                                - 0x1::aptos_account::transfer
+                                - 0x1::aptos_account::transfer_coins
+                                - 0x1::primary_fungible_store::transfer
+                            eventType:
+                              type: string
+                              description: |
+                                The event type to monitor. Event types refer to the name of the event struct defined in the module. Enter in the format `module_address::module_name::event_name`.
+                                > 📘 Can't `0x1::transaction_fee::FeeStatement` be used in eventType?
+                                > No. This event is included in all user transactions that consume gas fees.
+                                > Therefore, there is no need to subscribe to it as a separate event. We recommend subscribing to the Transaction event instead.
+                              default: 0x1::account::CoinRegisterEvent
+                              example:
+                                - 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                                - 0x1::coin::CoinDeposit
+                            eventAccountAddress:
+                              type: string
+                              description: |
+                                The address that emits the event you want to monitor.
+                                > 📘 Must eventAccountAddress be 0x0 for Module Events?
+                                > Yes. When eventType is "Module Events", you must set eventAccountAddress to "0x0". For "Event-Handler Events", enter the account address that emitted the event. For more details on event types, see the [Aptos official documentation](https://aptos.dev/en/network/blockchain/events).
+                              default: "0x0"
+                              example:
+                                - "0x1"
+                                - "0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d"
+                            eventData:
+                              type: string
+                              format: json
+                              description: Object specifying event data filtering conditions. Use this field to filter for specific events by specifying key-value pairs. Supports JSON object format with up to 3 levels of nesting. Filtering applies only when the specified keys and values exactly match the event data.
+                              example:
+                                - "{ transfer: { sender: \"0xcafe\", receiver: \"0xface\" } }"
+              required:
+                - eventType
+                - notification
+                - condition
+            example:
+              eventType: 0x1::coin::CoinDeposit
+              description: Your webhook description
+              notification:
+                webhookUrl: https://your-webhook-url.com
+              isInstant: false
+              condition:
+                type: BLOCK_PERIOD
+                block: 1
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscriptionId:
+                    type: string
+                    description: Field representing the subscriptionId assigned to the Webhook. subscriptionId is a unique value that identifies the Webhook and is used to query, update, or delete the Webhook.
+                  description:
+                    type: string
+                    description: Field representing the Webhook description.
+                  protocol:
+                    type: string
+                    description: Field representing the chain subscribed to via this Webhook. (e.g., ETHEREUM, POLYGON, OPTIMISM, ...)
+                  network:
+                    type: string
+                    description: Field representing the network subscribed to via this Webhook. (e.g., MAINNET, SEPOLIA, MUMBAI, ...)
+                  eventType:
+                    type: string
+                    description: Field representing the event type subscribed to by this Webhook.
+                  notification:
+                    type: object
+                    required:
+                      - webhookUrl
+                    description: Field representing the information for receiving notifications via Webhook.
+                    properties:
+                      webhookUrl:
+                        type: string
+                        description: Field representing the URL for receiving Webhook notifications.
+                  signingKey:
+                    type: string
+                    description: Field representing the signing key for authenticating Webhook notifications. After receiving a Webhook notification, use the signing key to verify the validity of the notification. The signing key is automatically generated when the Webhook is created and cannot be changed when updating the Webhook.
+                  isInstant:
+                    type: boolean
+                    description: |-
+                      Field that specifies whether the Instant Webhook option is enabled.
+                      - true: When enabled, you can receive Webhook messages immediately when the monitored event is detected, regardless of block confirmation status.
+                      - false: When disabled, messages are sent only after the block containing the event transaction has been confirmed.
+                  condition:
+                    type: object
+                    description: Field representing the Webhook subscription conditions. Conditions may vary by event type.
+                  createdAt:
+                    type: string
+                    description: Indicates when the webhook event occurred and the log was created. This field is returned in ISO 8601 format.
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+    get:
+      security:
+        - api_key: []
+      operationId: aptos-getWebhook
+      summary: Get Webhook
+      description: |+
+        API for querying Webhook information by Subscription ID.
+
+      x-seo-description: Retrieve details of a specific webhook subscription by its subscription ID.
+      tags:
+        - Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - testnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - name: subscriptionId
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "5001"
+          description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information. Enter an empty value to query all Webhook information.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - total
+                  - page
+                  - rpp
+                  - items
+                properties:
+                  total:
+                    type: number
+                    description: Total number of events matching the criteria.
+                  page:
+                    type: number
+                    description: Current page number of the query.
+                  rpp:
+                    type: number
+                    description: Number of events per page returned based on the request.
+                  items:
+                    type: array
+                    description: Array containing event detail data.
+                    items:
+                      type: object
+                      required:
+                        - subscriptionId
+                        - description
+                        - protocol
+                        - network
+                        - subscriptionType
+                        - eventType
+                        - notification
+                        - isActive
+                        - updatedAt
+                        - createdAt
+                        - condition
+                      properties:
+                        subscriptionId:
+                          type: string
+                          description: Field representing the subscriptionId assigned to the Webhook. subscriptionId is a unique value that identifies the Webhook and is used to query, update, or delete the Webhook.
+                        description:
+                          type: string
+                          description: Field representing the Webhook description.
+                        protocol:
+                          type: string
+                          description: Field representing the chain subscribed to via this Webhook. (e.g., ETHEREUM, POLYGON, OPTIMISM, ...)
+                        network:
+                          type: string
+                          description: Field representing the network subscribed to via this Webhook. (e.g., MAINNET, SEPOLIA, MUMBAI, ...)
+                        subscriptionType:
+                          type: string
+                          description: Field for identifying the subscription type.
+                          example: WEBHOOK
+                        eventType:
+                          type: string
+                          description: Field representing the event type subscribed to by this Webhook.
+                        notification:
+                          type: object
+                          required:
+                            - webhookUrl
+                          description: Field representing the information for receiving notifications via Webhook.
+                          properties:
+                            webhookUrl:
+                              type: string
+                              description: Field representing the URL for receiving Webhook notifications.
+                        isInstant:
+                          type: boolean
+                          description: |-
+                            Field that specifies whether the Instant Webhook option is enabled.
+                            - true: When enabled, you can receive Webhook messages immediately when the monitored event is detected, regardless of block confirmation status.
+                            - false: When disabled, messages are sent only after the block containing the event transaction has been confirmed.
+                        isActive:
+                          type: boolean
+                          description: Field representing whether the Webhook is active. true when the Webhook is enabled, false when disabled. When disabled, you cannot receive notifications via the Webhook.
+                        updatedAt:
+                          type: string
+                          description: Indicates when there was a change in the webhook delivery result (status), e.g., when a failed delivery was retried and changed to success. This field is returned in ISO 8601 format.
+                        createdAt:
+                          type: string
+                          description: Indicates when the webhook event occurred and the log was created. This field is returned in ISO 8601 format.
+                        condition:
+                          type: object
+                          description: Field representing the Webhook subscription conditions. Conditions may vary by event type.
+              example:
+                total: 1
+                rpp: 10
+                page: 1
+                items:
+                  - subscriptionId: "31"
+                    description: test
+                    protocol: ETHEREUM
+                    network: MAINNET
+                    subscriptionType: WEBHOOK
+                    eventType: BLOCK_PERIOD
+                    notification:
+                      webhookUrl: https://webhook.mock.server/blockperiod
+                    isActive: true
+                    isInstant: true
+                    updatedAt: "2023-04-21T09:40:49.678Z"
+                    createdAt: "2023-04-21T09:40:49.678Z"
+                    condition:
+                      period: 1
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/webhooks/{subscriptionId}:
+    delete:
+      security:
+        - api_key: []
+      operationId: aptos-deleteWebhook
+      summary: Delete Webhook
+      description: |+
+        API for deleting a Webhook. Deleting a Webhook cancels the subscription, and you will no longer receive events.
+
+      x-seo-description: Delete an existing webhook subscription by its subscription ID to stop receiving event notifications.
+      tags:
+        - Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - testnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information.
+          schema:
+            type: string
+          example:
+            subscriptionId: "5001"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: Field representing the call result. Returns true on success, false on failure.
+              example:
+                result: true
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+    patch:
+      security:
+        - api_key: []
+      operationId: aptos-updateWebhook
+      summary: Update Webhook
+      description: |+
+        You can modify the subscription condition of a Webhook, or activate or deactivate a Webhook.
+
+      x-seo-description: Update the configuration of an existing webhook subscription, including URL and event filters.
+      tags:
+        - Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - testnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "5001"
+          description: Parameter to specify the subscriptionId assigned to the Webhook you want to query. You can use the subscriptionId returned when creating a Webhook to query, modify, and delete Webhook information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              type: object
+              properties:
+                notification:
+                  type: object
+                  description: Parameter specifying the information required to receive notifications when an event occurs.
+                  properties:
+                    webhookUrl:
+                      type: string
+                      description: Parameter specifying the webhook URL to receive notifications when the subscribed event occurs. A publicly accessible URL must be specified.
+                description:
+                  type: string
+                  description: Parameter specifying the description of the event.
+                isActive:
+                  type: boolean
+                  description: Parameter specifying whether the Webhook is active. When set to true, the Webhook is activated; when set to false, it is deactivated. A deactivated Webhook cannot receive notifications but is not deleted.
+                condition:
+                  type: object
+                  description: Field for defining detailed conditions of the events you want to subscribe to. Available conditions vary by event type, so refer to the Webhook Types page for usage.
+                  oneOf:
+                    - title: EVENT
+                      description: Sends a notification whenever a specified event occurs. Users can quickly identify important activities happening on the network.
+                      type: object
+                      required:
+                        - eventType
+                        - eventAccountAddress
+                      properties:
+                        eventType:
+                          type: string
+                          description: |
+                            The event type to monitor. Event types refer to the name of the event struct defined in the module. Enter in the format `module_address::module_name::event_name`.
+                            > 📘 Can't `0x1::transaction_fee::FeeStatement` be used in eventType?
+                            > No. This event is included in all user transactions that consume gas fees.
+                            > Therefore, there is no need to subscribe to it as a separate event. We recommend subscribing to the Transaction event instead.
+                          default: 0x1::account::CoinRegisterEvent
+                          example:
+                            - 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                            - 0x1::coin::CoinDeposit
+                        eventAccountAddress:
+                          type: string
+                          description: |
+                            The address that emits the event you want to monitor.
+                            > 📘 Must eventAccountAddress be 0x0 for Module Events?
+                            > Yes. When eventType is "Module Events", you must set eventAccountAddress to "0x0". For "Event-Handler Events", enter the account address that emitted the event. For more details on event types, see the [Aptos official documentation](https://aptos.dev/en/network/blockchain/events).
+                          default: "0x0"
+                          example:
+                            - "0x1"
+                            - "0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d"
+                        eventData:
+                          type: string
+                          format: json
+                          description: Object specifying event data filtering conditions. Use this field to filter for specific events by specifying key-value pairs. Supports JSON object format with up to 3 levels of nesting. Filtering applies only when the specified keys and values exactly match the event data.
+                          example:
+                            - "{ transfer: { sender: \"0xcafe\", receiver: \"0xface\" } }"
+                    - title: TRANSACTION
+                      description: When you configure the API with a specific event type (eventType) and the account that emits the event (eventAccountAddress), this feature returns all details of the transaction containing that event type whenever it occurs. When an event occurs, you can view the full transaction details including sender, receiver, amount, called functions, and related data, making it useful for system monitoring.
+                      type: object
+                      oneOf:
+                        - title: function condition set
+                          required:
+                            - payloadFunction
+                          properties:
+                            payloadFunction:
+                              type: string
+                              description: The function to monitor. Enter in the format `module_address::module_name::function_name`.
+                              default: 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
+                              example:
+                                - 0x1::aptos_account::transfer
+                                - 0x1::aptos_account::transfer_coins
+                                - 0x1::primary_fungible_store::transfer
+                        - title: event condition set
+                          required:
+                            - eventType
+                            - eventAccountAddress
+                          properties:
+                            eventType:
+                              type: string
+                              description: |
+                                The event type to monitor. Event types refer to the name of the event struct defined in the module. Enter in the format `module_address::module_name::event_name`.
+                                > 📘 Can't `0x1::transaction_fee::FeeStatement` be used in eventType?
+                                > No. This event is included in all user transactions that consume gas fees.
+                                > Therefore, there is no need to subscribe to it as a separate event. We recommend subscribing to the Transaction event instead.
+                              default: 0x1::account::CoinRegisterEvent
+                              example:
+                                - 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                                - 0x1::coin::CoinDeposit
+                            eventAccountAddress:
+                              type: string
+                              description: |
+                                The address that emits the event you want to monitor.
+                                > 📘 Must eventAccountAddress be 0x0 for Module Events?
+                                > Yes. When eventType is "Module Events", you must set eventAccountAddress to "0x0". For "Event-Handler Events", enter the account address that emitted the event. For more details on event types, see the [Aptos official documentation](https://aptos.dev/en/network/blockchain/events).
+                              default: "0x0"
+                              example:
+                                - "0x1"
+                                - "0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d"
+                            eventData:
+                              type: string
+                              format: json
+                              description: Object specifying event data filtering conditions. Use this field to filter for specific events by specifying key-value pairs. Supports JSON object format with up to 3 levels of nesting. Filtering applies only when the specified keys and values exactly match the event data.
+                              example:
+                                - "{ transfer: { sender: \"0xcafe\", receiver: \"0xface\" } }"
+                        - title: function and event condition set
+                          required:
+                            - payloadFunction
+                            - eventType
+                            - eventAccountAddress
+                          properties:
+                            payloadFunction:
+                              type: string
+                              description: The function to monitor. Enter in the format `module_address::module_name::function_name`.
+                              default: 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::roll_premium
+                              example:
+                                - 0x1::aptos_account::transfer
+                                - 0x1::aptos_account::transfer_coins
+                                - 0x1::primary_fungible_store::transfer
+                            eventType:
+                              type: string
+                              description: |
+                                The event type to monitor. Event types refer to the name of the event struct defined in the module. Enter in the format `module_address::module_name::event_name`.
+                                > 📘 Can't `0x1::transaction_fee::FeeStatement` be used in eventType?
+                                > No. This event is included in all user transactions that consume gas fees.
+                                > Therefore, there is no need to subscribe to it as a separate event. We recommend subscribing to the Transaction event instead.
+                              default: 0x1::account::CoinRegisterEvent
+                              example:
+                                - 0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d::eragon_lucky_wheel::EragonLuckyWheelEvent
+                                - 0x1::coin::CoinDeposit
+                            eventAccountAddress:
+                              type: string
+                              description: |
+                                The address that emits the event you want to monitor.
+                                > 📘 Must eventAccountAddress be 0x0 for Module Events?
+                                > Yes. When eventType is "Module Events", you must set eventAccountAddress to "0x0". For "Event-Handler Events", enter the account address that emitted the event. For more details on event types, see the [Aptos official documentation](https://aptos.dev/en/network/blockchain/events).
+                              default: "0x0"
+                              example:
+                                - "0x1"
+                                - "0x6d138096fb880d1c16b48f10686b98a96000c0ac18501425378f784c6b81c34d"
+                            eventData:
+                              type: string
+                              format: json
+                              description: Object specifying event data filtering conditions. Use this field to filter for specific events by specifying key-value pairs. Supports JSON object format with up to 3 levels of nesting. Filtering applies only when the specified keys and values exactly match the event data.
+                              example:
+                                - "{ transfer: { sender: \"0xcafe\", receiver: \"0xface\" } }"
+              example:
+                notification:
+                  webhookUrl: https://your-webhook-url.com
+                description: Your webhook description
+                isActive: false
+                condition:
+                  type: BLOCK_PERIOD
+                  block: 2
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: Field indicating the result of the call. Returns true on success and false on failure.
+              example:
+                result: true
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/webhooks/history:
+    get:
+      security:
+        - api_key: []
+      operationId: aptos-getWebhookHistory
+      summary: Get Webhook History
+      description: |-
+        API for querying Webhook call history. Use this API to check Webhook execution status and call results. Call history includes Webhook event success/failure status and detailed information for each call.
+
+        > 💡 History data retention period
+        > Only Webhook call history from the last 30 days is stored. Data older than 30 days is not retained, so you must query needed history within that period.
+      x-seo-description: Retrieve the delivery history of a webhook subscription, including event logs and response statuses.
+      tags:
+        - Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - aptos
+            default: aptos
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - testnet
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - name: subscriptionId
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "5001"
+          description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information. Enter an empty value to query all Webhook information.
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 1
+          description: Specifies the page to query. Default is 1.
+        - name: rpp
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "10"
+          description: Specifies the number of events to query per page. Value range is 1 to 100. Default is 10.
+        - name: withEventMessage
+          in: query
+          required: false
+          schema:
+            type: boolean
+            example: true
+          description: Specifies whether to include event messages in the query. Default is false.
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - SUCCESS
+              - FAIL
+            example: SUCCESS
+          description: Filters events by webhook call success (SUCCESS) or failure (FAIL).
+        - name: startAt
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: "2026-01-01T00:00:00Z"
+          description: Specifies the start time for event occurrence in ISO 8601 format.
+        - name: endAt
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+            example: "2026-01-01T00:00:00Z"
+          description: Specifies the end time for event occurrence in ISO 8601 format.
+        - name: startSequenceNumber
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "100"
+          description: Specifies the sequenceNumber to start the query from.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                    description: Total number of events matching the criteria.
+                  page:
+                    type: number
+                    description: Current page number of the query.
+                  rpp:
+                    type: number
+                    description: Number of events per page returned based on the request.
+                  items:
+                    type: array
+                    description: Array containing event detail data.
+                    items:
+                      type: object
+                      properties:
+                        subscriptionId:
+                          type: string
+                          description: Field representing the subscriptionId assigned to the Webhook. subscriptionId is a unique value that identifies the Webhook and is used to query, update, or delete the Webhook.
+                        description:
+                          type: string
+                          description: Field representing the Webhook description.
+                        protocol:
+                          type: string
+                          description: Field representing the chain subscribed to via this Webhook. (e.g., ETHEREUM, POLYGON, OPTIMISM, ...)
+                        network:
+                          type: string
+                          description: Field representing the network subscribed to via this Webhook. (e.g., MAINNET, SEPOLIA, MUMBAI, ...)
+                        subscriptionType:
+                          type: string
+                          description: Field for identifying the subscription type.
+                          example: WEBHOOK
+                        eventType:
+                          type: string
+                          description: Field representing the event type subscribed to by this Webhook.
+                        notification:
+                          type: object
+                          required:
+                            - webhookUrl
+                          description: Field representing the information for receiving notifications via Webhook.
+                          properties:
+                            webhookUrl:
+                              type: string
+                              description: Field representing the URL for receiving Webhook notifications.
+                        isActive:
+                          type: boolean
+                          description: Field representing whether the Webhook is active. true when the Webhook is enabled, false when disabled. When disabled, you cannot receive notifications via the Webhook.
+                        updatedAt:
+                          type: string
+                          description: Indicates when there was a change in the webhook delivery result (status), e.g., when a failed delivery was retried and changed to success. This field is returned in ISO 8601 format.
+                        createdAt:
+                          type: string
+                          description: Indicates when the webhook event occurred and the log was created. This field is returned in ISO 8601 format.
+                        condition:
+                          type: object
+                          description: Field representing the Webhook subscription conditions. Conditions may vary by event type.
+              example:
+                total: 146779
+                rpp: 2
+                page: 1
+                items:
+                  - id: "1596"
+                    subscriptionId: "103524"
+                    sequenceNumber: "20"
+                    status: FAIL
+                    updatedAt: "2024-12-13T02:06:09.000Z"
+                    createdAt: "2024-12-13T02:06:07.000Z"
+                    eventMessage:
+                      subscriptionId: "103524"
+                      sequenceNumber: "20"
+                      eventType: EVENT
+                      network: MAINNET
+                      protocol: APTOS
+                      event:
+                        eventType: 0x1::block::NewBlockEvent
+                        eventAccountAddress: null
+                        payloadFunction: null
+                        messages:
+                          - - guid:
+                                creation_number: "3"
+                                account_address: "0x0000000000000000000000000000000000000000000000000000000000000001"
+                              sequence_number: "264073031"
+                              type: 0x1::block::NewBlockEvent
+                              data:
+                                epoch: "9559"
+                                failed_proposer_indices: []
+                                hash: "0x7d360d5e499d93eb87ca34fe3f8f18eab602cb8d365e402da750b7e6c5786c4d"
+                                height: "264073031"
+                                previous_block_votes_bitvec: "0x177fffef57fbbf7ff63c15cfef4679a1bb79d8"
+                                proposer: "0xa651c7c52d64a2014379902bbc92439d196499bcc36d94ff0395aa45837c66db"
+                                round: "13485"
+                                time_microseconds: "1734048334428800"
+                  - id: "1597"
+                    subscriptionId: "103524"
+                    sequenceNumber: "21"
+                    status: FAIL
+                    updatedAt: "2024-12-13T02:26:29.000Z"
+                    createdAt: "2024-12-13T02:26:28.000Z"
+                    eventMessage:
+                      subscriptionId: "103524"
+                      sequenceNumber: "21"
+                      eventType: EVENT
+                      network: MAINNET
+                      protocol: APTOS
+                      event:
+                        eventType: 0x1::block::NewBlockEvent
+                        eventAccountAddress: null
+                        payloadFunction: null
+                        messages:
+                          - - guid:
+                                creation_number: "3"
+                                account_address: "0x0000000000000000000000000000000000000000000000000000000000000001"
+                              sequence_number: "264073128"
+                              type: 0x1::block::NewBlockEvent
+                              data:
+                                epoch: "9559"
+                                failed_proposer_indices: []
+                                hash: "0x53570fbecfb44c723c2db3bac968d467bd4d4a8185a383b094f7578c4a3f014"
+                                height: "264073128"
+                                previous_block_votes_bitvec: "0x7f048b4a700f7259fff3fafb9dc89141c2ddfc"
+                                proposer: "0x6d00d52f94579e51308ae83841b5133e3a7e93b51fcd8cf338d766e3f0331026"
+                                round: "13582"
+                                time_microseconds: "1734048354656343"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"

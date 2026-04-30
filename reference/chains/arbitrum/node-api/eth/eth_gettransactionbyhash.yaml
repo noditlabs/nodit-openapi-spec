@@ -1,0 +1,1400 @@
+openapi: 3.1.0
+info:
+  title: Arbitrum - eth_getTransactionByHash
+  version: 1.0.0
+servers:
+  - url: https://arbitrum-mainnet.nodit.io
+    description: Arbitrum Mainnet
+  - url: https://arbitrum-sepolia.nodit.io
+    description: Arbitrum Sepolia
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccessListResult:
+      type: object
+      description: Result object from eth_createAccessList. Returns the EIP-2930 access list and estimated gas usage.
+      properties:
+        accessList:
+          type: array
+          description: The generated access list
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+                description: Contract address to be accessed
+              storageKeys:
+                type: array
+                description: Storage keys to be accessed
+                items:
+                  type: string
+        gasUsed:
+          type: string
+          description: Estimated gas used when applying the access list (hex)
+    Address:
+      type: string
+      description: A 40-character hexadecimal address prefixed with 0x.
+      pattern: ^0[xX][0-9a-fA-F]{40}$
+      example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    Block:
+      type: object
+      description: An EVM block object containing block header fields and transaction list.
+      properties:
+        baseFeePerGas:
+          type: string
+          description: Base fee per gas (EIP-1559, hex in wei)
+        difficulty:
+          type: string
+          description: Mining difficulty of the block (hex)
+        extraData:
+          type: string
+          description: Arbitrary extra data added by the miner (hex)
+        gasLimit:
+          type: string
+          description: Maximum total gas allowed in this block (hex)
+        gasUsed:
+          type: string
+          description: Total gas used by all transactions in this block (hex)
+        hash:
+          type: string
+          description: Block hash
+        logsBloom:
+          type: string
+          description: Bloom filter for event log search (2048 bits, hex)
+        miner:
+          type: string
+          description: Address of the block miner
+        mixHash:
+          type: string
+          description: Mix hash used in proof-of-work
+        nonce:
+          type: string
+          description: Nonce used in proof-of-work (hex)
+        number:
+          type: string
+          description: Block number (hex)
+        parentHash:
+          type: string
+          description: Hash of the parent block
+        receiptsRoot:
+          type: string
+          description: Root hash of the transaction receipts trie
+        sha3Uncles:
+          type: string
+          description: SHA3 hash of the uncles list
+        size:
+          type: string
+          description: Block size in bytes (hex)
+        stateRoot:
+          type: string
+          description: Root hash of the state trie
+        timestamp:
+          type: string
+          description: Block creation time (Unix timestamp, hex)
+        totalDifficulty:
+          type: string
+          description: Cumulative difficulty from genesis to this block (hex)
+        transactions:
+          description: Transactions in this block. Returns hash array or full objects depending on includeTransactions parameter.
+          oneOf:
+            - type: array
+              items:
+                type: string
+              description: Array of transaction hashes (includeTransactions=false)
+            - type: array
+              items:
+                $ref: "#/components/schemas/Transaction"
+              description: Array of full transaction objects (includeTransactions=true)
+        transactionsRoot:
+          type: string
+          description: Root hash of the transactions trie
+        uncles:
+          type: array
+          description: Array of uncle block hashes
+          items:
+            type: string
+        withdrawals:
+          type: array
+          description: Validator withdrawal list (EIP-4895)
+          items:
+            type: object
+            properties:
+              index:
+                type: string
+                description: Withdrawal index (hex)
+              validatorIndex:
+                type: string
+                description: Validator index (hex)
+              address:
+                type: string
+                description: Withdrawal recipient address
+              amount:
+                type: string
+                description: Withdrawal amount (in Gwei, hex)
+        withdrawalsRoot:
+          type: string
+          description: Root hash of the withdrawals trie (EIP-4895)
+    BlockHash:
+      type: string
+      description: Block hash is the unique identifier of a block. The block hash is represented as a 64-character hexadecimal string.
+      pattern: ^0[xX][0-9a-fA-F]{64}$
+      example: "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48"
+    BlockIdentifier:
+      description: |
+        Use one of block hash, block number, or block tag to specify a block.
+        * Block number: hex string (e.g. "0x1")
+        * Block hash: 64-character hex string (e.g. "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")
+        * Block tag: enum string (e.g. "latest", "earliest", "pending")
+      oneOf:
+        - $ref: "#/components/schemas/BlockNumber"
+        - $ref: "#/components/schemas/BlockHash"
+        - $ref: "#/components/schemas/BlockTag"
+    BlockNumber:
+      type: string
+      description: Block number represents the order of blocks in the chain. It is expressed as a hexadecimal string.
+      pattern: ^0[xX][0-9a-fA-F]+$
+      example: "0x1076B5A"
+    BlockTag:
+      type: string
+      description: |
+        Block tag specifies a block using one of the following:
+        * `earliest`: The oldest available block on the chain.
+        * `finalized`: A recently finalized block that can no longer be changed.
+        * `safe`: A recent block considered safe by the network (immune to reorgs).
+        * `latest`: The most recent block on the chain (may be subject to reorgs).
+        * `pending`: The next block to be mined, including pending transactions in the mempool.
+      enum:
+        - latest
+        - earliest
+        - pending
+        - safe
+        - finalized
+      default: latest
+    Boolean:
+      type: boolean
+      description: A boolean value.
+      example: true
+    BorCurrentValidators:
+      type: array
+      description: List of current validators on the Bor network.
+      items:
+        type: object
+        properties:
+          ID:
+            type: integer
+            description: Validator ID
+          signer:
+            type: string
+            description: Validator signer address
+          power:
+            type: integer
+            description: Validator voting power (weight)
+          accum:
+            type: integer
+            description: Accumulated voting power
+    DebugTraceResult:
+      type: object
+      description: Debug trace result object. Structure based on the callTracer returned by debug_traceTransaction.
+      properties:
+        from:
+          type: string
+          description: Caller address
+        gas:
+          type: string
+          description: Gas limit set for the call (hex)
+        gasUsed:
+          type: string
+          description: Actual gas used (hex)
+        to:
+          type: string
+          description: Callee address
+        input:
+          type: string
+          description: Call input data (hex)
+        output:
+          type: string
+          description: Call return data (hex)
+        value:
+          type: string
+          description: Amount of ETH transferred (hex, in wei)
+        type:
+          type: string
+          description: Call type (CALL, CREATE, STATICCALL, etc.)
+        calls:
+          type: array
+          description: List of internal sub-calls
+          items:
+            type: object
+            description: Internal call entry (same structure as DebugTraceResult)
+        error:
+          type: string
+          description: Error message if execution failed
+        revertReason:
+          type: string
+          description: Revert reason if the transaction was reverted
+    DebugTraceResultArray:
+      type: array
+      description: An array of debug trace result objects.
+      items:
+        $ref: "#/components/schemas/DebugTraceResult"
+    FeeHistory:
+      type: object
+      description: Historical gas fee data for a range of blocks.
+      properties:
+        oldestBlock:
+          type: string
+          description: Oldest block number in the returned range (hex)
+        reward:
+          type: array
+          description: Array of priority fees at requested percentiles for each block (in wei, hex)
+          items:
+            type: array
+            items:
+              type: string
+        baseFeePerGas:
+          type: array
+          description: Array of base fees per gas for each block (in wei, hex). Last element is the next block's expected value.
+          items:
+            type: string
+        gasUsedRatio:
+          type: array
+          description: Array of gas utilization ratios per block (0 to 1)
+          items:
+            type: number
+    HexQuantity:
+      type: string
+      description: An integer encoded as a hexadecimal string. (e.g. '0x1a')
+      pattern: ^0[xX][0-9a-fA-F]+
+      example: "0x1a"
+    HexString:
+      type: string
+      description: A hexadecimal string prefixed with 0x.
+      pattern: ^0[xX][0-9a-fA-F]*$
+      example: "0x1"
+    HexStringArray:
+      type: array
+      description: An array of hexadecimal strings.
+      items:
+        type: string
+      example:
+        - "0x00856730088a5c3191bd26eb482e45229555ce57"
+        - "0x1a3cca9a3b6c5e2a4b4d7f8e1d2c3a4b5c6d7e8f"
+    JsonRpcRequest:
+      type: object
+      description: JSON-RPC 2.0 request object
+      required:
+        - id
+        - jsonrpc
+        - method
+      properties:
+        id:
+          type: integer
+          description: Request identifier
+          default: 1
+        jsonrpc:
+          type: string
+          description: JSON-RPC version
+          default: "2.0"
+          const: "2.0"
+        method:
+          type: string
+          description: Name of the method to invoke
+        params:
+          type: array
+          description: Method parameters array
+          items: {}
+    JsonRpcResponse:
+      type: object
+      description: JSON-RPC 2.0 response object
+      properties:
+        id:
+          type: integer
+          description: Request identifier
+        jsonrpc:
+          type: string
+          description: JSON-RPC version
+          const: "2.0"
+        result:
+          description: Method execution result
+        error:
+          type: object
+          description: Error info (on failure)
+          properties:
+            code:
+              type: integer
+              description: Error code
+            message:
+              type: string
+              description: Error message
+    KaiaBlock:
+      type: object
+      description: A Kaia block object. Includes EVM block fields plus Kaia-specific fields.
+      properties:
+        blockScore:
+          type: string
+          description: Former difficulty field (hex)
+        extraData:
+          type: string
+          description: Arbitrary extra data added by the proposer (hex)
+        gasUsed:
+          type: string
+          description: Total gas used by all transactions in this block (hex)
+        governanceData:
+          type: string
+          description: RLP-encoded governance configuration data (hex)
+        hash:
+          type: string
+          description: Block hash
+        logsBloom:
+          type: string
+          description: Bloom filter for event log search (2048 bits, hex)
+        number:
+          type: string
+          description: Block number (hex)
+        parentHash:
+          type: string
+          description: Hash of the parent block
+        proposer:
+          type: string
+          description: Address of the node that proposed this block
+        receiptsRoot:
+          type: string
+          description: Root hash of the transaction receipts trie
+        reward:
+          type: string
+          description: Address of the reward beneficiary
+        size:
+          type: string
+          description: Block size in bytes (hex)
+        stateRoot:
+          type: string
+          description: Root hash of the state trie
+        timestamp:
+          type: string
+          description: Block creation time (Unix timestamp, hex)
+        timestampFoS:
+          type: string
+          description: Fractional seconds of block creation time (1/100 second, hex)
+        totalBlockScore:
+          type: string
+          description: Cumulative blockScore from genesis to this block (hex)
+        transactions:
+          description: Transactions in this block
+          oneOf:
+            - type: array
+              items:
+                type: string
+              description: Array of transaction hashes (includeTransactions=false)
+            - type: array
+              items:
+                $ref: "#/components/schemas/KaiaTransaction"
+              description: Array of full transaction objects (includeTransactions=true)
+        transactionsRoot:
+          type: string
+          description: Root hash of the transactions trie
+        voteData:
+          type: string
+          description: RLP-encoded governance vote data (hex)
+    KaiaRewards:
+      type: object
+      description: Kaia block reward distribution result object.
+      properties:
+        minted:
+          type: string
+          description: Total KAIA newly minted in this block (hex, in peb)
+        totalFee:
+          type: string
+          description: Total transaction fees in this block (hex, in peb)
+        burntFee:
+          type: string
+          description: Total fees burned (hex, in peb)
+        proposer:
+          type: string
+          description: Reward received by the block proposer (hex, in peb)
+        stakers:
+          type: string
+          description: Total rewards received by staking participants (hex, in peb)
+        kif:
+          type: string
+          description: Reward received by the Kaia Infrastructure Fund (hex, in peb)
+        kef:
+          type: string
+          description: Reward received by the Kaia Ecosystem Fund (hex, in peb)
+        rewards:
+          type: object
+          description: Map of rewards per beneficiary address (key=address, value=amount in hex)
+          additionalProperties:
+            type: string
+    KaiaTransaction:
+      type: object
+      description: A Kaia transaction object. Includes EVM transaction fields plus Kaia-specific fields.
+      properties:
+        blockHash:
+          type: string
+          nullable: true
+          description: Hash of the block containing this transaction. Null for pending transactions
+        blockNumber:
+          type: string
+          nullable: true
+          description: Block number containing this transaction (hex). Null for pending transactions
+        from:
+          type: string
+          description: Sender address of the transaction
+        gas:
+          type: string
+          description: Gas limit set for the transaction (hex)
+        gasPrice:
+          type: string
+          description: Gas price (hex, in peb)
+        hash:
+          type: string
+          description: Transaction hash
+        input:
+          type: string
+          description: Transaction input data (hex)
+        nonce:
+          type: string
+          description: Number of transactions sent by the sender prior to this one (hex)
+        to:
+          type: string
+          nullable: true
+          description: Recipient address. Null for contract creation transactions
+        transactionIndex:
+          type: string
+          nullable: true
+          description: Transaction position index within the block (hex). Null for pending transactions
+        value:
+          type: string
+          description: Amount of KAIA transferred (hex, in peb)
+        type:
+          type: string
+          description: Transaction type (hex string)
+        typeInt:
+          type: integer
+          description: Transaction type as integer
+        signatures:
+          type: array
+          description: Array of transaction signatures
+          items:
+            type: object
+            properties:
+              V:
+                type: string
+                description: ECDSA signature v value (hex)
+              R:
+                type: string
+                description: ECDSA signature r value (hex)
+              S:
+                type: string
+                description: ECDSA signature s value (hex)
+        chainId:
+          type: string
+          description: Chain ID of the network this transaction belongs to (hex)
+    KaiaTransactionReceipt:
+      type: object
+      description: A Kaia transaction receipt object. Includes EVM receipt fields plus Kaia-specific fields.
+      properties:
+        blockHash:
+          type: string
+          description: Hash of the block containing this transaction
+        blockNumber:
+          type: string
+          description: Block number containing this transaction (hex)
+        contractAddress:
+          type: string
+          nullable: true
+          description: Contract address created if this was a contract creation transaction, otherwise null
+        effectiveGasPrice:
+          type: string
+          description: Actual gas price paid (hex, in peb)
+        from:
+          type: string
+          description: Sender address of the transaction
+        gas:
+          type: string
+          description: Gas limit set for the transaction (hex)
+        gasPrice:
+          type: string
+          description: Gas price (hex, in peb)
+        gasUsed:
+          type: string
+          description: Gas used by this specific transaction (hex)
+        logs:
+          type: array
+          description: List of event logs emitted during transaction execution
+          items:
+            $ref: "#/components/schemas/Log"
+        logsBloom:
+          type: string
+          description: Bloom filter for event log search (2048 bits, hex)
+        nonce:
+          type: string
+          description: Sender nonce (hex)
+        senderTxHash:
+          type: string
+          description: Transaction hash containing only the sender signature, for fee-delegated transactions
+        signatures:
+          type: array
+          description: Array of transaction signatures
+          items:
+            type: object
+            properties:
+              V:
+                type: string
+                description: ECDSA signature v value (hex)
+              R:
+                type: string
+                description: ECDSA signature r value (hex)
+              S:
+                type: string
+                description: ECDSA signature s value (hex)
+        status:
+          type: string
+          description: Transaction execution result (0x1=success, 0x0=failure)
+        to:
+          type: string
+          nullable: true
+          description: Recipient address. Null for contract creation transactions
+        transactionHash:
+          type: string
+          description: Transaction hash
+        transactionIndex:
+          type: string
+          description: Transaction position index within the block (hex)
+        type:
+          type: string
+          description: Transaction type (hex string)
+        typeInt:
+          type: integer
+          description: Transaction type as integer
+    KaiaTransactionReceiptArray:
+      type: array
+      description: An array of Kaia transaction receipt objects.
+      items:
+        $ref: "#/components/schemas/KaiaTransactionReceipt"
+    Log:
+      type: object
+      description: An event log object containing information about events emitted during transaction execution.
+      properties:
+        address:
+          type: string
+          description: The address of the contract that emitted this log
+        topics:
+          type: array
+          description: Array of event signature hash and indexed parameters (up to 4 entries)
+          items:
+            type: string
+        data:
+          type: string
+          description: Non-indexed event parameter data (hex encoded)
+        blockNumber:
+          type: string
+          description: Block number containing this log (hex)
+        transactionHash:
+          type: string
+          description: Hash of the transaction that created this log
+        transactionIndex:
+          type: string
+          description: Transaction position index within the block (hex)
+        blockHash:
+          type: string
+          description: Hash of the block containing this log
+        logIndex:
+          type: string
+          description: Log position index within the block (hex)
+        removed:
+          type: boolean
+          description: True if the log was removed due to a chain reorganization
+    LogArray:
+      type: array
+      description: An array of event log objects.
+      items:
+        $ref: "#/components/schemas/Log"
+    OptimismRollupConfig:
+      type: object
+      description: Optimism rollup configuration object.
+      properties:
+        genesis:
+          type: object
+          description: Rollup genesis configuration
+        block_time:
+          type: integer
+          description: L2 block production interval (seconds)
+        max_sequencer_drift:
+          type: integer
+          description: Maximum allowed sequencer drift (seconds)
+        seq_window_size:
+          type: integer
+          description: Sequencer window size (number of blocks)
+        channel_timeout:
+          type: integer
+          description: Channel timeout (number of blocks)
+        l1_chain_id:
+          type: string
+          description: L1 chain ID (hex)
+        l2_chain_id:
+          type: string
+          description: L2 chain ID (hex)
+        batch_inbox_address:
+          type: string
+          description: L1 batch inbox contract address
+        deposit_contract_address:
+          type: string
+          description: L1 deposit contract address
+        l1_system_config_address:
+          type: string
+          description: L1 system config contract address
+    Proof:
+      type: object
+      description: Merkle proof object for an account. Allows verification that account state and storage values have not been tampered with.
+      properties:
+        address:
+          type: string
+          description: Address of the proven account
+        accountProof:
+          type: array
+          description: Merkle proof nodes of the account state trie (RLP encoded, hex)
+          items:
+            type: string
+        balance:
+          type: string
+          description: Account balance (hex, in wei)
+        codeHash:
+          type: string
+          description: Keccak-256 hash of the account code
+        nonce:
+          type: string
+          description: Account transaction count (hex)
+        storageHash:
+          type: string
+          description: Root hash of the storage trie
+        storageProof:
+          type: array
+          description: Array of proofs for the requested storage keys
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                description: Storage key (hex)
+              value:
+                type: string
+                description: Storage value (hex)
+              proof:
+                type: array
+                description: Merkle proof nodes of the storage state trie (RLP encoded, hex)
+                items:
+                  type: string
+    StringValue:
+      type: string
+      description: A plain string value.
+      example: Geth/v1.13.0-stable/linux-amd64/go1.21.0
+    SyncStatus:
+      description: Node synchronization status. Returns false when sync is complete, or a status object when syncing is in progress.
+      oneOf:
+        - type: boolean
+          description: Returns false when sync is complete
+        - type: object
+          description: Sync status object returned while syncing is in progress
+          properties:
+            startingBlock:
+              type: string
+              description: Block number where sync started (hex)
+            currentBlock:
+              type: string
+              description: Current block number being processed (hex)
+            highestBlock:
+              type: string
+              description: Target block number for sync (hex)
+    TraceResult:
+      type: object
+      description: A trace result object. An individual trace entry returned by trace_* methods.
+      properties:
+        action:
+          type: object
+          description: Information about the traced action
+          properties:
+            from:
+              type: string
+              description: Caller address
+            callType:
+              type: string
+              description: Call type (call, delegatecall, staticcall, etc.)
+            gas:
+              type: string
+              description: Gas limit set for the call (hex)
+            input:
+              type: string
+              description: Call input data (hex)
+            to:
+              type: string
+              description: Callee address
+            value:
+              type: string
+              description: Amount of ETH transferred (hex, in wei)
+        blockHash:
+          type: string
+          description: Hash of the block containing the transaction
+        blockNumber:
+          type: integer
+          description: Block number containing the transaction
+        result:
+          type: object
+          description: Call result
+          properties:
+            gasUsed:
+              type: string
+              description: Actual gas used (hex)
+            output:
+              type: string
+              description: Call return data (hex)
+        subtraces:
+          type: integer
+          description: Number of sub-traces
+        traceAddress:
+          type: array
+          description: Index array representing the trace path
+          items:
+            type: integer
+        transactionHash:
+          type: string
+          description: Hash of the traced transaction
+        transactionPosition:
+          type: integer
+          description: Position of the transaction within the block
+        type:
+          type: string
+          description: Trace type (call, create, reward, etc.)
+    TraceResultArray:
+      type: array
+      description: An array of trace result objects.
+      items:
+        $ref: "#/components/schemas/TraceResult"
+    Transaction:
+      type: object
+      description: An EVM transaction object containing details of a transaction included in a block.
+      properties:
+        blockHash:
+          type: string
+          nullable: true
+          description: Hash of the block containing this transaction. Null for pending transactions
+        blockNumber:
+          type: string
+          nullable: true
+          description: Block number containing this transaction (hex). Null for pending transactions
+        from:
+          type: string
+          description: Sender address of the transaction
+        gas:
+          type: string
+          description: Gas limit set for the transaction (hex)
+        gasPrice:
+          type: string
+          description: Gas price (hex, in wei)
+        maxPriorityFeePerGas:
+          type: string
+          description: Maximum priority fee per gas (EIP-1559, hex)
+        maxFeePerGas:
+          type: string
+          description: Maximum fee per gas (EIP-1559, hex)
+        hash:
+          type: string
+          description: Transaction hash
+        input:
+          type: string
+          description: Transaction input data (hex encoded)
+        nonce:
+          type: string
+          description: Number of transactions sent by the sender prior to this one (hex)
+        to:
+          type: string
+          nullable: true
+          description: Recipient address. Null for contract creation transactions
+        transactionIndex:
+          type: string
+          nullable: true
+          description: Transaction position index within the block (hex). Null for pending transactions
+        value:
+          type: string
+          description: Amount of ETH transferred (hex, in wei)
+        type:
+          type: string
+          description: Transaction type (0x0=Legacy, 0x1=EIP-2930, 0x2=EIP-1559)
+        accessList:
+          type: array
+          description: EIP-2930 access list (type 0x1 and 0x2)
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+                description: Contract address to be accessed
+              storageKeys:
+                type: array
+                items:
+                  type: string
+                description: Storage keys to be accessed
+        chainId:
+          type: string
+          description: Chain ID of the network this transaction belongs to (hex)
+        v:
+          type: string
+          description: ECDSA signature v value
+        r:
+          type: string
+          description: ECDSA signature r value
+        s:
+          type: string
+          description: ECDSA signature s value
+    TransactionHash:
+      type: string
+      description: Transaction hash is the unique identifier of a transaction. It is expressed as a 64-character hexadecimal string.
+      pattern: ^0[xX][0-9a-fA-F]{64}$
+      example: "0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060"
+    TransactionReceipt:
+      type: object
+      description: A transaction receipt object. Available only after the transaction has been included in a block.
+      properties:
+        blockHash:
+          type: string
+          description: Hash of the block containing this transaction
+        blockNumber:
+          type: string
+          description: Block number containing this transaction (hex)
+        contractAddress:
+          type: string
+          nullable: true
+          description: Contract address created if this was a contract creation transaction, otherwise null
+        cumulativeGasUsed:
+          type: string
+          description: Total gas used in the block up to and including this transaction (hex)
+        effectiveGasPrice:
+          type: string
+          description: Actual gas price paid (hex, in wei)
+        from:
+          type: string
+          description: Sender address of the transaction
+        gasUsed:
+          type: string
+          description: Gas used by this specific transaction (hex)
+        logs:
+          type: array
+          description: List of event logs emitted during transaction execution
+          items:
+            $ref: "#/components/schemas/Log"
+        logsBloom:
+          type: string
+          description: Bloom filter for event log search (2048 bits, hex)
+        status:
+          type: string
+          description: Transaction execution result (0x1=success, 0x0=failure)
+        to:
+          type: string
+          nullable: true
+          description: Recipient address. Null for contract creation transactions
+        transactionHash:
+          type: string
+          description: Transaction hash
+        transactionIndex:
+          type: string
+          description: Transaction position index within the block (hex)
+        type:
+          type: string
+          description: Transaction type (0x0=Legacy, 0x1=EIP-2930, 0x2=EIP-1559)
+    TransactionReceiptArray:
+      type: array
+      description: An array of transaction receipt objects.
+      items:
+        $ref: "#/components/schemas/TransactionReceipt"
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - MISSING_REQUIRED_PARAMETER
+                  - INVALID_PARAMETER
+                  - WRONG_RANGE_PARAMETER
+                  - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+              - code
+              - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: When a required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: "Missing required parameter: { PARAMETER_NAME }"
+            INVALID_PARAMETER:
+              summary: When an invalid value is provided for a parameter
+              value:
+                code: INVALID_PARAMETER
+                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+            WRONG_RANGE_PARAMETER:
+              summary: When a value outside the query range is provided
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: "Wrong range parameter: { PARAMETER_NAME }"
+            DEPRECATED_OPERATION:
+              summary: When a deprecated API is requested
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - NO_AUTHENTICATION_FOUND
+                  - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+              - code
+              - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: When authentication credentials are not included
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found
+            AUTHENTICATION_FAILED:
+              summary: When authentication credentials are mismatched or invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+              - code
+              - message
+          examples:
+            PERMISSION_DENIED:
+              summary: When accessing an unauthorized resource
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - WRONG_ENDPOINT
+                  - NOT_SUPPORTED_CHAIN
+                  - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+              - code
+              - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: When requesting a non-existent API path
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: When requesting an unsupported chain
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: When requesting a resource that does not exist on the server
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+              - code
+              - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: When requesting with an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+              - code
+              - message
+          examples:
+            TIMEOUT:
+              summary: When processing is not completed within the specified time
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - RESOURCE_ALREADY_EXISTS
+                  - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+              - code
+              - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: When attempting to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: When the request is rejected by the server
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+              - code
+              - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: When the payload exceeds the server's maximum limit
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+              - code
+              - message
+          examples:
+            TOO_LONG_URI:
+              summary: When the request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_MANY_REQUESTS
+                  - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+              - code
+              - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: When the rate limit is exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: When the quota limit is exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_SERVER_ERROR
+                  - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+              - code
+              - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: When an internal server error occurs
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: When processing fails temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+              - code
+              - message
+          examples:
+            UNAVAILABLE:
+              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: arbitrum-eth_gettransactionbyhash
+      summary: eth_getTransactionByHash
+      description: Returns the transaction information for the specified transaction hash.
+      x-seo-description: Fetch detailed transaction data including gas, value, and input by transaction hash.
+      tags:
+        - eth
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - jsonrpc
+                - method
+                - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: eth_getTransactionByHash
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                      - title: Transaction Hash
+                        type: string
+                        pattern: ^0[xX][0-9a-fA-F]{64}
+                        example: "0xda148d856aef6d77d0b76c90ef1091ffe77afe9ee9b1c6cc23f28f042f198bd8"
+                        description: Transaction hash is the unique identifier of a transaction. It is expressed as a 64-character hexadecimal string.
+                  example:
+                    - "0xda148d856aef6d77d0b76c90ef1091ffe77afe9ee9b1c6cc23f28f042f198bd8"
+                  description: |-
+                    Pass the following parameters as an array with the appropriate types.
+                    1. `transaction hash`: The transaction hash to query as a string.
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: eth_getTransactionByHash
+                params:
+                  - "0xda148d856aef6d77d0b76c90ef1091ffe77afe9ee9b1c6cc23f28f042f198bd8"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  blockHash: "0x59f63e3840e0f4a1659074c1a4021e881a268a52d31958688da1d66bfbf6d2ca"
+                  blockNumber: "0x1076b5a"
+                  from: "0xae2fc483527b8ef99eb5d9b44875f005ba1fae13"
+                  gas: "0x2d6b9"
+                  gasPrice: "0xb25ce488f"
+                  maxPriorityFeePerGas: "0x0"
+                  maxFeePerGas: "0xb25ce488f"
+                  hash: "0xf3b9303a4149fed1a61438c737264d7d2ca9c33a94c2174506b84192998d9000"
+                  input: "0x5a2f17a6ebc9dd3285a0d49a485c2e6d9a0134fc5707d47a95ff9b"
+                  nonce: "0x70934"
+                  to: "0x6b75d8af000000e20b7a7ddf000ba900b4009a80"
+                  transactionIndex: "0x0"
+                  value: "0x11b7bad5"
+                  type: "0x2"
+                  accessList:
+                    - address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                      storageKeys:
+                        - "0x12231cd4c753cb5530a43a74c45106c24765e6f81dc8927d4f4be7e53315d5a8"
+                        - "0xae2b03699e4c0a0df0d8fda1e23931ec61addf4b43f27bbf0032f998d9d327c5"
+                    - address: "0xa6ebc9dd3285a0d49a485c2e6d9a0134fc5707d4"
+                      storageKeys:
+                        - "0x0000000000000000000000000000000000000000000000000000000000000006"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000007"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000009"
+                        - "0x000000000000000000000000000000000000000000000000000000000000000a"
+                        - "0x000000000000000000000000000000000000000000000000000000000000000c"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000008"
+                    - address: "0x2680961ba5f113d55e2b412701732da13bb42a11"
+                      storageKeys:
+                        - "0x0000000000000000000000000000000000000000000000000000000000000010"
+                        - "0x0ae5bc8a4cd96bdb8f9b7f69d654287bfb6d0e9babce74e79c552b054dca2254"
+                        - "0xebb137c40e65d8055f7de06af99f99871d2f30fca8f82278c470ceed130ee48f"
+                        - "0x69c6fb2c184647f028ae0f0da5e6cb3e57cf1e1704e92b75d5c93d7690832ef2"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000011"
+                        - "0x5b07b4616e979c247a9ea22cc5aa9007ab779de1a0152b002690105a64c3052b"
+                        - "0x699cf97972fa99b01ba01fdf5fd459644663c0582d960c4bda3936ef6d1f25bf"
+                        - "0x000000000000000000000000000000000000000000000000000000000000000b"
+                        - "0x000000000000000000000000000000000000000000000000000000000000000d"
+                        - "0xb39e9ba92c3c47c76d4f70e3bc9c3270ab78d2592718d377c8f5433a34d3470a"
+                        - "0x3fd59a5ac09fa0b80d9bd9c8d2e28ee4a6b62d0942f28eb8a9d01d35aabb1d61"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000012"
+                        - "0xc7d07bc7b4b06c606d8bd09d68b5b57a8ae0ff2e1ce65b1f30b9a2e225f724fe"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000005"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000006"
+                        - "0x000000000000000000000000000000000000000000000000000000000000000c"
+                        - "0xdab1effe970e90ce1e3c191e4588741c0605cac2617996daad79eada3d9f5e40"
+                        - "0x000000000000000000000000000000000000000000000000000000000000000e"
+                        - "0x4e195366bb42075d59d4f2807bdaf03e5435edde6d946f677ac5cada5642c529"
+                        - "0x0000000000000000000000000000000000000000000000000000000000000014"
+                  chainId: "0x1"
+                  v: "0x0"
+                  r: "0xedb4d30e030012361075034e35993749f86abe097bfdfa5067e7233c5f1f585b"
+                  s: "0x26d0db35fcd39cffa14f637e604d367dfdeeaab7e7021f13abcce11dba7e593d"
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"

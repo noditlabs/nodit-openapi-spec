@@ -1,0 +1,45 @@
+openapi: 3.1.0
+info:
+  title: Initia - initia_mstaking_v1_params
+  version: 1.0.0
+servers:
+  - url: https://rest-initia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /initia/mstaking/v1/params:
+    get:
+      description: Returns the parameters of the Initia mstaking module.
+      operationId: initia_mstaking_v1_params
+      tags:
+        - mstaking
+      responses:
+        "200":
+          description: Successful Response
+        default:
+          description: An unexpected error response.
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: object
+      security:
+        - api_key: []
+      summary: /initia/mstaking/v1/params

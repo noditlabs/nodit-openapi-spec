@@ -1,0 +1,246 @@
+openapi: 3.1.0
+info:
+  title: Hippo - Block Search
+  version: 1.0.0
+servers:
+  - url: https://rpc-hippo-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /block_search:
+    get:
+      security:
+        - api_key: []
+      operationId: block_search
+      summary: Block Search
+      description: Searches for blocks matching the query conditions.
+      tags:
+        - rest-api
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Block search query string.
+          schema:
+            type: string
+          example: block.height > 1000
+        - name: page
+          in: query
+          description: Page number (starting from 1).
+          schema:
+            type: string
+          example: "1"
+        - name: per_page
+          in: query
+          description: Number of items to return per page (maximum 100).
+          schema:
+            type: string
+          example: "30"
+        - name: order_by
+          in: query
+          description: Sort order. "asc" or "desc". Defaults to the default sort order if omitted.
+          schema:
+            type: string
+          example: desc
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    required:
+                      - blocks
+                      - total_count
+                    properties:
+                      blocks:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: false
+                          properties:
+                            block_id:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                hash:
+                                  type: string
+                                parts:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    total:
+                                      type: integer
+                                    hash:
+                                      type: string
+                            block:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                header:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    version:
+                                      type: object
+                                      additionalProperties: false
+                                      properties:
+                                        block:
+                                          type: string
+                                        app:
+                                          type: string
+                                    chain_id:
+                                      type: string
+                                    height:
+                                      type: string
+                                    time:
+                                      type: string
+                                    last_block_id:
+                                      type: object
+                                      additionalProperties: false
+                                      properties:
+                                        hash:
+                                          type: string
+                                        parts:
+                                          type: object
+                                          additionalProperties: false
+                                          properties:
+                                            total:
+                                              type: integer
+                                            hash:
+                                              type: string
+                                    last_commit_hash:
+                                      type: string
+                                    data_hash:
+                                      type: string
+                                    validators_hash:
+                                      type: string
+                                    next_validators_hash:
+                                      type: string
+                                    consensus_hash:
+                                      type: string
+                                    app_hash:
+                                      type: string
+                                    last_results_hash:
+                                      type: string
+                                    evidence_hash:
+                                      type: string
+                                    proposer_address:
+                                      type: string
+                                data:
+                                  type: array
+                                  items:
+                                    type: string
+                                evidence:
+                                  type: array
+                                  items:
+                                    type: object
+                                last_commit:
+                                  type: object
+                                  additionalProperties: false
+                                  properties:
+                                    height:
+                                      type: integer
+                                    round:
+                                      type: integer
+                                    block_id:
+                                      type: object
+                                      additionalProperties: false
+                                      properties:
+                                        hash:
+                                          type: string
+                                        parts:
+                                          type: object
+                                          additionalProperties: false
+                                          properties:
+                                            total:
+                                              type: integer
+                                            hash:
+                                              type: string
+                                    signatures:
+                                      type: array
+                                      items:
+                                        type: object
+                                        additionalProperties: false
+                                        properties:
+                                          type:
+                                            type: integer
+                                          height:
+                                            type: string
+                                          round:
+                                            type: integer
+                                          timestamp:
+                                            type: string
+                                          validator_address:
+                                            type: string
+                                          validator_index:
+                                            type: integer
+                                          signature:
+                                            type: string
+                      total_count:
+                        type: integer
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  blocks:
+                    - block_id:
+                        hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                        parts:
+                          total: 1
+                          hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
+                      block:
+                        header:
+                          version:
+                            block: "11"
+                            app: "0"
+                          chain_id: cosmoshub-4
+                          height: "1001"
+                          time: "2019-12-11T16:11:40Z"
+                          last_block_id:
+                            hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
+                            parts:
+                              total: 1
+                              hash: B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3
+                          last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                          data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                          validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                          next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                          consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
+                          app_hash: 223BF64D4A01074DC523A80E76B9BBC786C791FB0A1893AC5B14866356FCFD6C
+                          last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                          evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                          proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                        data: []
+                        evidence: []
+                        last_commit:
+                          height: 1000
+                          round: 0
+                          block_id:
+                            hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                            parts:
+                              total: 1
+                              hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
+                          signatures: []
+                  total_count: 1

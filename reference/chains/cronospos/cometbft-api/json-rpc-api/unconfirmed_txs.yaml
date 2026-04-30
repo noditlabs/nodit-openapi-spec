@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: CronosPOS - UnconfirmedTxs
+  version: 1.0.0
+servers:
+  - url: https://rpc-cronospos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: unconfirmed_txs
+      summary: UnconfirmedTxs
+      description: Retrieves the list of unconfirmed transactions.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: unconfirmed_txs
+                params:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    limit:
+                      type: string
+                      description: Maximum number of transactions to return.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: unconfirmed_txs
+              params:
+                limit: "20"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      n_txs:
+                        type: string
+                      total:
+                        type: string
+                      total_bytes:
+                        type: string
+                      txs:
+                        type: array
+                        items:
+                          type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  n_txs: "2"
+                  total: "2"
+                  total_bytes: "1024"
+                  txs:
+                    - a/encoded_tx_1/c
+                    - a/encoded_tx_2/c

@@ -1,0 +1,123 @@
+openapi: 3.1.0
+info:
+  title: Celestia - ConsensusParams
+  version: 1.0.0
+servers:
+  - url: https://rpc-celestia-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: consensus_params
+      summary: ConsensusParams
+      description: Retrieves consensus parameters at the specified block height.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: consensus_params
+                params:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    height:
+                      type: string
+                      description: Target block height.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: consensus_params
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      block_height:
+                        type: string
+                      consensus_params:
+                        type: object
+                        additionalProperties: false
+                        properties:
+                          block:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              max_bytes:
+                                type: string
+                              max_gas:
+                                type: string
+                              time_iota_ms:
+                                type: string
+                          evidence:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              max_age:
+                                type: string
+                          validator:
+                            type: object
+                            additionalProperties: false
+                            properties:
+                              pub_key_types:
+                                type: array
+                                items:
+                                  type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  block_height: "12345678"
+                  consensus_params:
+                    block:
+                      max_bytes: "22020096"
+                      max_gas: "-1"
+                      time_iota_ms: "1000"
+                    evidence:
+                      max_age: "100000"
+                    validator:
+                      pub_key_types:
+                        - ed25519

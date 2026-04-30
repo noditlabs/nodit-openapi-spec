@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: CronosPOS - GenesisChunked
+  version: 1.0.0
+servers:
+  - url: https://rpc-cronospos-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: genesis_chunked
+      summary: GenesisChunked
+      description: Retrieves a large genesis document in chunks.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: genesis_chunked
+                params:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - chunk
+                  properties:
+                    chunk:
+                      type: integer
+                      description: Chunk index to retrieve.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: genesis_chunked
+              params:
+                chunk: 0
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      chunk:
+                        type: integer
+                      total:
+                        type: integer
+                      data:
+                        type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  chunk: 0
+                  total: 3
+                  data: eyJnZW5lc2lzX3RpbWUiOiIyMDE5LTEyLTExVDE2OjExOjM0WiIsImNoYWluX2lkIjoiY29zbW9zaHViLTQifQ==

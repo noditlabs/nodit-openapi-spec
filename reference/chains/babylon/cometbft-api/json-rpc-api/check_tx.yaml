@@ -1,0 +1,130 @@
+openapi: 3.1.0
+info:
+  title: Babylon - CheckTx
+  version: 1.0.0
+servers:
+  - url: https://rpc-babylon-mainnet.nodit.io
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+paths:
+  /:
+    post:
+      security:
+        - api_key: []
+      operationId: check_tx
+      summary: CheckTx
+      description: Validates a transaction without executing it.
+      tags:
+        - json-rpc-api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - jsonrpc
+                - id
+                - method
+              properties:
+                jsonrpc:
+                  type: string
+                  const: "2.0"
+                id:
+                  type: integer
+                method:
+                  type: string
+                  const: check_tx
+                params:
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - tx
+                  properties:
+                    tx:
+                      type: string
+                      description: Encoded transaction.
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: check_tx
+              params:
+                tx: a/encoded_tx/c
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - jsonrpc
+                  - id
+                  - result
+                properties:
+                  jsonrpc:
+                    type: string
+                    const: "2.0"
+                  id:
+                    type: integer
+                  error:
+                    type: string
+                  result:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      code:
+                        type: string
+                      data:
+                        type: string
+                      log:
+                        type: string
+                      info:
+                        type: string
+                      gas_wanted:
+                        type: string
+                      gas_used:
+                        type: string
+                      events:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: false
+                          properties:
+                            type:
+                              type: string
+                            attributes:
+                              type: array
+                              items:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                  index:
+                                    type: boolean
+                      codespace:
+                        type: string
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  code: "0"
+                  data: ""
+                  log: "[]"
+                  info: ""
+                  gas_wanted: "200000"
+                  gas_used: "80000"
+                  events: []
+                  codespace: ""
