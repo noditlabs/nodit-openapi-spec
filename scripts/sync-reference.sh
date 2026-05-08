@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE_REPO="git@github.com:Lambda256/nodit-docs-migration.git"
+SOURCE_REPO="https://github.com/Lambda256/nodit-docs-migration.git"
 SOURCE_BRANCH="main"
 SOURCE_PATH="oas/dist-en"
 TARGET_DIR="reference"
@@ -25,7 +25,7 @@ trap 'rm -rf "$TMP"' EXIT
 echo "Cloning $SOURCE_REPO ($SOURCE_BRANCH, sparse: $SOURCE_PATH)..."
 git clone --depth 1 --filter=blob:none --sparse \
   --branch "$SOURCE_BRANCH" "$SOURCE_REPO" "$TMP/src" --quiet
-git -C "$TMP/src" sparse-checkout set "$SOURCE_PATH" --quiet
+git -C "$TMP/src" sparse-checkout set "$SOURCE_PATH"
 
 if [[ ! -d "$TMP/src/$SOURCE_PATH" ]]; then
   echo "Source path not found: $SOURCE_PATH" >&2
@@ -47,12 +47,7 @@ git add "$TARGET_DIR"
 git commit -m "chore: sync reference from nodit-docs-migration"
 git push -u origin "$PR_BRANCH"
 
-if command -v gh >/dev/null 2>&1; then
-  gh pr create \
-    --title "chore: sync reference from nodit-docs-migration" \
-    --body "Manual sync from \`Lambda256/nodit-docs-migration\` \`$SOURCE_PATH/\`." \
-    --base main --head "$PR_BRANCH"
-else
-  echo "Branch pushed: $PR_BRANCH"
-  echo "Open PR manually at: https://github.com/noditlabs/nodit-openapi-spec/pull/new/$PR_BRANCH"
-fi
+echo
+echo "Branch pushed: $PR_BRANCH"
+echo "Open a PR manually:"
+echo "  https://github.com/noditlabs/nodit-openapi-spec/pull/new/$PR_BRANCH"
