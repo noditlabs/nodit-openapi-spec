@@ -5,8 +5,6 @@ info:
 servers:
   - url: https://sui-mainnet.nodit.io
     description: Sui Mainnet
-  - url: https://sui-testnet.nodit.io
-    description: Sui Testnet
 components:
   securitySchemes:
     api_key:

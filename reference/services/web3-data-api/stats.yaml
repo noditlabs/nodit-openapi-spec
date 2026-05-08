@@ -405,7 +405,6 @@ paths:
               - testnet
               - hoodi
               - kairos
-              - amoy
             default: mainnet
           description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
       requestBody:
