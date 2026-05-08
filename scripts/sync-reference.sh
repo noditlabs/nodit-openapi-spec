@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE_REPO="git@github.com:Lambda256/nodit-docs-migration.git"
+SOURCE_REPO="https://github.com/Lambda256/nodit-docs-migration.git"
 SOURCE_BRANCH="main"
 SOURCE_PATH="oas/dist-en"
 TARGET_DIR="reference"
@@ -25,7 +25,7 @@ trap 'rm -rf "$TMP"' EXIT
 echo "Cloning $SOURCE_REPO ($SOURCE_BRANCH, sparse: $SOURCE_PATH)..."
 git clone --depth 1 --filter=blob:none --sparse \
   --branch "$SOURCE_BRANCH" "$SOURCE_REPO" "$TMP/src" --quiet
-git -C "$TMP/src" sparse-checkout set "$SOURCE_PATH" --quiet
+git -C "$TMP/src" sparse-checkout set "$SOURCE_PATH"
 
 if [[ ! -d "$TMP/src/$SOURCE_PATH" ]]; then
   echo "Source path not found: $SOURCE_PATH" >&2
