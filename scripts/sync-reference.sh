@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE_REPO="git@github.com:Lambda256/nodit-docs-migration.git"
+SOURCE_REPO="https://github.com/Lambda256/nodit-docs-migration.git"
 SOURCE_BRANCH="main"
 SOURCE_PATH="oas/dist-en"
 TARGET_DIR="reference"
