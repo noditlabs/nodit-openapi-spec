@@ -388,7 +388,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - amoy
             default: mainnet
           description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
       requestBody:
@@ -770,7 +769,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - amoy
             default: mainnet
           description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
         - name: subscriptionId
@@ -938,7 +936,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - amoy
             default: mainnet
           description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
         - name: subscriptionId
@@ -1014,7 +1011,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - amoy
             default: mainnet
           description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
         - name: subscriptionId
@@ -1350,7 +1346,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - amoy
             default: mainnet
           description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
         - name: subscriptionId
