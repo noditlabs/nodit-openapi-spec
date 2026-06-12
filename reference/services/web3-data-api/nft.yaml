@@ -9872,84 +9872,84 @@ paths:
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Arc
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Base
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: BNB Smart Chain
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Chiliz
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Ethereum
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Ethereum Classic
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Giwa
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Kaia
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Luniverse
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Optimism
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Polygon
                     type: object
                     properties:
                       message:
                         type: string
-                        description: Returns a result message for the synchronization request.
+                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                         example: NFT Metadata synchronization request has been successfully submitted.
         "400":
           $ref: "#/components/responses/400"

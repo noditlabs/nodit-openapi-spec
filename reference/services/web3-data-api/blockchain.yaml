@@ -4090,7 +4090,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4160,7 +4160,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4230,7 +4230,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4300,7 +4300,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4370,7 +4370,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4440,7 +4440,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4510,7 +4510,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4580,7 +4580,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4650,7 +4650,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4720,7 +4720,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4790,7 +4790,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0
@@ -4860,7 +4860,7 @@ paths:
                                   description: A field representing the block number that contains the transaction.
                                 timestamp:
                                   type: integer
-                                  description: A field representing the time the transaction was created. This field is provided as a UNIX timestamp.
+                                  description: 트랜잭션이 생성된 시간을 나타내는 필드입니다. 이 필드는 UNIX 타임스탬프로 제공됩니다.
                               example:
                                 traceId: call_21466252_48_
                                 traceIndex: 0

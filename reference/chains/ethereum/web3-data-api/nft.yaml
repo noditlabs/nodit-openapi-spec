@@ -2003,7 +2003,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: Returns a result message for the synchronization request.
+                    description: 동기화 요청에 대한 결과 메시지를 반환합니다.
                     example: NFT Metadata synchronization request has been successfully submitted.
         "400":
           $ref: "#/components/responses/400"

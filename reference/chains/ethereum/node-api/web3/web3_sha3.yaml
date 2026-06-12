@@ -1295,7 +1295,7 @@ paths:
                   type: array
                   items:
                     oneOf:
-                      - title: Input Data
+                      - title: 입력 데이터
                         type: string
                         pattern: ^0[xX][0-9a-fA-F]+$
                         example: "0x68656c6c6f204e4f444954"

@@ -4,13 +4,13 @@ slug: /node-api/signaturesubscribe
 
 # signatureSubscribe
 
-The signatureSubscribe method in Solana creates a subscription to receive a notification when a specific transaction signature reaches the specified commitment level.
+Solana의 signatureSubscribe 메서드는 특정 트랜잭션 서명이 지정된 commitment 레벨에 도달했을 때 알림을 받을 수 있도록 구독을 생성합니다.
 
-> 📘 Notes on Usage
+> 📘 사용 시 참고사항
 >
-> - Must be called via a **WebSocket** endpoint; HTTP is not supported.
-> - This is a **single-notification subscription**. The subscription is automatically cancelled after the server sends the signatureNotification.
-> - CU is consumed based on the amount of data subscribed. It is recommended to use appropriate filtering options to subscribe only to the data you need.
+> - 반드시 **WebSocket** 엔드포인트를 통해 호출해야 하며, HTTP는 지원되지 않습니다.
+> - 이는 **단일 알림 구독**입니다. 서버가 signatureNotification을 전송한 후 자동으로 구독이 취소됩니다.
+> - CU는 구독한 데이터의 양에 따라 소진되므로, 필요한 데이터만을 구독할 수 있도록 적절한 필터링 옵션 사용을 권장합니다.
 
 ---
 
@@ -18,17 +18,17 @@ The signatureSubscribe method in Solana creates a subscription to receive a noti
 
 ### Parameters
 
-The subscription request has the following parameters.
+서명 구독 요청은 아래의 파라미터를 가집니다.
 
 | Parameter                            | Type              | Required | Description                                                                                                                                                                                                                                                                                                                                                           |
 | ------------------------------------ | ----------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| id                                   | integer or string | required | A unique request identifier. Used by the client to match requests with responses.                                                                                                                                                                                                                                                                                     |
-| jsonrpc                              | string            | required | JSON-RPC protocol version. Always enter "2.0".                                                                                                                                                                                                                                                                                                                        |
-| method                               | string            | required | The method name to execute. Enter "signatureSubscribe" here.                                                                                                                                                                                                                                                                                                          |
-| params                               | array             | required | Signature information and options to subscribe to. The first element is the transaction signature, and the second is a configuration object.                                                                                                                                                                                                                          |
-| params[0]                            | string            | required | The transaction signature to subscribe to (base-58 encoded string). Must be the first signature of the transaction.                                                                                                                                                                                                                                                   |
-| params[1].commitment                 | string            | optional | Specifies the level of block commitment. <br />- `finalized`: Queries the most recent block confirmed by a supermajority of the cluster reaching maximum lockout. The cluster recognizes this block as finalized. <br />- `confirmed`: Queries the most recent block voted on by a supermajority of the cluster. <br />- `processed`: Queries the most recent block of the node. This block may still be skipped by the cluster. |
-| params[1].enableReceivedNotification | boolean           | optional | Specifies whether to also receive a notification when the signature is received by the RPC. When `true`, notifications are received both upon receipt and upon processing completion.                                                                                                                                                                                  |
+| id                                   | integer or string | required | 요청 고유 식별자. 클라이언트가 요청과 응답을 매칭하는데 사용됩니다.                                                                                                                                                                                                                                                                                                   |
+| jsonrpc                              | string            | required | JSON-RPC 프로토콜 버전. 항상 "2.0"을 입력합니다.                                                                                                                                                                                                                                                                                                                      |
+| method                               | string            | required | 실행할 메서드 이름. 여기서는 "signatureSubscribe"를 입력합니다.                                                                                                                                                                                                                                                                                                       |
+| params                               | array             | required | 구독할 서명 정보 및 옵션. 첫 번째 요소는 트랜잭션 서명, 두 번째는 configuration object 입니다.                                                                                                                                                                                                                                                                        |
+| params[0]                            | string            | required | 구독할 트랜잭션 서명 (base-58 인코딩된 문자열). 트랜잭션의 첫 번째 서명이어야 합니다.                                                                                                                                                                                                                                                                                 |
+| params[1].commitment                 | string            | optional | 블록 확정 정도를 지정합니다. <br />- `finalized`: 클러스터의 과반수가 최대 lockout에 도달하여 확정된 가장 최근 블록을 조회합니다. 클러스터가 이 블록을 최종 확정으로 인식합니다. <br />- `confirmed`: 클러스터의 과반수가 투표한 가장 최근 블록을 조회합니다. <br />- `processed`: 노드의 가장 최근 블록을 조회합니다. 이 블록은 여전히 클러스터에 의해 건너뛸 수 있습니다. |
+| params[1].enableReceivedNotification | boolean           | optional | 서명이 RPC에 수신되었을 때도 알림을 받을지 여부를 지정합니다. `true`인 경우 수신 시와 처리 완료 시 모두 알림을 받습니다.                                                                                                                                                                                                                                              |
 
 ### Example
 
@@ -53,7 +53,7 @@ The subscription request has the following parameters.
 
 ### Subscription Response
 
-Upon successful subscription, a subscription ID is returned.
+성공적으로 구독이 생성되면 subscription ID가 반환됩니다.
 
 ```json Response example
 {
@@ -63,31 +63,31 @@ Upon successful subscription, a subscription ID is returned.
 }
 ```
 
-This subscription ID is required when calling the signatureUnsubscribe method.
+이 subscription ID는 signatureUnsubscribe 메서드 호출 시 필요합니다.
 
 ### Notifications
 
-When the subscription is active, the server pushes a notification when the transaction reaches the specified commitment level.
+구독이 활성화되면, 트랜잭션이 지정된 commitment 레벨에 도달했을 때 서버에서 알림을 푸시합니다.
 
-**Notification Format:**
+**알림 형식:**
 
-| Field | Type             | Description                       |
-| ----- | ---------------- | --------------------------------- |
-| slot  | u64              | The slot number                   |
-| value | object \| string | RpcSignatureResult notification value |
+| 필드  | 타입             | 설명                       |
+| ----- | ---------------- | -------------------------- |
+| slot  | u64              | 해당 슬롯 번호             |
+| value | object \| string | RpcSignatureResult 알림 값 |
 
-**value field details:**
+**value 필드 상세:**
 
-- **Signature received notification** (when enableReceivedNotification is true and the signature is received):
+- **서명 수신 알림** (enableReceivedNotification이 true이고 서명이 수신된 경우):
 
-  - Type: `string`
-  - Value: `"receivedSignature"`
-  - Description: Indicates that the signature has been received by the RPC
+  - 타입: `string`
+  - 값: `"receivedSignature"`
+  - 설명: 서명이 RPC에 수신되었음을 나타냄
 
-- **Transaction processing complete notification** (when the signature is processed):
-  - Type: `object`
-  - Value: `{ "err": null }` (success) or `{ "err": TransactionError }` (failure)
-  - Description: The transaction has been processed at the specified commitment level
+- **트랜잭션 처리 완료 알림** (서명이 처리된 경우):
+  - 타입: `object`
+  - 값: `{ "err": null }` (성공) 또는 `{ "err": TransactionError }` (실패)
+  - 설명: 트랜잭션이 지정된 commitment 레벨에서 처리됨
 
 #### Examples
 
@@ -154,18 +154,18 @@ wscat -c wss://api.mainnet-beta.solana.com
 
 ### Receive Notification
 
-- Initial response: subscription ID returned
-- Subsequently: when a matching transaction reaches the specified commitment level, the server automatically sends a notification, and the subscription is automatically cancelled after the notification is received (single-notification subscription)
+- 최초 응답: subscription ID 반환
+- 이후: 조건에 맞는 트랜잭션이 지정된 commitment 레벨에 도달하면 서버에서 자동으로 알림 전송되며 알림 수신 후 구독은 자동으로 해제됨 (단일 알림 구독)
 
 ### Unsubscribe
 
-There are two ways to cancel a subscription:
+구독을 해제하는 방법은 두 가지가 있습니다:
 
-1. **Close connection**: Press `CTRL+C` in the terminal window to close the WebSocket connection and all subscriptions will be automatically cancelled.
+1. **연결 종료**: 터미널 창에서 `CTRL+C`를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
 
-2. **Cancel specific subscription**: Use signatureUnsubscribe to cancel only a specific subscription while keeping the connection open.
+2. **특정 구독 해제**: signatureUnsubscribe를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
 
-Unsubscribe request:
+구독 해제 요청:
 
 ```json unsubscribe example
 {
@@ -176,7 +176,7 @@ Unsubscribe request:
 }
 ```
 
-Response after unsubscribing:
+구독 해제 후 응답:
 
 ```json unsubscribe success
 {

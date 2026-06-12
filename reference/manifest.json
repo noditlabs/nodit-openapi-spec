@@ -58,7 +58,7 @@
       "webhookApi": {
         "supported": true,
         "type": "aptos",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -66,13 +66,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "aptos-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "arbitrum": {
@@ -173,7 +183,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -181,14 +191,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "arbitrum-mainnet",
-            "arbitrum-sepolia"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "arc": {
@@ -291,12 +310,24 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
           "getWebhookHistory",
           "updateWebhook"
+        ]
+      },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
         ]
       },
       "multichainApi": {
@@ -360,6 +391,9 @@
         "supported": false
       },
       "webhookApi": {
+        "supported": false
+      },
+      "flexibleWebhookApi": {
         "supported": false
       },
       "multichainApi": {
@@ -507,6 +541,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -612,7 +649,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -620,14 +657,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "base-mainnet",
-            "base-sepolia"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "bitcoin": {
@@ -650,13 +696,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "bitcoin-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "bitcoincash": {
@@ -679,13 +726,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "bitcoincash-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "bnb": {
@@ -787,7 +835,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -795,14 +843,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "bnb-mainnet",
-            "bnb-testnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "celestia": {
@@ -946,6 +1003,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -999,13 +1059,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "chiliz-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "cosmos": {
@@ -1149,6 +1210,9 @@
         "supported": false
       },
       "webhookApi": {
+        "supported": false
+      },
+      "flexibleWebhookApi": {
         "supported": false
       },
       "multichainApi": {
@@ -1298,6 +1362,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -1322,13 +1389,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "dogecoin-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "ethereum": {
@@ -1449,7 +1517,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -1457,15 +1525,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "ethereum-hoodi",
-            "ethereum-mainnet",
-            "ethereum-sepolia"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "ethereumclassic": {
@@ -1517,13 +1593,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "ethereumclassic-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "giwa": {
@@ -1627,7 +1704,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -1635,13 +1712,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "giwa-sepolia"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "hippo": {
@@ -1787,6 +1874,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -1923,6 +2013,9 @@
         "supported": false
       },
       "webhookApi": {
+        "supported": false
+      },
+      "flexibleWebhookApi": {
         "supported": false
       },
       "multichainApi": {
@@ -2117,6 +2210,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -2281,7 +2377,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -2289,14 +2385,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "kaia-kairos",
-            "kaia-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "luniverse": {
@@ -2405,13 +2510,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "luniverse-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "metal": {
@@ -2469,6 +2575,9 @@
         "apis": []
       },
       "webhookApi": {
+        "supported": false
+      },
+      "flexibleWebhookApi": {
         "supported": false
       },
       "multichainApi": {
@@ -2576,7 +2685,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -2584,14 +2693,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "optimism-mainnet",
-            "optimism-sepolia"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "polygon": {
@@ -2697,7 +2815,7 @@
       "webhookApi": {
         "supported": true,
         "type": "evm",
-        "operations": [
+        "apis": [
           "createWebhook",
           "deleteWebhook",
           "getWebhook",
@@ -2705,14 +2823,23 @@
           "updateWebhook"
         ]
       },
+      "flexibleWebhookApi": {
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "polygon-amoy",
-            "polygon-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "sei": {
@@ -2885,6 +3012,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -2963,6 +3093,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -3035,6 +3168,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -3079,13 +3215,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "tron-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "worldchain": {
@@ -3145,6 +3282,9 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": false
       }
@@ -3174,13 +3314,14 @@
       "webhookApi": {
         "supported": false
       },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
       "multichainApi": {
         "supported": true,
-        "apis": {
-          "lookupEntities": [
-            "xrpl-mainnet"
-          ]
-        }
+        "apis": [
+          "lookupEntities"
+        ]
       }
     }
   },
@@ -3189,6 +3330,1280 @@
     "nodeApiChains": 24,
     "web3DataApiChains": 20,
     "webhookApiChains": 10,
+    "flexibleWebhookApiChains": 10,
     "multichainApiChains": 17
+  },
+  "services": {
+    "flexible-webhook-api": {
+      "apis": {
+        "createFlexibleWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "listFlexibleWebhooks": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "deleteFlexibleWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "getFlexibleWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "updateFlexibleWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "getFlexibleStreamSchema": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "listFlexibleStreams": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ]
+      }
+    },
+    "multichain-api": {
+      "apis": {
+        "lookupEntities": [
+          "aptos-mainnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "base-mainnet",
+          "base-sepolia",
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "dogecoin-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-amoy",
+          "polygon-mainnet",
+          "tron-mainnet",
+          "xrpl-mainnet"
+        ]
+      }
+    },
+    "web3-data-api": {
+      "apis": {
+        "asset/getAssetHoldersById": [
+          "tron-mainnet"
+        ],
+        "asset/getAssetMetadataByIds": [
+          "tron-mainnet"
+        ],
+        "asset/getAssetMetadataByIssuer": [
+          "tron-mainnet"
+        ],
+        "asset/getAssetTransfersByAccount": [
+          "tron-mainnet"
+        ],
+        "asset/getAssetTransfersById": [
+          "tron-mainnet"
+        ],
+        "asset/getAssetTransfersWithinRange": [
+          "tron-mainnet"
+        ],
+        "asset/getAssetsOwnedByAccount": [
+          "tron-mainnet"
+        ],
+        "asset/searchAssetMetadataByKeyword": [
+          "tron-mainnet"
+        ],
+        "blockchain/getBlockByHashOrNumber": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "dogecoin-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "blockchain/getBlocksWithinRange": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "blockchain/getEventsByAccount": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "blockchain/getEventsByType": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "blockchain/getGasPrice": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "blockchain/getInternalTransactionsByAccount": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "blockchain/getInternalTransactionsByTransactionHash": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "blockchain/getLedgerByHashOrIndex": [
+          "xrpl-mainnet"
+        ],
+        "blockchain/getLedgersWithinRange": [
+          "xrpl-mainnet"
+        ],
+        "blockchain/getNextNonceByAccount": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "blockchain/getTotalTransactionCountByAccount": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "dogecoin-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet",
+          "xrpl-mainnet"
+        ],
+        "blockchain/getTransactionByHash": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "xrpl-mainnet"
+        ],
+        "blockchain/getTransactionByTransactionId": [
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "dogecoin-mainnet"
+        ],
+        "blockchain/getTransactionByVersion": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "blockchain/getTransactionsByAccount": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "dogecoin-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet",
+          "xrpl-mainnet"
+        ],
+        "blockchain/getTransactionsByHashes": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet",
+          "xrpl-mainnet"
+        ],
+        "blockchain/getTransactionsByTransactionIds": [
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "dogecoin-mainnet"
+        ],
+        "blockchain/getTransactionsByVersions": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "blockchain/getTransactionsInBlock": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "blockchain/getTransactionsInLedger": [
+          "xrpl-mainnet"
+        ],
+        "blockchain/getUnspentTransactionOutputsByAccount": [
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "dogecoin-mainnet"
+        ],
+        "blockchain/isContract": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "blockchain/searchEvents": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "ens/getAddressByEnsName": [
+          "ethereum-mainnet"
+        ],
+        "ens/getEnsNameByAddress": [
+          "ethereum-mainnet"
+        ],
+        "ens/getEnsRecordByName": [
+          "ethereum-mainnet"
+        ],
+        "ens/getEnsRecordsByAccount": [
+          "ethereum-mainnet"
+        ],
+        "native/getNativeBalanceByAccount": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "native/getNativeHolders": [
+          "tron-mainnet"
+        ],
+        "native/getNativeTokenBalanceByAccount": [
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "dogecoin-mainnet",
+          "xrpl-mainnet"
+        ],
+        "native/getNativeTokenBalanceChangesByAccount": [
+          "xrpl-mainnet"
+        ],
+        "native/getNativeTokenTransfersByAccount": [
+          "bitcoin-mainnet",
+          "bitcoincash-mainnet",
+          "dogecoin-mainnet"
+        ],
+        "native/getNativeTransfersByAccount": [
+          "arc-testnet",
+          "tron-mainnet"
+        ],
+        "native/getNativeTransfersWithinRange": [
+          "arc-testnet",
+          "tron-mainnet"
+        ],
+        "nft/getNftContractMetadataByContracts": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftContractsByAccount": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftHoldersByContract": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftHoldersByTokenId": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftMetadataByContract": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftMetadataByTokenIds": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftTransfersByAccount": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftTransfersByContract": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftTransfersByTokenId": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftTransfersWithinRange": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/getNftsOwnedByAccount": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/searchNftContractMetadataByKeyword": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "nft/syncNftMetadata": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "stats/getAccountStats": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "stats/getDailyActiveAccountsStats": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "stats/getDailyActiveAccountsStatsByContract": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "stats/getDailyTransactionsStats": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "stats/getDailyTransactionsStatsByContract": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "stats/getHourlyActiveAccountsStats": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "stats/getHourlyActiveAccountsStatsByContract": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "stats/getHourlyTransactionsStats": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "stats/getHourlyTransactionsStatsByContract": [
+          "ethereum-mainnet",
+          "luniverse-mainnet"
+        ],
+        "token/getTokenAccountsByAssetType": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "token/getTokenAllowance": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "token/getTokenBalanceChangesByAccount": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "xrpl-mainnet"
+        ],
+        "token/getTokenBalanceChangesByAssetType": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "token/getTokenBalanceChangesWithinRange": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "token/getTokenContractMetadataByContracts": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "token/getTokenHoldersByContract": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "token/getTokenMetadataByAssetTypes": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "token/getTokenPairByAssetType": [
+          "aptos-mainnet",
+          "aptos-testnet"
+        ],
+        "token/getTokenPricesByContracts": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "token/getTokenTransfersByAccount": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet",
+          "xrpl-mainnet"
+        ],
+        "token/getTokenTransfersByContract": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "token/getTokenTransfersByCurrencyAndIssuer": [
+          "xrpl-mainnet"
+        ],
+        "token/getTokenTransfersWithinRange": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet",
+          "xrpl-mainnet"
+        ],
+        "token/getTokensOwnedByAccount": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "token/searchTokenContractMetadataByKeyword": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ]
+      }
+    },
+    "webhook-api": {
+      "apis": {
+        "createWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "getWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "deleteWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "updateWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "getWebhookHistory": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-testnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ]
+      }
+    }
   }
 }

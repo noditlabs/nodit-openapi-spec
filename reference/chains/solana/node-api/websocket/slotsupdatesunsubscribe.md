@@ -4,14 +4,14 @@ slug: /node-api/slotsupdatesunsubscribe
 
 # slotsUpdatesUnsubscribe
 
-The slotsUpdatesUnsubscribe method in Solana cancels a slot update subscription created by slotsUpdatesSubscribe so that slot update notifications are no longer received.
+Solana의 slotsUpdatesUnsubscribe 메서드는 slotsUpdatesSubscribe로 생성된 슬롯 업데이트 구독을 해제하여 더 이상 슬롯 업데이트 알림을 받지 않도록 합니다.
 
-> 📘 Notes on Usage
+> 📘 사용 시 참고사항
 >
-> - Must be called via a **WebSocket** endpoint; HTTP is not supported.
-> - After unsubscribing, you cannot re-subscribe using the same subscription ID. If a new subscription is needed, call slotsUpdatesSubscribe again.
-> - When the WebSocket connection drops, the subscription is automatically cancelled, so you must re-subscribe upon reconnection.
-> - **⚠️ This subscription is unstable.** The subscription format may change in the future and may not always be supported.
+> - 반드시 **WebSocket** 엔드포인트를 통해 호출해야 하며, HTTP는 지원되지 않습니다.
+> - 구독 해제 후에는 해당 subscription ID로 다시 구독할 수 없습니다. 새로운 구독이 필요한 경우 slotsUpdatesSubscribe를 다시 호출해야 합니다.
+> - WebSocket 연결이 끊어지면 구독이 자동으로 해제되므로, 재연결 시 구독을 다시 설정해야 합니다.
+> - **⚠️ 이 구독은 불안정합니다.** 구독 형식이 향후 변경될 수 있으며, 항상 지원되지 않을 수 있습니다.
 
 ---
 
@@ -19,14 +19,14 @@ The slotsUpdatesUnsubscribe method in Solana cancels a slot update subscription 
 
 ### Parameters
 
-The unsubscribe request has the following parameters.
+슬롯 업데이트 구독 해제 요청은 아래의 파라미터를 가집니다.
 
-| Parameter | Type              | Required | Description                                                                       |
-| --------- | ----------------- | -------- | --------------------------------------------------------------------------------- |
-| id        | integer or string | required | A unique request identifier. Used by the client to match requests with responses. |
-| jsonrpc   | string            | required | JSON-RPC protocol version. Always enter "2.0".                                    |
-| method    | string            | required | The method name to execute. Enter "slotsUpdatesUnsubscribe" here.                 |
-| params    | array             | required | An array containing the subscription ID of the subscription to cancel.            |
+| Parameter | Type              | Required | Description                                                          |
+| --------- | ----------------- | -------- | -------------------------------------------------------------------- |
+| id        | integer or string | required | 요청 고유 식별자. 클라이언트가 요청과 응답을 매칭하는데 사용됩니다.  |
+| jsonrpc   | string            | required | JSON-RPC 프로토콜 버전. 항상 "2.0"을 입력합니다.                     |
+| method    | string            | required | 실행할 메서드 이름. 여기서는 "slotsUpdatesUnsubscribe"를 입력합니다. |
+| params    | array             | required | 해제할 구독의 subscription ID를 포함하는 배열입니다.                 |
 
 ### Example
 
@@ -45,7 +45,7 @@ The unsubscribe request has the following parameters.
 
 ### Success Response
 
-Upon successful unsubscription, true is returned.
+성공적으로 구독이 해제되면 true가 반환됩니다.
 
 ```json Response example
 {
@@ -57,7 +57,7 @@ Upon successful unsubscription, true is returned.
 
 ### Error Response
 
-If unsubscription fails, an error is returned.
+구독 해제에 실패한 경우 에러가 반환됩니다.
 
 ```json Error example
 {
@@ -103,11 +103,11 @@ wscat -c wss://api.mainnet-beta.solana.com
 
 ### Unsubscribe
 
-There are two ways to cancel a subscription:
+구독을 해제하는 방법은 두 가지가 있습니다:
 
-1. **Close connection**: Press `CTRL+C` in the terminal window to close the WebSocket connection and all subscriptions will be automatically cancelled.
+1. **연결 종료**: 터미널 창에서 `CTRL+C`를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
 
-2. **Cancel specific subscription**: Use slotsUpdatesUnsubscribe to cancel only a specific subscription while keeping the connection open.
+2. **특정 구독 해제**: slotsUpdatesUnsubscribe를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
 
 ```json unsubscribe example
 {
