@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_sendrawtransaction
+      operationId: worldchain-eth_sendrawtransaction
       summary: eth_sendRawTransaction
       description: Broadcasts a signed transaction to the network. On success, returns the transaction hash. Transaction signing must be done client-side with the private key. The node only validates the transaction.
       x-seo-description: Submit a signed and RLP-encoded raw transaction to broadcast.

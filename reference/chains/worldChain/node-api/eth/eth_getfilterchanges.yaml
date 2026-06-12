@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getfilterchanges
+      operationId: worldchain-eth_getfilterchanges
       summary: eth_getFilterChanges
       description: Returns filter results for the specified filter ID. Use a filter ID created via eth_newFilter, eth_newBlockFilter, or eth_newPendingTransactionFilter.
       x-seo-description: Poll for new logs, blocks, or pending transactions since the last poll for an active filter.

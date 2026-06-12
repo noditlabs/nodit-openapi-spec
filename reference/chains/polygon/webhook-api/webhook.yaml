@@ -369,6 +369,7 @@ paths:
         API for creating a Webhook. Create a Webhook by providing subscription details and Webhook URL. Once created, events will be sent to the Webhook URL. On creation, the API returns the Webhook's Subscription ID, which you can use to query, update, and delete the Webhook.
 
       x-seo-description: Create a new webhook subscription to receive real-time blockchain event notifications to your endpoint.
+      x-hide-try-it: true
       tags:
         - Webhook API
       parameters:

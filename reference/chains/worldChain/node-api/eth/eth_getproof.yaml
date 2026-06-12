@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getproof
+      operationId: worldchain-eth_getproof
       summary: eth_getProof
       description: Returns the value stored in the Storage of the specified address in a format that includes a Merkle proof. The returned proof can be used to verify that the queried storage state has not been tampered with.
       x-seo-description: Generate a Merkle proof for account storage and state.

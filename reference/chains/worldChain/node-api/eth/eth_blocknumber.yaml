@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_blocknumber
+      operationId: worldchain-eth_blocknumber
       summary: eth_blockNumber
       description: Returns the number of the most recent block.
       x-seo-description: Returns the number of the most recent block.

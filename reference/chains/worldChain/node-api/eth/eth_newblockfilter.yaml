@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_newblockfilter
+      operationId: worldchain-eth_newblockfilter
       summary: eth_newBlockFilter
       description: Creates a filter to receive notifications when new blocks are mined, and returns a filter ID. The filter ID is used with eth_getFilterChanges to poll for filter results.
       x-seo-description: Create a filter to receive notifications when new blocks are added to the blockchain.

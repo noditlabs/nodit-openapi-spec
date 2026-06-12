@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-net_version
+      operationId: worldchain-net_version
       summary: net_version
       description: Returns the network ID of the connected Ethereum network. The network ID is used to distinguish between different Ethereum networks (e.g., mainnet, testnet). For example, Ethereum mainnet has network ID 1, Ropsten testnet has 3, and Rinkeby testnet has 4. This method is primarily used to identify the network and verify that an application is connected to the correct network.
       x-seo-description: Returns the current network ID as a string.

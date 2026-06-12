@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getblockbynumber
+      operationId: worldchain-eth_getblockbynumber
       summary: eth_getBlockByNumber
       description: "Returns block information for the specified block number.\n\t\t\t\t\t\n\n> 🚧 Response taking too long? Response time may increase when including transactions!\n>\n> When requesting full block information, response time can increase if the block contains many transactions.\n> For faster responses, exclude transactions and request only the block header (include transactions=false).\n"
       x-seo-description: Retrieve full block details including transactions by block number.

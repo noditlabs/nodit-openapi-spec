@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_chainid
+      operationId: worldchain-eth_chainid
       summary: eth_chainId
       description: Returns the chain ID of the network the node is connected to as a hexadecimal string. The chain ID is the network identifier defined in EIP-155, used for transaction signing to prevent replay attacks.
       x-seo-description: Returns the chain ID of the current EVM network, used for transaction signing and replay protection.

@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_newfilter
+      operationId: worldchain-eth_newfilter
       summary: eth_newFilter
       description: |
         Creates a filter for logs matching the specified criteria and returns a filter ID. The filter ID is used with eth_getFilterLogs and eth_uninstallFilter.

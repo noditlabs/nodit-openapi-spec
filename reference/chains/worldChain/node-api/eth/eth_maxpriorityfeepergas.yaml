@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_maxpriorityfeepergas
+      operationId: worldchain-eth_maxpriorityfeepergas
       summary: eth_maxPriorityFeePerGas
       description: Returns the maximum priority fee in wei for the network the node is connected to. The maximum priority fee is used in the new transaction format defined in EIP-1559.
       x-seo-description: Returns the recommended maximum priority fee per gas (miner tip) for EIP-1559 transactions.

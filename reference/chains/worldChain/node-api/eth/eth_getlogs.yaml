@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getlogs
+      operationId: worldchain-eth_getlogs
       summary: eth_getLogs
       description: |
         Returns logs matching the specified filter criteria. Unlike filter-based methods, filter conditions are passed directly in the request without creating a filter first.

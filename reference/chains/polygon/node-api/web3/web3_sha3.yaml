@@ -5,8 +5,6 @@ info:
 servers:
   - url: https://polygon-mainnet.nodit.io
     description: Polygon Mainnet
-  - url: https://polygon-amoy.nodit.io
-    description: Polygon Amoy
 components:
   securitySchemes:
     api_key:
@@ -1293,7 +1291,7 @@ paths:
                   type: array
                   items:
                     oneOf:
-                      - title: 입력 데이터
+                      - title: Input Data
                         type: string
                         pattern: ^0[xX][0-9a-fA-F]+$
                         example: "0x68656c6c6f204e4f444954"

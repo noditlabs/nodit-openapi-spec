@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_uninstallfilter
+      operationId: worldchain-eth_uninstallfilter
       summary: eth_uninstallFilter
       description: Uninstalls the filter with the specified filter ID. Use a filter ID created via eth_newFilter. Returns `false` if the filter was already removed or does not exist.
       x-seo-description: Uninstall and remove an active event filter identified by its filter ID.

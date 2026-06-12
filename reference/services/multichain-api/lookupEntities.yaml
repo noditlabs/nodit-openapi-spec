@@ -391,7 +391,7 @@ components:
                 code: UNAVAILABLE
                 message: Service unavailable
 paths:
-  /lookupEntities:
+  /multichain/lookupEntities:
     post:
       security:
         - api_key: []

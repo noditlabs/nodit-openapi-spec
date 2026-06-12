@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_gettransactionreceipt
+      operationId: worldchain-eth_gettransactionreceipt
       summary: eth_getTransactionReceipt
       description: "Returns the transaction receipt for the specified transaction hash.\n\t\t\t\t\t\n\n> 🚧 Response taking too long? Response time may vary based on transaction complexity!\n>\n> When querying a specific transaction, response time can increase depending on the amount of event logs, transaction order in the block, etc.\n> For faster responses, request without including the transaction's event logs.\n"
       x-seo-description: Retrieve the transaction receipt including status, gas used, and logs after confirmation.

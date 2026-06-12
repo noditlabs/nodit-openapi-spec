@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getblockbyhash
+      operationId: worldchain-eth_getblockbyhash
       summary: eth_getBlockByHash
       description: |
         Returns block information for the specified block hash.

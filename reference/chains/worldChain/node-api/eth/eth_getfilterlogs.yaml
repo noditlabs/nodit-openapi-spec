@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getfilterlogs
+      operationId: worldchain-eth_getfilterlogs
       summary: eth_getFilterLogs
       description: Returns logs for the specified filter ID. Use a filter ID created via eth_newFilter. Returns the same result as eth_getLogs.
       x-seo-description: Retrieve all logs matching the criteria of an existing filter.

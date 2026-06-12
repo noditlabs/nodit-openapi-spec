@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-web3_clientversion
+      operationId: worldchain-web3_clientversion
       summary: web3_clientVersion
       description: Queries the client version information of the current node.
       x-seo-description: Returns the current client version and implementation details of the connected Ethereum node.

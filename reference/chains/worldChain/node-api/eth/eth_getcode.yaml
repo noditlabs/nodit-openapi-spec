@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getcode
+      operationId: worldchain-eth_getcode
       summary: eth_getCode
       description: Returns the smart contract code at the specified address. Returns `0x` if no code exists.
       x-seo-description: Retrieve the bytecode deployed at a smart contract address.

@@ -3088,7 +3088,7 @@
         }
       }
     },
-    "worldChain": {
+    "worldchain": {
       "nodeApi": {
         "supported": true,
         "evmJsonrpc": {

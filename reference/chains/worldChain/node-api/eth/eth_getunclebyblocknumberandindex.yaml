@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getunclebyblocknumberandindex
+      operationId: worldchain-eth_getunclebyblocknumberandindex
       summary: eth_getUncleByBlockNumberAndIndex
       description: Returns the uncle block information for the specified block number and uncle index.
       x-seo-description: Returns information about an uncle block by block number and uncle index position.

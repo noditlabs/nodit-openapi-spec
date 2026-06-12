@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-net_listening
+      operationId: worldchain-net_listening
       summary: net_listening
       description: Checks whether the client is currently in a state to accept requests. Can be used as a health check method.
       x-seo-description: Returns whether the node is actively listening for network connections on the EVM network.

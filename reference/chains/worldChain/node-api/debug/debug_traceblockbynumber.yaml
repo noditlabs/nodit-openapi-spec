@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-debug_traceblockbynumber
+      operationId: worldchain-debug_traceblockbynumber
       summary: debug_traceBlockByNumber
       description: |
         A debugging tool that allows you to trace chain state changes caused by transactions and the history of actual calls for a specific block, by configuring a tracer and using the information it provides.
