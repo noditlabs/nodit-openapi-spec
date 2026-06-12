@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-web3_sha3
+      operationId: worldchain-web3_sha3
       summary: web3_sha3
       description: Applies the SHA3 (Keccak-256) hash function to the input data and returns the result. This method is primarily used to verify data integrity or generate unique identifiers for specific data. For example, it can be used to hash input data for storage on the blockchain or to compute unique hash values.
       x-seo-description: Compute the Keccak-256 hash of the given data using the Ethereum hashing algorithm.
@@ -1291,7 +1291,7 @@ paths:
                   type: array
                   items:
                     oneOf:
-                      - title: 입력 데이터
+                      - title: Input Data
                         type: string
                         pattern: ^0[xX][0-9a-fA-F]+$
                         example: "0x68656c6c6f204e4f444954"

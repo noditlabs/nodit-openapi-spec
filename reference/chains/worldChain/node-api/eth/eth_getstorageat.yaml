@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getstorageat
+      operationId: worldchain-eth_getstorageat
       summary: eth_getStorageAt
       description: Returns the value at the assigned storage slot of the specified address.
       x-seo-description: Read the value stored at a specific storage slot of a smart contract address.

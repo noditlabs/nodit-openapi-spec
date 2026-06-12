@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_gettransactionbyblockhashandindex
+      operationId: worldchain-eth_gettransactionbyblockhashandindex
       summary: eth_getTransactionByBlockHashAndIndex
       description: Returns the transaction information for the specified block hash and transaction index.
       x-seo-description: Retrieve a transaction by its position index within a block identified by block hash.

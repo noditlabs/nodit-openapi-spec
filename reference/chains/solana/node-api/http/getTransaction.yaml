@@ -469,13 +469,16 @@ paths:
                             type: integer
                             description: Estimated production time, as Unix timestamp (seconds since the Unix epoch) of when the transaction was processed. null if not available
                           meta:
+                            description: Metadata for the transaction processing result.
                             $ref: "#/components/schemas/TransactionMeta"
                           slot:
                             type: integer
                             description: The slot this transaction was processed in
                           transaction:
+                            description: Transaction information.
                             $ref: "#/components/schemas/Transaction"
                           version:
+                            description: Transaction version. Undefined if maxSupportedTransactionVersion is not set in request params.
                             $ref: "#/components/schemas/TransactionVersion"
                 example:
                   jsonrpc: "2.0"

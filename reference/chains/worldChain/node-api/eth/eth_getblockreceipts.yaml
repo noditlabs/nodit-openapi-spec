@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getblockreceipts
+      operationId: worldchain-eth_getblockreceipts
       summary: eth_getBlockReceipts
       description: "Returns all transaction receipts for the block specified by block hash or identifier.\n\t\t\t\t\t\n\n> 🚧 Response taking too long? Response time may increase with the number of transactions in the block!\n>\n> eth_getBlockReceipts fetches all transaction receipts for a block at once. Response time can increase when the block has many transactions or complex execution results.\n>\n> For faster responses, consider:\n>\n> - Use eth_getTransactionReceipt to fetch individual transaction receipts when only specific transactions are needed.\n"
       x-seo-description: Fetch all transaction receipts for a specific block.

@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-debug_tracecall
+      operationId: worldchain-debug_tracecall
       summary: debug_traceCall
       description: Runs eth_call in debugging mode and provides trace functionality. You can trace all stack changes that occur when executing a specific call based on the current block's state.
       x-seo-description: Trace a call execution against a specific block to debug smart contract interactions.

@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_createaccesslist
+      operationId: worldchain-eth_createaccesslist
       summary: eth_createAccessList
       description: Generates an Access List for a transaction according to EIP-2930. The Access List contains only the minimum information required for execution, reducing network load and gas costs.
       x-seo-description: Generate an access list for a transaction to optimize gas usage .

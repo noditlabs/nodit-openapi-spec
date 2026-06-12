@@ -1,0 +1,1243 @@
+openapi: 3.1.0
+info:
+  title: Arbitrum - Flexible Webhook API
+  version: 1.0.0
+servers:
+  - url: https://web3.nodit.io/v1
+    description: Flexible Webhook API
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - MISSING_REQUIRED_PARAMETER
+                  - INVALID_PARAMETER
+                  - WRONG_RANGE_PARAMETER
+                  - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+              - code
+              - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: When a required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: "Missing required parameter: { PARAMETER_NAME }"
+            INVALID_PARAMETER:
+              summary: When an invalid value is provided for a parameter
+              value:
+                code: INVALID_PARAMETER
+                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+            WRONG_RANGE_PARAMETER:
+              summary: When a value outside the query range is provided
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: "Wrong range parameter: { PARAMETER_NAME }"
+            DEPRECATED_OPERATION:
+              summary: When a deprecated API is requested
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - NO_AUTHENTICATION_FOUND
+                  - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+              - code
+              - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: When authentication credentials are not included
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found
+            AUTHENTICATION_FAILED:
+              summary: When authentication credentials are mismatched or invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+              - code
+              - message
+          examples:
+            PERMISSION_DENIED:
+              summary: When accessing an unauthorized resource
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - WRONG_ENDPOINT
+                  - NOT_SUPPORTED_CHAIN
+                  - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+              - code
+              - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: When requesting a non-existent API path
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: When requesting an unsupported chain
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: When requesting a resource that does not exist on the server
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+              - code
+              - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: When requesting with an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+              - code
+              - message
+          examples:
+            TIMEOUT:
+              summary: When processing is not completed within the specified time
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - RESOURCE_ALREADY_EXISTS
+                  - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+              - code
+              - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: When attempting to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: When the request is rejected by the server
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+              - code
+              - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: When the payload exceeds the server's maximum limit
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+              - code
+              - message
+          examples:
+            TOO_LONG_URI:
+              summary: When the request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - TOO_MANY_REQUESTS
+                  - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+              - code
+              - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: When the rate limit is exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: When the quota limit is exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - INTERNAL_SERVER_ERROR
+                  - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+              - code
+              - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: When an internal server error occurs
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: When processing fails temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                  - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+              - code
+              - message
+          examples:
+            UNAVAILABLE:
+              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+  parameters:
+    SubscriptionId:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The unique ID that identifies a Webhook subscription.
+      schema:
+        type: string
+        example: "9193601422344750850"
+    StreamId:
+      name: streamId
+      in: path
+      required: true
+      description: The unique ID that identifies a Stream.
+      schema:
+        type: string
+        example: "77"
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Page number to retrieve. Starts from 1.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    Rpp:
+      name: rpp
+      in: query
+      required: false
+      description: Number of results per page. Minimum 1, maximum 100. Defaults to 10.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+    SigningKey:
+      signingKey:
+        type: string
+        nullable: true
+        description: |
+          The signing key used to authenticate Flexible Webhook notifications. After receiving a notification, use this key to verify its validity.
+
+          The signing key is automatically generated when the Flexible Webhook is created and is only available in the creation response.
+  schemas:
+    DeleteResponse:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: Result of the request. Returns `true` on success.
+          example: true
+        code:
+          type: string
+          description: Processing result code. Returns `"OK"` on success.
+          example: OK
+    StreamData:
+      type: object
+      properties:
+        streamId:
+          type: string
+          description: The unique ID of the on-chain data trackable via Flexible Webhook. You can look this up using the List Flexible Streams API.
+        slug:
+          type: string
+          description: A human-readable identifier for the stream.
+        chain:
+          type: string
+          description: The name of the blockchain from which data is retrieved.
+        network:
+          type: string
+          description: The network of the blockchain from which data is retrieved (e.g., "mainnet", "testnet").
+        description:
+          type: string
+          nullable: true
+          description: A description of the stream. Returns null if not provided.
+        schema:
+          type: object
+          description: The JSON Schema for the Stream event payload.
+        filterFields:
+          type: array
+          description: List of fields that can be used as filter conditions in a CEL expression.
+          items:
+            type: string
+        bigintFields:
+          type: array
+          description: List of fields with bigint values. Take care with numeric comparisons when writing CEL expressions.
+          items:
+            type: string
+        addressFields:
+          type: array
+          description: List of fields containing blockchain address values. Use the `address_eq()` function in CEL expressions for these fields.
+          items:
+            type: string
+    StreamListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of Streams matching the query conditions.
+        page:
+          type: integer
+          description: Current page number.
+        rpp:
+          type: integer
+          description: Number of results per page.
+        items:
+          type: array
+          description: List of Streams on the current page.
+          items:
+            $ref: "#/components/schemas/StreamData"
+    StreamSchema:
+      type: object
+      properties:
+        streamId:
+          type: string
+          description: The unique ID that identifies a Stream.
+        schema:
+          type: object
+          description: The full JSON Schema of the Stream payload. Use this to inspect the type and structure of each field.
+        filterFields:
+          type: array
+          description: List of fields that can be used as filter conditions in a CEL expression.
+          items:
+            type: string
+        bigintFields:
+          type: array
+          description: List of fields with bigint values. Take care with numeric comparisons when writing CEL expressions.
+          items:
+            type: string
+        addressFields:
+          type: array
+          description: List of fields containing blockchain address values. Use the `address_eq()` function in CEL expressions for these fields.
+          items:
+            type: string
+    WebhookCreateRequest:
+      type: object
+      required:
+        - name
+        - streamId
+        - filterExpression
+        - destination
+      properties:
+        name:
+          type: string
+          description: The display name of the Flexible Webhook subscription. Up to 255 characters.
+          maxLength: 255
+        description:
+          type: string
+          description: An optional description of the Webhook subscription.
+        streamId:
+          type: string
+          description: The unique ID of the on-chain data trackable via Flexible Webhook. You can look this up using the List Flexible Streams API.
+          example: "77"
+        filterExpression:
+          type: string
+          description: A CEL (Common Expression Language) expression used to filter events. Use the List Flexible Streams API to view the stream's schema.
+          example: address_eq(token_address, '0xdAC17F958D2ee523a2206206994597C13D831ec7')
+        receiveFields:
+          type: array
+          description: List of fields to include in the Webhook payload. If not specified, all fields from the stream are received.
+          items:
+            type: string
+          example:
+            - from_address
+            - to_address
+            - value
+        destination:
+          type: string
+          description: The endpoint URL to receive events.
+          example: https://example.com/webhook
+    WebhookData:
+      type: object
+      description: Webhook subscription information.
+      properties:
+        subscriptionId:
+          type: string
+          description: The unique ID that identifies this Flexible Webhook.
+        projectId:
+          type: string
+          description: The ID of the project this Flexible Webhook belongs to.
+        accountId:
+          type: string
+          description: The ID of the account that created this Flexible Webhook.
+        name:
+          type: string
+          description: The display name of the Flexible Webhook subscription.
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          description: An optional description of the Flexible Webhook subscription.
+        chain:
+          type: string
+          description: The name of the blockchain this Flexible Webhook is subscribed to.
+        network:
+          type: string
+          description: The network of the blockchain this Flexible Webhook is subscribed to.
+        streamId:
+          type: string
+          description: The unique ID of the on-chain data trackable via Flexible Webhook. You can look this up using the Get Stream Schema API or List Flexible Streams API.
+        streamSlug:
+          type: string
+          description: The slug identifying this Stream.
+        filterExpression:
+          type: string
+          description: A CEL (Common Expression Language) expression used to filter events. Use the Get Stream Schema API or List Flexible Streams API to view the stream's schema.
+        receiveFields:
+          type: array
+          nullable: true
+          description: List of fields included in the Webhook payload. If not specified, all stream fields are received.
+          items:
+            type: string
+        deliveryChannel:
+          type: string
+          description: The delivery channel for event data.
+          enum:
+            - WEBHOOK
+        destination:
+          type: string
+          nullable: true
+          description: The endpoint URL that receives events for this Flexible Webhook subscription.
+        signingKey:
+          type: string
+          nullable: true
+          description: |
+            The signing key used to authenticate Flexible Webhook notifications. After receiving a notification, use this key to verify its validity.
+
+            The signing key is automatically generated when the Flexible Webhook is created and is only available in the creation response.
+        status:
+          type: string
+          description: The subscription status of this Flexible Webhook.
+          enum:
+            - ACTIVE
+            - PAUSED
+        createdAt:
+          type: string
+          description: The date and time this Flexible Webhook subscription was created (ISO 8601 format).
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date and time this Flexible Webhook subscription was last updated (ISO 8601 format).
+          format: date-time
+    WebhookListData:
+      type: object
+      description: Webhook subscription information.
+      properties:
+        subscriptionId:
+          type: string
+          description: The unique ID that identifies this Flexible Webhook.
+        projectId:
+          type: string
+          description: The ID of the project this Flexible Webhook belongs to.
+        accountId:
+          type: string
+          description: The ID of the account that created this Flexible Webhook.
+        name:
+          type: string
+          description: The display name of the Flexible Webhook subscription.
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          description: An optional description of the Flexible Webhook subscription.
+        chain:
+          type: string
+          description: The name of the blockchain this Flexible Webhook is subscribed to.
+        network:
+          type: string
+          description: The network of the blockchain this Flexible Webhook is subscribed to.
+        streamId:
+          type: string
+          description: The unique ID of the on-chain data trackable via Flexible Webhook. You can look this up using the List Flexible Streams API.
+        streamSlug:
+          type: string
+          description: The slug identifying this Stream.
+        filterExpression:
+          type: string
+          description: A CEL (Common Expression Language) expression used to filter events. Use the List Flexible Streams API to view the stream's schema.
+        receiveFields:
+          type: array
+          nullable: true
+          description: List of fields included in the Webhook payload. If not specified, all stream fields are received.
+          items:
+            type: string
+        deliveryChannel:
+          type: string
+          description: The delivery channel for event data.
+          enum:
+            - WEBHOOK
+        destination:
+          type: string
+          nullable: true
+          description: The endpoint URL that receives events for this Flexible Webhook subscription.
+        status:
+          type: string
+          description: The subscription status of this Flexible Webhook.
+          enum:
+            - ACTIVE
+            - PAUSED
+        createdAt:
+          type: string
+          description: The date and time this Flexible Webhook subscription was created (ISO 8601 format).
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date and time this Flexible Webhook subscription was last updated (ISO 8601 format).
+          format: date-time
+    WebhookListResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of Webhook subscriptions matching the query conditions.
+        page:
+          type: integer
+          description: Current page number.
+        rpp:
+          type: integer
+          description: Number of results per page.
+        items:
+          type: array
+          description: List of Webhook subscriptions on the current page.
+          items:
+            $ref: "#/components/schemas/WebhookListData"
+    WebhookUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The new display name for the Flexible Webhook subscription. Up to 255 characters.
+          maxLength: 255
+        description:
+          type: string
+          description: An optional description of the Webhook subscription.
+        status:
+          type: string
+          description: The new subscription status. Set to ACTIVE to resume event delivery, or PAUSED to suspend it.
+          enum:
+            - ACTIVE
+            - PAUSED
+paths:
+  /{chain}/{network}/flexible-webhooks:
+    post:
+      security:
+        - api_key: []
+      operationId: arbitrum-createFlexibleWebhook
+      summary: Create Flexible Webhook
+      description: |+
+        Creates a Flexible Webhook subscription that matches Stream events against a CEL filter expression and delivers them to the endpoint you specify.
+
+        > The `signingKey` is only exposed in plain text in this response. Store it securely.
+
+        > Before creating a Flexible Webhook, call the Get Stream Schema API or List Flexible Streams API to check the available `streamId` values and the fields you can filter with a CEL expression.
+
+      x-seo-description: Create a new flexible webhook subscription using CEL filter expressions to receive real-time blockchain event notifications.
+      x-hide-try-it: true
+      tags:
+        - Flexible Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arbitrum
+            default: arbitrum
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - sepolia
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebhookCreateRequest"
+            example:
+              name: usdt-transfer-monitor
+              description: Monitor USDT transfers
+              streamId: "77"
+              filterExpression: address_eq(token_address, '0xdAC17F958D2ee523a2206206994597C13D831ec7')
+              receiveFields:
+                - from_address
+                - to_address
+                - value
+              destination: https://example.com/webhook
+      responses:
+        "201":
+          description: Created Flexible Webhook
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookData"
+              example:
+                subscriptionId: "9193601422344750850"
+                projectId: "1707097591297382645"
+                accountId: "2636185936096812397"
+                name: usdt-transfer-monitor
+                description: Monitor USDT transfers
+                protocol: ethereum
+                network: mainnet
+                streamId: "77"
+                streamSlug: ethereum.mainnet.erc20.transfer
+                filterExpression: address_eq(token_address, '0xdAC17F958D2ee523a2206206994597C13D831ec7')
+                receiveFields:
+                  - from_address
+                  - to_address
+                  - value
+                deliveryChannel: WEBHOOK
+                destination: https://example.com/webhook
+                signingKey: dd8af3faf0e24f4f96596b6ee42fc30e526bf29e162947b89d822ad5733555f6
+                status: ACTIVE
+                createdAt: "2026-05-18T10:00:00Z"
+                updatedAt: "2026-05-18T10:00:00Z"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+    get:
+      security:
+        - api_key: []
+      operationId: arbitrum-listFlexibleWebhooks
+      summary: List Flexible Webhooks
+      description: |+
+        Returns a paginated list of all active Flexible Webhook subscriptions for the specified chain and network.
+
+      x-seo-description: Retrieve a paginated list of all flexible webhook subscriptions for the specified chain and network.
+      tags:
+        - Flexible Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arbitrum
+            default: arbitrum
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - sepolia
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/Rpp"
+      responses:
+        "200":
+          description: Webhook list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookListResponse"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/flexible-webhooks/{subscriptionId}:
+    delete:
+      security:
+        - api_key: []
+      operationId: arbitrum-deleteFlexibleWebhook
+      summary: Delete Flexible Webhook
+      description: |+
+        Permanently deletes a specific Flexible Webhook subscription.
+
+      x-seo-description: Permanently delete a flexible webhook subscription by its subscription ID.
+      tags:
+        - Flexible Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arbitrum
+            default: arbitrum
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - sepolia
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - $ref: "#/components/parameters/SubscriptionId"
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResponse"
+              example:
+                result: true
+                code: OK
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+    get:
+      security:
+        - api_key: []
+      operationId: arbitrum-getFlexibleWebhook
+      summary: Get Flexible Webhook
+      description: |+
+        Retrieves the details of a specific active Flexible Webhook subscription. The `signingKey` field is not included in the response.
+
+      x-seo-description: Retrieve details of a specific flexible webhook subscription by its subscription ID.
+      tags:
+        - Flexible Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arbitrum
+            default: arbitrum
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - sepolia
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - $ref: "#/components/parameters/SubscriptionId"
+      responses:
+        "200":
+          description: Webhook details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookListData"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+    patch:
+      security:
+        - api_key: []
+      operationId: arbitrum-updateFlexibleWebhook
+      summary: Update Flexible Webhook
+      description: |+
+        Updates the metadata of an existing Webhook subscription. Only `name`, `description`, and `status` can be modified. For any other changes, create a new Webhook subscription.
+
+      x-seo-description: Update the name, description, or status of a flexible webhook subscription. Condition fields are immutable.
+      tags:
+        - Flexible Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arbitrum
+            default: arbitrum
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - sepolia
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - $ref: "#/components/parameters/SubscriptionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebhookUpdateRequest"
+            example:
+              name: renamed-webhook
+              status: PAUSED
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhookData"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/flexible-webhooks/streams/{streamId}/schema:
+    get:
+      security:
+        - api_key: []
+      operationId: arbitrum-getFlexibleStreamSchema
+      summary: Get Stream Schema
+      description: |+
+        Retrieves the JSON Schema and filterable CEL field list for a specific stream. Use `filterFields`, `bigintFields`, and `addressFields` as a reference when writing CEL filter expressions.
+
+      x-seo-description: Retrieve the JSON schema and CEL-filterable fields for a specific stream to build filter expressions.
+      tags:
+        - Flexible Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arbitrum
+            default: arbitrum
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - sepolia
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - $ref: "#/components/parameters/StreamId"
+      responses:
+        "200":
+          description: Stream schema
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StreamSchema"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"
+  /{chain}/{network}/flexible-webhooks/streams:
+    get:
+      security:
+        - api_key: []
+      operationId: arbitrum-listFlexibleStreams
+      summary: List Streams
+      description: |+
+        Returns the available Stream types, their structures, and CEL schema list for Flexible Webhook subscriptions. Use the `streamId` to create a Flexible Webhook subscription and receive data matching the stream's schema at the `destination` endpoint you specify.
+
+      x-seo-description: List available streams for flexible webhook creation, including CEL schema and filterable fields.
+      tags:
+        - Flexible Webhook API
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - arbitrum
+            default: arbitrum
+          description: Parameter to specify the target chain for the query.
+        - name: network
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - mainnet
+              - sepolia
+            default: mainnet
+          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+        - $ref: "#/components/parameters/Page"
+        - $ref: "#/components/parameters/Rpp"
+      responses:
+        "200":
+          description: Stream list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StreamListResponse"
+              example:
+                total: 6
+                page: 1
+                rpp: 10
+                items:
+                  - streamId: "77"
+                    slug: ethereum.mainnet.erc20.transfer
+                    protocol: ethereum
+                    network: mainnet
+                    description: ethereum.mainnet.erc20.transfer schema for CEL evaluation
+                    schema:
+                      type: object
+                      properties:
+                        block_number:
+                          type: integer
+                        block_timestamp:
+                          type: integer
+                        from_address:
+                          type: string
+                        log_index:
+                          type: integer
+                        to_address:
+                          type: string
+                        token_address:
+                          type: string
+                        transaction_hash:
+                          type: string
+                        transaction_index:
+                          type: integer
+                        value:
+                          type: string
+                    filterFields:
+                      - token_address
+                      - from_address
+                      - to_address
+                      - value
+                    bigintFields:
+                      - value
+                    addressFields:
+                      - token_address
+                      - from_address
+                      - to_address
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "405":
+          $ref: "#/components/responses/405"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "413":
+          $ref: "#/components/responses/413"
+        "414":
+          $ref: "#/components/responses/414"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "503":
+          $ref: "#/components/responses/503"

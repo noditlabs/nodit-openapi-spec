@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getblocktransactioncountbyhash
+      operationId: worldchain-eth_getblocktransactioncountbyhash
       summary: eth_getBlockTransactionCountByHash
       description: Returns the number of transactions in the block specified by its block hash.
       x-seo-description: Returns the number of transactions in a block identified by its block hash.

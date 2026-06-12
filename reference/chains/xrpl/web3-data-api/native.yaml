@@ -613,7 +613,7 @@ paths:
                             - issuer
                             - previousBalance
                             - finalBalance
-                            - changeValue
+                            - balanceChange
                           example:
                             ledgerIndex: 95444296
                             ledgerTimestamp: 1744608171

@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_newpendingtransactionfilter
+      operationId: worldchain-eth_newpendingtransactionfilter
       summary: eth_newPendingTransactionFilter
       description: Creates a filter to receive notifications when new pending transactions appear, and returns a filter ID. The filter ID is used with eth_getFilterChanges to poll for filter results.
       x-seo-description: Create a filter to receive hashes of new pending transactions in the mempool.

@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_estimategas
+      operationId: worldchain-eth_estimategas
       summary: eth_estimateGas
       description: Estimates the gas required to execute a transaction. Estimates gas only; does not broadcast the transaction.
       x-seo-description: Estimate the gas required to execute a transaction or contract call on the EVM network.

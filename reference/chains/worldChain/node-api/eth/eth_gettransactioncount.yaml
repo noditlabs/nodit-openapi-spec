@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_gettransactioncount
+      operationId: worldchain-eth_gettransactioncount
       summary: eth_getTransactionCount
       description: Returns the number of transactions sent from the specified address.
       x-seo-description: Returns the number of transactions sent from an address, used to determine the next nonce.

@@ -510,8 +510,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:
@@ -607,8 +605,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:
@@ -708,8 +704,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:
@@ -830,8 +824,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:
@@ -933,8 +925,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:
@@ -1030,8 +1020,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:
@@ -1131,8 +1119,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:
@@ -1244,8 +1230,6 @@ paths:
             type: string
             enum:
               - mainnet
-              - sepolia
-              - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
       requestBody:

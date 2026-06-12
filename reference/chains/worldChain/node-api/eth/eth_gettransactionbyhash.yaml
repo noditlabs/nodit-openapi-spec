@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_gettransactionbyhash
+      operationId: worldchain-eth_gettransactionbyhash
       summary: eth_getTransactionByHash
       description: Returns the transaction information for the specified transaction hash.
       x-seo-description: Fetch detailed transaction data including gas, value, and input by transaction hash.

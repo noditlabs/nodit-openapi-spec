@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_gasprice
+      operationId: worldchain-eth_gasprice
       summary: eth_gasPrice
       description: Returns the estimated gas price of the network the node is connected to in wei.
       x-seo-description: Returns the current gas price in wei recommended for timely transaction inclusion on the network.

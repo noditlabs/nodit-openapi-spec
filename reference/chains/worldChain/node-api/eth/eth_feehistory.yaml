@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_feehistory
+      operationId: worldchain-eth_feehistory
       summary: eth_feeHistory
       description: Returns gas fee history for the requested block range. Use this to set appropriate values for maxFeePerGas and maxPriorityFeePerGas when creating transactions.
       x-seo-description: Retrieve historical gas fee data including base fee and priority fee per block for EVM networks.

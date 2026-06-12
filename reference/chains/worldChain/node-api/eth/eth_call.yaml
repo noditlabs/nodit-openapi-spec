@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_call
+      operationId: worldchain-eth_call
       summary: eth_call
       description: "Execute a read-only contract method without creating or broadcasting a transaction. Primarily used to read the current state of a smart contract. No state changes occur as a result of the call.\n\t\t\t\t\t\n\n> 🚧 Response taking too long? Response time may vary based on function complexity!\n>\n> When executing a smart contract function at a specific state, response time can increase depending on the complexity of the function.\n> For faster responses, optimize the function being executed and minimize the execution result.\n"
       x-seo-description: Execute a read-only smart contract call without submitting a transaction to the blockchain.

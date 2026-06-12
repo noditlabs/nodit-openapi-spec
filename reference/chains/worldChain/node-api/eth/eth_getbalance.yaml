@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getbalance
+      operationId: worldchain-eth_getbalance
       summary: eth_getBalance
       description: Returns the native token balance owned by the specified account address.
       x-seo-description: Returns the native token balance in wei for a specific address at a given block on the EVM network.

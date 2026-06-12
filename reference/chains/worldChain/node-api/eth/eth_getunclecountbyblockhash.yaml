@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-eth_getunclecountbyblockhash
+      operationId: worldchain-eth_getunclecountbyblockhash
       summary: eth_getUncleCountByBlockHash
       description: Returns the number of uncle blocks in the block specified by its block hash.
       x-seo-description: Returns the number of uncle blocks included in the block identified by its hash.

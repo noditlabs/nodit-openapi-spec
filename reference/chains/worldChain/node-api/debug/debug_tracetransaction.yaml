@@ -1260,7 +1260,7 @@ paths:
     post:
       security:
         - api_key: []
-      operationId: worldChain-debug_tracetransaction
+      operationId: worldchain-debug_tracetransaction
       summary: debug_traceTransaction
       description: A debugging method that replays an already-processed transaction at the node level and allows you to inspect detailed information for each step of the transaction execution. It returns various information such as the call stack, gas usage, state changes, and log events. This allows you to trace and debug contract function call flows, variable changes, and event emissions.
       x-seo-description: Replay and trace a specific transaction to inspect execution details and debug issues.
