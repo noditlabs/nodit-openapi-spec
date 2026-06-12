@@ -13,11 +13,13 @@ reference/
 │   └── <chain>/
 │       ├── node-api/          # JSON-RPC / chain-native node methods
 │       ├── web3-data-api/     # Indexed Web3 Data API endpoints
-│       └── webhook-api/       # Webhook subscription endpoints
+│       ├── webhook-api/       # Webhook subscription endpoints
+│       └── flexible-webhook-api/  # Flexible Webhook (stream-based) endpoints
 └── services/                  # Cross-chain (chain-agnostic) service specs
     ├── multichain-api/
     ├── web3-data-api/
-    └── webhook-api/
+    ├── webhook-api/
+    └── flexible-webhook-api/
 ```
 
 Each `*.yaml` file is a self-contained OpenAPI 3.1 document describing a single endpoint, method, or resource group.
@@ -34,7 +36,7 @@ Specs are grouped by chain, then by API surface. The internal layout of the Node
 | Sui                | `node-api/{sui,suix,unsafe}/`                                                                 |
 | Cosmos-based       | `cometbft-api/{json-rpc-api,rest-api}/` and `cosmos-rest-api/` directories at the chain root (Injective and Sei additionally have an EVM-style `node-api/`). |
 
-`web3-data-api/` and `webhook-api/` use a flat resource grouping (e.g. `blockchain.yaml`, `native.yaml`, `nft.yaml`, `token.yaml`, `stats.yaml`, `ens.yaml`, `asset.yaml`, `webhook.yaml`). The exact set of resource files present depends on what each chain supports.
+`web3-data-api/`, `webhook-api/`, and `flexible-webhook-api/` use a flat resource grouping (e.g. `blockchain.yaml`, `native.yaml`, `nft.yaml`, `token.yaml`, `stats.yaml`, `ens.yaml`, `asset.yaml`, `webhook.yaml`, `flexible-webhook.yaml`). The exact set of resource files present depends on what each chain supports.
 
 ### `reference/services/`
 
@@ -43,6 +45,7 @@ Cross-cutting service specs whose definitions are shared across many chains:
 - `multichain-api/` — cross-chain lookup endpoints (e.g. `lookupEntities`). Per-chain coverage is reported under each chain's `multichainApi` entry in `manifest.json`.
 - `web3-data-api/` — shared Web3 Data API resource definitions referenced by chain-specific Web3 Data specs.
 - `webhook-api/` — shared webhook subscription definitions referenced by chain-specific Webhook specs.
+- `flexible-webhook-api/` — shared Flexible Webhook (stream-based) definitions referenced by chain-specific Flexible Webhook specs.
 
 ### `reference/manifest.json`
 
@@ -52,10 +55,22 @@ A machine-readable index describing, for every chain, which API surfaces are sup
 {
   "chains": {
     "<chainName>": {
-      "nodeApi":       { "supported": true, "apis": [ ... ] },
-      "web3DataApi":   { "supported": true, "apis": [ ... ] },
-      "webhookApi":    { "supported": true, "type": "evm" | "aptos", "operations": [ ... ] },
-      "multichainApi": { "supported": true, "apis": [ ... ] }
+      "nodeApi": {
+        "supported": true,
+        // Sub-axis shape depends on the chain family — one or more of:
+        //   evmJsonrpc:      { apis: [...], websocketApis: [...] }
+        //   aptosRest:       { apis: [...] }
+        //   solanaJsonrpc:   { apis: [...] }
+        //   solanaWebsocket: { apis: [...] }
+        //   suiJsonrpc:      { apis: [...] }
+        //   cometbftJsonrpc: { apis: [...] }
+        //   cometbftRest:    { apis: [...] }
+        //   cosmosRest:      { apis: [...] }
+      },
+      "web3DataApi":        { "supported": true, "apis": [ ... ] },
+      "webhookApi":         { "supported": true, "type": "evm" | "aptos", "apis": [ ... ] },
+      "flexibleWebhookApi": { "supported": true, "apis": [ ... ] },
+      "multichainApi":      { "supported": true, "apis": [ ... ] }
     }
   },
   "summary": {
@@ -63,6 +78,7 @@ A machine-readable index describing, for every chain, which API surfaces are sup
     "nodeApiChains": 24,
     "web3DataApiChains": 20,
     "webhookApiChains": 10,
+    "flexibleWebhookApiChains": 10,
     "multichainApiChains": 17
   }
 }
@@ -70,44 +86,45 @@ A machine-readable index describing, for every chain, which API surfaces are sup
 
 Notes:
 
-- Each chain entry has four API axes: `nodeApi`, `web3DataApi`, `webhookApi`, and `multichainApi`. Set `supported: false` for axes the chain does not expose.
-- `webhookApi` uses `operations` (not `apis`) and adds a `type` discriminator (`evm` or `aptos`) that indicates which webhook spec shape applies.
+- Each chain entry has five API axes: `nodeApi`, `web3DataApi`, `webhookApi`, `flexibleWebhookApi`, and `multichainApi`. Set `supported: false` for axes the chain does not expose.
+- `nodeApi` is not flat — it branches into chain-family sub-axes (`evmJsonrpc`, `aptosRest`, `solanaJsonrpc`/`solanaWebsocket`, `suiJsonrpc`, `cometbftJsonrpc`/`cometbftRest`/`cosmosRest`). A chain may carry more than one sub-axis (e.g. Injective and Sei have both `evmJsonrpc` and the Cometbft/Cosmos REST sub-axes).
+- `webhookApi` adds a `type` discriminator (`evm` or `aptos`) that indicates which webhook spec shape applies.
 - For Cosmos-based chains, the CometBFT and Cosmos REST endpoints are both reported under `nodeApi`, even though the underlying YAML files live in separate `cometbft-api/` and `cosmos-rest-api/` directories on disk.
 
 ## Supported chains
 
-The matrix below mirrors the `supported` flags in `manifest.json` (31 chains total: 24 Node API, 20 Web3 Data API, 10 Webhook API, 17 Multichain API).
+The matrix below mirrors the `supported` flags in `manifest.json` (31 chains total: 24 Node API, 20 Web3 Data API, 10 Webhook API, 10 Flexible Webhook API, 17 Multichain API).
 
-| Chain            | Node API | Web3 Data API | Webhook API | Multichain API |
-| ---------------- | :------: | :-----------: | :---------: | :------------: |
-| Aptos            | ✓        | ✓             | ✓           | ✓              |
-| Arbitrum         | ✓        | ✓             | ✓           | ✓              |
-| Arc              | ✓        | ✓             | ✓           |                |
-| Avalanche        | ✓        |               |             |                |
-| Babylon          | ✓        |               |             |                |
-| Base             | ✓        | ✓             | ✓           | ✓              |
-| Bitcoin          |          | ✓             |             | ✓              |
-| Bitcoin Cash     |          | ✓             |             | ✓              |
-| BNB              | ✓        | ✓             | ✓           | ✓              |
-| Celestia         | ✓        |               |             |                |
-| Chiliz           |          | ✓             |             | ✓              |
-| Cosmos           | ✓        |               |             |                |
-| Cronos PoS       | ✓        |               |             |                |
-| Dogecoin         |          | ✓             |             | ✓              |
-| Ethereum         | ✓        | ✓             | ✓           | ✓              |
-| Ethereum Classic |          | ✓             |             | ✓              |
-| Giwa             | ✓        | ✓             | ✓           | ✓              |
-| Hippo            | ✓        |               |             |                |
-| Initia           | ✓        |               |             |                |
-| Injective        | ✓        |               |             |                |
-| Kaia             | ✓        | ✓             | ✓           | ✓              |
-| Luniverse        | ✓        | ✓             |             | ✓              |
-| Metal            | ✓        | ✓             |             |                |
-| Optimism         | ✓        | ✓             | ✓           | ✓              |
-| Polygon          | ✓        | ✓             | ✓           | ✓              |
-| Sei              | ✓        |               |             |                |
-| Solana           | ✓        |               |             |                |
-| Sui              | ✓        |               |             |                |
-| Tron             |          | ✓             |             | ✓              |
-| World Chain      | ✓        | ✓             |             |                |
-| XRPL             |          | ✓             |             | ✓              |
+| Chain            | Node API | Web3 Data API | Webhook API | Flexible Webhook API | Multichain API |
+| ---------------- | :------: | :-----------: | :---------: | :------------------: | :------------: |
+| Aptos            | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Arbitrum         | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Arc              | ✓        | ✓             | ✓           | ✓                    |                |
+| Avalanche        | ✓        |               |             |                      |                |
+| Babylon          | ✓        |               |             |                      |                |
+| Base             | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Bitcoin          |          | ✓             |             |                      | ✓              |
+| Bitcoin Cash     |          | ✓             |             |                      | ✓              |
+| BNB              | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Celestia         | ✓        |               |             |                      |                |
+| Chiliz           |          | ✓             |             |                      | ✓              |
+| Cosmos           | ✓        |               |             |                      |                |
+| Cronos PoS       | ✓        |               |             |                      |                |
+| Dogecoin         |          | ✓             |             |                      | ✓              |
+| Ethereum         | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Ethereum Classic |          | ✓             |             |                      | ✓              |
+| Giwa             | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Hippo            | ✓        |               |             |                      |                |
+| Initia           | ✓        |               |             |                      |                |
+| Injective        | ✓        |               |             |                      |                |
+| Kaia             | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Luniverse        | ✓        | ✓             |             |                      | ✓              |
+| Metal            | ✓        | ✓             |             |                      |                |
+| Optimism         | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Polygon          | ✓        | ✓             | ✓           | ✓                    | ✓              |
+| Sei              | ✓        |               |             |                      |                |
+| Solana           | ✓        |               |             |                      |                |
+| Sui              | ✓        |               |             |                      |                |
+| Tron             |          | ✓             |             |                      | ✓              |
+| World Chain      | ✓        | ✓             |             |                      |                |
+| XRPL             |          | ✓             |             |                      | ✓              |
