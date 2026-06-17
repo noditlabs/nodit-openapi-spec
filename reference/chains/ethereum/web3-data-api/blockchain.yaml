@@ -2167,9 +2167,55 @@ paths:
                         type: string
                         description: Parameter specifying the name of the event to query.
                     abi:
-                      type: string
-                      format: json
-                      description: Parameter specifying the ABI of the contract to query. Can be entered as a JSON-formatted ABI string.
+                      type: array
+                      description: Parameter specifying the ABI of the contract to query. Provided as an array of ABI item objects.
+                      items:
+                        type: object
+                        properties:
+                          anonymous:
+                            type: boolean
+                            description: Indicates whether the event is anonymous.
+                          inputs:
+                            type: array
+                            description: List of input parameters for the function or event.
+                            items:
+                              type: object
+                              properties:
+                                indexed:
+                                  type: boolean
+                                  description: Indicates whether the event parameter is indexed.
+                                internalType:
+                                  type: string
+                                  description: The Solidity internal type.
+                                name:
+                                  type: string
+                                  description: The parameter name.
+                                type:
+                                  type: string
+                                  description: The ABI type.
+                          name:
+                            type: string
+                            description: The name of the function or event.
+                          type:
+                            type: string
+                            description: The kind of ABI item (e.g. event, function).
+                      example:
+                        - anonymous: false
+                          inputs:
+                            - indexed: true
+                              internalType: address
+                              name: from
+                              type: address
+                            - indexed: true
+                              internalType: address
+                              name: to
+                              type: address
+                            - indexed: false
+                              internalType: uint256
+                              name: value
+                              type: uint256
+                          name: Transfer
+                          type: event
                     fromBlock:
                       type: string
                       description: |
@@ -2255,7 +2301,23 @@ paths:
               contractAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
               eventNames:
                 - Transfer
-              abi: "0x1234567890123456789012345678901234567890"
+              abi:
+                - anonymous: false
+                  inputs:
+                    - indexed: true
+                      internalType: address
+                      name: from
+                      type: address
+                    - indexed: true
+                      internalType: address
+                      name: to
+                      type: address
+                    - indexed: false
+                      internalType: uint256
+                      name: value
+                      type: uint256
+                  name: Transfer
+                  type: event
               fromDate: "2026-01-01T00:00:00Z"
               toDate: "2026-02-01T00:00:00Z"
       responses:
