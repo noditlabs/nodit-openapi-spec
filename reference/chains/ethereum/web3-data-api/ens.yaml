@@ -401,6 +401,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - name
               properties:
                 name:
                   type: string
@@ -579,6 +581,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - name
               properties:
                 name:
                   type: string
@@ -686,10 +690,10 @@ paths:
                         type: string
                         description: A field representing the address that registered the domain. Provided as a 40-character hexadecimal string prefixed with 0x.
                       registrationDate:
-                        type: integer
+                        type: string
                         description: A field representing the registration date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
                       expiryDate:
-                        type: integer
+                        type: string
                         description: A field representing the expiry date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
                       cost:
                         type: string

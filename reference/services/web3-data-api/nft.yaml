@@ -9860,6 +9860,228 @@ paths:
               - kairos
             default: mainnet
           description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - title: Arbitrum
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Arc
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Base
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: BNB Smart Chain
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Chiliz
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Ethereum
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Ethereum Classic
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Giwa
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Kaia
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Luniverse
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Optimism
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
+                - title: Polygon
+                  type: object
+                  required:
+                    - tokens
+                  properties:
+                    tokens:
+                      type: array
+                      description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                      items:
+                        type: object
+                        required:
+                          - contractAddress
+                          - tokenId
+                        properties:
+                          contractAddress:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/contractAddress"
+                          tokenId:
+                            $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/oneOf/0/allOf/0/properties/tokenId"
       responses:
         "200":
           description: Successful Response
@@ -9872,84 +10094,84 @@ paths:
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Arc
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Base
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: BNB Smart Chain
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Chiliz
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Ethereum
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Ethereum Classic
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Giwa
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Kaia
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Luniverse
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Optimism
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
                   - title: Polygon
                     type: object
                     properties:
                       message:
                         type: string
-                        description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                        description: Returns the result message for the synchronization request.
                         example: NFT Metadata synchronization request has been successfully submitted.
         "400":
           $ref: "#/components/responses/400"

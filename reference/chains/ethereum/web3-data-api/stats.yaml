@@ -414,10 +414,17 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - transactionCounts
+                  - transferCounts
+                  - assets
                 properties:
                   transactionCounts:
                     type: object
                     description: An object containing transaction count information associated with the queried address.
+                    required:
+                      - external
+                      - internal
                     properties:
                       external:
                         type: number
@@ -428,6 +435,9 @@ paths:
                   transferCounts:
                     type: object
                     description: An object containing transfer event count information associated with the queried address.
+                    required:
+                      - tokens
+                      - nfts
                     properties:
                       tokens:
                         type: number
@@ -438,6 +448,10 @@ paths:
                   assets:
                     type: object
                     description: An object containing asset information owned by the queried address.
+                    required:
+                      - tokens
+                      - nfts
+                      - nftContracts
                     properties:
                       tokens:
                         type: number

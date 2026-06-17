@@ -484,6 +484,8 @@ paths:
             schema:
               allOf:
                 - type: object
+                  required:
+                    - accountAddress
                   properties:
                     accountAddress:
                       $ref: "#/paths/~1{chain}~1{network}~1native~1getNativeBalanceByAccount/post/requestBody/content/application~1json/schema/properties/accountAddress"
@@ -623,69 +625,36 @@ paths:
                             - from
                             - to
                             - value
-                            - timestamp
+                            - blockTimestamp
                             - blockNumber
                             - transactionHash
-                            - logIndex
+                            - transactionIndex
+                            - traceIndex
                           properties:
                             from:
                               type: string
-                              description: A field representing the address from which the token was transferred. Provided as a 40-character hexadecimal string prefixed with 0x.
+                              description: The address that sent the native token. Provided as a 40-character hexadecimal string prefixed with 0x.
                             to:
                               type: string
-                              description: A field representing the address that received the token. Provided as a 40-character hexadecimal string prefixed with 0x.
+                              description: The address that received the native token. Provided as a 40-character hexadecimal string prefixed with 0x.
                             value:
                               type: string
-                              description: A field representing the amount of tokens transferred. Provided in decimal string format.
-                            timestamp:
+                              description: The amount of native token transferred. Provided as a decimal string in Wei units.
+                            blockTimestamp:
                               type: integer
-                              description: A field representing when the token transfer occurred. This field is provided as a UNIX timestamp.
+                              description: The timestamp of the block in which the transfer occurred. Provided as a UNIX timestamp.
                             blockNumber:
                               type: integer
-                              description: A field representing the block number where the token transfer occurred.
+                              description: The block number in which the transfer occurred.
                             transactionHash:
                               type: string
-                              description: A field representing the hash of the token transfer transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
-                            logIndex:
+                              description: The hash of the transfer transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
+                            transactionIndex:
                               type: integer
-                              description: A field representing the log index of the token transfer transaction. Indicates the order of events in the transaction.
-                            batchIndex:
+                              description: The index of the transaction within the block.
+                            traceIndex:
                               type: integer
-                              description: A field representing the batch index of the token transfer transaction. This field is included only in responses for ERC1155 token transfers.
-                            function:
-                              type: object
-                              description: A field representing the information of the function called in a transaction containing a Transfer. This field is included in the response only when the withFunction parameter is set to true.
-                              required:
-                                - selector
-                                - input
-                              properties:
-                                selector:
-                                  type: string
-                                  description: A 4-byte function selector value that identifies the called function. The function selector is the first 4 bytes of the Keccak-256 hash of the function signature. Provided as an 8-character hexadecimal string prefixed with 0x.
-                                name:
-                                  type: string
-                                  description: A field representing the name of the called function.
-                                signature:
-                                  type: string
-                                  description: "A field representing the signature of the called function. "
-                                args:
-                                  type: array
-                                  description: A field representing the arguments of the called function.
-                                  items:
-                                    type: object
-                                    properties:
-                                      name:
-                                        type: string
-                                        description: A field representing the name of the argument.
-                                      type:
-                                        type: string
-                                        description: A field representing the type of the argument.
-                                      value:
-                                        type: string
-                                        description: A field representing the value of the argument.
-                                input:
-                                  type: string
-                                  description: A field representing the input data of the function. Provided as a hexadecimal string prefixed with 0x.
+                              description: The index of the internal call (trace) within the transaction.
         "400":
           $ref: "#/components/responses/400"
         "401":

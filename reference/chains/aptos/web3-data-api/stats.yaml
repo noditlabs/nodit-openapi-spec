@@ -416,7 +416,7 @@ paths:
                 type: object
                 required:
                   - transactionCounts
-                  - balanceChangeCounts
+                  - balanceChangesCounts
                   - assets
                 properties:
                   transactionCounts:
@@ -425,7 +425,7 @@ paths:
                       A field that represents the number of transactions created by the account.
                       Refers to transactions where this account is included as the sender.
                     example: 48
-                  balanceChangeCounts:
+                  balanceChangesCounts:
                     type: object
                     properties:
                       tokens:

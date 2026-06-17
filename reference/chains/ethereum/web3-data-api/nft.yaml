@@ -1993,6 +1993,34 @@ paths:
               - hoodi
             default: mainnet
           description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tokens
+              properties:
+                tokens:
+                  type: array
+                  description: List of NFTs to synchronize. Up to 100 NFTs can be synchronized.
+                  items:
+                    type: object
+                    required:
+                      - contractAddress
+                      - tokenId
+                    properties:
+                      contractAddress:
+                        $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/allOf/0/properties/contractAddress"
+                      tokenId:
+                        $ref: "#/paths/~1{chain}~1{network}~1nft~1getNftHoldersByTokenId/post/requestBody/content/application~1json/schema/allOf/0/properties/tokenId"
+            example:
+              tokens:
+                - contractAddress: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+                  tokenId: "1"
+                - contractAddress: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+                  tokenId: "2"
       responses:
         "200":
           description: Successful Response
@@ -2003,7 +2031,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: 동기화 요청에 대한 결과 메시지를 반환합니다.
+                    description: Returns the result message for the synchronization request.
                     example: NFT Metadata synchronization request has been successfully submitted.
         "400":
           $ref: "#/components/responses/400"

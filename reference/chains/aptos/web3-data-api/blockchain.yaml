@@ -1302,116 +1302,194 @@ paths:
                     example:
                       - 0x1::aptos_coin::AptosCoin
                       - 0x1::usdc::USDC
-                  balanceChanges:
+                  payload:
+                    description: |
+                      A field that represents the transaction payload.
+                      Contains the execution content of the transaction, such as entry function calls or script executions.
+                      Only provided when the payload type is entry_function_payload.
                     type: object
                     required:
-                      - eventIndex
-                      - eventType
-                      - subEventIndex
-                      - accountAddress
-                      - assetType
-                      - linkedAssetType
-                      - changeValue
-                      - tokenStandard
-                      - transferType
+                      - function
+                      - type
+                      - typeArguments
+                      - arguments
                     properties:
-                      blockHeight:
-                        type: integer
-                        description: |
-                          A field that represents the height of the block containing this balance change.
-                          An integer that increments sequentially starting from the genesis block (0), used as an indicator for the blockchain length and the position of a specific block.
-                        example: 160155267
-                      blockTimestamp:
-                        type: integer
-                        description: |
-                          A field that represents the block creation time.
-                          Provided as a UNIX timestamp, used for block creation order and time tracking.
-                          Block timestamps are used to ensure transaction order and measure inter-block creation intervals.
-                        example: 1749003732416395
-                      transactionHash:
+                      function:
                         type: string
                         description: |
-                          A field that represents the hash of the transaction that caused the balance change.
-                          A cryptographic hash computed from all transaction data, provided as a 64-character hexadecimal string prefixed with 0x.
-                          This hash enables retrieval of full information for the transaction related to the balance change.
-                        example: "0x2a41cd44491bb92d4eb17d8487f82d9b43ab6289074c1986ee055be8105707c9"
-                      transactionVersion:
-                        type: integer
-                        description: |
-                          A field that represents the version of the transaction where the balance change occurred.
-                          A unique sequence ID indicating the order of the transaction on the chain, incrementing sequentially from 0.
-                        example: 34872482
-                      eventIndex:
-                        type: integer
-                        description: |
-                          A field that represents the order index of the event within the transaction.
-                          Indicates the order of the current event among multiple events emitted in a single transaction.
-                          Starts at 0 and increments in event emission order; used to identify the order of events within the same transaction.
-                        example: 0
-                      eventType:
+                          A field that represents the full identifier of the on-chain function being invoked.
+                          Provided in 'address::moduleName::functionName' format; uniquely identifies the Module function to be executed.
+                        example: 0x1::coin::transfer
+                      type:
                         type: string
                         description: |
-                          A field that represents the type of the event.
-                          Provided as the full path (address::module::struct) of the event struct defined in the Move module.
-                          Used to identify the type of operation that caused the balance change.
-                        example: 0x1::coin::WithdrawEvent
-                      subEventIndex:
-                        type: integer
+                          A field that represents the type of the payload.
+                          The following values are possible:
+                          - entry_function_payload: Directly invokes an entry function of a Move module
+                          - script_payload: Executes a Move script
+                          - multisig_payload: Transaction requiring multi-signature
+                          The execution method and required arguments of the transaction are determined by this value.
+                        example: entry_function_payload
+                      typeArguments:
+                        type: array
                         description: |
-                          A field that represents the order of asset changes when multiple asset changes occur within a single event.
-                          Identifies the order of multiple asset changes within an event sharing the same eventIndex.
-                          Starts at 0 and increments sequentially; plays an important role in complex asset operations (e.g., swaps).
-                        example: 0
-                      accountAddress:
-                        type: string
+                          A field that represents the type arguments used when calling a generic function.
+                        items:
+                          type: string
+                        default: []
+                        example:
+                          - 0x1::aptos_coin::AptosCoin
+                      arguments:
+                        type: array
                         description: |
-                          A field that represents the address of the account where the balance change occurred.
-                          Provided as a 64-character hexadecimal string prefixed with 0x; identifies the account whose asset balance changed.
-                          This address is either the asset owner or the destination account the asset was transferred to.
-                        example: "0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a"
-                      assetType:
-                        type: string
-                        description: |
-                          A field that represents the type of the asset whose balance changed.
-                          Provided in one of two formats:
-                          - Coin: Asset ID in Move struct format (e.g., 0x1::aptos_coin::AptosCoin)
-                          - Fungible Asset: Object address that owns the metadata of the asset
-                          Used to uniquely identify the type of asset.
-                        example: 0x1::aptos_coin::AptosCoin
-                      linkedAssetType:
-                        type: string
-                        description: |
-                          A common identifier that links Coin and Fungible Asset when they have been migrated.
-                          This field serves as a unified key that groups Coin/Fungible Asset into a single asset unit for identification and retrieval, providing the Object address where the migrated Fungible Asset's Metadata is stored.
-                        example: "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b"
-                      changeValue:
-                        type: string
-                        description: |
-                          A field that represents the balance change amount.
-                          Provided as a string in integer form.
-                          - Positive: indicates the account balance increased
-                          - Negative: indicates the account balance decreased
-                          The actual value must be interpreted considering decimals.
-                        example: "1000000"
-                      tokenStandard:
-                        type: string
-                        description: |
-                          A field that represents the standard type of the asset.
-                          - v1: Assets following the Coin standard
-                          - v2: Assets following the Fungible Asset standard
-                        example: coin
-                      transferType:
-                        type: string
-                        description: |
-                          A field that represents the transfer direction or action type.
-                          Indicates the specific type of balance change; the following values are possible:
-                          - deposit: asset deposit
-                          - withdraw: asset withdrawal
-                          - swap_in: deposit from swap
-                          - swap_out: withdrawal from swap
-                          - gas: gas fee payment
-                          - refund_gas: gas fee refund
-                        example: deposit
+                          A field that represents the arguments passed to the invoked function.
+                          Values must be provided in order matching the function parameters; parameter types and count differ per function.
+                        items:
+                          type: string
+                        default: []
+                        example:
+                          - "0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a"
+                          - "1000000"
+                  entryFunctionContractAddress:
+                    type: string
+                    description: |
+                      A field that represents the module address of the called entry function.
+                      Only provided when the payload type is entry_function_payload.
+                    example: "0x1"
+                  entryFunctionIdStr:
+                    type: string
+                    description: |
+                      A field that represents the full identifier of the called entry function.
+                      Provided in 'moduleAddress::moduleName::functionName' format.
+                      Only provided when the payload type is entry_function_payload.
+                    example: 0x1::coin::transfer
+                  entryFunctionModuleName:
+                    type: string
+                    description: |
+                      A field that represents the module name of the called entry function.
+                      Only provided when the payload type is entry_function_payload.
+                    example: coin
+                  entryFunctionName:
+                    type: string
+                    description: |
+                      A field that represents the name of the called entry function.
+                      Only provided when the payload type is entry_function_payload.
+                    example: transfer
+                  balanceChanges:
+                    type: array
+                    description: |
+                      A field that represents the asset change history that occurred in the transaction.
+                      Only provided when withBalance=true is included in the request.
+                    items:
+                      type: object
+                      required:
+                        - eventIndex
+                        - eventType
+                        - subEventIndex
+                        - accountAddress
+                        - assetType
+                        - linkedAssetType
+                        - changeValue
+                        - tokenStandard
+                        - transferType
+                      properties:
+                        blockHeight:
+                          type: integer
+                          description: |
+                            A field that represents the height of the block containing this balance change.
+                            An integer that increments sequentially starting from the genesis block (0), used as an indicator for the blockchain length and the position of a specific block.
+                          example: 160155267
+                        blockTimestamp:
+                          type: integer
+                          description: |
+                            A field that represents the block creation time.
+                            Provided as a UNIX timestamp, used for block creation order and time tracking.
+                            Block timestamps are used to ensure transaction order and measure inter-block creation intervals.
+                          example: 1749003732416395
+                        transactionHash:
+                          type: string
+                          description: |
+                            A field that represents the hash of the transaction that caused the balance change.
+                            A cryptographic hash computed from all transaction data, provided as a 64-character hexadecimal string prefixed with 0x.
+                            This hash enables retrieval of full information for the transaction related to the balance change.
+                          example: "0x2a41cd44491bb92d4eb17d8487f82d9b43ab6289074c1986ee055be8105707c9"
+                        transactionVersion:
+                          type: integer
+                          description: |
+                            A field that represents the version of the transaction where the balance change occurred.
+                            A unique sequence ID indicating the order of the transaction on the chain, incrementing sequentially from 0.
+                          example: 34872482
+                        eventIndex:
+                          type: integer
+                          description: |
+                            A field that represents the order index of the event within the transaction.
+                            Indicates the order of the current event among multiple events emitted in a single transaction.
+                            Starts at 0 and increments in event emission order; used to identify the order of events within the same transaction.
+                          example: 0
+                        eventType:
+                          type: string
+                          description: |
+                            A field that represents the type of the event.
+                            Provided as the full path (address::module::struct) of the event struct defined in the Move module.
+                            Used to identify the type of operation that caused the balance change.
+                          example: 0x1::coin::WithdrawEvent
+                        subEventIndex:
+                          type: integer
+                          description: |
+                            A field that represents the order of asset changes when multiple asset changes occur within a single event.
+                            Identifies the order of multiple asset changes within an event sharing the same eventIndex.
+                            Starts at 0 and increments sequentially; plays an important role in complex asset operations (e.g., swaps).
+                          example: 0
+                        accountAddress:
+                          type: string
+                          description: |
+                            A field that represents the address of the account where the balance change occurred.
+                            Provided as a 64-character hexadecimal string prefixed with 0x; identifies the account whose asset balance changed.
+                            This address is either the asset owner or the destination account the asset was transferred to.
+                          example: "0x948592877d14d0fde0a42e2fc15a56959f30ea35d0b87c7ee8e98e0cce756f1a"
+                        assetType:
+                          type: string
+                          description: |
+                            A field that represents the type of the asset whose balance changed.
+                            Provided in one of two formats:
+                            - Coin: Asset ID in Move struct format (e.g., 0x1::aptos_coin::AptosCoin)
+                            - Fungible Asset: Object address that owns the metadata of the asset
+                            Used to uniquely identify the type of asset.
+                          example: 0x1::aptos_coin::AptosCoin
+                        linkedAssetType:
+                          type: string
+                          description: |
+                            A common identifier that links Coin and Fungible Asset when they have been migrated.
+                            This field serves as a unified key that groups Coin/Fungible Asset into a single asset unit for identification and retrieval, providing the Object address where the migrated Fungible Asset's Metadata is stored.
+                          example: "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b"
+                        changeValue:
+                          type: string
+                          description: |
+                            A field that represents the balance change amount.
+                            Provided as a string in integer form.
+                            - Positive: indicates the account balance increased
+                            - Negative: indicates the account balance decreased
+                            The actual value must be interpreted considering decimals.
+                          example: "1000000"
+                        tokenStandard:
+                          type: string
+                          description: |
+                            A field that represents the standard type of the asset.
+                            - v1: Assets following the Coin standard
+                            - v2: Assets following the Fungible Asset standard
+                          example: coin
+                        transferType:
+                          type: string
+                          description: |
+                            A field that represents the transfer direction or action type.
+                            Indicates the specific type of balance change; the following values are possible:
+                            - deposit: asset deposit
+                            - withdraw: asset withdrawal
+                            - swap_in: deposit from swap
+                            - swap_out: withdrawal from swap
+                            - gas: gas fee payment
+                            - refund_gas: gas fee refund
+                          example: deposit
         "400":
           $ref: "#/components/responses/400"
         "401":

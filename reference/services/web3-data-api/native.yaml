@@ -1687,6 +1687,8 @@ paths:
                 - title: Arc
                   allOf:
                     - type: object
+                      required:
+                        - accountAddress
                       properties:
                         accountAddress:
                           $ref: "#/paths/~1{chain}~1{network}~1native~1getNativeBalanceByAccount/post/requestBody/content/application~1json/schema/oneOf/0/properties/accountAddress"
@@ -1765,6 +1767,8 @@ paths:
                 - title: Tron
                   allOf:
                     - type: object
+                      required:
+                        - accountAddress
                       properties:
                         accountAddress:
                           $ref: "#/paths/~1{chain}~1{network}~1native~1getNativeBalanceByAccount/post/requestBody/content/application~1json/schema/oneOf/12/properties/accountAddress"
@@ -1833,69 +1837,36 @@ paths:
                                 - from
                                 - to
                                 - value
-                                - timestamp
+                                - blockTimestamp
                                 - blockNumber
                                 - transactionHash
-                                - logIndex
+                                - transactionIndex
+                                - traceIndex
                               properties:
                                 from:
                                   type: string
-                                  description: A field representing the address from which the token was transferred. Provided as a 40-character hexadecimal string prefixed with 0x.
+                                  description: The address that sent the native token. Provided as a 40-character hexadecimal string prefixed with 0x.
                                 to:
                                   type: string
-                                  description: A field representing the address that received the token. Provided as a 40-character hexadecimal string prefixed with 0x.
+                                  description: The address that received the native token. Provided as a 40-character hexadecimal string prefixed with 0x.
                                 value:
                                   type: string
-                                  description: A field representing the amount of tokens transferred. Provided in decimal string format.
-                                timestamp:
+                                  description: The amount of native token transferred. Provided as a decimal string in Wei units.
+                                blockTimestamp:
                                   type: integer
-                                  description: A field representing when the token transfer occurred. This field is provided as a UNIX timestamp.
+                                  description: The timestamp of the block in which the transfer occurred. Provided as a UNIX timestamp.
                                 blockNumber:
                                   type: integer
-                                  description: A field representing the block number where the token transfer occurred.
+                                  description: The block number in which the transfer occurred.
                                 transactionHash:
                                   type: string
-                                  description: A field representing the hash of the token transfer transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
-                                logIndex:
+                                  description: The hash of the transfer transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
+                                transactionIndex:
                                   type: integer
-                                  description: A field representing the log index of the token transfer transaction. Indicates the order of events in the transaction.
-                                batchIndex:
+                                  description: The index of the transaction within the block.
+                                traceIndex:
                                   type: integer
-                                  description: A field representing the batch index of the token transfer transaction. This field is included only in responses for ERC1155 token transfers.
-                                function:
-                                  type: object
-                                  description: A field representing the information of the function called in a transaction containing a Transfer. This field is included in the response only when the withFunction parameter is set to true.
-                                  required:
-                                    - selector
-                                    - input
-                                  properties:
-                                    selector:
-                                      type: string
-                                      description: A 4-byte function selector value that identifies the called function. The function selector is the first 4 bytes of the Keccak-256 hash of the function signature. Provided as an 8-character hexadecimal string prefixed with 0x.
-                                    name:
-                                      type: string
-                                      description: A field representing the name of the called function.
-                                    signature:
-                                      type: string
-                                      description: "A field representing the signature of the called function. "
-                                    args:
-                                      type: array
-                                      description: A field representing the arguments of the called function.
-                                      items:
-                                        type: object
-                                        properties:
-                                          name:
-                                            type: string
-                                            description: A field representing the name of the argument.
-                                          type:
-                                            type: string
-                                            description: A field representing the type of the argument.
-                                          value:
-                                            type: string
-                                            description: A field representing the value of the argument.
-                                    input:
-                                      type: string
-                                      description: A field representing the input data of the function. Provided as a hexadecimal string prefixed with 0x.
+                                  description: The index of the internal call (trace) within the transaction.
                   - title: Tron
                     allOf:
                       - $ref: "#/paths/~1{chain}~1{network}~1native~1getNativeHolders/post/responses/200/content/application~1json/schema/allOf/0"
@@ -1916,36 +1887,35 @@ paths:
                               properties:
                                 from:
                                   type: string
-                                  description: Represents the address that initiated the transaction. This address refers to the account or smart contract that sends assets. This field has a 34-character base58 string format starting with "T".
+                                  description: The address that sent the native token. Provided as a 34-character base58 string starting with "T".
                                 to:
                                   type: string
-                                  description: Represents the recipient address of the transaction. This address refers to the account or smart contract that receives assets. This field has a 34-character base58 string format starting with "T".
+                                  description: The address that received the native token. Provided as a 34-character base58 string starting with "T".
                                 value:
                                   type: string
-                                  description: Represents the amount of assets or data transferred. For TRC10 and TRC20, it indicates the amount transferred.
+                                  description: The amount of native token transferred. Provided as a decimal string in SUN units.
                                 blockTimestamp:
                                   type: integer
-                                  description: Indicates when the block containing the transaction was created. Recorded in UNIX timestamp format in milliseconds, used to verify when the transaction occurred.
+                                  description: The timestamp of the block in which the transaction was included. Provided as a UNIX timestamp in milliseconds.
                                 blockNumber:
                                   type: integer
-                                  description: Indicates the block number containing the transaction. Used to trace the transaction on the blockchain and identify the transaction's position within a specific block.
+                                  description: The block number in which the transaction was included.
                                 transactionHash:
                                   type: string
-                                  description: Represents the unique hash of the transaction. Used as the transaction identifier and serves as the key to trace all data related to the transaction.
+                                  description: The unique hash of the transaction.
                                 transactionIndex:
                                   type: integer
-                                  description: Indicates the position of the transaction within the block containing it. Used to identify the order of the transaction among multiple transactions in a block.
-                                logIndex:
-                                  type: integer
-                                  description: Indicates the index of the log containing this Transfer event. Used to identify a specific log when multiple logs exist within the same block.
+                                  description: The index of the transaction within the block.
                                 internalTransactionIndex:
                                   type: integer
                                   description: |-
-                                    Indicates the index of the internal transaction related to TRX or TRC10 transfer. Used to distinguish among multiple internal transactions within a block.
-                                    <strong style='color: red;'>*</strong> When this value is "-1", it indicates a Root Transaction.
+                                    The index of the internal transaction related to TRX transfer.
+                                    A value of "-1" indicates a Root Transaction.
                                 exchangeId:
-                                  type: integer
-                                  description: Unique ID that identifies a swap transaction on the decentralized exchange (DEX) provided by the TRON network. Used to distinguish specific swap transactions and track which asset pair was traded. Returns null when the transfer is not from a swap transaction.
+                                  oneOf:
+                                    - type: integer
+                                    - type: "null"
+                                  description: A unique ID identifying a DEX exchange transaction on the Tron network. Returns null if the transfer was not caused by an exchange transaction.
         "400":
           $ref: "#/components/responses/400"
         "401":
@@ -2100,7 +2070,48 @@ paths:
                           items:
                             type: array
                             items:
-                              $ref: "#/paths/~1{chain}~1{network}~1native~1getNativeTransfersByAccount/post/responses/200/content/application~1json/schema/oneOf/1/allOf/1/properties/items/items"
+                              type: object
+                              required:
+                                - from
+                                - to
+                                - value
+                                - blockTimestamp
+                                - blockNumber
+                                - transactionHash
+                                - transactionIndex
+                              properties:
+                                from:
+                                  type: string
+                                  description: Represents the address that initiated the transaction. This address refers to the account or smart contract that sends assets. This field has a 34-character base58 string format starting with "T".
+                                to:
+                                  type: string
+                                  description: Represents the recipient address of the transaction. This address refers to the account or smart contract that receives assets. This field has a 34-character base58 string format starting with "T".
+                                value:
+                                  type: string
+                                  description: Represents the amount of assets or data transferred. For TRC10 and TRC20, it indicates the amount transferred.
+                                blockTimestamp:
+                                  type: integer
+                                  description: Indicates when the block containing the transaction was created. Recorded in UNIX timestamp format in milliseconds, used to verify when the transaction occurred.
+                                blockNumber:
+                                  type: integer
+                                  description: Indicates the block number containing the transaction. Used to trace the transaction on the blockchain and identify the transaction's position within a specific block.
+                                transactionHash:
+                                  type: string
+                                  description: Represents the unique hash of the transaction. Used as the transaction identifier and serves as the key to trace all data related to the transaction.
+                                transactionIndex:
+                                  type: integer
+                                  description: Indicates the position of the transaction within the block containing it. Used to identify the order of the transaction among multiple transactions in a block.
+                                logIndex:
+                                  type: integer
+                                  description: Indicates the index of the log containing this Transfer event. Used to identify a specific log when multiple logs exist within the same block.
+                                internalTransactionIndex:
+                                  type: integer
+                                  description: |-
+                                    Indicates the index of the internal transaction related to TRX or TRC10 transfer. Used to distinguish among multiple internal transactions within a block.
+                                    <strong style='color: red;'>*</strong> When this value is "-1", it indicates a Root Transaction.
+                                exchangeId:
+                                  type: integer
+                                  description: Unique ID that identifies a swap transaction on the decentralized exchange (DEX) provided by the TRON network. Used to distinguish specific swap transactions and track which asset pair was traded. Returns null when the transfer is not from a swap transaction.
         "400":
           $ref: "#/components/responses/400"
         "401":

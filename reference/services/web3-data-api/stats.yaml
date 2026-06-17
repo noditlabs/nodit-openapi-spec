@@ -550,10 +550,17 @@ paths:
                 oneOf:
                   - title: Arbitrum
                     type: object
+                    required:
+                      - transactionCounts
+                      - transferCounts
+                      - assets
                     properties:
                       transactionCounts:
                         type: object
                         description: An object containing transaction count information associated with the queried address.
+                        required:
+                          - external
+                          - internal
                         properties:
                           external:
                             type: number
@@ -564,6 +571,9 @@ paths:
                       transferCounts:
                         type: object
                         description: An object containing transfer event count information associated with the queried address.
+                        required:
+                          - tokens
+                          - nfts
                         properties:
                           tokens:
                             type: number
@@ -574,6 +584,10 @@ paths:
                       assets:
                         type: object
                         description: An object containing asset information owned by the queried address.
+                        required:
+                          - tokens
+                          - nfts
+                          - nftContracts
                         properties:
                           tokens:
                             type: number
@@ -645,7 +659,7 @@ paths:
                     type: object
                     required:
                       - transactionCounts
-                      - balanceChangeCounts
+                      - balanceChangesCounts
                       - assets
                     properties:
                       transactionCounts:
@@ -654,7 +668,7 @@ paths:
                           A field that represents the number of transactions created by the account.
                           Refers to transactions where this account is included as the sender.
                         example: 48
-                      balanceChangeCounts:
+                      balanceChangesCounts:
                         type: object
                         properties:
                           tokens:
