@@ -464,7 +464,7 @@ paths:
                             The actual response returns in {chain}-{network} format.
                         type:
                           type: string
-                          description: Type of the target chain being queried
+                          description: Type of the entities(TRANSACTION or ACCOUNT).
                         normalizedInput:
                           type: string
                           description: |

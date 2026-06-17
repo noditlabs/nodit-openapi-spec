@@ -1318,7 +1318,6 @@ paths:
                         required:
                           - amount
                           - deliverMax
-                          - deliveredAmount
                           - destination
                         properties:
                           amount:
@@ -1369,22 +1368,24 @@ paths:
                                 description: Returns the asset amount as a string. The amount format varies by currency. For \"XRP\", the value is in standard XRP units where 1 XRP equals 1,000,000 drops. IOU assets are expressed based on the precision defined by the issuer.
                                 example: "100.5"
                             description: When partial payment is allowed, minimum asset amount the recipient must receive. The transaction fails if a lesser amount is delivered.
-                          destinationAmount:
-                            type: object
-                            properties:
-                              currency:
-                                type: string
-                                description: Indicates the currency code of the asset. Typically uses ISO 4217 standard codes (e.g. "USD", "EUR"), but 160-bit custom codes may also be used. Custom codes are expressed as 40-character hexadecimal strings and are used for proprietary assets defined by specific projects or platforms (e.g. "SOLO"). For XRP, the fixed string "XRP" is used in the currency field and is returned in the same structure as IOU assets.
-                                example: USD
-                              issuer:
-                                type: string
-                                description: The address of the account that issued the asset. Even with the same currency code, asset credibility and risk may vary by issuer. Thus, the XRP Ledger uniquely identifies assets by the combination of currency code and issuer. Each asset's trustworthiness largely depends on the issuer's reputation. This field is a Base58-encoded string 25-35 characters in length, always starting with 'r'. XRP is a native asset with no issuer; in that case, issuer is shown as an empty string ("").
-                                example: rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq
-                              value:
-                                type: string
-                                description: Returns the asset amount as a string. The amount format varies by currency. For \"XRP\", the value is in standard XRP units where 1 XRP equals 1,000,000 drops. IOU assets are expressed based on the precision defined by the issuer.
-                                example: "100.5"
-                            description: Actual asset amount delivered to the recipient. May be less than amount for partial payments; may show "unavailable" for older ledgers (before 2014-01-20).
+                          deliveredAmount:
+                            oneOf:
+                              - type: object
+                                properties:
+                                  currency:
+                                    type: string
+                                    description: Indicates the currency code of the asset. Typically uses ISO 4217 standard codes (e.g. "USD", "EUR"), but 160-bit custom codes may also be used. Custom codes are expressed as 40-character hexadecimal strings and are used for proprietary assets defined by specific projects or platforms (e.g. "SOLO"). For XRP, the fixed string "XRP" is used in the currency field and is returned in the same structure as IOU assets.
+                                    example: USD
+                                  issuer:
+                                    type: string
+                                    description: The address of the account that issued the asset. Even with the same currency code, asset credibility and risk may vary by issuer. Thus, the XRP Ledger uniquely identifies assets by the combination of currency code and issuer. Each asset's trustworthiness largely depends on the issuer's reputation. This field is a Base58-encoded string 25-35 characters in length, always starting with 'r'. XRP is a native asset with no issuer; in that case, issuer is shown as an empty string ("").
+                                    example: rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq
+                                  value:
+                                    type: string
+                                    description: Returns the asset amount as a string. The amount format varies by currency. For \"XRP\", the value is in standard XRP units where 1 XRP equals 1,000,000 drops. IOU assets are expressed based on the precision defined by the issuer.
+                                    example: "100.5"
+                              - type: "null"
+                            description: Actual asset amount delivered to the recipient. Returns null if the transaction failed. May be less than amount for partial payments; may show "unavailable" for older ledgers (before 2014-01-20).
                           destination:
                             type: string
                             description: Account address that received the payment. Base58 encoding, always starting with 'r', 25-35 characters in length.

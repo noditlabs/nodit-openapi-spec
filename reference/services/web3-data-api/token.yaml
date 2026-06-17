@@ -2980,17 +2980,15 @@ paths:
           application/json:
             schema:
               title: Aptos
-              allOf:
-                - type: object
-                  required:
-                    - assetTypes
-                  properties:
-                    assetTypes:
-                      type: array
-                      items:
-                        $ref: "#/paths/~1{chain}~1{network}~1token~1getTokenPairByAssetType/post/requestBody/content/application~1json/schema/properties/assetType"
-                      description: Enter the Asset Types to query as an array.
-                - $ref: "#/paths/~1{chain}~1{network}~1token~1getTokenAccountsByAssetType/post/requestBody/content/application~1json/schema/allOf/1"
+              type: object
+              required:
+                - assetTypes
+              properties:
+                assetTypes:
+                  type: array
+                  items:
+                    $ref: "#/paths/~1{chain}~1{network}~1token~1getTokenPairByAssetType/post/requestBody/content/application~1json/schema/properties/assetType"
+                  description: Enter the Asset Types to query as an array.
       responses:
         "200":
           description: Successful Response
@@ -2998,92 +2996,87 @@ paths:
             application/json:
               schema:
                 title: Aptos
-                allOf:
-                  - $ref: "#/paths/~1{chain}~1{network}~1token~1getTokenAccountsByAssetType/post/responses/200/content/application~1json/schema/allOf/0"
-                  - type: object
-                    properties:
-                      items:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                            - name
-                            - symbol
-                            - decimals
-                            - totalSupply
-                            - maximumSupply
-                            - creatorAddress
-                            - projectURI
-                            - iconURI
-                          properties:
-                            assetType:
-                              type: string
-                              description: |
-                                A field that represents the unique identifier of the asset.
-                                Provided in one of two formats:
-                                - Coin: Asset ID in Move struct format (e.g., 0x1::aptos_coin::AptosCoin)
-                                - Fungible Asset: Object address that owns the metadata of the asset
-                              example: 0x1::aptos_coin::AptosCoin
-                            tokenStandard:
-                              type: string
-                              description: |
-                                A field that represents the standard the asset follows.
-                                - v1: Assets following the Coin standard
-                                - v2: Assets following the Fungible Asset standard
-                              example: v1
-                            name:
-                              type: string
-                              description: |
-                                A field that represents the name of the asset.
-                                The official name of the asset displayed in the user interface; used to identify and distinguish assets.
-                              example: Aptos Coin
-                            symbol:
-                              type: string
-                              description: |
-                                A field that represents the symbol of the asset.
-                                The abbreviated identifier of the asset used in exchanges and wallets.
-                              example: APT
-                            decimals:
-                              type: integer
-                              description: |
-                                A field that represents the decimal places of the asset.
-                                Defines the number of decimal places applied when displaying the actual asset quantity.
-                                For example, if decimals is 8, 100000000 (10^8) is displayed as 1.0.
-                              example: 8
-                            totalSupply:
-                              type: string
-                              description: |
-                                A field that represents the total circulating supply.
-                                Provided as an integer value before decimals are applied.
-                                The asset's decimals must be considered when calculating the actual circulating supply.
-                              example: "123456789000000"
-                            maximumSupply:
-                              type: string
-                              description: |
-                                A field that represents the maximum supply that can be minted.
-                                Provided as an integer value before decimals are applied.
-                                An empty string ("") means there is no maximum supply limit.
-                              example: "123123"
-                            creatorAddress:
-                              type: string
-                              description: |
-                                A field that represents the address of the account that created the asset.
-                                Provided as a 64-character hexadecimal string prefixed with 0x; identifies the asset creator.
-                                Used to track asset management authority and ownership.
-                              example: "0x1"
-                            projectURI:
-                              type: string
-                              description: |
-                                A field that represents the URI that provides project-related information.
-                                A URL is provided where you can find detailed information about the project such as website, whitepaper, and documentation.
-                                Used to obtain additional information related to the asset.
-                              example: https://aptos.dev
-                            iconURI:
-                              type: string
-                              description: |
-                                A field that represents the icon image URL of the asset.
-                                The URL of an image that allows visual identification of the asset is provided.
-                              example: https://aptos.dev/icon.png
+                type: array
+                items:
+                  type: object
+                  required:
+                    - name
+                    - symbol
+                    - decimals
+                    - totalSupply
+                    - maximumSupply
+                    - creatorAddress
+                    - projectURI
+                    - iconURI
+                  properties:
+                    assetType:
+                      type: string
+                      description: |
+                        A field that represents the unique identifier of the asset.
+                        Provided in one of two formats:
+                        - Coin: Asset ID in Move struct format (e.g., 0x1::aptos_coin::AptosCoin)
+                        - Fungible Asset: Object address that owns the metadata of the asset
+                      example: 0x1::aptos_coin::AptosCoin
+                    tokenStandard:
+                      type: string
+                      description: |
+                        A field that represents the standard the asset follows.
+                        - v1: Assets following the Coin standard
+                        - v2: Assets following the Fungible Asset standard
+                      example: v1
+                    name:
+                      type: string
+                      description: |
+                        A field that represents the name of the asset.
+                        The official name of the asset displayed in the user interface; used to identify and distinguish assets.
+                      example: Aptos Coin
+                    symbol:
+                      type: string
+                      description: |
+                        A field that represents the symbol of the asset.
+                        The abbreviated identifier of the asset used in exchanges and wallets.
+                      example: APT
+                    decimals:
+                      type: integer
+                      description: |
+                        A field that represents the decimal places of the asset.
+                        Defines the number of decimal places applied when displaying the actual asset quantity.
+                        For example, if decimals is 8, 100000000 (10^8) is displayed as 1.0.
+                      example: 8
+                    totalSupply:
+                      type: string
+                      description: |
+                        A field that represents the total circulating supply.
+                        Provided as an integer value before decimals are applied.
+                        The asset's decimals must be considered when calculating the actual circulating supply.
+                      example: "123456789000000"
+                    maximumSupply:
+                      type: string
+                      description: |
+                        A field that represents the maximum supply that can be minted.
+                        Provided as an integer value before decimals are applied.
+                        An empty string ("") means there is no maximum supply limit.
+                      example: "123123"
+                    creatorAddress:
+                      type: string
+                      description: |
+                        A field that represents the address of the account that created the asset.
+                        Provided as a 64-character hexadecimal string prefixed with 0x; identifies the asset creator.
+                        Used to track asset management authority and ownership.
+                      example: "0x1"
+                    projectURI:
+                      type: string
+                      description: |
+                        A field that represents the URI that provides project-related information.
+                        A URL is provided where you can find detailed information about the project such as website, whitepaper, and documentation.
+                        Used to obtain additional information related to the asset.
+                      example: https://aptos.dev
+                    iconURI:
+                      type: string
+                      description: |
+                        A field that represents the icon image URL of the asset.
+                        The URL of an image that allows visual identification of the asset is provided.
+                      example: https://aptos.dev/icon.png
         "400":
           $ref: "#/components/responses/400"
         "401":
@@ -7905,7 +7898,7 @@ paths:
                                     This field serves as a unified key that groups Coin/Fungible Asset into a single asset unit for identification and retrieval, providing the Object address where the migrated Fungible Asset's Metadata is stored.
                                   example: "0xbae207659db88bea0cbead6da0ed00aac12edcdda169e591cd41c94180b46f3b"
                                 metadata:
-                                  $ref: "#/paths/~1{chain}~1{network}~1token~1getTokenMetadataByAssetTypes/post/responses/200/content/application~1json/schema/allOf/1/properties/items/items"
+                                  $ref: "#/paths/~1{chain}~1{network}~1token~1getTokenMetadataByAssetTypes/post/responses/200/content/application~1json/schema/items"
         "400":
           $ref: "#/components/responses/400"
         "401":

@@ -436,7 +436,7 @@ paths:
                   - logsBloom
                   - extraData
                   - sha3Uncles
-                  - transactionCount
+                  - transactionsCount
                   - transactions
                 properties:
                   hash:
@@ -496,7 +496,7 @@ paths:
                   sha3Uncles:
                     type: string
                     description: A field representing the hash of all uncle blocks in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
-                  transactionCount:
+                  transactionsCount:
                     type: integer
                     description: A field representing the number of transactions in the block.
                   transactions:
@@ -505,9 +505,12 @@ paths:
                     items:
                       type: string
                       description: A field representing the hash of a transaction in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
-                  withdrawalRoot:
+                  withdrawalsRoot:
                     type: string
                     description: A field representing the root hash of all withdrawal transactions in the block. Provided as a 64-character hexadecimal string prefixed with 0x.
+                  withdrawalsCount:
+                    type: integer
+                    description: A field representing the number of withdrawal transactions included in the block.
                   withdrawals:
                     type: array
                     description: A field representing the list of withdrawals of staked assets by validators.
@@ -531,7 +534,7 @@ paths:
                         amount:
                           type: string
                           description: A field representing the withdrawn amount. Provided in decimal string format.
-                  requestHash:
+                  requestsHash:
                     type: string
                     description: A field in the block header that is a cryptographic commitment of the order and content of all requests in the block. This allows verification of the integrity of the request list within the block without downloading the full data.
                 example:
@@ -1368,9 +1371,9 @@ paths:
                   cumulativeGasUsed:
                     type: string
                     description: A field representing the total gas used by all transactions in the block up to and including the current transaction. Provided in decimal string format.
-                  effectGasPrice:
+                  effectiveGasPrice:
                     type: string
-                    description: A field representing the average price actually paid per unit of gas by the transaction. Part of the variable fee model introduced in EIP-1559 (London Hard fork). This field is not provided for transactions before this introduction. Provided in decimal string format.
+                    description: A field representing the average price actually paid per unit of gas by the transaction. For transactions before EIP-1559 (London Hard fork), this field returns the same value as gasPrice. Provided in decimal string format.
                   contractAddress:
                     type: string
                     description: A field representing the created contract address when the transaction is a contract creation transaction. Provided as a 40-character hexadecimal string prefixed with 0x.
@@ -1407,7 +1410,7 @@ paths:
                           items:
                             type: string
                             description: A field representing a storage key of the contract accessed in the transaction. Provided as a 64-character hexadecimal string prefixed with 0x.
-                  timeStamp:
+                  timestamp:
                     type: integer
                     description: A field representing when the transaction was created. This field is provided as a UNIX timestamp.
                   authorizationList:
@@ -2286,61 +2289,81 @@ paths:
                       items:
                         type: array
                         items:
-                          type: object
-                          required:
-                            - contractAddress
-                            - transactionHash
-                            - transactionIndex
-                            - blockHash
-                            - blockNumber
-                            - data
-                            - logIndex
-                            - removed
-                            - topics
-                          properties:
-                            contractAddress:
-                              type: string
-                              description: A field representing the contract address that generated the log. Provided as a 40-character hexadecimal string prefixed with 0x.
-                            transactionHash:
-                              type: string
-                              description: A field representing the hash of the transaction that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
-                            transactionIndex:
-                              type: integer
-                              description: A field representing the index of the transaction that generated the log. Indicates the order within the block. Provided in decimal string format.
-                            blockHash:
-                              type: string
-                              description: A field representing the hash of the block that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
-                            blockNumber:
-                              type: integer
-                              description: A field representing the block number that generated the log.
-                            data:
-                              type: string
-                              description: A field representing the data of the log. Provided as a hexadecimal string prefixed with 0x. This field represents the event data of the log.
-                            logIndex:
-                              type: integer
-                              description: A field representing the index of the log. Indicates the order of events in the transaction. Provided in decimal string format.
-                            removed:
-                              type: boolean
-                              description: A field indicating whether the log was removed. Returns true if the log was removed due to chain reorganization (Reorg).
-                            topics:
-                              type: array
-                              description: A field representing the indexed arguments of the log. Can have up to 4 topics.
-                              items:
-                                type: string
-                                description: A field representing a topic of the log. Provided as a 64-character hexadecimal string prefixed with 0x.
-                          example:
-                            contractAddress: "0xB1F1ee126e9c96231Cc3d3fAD7C08b4cf873b1f1"
-                            transactionHash: "0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4"
-                            transactionIndex: 6
-                            blockHash: "0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8"
-                            blockNumber: 21309845
-                            data: "0x000000000000000000000000000000000000000000000000410ba9e7b561fe8e"
-                            logIndex: 72
-                            removed: false
-                            topics:
-                              - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-                              - "0x000000000000000000000000fba26c3f9c8ecef989def3c5c8ad037487462d83"
-                              - "0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387"
+                          allOf:
+                            - type: object
+                              required:
+                                - contractAddress
+                                - transactionHash
+                                - transactionIndex
+                                - blockHash
+                                - blockNumber
+                                - data
+                                - logIndex
+                                - removed
+                                - topics
+                              properties:
+                                contractAddress:
+                                  type: string
+                                  description: A field representing the contract address that generated the log. Provided as a 40-character hexadecimal string prefixed with 0x.
+                                transactionHash:
+                                  type: string
+                                  description: A field representing the hash of the transaction that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                                transactionIndex:
+                                  type: integer
+                                  description: A field representing the index of the transaction that generated the log. Indicates the order within the block. Provided in decimal string format.
+                                blockHash:
+                                  type: string
+                                  description: A field representing the hash of the block that generated the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                                blockNumber:
+                                  type: integer
+                                  description: A field representing the block number that generated the log.
+                                data:
+                                  type: string
+                                  description: A field representing the data of the log. Provided as a hexadecimal string prefixed with 0x. This field represents the event data of the log.
+                                logIndex:
+                                  type: integer
+                                  description: A field representing the index of the log. Indicates the order of events in the transaction. Provided in decimal string format.
+                                removed:
+                                  type: boolean
+                                  description: A field indicating whether the log was removed. Returns true if the log was removed due to chain reorganization (Reorg).
+                                topics:
+                                  type: array
+                                  description: A field representing the indexed arguments of the log. Can have up to 4 topics.
+                                  items:
+                                    type: string
+                                    description: A field representing a topic of the log. Provided as a 64-character hexadecimal string prefixed with 0x.
+                              example:
+                                contractAddress: "0xB1F1ee126e9c96231Cc3d3fAD7C08b4cf873b1f1"
+                                transactionHash: "0x75f0194c076da2fbcf09b7e5cd302ee25a8b97ec5110bb89184682170e7dd5c4"
+                                transactionIndex: 6
+                                blockHash: "0x34c66823a963328f629116378f54d147ab67ab9d703c5898cf0b6a8822a778c8"
+                                blockNumber: 21309845
+                                data: "0x000000000000000000000000000000000000000000000000410ba9e7b561fe8e"
+                                logIndex: 72
+                                removed: false
+                                topics:
+                                  - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                                  - "0x000000000000000000000000fba26c3f9c8ecef989def3c5c8ad037487462d83"
+                                  - "0x0000000000000000000000001f2f10d1c40777ae1da742455c65828ff36df387"
+                            - type: object
+                              required:
+                                - decodedTopics
+                                - eventSignature
+                                - eventName
+                              properties:
+                                decodedTopics:
+                                  type: object
+                                  description: |
+                                    An object decoded based on the ABI provided in the request.
+                                    The value type of all sub-fields is always string.
+
+                                    * The number and names of fields may vary per Event Signature.
+                                eventSignature:
+                                  type: string
+                                  description: The event signature decoded based on the ABI provided in the request.
+                                eventName:
+                                  type: string
+                                  description: The value provided as eventName in the request.
         "400":
           $ref: "#/components/responses/400"
         "401":
