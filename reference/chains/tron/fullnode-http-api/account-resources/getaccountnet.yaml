@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetAccountNet
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getaccountnet:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getaccountnet
+      summary: GetAccountNet
+      description: Query bandwidth information.
+      x-seo-description: Query the Bandwidth resource state of a TRON account.
+      tags:
+      - account-resources
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              visible: true
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: 'Account address. (Format: Base58 or Hex). Example: `TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM`'
+                  example: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: "false"
+              required:
+              - address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  freeNetUsed:
+                    type: int64
+                    description: Amount of free Bandwidth used by the account.
+                    format: int64
+                  freeNetLimit:
+                    type: int64
+                    description: Total free Bandwidth limit for the account.
+                    format: int64
+                  NetUsed:
+                    type: int64
+                    description: Amount of staked Bandwidth used by the account.
+                    format: int64
+                  NetLimit:
+                    type: int64
+                    description: Total Bandwidth obtained by staking.
+                    format: int64
+                  TotalNetLimit:
+                    type: int64
+                    description: Total Bandwidth can be obtained by staking by the entire network.
+                    format: int64
+                  TotalNetWeight:
+                    type: int64
+                    description: Total amount of TRX staked for Bandwidth by the entire network.
+                    format: int64
+                  assetNetUsed:
+                    type: map\<string, int64>
+                    description: Account's free Bandwidth used for TRC-10 tokens, keyed by Token ID.
+                  assetNetLimit:
+                    type: map\<string, int64>
+                    description: Account's free Bandwidth limits for TRC-10 tokens, keyed by Token ID.
+              examples:
+                Example API Call Output:
+                  value: ""

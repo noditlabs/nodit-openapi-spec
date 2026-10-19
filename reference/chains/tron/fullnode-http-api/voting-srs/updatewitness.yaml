@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info:
+  title: Tron - UpdateWitness
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/updatewitness:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-updatewitness
+      summary: UpdateWitness
+      description: Edit the URL of the SR's official website.
+      x-seo-description: Create a transaction that updates a TRON Super Representative's website URL.
+      tags:
+      - voting-srs
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TJvaAeFb8Lykt9RQcVyyTFN2iDvGMuyD4M
+              update_url: "0x7777772e6578616d706c652e636f6d"
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Super Representative (SR) address. (Format: Base58 or Hex)'
+                update_url:
+                  type: string
+                  description: New official website URL for the Super Representative (SR).
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - update_url
+              - owner_address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: Super Representative (SR) address.
+                  update_url:
+                    type: string
+                    description: SR‘s Updated URL.
+              examples:
+                Result:
+                  value: '{}'

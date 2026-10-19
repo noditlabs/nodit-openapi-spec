@@ -1,0 +1,103 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetAccountBalance
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getaccountbalance:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getaccountbalance
+      summary: GetAccountBalance
+      description: 'Get the account balance in a specific block.(Note: At present, the interface data can only be queried through the following official nodes 13.228.119.63 & 18.139.193.235 & 18.141.79.38 & 18.139.248.26)'
+      x-seo-description: Query a TRON account's balance at a specific block.
+      tags:
+      - accounts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              account_identifier:
+                address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              block_identifier:
+                hash: 00000000052b3fa2d0034a3cd2b4d64daf8d4ebf4e72e8d262cc47e9592b2453
+                number: 86720418
+              visible: true
+            schema:
+              type: object
+              properties:
+                account_identifier:
+                  type: string
+                  format: json
+                  description: 'Object containing the account address.  Example: `{   "address": "TLLM21wteSPs4hKjbxgmH1L6poyMjeTbHm" }`'
+                  example: '{   "address": "TLLM21wteSPs4hKjbxgmH1L6poyMjeTbHm" }'
+                block_identifier:
+                  type: string
+                  format: json
+                  description: 'Object containing the block number and hash. Example: `{         "hash": "0000000000010c4a732d1e215e87466271e425c86945783c3d3f122bfa5affd9",         "number": 68682     }`'
+                  example: '{         "hash": "0000000000010c4a732d1e215e87466271e425c86945783c3d3f122bfa5affd9",         "number": 68682     }'
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - account_identifier
+              - block_identifier
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: integer
+                    format: int64
+                    description: TRX balance, in sun (1 TRX = 1,000,000 sun).
+                  block_identifier:
+                    type: object
+                    properties:
+                      hash:
+                        type: string
+                        description: Block hash.
+                      number:
+                        type: integer
+                        format: int64
+                        description: Block number.
+              examples:
+                Result:
+                  value: |-
+                    {
+                        "balance": 64086449348265042,
+                        "block_identifier": {
+                            "hash": "0000000000010c4a732d1e215e87466271e425c86945783c3d3f122bfa5affd9",
+                            "number": 68682
+                        }
+                    }
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

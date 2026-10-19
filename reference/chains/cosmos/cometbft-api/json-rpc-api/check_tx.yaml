@@ -3,7 +3,7 @@ info:
   title: Cosmos - CheckTx
   version: 1.0.0
 servers:
-  - url: https://rpc-cosmos-mainnet.nodit.io
+- url: https://rpc-cosmos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: check_tx
       summary: CheckTx
       description: Validates a transaction without executing it.
       tags:
-        - json-rpc-api
+      - json-rpc-api
       requestBody:
         required: true
         content:
@@ -32,23 +32,27 @@ paths:
               type: object
               additionalProperties: false
               required:
-                - jsonrpc
-                - id
-                - method
+              - jsonrpc
+              - id
+              - method
               properties:
                 jsonrpc:
+                  description: JSON-RPC protocol version. Always `2.0`.
                   type: string
                   const: "2.0"
                 id:
+                  description: Identifier of the request. Returned unchanged as `id` in the response.
                   type: integer
                 method:
+                  description: Name of the JSON-RPC method to call.
                   type: string
                   const: check_tx
                 params:
+                  description: Parameters passed to the method.
                   type: object
                   additionalProperties: false
                   required:
-                    - tx
+                  - tx
                   properties:
                     tx:
                       type: string
@@ -67,54 +71,71 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   error:
+                    description: Error information returned when the request fails.
                     type: string
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       code:
+                        description: Result code. `0` means success; any other value is an error.
                         type: string
                       data:
+                        description: Data returned by CheckTx.
                         type: string
                       log:
+                        description: Execution log message.
                         type: string
                       info:
+                        description: Additional information.
                         type: string
                       gas_wanted:
+                        description: Gas limit requested by the transaction.
                         type: string
                       gas_used:
+                        description: Gas actually used.
                         type: string
                       events:
+                        description: Events emitted during execution.
                         type: array
                         items:
                           type: object
                           additionalProperties: false
                           properties:
                             type:
+                              description: Event type.
                               type: string
                             attributes:
+                              description: Event attributes (key-value pairs).
                               type: array
                               items:
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   key:
+                                    description: Attribute key.
                                     type: string
                                   value:
+                                    description: Attribute value.
                                     type: string
                                   index:
+                                    description: Whether the attribute is indexed.
                                     type: boolean
                       codespace:
+                        description: Namespace of the result code.
                         type: string
               example:
                 jsonrpc: "2.0"
@@ -122,7 +143,7 @@ paths:
                 result:
                   code: "0"
                   data: ""
-                  log: "[]"
+                  log: '[]'
                   info: ""
                   gas_wanted: "200000"
                   gas_used: "80000"

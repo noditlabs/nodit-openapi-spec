@@ -1,0 +1,80 @@
+openapi: 3.1.0
+info:
+  title: Tron - SetAccountId
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/setaccountid:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-setaccountid
+      summary: SetAccountId
+      description: Create a transaction that assigns a unique ID to an account. An account ID cannot be changed once set.
+      x-seo-description: Create a transaction that sets a unique ID for a TRON account.
+      tags:
+      - accounts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              account_id: "6161616162626262"
+              visible: true
+            schema:
+              type: object
+              required:
+              - owner_address
+              - account_id
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                  example: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                account_id:
+                  type: string
+                  description: 'Account ID to set. (Format: hex) Example: `6161616162626262`'
+                  example: "6161616162626262"
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Unsigned (or signed) transaction object ready for signing / broadcasting.
+                properties:
+                  txID:
+                    type: string
+                    description: Transaction ID (hash).
+                  raw_data:
+                    type: object
+                    description: The transaction `raw_data` (contract, ref_block_*, expiration, etc.).
+                  raw_data_hex:
+                    type: string
+                    description: Hex-encoded protobuf of `raw_data`.
+                  visible:
+                    type: boolean
+                    description: Echoes back the `visible` value given in the request.

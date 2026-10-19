@@ -1,0 +1,91 @@
+openapi: 3.1.0
+info:
+  title: Sui - VerifySignature
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.SignatureVerificationService/VerifySignature:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-VerifySignature
+      summary: VerifySignature
+      description: |
+        Verifies a UserSignature against the provided message.
+      x-seo-description: 제공된 메시지에 대해 UserSignature의 유효성을 검증합니다.
+      x-grpc-method: sui.rpc.v2.SignatureVerificationService/VerifySignature
+      x-proto: sui/rpc/v2/signature_verification_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.SignatureVerificationService
+        method: VerifySignature
+        streaming: unary
+        proto: sui/rpc/v2/signature_verification_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - SignatureVerificationService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: object
+                  description: The message to verify against. Today the only supported message types are `PersonalMessage` and `TransactionData`, and the `Bcs.name` must be set to indicate which type of message is being verified.
+                signature:
+                  type: object
+                  description: The signature to verify.
+                address:
+                  type: string
+                  description: Optional. Address to validate against the provided signature. If provided, this address will be compared against the address derived from the signature and a successful response will only be returned if they match.
+                jwks:
+                  type: array
+                  items:
+                    type: object
+                  description: The set of JWKs to use when verifying Zklogin signatures. If this is empty, the current set of valid JWKs stored on-chain will be used.
+            example:
+              message:
+                name: PersonalMessage
+                value: <base64-encoded message bytes>
+              signature:
+                bcs:
+                  value: <base64-encoded user signature>
+              address: "0x0000000000000000000000000000000000000000000000000000000000000001"
+              jwks: []
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_valid:
+                    type: boolean
+                    description: Indicates if the provided signature was valid given the requested parameters.
+                  reason:
+                    type: string
+                    description: If `is_valid` is `false`, this is the reason for why the signature verification failed.
+              example:
+                is_valid: false
+                reason: ""

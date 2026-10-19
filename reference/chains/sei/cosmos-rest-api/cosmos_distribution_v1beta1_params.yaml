@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: SEI - cosmos_distribution_v1beta1_params
+  title: Sei - cosmos_distribution_v1beta1_params
   version: 1.0.0
 servers:
-  - url: https://rest-sei-mainnet.nodit.io
+- url: https://rest-sei-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: Params queries params of the distribution module.
       operationId: cosmos_distribution_v1beta1_params
       tags:
-        - distribution
+      - distribution
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -34,6 +34,7 @@ paths:
                     type: object
                     properties:
                       community_tax:
+                        description: Fraction of block rewards sent to the community pool.
                         type: string
                       base_proposer_reward:
                         type: string
@@ -46,12 +47,13 @@ paths:
                           Deprecated: The bonus_proposer_reward field is deprecated and is no longer used
                           in the x/distribution module's reward mechanism.
                       withdraw_addr_enabled:
+                        description: Whether a separate reward withdrawal address can be set.
                         type: boolean
                 description: QueryParamsResponse is the response type for the Query/Params RPC method.
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -73,5 +75,5 @@ paths:
                           type: string
                           format: byte
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/distribution/v1beta1/params

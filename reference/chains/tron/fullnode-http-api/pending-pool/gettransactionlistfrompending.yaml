@@ -1,0 +1,67 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetTransactionListFromPending
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/gettransactionlistfrompending:
+    get:
+      security:
+      - api_key: []
+      operationId: tron-gettransactionlistfrompending
+      summary: GetTransactionListFromPending
+      description: Get transaction list information from pending pool
+      x-seo-description: List the transaction IDs currently held in the TRON pending pool.
+      tags:
+      - pending-pool
+      parameters: []
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  txId:
+                    type: array
+                    items:
+                      type: string
+                    description: List of transaction IDs in the pool.
+              examples:
+                Result:
+                  value: |-
+                    {
+                        "txId": [
+                            "48ce8d57e83cc6c28737b785af4d0732c70fa73c2900ed4291b376364872775a",
+                            "3b37e600a2d90cd464c2a8ca58b1f0183b75667a0a50d8e17db440b2f614084c",
+                            "bf40178f1d2d12a90d5caee5c71fa45f61c3c532328041c0fb44dc57b17dcd4c",
+                            "596b39cf802a0eb7bda035e124f1936f7ae01f7c418dc1f0628f077be180382a",
+                            "13f0f3e65f9dc1ad72117dbfd38c66c46355ca36dff85507b04216169cffc07b"
+                        ]
+                    }
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

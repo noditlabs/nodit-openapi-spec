@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: Sui - GetDatatype
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.MovePackageService/GetDatatype:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-GetDatatype
+      summary: GetDatatype
+      description: |
+        Retrieves the Move datatype information for the specified package.
+      x-seo-description: 지정한 패키지의 Move 데이터타입 정보를 조회합니다.
+      x-grpc-method: sui.rpc.v2.MovePackageService/GetDatatype
+      x-proto: sui/rpc/v2/move_package_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.MovePackageService
+        method: GetDatatype
+        streaming: unary
+        proto: sui/rpc/v2/move_package_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - MovePackageService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - package_id
+              - module_name
+              - name
+              properties:
+                package_id:
+                  type: string
+                  description: ' Required. The `storage_id` of the requested package.'
+                module_name:
+                  type: string
+                  description: ' Required. The name of the requested module.'
+                name:
+                  type: string
+                  description: ' Required. The name of the requested datatype.'
+            example:
+              package_id: "0x0000000000000000000000000000000000000000000000000000000000000001"
+              module_name: example.sui
+              name: example.sui
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datatype:
+                    type: object
+                    description: The requested datatype.
+                    properties:
+                      type_name:
+                        type: string
+                        description: Fully qualified type name.
+                      defining_id:
+                        type: string
+                        description: Package storage ID that defines the type.
+                      module:
+                        type: string
+                        description: Module name.
+                      name:
+                        type: string
+                        description: Datatype name.
+                      abilities:
+                        type: array
+                        items:
+                          type: string
+                        description: Abilities of the datatype.
+                      type_parameters:
+                        type: array
+                        description: Generic type parameters.
+                        items:
+                          type: object
+                          properties:
+                            constraints:
+                              type: array
+                              items:
+                                type: string
+                              description: Ability constraints on the parameter.
+                            is_phantom:
+                              type: boolean
+                              description: Whether the parameter is phantom.
+                      kind:
+                        type: string
+                        description: Whether it is a struct or enum.
+                      fields:
+                        type: array
+                        description: Fields of the datatype.
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the field.
+                            position:
+                              type: integer
+                              description: Position in definition order.
+                            type:
+                              type: object
+                              description: Type of the field.
+                              properties:
+                                type:
+                                  type: object
+                                  description: The type.
+                                type_name:
+                                  type: string
+                                  description: Fully qualified datatype name.
+                                type_parameter_instantiation:
+                                  type: array
+                                  items:
+                                    type: object
+                                  description: Instantiation of type parameters.
+                                type_parameter:
+                                  type: integer
+                                  description: Type parameter position.
+                      variants:
+                        type: array
+                        description: Variants if the datatype is an enum.
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the variant.
+                            position:
+                              type: integer
+                              description: Position in definition order.
+                            fields:
+                              type: array
+                              description: Fields of the variant.
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                    description: Name of the field.
+                                  position:
+                                    type: integer
+                                    description: Position in definition order.
+                                  type:
+                                    type: object
+                                    description: Type of the field.
+                                    properties:
+                                      type:
+                                        type: object
+                                        description: The type.
+                                      type_name:
+                                        type: string
+                                        description: Fully qualified datatype name.
+                                      type_parameter_instantiation:
+                                        type: array
+                                        items:
+                                          type: object
+                                        description: Instantiation of type parameters.
+                                      type_parameter:
+                                        type: integer
+                                        description: Type parameter position.
+              example:
+                datatype: {}

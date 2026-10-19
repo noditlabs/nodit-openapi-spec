@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetTransactionInfoById
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/gettransactioninfobyid:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-gettransactioninfobyid
+      summary: GetTransactionInfoById
+      description: Query the transaction fee, block height by transaction id
+      x-seo-description: Query TRON transaction fee, logs and block height by transaction ID.
+      tags:
+      - query-the-network
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: 349ab7e2ba7f10687049d02a8138668d14a88888709aa681f7b32d475b0049d4
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: 'Transaction ID (hash). Example: `bd32eef7469d57011a092c59c745cab1e49c501e9f0ac15c580656f9ead1e319`'
+                  example: bd32eef7469d57011a092c59c745cab1e49c501e9f0ac15c580656f9ead1e319
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - value
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: |-
+                    {
+                      "id": "d0807adb3c5412aa150787b944c96ee898c997debdc27e2f6a643c771edb5933",
+                      "fee": 2790,
+                      "blockNumber": 5467102,
+                      "blockTimeStamp": 1546455621000,
+                      "contractResult": [
+                        ""
+                      ],
+                      "receipt": {
+                        "net_fee": 2790
+                      }
+                    }
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: d0807adb3c5412aa150787b944c96ee898c997debdc27e2f6a643c771edb5933
+                  fee:
+                    type: integer
+                    example: 2790
+                    default: 0
+                  blockNumber:
+                    type: integer
+                    example: 5467102
+                    default: 0
+                  blockTimeStamp:
+                    type: integer
+                    example: 1546455621000
+                    default: 0
+                  contractResult:
+                    type: array
+                    items:
+                      type: string
+                      example: ""
+                  receipt:
+                    type: object
+                    properties:
+                      net_fee:
+                        type: integer
+                        example: 2790
+                        default: 0

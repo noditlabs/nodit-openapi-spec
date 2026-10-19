@@ -1,0 +1,76 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBrokerage
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getBrokerage:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getBrokerage
+      summary: GetBrokerage
+      description: Get SR brokerage ratio (Confirmed state)
+      x-seo-description: Query the brokerage ratio of a TRON Super Representative.
+      tags:
+      - voting-srs
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              address: TJvaAeFb8Lykt9RQcVyyTFN2iDvGMuyD4M
+              visible: true
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: 'Super Representative (SR) account address. (Format: Base58 or Hex). Example: `TGj1Ej1qRzL9feLTLhjwgxXF4Ct6GTWg2U`'
+                  example: TGj1Ej1qRzL9feLTLhjwgxXF4Ct6GTWg2U
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: true
+              required:
+              - address
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  brokerage:
+                    type: integer
+                    format: int32
+                    description: Dividend ratio, from 0 to 100, 1 represents 1%.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

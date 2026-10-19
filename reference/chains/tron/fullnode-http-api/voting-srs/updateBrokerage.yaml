@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: Tron - UpdateBrokerage
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/updateBrokerage:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-updateBrokerage
+      summary: UpdateBrokerage
+      description: Update the SR's brokerage setting.
+      x-seo-description: Create a transaction that updates a TRON Super Representative's brokerage ratio.
+      tags:
+      - voting-srs
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TJvaAeFb8Lykt9RQcVyyTFN2iDvGMuyD4M
+              brokerage: 20
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Super Representative (SR) address. (Format: Base58 or Hex)'
+                brokerage:
+                  type: integer
+                  description: 'The brokerage ratio of the super representative, for example: 20 means 20%, 100 means 100%'
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+              required:
+              - owner_address
+              - brokerage
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: Super Representative (SR) address.
+                  brokerage:
+                    type: integer
+                    format: int32
+                    description: Dividend ratio, from 0 to 100, 1 represents 1%.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

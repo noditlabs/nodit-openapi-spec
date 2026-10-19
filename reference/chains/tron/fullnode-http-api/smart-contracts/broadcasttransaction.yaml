@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: Tron - BroadcastTransaction
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/broadcasttransaction:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-broadcasttransaction
+      summary: BroadcastTransaction
+      description: Broadcasts a signed transaction to the network.
+      x-seo-description: Broadcast a signed TRON transaction to the network.
+      tags:
+      - smart-contracts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              visible: false
+              txID: 6db783c4142b3749a4b598db4644155455c9206e2eca4b31efbd48e46773d9d5
+              raw_data:
+                contract:
+                - parameter:
+                    value:
+                      amount: 1000000
+                      owner_address: 411320a6fb4dcd4ff8e91392a8cb98378633cf7dd8
+                      to_address: 414c8967080d86f3d0e1352a42f9213c7b9dd03b0f
+                    type_url: type.googleapis.com/protocol.TransferContract
+                  type: TransferContract
+                ref_block_bytes: f69b
+                ref_block_hash: 7d4a3b02495f2320
+                expiration: 1762502739000
+                timestamp: 1762502681856
+              raw_data_hex: 0a02f69b22087d4a3b02495f232040b888e6eaa5335a67080112630a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412320a15411320a6fb4dcd4ff8e91392a8cb98378633cf7dd81215414c8967080d86f3d0e1352a42f9213c7b9dd03b0f18c0843d7080cae2eaa533
+              signature:
+              - 2a3743f40d53a124c1597256b155bf286bd8874afe6997ec0a7e63405dea78cd914d9aa9adb8f84dc8d1ef4b1827dd9e8960a40a4ad11e619d06e9601e8b27c000
+            schema:
+              type: object
+              required:
+              - RAW_BODY
+              properties:
+                RAW_BODY:
+                  type: string
+                  description: |-
+                    Transaction object(Singed). See [here](https://developers.tron.network/docs/tron-protocol-transaction) for details.
+                    e.g., {"visible": false, "txID": "6db783c4142b3749a4b598db4644155455c9206e2eca4b31efbd48e46773d9d5", "raw_data": {"contract": [{"parameter": {"value": {"amount": 1000000, "owner_address": "411320a6fb4dcd4ff8e91392a8cb98378633cf7dd8", "to_address": "414c8967080d86f3d0e1352a42f9213c7b9dd03b0f"}, "type_url": "type.googleapis.com/protocol.TransferContract"}, "type": "TransferContract"}], "ref_block_bytes": "f69b", "ref_block_hash": "7d4a3b02495f2320", "expiration": 1762502739000, "timestamp": 1762502681856}, "raw_data_hex": "0a02f69b22087d4a3b02495f232040b888e6eaa5335a67080112630a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412320a15411320a6fb4dcd4ff8e91392a8cb98378633cf7dd81215414c8967080d86f3d0e1352a42f9213c7b9dd03b0f18c0843d7080cae2eaa533", "signature": ["2a3743f40d53a124c1597256b155bf286bd8874afe6997ec0a7e63405dea78cd914d9aa9adb8f84dc8d1ef4b1827dd9e8960a40a4ad11e619d06e9601e8b27c000"]}
+                  format: json
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: boolean
+                    description: Whether the broadcast was successful. `true` - successful; `false` - failed. (Field omitted in result).
+                  txid:
+                    type: string
+                    description: The transaction hash.
+                  code:
+                    type: string
+                    description: Error code indicating the result.
+                  message:
+                    type: string
+                    description: Detailed error information.
+              examples:
+                Example API Call Response:
+                  value: |-
+                    {
+                      "result": true,
+                      "txid": "6db783c4142b3749a4b598db4644155455c9206e2eca4b31efbd48e46773d9d5"
+                    }

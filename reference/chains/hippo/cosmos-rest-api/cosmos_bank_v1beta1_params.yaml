@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Hippo - cosmos_bank_v1beta1_params
+  title: Hippo Protocol - cosmos_bank_v1beta1_params
   version: 1.0.0
 servers:
-  - url: https://rest-hippo-mainnet.nodit.io
+- url: https://rest-hippo-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: Params queries the parameters of x/bank module.
       operationId: cosmos_bank_v1beta1_params
       tags:
-        - bank
+      - bank
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -39,8 +39,10 @@ paths:
                           type: object
                           properties:
                             denom:
+                              description: Token denomination.
                               type: string
                             enabled:
+                              description: Whether transfers of this denomination are enabled.
                               type: boolean
                           description: |-
                             SendEnabled maps coin denom to a send_enabled status (whether a denom is
@@ -52,12 +54,13 @@ paths:
 
                           As of cosmos-sdk 0.47, this only exists for backwards compatibility of genesis files.
                       default_send_enabled:
+                        description: Default transfer setting for denominations without an explicit setting.
                         type: boolean
                 description: QueryParamsResponse defines the response type for querying x/bank parameters.
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -79,5 +82,5 @@ paths:
                           type: string
                           format: byte
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/bank/v1beta1/params

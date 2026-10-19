@@ -3,7 +3,7 @@ info:
   title: Celestia - cosmos_mint_v1beta1_annual_provisions
   version: 1.0.0
 servers:
-  - url: https://rest-celestia-mainnet.nodit.io
+- url: https://rest-celestia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: AnnualProvisions current minting annual provisions value.
       operationId: cosmos_mint_v1beta1_annual_provisions
       tags:
-        - mint
+      - mint
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -39,7 +39,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -61,5 +61,5 @@ paths:
                           type: string
                           format: byte
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/mint/v1beta1/annual_provisions

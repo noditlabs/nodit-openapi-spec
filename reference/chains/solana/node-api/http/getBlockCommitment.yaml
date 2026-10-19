@@ -3,10 +3,10 @@ info:
   title: Solana - getBlockCommitment
   version: 1.0.0
 servers:
-  - url: https://solana-mainnet.nodit.io
-    description: Solana Mainnet
-  - url: https://solana-devnet.nodit.io
-    description: Solana Devnet
+- url: https://solana-mainnet.nodit.io
+  description: Solana Mainnet
+- url: https://solana-devnet.nodit.io
+  description: Solana Devnet
 components:
   securitySchemes:
     api_key:
@@ -42,8 +42,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
     Error:
       type: object
       properties:
@@ -54,8 +54,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -66,24 +66,24 @@ components:
             properties:
               jsonrpc:
                 type: string
-                description: JSON-RPC version
+                description: The JSON-RPC version
                 example: "2.0"
               id:
                 type: integer
-                description: Request ID
+                description: The request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ErrorFromRPC"
+                $ref: '#/components/schemas/ErrorFromRPC'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -92,7 +92,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -101,16 +101,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -118,14 +118,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: solana-getBlockCommitment
       summary: getBlockCommitment
       description: |
         Returns commitment for particular block.
       x-seo-description: Returns the commitment level and total cluster stake for a specific Solana block.
       tags:
-        - http
+      - http
       parameters: []
       requestBody:
         required: true
@@ -134,10 +134,10 @@ paths:
             schema:
               type: object
               required:
-                - jsonrpc
-                - id
-                - method
-                - params
+              - jsonrpc
+              - id
+              - method
+              - params
               properties:
                 jsonrpc:
                   type: string
@@ -157,13 +157,13 @@ paths:
                     1. Block number (`required`)
                   items:
                     title: Block number
-                    $ref: "#/components/schemas/BlockNumber"
+                    $ref: '#/components/schemas/BlockNumber'
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: getBlockCommitment
                 params:
-                  - 5
+                - 5
       responses:
         "200":
           description: Successful Response
@@ -171,65 +171,65 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessfulResponse"
-                  - type: object
-                    properties:
-                      result:
-                        type: object
-                        properties:
-                          commitment:
-                            type: array
-                            description: Array of u64 integers logging the amount of cluster stake in lamports that has voted on the block at each depth from 0 to `MAX_LOCKOUT_HISTORY`.
-                            items:
-                              type: integer
-                          totalStake:
+                - $ref: '#/components/schemas/SuccessfulResponse'
+                - type: object
+                  properties:
+                    result:
+                      type: object
+                      properties:
+                        commitment:
+                          type: array
+                          description: Array of u64 integers logging the amount of cluster stake in lamports that has voted on the block at each depth from 0 to `MAX_LOCKOUT_HISTORY`.
+                          items:
                             type: integer
-                            description: Total active stake, in lamports, of the current epoch.
+                        totalStake:
+                          type: integer
+                          description: Total active stake, in lamports, of the current epoch.
               example:
                 jsonrpc: "2.0"
                 result:
                   commitment:
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 0
-                    - 10
-                    - 32
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 0
+                  - 10
+                  - 32
                   totalStake: 42
                 id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

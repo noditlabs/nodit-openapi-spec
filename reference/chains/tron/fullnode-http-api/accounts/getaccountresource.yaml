@@ -1,0 +1,129 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetAccountResource
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getaccountresource:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getaccountresource
+      summary: GetAccountResource
+      description: Query the resource information of an account(bandwidth,energy,etc)
+      x-seo-description: Query a TRON account's Bandwidth, Energy and TRON Power resource state.
+      tags:
+      - accounts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              visible: true
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: 'Account address. (Format: Base58 or Hex). Example: `TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM`'
+                  example: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  freeNetUsed:
+                    type: int64
+                    description: Amount of free Bandwidth used by the account.
+                    format: int64
+                  freeNetLimit:
+                    type: int64
+                    description: Total free Bandwidth limit for the account.
+                    format: int64
+                  NetUsed:
+                    type: int64
+                    description: Amount of staked Bandwidth used by the account.
+                    format: int64
+                  NetLimit:
+                    type: int64
+                    description: Total Bandwidth obtained by staking.
+                    format: int64
+                  TotalNetLimit:
+                    type: int64
+                    description: Total Bandwidth can be obtained by staking by the entire network.
+                    format: int64
+                  TotalNetWeight:
+                    type: int64
+                    description: Total amount of TRX staked for Bandwidth by the entire network.
+                    format: int64
+                  totalTronPowerWeight:
+                    type: integer
+                    format: int64
+                    description: Total TRON Power (votes) in the entire network.
+                  tronPowerLimit:
+                    type: integer
+                    format: int64
+                    description: Total TRON Power (votes) obtained by the account.
+                  tronPowerUsed:
+                    type: integer
+                    format: int64
+                    description: Amount of TRON Power (votes) used by the account.
+                  EnergyUsed:
+                    type: integer
+                    format: int64
+                    description: Account's Energy usage.
+                  EnergyLimit:
+                    type: integer
+                    format: int64
+                    description: Total energy obtained by staking.
+                  TotalEnergyLimit:
+                    type: integer
+                    format: int64
+                    description: Total Energy limit for the entire network.
+                  TotalEnergyWeight:
+                    type: integer
+                    format: int64
+                    description: Total amount of TRX staked for energy by the entire network.
+                  assetNetUsed:
+                    type: map\<string, int64>
+                    description: Account's free Bandwidth used for TRC-10 tokens, keyed by Token ID.
+                  assetNetLimit:
+                    type: map\<string, int64>
+                    description: Account's free Bandwidth limits for TRC-10 tokens, keyed by Token ID.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

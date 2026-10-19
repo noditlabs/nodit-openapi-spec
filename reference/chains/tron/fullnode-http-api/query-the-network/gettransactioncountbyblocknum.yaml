@@ -1,0 +1,71 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetTransactionCountByBlockNum
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/gettransactioncountbyblocknum:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-gettransactioncountbyblocknum
+      summary: GetTransactionCountByBlockNum
+      description: Get transaction count in a block by block number. (Confirmed state)
+      x-seo-description: Query the number of transactions in a TRON block.
+      tags:
+      - query-the-network
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              num: 86720418
+            schema:
+              type: object
+              properties:
+                num:
+                  type: integer
+                  description: 'Block number (height). Example: `61815425`'
+                  format: int32
+                  example: 61815425
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Transaction count for the specified block.
+                properties:
+                  count:
+                    type: integer
+                    format: int64
+                    description: Number of transactions in the block.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

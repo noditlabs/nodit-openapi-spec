@@ -1,0 +1,47 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBurnTRX
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getburntrx:
+    get:
+      security:
+      - api_key: []
+      operationId: tron-getburntrx
+      summary: GetBurnTRX
+      description: Query the amount of TRX burned due to on-chain transaction fees since [No. 54 Committee Proposal ](https://tronscan.org/#/proposal/54) took effect
+      x-seo-description: Query the total amount of TRX burned by on-chain transaction fees.
+      tags:
+      - query-the-network
+      parameters: []
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  burnTrxAmount:
+                    type: integer
+                    format: int64
+                    description: Amount of TRX burned, in sun.
+              examples:
+                Example API Call Output:
+                  value: ""

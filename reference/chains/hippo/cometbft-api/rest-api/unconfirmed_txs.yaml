@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Hippo - UnconfirmedTxs
+  title: Hippo Protocol - UnconfirmedTxs
   version: 1.0.0
 servers:
-  - url: https://rpc-hippo-mainnet.nodit.io
+- url: https://rpc-hippo-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,19 +18,19 @@ paths:
   /unconfirmed_txs:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: unconfirmed_txs
       summary: UnconfirmedTxs
       description: Retrieves the list of unconfirmed transactions.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: limit
-          in: query
-          description: Maximum number of transactions to return.
-          schema:
-            type: string
-          example: "20"
+      - name: limit
+        in: query
+        description: Maximum number of transactions to return.
+        schema:
+          type: string
+        example: "20"
       responses:
         "200":
           content:
@@ -39,26 +39,33 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       n_txs:
+                        description: Number of transactions in this response.
                         type: string
                       total:
+                        description: Total number of transactions in the mempool.
                         type: string
                       total_bytes:
+                        description: Total size of mempool transactions in bytes.
                         type: string
                       txs:
+                        description: Transactions in the mempool (Base64).
                         type: array
                         items:
                           type: string
@@ -70,5 +77,5 @@ paths:
                   total: "2"
                   total_bytes: "1024"
                   txs:
-                    - a/encoded_tx_1/c
-                    - a/encoded_tx_2/c
+                  - a/encoded_tx_1/c
+                  - a/encoded_tx_2/c

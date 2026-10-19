@@ -3,8 +3,8 @@ info:
   title: Sui - suix_resolveNameServiceAddress
   version: 1.0.0
 servers:
-  - url: https://sui-mainnet.nodit.io
-    description: Sui Mainnet
+- url: https://sui-mainnet.nodit.io
+  description: Sui Mainnet
 components:
   securitySchemes:
     api_key:
@@ -21,82 +21,82 @@ components:
       type: string
     SuiAddress:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     ObjectID:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     Base58:
       type: string
     Digest:
       allOf:
-        - $ref: "#/components/schemas/Base58"
+      - $ref: '#/components/schemas/Base58'
       description: A representation of a 32 byte digest
     BigInt_for_uint64:
       type: string
     ObjectResponseError:
       oneOf:
-        - type: object
-          required:
-            - code
-            - object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - notExists
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - parent_object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - dynamicFieldNotFound
-            parent_object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - digest
-            - object_id
-            - version
-          properties:
-            code:
-              type: string
-              enum:
-                - deleted
-            digest:
-              description: Base64 string representing the object digest
-              allOf:
-                - $ref: "#/components/schemas/Digest"
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-            version:
-              description: Object version.
-              allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
-        - type: object
-          required:
-            - code
-          properties:
-            code:
-              type: string
-              enum:
-                - unknown
-        - type: object
-          required:
-            - code
-            - error
-          properties:
-            code:
-              type: string
-              enum:
-                - displayError
-            error:
-              type: string
+      - type: object
+        required:
+        - code
+        - object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - notExists
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - parent_object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - dynamicFieldNotFound
+          parent_object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - digest
+        - object_id
+        - version
+        properties:
+          code:
+            type: string
+            enum:
+            - deleted
+          digest:
+            description: Base64 string representing the object digest
+            allOf:
+            - $ref: '#/components/schemas/Digest'
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+          version:
+            description: Object version.
+            allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+      - type: object
+        required:
+        - code
+        properties:
+          code:
+            type: string
+            enum:
+            - unknown
+      - type: object
+        required:
+        - code
+        - error
+        properties:
+          code:
+            type: string
+            enum:
+            - displayError
+          error:
+            type: string
     Error:
       type: object
       properties:
@@ -107,8 +107,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -126,17 +126,17 @@ components:
                 description: Request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ObjectResponseError"
+                $ref: '#/components/schemas/ObjectResponseError'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -145,7 +145,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -154,16 +154,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -171,14 +171,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: sui-suix_resolveNameServiceAddress
       summary: suix_resolveNameServiceAddress
       description: |
         Return the resolved address given resolver and name
       x-seo-description: Resolve a Sui Name Service (SuiNS) domain name to its corresponding wallet address.
       tags:
-        - suix
+      - suix
       parameters: []
       requestBody:
         required: true
@@ -187,10 +187,10 @@ paths:
             schema:
               type: object
               required:
-                - id
-                - jsonrpc
-                - method
-                - params
+              - id
+              - jsonrpc
+              - method
+              - params
               properties:
                 id:
                   type: integer
@@ -207,15 +207,15 @@ paths:
                   maxItems: 1
                   items:
                     oneOf:
-                      - title: name
-                        type: string
-                        description: The name to resolve
+                    - title: name
+                      type: string
+                      description: The name to resolve
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: suix_resolveNameServiceAddress
                 params:
-                  - example.sui
+                - example.sui
       responses:
         "200":
           description: Successful Response
@@ -229,19 +229,19 @@ paths:
                   id:
                     type: integer
                   result:
-                    $ref: "#/components/schemas/SuiAddress"
+                    $ref: '#/components/schemas/SuiAddress'
                     description: The resolved address for the name
               example:
                 jsonrpc: "2.0"
                 result: "0x6710024f81dd33ab6833482ee8034e779a48e6ef635c7f856df4905022458bfb"
                 id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

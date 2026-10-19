@@ -1,0 +1,66 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetAssetIssueListByName
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getassetissuelistbyname:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getassetissuelistbyname
+      summary: GetAssetIssueListByName
+      description: Query the list of all the TRC-10 tokens by a name. (Confirmed state)
+      x-seo-description: Query solidified TRC-10 tokens that share a given token name.
+      tags:
+      - trc10-token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: 426974546f7272656e74
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: Name of a TRC 10 token, default hexString.
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - value
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assetIssue:
+                    type: array
+                    items:
+                      type: object
+                      description: 'TRC-10 token info. See [GetAssetIssueByAccount](https://developers.tron.network/reference/getassetissuebyaccount) for full structure. Note: string fields are HexString-encoded.'
+                      properties: {}
+                    description: The list of TRC-10 token with same query name, please refer to [GetAssetIssueByAccount](https://developers.tron.network/reference/getassetissuebyaccount) for detailed fields of AssetIssueCapsule object, please note that string fields are in HexString format.
+              examples:
+                Result:
+                  value: '{}'

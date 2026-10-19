@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: CronosPOS - Header By Hash
+  title: Cronos POS - Header By Hash
   version: 1.0.0
 servers:
-  - url: https://rpc-cronospos-mainnet.nodit.io
+- url: https://rpc-cronospos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,20 +18,20 @@ paths:
   /header_by_hash:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: header_by_hash
       summary: Header By Hash
       description: Retrieves the header of a specific block by its hash.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: hash
-          in: query
-          required: true
-          description: Block hash to query.
-          schema:
-            type: string
-          example: "0xD70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED"
+      - name: hash
+        in: query
+        required: true
+        description: Block hash to query.
+        schema:
+          type: string
+        example: "0xD70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED"
       responses:
         "200":
           content:
@@ -40,68 +40,92 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       header:
+                        description: Block header.
                         type: object
                         additionalProperties: false
                         properties:
                           version:
+                            description: Block and application protocol versions.
                             type: object
                             additionalProperties: false
                             properties:
                               block:
+                                description: Block protocol version.
                                 type: string
                               app:
+                                description: Application protocol version.
                                 type: string
                           chain_id:
+                            description: Chain ID.
                             type: string
                           height:
+                            description: Block height.
                             type: string
                           time:
+                            description: Block time (UTC).
                             type: string
                           last_block_id:
+                            description: Block ID of the previous block.
                             type: object
                             additionalProperties: false
                             properties:
                               hash:
+                                description: Block hash.
                                 type: string
                               parts:
+                                description: Part set header, used when the block is split into parts for gossiping.
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   total:
+                                    description: Total number of block parts.
                                     type: integer
                                   hash:
+                                    description: Merkle root hash of the block parts.
                                     type: string
                           last_commit_hash:
+                            description: Hash of the validators' commit for the previous block.
                             type: string
                           data_hash:
+                            description: Hash of the transactions in the block.
                             type: string
                           validators_hash:
+                            description: Hash of the validator set for the current block.
                             type: string
                           next_validators_hash:
+                            description: Hash of the validator set for the next block.
                             type: string
                           consensus_hash:
+                            description: Hash of the consensus parameters for the current block.
                             type: string
                           app_hash:
+                            description: Application state hash after executing the previous block's transactions.
                             type: string
                           last_results_hash:
+                            description: Root hash of the execution results of the previous block's transactions.
                             type: string
                           evidence_hash:
+                            description: Hash of the evidence included in the block.
                             type: string
                           proposer_address:
+                            description: Address of the validator that proposed the block.
                             type: string
               example:
                 jsonrpc: "2.0"
@@ -113,7 +137,7 @@ paths:
                       app: "0"
                     chain_id: cosmoshub-4
                     height: "1000"
-                    time: "2019-12-11T16:11:34Z"
+                    time: '2019-12-11T16:11:34Z'
                     last_block_id:
                       hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
                       parts:

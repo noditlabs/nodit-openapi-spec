@@ -1,0 +1,879 @@
+openapi: 3.1.0
+info:
+  title: Tron - eth_getCode
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    Address:
+      type: string
+      description: |
+        A TRON account address. It is not a Base58 address but the 20-byte form obtained by removing
+        the `41` prefix from the TRON hexadecimal address. (e.g.) `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` →
+        `41a614f803b6fd780986a42c78ec9c7f77e6ded13c` → `0xa614f803b6fd780986a42c78ec9c7f77e6ded13c`
+      example: "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+    Block:
+      type: object
+      description: |
+        A TRON block object. It has the same field layout as an Ethereum block, but fields that have no
+        TRON counterpart are filled with fixed values.
+      properties:
+        number:
+          type: string
+          description: The block number, hex-encoded.
+        hash:
+          type: string
+          description: The block hash. Its leading 8 characters encode the block height.
+        parentHash:
+          type: string
+          description: The hash of the previous block.
+        transactionsRoot:
+          type: string
+          description: The merkle root of the transactions in the block.
+        stateRoot:
+          type: string
+          description: The state tree root. TRON does not provide this value and returns an empty value (`0x`).
+        receiptsRoot:
+          type: string
+          description: The receipts tree root. TRON has no counterpart, so it is filled with zeros.
+        miner:
+          type: string
+          description: The address of the Super Representative (SR) that produced the block.
+        logsBloom:
+          type: string
+          description: The Bloom filter used to search event logs.
+        size:
+          type: string
+          description: The block size in bytes, hex-encoded.
+        gasLimit:
+          type: string
+          description: The maximum total energy allowed for the block.
+        gasUsed:
+          type: string
+          description: The total energy consumed in the block.
+        timestamp:
+          type: string
+          description: The block creation time in UNIX epoch seconds, hex-encoded.
+        transactions:
+          type: array
+          description: |
+            The list of transactions included in the block.
+            When the second request parameter is `false`, an array of transaction hashes is returned; when `true`, an array of transaction objects is returned.
+          items:
+            description: A transaction hash string or a transaction object.
+        difficulty:
+          type: string
+          description: The mining difficulty. TRON does not use proof of work, so it is always `0x0`.
+        totalDifficulty:
+          type: string
+          description: The cumulative difficulty. TRON does not use proof of work, so it is always `0x0`.
+        nonce:
+          type: string
+          description: The proof-of-work nonce. TRON has no counterpart, so it is filled with zeros.
+        mixHash:
+          type: string
+          description: The proof-of-work mix hash. TRON has no counterpart, so it is filled with zeros.
+        sha3Uncles:
+          type: string
+          description: The hash of the uncle list. TRON has no uncles, so it is filled with zeros.
+        uncles:
+          type: array
+          description: The list of uncle blocks. TRON has no uncles, so it is always an empty array.
+          items:
+            type: string
+            description: An uncle block hash.
+        extraData:
+          type: string
+          description: Extra data included in the block. TRON returns an empty value (`0x`).
+        baseFeePerGas:
+          type: string
+          description: The EIP-1559 base fee. TRON has no counterpart, so it is always `0x0`.
+    BlockTag:
+      description: |
+        Specifies the block to query. Pass a hexadecimal block number or a block tag.
+        Unlike Ethereum, TRON supports only a limited set of tags.
+        - `latest`: The most recent block.
+        - `earliest`: The oldest available block.
+      oneOf:
+      - title: Block Number
+        type: string
+        description: The hex-encoded block number.
+        pattern: ^0[xX][0-9a-fA-F]+$
+        example: "0x51e8875"
+      - title: Block Tag
+        type: string
+        description: A tag string that points to a block.
+        enum:
+        - latest
+        - earliest
+        example: latest
+    BooleanValue:
+      type: boolean
+      description: A boolean value.
+      example: true
+    CallObject:
+      type: object
+      description: |
+        The transaction call object used to call a contract.
+        `data` and `input` are aliases for each other; when both are given, `input` takes precedence.
+      properties:
+        from:
+          type: string
+          description: The caller address. Pass it in the TRON hexadecimal address form with the `41` prefix removed.
+          example: "0xf0cc5a2a84cd0f68ed1667070934542d673acbd8"
+        to:
+          type: string
+          description: The contract address. Pass it in the TRON hexadecimal address form with the `41` prefix removed.
+          example: "0x70082243784dcdf3042034e7b044d6d342a91360"
+        gas:
+          type: string
+          description: Retained for Ethereum compatibility. It is not used by the TRON implementation.
+          example: "0x0"
+        gasPrice:
+          type: string
+          description: Retained for Ethereum compatibility. It is not used by the TRON implementation.
+          example: "0x0"
+        value:
+          type: string
+          description: |
+            The amount of TRX sent with the call, in sun, passed in hexadecimal.
+            It maps to `msg.value` during simulation; no actual funds are transferred.
+          example: "0x0"
+        data:
+          type: string
+          description: The function selector and the ABI-encoded parameters.
+        input:
+          type: string
+          description: |
+            An alias for `data`. When both are given, this value takes precedence.
+            When a value is given, it requires a `0x` prefix and an even number of hex digits; an empty string means empty bytes.
+    FilterOptions:
+      type: object
+      description: |
+        The filter object that specifies the log query conditions.
+        When `blockHash` is used, `fromBlock` and `toBlock` must not be specified together.
+      properties:
+        fromBlock:
+          type: string
+          description: |
+            The block to start searching from. Pass a hexadecimal block number or the `latest`, `earliest` or `finalized` tag.
+            `pending` and `safe` are not supported. When omitted, `latest` is applied.
+          example: "0x3e8a920"
+        toBlock:
+          type: string
+          description: |
+            The block to stop searching at. It accepts the same tags as `fromBlock`, and `latest` is applied when omitted.
+          example: "0x3e8a984"
+        address:
+          description: |
+            The contract address that emitted the logs. Pass a single address or an array of addresses.
+            By default the array allows up to 1,000 entries; exceeding that returns a `-32602` error.
+          oneOf:
+          - title: Single Address
+            type: string
+            description: The contract address.
+          - title: Address Array
+            type: array
+            description: The list of contract addresses.
+            items:
+              type: string
+              description: The contract address.
+        topics:
+          type: array
+          description: |
+            The list of topics to query. Their order is significant, and up to 4 positions can be specified.
+            Each position may contain `null` (matches any value) or an array for OR conditions, and
+            by default each position allows up to 1,000 OR candidates.
+          items:
+            description: A 32-byte topic value, `null`, or an array of OR conditions.
+        blockHash:
+          type: string
+          description: |
+            A 32-byte block hash that restricts the query to a single block.
+            When this value is given, `fromBlock` and `toBlock` must not be specified together.
+    HexData:
+      type: string
+      description: Hex-encoded byte data.
+      example: 0x
+    HexQuantity:
+      type: string
+      description: An integer encoded as a hexadecimal string. (e.g.) `0x51e8875`
+      pattern: ^0[xX][0-9a-fA-F]+$
+      example: "0x51e8875"
+    Log:
+      type: object
+      description: An event log object.
+      properties:
+        address:
+          type: string
+          description: The address of the contract that emitted the log.
+        topics:
+          type: array
+          description: The list of log topics. The first entry is the event signature hash.
+          items:
+            type: string
+            description: A 32-byte topic value.
+        data:
+          type: string
+          description: The ABI-encoded data for the non-indexed event arguments.
+        blockNumber:
+          type: string
+          description: The number of the block containing the log.
+        blockHash:
+          type: string
+          description: The hash of the block containing the log.
+        blockTimestamp:
+          type: string
+          description: |
+            The creation time of the block containing the log, in UNIX epoch seconds, hex-encoded.
+            It is returned on GreatVoyage-v4.8.2 and later, and may be omitted on gateways that have not been upgraded yet.
+        transactionHash:
+          type: string
+          description: The hash of the transaction that emitted the log.
+        transactionIndex:
+          type: string
+          description: The transaction index within the block.
+        logIndex:
+          type: string
+          description: The log index within the block.
+        removed:
+          type: boolean
+          description: Whether the log was removed by a chain reorganization.
+    StringValue:
+      type: string
+      description: A string value.
+      example: TRON/v4.8.2.1/Linux/Java1.8
+    SyncStatus:
+      type: object
+      description: The block sync status of the node.
+      properties:
+        startingBlock:
+          type: string
+          description: The block number where syncing started.
+        currentBlock:
+          type: string
+          description: The block number synced so far.
+        highestBlock:
+          type: string
+          description: The highest block number seen on the network.
+    Transaction:
+      type: object
+      description: A TRON transaction object.
+      properties:
+        hash:
+          type: string
+          description: The transaction hash.
+        blockHash:
+          type: string
+          description: The hash of the block containing the transaction.
+        blockNumber:
+          type: string
+          description: The number of the block containing the transaction.
+        transactionIndex:
+          type: string
+          description: The transaction index within the block.
+        from:
+          type: string
+          description: The address of the account that sent the transaction.
+        to:
+          type: string
+          description: The address of the account or contract that received the transaction.
+        value:
+          type: string
+          description: The amount of TRX transferred, in sun, hex-encoded.
+        gas:
+          type: string
+          description: The fee limit set on the transaction. TRON may return `0x0`.
+        gasPrice:
+          type: string
+          description: The energy price, in sun.
+        input:
+          type: string
+          description: The contract call data. For a plain transfer it is `0x`.
+        nonce:
+          type: string
+          description: |
+            The transaction nonce.
+            The TRON protocol has no concept of an Ethereum account nonce, so it is always returned as a fixed `0x0`.
+        type:
+          type: string
+          description: The transaction type. TRON returns `0x0`.
+        v:
+          type: string
+          description: The recovery identifier of the signature.
+        r:
+          type: string
+          description: The r value of the signature.
+        s:
+          type: string
+          description: The s value of the signature.
+    TransactionReceipt:
+      type: object
+      description: A transaction receipt object.
+      properties:
+        transactionHash:
+          type: string
+          description: The transaction hash.
+        transactionIndex:
+          type: string
+          description: The transaction index within the block.
+        blockHash:
+          type: string
+          description: The hash of the block containing the transaction.
+        blockNumber:
+          type: string
+          description: The number of the block containing the transaction.
+        from:
+          type: string
+          description: The address of the account that sent the transaction.
+        to:
+          type: string
+          description: The address of the account or contract that received the transaction.
+        contractAddress:
+          type: string
+          description: The address of the created contract when the transaction created one. Otherwise it is `null`.
+        gasUsed:
+          type: string
+          description: The energy consumed by this transaction.
+        cumulativeGasUsed:
+          type: string
+          description: The cumulative energy consumed in the block up to this transaction.
+        effectiveGasPrice:
+          type: string
+          description: The energy price actually applied, in sun.
+        logs:
+          type: array
+          description: The list of event logs emitted by the transaction.
+          items:
+            $ref: '#/components/schemas/Log'
+        logsBloom:
+          type: string
+          description: The Bloom filter used to search event logs.
+        status:
+          type: string
+          description: The execution result of the transaction. `0x1` for success, `0x0` for failure.
+        type:
+          type: string
+          description: The transaction type. TRON returns `0x0`.
+    TronTransactionResult:
+      type: object
+      description: |
+        The created TRON transaction. It is unsigned, so
+        it must be signed and then broadcast with `/wallet/broadcasttransaction` of the FullNode HTTP API.
+      properties:
+        transaction:
+          type: object
+          description: The created transaction object.
+          properties:
+            visible:
+              type: boolean
+              description: Whether addresses are shown in Base58 form.
+            txID:
+              type: string
+              description: The transaction ID.
+            contract_address:
+              type: string
+              description: The address of the contract to be created when the transaction creates one.
+            raw_data:
+              type: object
+              description: The raw data of the transaction.
+              properties:
+                contract:
+                  type: array
+                  description: The list of contracts included in the transaction.
+                  items:
+                    type: object
+                    description: Contract information.
+                    properties:
+                      type:
+                        type: string
+                        description: The contract type. (e.g.) `TransferContract`, `TriggerSmartContract`
+                      parameter:
+                        type: object
+                        description: The parameters specific to the contract type.
+                        properties:
+                          type_url:
+                            type: string
+                            description: The URL that identifies the contract type.
+                          value:
+                            type: object
+                            description: The parameter value, whose layout depends on the contract type.
+                ref_block_bytes:
+                  type: string
+                  description: The lower 2 bytes of the reference block number.
+                ref_block_hash:
+                  type: string
+                  description: Part of the reference block hash.
+                expiration:
+                  type: integer
+                  description: The transaction expiration time, in milliseconds.
+                timestamp:
+                  type: integer
+                  description: The transaction creation time, in milliseconds.
+                fee_limit:
+                  type: integer
+                  description: The maximum fee allowed for contract execution, in sun.
+            raw_data_hex:
+              type: string
+              description: The raw data hex-encoded. This is the data that gets signed.
+    Work:
+      type: array
+      description: |
+        Proof-of-work information. Because TRON uses Delegated Proof of Stake (DPoS),
+        the first entry holds the current block hash and the remaining two entries are always `null`.
+        This method is provided only for compatibility with Ethereum clients.
+      items:
+        description: The current block hash or `null`.
+      example:
+      - "0x00000000051e8840887633e01d4bbef8bc79e3389cf29cea2ee85a7fe7cf4bce"
+      - null
+      - null
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - MISSING_REQUIRED_PARAMETER
+                - INVALID_PARAMETER
+                - WRONG_RANGE_PARAMETER
+                - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+            - code
+            - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: A required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: 'Missing required parameter: { PARAMETER_NAME }'
+            INVALID_PARAMETER:
+              summary: A parameter has an invalid value
+              value:
+                code: INVALID_PARAMETER
+                message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }'
+            WRONG_RANGE_PARAMETER:
+              summary: A value is outside the allowed range
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: 'Wrong range parameter: { PARAMETER_NAME }'
+            DEPRECATED_OPERATION:
+              summary: The requested API is no longer supported
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-eth_getcode
+      summary: eth_getCode
+      description: |
+        Returns the runtime bytecode deployed at a contract address.
+        Querying a regular account returns `0x`.
+      x-seo-description: Returns the runtime bytecode of a given TRON smart contract address.
+      tags:
+      - eth
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              - jsonrpc
+              - method
+              - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: eth_getCode
+                params:
+                  type: array
+                  description: |-
+                    It contains following parameters in order:
+                    1. `address`: The contract address to look up. (required)
+                    2. `block`: The block to query against. (required, currently only `latest` is supported)
+                  items:
+                    oneOf:
+                    - title: Address
+                      $ref: '#/components/schemas/Address'
+                    - title: Block Tag
+                      type: string
+                      description: |
+                        The block to query. TRON currently supports only `latest`.
+                      enum:
+                      - latest
+                      example: latest
+                  example:
+                  - "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+                  - latest
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: eth_getCode
+                params:
+                - "0xa614f803b6fd780986a42c78ec9c7f77e6ded13c"
+                - latest
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result: 0x
+              schema:
+                $ref: '#/components/schemas/HexData'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

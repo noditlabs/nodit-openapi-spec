@@ -3,10 +3,10 @@ info:
   title: Solana - getBalance
   version: 1.0.0
 servers:
-  - url: https://solana-mainnet.nodit.io
-    description: Solana Mainnet
-  - url: https://solana-devnet.nodit.io
-    description: Solana Devnet
+- url: https://solana-mainnet.nodit.io
+  description: Solana Mainnet
+- url: https://solana-devnet.nodit.io
+  description: Solana Devnet
 components:
   securitySchemes:
     api_key:
@@ -26,9 +26,9 @@ components:
         - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
         - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
       enum:
-        - processed
-        - confirmed
-        - finalized
+      - processed
+      - confirmed
+      - finalized
     MinContextSlot:
       type: string
       description: The minimum slot that the request can be evaluated at.
@@ -62,8 +62,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
     Error:
       type: object
       properties:
@@ -74,8 +74,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -86,24 +86,24 @@ components:
             properties:
               jsonrpc:
                 type: string
-                description: JSON-RPC version
+                description: The JSON-RPC version
                 example: "2.0"
               id:
                 type: integer
-                description: Request ID
+                description: The request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ErrorFromRPC"
+                $ref: '#/components/schemas/ErrorFromRPC'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -112,7 +112,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -121,16 +121,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -138,14 +138,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: solana-getBalance
       summary: getBalance
       description: |
         Returns the lamport balance of the account of provided Pubkey
       x-seo-description: Returns the lamport balance for a specific account address on the Solana blockchain.
       tags:
-        - http
+      - http
       parameters: []
       requestBody:
         required: true
@@ -154,10 +154,10 @@ paths:
             schema:
               type: object
               required:
-                - jsonrpc
-                - id
-                - method
-                - params
+              - jsonrpc
+              - id
+              - method
+              - params
               properties:
                 jsonrpc:
                   type: string
@@ -178,24 +178,24 @@ paths:
                     2. ConfigurationObject (`optional`)
                   items:
                     oneOf:
-                      - title: Pubkey
-                        type: string
-                        description: Pubkey of account to query, as base-58 encoded string.
-                      - title: Configuration Object
-                        type: object
-                        properties:
-                          commitment:
-                            $ref: "#/components/schemas/Commitment"
-                          minContextSlot:
-                            $ref: "#/components/schemas/MinContextSlot"
+                    - title: Pubkey
+                      type: string
+                      description: Pubkey of account to query, as base-58 encoded string.
+                    - title: Configuration Object
+                      type: object
+                      properties:
+                        commitment:
+                          $ref: '#/components/schemas/Commitment'
+                        minContextSlot:
+                          $ref: '#/components/schemas/MinContextSlot'
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: getBalance
                 params:
-                  - 3fJ7AiixCoHhaYzaNn1nNoLZMQnrGSMDNmMN4ZNUMpEa
-                  - commitment: processed
-                    minContextSlot: "1234567890"
+                - 3fJ7AiixCoHhaYzaNn1nNoLZMQnrGSMDNmMN4ZNUMpEa
+                - commitment: processed
+                  minContextSlot: "1234567890"
       responses:
         "200":
           description: Successful Response
@@ -203,17 +203,17 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessfulResponse"
-                  - type: object
-                    properties:
-                      result:
-                        type: object
-                        properties:
-                          context:
-                            $ref: "#/components/schemas/Context"
-                          value:
-                            type: integer
-                            description: The lamport balance of the account
+                - $ref: '#/components/schemas/SuccessfulResponse'
+                - type: object
+                  properties:
+                    result:
+                      type: object
+                      properties:
+                        context:
+                          $ref: '#/components/schemas/Context'
+                        value:
+                          type: integer
+                          description: The lamport balance of the account
                 example:
                   jsonrpc: "2.0"
                   result:
@@ -223,12 +223,12 @@ paths:
                     value: 1354524722001
                   id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

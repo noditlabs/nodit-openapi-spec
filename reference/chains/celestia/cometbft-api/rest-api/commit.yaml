@@ -3,7 +3,7 @@ info:
   title: Celestia - Commit
   version: 1.0.0
 servers:
-  - url: https://rpc-celestia-mainnet.nodit.io
+- url: https://rpc-celestia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,19 +18,19 @@ paths:
   /commit:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: commit
       summary: Commit
       description: Retrieves the commit at the specified block height. Returns the latest commit if height is omitted.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: height
-          in: query
-          description: Target block height.
-          schema:
-            type: string
-          example: "1"
+      - name: height
+        in: query
+        description: Target block height.
+        schema:
+          type: string
+        example: "1"
       responses:
         "200":
           content:
@@ -39,110 +39,149 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       signed_header:
+                        description: Signed header (header and commit).
                         type: object
                         additionalProperties: false
                         properties:
                           header:
+                            description: Block header.
                             type: object
                             additionalProperties: false
                             properties:
                               version:
+                                description: Block and application protocol versions.
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   block:
+                                    description: Block protocol version.
                                     type: string
                                   app:
+                                    description: Application protocol version.
                                     type: string
                               chain_id:
+                                description: Chain ID.
                                 type: string
                               height:
+                                description: Block height.
                                 type: string
                               time:
+                                description: Block time (UTC).
                                 type: string
                               last_block_id:
+                                description: Block ID of the previous block.
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   hash:
+                                    description: Block hash.
                                     type: string
                                   parts:
+                                    description: Part set header, used when the block is split into parts for gossiping.
                                     type: object
                                     additionalProperties: false
                                     properties:
                                       total:
+                                        description: Total number of block parts.
                                         type: integer
                                       hash:
+                                        description: Merkle root hash of the block parts.
                                         type: string
                               last_commit_hash:
+                                description: Hash of the validators' commit for the previous block.
                                 type: string
                               data_hash:
+                                description: Hash of the transactions in the block.
                                 type: string
                               validators_hash:
+                                description: Hash of the validator set for the current block.
                                 type: string
                               next_validators_hash:
+                                description: Hash of the validator set for the next block.
                                 type: string
                               consensus_hash:
+                                description: Hash of the consensus parameters for the current block.
                                 type: string
                               app_hash:
+                                description: Application state hash after executing the previous block's transactions.
                                 type: string
                               last_results_hash:
+                                description: Root hash of the execution results of the previous block's transactions.
                                 type: string
                               evidence_hash:
+                                description: Hash of the evidence included in the block.
                                 type: string
                               proposer_address:
+                                description: Address of the validator that proposed the block.
                                 type: string
                           commit:
+                            description: Validators' commit for the block.
                             type: object
                             additionalProperties: false
                             properties:
                               height:
+                                description: Height of the committed block.
                                 type: string
                               round:
+                                description: Consensus round in which the block was committed.
                                 type: integer
                               block_id:
+                                description: ID of the committed block.
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   hash:
+                                    description: Block hash.
                                     type: string
                                   parts:
+                                    description: Part set header, used when the block is split into parts for gossiping.
                                     type: object
                                     additionalProperties: false
                                     properties:
                                       total:
+                                        description: Total number of block parts.
                                         type: integer
                                       hash:
+                                        description: Merkle root hash of the block parts.
                                         type: string
                               signatures:
+                                description: Validator signatures, ordered by the validator set.
                                 type: array
                                 items:
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     block_id_flag:
+                                      description: 'Validator vote status: `1` absent, `2` voted for this block, `3` voted nil.'
                                       type: integer
                                     validator_address:
+                                      description: Address of the signing validator.
                                       type: string
                                     timestamp:
+                                      description: Time the signature was made.
                                       type: string
                                     signature:
+                                      description: Validator signature (Base64).
                                       type: string
                       canonical:
+                        description: '`true` if this is the canonical commit included in the next block; `false` if the block is the latest and has no canonical commit yet.'
                         type: boolean
               example:
                 jsonrpc: "2.0"
@@ -155,7 +194,7 @@ paths:
                         app: "0"
                       chain_id: cosmoshub-4
                       height: "1"
-                      time: "2019-12-11T16:11:34Z"
+                      time: '2019-12-11T16:11:34Z'
                       last_block_id:
                         hash: ""
                         parts:
@@ -179,8 +218,8 @@ paths:
                           total: 1
                           hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
                       signatures:
-                        - block_id_flag: 2
-                          validator_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-                          timestamp: "2019-12-11T16:11:40Z"
-                          signature: WkqFVjGaVFIQMAbClHXHSBOQW0V5RM3PKpFqmSX/I2wkAlhbzPCHm/DCNj6LNrWnKoKY0M+ypzLKVpPpkM4SDg==
+                      - block_id_flag: 2
+                        validator_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                        timestamp: '2019-12-11T16:11:40Z'
+                        signature: WkqFVjGaVFIQMAbClHXHSBOQW0V5RM3PKpFqmSX/I2wkAlhbzPCHm/DCNj6LNrWnKoKY0M+ypzLKVpPpkM4SDg==
                   canonical: true

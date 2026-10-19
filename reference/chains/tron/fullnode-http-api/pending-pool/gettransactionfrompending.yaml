@@ -1,0 +1,180 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetTransactionFromPending
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/gettransactionfrompending:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-gettransactionfrompending
+      summary: GetTransactionFromPending
+      description: Get transaction details from the pending pool
+      x-seo-description: Query the details of a transaction waiting in the TRON pending pool.
+      tags:
+      - pending-pool
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: 349ab7e2ba7f10687049d02a8138668d14a88888709aa681f7b32d475b0049d4
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: 'The transaction hash to retrieve information for. Example: `6b0384b180d43421277822627d04b123f1091c0153b8e11326c1298e4d8a9b53`'
+                  example: 6b0384b180d43421277822627d04b123f1091c0153b8e11326c1298e4d8a9b53
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: |-
+                    {
+                        "ret": [
+                            {
+                                "contractRet": "SUCCESS"
+                            }
+                        ],
+                        "signature": [
+                            "693ad22a762a6228423f77cdb36440a3b93d7b1cbec7aa3822454e6146fb2af5075e541f298fcc8d68e51f3d0ae34e7b713e4f1582e70b0eba1b1436c848b15a1b"
+                        ],
+                        "txID": "f34f1c799700a9d83b67fdcadd7be697010a8dbbcd520de4ac46a648e3e7ae3d",
+                        "raw_data": {
+                            "contract": [
+                                {
+                                    "parameter": {
+                                        "value": {
+                                            "amount": 234000000,
+                                            "owner_address": "4192c47b086eae54ed142d75ce4806df751bac7551",
+                                            "to_address": "411113df41d4f3b8b46acc40c266bee87eca42c73d"
+                                        },
+                                        "type_url": "type.googleapis.com/protocol.TransferContract"
+                                    },
+                                    "type": "TransferContract"
+                                }
+                            ],
+                            "ref_block_bytes": "6d64",
+                            "ref_block_hash": "f35991f9b546f69f",
+                            "expiration": 1616394384000,
+                            "timestamp": 1616394325960
+                        },
+                        "raw_data_hex": "0a026d642208f35991f9b546f69f4080e5f3c4852f5a68080112640a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412330a154192c47b086eae54ed142d75ce4806df751bac75511215411113df41d4f3b8b46acc40c266bee87eca42c73d18809dca6f70c89ff0c4852f"
+                    }
+              schema:
+                type: object
+                properties:
+                  ret:
+                    type: array
+                    description: List of transaction execution results.
+                    items:
+                      type: object
+                      properties:
+                        contractRet:
+                          type: string
+                          description: Transaction Execution Results.
+                          example: SUCCESS
+                  signature:
+                    type: array
+                    description: Transaction signature.
+                    items:
+                      type: string
+                      example: 693ad22a762a6228423f77cdb36440a3b93d7b1cbec7aa3822454e6146fb2af5075e541f298fcc8d68e51f3d0ae34e7b713e4f1582e70b0eba1b1436c848b15a1b
+                  txID:
+                    type: string
+                    description: Transaction ID(Hash).
+                    example: f34f1c799700a9d83b67fdcadd7be697010a8dbbcd520de4ac46a648e3e7ae3d
+                  raw_data:
+                    type: object
+                    description: Transaction content. See [here](https://developers.tron.network/docs/tron-protocol-transaction)  for details.
+                    properties:
+                      contract:
+                        type: array
+                        description: List of contracts included in the transaction.
+                        items:
+                          type: object
+                          properties:
+                            parameter:
+                              type: object
+                              description: Contract parameter.
+                              properties:
+                                value:
+                                  type: object
+                                  description: Parameter values for the contract type.
+                                  properties:
+                                    amount:
+                                      type: integer
+                                      description: 'Amount transferred. (Unit: sun)'
+                                      example: 234000000
+                                      default: 0
+                                    owner_address:
+                                      type: string
+                                      description: Address of the account that created the transaction.
+                                      example: 4192c47b086eae54ed142d75ce4806df751bac7551
+                                    to_address:
+                                      type: string
+                                      description: Recipient address.
+                                      example: 411113df41d4f3b8b46acc40c266bee87eca42c73d
+                                type_url:
+                                  type: string
+                                  description: Protobuf type URL of the contract parameter.
+                                  example: type.googleapis.com/protocol.TransferContract
+                            type:
+                              type: string
+                              description: Contract type.
+                              example: TransferContract
+                      ref_block_bytes:
+                        type: string
+                        description: The last two bytes of the reference block's number (height), used for transaction validation.
+                        example: 6d64
+                      ref_block_hash:
+                        type: string
+                        description: Bytes 8 to 16 of the reference block's hash, used for transaction validation.
+                        example: f35991f9b546f69f
+                      expiration:
+                        type: integer
+                        description: 'Transaction expiration time. (Unit: millisecond)'
+                        example: 1616394384000
+                        default: 0
+                      timestamp:
+                        type: integer
+                        description: 'Timestamp. (Unit: millisecond)'
+                        example: 1616394325960
+                        default: 0
+                  raw_data_hex:
+                    type: string
+                    description: 'The transaction''s raw data. (Format: hex)'
+                    example: 0a026d642208f35991f9b546f69f4080e5f3c4852f5a68080112640a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412330a154192c47b086eae54ed142d75ce4806df751bac75511215411113df41d4f3b8b46acc40c266bee87eca42c73d18809dca6f70c89ff0c4852f
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

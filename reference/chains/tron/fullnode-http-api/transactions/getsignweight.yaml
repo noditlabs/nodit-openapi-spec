@@ -1,0 +1,116 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetSignWeight
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getsignweight:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getsignweight
+      summary: GetSignWeight
+      description: Query the current weight of signatures collected on a transaction. Used to inspect multi-signature progress before broadcasting.
+      x-seo-description: Query the collected signature weight of a TRON multi-signature transaction.
+      tags:
+      - transactions
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              visible: false
+              txID: 6db783c4142b3749a4b598db4644155455c9206e2eca4b31efbd48e46773d9d5
+              raw_data:
+                contract:
+                - parameter:
+                    value:
+                      amount: 1000000
+                      owner_address: 411320a6fb4dcd4ff8e91392a8cb98378633cf7dd8
+                      to_address: 414c8967080d86f3d0e1352a42f9213c7b9dd03b0f
+                    type_url: type.googleapis.com/protocol.TransferContract
+                  type: TransferContract
+                ref_block_bytes: f69b
+                ref_block_hash: 7d4a3b02495f2320
+                expiration: 1762502739000
+                timestamp: 1762502681856
+              raw_data_hex: 0a02f69b22087d4a3b02495f232040b888e6eaa5335a67080112630a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412320a15411320a6fb4dcd4ff8e91392a8cb98378633cf7dd81215414c8967080d86f3d0e1352a42f9213c7b9dd03b0f18c0843d7080cae2eaa533
+              signature:
+              - 2a3743f40d53a124c1597256b155bf286bd8874afe6997ec0a7e63405dea78cd914d9aa9adb8f84dc8d1ef4b1827dd9e8960a40a4ad11e619d06e9601e8b27c000
+            schema:
+              type: object
+              required:
+              - raw_data
+              - signature
+              properties:
+                txID:
+                  type: string
+                  description: Transaction ID (hex).
+                visible:
+                  type: boolean
+                  description: If true, addresses in the request are base58 strings; otherwise hex.
+                raw_data:
+                  type: object
+                  description: The transaction `raw_data` (contract, ref_block_*, expiration, etc.).
+                raw_data_hex:
+                  type: string
+                  description: Hex-encoded protobuf of `raw_data`.
+                signature:
+                  type: array
+                  items:
+                    type: string
+                  description: Currently collected signatures (hex, 65 bytes each). At least one required.
+      responses:
+        "200":
+          description: Sign-weight summary for the supplied transaction.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permission:
+                    type: object
+                    description: The active/owner Permission this transaction is signed against (keys, threshold, etc.).
+                  approved_list:
+                    type: array
+                    items:
+                      type: string
+                    description: Addresses that have signed (hex by default; base58 when `visible=true`).
+                  current_weight:
+                    type: integer
+                    format: int64
+                    description: Sum of weights of `approved_list` under the permission.
+                  result:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        enum:
+                        - ENOUGH_PERMISSION
+                        - NOT_ENOUGH_PERMISSION
+                        - SIGNATURE_FORMAT_ERROR
+                        - COMPUTE_ADDRESS_ERROR
+                        - PERMISSION_ERROR
+                        - OTHER_ERROR
+                        description: 'Aggregate verdict: `ENOUGH_PERMISSION` = current_weight ≥ threshold (ready to broadcast); `NOT_ENOUGH_PERMISSION` = more signatures needed; other codes = error.'
+                      message:
+                        type: string
+                        description: Hex-encoded error message when code is not ENOUGH/NOT_ENOUGH.
+                  transaction:
+                    type: object
+                    description: Echo of the input transaction (TransactionExtention).

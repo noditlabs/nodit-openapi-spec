@@ -1,0 +1,67 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetChainParameters
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getchainparameters:
+    get:
+      security:
+      - api_key: []
+      operationId: tron-getchainparameters
+      summary: GetChainParameters
+      description: All parameters that the blockchain committee can set
+      x-seo-description: Query all TRON chain parameters configurable by the committee.
+      tags:
+      - query-the-network
+      parameters: []
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chainParameter:
+                    type: array
+                    items:
+                      type: object
+                      description: Wrapper for a single chain (dynamic) parameter entry. Same shape as ChainParameter.
+                      properties:
+                        key:
+                          type: string
+                          description: Parameter name.
+                        value:
+                          type: integer
+                          format: int64
+                          description: Parameter value.
+                    description: 'List of dynamic chain parameter objects. Each dynamic parameter contains the following fields:'
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

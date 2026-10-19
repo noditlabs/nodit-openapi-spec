@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Giwa - net_version
+  title: GIWA - net_version
   version: 1.0.0
 servers:
-  - url: https://giwa-sepolia.nodit.io
-    description: Giwa Sepolia
+- url: https://giwa-sepolia.nodit.io
+  description: Giwa Sepolia
 components:
   securitySchemes:
     api_key:
@@ -103,14 +103,14 @@ components:
         transactions:
           description: Transactions in this block. Returns hash array or full objects depending on includeTransactions parameter.
           oneOf:
-            - type: array
-              items:
-                type: string
-              description: Array of transaction hashes (includeTransactions=false)
-            - type: array
-              items:
-                $ref: "#/components/schemas/Transaction"
-              description: Array of full transaction objects (includeTransactions=true)
+          - type: array
+            items:
+              type: string
+            description: Array of transaction hashes (includeTransactions=false)
+          - type: array
+            items:
+              $ref: '#/components/schemas/Transaction'
+            description: Array of full transaction objects (includeTransactions=true)
         transactionsRoot:
           type: string
           description: Root hash of the transactions trie
@@ -152,9 +152,9 @@ components:
         * Block hash: 64-character hex string (e.g. "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")
         * Block tag: enum string (e.g. "latest", "earliest", "pending")
       oneOf:
-        - $ref: "#/components/schemas/BlockNumber"
-        - $ref: "#/components/schemas/BlockHash"
-        - $ref: "#/components/schemas/BlockTag"
+      - $ref: '#/components/schemas/BlockNumber'
+      - $ref: '#/components/schemas/BlockHash'
+      - $ref: '#/components/schemas/BlockTag'
     BlockNumber:
       type: string
       description: Block number represents the order of blocks in the chain. It is expressed as a hexadecimal string.
@@ -170,11 +170,11 @@ components:
         * `latest`: The most recent block on the chain (may be subject to reorgs).
         * `pending`: The next block to be mined, including pending transactions in the mempool.
       enum:
-        - latest
-        - earliest
-        - pending
-        - safe
-        - finalized
+      - latest
+      - earliest
+      - pending
+      - safe
+      - finalized
       default: latest
     Boolean:
       type: boolean
@@ -242,7 +242,7 @@ components:
       type: array
       description: An array of debug trace result objects.
       items:
-        $ref: "#/components/schemas/DebugTraceResult"
+        $ref: '#/components/schemas/DebugTraceResult'
     FeeHistory:
       type: object
       description: Historical gas fee data for a range of blocks.
@@ -283,15 +283,15 @@ components:
       items:
         type: string
       example:
-        - "0x00856730088a5c3191bd26eb482e45229555ce57"
-        - "0x1a3cca9a3b6c5e2a4b4d7f8e1d2c3a4b5c6d7e8f"
+      - "0x00856730088a5c3191bd26eb482e45229555ce57"
+      - "0x1a3cca9a3b6c5e2a4b4d7f8e1d2c3a4b5c6d7e8f"
     JsonRpcRequest:
       type: object
       description: JSON-RPC 2.0 request object
       required:
-        - id
-        - jsonrpc
-        - method
+      - id
+      - jsonrpc
+      - method
       properties:
         id:
           type: integer
@@ -341,7 +341,7 @@ components:
           description: Former difficulty field (hex)
         extraData:
           type: string
-          description: Arbitrary extra data added by the proposer (hex)
+          description: Arbitrary extra data added by the miner (hex)
         gasUsed:
           type: string
           description: Total gas used by all transactions in this block (hex)
@@ -387,14 +387,14 @@ components:
         transactions:
           description: Transactions in this block
           oneOf:
-            - type: array
-              items:
-                type: string
-              description: Array of transaction hashes (includeTransactions=false)
-            - type: array
-              items:
-                $ref: "#/components/schemas/KaiaTransaction"
-              description: Array of full transaction objects (includeTransactions=true)
+          - type: array
+            items:
+              type: string
+            description: Array of transaction hashes (includeTransactions=false)
+          - type: array
+            items:
+              $ref: '#/components/schemas/KaiaTransaction'
+            description: Array of full transaction objects (includeTransactions=true)
         transactionsRoot:
           type: string
           description: Root hash of the transactions trie
@@ -529,7 +529,7 @@ components:
           type: array
           description: List of event logs emitted during transaction execution
           items:
-            $ref: "#/components/schemas/Log"
+            $ref: '#/components/schemas/Log'
         logsBloom:
           type: string
           description: Bloom filter for event log search (2048 bits, hex)
@@ -577,7 +577,7 @@ components:
       type: array
       description: An array of Kaia transaction receipt objects.
       items:
-        $ref: "#/components/schemas/KaiaTransactionReceipt"
+        $ref: '#/components/schemas/KaiaTransactionReceipt'
     Log:
       type: object
       description: An event log object containing information about events emitted during transaction execution.
@@ -615,7 +615,7 @@ components:
       type: array
       description: An array of event log objects.
       items:
-        $ref: "#/components/schemas/Log"
+        $ref: '#/components/schemas/Log'
     OptimismRollupConfig:
       type: object
       description: Optimism rollup configuration object.
@@ -691,6 +691,154 @@ components:
                 description: Merkle proof nodes of the storage state trie (RLP encoded, hex)
                 items:
                   type: string
+    SimulateBlockResult:
+      type: object
+      description: Simulated block object returned by eth_simulateV1. In addition to the standard block fields, it includes the results of the calls executed in that block (`calls`).
+      properties:
+        baseFeePerGas:
+          type: string
+          description: Base fee per gas of the simulated block (EIP-1559, hex wei)
+        blobGasUsed:
+          type: string
+          description: Amount of blob gas used in the block (EIP-4844, hex)
+        difficulty:
+          type: string
+          description: Block difficulty (hex)
+        excessBlobGas:
+          type: string
+          description: Amount of blob gas used above the target (EIP-4844, hex)
+        extraData:
+          type: string
+          description: Arbitrary data included in the block (hex)
+        gasLimit:
+          type: string
+          description: Maximum total gas allowed in this block (hex)
+        gasUsed:
+          type: string
+          description: Total gas used by all transactions in this block (hex)
+        hash:
+          type: string
+          description: Hash of the simulated block
+        logsBloom:
+          type: string
+          description: Bloom filter for event log search (2048 bits, hex)
+        miner:
+          type: string
+          description: Block miner address. Can be changed with `blockOverrides.feeRecipient`.
+        mixHash:
+          type: string
+          description: Mix hash of the block
+        nonce:
+          type: string
+          description: Block nonce (hex)
+        number:
+          type: string
+          description: Simulated block number (hex)
+        parentBeaconBlockRoot:
+          type: string
+          description: Root hash of the parent beacon block (EIP-4788)
+        parentHash:
+          type: string
+          description: Hash of the parent block
+        receiptsRoot:
+          type: string
+          description: Root hash of the transaction receipts trie
+        sha3Uncles:
+          type: string
+          description: SHA3 hash of the uncles list
+        size:
+          type: string
+          description: Block size in bytes (hex)
+        stateRoot:
+          type: string
+          description: Root hash of the state trie
+        timestamp:
+          type: string
+          description: Block creation time (Unix timestamp, hex). Can be changed with `blockOverrides.time`.
+        transactions:
+          description: List of transactions included in the block. Returns an array of full transaction objects when `returnFullTransactions` is set to `true`, and an array of transaction hashes otherwise.
+          oneOf:
+          - type: array
+            items:
+              type: string
+            description: Array of transaction hashes (returnFullTransactions=false)
+          - type: array
+            items:
+              $ref: '#/components/schemas/Transaction'
+            description: Array of full transaction objects (returnFullTransactions=true)
+        transactionsRoot:
+          type: string
+          description: Root hash of the transactions trie
+        uncles:
+          type: array
+          description: Array of uncle block hashes
+          items:
+            type: string
+        withdrawals:
+          type: array
+          description: Validator withdrawal list (EIP-4895)
+          items:
+            type: object
+            properties:
+              index:
+                type: string
+                description: Withdrawal index (hex)
+              validatorIndex:
+                type: string
+                description: Validator index (hex)
+              address:
+                type: string
+                description: Withdrawal recipient address
+              amount:
+                type: string
+                description: Withdrawal amount (in Gwei, hex)
+        withdrawalsRoot:
+          type: string
+          description: Root hash of the withdrawals trie (EIP-4895)
+        calls:
+          type: array
+          description: Results of the calls executed in this block. Returned in the same order as the `calls` array in the request.
+          items:
+            $ref: '#/components/schemas/SimulateCallResult'
+    SimulateBlockResultArray:
+      type: array
+      description: Array of simulated block objects returned by eth_simulateV1. Returned in the same order as the `blockStateCalls` array in the request; when block numbers are skipped, the skipped blocks are included as well.
+      items:
+        $ref: '#/components/schemas/SimulateBlockResult'
+    SimulateCallResult:
+      type: object
+      description: Result object for an individual call executed during an eth_simulateV1 simulation.
+      properties:
+        status:
+          type: string
+          description: Execution status of the call. Returns `0x1` on success and `0x0` on failure (including reverts).
+        returnData:
+          type: string
+          description: Data returned by the call (hex). Contains the revert data when the call fails.
+        gasUsed:
+          type: string
+          description: Amount of gas used to execute the call (hex)
+        maxUsedGas:
+          type: string
+          description: Maximum gas used during execution before refunds are applied (hex)
+        logs:
+          type: array
+          description: Event logs emitted during the call. When `traceTransfers` is set to `true`, native token transfers are also included as ERC-20 Transfer events (address `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`).
+          items:
+            $ref: '#/components/schemas/Log'
+        error:
+          type: object
+          description: Error object returned only when the call fails.
+          properties:
+            code:
+              type: integer
+              description: Error code. Returns `3` when the call reverted, or `-32015` on a VM execution error.
+            message:
+              type: string
+              description: Error message
+            data:
+              type: string
+              description: Additional error data such as the revert reason (hex). May not be provided depending on the client.
     StringValue:
       type: string
       description: A plain string value.
@@ -698,20 +846,20 @@ components:
     SyncStatus:
       description: Node synchronization status. Returns false when sync is complete, or a status object when syncing is in progress.
       oneOf:
-        - type: boolean
-          description: Returns false when sync is complete
-        - type: object
-          description: Sync status object returned while syncing is in progress
-          properties:
-            startingBlock:
-              type: string
-              description: Block number where sync started (hex)
-            currentBlock:
-              type: string
-              description: Current block number being processed (hex)
-            highestBlock:
-              type: string
-              description: Target block number for sync (hex)
+      - type: boolean
+        description: Returns false when sync is complete
+      - type: object
+        description: Sync status object returned while syncing is in progress
+        properties:
+          startingBlock:
+            type: string
+            description: Block number where sync started (hex)
+          currentBlock:
+            type: string
+            description: Current block number being processed (hex)
+          highestBlock:
+            type: string
+            description: Target block number for sync (hex)
     TraceResult:
       type: object
       description: A trace result object. An individual trace entry returned by trace_* methods.
@@ -740,7 +888,7 @@ components:
               description: Amount of ETH transferred (hex, in wei)
         blockHash:
           type: string
-          description: Hash of the block containing the transaction
+          description: Hash of the block containing this transaction
         blockNumber:
           type: integer
           description: Block number containing the transaction
@@ -775,7 +923,7 @@ components:
       type: array
       description: An array of trace result objects.
       items:
-        $ref: "#/components/schemas/TraceResult"
+        $ref: '#/components/schemas/TraceResult'
     Transaction:
       type: object
       description: An EVM transaction object containing details of a transaction included in a block.
@@ -808,7 +956,7 @@ components:
           description: Transaction hash
         input:
           type: string
-          description: Transaction input data (hex encoded)
+          description: Transaction input data (hex)
         nonce:
           type: string
           description: Number of transactions sent by the sender prior to this one (hex)
@@ -887,7 +1035,7 @@ components:
           type: array
           description: List of event logs emitted during transaction execution
           items:
-            $ref: "#/components/schemas/Log"
+            $ref: '#/components/schemas/Log'
         logsBloom:
           type: string
           description: Bloom filter for event log search (2048 bits, hex)
@@ -911,7 +1059,7 @@ components:
       type: array
       description: An array of transaction receipt objects.
       items:
-        $ref: "#/components/schemas/TransactionReceipt"
+        $ref: '#/components/schemas/TransactionReceipt'
   responses:
     "400":
       description: Bad Request
@@ -923,35 +1071,35 @@ components:
               code:
                 type: string
                 enum:
-                  - MISSING_REQUIRED_PARAMETER
-                  - INVALID_PARAMETER
-                  - WRONG_RANGE_PARAMETER
-                  - DEPRECATED_OPERATION
+                - MISSING_REQUIRED_PARAMETER
+                - INVALID_PARAMETER
+                - WRONG_RANGE_PARAMETER
+                - DEPRECATED_OPERATION
                 description: Code to identify the cause of the bad request
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the invalid parameter
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             MISSING_REQUIRED_PARAMETER:
-              summary: When a required parameter is missing
+              summary: A required parameter is missing
               value:
                 code: MISSING_REQUIRED_PARAMETER
-                message: "Missing required parameter: { PARAMETER_NAME }"
+                message: 'Missing required parameter: { PARAMETER_NAME }'
             INVALID_PARAMETER:
-              summary: When an invalid value is provided for a parameter
+              summary: A parameter has an invalid value
               value:
                 code: INVALID_PARAMETER
-                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+                message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }'
             WRONG_RANGE_PARAMETER:
-              summary: When a value outside the query range is provided
+              summary: A value is outside the allowed range
               value:
                 code: WRONG_RANGE_PARAMETER
-                message: "Wrong range parameter: { PARAMETER_NAME }"
+                message: 'Wrong range parameter: { PARAMETER_NAME }'
             DEPRECATED_OPERATION:
-              summary: When a deprecated API is requested
+              summary: The requested API is no longer supported
               value:
                 code: DEPRECATED_OPERATION
                 message: This operation has been deprecated
@@ -965,26 +1113,26 @@ components:
               code:
                 type: string
                 enum:
-                  - NO_AUTHENTICATION_FOUND
-                  - AUTHENTICATION_FAILED
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
                 description: Code to identify the cause of authentication failure
               message:
                 type: string
                 description: Detailed message including the cause of authentication failure
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             NO_AUTHENTICATION_FOUND:
-              summary: When authentication credentials are not included
+              summary: The request does not include authentication (API Key)
               value:
                 code: NO_AUTHENTICATION_FOUND
-                message: No authentication found
+                message: No authentication found.
             AUTHENTICATION_FAILED:
-              summary: When authentication credentials are mismatched or invalid
+              summary: The authentication (API Key) is invalid
               value:
                 code: AUTHENTICATION_FAILED
-                message: Authentication failed
+                message: Authentication failed.
     "403":
       description: Forbidden
       content:
@@ -995,17 +1143,17 @@ components:
               code:
                 type: string
                 enum:
-                  - PERMISSION_DENIED
+                - PERMISSION_DENIED
                 description: Code indicating permission denied
               message:
                 type: string
                 description: Detailed message including information about the denied resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             PERMISSION_DENIED:
-              summary: When accessing an unauthorized resource
+              summary: The request accesses a resource it is not authorized for
               value:
                 code: PERMISSION_DENIED
                 message: Permission denied
@@ -1019,32 +1167,32 @@ components:
               code:
                 type: string
                 enum:
-                  - WRONG_ENDPOINT
-                  - NOT_SUPPORTED_CHAIN
-                  - RESOURCE_NOT_FOUND
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
                 description: Code to identify the cause of the resource not found
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the resource not found
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             WRONG_ENDPOINT:
-              summary: When requesting a non-existent API path
+              summary: The requested API path does not exist
               value:
                 code: WRONG_ENDPOINT
                 message: Wrong endpoint
             NOT_SUPPORTED_CHAIN:
-              summary: When requesting an unsupported chain
+              summary: The requested chain is not supported
               value:
                 code: NOT_SUPPORTED_CHAIN
                 message: Not supported chain
             RESOURCE_NOT_FOUND:
-              summary: When requesting a resource that does not exist on the server
+              summary: The requested resource does not exist
               value:
                 code: RESOURCE_NOT_FOUND
-                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
     "405":
       description: Method Not Allowed
       content:
@@ -1055,17 +1203,17 @@ components:
               code:
                 type: string
                 enum:
-                  - METHOD_NOT_ALLOWED
+                - METHOD_NOT_ALLOWED
                 description: Code indicating a disallowed HTTP method
               message:
                 type: string
                 description: Detailed message about the disallowed HTTP method
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             METHOD_NOT_ALLOWED:
-              summary: When requesting with an unsupported HTTP method
+              summary: The request uses an unsupported HTTP method
               value:
                 code: METHOD_NOT_ALLOWED
                 message: Method not allowed
@@ -1079,17 +1227,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TIMEOUT
+                - TIMEOUT
                 description: Code indicating request timeout
               message:
                 type: string
                 description: Detailed message including the cause of the timeout
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TIMEOUT:
-              summary: When processing is not completed within the specified time
+              summary: Processing did not finish within the time limit
               value:
                 code: TIMEOUT
                 message: Request timeout
@@ -1103,23 +1251,23 @@ components:
               code:
                 type: string
                 enum:
-                  - RESOURCE_ALREADY_EXISTS
-                  - REJECTED
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
                 description: Code to identify the cause of the request conflict
               message:
                 type: string
                 description: Detailed message including information about the conflicting resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             RESOURCE_ALREADY_EXISTS:
-              summary: When attempting to create a resource that already exists
+              summary: The request tries to create a resource that already exists
               value:
                 code: RESOURCE_ALREADY_EXISTS
                 message: Resource already exists
             REJECTED:
-              summary: When the request is rejected by the server
+              summary: The server rejected the request
               value:
                 code: REJECTED
                 message: Request rejected
@@ -1133,17 +1281,17 @@ components:
               code:
                 type: string
                 enum:
-                  - CONTENTS_TOO_LARGE
+                - CONTENTS_TOO_LARGE
                 description: Code indicating payload size exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed payload size
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             CONTENTS_TOO_LARGE:
-              summary: When the payload exceeds the server's maximum limit
+              summary: The payload exceeds the server's maximum size
               value:
                 code: CONTENTS_TOO_LARGE
                 message: Contents too large
@@ -1157,17 +1305,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_LONG_URI
+                - TOO_LONG_URI
                 description: Code indicating URI length exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed URI length
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_LONG_URI:
-              summary: When the request URI exceeds the server's maximum length
+              summary: The request URI exceeds the server's maximum length
               value:
                 code: TOO_LONG_URI
                 message: URI too long
@@ -1181,23 +1329,23 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_MANY_REQUESTS
-                  - EXCEEDED_QUOTA_LIMIT
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
                 description: Code identifying the cause of the request limit exceeded
               message:
                 type: string
                 description: Detailed message including the exceeded limit type and allowed threshold
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_MANY_REQUESTS:
-              summary: When the rate limit is exceeded
+              summary: The rate limit was exceeded
               value:
                 code: TOO_MANY_REQUESTS
                 message: Too many requests
             EXCEEDED_QUOTA_LIMIT:
-              summary: When the quota limit is exceeded
+              summary: The quota limit was exceeded
               value:
                 code: EXCEEDED_QUOTA_LIMIT
                 message: Exceeded quota limit
@@ -1211,23 +1359,23 @@ components:
               code:
                 type: string
                 enum:
-                  - INTERNAL_SERVER_ERROR
-                  - INTERRUPTED
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
                 description: Code to identify the cause of the internal server error
               message:
                 type: string
                 description: Detailed message including the cause of the server error
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             INTERNAL_SERVER_ERROR:
-              summary: When an internal server error occurs
+              summary: An internal server error occurred
               value:
                 code: INTERNAL_SERVER_ERROR
                 message: Internal server error
             INTERRUPTED:
-              summary: When processing fails temporarily due to server load
+              summary: Processing failed temporarily due to server load
               value:
                 code: INTERRUPTED
                 message: Request interrupted
@@ -1241,17 +1389,17 @@ components:
               code:
                 type: string
                 enum:
-                  - UNAVAILABLE
+                - UNAVAILABLE
                 description: Code indicating service unavailability
               message:
                 type: string
                 description: Detailed message including the cause of the service outage
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             UNAVAILABLE:
-              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
               value:
                 code: UNAVAILABLE
                 message: Service unavailable
@@ -1259,13 +1407,13 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: giwa-net_version
       summary: net_version
       description: Returns the network ID of the connected Ethereum network. The network ID is used to distinguish between different Ethereum networks (e.g., mainnet, testnet). For example, Ethereum mainnet has network ID 1, Ropsten testnet has 3, and Rinkeby testnet has 4. This method is primarily used to identify the network and verify that an application is connected to the correct network.
       x-seo-description: Returns the current network ID as a string.
       tags:
-        - net
+      - net
       parameters: []
       requestBody:
         required: true
@@ -1274,9 +1422,9 @@ paths:
             schema:
               type: object
               required:
-                - id
-                - jsonrpc
-                - method
+              - id
+              - jsonrpc
+              - method
               properties:
                 id:
                   type: integer
@@ -1301,28 +1449,26 @@ paths:
                 id: 1
                 result: "1"
               schema:
-                $ref: "#/components/schemas/HexQuantity"
-        "400":
-          $ref: "#/components/responses/400"
+                $ref: '#/components/schemas/HexQuantity'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'

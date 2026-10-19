@@ -3,7 +3,7 @@ info:
   title: Injective - cosmos_distribution_v1beta1_delegators_{delegator_address}_rewards_{validator_address}
   version: 1.0.0
 servers:
-  - url: https://rest-injective-mainnet.nodit.io
+- url: https://rest-injective-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: DelegationRewards queries the total rewards accrued by a delegation.
       operationId: cosmos_distribution_v1beta1_delegators_{delegator_address}_rewards_{validator_address}
       tags:
-        - distribution
+      - distribution
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -35,8 +35,10 @@ paths:
                       type: object
                       properties:
                         denom:
+                          description: Token denomination.
                           type: string
                         amount:
+                          description: Amount, as an integer string in the smallest unit.
                           type: string
                       description: |-
                         DecCoin defines a token with a denomination and a decimal amount.
@@ -50,7 +52,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -72,18 +74,18 @@ paths:
                           type: string
                           format: byte
       parameters:
-        - name: delegator_address
-          description: delegator_addr defines the delegator address to query for.
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: validator_address
-          description: Validator address to query.
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: delegator_address
+        description: delegator_addr defines the delegator address to query for.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: validator_address
+        description: Validator address to query.
+        in: path
+        required: true
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/distribution/v1beta1/delegators/{delegator_address}/rewards/{validator_address}

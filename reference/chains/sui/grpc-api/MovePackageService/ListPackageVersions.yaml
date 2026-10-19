@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: Sui - ListPackageVersions
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.MovePackageService/ListPackageVersions:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-ListPackageVersions
+      summary: ListPackageVersions
+      description: |
+        Retrieves the list of all versions of the specified package.
+      x-seo-description: 지정한 패키지의 버전 목록을 조회합니다.
+      x-grpc-method: sui.rpc.v2.MovePackageService/ListPackageVersions
+      x-proto: sui/rpc/v2/move_package_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.MovePackageService
+        method: ListPackageVersions
+        streaming: unary
+        proto: sui/rpc/v2/move_package_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - MovePackageService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - package_id
+              properties:
+                package_id:
+                  type: string
+                  description: ' Required. The `storage_id` of any version of the package.'
+                page_size:
+                  type: integer
+                  description: The maximum number of versions to return. The service may return fewer than this value. If unspecified, at most `1000` entries will be returned. The maximum value is `10000`; values above `10000` will be coerced to `10000`.
+                page_token:
+                  type: string
+                  description: A page token, received from a previous `ListPackageVersions` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListPackageVersions` must match the call that provided the page token.
+            example:
+              package_id: "0x0000000000000000000000000000000000000000000000000000000000000001"
+              page_size: 50
+              page_token: ""
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  versions:
+                    type: array
+                    description: List of versions, ordered by version.
+                    items:
+                      type: object
+                      properties:
+                        package_id:
+                          type: string
+                          description: Storage ID of the package.
+                        version:
+                          type: integer
+                          description: Version number.
+                  next_page_token:
+                    type: string
+                    description: A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no subsequent pages.
+              example:
+                versions: []
+                next_page_token: ""

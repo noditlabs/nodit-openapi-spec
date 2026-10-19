@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: Sui - GetServiceInfo
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.LedgerService/GetServiceInfo:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-GetServiceInfo
+      summary: GetServiceInfo
+      description: |
+        Returns general information about the current state of the service.
+      x-seo-description: 서비스의 현재 상태에 대한 일반 정보를 조회합니다.
+      x-grpc-method: sui.rpc.v2.LedgerService/GetServiceInfo
+      x-proto: sui/rpc/v2/ledger_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.LedgerService
+        method: GetServiceInfo
+        streaming: unary
+        proto: sui/rpc/v2/ledger_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - LedgerService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chain_id:
+                    type: string
+                    description: The chain identifier of the chain that this node is on. The chain identifier is the digest of the genesis checkpoint (sequence number 0).
+                  chain:
+                    type: string
+                    description: Human-readable name of the chain that this node is on (e.g., `mainnet`, `testnet`).
+                  epoch:
+                    type: integer
+                    description: Current epoch of the node based on its highest executed checkpoint.
+                  checkpoint_height:
+                    type: integer
+                    description: Checkpoint height of the most recently executed checkpoint.
+                  timestamp:
+                    type: string
+                    description: Timestamp of the most recently executed checkpoint.
+                  lowest_available_checkpoint:
+                    type: integer
+                    description: Lowest available checkpoint.
+                  lowest_available_checkpoint_objects:
+                    type: integer
+                    description: Lowest checkpoint for which objects are available.
+                  server:
+                    type: string
+                    description: Software version of the server.
+              example:
+                chain_id: mainnet
+                chain: mainnet
+                epoch: 100
+                checkpoint_height: 0
+                timestamp: ""
+                lowest_available_checkpoint: 0
+                lowest_available_checkpoint_objects: 0
+                server: ""

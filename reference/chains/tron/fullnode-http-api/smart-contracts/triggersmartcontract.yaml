@@ -1,0 +1,136 @@
+openapi: 3.1.0
+info:
+  title: Tron - TriggerSmartContract
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/triggersmartcontract:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-triggersmartcontract
+      summary: TriggerSmartContract
+      description: Returns TransactionExtention, which contains the unsigned Transaction
+      x-seo-description: Create a transaction that calls a TRON smart contract function.
+      tags:
+      - smart-contracts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              contract_address: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+              function_selector: transfer(address,uint256)
+              parameter: 00000000000000000000000098927ffb9f554dc4a453c64b2e553a02d6df514b00000000000000000000000000000000000000000000000000000000000f4240
+              fee_limit: 100000000
+              call_value: 0
+              visible: true
+            schema:
+              type: object
+              required:
+              - owner_address
+              - contract_address
+              - fee_limit
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                contract_address:
+                  type: string
+                  description: |-
+                    Contract address. (Format: Base58 or Hex).
+                    Example: `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs`
+                  example: TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs
+                function_selector:
+                  type: string
+                  description: |-
+                    Function selector.
+                    Example: `transfer(address,uint256)`
+                  example: transfer(address,uint256)
+                parameter:
+                  type: string
+                  description: |-
+                    ABI-encoded function parameters (Hex String).
+                    e.g., 00000000000000000000004115208EF33A926919ED270E2FA61367B2DA3753DA0000000000000000000000000000000000000000000000000000000000000032
+                data:
+                  type: string
+                  description: This field transmits the necessary data for smart contract interaction, including the function being called and its parameters. You may choose to use the `data` field, which contains the complete ABI-encoded information, or use the `function_selector` and `parameter` fields separately. Note that if both `data` and `function_selector` are present, the system will prioritize using the `function_selector` and `parameter` fields for the contract interaction.
+                fee_limit:
+                  type: integer
+                  description: 'Maximum TRX (in sun) the caller agrees to pay for transaction fees. (Unit: sun). Example: `1000000000` (1,000 TRX)'
+                  format: int32
+                call_value:
+                  type: integer
+                  description: 'Amount of TRX transferred into the contract. (Unit: sun)'
+                  default: 0
+                  format: int64
+                call_token_value:
+                  type: integer
+                  description: Amount of TRC-10 token transferred into the contract.
+                  format: int64
+                token_id:
+                  type: integer
+                  description: TRC-10 token ID
+                  format: int64
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: true
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                  contract_address:
+                    type: string
+                    description: 'Contract address. (Format: Base58 or Hex)'
+                  call_value:
+                    type: integer
+                    format: int64
+                    description: 'Amount of TRX transferred into the contract in this call. (Unit: sun)'
+                  data:
+                    type: string
+                    description: 'Function call data, containing the function selector and encoded parameters, specifying which function to execute and how. (Format: hex string)'
+                  call_token_value:
+                    type: int64
+                    description: Amount of TRC-10 token transferred into the contract.
+                    format: int64
+                  token_id:
+                    type: integer
+                    format: int64
+                    description: TRC-10 token id transferred into the contract.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

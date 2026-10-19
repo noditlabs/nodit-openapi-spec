@@ -1,0 +1,81 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetCanWithdrawUnfreezeAmount
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getcanwithdrawunfreezeamount:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getcanwithdrawunfreezeamount
+      summary: GetCanWithdrawUnfreezeAmount
+      description: Query the withdrawable balance at the specified timestamp In Stake 2.0
+      x-seo-description: Query the withdrawable unstaked balance of a TRON account at a given time.
+      tags:
+      - account-resources
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              timestamp: 1790812800000
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                timestamp:
+                  type: integer
+                  description: 'Timestamp to query. (Unit: millGisecond)'
+                  format: int64
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: "false"
+              required:
+              - owner_address
+              - timestamp
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amount:
+                    type: integer
+                    format: int64
+                    description: 'Withdrawable balance. (Unit: sun)'
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

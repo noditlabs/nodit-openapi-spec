@@ -1,0 +1,94 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetContract
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getcontract:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getcontract
+      summary: GetContract
+      description: Queries a contract's information from the blockchain, including the bytecode of the contract, ABI, configuration parameters, etc.
+      x-seo-description: Query a TRON smart contract's bytecode, ABI and configuration.
+      tags:
+      - smart-contracts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+              visible: true
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: |-
+                    The contract address. (Format: Base58 or hex).
+                    Example: TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: true
+              required:
+              - value
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  origin_address:
+                    type: string
+                    description: Address of the contract creator.
+                  contract_address:
+                    type: string
+                    description: 'Contract address. (Format: Base58 or Hex)'
+                  abi:
+                    type: object
+                    description: Smart contract ABI.
+                    properties: {}
+                  bytecode:
+                    type: string
+                    description: Bytecode of the smart contract.
+                  call_value:
+                    type: integer
+                    format: int64
+                    description: 'Amount of TRX transferred into the contract at deployment. (Unit: sun)'
+                  consume_user_resource_percent:
+                    type: int64
+                    description: 'Percentage of user Energy consumption for a smart contract. (Range: [0-100])'
+                    format: int64
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

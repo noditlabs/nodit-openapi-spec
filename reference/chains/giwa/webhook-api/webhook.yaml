@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Giwa - Webhook API
+  title: GIWA - Webhook API
   version: 1.0.0
 servers:
-  - url: https://web3.nodit.io/v1
-    description: Webhook API
+- url: https://web3.nodit.io/v1
+  description: Webhook API
 components:
   securitySchemes:
     api_key:
@@ -26,35 +26,35 @@ components:
               code:
                 type: string
                 enum:
-                  - MISSING_REQUIRED_PARAMETER
-                  - INVALID_PARAMETER
-                  - WRONG_RANGE_PARAMETER
-                  - DEPRECATED_OPERATION
+                - MISSING_REQUIRED_PARAMETER
+                - INVALID_PARAMETER
+                - WRONG_RANGE_PARAMETER
+                - DEPRECATED_OPERATION
                 description: Code to identify the cause of the bad request
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the invalid parameter
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             MISSING_REQUIRED_PARAMETER:
-              summary: When a required parameter is missing
+              summary: A required parameter is missing
               value:
                 code: MISSING_REQUIRED_PARAMETER
-                message: "Missing required parameter: { PARAMETER_NAME }"
+                message: 'Missing required parameter: { PARAMETER_NAME }'
             INVALID_PARAMETER:
-              summary: When an invalid value is provided for a parameter
+              summary: A parameter has an invalid value
               value:
                 code: INVALID_PARAMETER
-                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+                message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }'
             WRONG_RANGE_PARAMETER:
-              summary: When a value outside the query range is provided
+              summary: A value is outside the allowed range
               value:
                 code: WRONG_RANGE_PARAMETER
-                message: "Wrong range parameter: { PARAMETER_NAME }"
+                message: 'Wrong range parameter: { PARAMETER_NAME }'
             DEPRECATED_OPERATION:
-              summary: When a deprecated API is requested
+              summary: The requested API is no longer supported
               value:
                 code: DEPRECATED_OPERATION
                 message: This operation has been deprecated
@@ -68,26 +68,26 @@ components:
               code:
                 type: string
                 enum:
-                  - NO_AUTHENTICATION_FOUND
-                  - AUTHENTICATION_FAILED
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
                 description: Code to identify the cause of authentication failure
               message:
                 type: string
                 description: Detailed message including the cause of authentication failure
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             NO_AUTHENTICATION_FOUND:
-              summary: When authentication credentials are not included
+              summary: The request does not include authentication (API Key)
               value:
                 code: NO_AUTHENTICATION_FOUND
-                message: No authentication found
+                message: No authentication found.
             AUTHENTICATION_FAILED:
-              summary: When authentication credentials are mismatched or invalid
+              summary: The authentication (API Key) is invalid
               value:
                 code: AUTHENTICATION_FAILED
-                message: Authentication failed
+                message: Authentication failed.
     "403":
       description: Forbidden
       content:
@@ -98,17 +98,17 @@ components:
               code:
                 type: string
                 enum:
-                  - PERMISSION_DENIED
+                - PERMISSION_DENIED
                 description: Code indicating permission denied
               message:
                 type: string
                 description: Detailed message including information about the denied resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             PERMISSION_DENIED:
-              summary: When accessing an unauthorized resource
+              summary: The request accesses a resource it is not authorized for
               value:
                 code: PERMISSION_DENIED
                 message: Permission denied
@@ -122,32 +122,32 @@ components:
               code:
                 type: string
                 enum:
-                  - WRONG_ENDPOINT
-                  - NOT_SUPPORTED_CHAIN
-                  - RESOURCE_NOT_FOUND
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
                 description: Code to identify the cause of the resource not found
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the resource not found
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             WRONG_ENDPOINT:
-              summary: When requesting a non-existent API path
+              summary: The requested API path does not exist
               value:
                 code: WRONG_ENDPOINT
                 message: Wrong endpoint
             NOT_SUPPORTED_CHAIN:
-              summary: When requesting an unsupported chain
+              summary: The requested chain is not supported
               value:
                 code: NOT_SUPPORTED_CHAIN
                 message: Not supported chain
             RESOURCE_NOT_FOUND:
-              summary: When requesting a resource that does not exist on the server
+              summary: The requested resource does not exist
               value:
                 code: RESOURCE_NOT_FOUND
-                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
     "405":
       description: Method Not Allowed
       content:
@@ -158,17 +158,17 @@ components:
               code:
                 type: string
                 enum:
-                  - METHOD_NOT_ALLOWED
+                - METHOD_NOT_ALLOWED
                 description: Code indicating a disallowed HTTP method
               message:
                 type: string
                 description: Detailed message about the disallowed HTTP method
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             METHOD_NOT_ALLOWED:
-              summary: When requesting with an unsupported HTTP method
+              summary: The request uses an unsupported HTTP method
               value:
                 code: METHOD_NOT_ALLOWED
                 message: Method not allowed
@@ -182,17 +182,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TIMEOUT
+                - TIMEOUT
                 description: Code indicating request timeout
               message:
                 type: string
                 description: Detailed message including the cause of the timeout
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TIMEOUT:
-              summary: When processing is not completed within the specified time
+              summary: Processing did not finish within the time limit
               value:
                 code: TIMEOUT
                 message: Request timeout
@@ -206,23 +206,23 @@ components:
               code:
                 type: string
                 enum:
-                  - RESOURCE_ALREADY_EXISTS
-                  - REJECTED
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
                 description: Code to identify the cause of the request conflict
               message:
                 type: string
                 description: Detailed message including information about the conflicting resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             RESOURCE_ALREADY_EXISTS:
-              summary: When attempting to create a resource that already exists
+              summary: The request tries to create a resource that already exists
               value:
                 code: RESOURCE_ALREADY_EXISTS
                 message: Resource already exists
             REJECTED:
-              summary: When the request is rejected by the server
+              summary: The server rejected the request
               value:
                 code: REJECTED
                 message: Request rejected
@@ -236,17 +236,17 @@ components:
               code:
                 type: string
                 enum:
-                  - CONTENTS_TOO_LARGE
+                - CONTENTS_TOO_LARGE
                 description: Code indicating payload size exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed payload size
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             CONTENTS_TOO_LARGE:
-              summary: When the payload exceeds the server's maximum limit
+              summary: The payload exceeds the server's maximum size
               value:
                 code: CONTENTS_TOO_LARGE
                 message: Contents too large
@@ -260,17 +260,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_LONG_URI
+                - TOO_LONG_URI
                 description: Code indicating URI length exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed URI length
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_LONG_URI:
-              summary: When the request URI exceeds the server's maximum length
+              summary: The request URI exceeds the server's maximum length
               value:
                 code: TOO_LONG_URI
                 message: URI too long
@@ -284,23 +284,23 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_MANY_REQUESTS
-                  - EXCEEDED_QUOTA_LIMIT
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
                 description: Code identifying the cause of the request limit exceeded
               message:
                 type: string
                 description: Detailed message including the exceeded limit type and allowed threshold
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_MANY_REQUESTS:
-              summary: When the rate limit is exceeded
+              summary: The rate limit was exceeded
               value:
                 code: TOO_MANY_REQUESTS
                 message: Too many requests
             EXCEEDED_QUOTA_LIMIT:
-              summary: When the quota limit is exceeded
+              summary: The quota limit was exceeded
               value:
                 code: EXCEEDED_QUOTA_LIMIT
                 message: Exceeded quota limit
@@ -314,23 +314,23 @@ components:
               code:
                 type: string
                 enum:
-                  - INTERNAL_SERVER_ERROR
-                  - INTERRUPTED
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
                 description: Code to identify the cause of the internal server error
               message:
                 type: string
                 description: Detailed message including the cause of the server error
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             INTERNAL_SERVER_ERROR:
-              summary: When an internal server error occurs
+              summary: An internal server error occurred
               value:
                 code: INTERNAL_SERVER_ERROR
                 message: Internal server error
             INTERRUPTED:
-              summary: When processing fails temporarily due to server load
+              summary: Processing failed temporarily due to server load
               value:
                 code: INTERRUPTED
                 message: Request interrupted
@@ -344,17 +344,17 @@ components:
               code:
                 type: string
                 enum:
-                  - UNAVAILABLE
+                - UNAVAILABLE
                 description: Code indicating service unavailability
               message:
                 type: string
                 description: Detailed message including the cause of the service outage
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             UNAVAILABLE:
-              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
               value:
                 code: UNAVAILABLE
                 message: Service unavailable
@@ -362,35 +362,47 @@ paths:
   /{chain}/{network}/webhooks:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: giwa-createWebhook
       summary: Create Webhook
       description: |+
         API for creating a Webhook. Create a Webhook by providing subscription details and Webhook URL. Once created, events will be sent to the Webhook URL. On creation, the API returns the Webhook's Subscription ID, which you can use to query, update, and delete the Webhook.
 
+        **condition for ADDRESS_ACTIVITY**
+
+        Provide the `condition` of an `ADDRESS_ACTIVITY` event in exactly one of the following two ways. Providing both returns 400 `INVALID_PARAMETER`, and providing neither returns 400 `MISSING_REQUIRED_PARAMETER`.
+
+        - `addresses`: list the monitored addresses directly. This is the existing method and keeps working as before.
+        - `addressSetId`: specify a set created in advance with the Address Set API. The set must be in `READY` status (otherwise 409 `ADDRESS_SET_NOT_READY`), and its `addressFormat` must match the chain's address format (otherwise 422 `ADDRESS_SET_FORMAT_MISMATCH`, e.g. attaching a TRON set to an EVM chain). A set that does not exist, or that belongs to another account or a project other than the one creating the Webhook, returns 404 `RESOURCE_NOT_FOUND`. Passing `addressSetId` for an event type other than `ADDRESS_ACTIVITY` returns 400.
+
+        Request examples:
+
+        - Existing method: `{ "eventType": "ADDRESS_ACTIVITY", "condition": { "addresses": ["0x..."] } }`
+        - Using an Address Set: `{ "eventType": "ADDRESS_ACTIVITY", "condition": { "addressSetId": "1788439512345678901" } }`
+
       x-seo-description: Create a new webhook subscription to receive real-time blockchain event notifications to your endpoint.
       x-hide-try-it: true
       tags:
-        - Webhook API
+      - Webhook API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - giwa
-            default: giwa
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - sepolia
-            default: sepolia
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - giwa
+          default: giwa
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - sepolia
+          default: sepolia
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
       requestBody:
         required: true
         content:
@@ -403,16 +415,9 @@ paths:
                   type: string
                   description: Parameter specifying the event type identifier to subscribe to via Webhook. For information on supported event types, refer to the Event Types page.
                   enum:
-                    - ADDRESS_ACTIVITY
-                    - MINED_TRANSACTION
-                    - SUCCESSFUL_TRANSACTION
-                    - FAILED_TRANSACTION
-                    - TOKEN_TRANSFER
-                    - BELOW_THRESHOLD_BALANCE
-                    - BLOCK_PERIOD
-                    - BLOCK_LIST_CALLER
-                    - ALLOW_LIST_CALLER
-                    - LOG
+                  - ADDRESS_ACTIVITY
+                  - TOKEN_TRANSFER
+                  - LOG
                 description:
                   type: string
                   description: Parameter that specifies the description of the event.
@@ -429,248 +434,119 @@ paths:
                     Parameter that specifies whether to enable the Instant Webhook option. Defaults to false when not specified.
                     - true: Enables the Instant Webhook option. You can receive Webhook messages immediately when the event is detected, regardless of block confirmation status.
                     - false: Disables the Instant Webhook option. Messages are sent only after the block containing the event transaction has been confirmed.
+                withNative:
+                  type: boolean
+                  default: false
+                  description: Field that selects whether to retrieve native transfer information. It can only be set when creating an `ADDRESS_ACTIVITY` event on EVM-based chains and Tron. When enabled, EVM-based chains deliver messages of the nativeTransfer, withdrawal, atomic, erc20, erc721, and erc1155 types, and Tron delivers messages of the Native Transfer (Tron) type.
+                reorgCorrectionEnabled:
+                  type: boolean
+                  default: false
+                  description: 'Field that selects whether to apply reorg detection and correction. With this option enabled, when a reorg block occurs, the message affected by the reorg is re-sent under the same Sequence Number with the `event.reorgRemoved: true` tag. The information of the new block is then sent under a new Sequence Number.'
                 condition:
                   type: object
                   description: Field for defining detailed conditions of the events you want to subscribe to. Available conditions vary by event type, so refer to the Webhook Types page for usage.
                   oneOf:
-                    - title: ADDRESS_ACTIVITY
-                      description: Monitors activity of accounts included in a specified address array. This event sends a notification whenever these accounts are involved as either sender (from) or recipient (to) in a transaction, i.e., when a transaction, token transfer (ERC20), or NFT transfer (ERC721, ERC1155) occurs. This service enables users to track activity across multiple addresses in real time and effectively monitor asset movements and transactions.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: "List of addresses to monitor for events.\t"
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: MINED_TRANSACTION
-                      description: Provides a notification with receipt information when a transaction sent from a specific address is successfully mined and finally confirmed by the blockchain network. This event triggers notifications for both successful and failed transactions. Users can monitor the final status of their transactions in real time and confirm whether transactions succeeded or failed.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: List of sender addresses for transactions to monitor. You can receive notifications when a transaction with from matching any address in the array occurs.
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: SUCCESSFUL_TRANSACTION
-                      description: Provides a notification when a transaction sent from a specific address is successfully processed. This event occurs when the transaction is fully confirmed and validated by the blockchain network. Users can confirm that their transaction was executed as expected and that the desired operation completed successfully.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: List of sender addresses for transactions to monitor. You can receive notifications when a transaction with from matching any address in the array occurs.
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: FAILED_TRANSACTION
-                      description: Provides a notification when a transaction sent from a specific address fails. This event occurs when the transaction is rejected by the blockchain network or fails to complete due to an execution error. Users can quickly identify the cause of transaction failure and take necessary action. Failures can result from various technical issues such as insufficient gas, unmet contract conditions, etc. This event helps users manage blockchain transactions and track errors more effectively.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: List of sender addresses for transactions to monitor. You can receive notifications when a transaction with from matching any address in the array occurs.
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: TOKEN_TRANSFER
-                      description: Provides a notification when a token (ERC20) transfer or NFT (ERC721, ERC1155) transfer occurs. Users can specify a contract address to monitor token movements from that contract. For NFTs under ERC721 and ERC1155 standards, you can also set a specific token ID as a condition to track transfers of only that token.
-                      type: object
-                      required:
-                        - tokens
-                      properties:
-                        tokens:
-                          type: array
-                          description: Token information object for monitoring transfer events
-                          items:
-                            type: object
-                            required:
-                              - contractAddress
-                            properties:
-                              contractAddress:
-                                type: string
-                                description: Contract address of the ERC20, ERC721, or ERC1155 token to monitor
-                                format: ^0[xX][0-9a-fA-F]{40}$
-                                default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                                example:
-                                  - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                    ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                                  - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                              tokenId:
-                                type: string
-                                description: Token ID when monitoring transfer events for a specific token in the ERC721 or ERC1155 contract only
-                                format: ^[0-9]+$
-                                example:
-                                  - "1"
-                                  - "9386"
-                    - title: BELOW_THRESHOLD_BALANCE
-                      description: Provides a notification when an account's balance falls below a user-specified threshold. This event is particularly useful for financial management and asset protection. Users can take preventive measures to ensure their account does not fall below a minimum balance and can timely transfer additional funds or take other financial actions when needed.
-                      type: object
-                      required:
-                        - address
-                        - belowThresholdBalance
-                      properties:
-                        address:
+                  - title: ADDRESS_ACTIVITY
+                    description: Monitors activity of the addresses you specify. This event sends a notification whenever these accounts are involved as either sender (from) or recipient (to) in a transaction, i.e., when a transaction, token transfer (ERC20), or NFT transfer (ERC721, ERC1155) occurs. This service enables users to track activity across multiple addresses in real time and effectively monitor asset movements and transactions. Provide the monitored addresses in **exactly one** of two ways, either listing them directly in `addresses` or specifying the `addressSetId` of a set created in advance with the Address Set API. Providing both returns 400 `INVALID_PARAMETER`, and providing neither returns 400 `MISSING_REQUIRED_PARAMETER`.
+                    type: object
+                    oneOf:
+                    - required:
+                      - addresses
+                    - required:
+                      - addressSetId
+                    properties:
+                      addresses:
+                        type: array
+                        description: List of addresses to monitor for events. Cannot be used together with `addressSetId`.
+                        items:
                           type: string
-                          description: "Target address to receive balance notifications\t"
+                          format: ^0[xX][0-9a-fA-F]{40}$
                           default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                          example:
-                            - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                              ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                        belowThresholdBalance:
-                          type: string
-                          description: |
-                            Threshold balance to monitor. You receive a notification when the balance falls below the set threshold.
-                            > 📘 What is the notification frequency?
-                            >
-                            > The balance of the address is queried every minute. If the balance is lower than the entered THRESHOLD, a notification is sent. If the actual balance remains below the value entered in belowThresholdBalance at each query, you will continue to receive notifications.
-                          default: "1000000000000000000"
-                          example:
-                            - "1000000000"
-                            - "100000000000"
-                            - "1000000000000000000"
-                    - title: BLOCK_PERIOD
-                      description: Provides notifications according to the block interval on the network. Users can set a desired block period (e.g., every block, every N blocks) to receive block information at that interval. This event provides more stable and confirmed data by delivering information after a certain number of blocks have been confirmed.
-                      type: object
-                      required:
-                        - period
-                      properties:
-                        period:
-                          type: integer
-                          description: Value for the block period at which to receive event notifications. Setting to 1 enables notifications for every block that is created.
-                          default: 1
-                          example:
-                            - 1
-                            - 2
-                            - 10
-                    - title: BLOCK_LIST_CALLER
-                      description: Provides a notification when addresses on a block list send tokens to a target address. This event type is mainly used when you want to monitor activity from addresses on a predefined block list. For example, you can receive an immediate alert when blacklisted addresses attempt to transfer funds to a specific account. This is a useful tool for detecting illegal or suspicious fund movements in advance.
-                      type: object
-                      required:
-                        - address
-                        - blockListCallers
-                      properties:
-                        address:
-                          type: string
-                          description: Target address to monitor for token transfer events
-                          default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                          example:
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                            - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                        blockListCallers:
-                          type: array
-                          description: List of addresses for which you want to receive notifications when token transfers to the target address occur
-                          items:
-                            type: string
-                            default: "0x6ccf8Ecfc7805145ce5e3f1448c2f54572970f74"
-                            example:
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                              - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                    - title: ALLOW_LIST_CALLER
-                      description: Provides a notification when addresses on an allow list send tokens to a target address. This list contains trusted addresses, and fund movements from these addresses are considered safe or expected activity. Use this event type when you want to track activity from allowed addresses and verify fund transfers from addresses on the allow list.
-                      type: object
-                      required:
-                        - address
-                        - allowListCallers
-                      properties:
-                        address:
-                          type: string
-                          description: Target address to monitor for token transfer events
-                          default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                          example:
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                            - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                        allowListCallers:
-                          type: array
-                          description: List of addresses for which you want to receive notifications when token transfers to the target address occur
-                          items:
-                            type: string
-                            default: "0x6ccf8Ecfc7805145ce5e3f1448c2f54572970f74"
-                            example:
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                              - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                    - title: LOG
-                      description: Provides a notification when a transaction containing specified smart contract event logs is created. Users can specify the account address (address) to monitor and event identifier information (topics) as filter conditions. For example, configuring monitoring for the ERC20 standard token transfer event Transfer(address,address,uint256) captures all transaction logs matching that event signature (0xddf252ad...). Use the LOG EventType to efficiently track important activities such as standard token transfers or specific smart contract events.
-                      type: object
-                      required:
-                        - address
-                        - topics
-                      properties:
-                        address:
-                          type: string
-                          description: Target address to monitor for token transfer events
-                          default: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                          example:
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                            - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                        topics:
-                          type: array
-                          description: |
-                            Array of topics for the Event Log to monitor. Can contain up to 4 strings.
+                          example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                      addressSetId:
+                        type: string
+                        description: The addressSetId of the Address Set whose addresses are to be monitored. Specify a set created in advance with the Address Set API; it cannot be used together with `addresses`. The set must be in `READY` status (otherwise 409 `ADDRESS_SET_NOT_READY`), and its `addressFormat` must match the chain's address format (otherwise 422 `ADDRESS_SET_FORMAT_MISMATCH`). Specifying a set that does not exist, or that belongs to another account or another project, returns 404 `RESOURCE_NOT_FOUND`. Pass the 19-digit number as a string.
+                        example: "1788439512345678901"
+                  - title: TOKEN_TRANSFER
+                    description: Provides a notification when a token (ERC20) transfer or NFT (ERC721, ERC1155) transfer occurs. Users can specify a contract address to monitor token movements from that contract. For NFTs under ERC721 and ERC1155 standards, you can also set a specific token ID as a condition to track transfers of only that token.
+                    type: object
+                    required:
+                    - tokens
+                    properties:
+                      tokens:
+                        type: array
+                        description: Token information object for monitoring transfer events
+                        items:
+                          type: object
+                          required:
+                          - contractAddress
+                          properties:
+                            contractAddress:
+                              type: string
+                              description: Contract address of the ERC20, ERC721, or ERC1155 token to monitor
+                              format: ^0[xX][0-9a-fA-F]{40}$
+                              default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
+                              example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                            tokenId:
+                              type: string
+                              description: Token ID when monitoring transfer events for a specific token in the ERC721 or ERC1155 contract only
+                              format: ^[0-9]+$
+                              example:
+                              - "1"
+                              - "9386"
+                  - title: LOG
+                    description: Provides a notification when a transaction containing specified smart contract event logs is created. Users can specify the account address (address) to monitor and event identifier information (topics) as filter conditions. For example, configuring monitoring for the ERC20 standard token transfer event Transfer(address,address,uint256) captures all transaction logs matching that event signature (0xddf252ad...). Use the LOG EventType to efficiently track important activities such as standard token transfers or specific smart contract events.
+                    type: object
+                    required:
+                    - address
+                    - topics
+                    properties:
+                      address:
+                        type: string
+                        description: Target address to monitor for token transfer events
+                        default: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                        example:
+                        - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                        - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
+                      topics:
+                        type: array
+                        description: |
+                          Array of topics for the Event Log to monitor. Can contain up to 4 strings.
 
-                            > 📘 The Topic fields of the event you want to monitor are used to filter data associated with smart contract events. Each topic contains the event's signature and indexed parameter information.
-                            > **topics[0]: Event Signature**
-                            > - topics[0] is always the Keccak256 hash of the event signature.
-                            > For example, for the Transfer(address indexed from, address indexed to, uint256 value) event, the event signature can be verified with code like this:
-                            > `Keccak256("Transfer(address,address,uint256)") = 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef `
-                            >
-                            > **topics[1], topics[2], topics[3]: Indexed Parameters**
-                            > - topics[1] onward correspond to indexed parameter values of the event. Only event parameters declared with the indexed keyword in the smart contract are included in topics. For the Transfer event example above, the from address maps to topics[1] and the to address to topics[2]. To filter events where from is a specific address, enter that address in topics[1]. Values for non-indexed parameters can be found in the data field of the retrieved logs.
-                            >
-                            > **How to find Topic values**
-                            > - From smart contract code: Check the event definition in Solidity code, identify indexed parameters and the event signature, then obtain topic values via Keccak256 hashing.
-                            > - Using a block explorer: Select a sample transaction to trace, go to the transaction details, and find topic values in sections such as "Logs". Below is an example view from Etherscan (https://etherscan.io) for USDC (ERC20) Transfer event logs.
-                          minItems: 1
-                          maxItems: 4
-                          items:
-                            type: string
-                            default: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-                            example:
-                              - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-                              - "0x000000000000000000000000b7aa2d3c833a6827c4f39bef9622d7cddf66b7e7"
-                              - "0x0000000000000000000000003264039cfaa37a70a0e8ccfbf4b7e60bedce5c9f"
+                          > 📘 The Topic fields of the event you want to monitor are used to filter data associated with smart contract events. Each topic contains the event's signature and indexed parameter information.
+                          > **topics[0]: Event Signature**
+                          > - topics[0] is always the Keccak256 hash of the event signature.
+                          > For example, for the Transfer(address indexed from, address indexed to, uint256 value) event, the event signature can be verified with code like this:
+                          > `Keccak256("Transfer(address,address,uint256)") = 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef `
+                          >
+                          > **topics[1], topics[2], topics[3]: Indexed Parameters**
+                          > - topics[1] onward correspond to indexed parameter values of the event. Only event parameters declared with the indexed keyword in the smart contract are included in topics. For the Transfer event example above, the from address maps to topics[1] and the to address to topics[2]. To filter events where from is a specific address, enter that address in topics[1]. Values for non-indexed parameters can be found in the data field of the retrieved logs.
+                          >
+                          > **How to find Topic values**
+                          > - From smart contract code: Check the event definition in Solidity code, identify indexed parameters and the event signature, then obtain topic values via Keccak256 hashing.
+                          > - Using a block explorer: Select a sample transaction to trace, go to the transaction details, and find topic values in sections such as "Logs". Below is an example view from Etherscan (https://etherscan.io) for USDC (ERC20) Transfer event logs.
+                        minItems: 1
+                        maxItems: 4
+                        items:
+                          type: string
+                          default: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                          example:
+                          - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                          - "0x000000000000000000000000b7aa2d3c833a6827c4f39bef9622d7cddf66b7e7"
+                          - "0x0000000000000000000000003264039cfaa37a70a0e8ccfbf4b7e60bedce5c9f"
               required:
-                - eventType
-                - notification
-                - condition
+              - eventType
+              - notification
+              - condition
             example:
-              eventType: 0x1::coin::CoinDeposit
+              eventType: ADDRESS_ACTIVITY
               description: Your webhook description
               notification:
                 webhookUrl: https://your-webhook-url.com
-              isInstant: false
               condition:
-                type: BLOCK_PERIOD
-                block: 1
+                addresses:
+                - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              isInstant: false
       responses:
         "201":
           description: Created
@@ -697,7 +573,7 @@ paths:
                   notification:
                     type: object
                     required:
-                      - webhookUrl
+                    - webhookUrl
                     description: Field representing the information for receiving notifications via Webhook.
                     properties:
                       webhookUrl:
@@ -719,32 +595,164 @@ paths:
                     type: string
                     description: Indicates when the webhook event occurred and the log was created. This field is returned in ISO 8601 format.
         "400":
-          $ref: "#/components/responses/400"
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                    enum:
+                    - MISSING_REQUIRED_PARAMETER
+                    - INVALID_PARAMETER
+                    - WRONG_RANGE_PARAMETER
+                    - DEPRECATED_OPERATION
+                    description: Code that identifies the cause of the error.
+                  message:
+                    type: string
+                    description: Detailed message including the cause of the error.
+              examples:
+                MISSING_REQUIRED_PARAMETER:
+                  summary: A required parameter is missing. This includes an `ADDRESS_ACTIVITY` request with neither `addresses` nor `addressSetId`
+                  value:
+                    code: MISSING_REQUIRED_PARAMETER
+                    message: Required parameter missing for condition. { addresses } or { addressSetId }
+                INVALID_PARAMETER:
+                  summary: 'A parameter has an invalid value. This includes an `ADDRESS_ACTIVITY` request with both `addresses` and `addressSetId`, and `addressSetId` given for an event type other than `ADDRESS_ACTIVITY` (`Invalid parameter: { addressSetId = ''…'' }.`)'
+                  value:
+                    code: INVALID_PARAMETER
+                    message: condition takes either { addresses } or { addressSetId }, not both.
+                WRONG_RANGE_PARAMETER:
+                  summary: A value is outside the allowed range
+                  value:
+                    code: WRONG_RANGE_PARAMETER
+                    message: 'Wrong range parameter: { PARAMETER_NAME }'
+                DEPRECATED_OPERATION:
+                  summary: The requested API is no longer supported
+                  value:
+                    code: DEPRECATED_OPERATION
+                    message: Deprecated operation
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                    enum:
+                    - WRONG_ENDPOINT
+                    - NOT_SUPPORTED_CHAIN
+                    - RESOURCE_NOT_FOUND
+                    description: Code that identifies the cause of the error.
+                  message:
+                    type: string
+                    description: Detailed message including the cause of the error.
+              examples:
+                WRONG_ENDPOINT:
+                  summary: The requested API path does not exist
+                  value:
+                    code: WRONG_ENDPOINT
+                    message: Wrong endpoint
+                NOT_SUPPORTED_CHAIN:
+                  summary: The requested chain is not supported
+                  value:
+                    code: NOT_SUPPORTED_CHAIN
+                    message: Not supported chain
+                RESOURCE_NOT_FOUND:
+                  summary: The requested resource does not exist. This includes an `addressSetId` that does not exist, belongs to another account, or belongs to a project other than the one creating the Webhook (the three cases are not distinguished)
+                  value:
+                    code: RESOURCE_NOT_FOUND
+                    message: 'Resource not found: addressSetId=1788439512345678901'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                    enum:
+                    - RESOURCE_ALREADY_EXISTS
+                    - REJECTED
+                    - ADDRESS_SET_NOT_READY
+                    description: Code that identifies the cause of the error.
+                  message:
+                    type: string
+                    description: Detailed message including the cause of the error.
+              examples:
+                RESOURCE_ALREADY_EXISTS:
+                  summary: The request tries to create a resource that already exists
+                  value:
+                    code: RESOURCE_ALREADY_EXISTS
+                    message: Resource already exists
+                REJECTED:
+                  summary: The server rejected the request
+                  value:
+                    code: REJECTED
+                    message: Request rejected
+                ADDRESS_SET_NOT_READY:
+                  summary: The specified Address Set is not `READY` (it is `IMPORTING`)
+                  value:
+                    code: ADDRESS_SET_NOT_READY
+                    message: 'Address set is not ready: status=IMPORTING'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                    enum:
+                    - ADDRESS_SET_FORMAT_MISMATCH
+                    description: Code that identifies the cause of the error.
+                  message:
+                    type: string
+                    description: Detailed message including the cause of the error.
+              examples:
+                ADDRESS_SET_FORMAT_MISMATCH:
+                  summary: The `addressFormat` of the specified Address Set differs from the chain's address format (for example, attaching a TRON set to an EVM chain)
+                  value:
+                    code: ADDRESS_SET_FORMAT_MISMATCH
+                    message: 'Address set format mismatch: set=TRON, chain=EVM'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: giwa-getWebhook
       summary: Get Webhook
       description: |+
@@ -752,33 +760,33 @@ paths:
 
       x-seo-description: Retrieve details of a specific webhook subscription by its subscription ID.
       tags:
-        - Webhook API
+      - Webhook API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - giwa
-            default: giwa
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - sepolia
-            default: sepolia
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-        - name: subscriptionId
-          in: query
-          required: false
-          schema:
-            type: string
-            example: "5001"
-          description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information. Enter an empty value to query all Webhook information.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - giwa
+          default: giwa
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - sepolia
+          default: sepolia
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: subscriptionId
+        in: query
+        required: false
+        schema:
+          type: string
+          example: "5001"
+        description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information. Enter an empty value to query all Webhook information.
       responses:
         "200":
           description: Successful Response
@@ -787,10 +795,10 @@ paths:
               schema:
                 type: object
                 required:
-                  - total
-                  - page
-                  - rpp
-                  - items
+                - total
+                - page
+                - rpp
+                - items
                 properties:
                   total:
                     type: number
@@ -807,17 +815,17 @@ paths:
                     items:
                       type: object
                       required:
-                        - subscriptionId
-                        - description
-                        - protocol
-                        - network
-                        - subscriptionType
-                        - eventType
-                        - notification
-                        - isActive
-                        - updatedAt
-                        - createdAt
-                        - condition
+                      - subscriptionId
+                      - description
+                      - protocol
+                      - network
+                      - subscriptionType
+                      - eventType
+                      - notification
+                      - isActive
+                      - updatedAt
+                      - createdAt
+                      - condition
                       properties:
                         subscriptionId:
                           type: string
@@ -841,7 +849,7 @@ paths:
                         notification:
                           type: object
                           required:
-                            - webhookUrl
+                          - webhookUrl
                           description: Field representing the information for receiving notifications via Webhook.
                           properties:
                             webhookUrl:
@@ -870,48 +878,48 @@ paths:
                 rpp: 10
                 page: 1
                 items:
-                  - subscriptionId: "31"
-                    description: test
-                    protocol: ETHEREUM
-                    network: MAINNET
-                    subscriptionType: WEBHOOK
-                    eventType: BLOCK_PERIOD
-                    notification:
-                      webhookUrl: https://webhook.mock.server/blockperiod
-                    isActive: true
-                    isInstant: true
-                    updatedAt: "2023-04-21T09:40:49.678Z"
-                    createdAt: "2023-04-21T09:40:49.678Z"
-                    condition:
-                      period: 1
+                - subscriptionId: "31"
+                  description: test
+                  protocol: ETHEREUM
+                  network: MAINNET
+                  subscriptionType: WEBHOOK
+                  eventType: BLOCK_PERIOD
+                  notification:
+                    webhookUrl: https://webhook.mock.server/blockperiod
+                  isActive: true
+                  isInstant: true
+                  updatedAt: '2023-04-21T09:40:49.678Z'
+                  createdAt: '2023-04-21T09:40:49.678Z'
+                  condition:
+                    period: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
   /{chain}/{network}/webhooks/{subscriptionId}:
     delete:
       security:
-        - api_key: []
+      - api_key: []
       operationId: giwa-deleteWebhook
       summary: Delete Webhook
       description: |+
@@ -919,34 +927,34 @@ paths:
 
       x-seo-description: Delete an existing webhook subscription by its subscription ID to stop receiving event notifications.
       tags:
-        - Webhook API
+      - Webhook API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - giwa
-            default: giwa
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - sepolia
-            default: sepolia
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-        - name: subscriptionId
-          in: path
-          required: true
-          description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information.
-          schema:
-            type: string
-          example:
-            subscriptionId: "5001"
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - giwa
+          default: giwa
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - sepolia
+          default: sepolia
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: subscriptionId
+        in: path
+        required: true
+        description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information.
+        schema:
+          type: string
+        example:
+          subscriptionId: "5001"
       responses:
         "200":
           description: Successful Response
@@ -961,66 +969,68 @@ paths:
               example:
                 result: true
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
     patch:
       security:
-        - api_key: []
+      - api_key: []
       operationId: giwa-updateWebhook
       summary: Update Webhook
       description: |+
         You can modify the subscription condition of a Webhook, or activate or deactivate a Webhook.
 
+        For an `ADDRESS_ACTIVITY` Webhook, the way monitored addresses are specified (`addresses` or `addressSetId`) and the attached Address Set cannot be changed after creation. A Webhook created with `addresses` can only change the address list in `addresses`, and a Webhook created with `addressSetId` cannot be switched to another set or to `addresses`. Attempting to do so returns `409 ADDRESS_SET_BINDING_IMMUTABLE`; to change the method or the set, create a new Webhook. To change the monitored addresses of a Webhook attached to a set, modify the addresses of the set through the Address Set API. Even for a Webhook created with `addresses`, if another Webhook also reads its address list via `addressSetId`, `addresses` cannot be changed and `409 ADDRESS_SET_MANAGED` is returned. In that case as well, modify the addresses through the Address Set API.
+
       x-seo-description: Update the configuration of an existing webhook subscription, including URL and event filters.
       tags:
-        - Webhook API
+      - Webhook API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - giwa
-            default: giwa
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - sepolia
-            default: sepolia
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-        - name: subscriptionId
-          in: path
-          required: true
-          schema:
-            type: string
-            example: "5001"
-          description: Parameter to specify the subscriptionId assigned to the Webhook you want to query. You can use the subscriptionId returned when creating a Webhook to query, modify, and delete Webhook information.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - giwa
+          default: giwa
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - sepolia
+          default: sepolia
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: subscriptionId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: "5001"
+        description: Parameter to specify the subscriptionId assigned to the Webhook you want to query. You can use the subscriptionId returned when creating a Webhook to query, modify, and delete Webhook information.
       requestBody:
         required: true
         content:
@@ -1046,239 +1056,102 @@ paths:
                   type: object
                   description: Field for defining detailed conditions of the events you want to subscribe to. Available conditions vary by event type, so refer to the Webhook Types page for usage.
                   oneOf:
-                    - title: ADDRESS_ACTIVITY
-                      description: Monitors activity of accounts included in a specified address array. This event sends a notification whenever these accounts are involved as either sender (from) or recipient (to) in a transaction, i.e., when a transaction, token transfer (ERC20), or NFT transfer (ERC721, ERC1155) occurs. This service enables users to track activity across multiple addresses in real time and effectively monitor asset movements and transactions.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: "List of addresses to monitor for events.\t"
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: MINED_TRANSACTION
-                      description: Provides a notification with receipt information when a transaction sent from a specific address is successfully mined and finally confirmed by the blockchain network. This event triggers notifications for both successful and failed transactions. Users can monitor the final status of their transactions in real time and confirm whether transactions succeeded or failed.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: List of sender addresses for transactions to monitor. You can receive notifications when a transaction with from matching any address in the array occurs.
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: SUCCESSFUL_TRANSACTION
-                      description: Provides a notification when a transaction sent from a specific address is successfully processed. This event occurs when the transaction is fully confirmed and validated by the blockchain network. Users can confirm that their transaction was executed as expected and that the desired operation completed successfully.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: List of sender addresses for transactions to monitor. You can receive notifications when a transaction with from matching any address in the array occurs.
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: FAILED_TRANSACTION
-                      description: Provides a notification when a transaction sent from a specific address fails. This event occurs when the transaction is rejected by the blockchain network or fails to complete due to an execution error. Users can quickly identify the cause of transaction failure and take necessary action. Failures can result from various technical issues such as insufficient gas, unmet contract conditions, etc. This event helps users manage blockchain transactions and track errors more effectively.
-                      type: object
-                      required:
-                        - addresses
-                      properties:
-                        addresses:
-                          type: array
-                          description: List of sender addresses for transactions to monitor. You can receive notifications when a transaction with from matching any address in the array occurs.
-                          items:
-                            type: string
-                            format: ^0[xX][0-9a-fA-F]{40}$
-                            default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                            example:
-                              - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: TOKEN_TRANSFER
-                      description: Provides a notification when a token (ERC20) transfer or NFT (ERC721, ERC1155) transfer occurs. Users can specify a contract address to monitor token movements from that contract. For NFTs under ERC721 and ERC1155 standards, you can also set a specific token ID as a condition to track transfers of only that token.
-                      type: object
-                      required:
-                        - tokens
-                      properties:
-                        tokens:
-                          type: array
-                          description: Token information object for monitoring transfer events
-                          items:
-                            type: object
-                            required:
-                              - contractAddress
-                            properties:
-                              contractAddress:
-                                type: string
-                                description: Contract address of the ERC20, ERC721, or ERC1155 token to monitor
-                                format: ^0[xX][0-9a-fA-F]{40}$
-                                default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                                example:
-                                  - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                                    ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                                  - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                              tokenId:
-                                type: string
-                                description: Token ID when monitoring transfer events for a specific token in the ERC721 or ERC1155 contract only
-                                format: ^[0-9]+$
-                                example:
-                                  - "1"
-                                  - "9386"
-                    - title: BELOW_THRESHOLD_BALANCE
-                      description: Provides a notification when an account's balance falls below a user-specified threshold. This event is particularly useful for financial management and asset protection. Users can take preventive measures to ensure their account does not fall below a minimum balance and can timely transfer additional funds or take other financial actions when needed.
-                      type: object
-                      required:
-                        - address
-                        - belowThresholdBalance
-                      properties:
-                        address:
+                  - title: ADDRESS_ACTIVITY
+                    description: Monitors activity of the addresses you specify. This event sends a notification whenever these accounts are involved as either sender (from) or recipient (to) in a transaction, i.e., when a transaction, token transfer (ERC20), or NFT transfer (ERC721, ERC1155) occurs. This service enables users to track activity across multiple addresses in real time and effectively monitor asset movements and transactions. Provide the monitored addresses in **exactly one** of two ways, either listing them directly in `addresses` or specifying the `addressSetId` of a set created in advance with the Address Set API. Providing both returns 400 `INVALID_PARAMETER`, and providing neither returns 400 `MISSING_REQUIRED_PARAMETER`.
+                    type: object
+                    oneOf:
+                    - required:
+                      - addresses
+                    - required:
+                      - addressSetId
+                    properties:
+                      addresses:
+                        type: array
+                        description: List of addresses to monitor for events. Cannot be used together with `addressSetId`.
+                        items:
                           type: string
-                          description: "Target address to receive balance notifications\t"
+                          format: ^0[xX][0-9a-fA-F]{40}$
                           default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                          example:
-                            - CONTRACT_ADDRESS: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
-                              ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"}]"
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                        belowThresholdBalance:
-                          type: string
-                          description: |
-                            Threshold balance to monitor. You receive a notification when the balance falls below the set threshold.
-                            > 📘 What is the notification frequency?
-                            >
-                            > The balance of the address is queried every minute. If the balance is lower than the entered THRESHOLD, a notification is sent. If the actual balance remains below the value entered in belowThresholdBalance at each query, you will continue to receive notifications.
-                          default: "1000000000000000000"
-                          example:
-                            - "1000000000"
-                            - "100000000000"
-                            - "1000000000000000000"
-                    - title: BLOCK_PERIOD
-                      description: Provides notifications according to the block interval on the network. Users can set a desired block period (e.g., every block, every N blocks) to receive block information at that interval. This event provides more stable and confirmed data by delivering information after a certain number of blocks have been confirmed.
-                      type: object
-                      required:
-                        - period
-                      properties:
-                        period:
-                          type: integer
-                          description: Value for the block period at which to receive event notifications. Setting to 1 enables notifications for every block that is created.
-                          default: 1
-                          example:
-                            - 1
-                            - 2
-                            - 10
-                    - title: BLOCK_LIST_CALLER
-                      description: Provides a notification when addresses on a block list send tokens to a target address. This event type is mainly used when you want to monitor activity from addresses on a predefined block list. For example, you can receive an immediate alert when blacklisted addresses attempt to transfer funds to a specific account. This is a useful tool for detecting illegal or suspicious fund movements in advance.
-                      type: object
-                      required:
-                        - address
-                        - blockListCallers
-                      properties:
-                        address:
-                          type: string
-                          description: Target address to monitor for token transfer events
-                          default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                          example:
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                            - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                        blockListCallers:
-                          type: array
-                          description: List of addresses for which you want to receive notifications when token transfers to the target address occur
-                          items:
-                            type: string
-                            default: "0x6ccf8Ecfc7805145ce5e3f1448c2f54572970f74"
-                            example:
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                              - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                    - title: ALLOW_LIST_CALLER
-                      description: Provides a notification when addresses on an allow list send tokens to a target address. This list contains trusted addresses, and fund movements from these addresses are considered safe or expected activity. Use this event type when you want to track activity from allowed addresses and verify fund transfers from addresses on the allow list.
-                      type: object
-                      required:
-                        - address
-                        - allowListCallers
-                      properties:
-                        address:
-                          type: string
-                          description: Target address to monitor for token transfer events
-                          default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
-                          example:
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                            - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                        allowListCallers:
-                          type: array
-                          description: List of addresses for which you want to receive notifications when token transfers to the target address occur
-                          items:
-                            type: string
-                            default: "0x6ccf8Ecfc7805145ce5e3f1448c2f54572970f74"
-                            example:
-                              - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                              - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                    - title: LOG
-                      description: Provides a notification when a transaction containing specified smart contract event logs is created. Users can specify the account address (address) to monitor and event identifier information (topics) as filter conditions. For example, configuring monitoring for the ERC20 standard token transfer event Transfer(address,address,uint256) captures all transaction logs matching that event signature (0xddf252ad...). Use the LOG EventType to efficiently track important activities such as standard token transfers or specific smart contract events.
-                      type: object
-                      required:
-                        - address
-                        - topics
-                      properties:
-                        address:
-                          type: string
-                          description: Target address to monitor for token transfer events
-                          default: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                          example:
-                            - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                            - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
-                        topics:
-                          type: array
-                          description: |
-                            Array of topics for the Event Log to monitor. Can contain up to 4 strings.
+                          example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                      addressSetId:
+                        type: string
+                        description: The addressSetId of the Address Set whose addresses are to be monitored. Specify a set created in advance with the Address Set API; it cannot be used together with `addresses`. The set must be in `READY` status (otherwise 409 `ADDRESS_SET_NOT_READY`), and its `addressFormat` must match the chain's address format (otherwise 422 `ADDRESS_SET_FORMAT_MISMATCH`). Specifying a set that does not exist, or that belongs to another account or another project, returns 404 `RESOURCE_NOT_FOUND`. Pass the 19-digit number as a string.
+                        example: "1788439512345678901"
+                  - title: TOKEN_TRANSFER
+                    description: Provides a notification when a token (ERC20) transfer or NFT (ERC721, ERC1155) transfer occurs. Users can specify a contract address to monitor token movements from that contract. For NFTs under ERC721 and ERC1155 standards, you can also set a specific token ID as a condition to track transfers of only that token.
+                    type: object
+                    required:
+                    - tokens
+                    properties:
+                      tokens:
+                        type: array
+                        description: Token information object for monitoring transfer events
+                        items:
+                          type: object
+                          required:
+                          - contractAddress
+                          properties:
+                            contractAddress:
+                              type: string
+                              description: Contract address of the ERC20, ERC721, or ERC1155 token to monitor
+                              format: ^0[xX][0-9a-fA-F]{40}$
+                              default: "0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
+                              example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                            tokenId:
+                              type: string
+                              description: Token ID when monitoring transfer events for a specific token in the ERC721 or ERC1155 contract only
+                              format: ^[0-9]+$
+                              example:
+                              - "1"
+                              - "9386"
+                  - title: LOG
+                    description: Provides a notification when a transaction containing specified smart contract event logs is created. Users can specify the account address (address) to monitor and event identifier information (topics) as filter conditions. For example, configuring monitoring for the ERC20 standard token transfer event Transfer(address,address,uint256) captures all transaction logs matching that event signature (0xddf252ad...). Use the LOG EventType to efficiently track important activities such as standard token transfers or specific smart contract events.
+                    type: object
+                    required:
+                    - address
+                    - topics
+                    properties:
+                      address:
+                        type: string
+                        description: Target address to monitor for token transfer events
+                        default: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                        example:
+                        - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                        - "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE"
+                      topics:
+                        type: array
+                        description: |
+                          Array of topics for the Event Log to monitor. Can contain up to 4 strings.
 
-                            > 📘 The Topic fields of the event you want to monitor are used to filter data associated with smart contract events. Each topic contains the event's signature and indexed parameter information.
-                            > **topics[0]: Event Signature**
-                            > - topics[0] is always the Keccak256 hash of the event signature.
-                            > For example, for the Transfer(address indexed from, address indexed to, uint256 value) event, the event signature can be verified with code like this:
-                            > `Keccak256("Transfer(address,address,uint256)") = 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef `
-                            >
-                            > **topics[1], topics[2], topics[3]: Indexed Parameters**
-                            > - topics[1] onward correspond to indexed parameter values of the event. Only event parameters declared with the indexed keyword in the smart contract are included in topics. For the Transfer event example above, the from address maps to topics[1] and the to address to topics[2]. To filter events where from is a specific address, enter that address in topics[1]. Values for non-indexed parameters can be found in the data field of the retrieved logs.
-                            >
-                            > **How to find Topic values**
-                            > - From smart contract code: Check the event definition in Solidity code, identify indexed parameters and the event signature, then obtain topic values via Keccak256 hashing.
-                            > - Using a block explorer: Select a sample transaction to trace, go to the transaction details, and find topic values in sections such as "Logs". Below is an example view from Etherscan (https://etherscan.io) for USDC (ERC20) Transfer event logs.
-                          minItems: 1
-                          maxItems: 4
-                          items:
-                            type: string
-                            default: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-                            example:
-                              - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
-                              - "0x000000000000000000000000b7aa2d3c833a6827c4f39bef9622d7cddf66b7e7"
-                              - "0x0000000000000000000000003264039cfaa37a70a0e8ccfbf4b7e60bedce5c9f"
+                          > 📘 The Topic fields of the event you want to monitor are used to filter data associated with smart contract events. Each topic contains the event's signature and indexed parameter information.
+                          > **topics[0]: Event Signature**
+                          > - topics[0] is always the Keccak256 hash of the event signature.
+                          > For example, for the Transfer(address indexed from, address indexed to, uint256 value) event, the event signature can be verified with code like this:
+                          > `Keccak256("Transfer(address,address,uint256)") = 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef `
+                          >
+                          > **topics[1], topics[2], topics[3]: Indexed Parameters**
+                          > - topics[1] onward correspond to indexed parameter values of the event. Only event parameters declared with the indexed keyword in the smart contract are included in topics. For the Transfer event example above, the from address maps to topics[1] and the to address to topics[2]. To filter events where from is a specific address, enter that address in topics[1]. Values for non-indexed parameters can be found in the data field of the retrieved logs.
+                          >
+                          > **How to find Topic values**
+                          > - From smart contract code: Check the event definition in Solidity code, identify indexed parameters and the event signature, then obtain topic values via Keccak256 hashing.
+                          > - Using a block explorer: Select a sample transaction to trace, go to the transaction details, and find topic values in sections such as "Logs". Below is an example view from Etherscan (https://etherscan.io) for USDC (ERC20) Transfer event logs.
+                        minItems: 1
+                        maxItems: 4
+                        items:
+                          type: string
+                          default: "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                          example:
+                          - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                          - "0x000000000000000000000000b7aa2d3c833a6827c4f39bef9622d7cddf66b7e7"
+                          - "0x0000000000000000000000003264039cfaa37a70a0e8ccfbf4b7e60bedce5c9f"
               example:
                 notification:
                   webhookUrl: https://your-webhook-url.com
                 description: Your webhook description
                 isActive: false
                 condition:
-                  type: BLOCK_PERIOD
-                  block: 2
+                  addresses:
+                  - "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
       responses:
         "200":
           description: Successful Response
@@ -1293,123 +1166,157 @@ paths:
               example:
                 result: true
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: string
+                    enum:
+                    - ADDRESS_SET_BINDING_IMMUTABLE
+                    - ADDRESS_SET_MANAGED
+                    - REJECTED
+                    description: A code that identifies the cause of the error.
+                  message:
+                    type: string
+                    description: A detailed message including the cause of the error.
+              examples:
+                ADDRESS_SET_BINDING_IMMUTABLE:
+                  summary: The request tries to change how an `ADDRESS_ACTIVITY` Webhook specifies its addresses or which Address Set it is attached to. This includes giving `addressSetId` to a Webhook created with `addresses`, and switching a set-attached Webhook to another set or to `addresses`
+                  value:
+                    code: ADDRESS_SET_BINDING_IMMUTABLE
+                    message: subscription 9163 is bound to address set 1791882485839048148; the binding cannot be changed
+                ADDRESS_SET_MANAGED:
+                  summary: Another Webhook also reads this Webhook's address list via `addressSetId`. A change on one side would affect the other Webhook, so modify the addresses only through the Address Set API
+                  value:
+                    code: ADDRESS_SET_MANAGED
+                    message: address set 1791884127529205343 is read by more than one subscription; change its addresses through the address set API
+                REJECTED:
+                  summary: The server rejected the request
+                  value:
+                    code: REJECTED
+                    message: Request rejected
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
   /{chain}/{network}/webhooks/history:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: giwa-getWebhookHistory
       summary: Get Webhook History
       description: |-
         API for querying Webhook call history. Use this API to check Webhook execution status and call results. Call history includes Webhook event success/failure status and detailed information for each call.
 
-        > 💡 History data retention period
-        > Only Webhook call history from the last 30 days is stored. Data older than 30 days is not retained, so you must query needed history within that period.
+        > 🚧 History data is retained for 7 days
+        > Only Webhook call history from the last 7 days is retained. Once an entry passes 7 days, it is deleted in full - including `eventMessage` - and cannot be recovered, so you must query the history you need within that period.
       x-seo-description: Retrieve the delivery history of a webhook subscription, including event logs and response statuses.
       tags:
-        - Webhook API
+      - Webhook API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - giwa
-            default: giwa
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - sepolia
-            default: sepolia
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-        - name: subscriptionId
-          in: query
-          required: true
-          schema:
-            type: string
-            example: "5001"
-          description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information. Enter an empty value to query all Webhook information.
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: string
-            example: 1
-          description: Specifies the page to query. Default is 1.
-        - name: rpp
-          in: query
-          required: false
-          schema:
-            type: string
-            example: "10"
-          description: Specifies the number of events to query per page. Value range is 1 to 100. Default is 10.
-        - name: withEventMessage
-          in: query
-          required: false
-          schema:
-            type: boolean
-            example: true
-          description: Specifies whether to include event messages in the query. Default is false.
-        - name: status
-          in: query
-          required: false
-          schema:
-            type: string
-            enum:
-              - SUCCESS
-              - FAIL
-            example: SUCCESS
-          description: Filters events by webhook call success (SUCCESS) or failure (FAIL).
-        - name: startAt
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date-time
-            example: "2026-01-01T00:00:00Z"
-          description: Specifies the start time for event occurrence in ISO 8601 format.
-        - name: endAt
-          in: query
-          required: false
-          schema:
-            type: string
-            format: date-time
-            example: "2026-01-01T00:00:00Z"
-          description: Specifies the end time for event occurrence in ISO 8601 format.
-        - name: startSequenceNumber
-          in: query
-          required: false
-          schema:
-            type: string
-            example: "100"
-          description: Specifies the sequenceNumber to start the query from.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - giwa
+          default: giwa
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - sepolia
+          default: sepolia
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: subscriptionId
+        in: query
+        required: true
+        schema:
+          type: string
+          example: "5001"
+        description: Parameter that specifies the subscriptionId assigned to the Webhook to query. Use the subscriptionId returned when creating the Webhook to query, update, or delete Webhook information. Enter an empty value to query all Webhook information.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+          example: 1
+        description: Specifies the page to query. Default is 1.
+      - name: rpp
+        in: query
+        required: false
+        schema:
+          type: string
+          example: "10"
+        description: Specifies the number of events to query per page. Value range is 1 to 100. Default is 10.
+      - name: withEventMessage
+        in: query
+        required: false
+        schema:
+          type: boolean
+          example: true
+        description: Specifies whether to include event messages in the query. Default is false.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - SUCCESS
+          - FAIL
+          example: SUCCESS
+        description: Filters events by webhook call success (SUCCESS) or failure (FAIL).
+      - name: startAt
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          example: '2026-01-01T00:00:00Z'
+        description: Specifies the start time for event occurrence in ISO 8601 format.
+      - name: endAt
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+          example: '2026-01-01T00:00:00Z'
+        description: Specifies the end time for event occurrence in ISO 8601 format.
+      - name: startSequenceNumber
+        in: query
+        required: false
+        schema:
+          type: string
+          example: "100"
+        description: Specifies the sequenceNumber to start the query from.
       responses:
         "200":
           description: Successful Response
@@ -1429,138 +1336,124 @@ paths:
                     description: Number of events per page returned based on the request.
                   items:
                     type: array
-                    description: Array containing event detail data.
+                    description: Array containing call history data.
                     items:
                       type: object
                       properties:
+                        id:
+                          type: string
+                          description: Unique value identifying the call history entry.
+                        compositeKey:
+                          type: string
+                          description: Value combining subscriptionId and sequenceNumber. (Format&#58; `{subscriptionId}&#58;{sequenceNumber}`)
                         subscriptionId:
                           type: string
-                          description: Field representing the subscriptionId assigned to the Webhook. subscriptionId is a unique value that identifies the Webhook and is used to query, update, or delete the Webhook.
-                        description:
+                          description: Field representing the subscriptionId of the Webhook this call history entry belongs to.
+                        sequenceNumber:
                           type: string
-                          description: Field representing the Webhook description.
-                        protocol:
+                          description: Field representing the sequence number of the Webhook message. Compare the sequenceNumber of received messages to identify missing messages.
+                        status:
                           type: string
-                          description: Field representing the chain subscribed to via this Webhook. (e.g., ETHEREUM, POLYGON, OPTIMISM, ...)
-                        network:
-                          type: string
-                          description: Field representing the network subscribed to via this Webhook. (e.g., MAINNET, SEPOLIA, MUMBAI, ...)
-                        subscriptionType:
-                          type: string
-                          description: Field for identifying the subscription type.
-                          example: WEBHOOK
-                        eventType:
-                          type: string
-                          description: Field representing the event type subscribed to by this Webhook.
-                        notification:
-                          type: object
-                          required:
-                            - webhookUrl
-                          description: Field representing the information for receiving notifications via Webhook.
-                          properties:
-                            webhookUrl:
-                              type: string
-                              description: Field representing the URL for receiving Webhook notifications.
-                        isActive:
-                          type: boolean
-                          description: Field representing whether the Webhook is active. true when the Webhook is enabled, false when disabled. When disabled, you cannot receive notifications via the Webhook.
+                          enum:
+                          - SUCCESS
+                          - FAIL
+                          description: Field representing whether the Webhook call succeeded (SUCCESS) or failed (FAIL).
                         updatedAt:
                           type: string
                           description: Indicates when there was a change in the webhook delivery result (status), e.g., when a failed delivery was retried and changed to success. This field is returned in ISO 8601 format.
                         createdAt:
                           type: string
                           description: Indicates when the webhook event occurred and the log was created. This field is returned in ISO 8601 format.
-                        condition:
+                        eventMessage:
                           type: object
-                          description: Field representing the Webhook subscription conditions. Conditions may vary by event type.
+                          description: Field representing the message body delivered via Webhook. Included only when `withEventMessage` is set to `true` in the request, and not returned for entries past the 7-day retention period.
+                          properties:
+                            subscriptionId:
+                              type: string
+                              description: Field representing the subscriptionId of the Webhook the message was delivered to.
+                            sequenceNumber:
+                              type: string
+                              description: Field representing the sequence number of the message.
+                            eventType:
+                              type: string
+                              description: Field representing the event type subscribed to by this Webhook. (e.g., ADDRESS_ACTIVITY, TOKEN_TRANSFER, LOG, ...)
+                            protocol:
+                              type: string
+                              description: Field representing the chain subscribed to via this Webhook. (e.g., ethereum, polygon, kaia, ...)
+                            network:
+                              type: string
+                              description: Field representing the network subscribed to via this Webhook. (e.g., mainnet, sepolia, ...)
+                            event:
+                              type: object
+                              description: Field representing the details of the detected event. The structure varies by eventType.
+                              properties:
+                                reorgRemoved:
+                                  type: boolean
+                                  example: true
+                                  description: Field that indicates whether the message resulted from a reorg. When a reorg occurs, the message is sent with this field added and set to true. It uses the same Sequence Number as the message containing the data of the affected block, so you can tell which block's data was reorged by its Sequence Number.
               example:
-                total: 146779
-                rpp: 2
+                total: 15
+                rpp: 1
                 page: 1
                 items:
-                  - id: "1596"
-                    subscriptionId: "103524"
-                    sequenceNumber: "20"
-                    status: FAIL
-                    updatedAt: "2024-12-13T02:06:09.000Z"
-                    createdAt: "2024-12-13T02:06:07.000Z"
-                    eventMessage:
-                      subscriptionId: "103524"
-                      sequenceNumber: "20"
-                      eventType: EVENT
-                      network: MAINNET
-                      protocol: APTOS
-                      event:
-                        eventType: 0x1::block::NewBlockEvent
-                        eventAccountAddress: null
-                        payloadFunction: null
-                        messages:
-                          - - guid:
-                                creation_number: "3"
-                                account_address: "0x0000000000000000000000000000000000000000000000000000000000000001"
-                              sequence_number: "264073031"
-                              type: 0x1::block::NewBlockEvent
-                              data:
-                                epoch: "9559"
-                                failed_proposer_indices: []
-                                hash: "0x7d360d5e499d93eb87ca34fe3f8f18eab602cb8d365e402da750b7e6c5786c4d"
-                                height: "264073031"
-                                previous_block_votes_bitvec: "0x177fffef57fbbf7ff63c15cfef4679a1bb79d8"
-                                proposer: "0xa651c7c52d64a2014379902bbc92439d196499bcc36d94ff0395aa45837c66db"
-                                round: "13485"
-                                time_microseconds: "1734048334428800"
-                  - id: "1597"
-                    subscriptionId: "103524"
-                    sequenceNumber: "21"
-                    status: FAIL
-                    updatedAt: "2024-12-13T02:26:29.000Z"
-                    createdAt: "2024-12-13T02:26:28.000Z"
-                    eventMessage:
-                      subscriptionId: "103524"
-                      sequenceNumber: "21"
-                      eventType: EVENT
-                      network: MAINNET
-                      protocol: APTOS
-                      event:
-                        eventType: 0x1::block::NewBlockEvent
-                        eventAccountAddress: null
-                        payloadFunction: null
-                        messages:
-                          - - guid:
-                                creation_number: "3"
-                                account_address: "0x0000000000000000000000000000000000000000000000000000000000000001"
-                              sequence_number: "264073128"
-                              type: 0x1::block::NewBlockEvent
-                              data:
-                                epoch: "9559"
-                                failed_proposer_indices: []
-                                hash: "0x53570fbecfb44c723c2db3bac968d467bd4d4a8185a383b094f7578c4a3f014"
-                                height: "264073128"
-                                previous_block_votes_bitvec: "0x7f048b4a700f7259fff3fafb9dc89141c2ddfc"
-                                proposer: "0x6d00d52f94579e51308ae83841b5133e3a7e93b51fcd8cf338d766e3f0331026"
-                                round: "13582"
-                                time_microseconds: "1734048354656343"
+                - id: "1284507193"
+                  compositeKey: '5001:15'
+                  subscriptionId: "5001"
+                  sequenceNumber: "15"
+                  status: SUCCESS
+                  updatedAt: '2026-08-10T07:33:53.000Z'
+                  createdAt: '2026-08-10T07:33:52.000Z'
+                  eventMessage:
+                    subscriptionId: "5001"
+                    sequenceNumber: "15"
+                    eventType: ADDRESS_ACTIVITY
+                    network: mainnet
+                    protocol: ethereum
+                    event:
+                      targetAddresses:
+                      - "0xdac17f958d2ee523a2206206994597c13d831ec7"
+                      messages:
+                      - token_address: "0xdac17f958d2ee523a2206206994597c13d831ec7"
+                        from_address: "0x12c28f26d876b9484417848cf904edda02e627aa"
+                        to_address: "0x8bb9de69d3e930f2e125b92461f8b93f00145ece"
+                        value: "100"
+                        transaction_hash: "0x6e529dd87fe612e04bdfa84a498e739923dd32f578d3a656cab29c4df680e22d"
+                        log_index: 1047
+                        block_number: 25723120
+                        block_timestamp: 1786347131
+                        transaction_index: 468
+                        type: erc20
+                      - token_address: "0xdac17f958d2ee523a2206206994597c13d831ec7"
+                        from_address: "0x89f23e7e0c1e11e2390db8ec66cf85093427ae10"
+                        to_address: "0x477b8d5ef7c2c42db84deb555419cd817c336b6f"
+                        value: "834940000"
+                        transaction_hash: "0xd65a6ce8ca872a819f3ae41968731e59536a5530746a1aee7d49c716a9fe35b2"
+                        log_index: 1039
+                        block_number: 25723120
+                        block_timestamp: 1786347131
+                        transaction_index: 450
+                        type: erc20
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'

@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: SEI - cosmos_upgrade_v1beta1_module_versions
+  title: Sei - cosmos_upgrade_v1beta1_module_versions
   version: 1.0.0
 servers:
-  - url: https://rest-sei-mainnet.nodit.io
+- url: https://rest-sei-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: ModuleVersions queries the list of module versions from state.
       operationId: cosmos_upgrade_v1beta1_module_versions
       tags:
-        - upgrade
+      - upgrade
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -35,9 +35,11 @@ paths:
                       type: object
                       properties:
                         name:
+                          description: Module name.
                           type: string
                           title: name of the app module
                         version:
+                          description: Consensus version of the module.
                           type: string
                           format: uint64
                           title: consensus version of the app module
@@ -49,7 +51,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -68,37 +70,21 @@ paths:
                         type_url:
                           type: string
                           description: |-
-                            A URL/resource name that uniquely identifies the type of the serialized
-                            protocol buffer message. This string must contain at least
-                            one "/" character. The last segment of the URL's path must represent
-                            the fully qualified name of the type (as in
-                            `path/google.protobuf.Duration`). The name should be in a canonical form
-                            (e.g., leading "." is not accepted).
+                            직렬화된 프로토콜 버퍼 메시지의 타입을 고유하게 식별하는 URL/리소스 이름. 이 문자열에는 "/" 문자가 최소 하나 포함되어야 하며, URL 경로의 마지막 세그먼트는 타입의 완전한 이름을 나타내야 합니다 (예: `path/google.protobuf.Duration`). 이름은 표준 형식이어야 합니다 (예: 선행 "."은 허용되지 않음).
 
-                            In practice, teams usually precompile into the binary all types that they
-                            expect it to use in the context of Any. However, for URLs which use the
-                            scheme `http`, `https`, or no scheme, one can optionally set up a type
-                            server that maps type URLs to message definitions as follows:
+                            실제로 팀들은 일반적으로 Any 컨텍스트에서 사용될 것으로 예상하는 모든 타입을 바이너리에 미리 컴파일합니다. 단, `http`, `https` 또는 스킴 없는 URL의 경우 다음과 같이 타입 URL을 메시지 정의에 매핑하는 타입 서버를 선택적으로 설정할 수 있습니다:
 
-                            * If no scheme is provided, `https` is assumed.
-                            * An HTTP GET on the URL must yield a [google.protobuf.Type][]
-                              value in binary format, or produce an error.
-                            * Applications are allowed to cache lookup results based on the
-                              URL, or have them precompiled into a binary to avoid any
-                              lookup. Therefore, binary compatibility needs to be preserved
-                              on changes to types. (Use versioned type names to manage
-                              breaking changes.)
+                            * 스킴이 제공되지 않으면 `https`로 가정합니다.
+                            * URL에 대한 HTTP GET은 바이너리 형식의 [google.protobuf.Type][] 값을 반환하거나 오류를 발생시켜야 합니다.
+                            * 애플리케이션은 URL을 기반으로 조회 결과를 캐시하거나 바이너리에 미리 컴파일하여 조회를 방지할 수 있습니다. 따라서 타입 변경 시 바이너리 호환성을 유지해야 합니다 (버전이 지정된 타입 이름을 사용하여 호환성 변경 관리).
 
-                            Note: this functionality is not currently available in the official
-                            protobuf release, and it is not used for type URLs beginning with
-                            type.googleapis.com.
+                            참고: 이 기능은 현재 공식 protobuf 릴리스에서 사용 불가하며, type.googleapis.com으로 시작하는 타입 URL에는 사용되지 않습니다.
 
-                            Schemes other than `http`, `https` (or the empty scheme) might be
-                            used with implementation specific semantics.
+                            `http`, `https` (또는 빈 스킴) 이외의 스킴은 구현별 의미를 가질 수 있습니다.
                         value:
                           type: string
                           format: byte
-                          description: Must be a valid serialized protocol buffer of the above specified type.
+                          description: 위에 지정된 타입의 유효한 직렬화 프로토콜 버퍼 값이어야 합니다.
                       description: |-
                         `Any` contains an arbitrary serialized protocol buffer message along with a
                         URL that describes the type of the serialized message.
@@ -186,15 +172,15 @@ paths:
                               "value": "1.212s"
                             }
       parameters:
-        - name: module_name
-          description: |-
-            module_name is a field to query a specific module
-            consensus version from state. Leaving this empty will
-            fetch the full list of module versions from state.
-          in: query
-          required: false
-          schema:
-            type: string
+      - name: module_name
+        description: |-
+          module_name is a field to query a specific module
+          consensus version from state. Leaving this empty will
+          fetch the full list of module versions from state.
+        in: query
+        required: false
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/upgrade/v1beta1/module_versions

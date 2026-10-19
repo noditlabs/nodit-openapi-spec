@@ -1,0 +1,112 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBlock
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getblock:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getblock
+      summary: GetBlock
+      description: Query block header information or entire block information according to block height or block hash. (Confirmed state)
+      x-seo-description: Query a solidified TRON block by block height or block hash.
+      tags:
+      - blocks
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              id_or_num: "86720418"
+              detail: false
+            schema:
+              type: object
+              properties:
+                id_or_num:
+                  type: string
+                  description: 'Block height or hash. If omitted, the latest block is queried. Example: `1000000`'
+                  example: "1000000"
+                detail:
+                  type: boolean
+                  description: 'Whether to query the full block information. Set to `true` to query the entire block details; set to `false` to query only the block header. (Default: `false`)'
+                  default: false
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockID:
+                    type: string
+                    description: Block hash.
+                  block_header:
+                    type: object
+                    description: Block header information.
+                    properties:
+                      raw_data:
+                        type: object
+                        description: Raw data of the block header.
+                        properties:
+                          timestamp:
+                            type: integer
+                            format: int64
+                            description: 'Timestamp. (Unit: millisecond)'
+                          txTrieRoot:
+                            type: string
+                            description: Root hash of the transaction Merkle tree.
+                          parentHash:
+                            type: string
+                            description: Hash of the parent block.
+                          number:
+                            type: integer
+                            format: int64
+                            description: Block number (height).
+                          witness_id:
+                            type: integer
+                            format: int64
+                            description: ID of the Super Representative.
+                          witness_address:
+                            type: string
+                            description: Address of the Super Representative that produced the block.
+                          version:
+                            type: integer
+                            format: int32
+                            description: Protocol version number.
+                          accountStateRoot:
+                            type: string
+                            description: Root hash of the account state tree.
+                      witness_signature:
+                        type: string
+                        description: Signature of the Super Representative.
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      description: TRON transaction object. See [wallet-gettransactionbyid](https://developers.tron.network/reference/wallet-gettransactionbyid) for full structure.
+                      properties: {}
+                    description: List of transaction objects in the block. See [GetTransactionById](https://developers.tron.network/reference/wallet-gettransactionbyid) for contents in each transaction.
+              examples:
+                Example API Call Output:
+                  value: ""

@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Hippo - cosmos_distribution_v1beta1_delegators_{delegator_address}_validators
+  title: Hippo Protocol - cosmos_distribution_v1beta1_delegators_{delegator_address}_validators
   version: 1.0.0
 servers:
-  - url: https://rest-hippo-mainnet.nodit.io
+- url: https://rest-hippo-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: Retrieves the list of validators for the delegator.
       operationId: cosmos_distribution_v1beta1_delegators_{delegator_address}_validators
       tags:
-        - distribution
+      - distribution
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -40,7 +40,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -62,12 +62,12 @@ paths:
                           type: string
                           format: byte
       parameters:
-        - name: delegator_address
-          description: delegator_addr defines the delegator address to query for.
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: delegator_address
+        description: delegator_addr defines the delegator address to query for.
+        in: path
+        required: true
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/distribution/v1beta1/delegators/{delegator_address}/validators

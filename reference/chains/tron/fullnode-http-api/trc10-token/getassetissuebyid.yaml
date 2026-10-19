@@ -1,0 +1,61 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetAssetIssueById
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getassetissuebyid:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getassetissuebyid
+      summary: GetAssetIssueById
+      description: Query a token by token id. Returns the token object, which contains the token name.
+      x-seo-description: Query a TRC-10 token by its Token ID.
+      tags:
+      - trc10-token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: 1002000
+            schema:
+              type: object
+              properties:
+                value:
+                  type: integer
+                  description: The ID of the TRC-10 token.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - value
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 'TRC-10 token info. See [GetAssetIssueByAccount](https://developers.tron.network/reference/getassetissuebyaccount) for full structure. Note: string fields are HexString-encoded.'
+                properties: {}
+              examples:
+                Result:
+                  value: '{}'

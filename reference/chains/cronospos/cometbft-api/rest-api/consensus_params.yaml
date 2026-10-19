@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: CronosPOS - ConsensusParams
+  title: Cronos POS - ConsensusParams
   version: 1.0.0
 servers:
-  - url: https://rpc-cronospos-mainnet.nodit.io
+- url: https://rpc-cronospos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,18 +18,18 @@ paths:
   /consensus_params:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: consensus_params
       summary: ConsensusParams
       description: Retrieves consensus parameters at the specified block height.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: height
-          in: query
-          description: Target block height.
-          schema:
-            type: string
+      - name: height
+        in: query
+        description: Target block height.
+        schema:
+          type: string
       responses:
         "200":
           content:
@@ -38,46 +38,59 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       block_height:
+                        description: Block height the result refers to.
                         type: string
                       consensus_params:
+                        description: Consensus parameters.
                         type: object
                         additionalProperties: false
                         properties:
                           block:
+                            description: Block-related consensus parameters.
                             type: object
                             additionalProperties: false
                             properties:
                               max_bytes:
+                                description: Maximum block size in bytes.
                                 type: string
                               max_gas:
+                                description: Maximum gas per block. `-1` means unlimited.
                                 type: string
                               time_iota_ms:
+                                description: Minimum time increment between blocks in milliseconds (legacy field).
                                 type: string
                           evidence:
+                            description: Evidence-related consensus parameters.
                             type: object
                             additionalProperties: false
                             properties:
                               max_age:
+                                description: Maximum age of evidence, in blocks.
                                 type: string
                           validator:
+                            description: Validator-related consensus parameters.
                             type: object
                             additionalProperties: false
                             properties:
                               pub_key_types:
+                                description: Public key types validators can use.
                                 type: array
                                 items:
                                   type: string
@@ -95,4 +108,4 @@ paths:
                       max_age: "100000"
                     validator:
                       pub_key_types:
-                        - ed25519
+                      - ed25519

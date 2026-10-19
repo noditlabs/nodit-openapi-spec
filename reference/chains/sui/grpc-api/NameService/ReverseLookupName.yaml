@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: Sui - ReverseLookupName
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.NameService/ReverseLookupName:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-ReverseLookupName
+      summary: ReverseLookupName
+      description: |
+        Performs a reverse lookup on a Sui address to find the associated SuiNS name.
+      x-seo-description: Sui 주소에 연결된 SuiNS 이름을 역방향으로 조회합니다.
+      x-grpc-method: sui.rpc.v2.NameService/ReverseLookupName
+      x-proto: sui/rpc/v2/name_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.NameService
+        method: ReverseLookupName
+        streaming: unary
+        proto: sui/rpc/v2/name_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - NameService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - address
+              properties:
+                address:
+                  type: string
+                  description: ' Required. The address to perform a reverse lookup for.'
+            example:
+              address: "0x0000000000000000000000000000000000000000000000000000000000000001"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    description: The record for the SuiNS name linked to the requested address.
+                    properties:
+                      id:
+                        type: string
+                        description: Record ID.
+                      name:
+                        type: string
+                        description: SuiNS name.
+                      registration_nft_id:
+                        type: string
+                        description: RegistrationNFT ID.
+                      expiration_timestamp:
+                        type: string
+                        description: Expiration timestamp.
+                      target_address:
+                        type: string
+                        description: Resolved target address.
+                      data:
+                        type: array
+                        description: Additional data entries.
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              type: string
+                              description: Entry key.
+                            value:
+                              type: string
+                              description: Entry value.
+              example:
+                record: {}

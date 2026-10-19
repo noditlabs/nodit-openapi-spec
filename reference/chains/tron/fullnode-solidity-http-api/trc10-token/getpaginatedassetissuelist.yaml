@@ -1,0 +1,73 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetPaginatedAssetIssueList
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getpaginatedassetissuelist:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getpaginatedassetissuelist
+      summary: GetPaginatedAssetIssueList
+      description: Query the list of all the tokens by pagination (confirmed state). Returns a list of Tokens that succeed the Token located at offset.
+      x-seo-description: List solidified TRC-10 tokens with pagination.
+      tags:
+      - trc10-token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              offset: 0
+              limit: 10
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: integer
+                  description: 'Starting position for pagination. Must be ≥ 0. (Default: 0). Example: `5` returns results starting from the 6th item.'
+                  default: 0
+                  format: int32
+                limit:
+                  type: integer
+                  description: The amount of tokens per page.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - limit
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  assetIssue:
+                    type: array
+                    items:
+                      type: object
+                      description: 'TRC-10 token info. See [GetAssetIssueByAccount](https://developers.tron.network/reference/getassetissuebyaccount) for full structure. Note: string fields are HexString-encoded.'
+                      properties: {}
+                    description: The list of paginated TRC-10 token, please refer to [GetAssetIssueByAccount](https://developers.tron.network/reference/getassetissuebyaccount) for detailed fields of AssetIssueCapsule object, please note that string fields are in HexString format.
+              examples:
+                Result:
+                  value: '{}'

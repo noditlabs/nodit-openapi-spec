@@ -3,7 +3,7 @@ info:
   title: Initia - initia_mstaking_v1_delegators_{delegator_address}_validators_{validator_address}
   version: 1.0.0
 servers:
-  - url: https://rest-initia-mainnet.nodit.io
+- url: https://rest-initia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,14 +20,14 @@ paths:
       description: Returns delegation information between the given delegator and validator.
       operationId: initia_mstaking_v1_delegators_{delegator_address}_validators_{validator_address}
       tags:
-        - mstaking
+      - mstaking
       responses:
         "200":
           description: Successful Response
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -41,20 +41,20 @@ paths:
                     items:
                       type: object
       parameters:
-        - name: delegator_address
-          description: Delegator address (bech32).
-          in: path
-          required: true
-          example: init1qx02ephfxq6vp3eku8p36mful0xxk8cq74jw8p
-          schema:
-            type: string
-        - name: validator_address
-          description: Validator operator address (bech32).
-          in: path
-          required: true
-          example: initvaloper1hq2gma6r9s9yz5klk0ra5gtwhxf2f6va7eqwep
-          schema:
-            type: string
+      - name: delegator_address
+        description: Delegator address (bech32).
+        in: path
+        required: true
+        example: init1qx02ephfxq6vp3eku8p36mful0xxk8cq74jw8p
+        schema:
+          type: string
+      - name: validator_address
+        description: Validator operator address (bech32).
+        in: path
+        required: true
+        example: initvaloper1hq2gma6r9s9yz5klk0ra5gtwhxf2f6va7eqwep
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /initia/mstaking/v1/delegators/{delegator_address}/validators/{validator_address}

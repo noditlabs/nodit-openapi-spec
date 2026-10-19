@@ -1,0 +1,97 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetDelegatedResource
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getdelegatedresource:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getdelegatedresource
+      summary: GetDelegatedResource
+      description: Returns all resources delegations from an account to another account during stake1.0 phase. The fromAddress can be retrieved from the GetDelegatedResourceAccountIndex API. (Confirmed state)
+      x-seo-description: Query solidified Stake 1.0 resource delegations between two TRON accounts.
+      tags:
+      - account-resources
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              fromAddress: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              toAddress: TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1
+              visible: true
+            schema:
+              type: object
+              required:
+              - fromAddress
+              - toAddress
+              properties:
+                fromAddress:
+                  type: string
+                  description: 'The queried from account address. (Format: Base58 or Hex)'
+                toAddress:
+                  type: string
+                  description: 'The queried to account address. (Format: Base58 or Hex)'
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from:
+                    type: string
+                    description: Delegate account address.
+                  to:
+                    type: string
+                    description: Resource recipient address.
+                  frozen_balance_for_bandwidth:
+                    type: int64
+                    description: 'Amount of TRX staked for Bandwidth delegated from the `from` address to the `to` address. (Unit: sun)'
+                    format: int64
+                  frozen_balance_for_energy:
+                    type: int64
+                    description: 'Amount of TRX staked for Energy delegated from the `from` address to the `to` address. (Unit: sun)'
+                    format: int64
+                  expire_time_for_bandwidth:
+                    type: int64
+                    description: 'Timestamp when the Bandwidth delegation lock expires. (Unit: millisecond)'
+                    format: int64
+                  expire_time_for_energy:
+                    type: int64
+                    description: 'Timestamp when the energy delegation lock expires. (Unit: millisecond)'
+                    format: int64
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

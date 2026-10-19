@@ -3,8 +3,8 @@ info:
   title: Sui - unsafe_requestWithdrawStake
   version: 1.0.0
 servers:
-  - url: https://sui-mainnet.nodit.io
-    description: Sui Mainnet
+- url: https://sui-mainnet.nodit.io
+  description: Sui Mainnet
 components:
   securitySchemes:
     api_key:
@@ -21,17 +21,17 @@ components:
       type: string
     SuiAddress:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     ObjectID:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     BigInt_for_uint64:
       type: string
     Base58:
       type: string
     Digest:
       allOf:
-        - $ref: "#/components/schemas/Base58"
+      - $ref: '#/components/schemas/Base58'
       description: A representation of a 32 byte digest
     SequenceNumber:
       type: integer
@@ -40,142 +40,142 @@ components:
     ObjectRef:
       type: object
       required:
-        - digest
-        - objectId
-        - version
+      - digest
+      - objectId
+      - version
       properties:
         digest:
           description: Base64 string representing the object digest
           allOf:
-            - $ref: "#/components/schemas/Digest"
+          - $ref: '#/components/schemas/Digest'
         objectId:
           description: Hex code as string representing the object id
           allOf:
-            - $ref: "#/components/schemas/ObjectID"
+          - $ref: '#/components/schemas/ObjectID'
         version:
           description: Object version.
           allOf:
-            - $ref: "#/components/schemas/SequenceNumber"
+          - $ref: '#/components/schemas/SequenceNumber'
     InputObjectKind:
       oneOf:
-        - type: object
-          required:
-            - MovePackage
-          properties:
-            MovePackage:
-              $ref: "#/components/schemas/ObjectID"
-          additionalProperties: false
-        - type: object
-          required:
-            - ImmOrOwnedMoveObject
-          properties:
-            ImmOrOwnedMoveObject:
-              $ref: "#/components/schemas/ObjectRef"
-          additionalProperties: false
-        - type: object
-          required:
-            - SharedMoveObject
-          properties:
-            SharedMoveObject:
-              type: object
-              required:
-                - id
-                - initial_shared_version
-              properties:
-                id:
-                  $ref: "#/components/schemas/ObjectID"
-                initial_shared_version:
-                  $ref: "#/components/schemas/BigInt_for_uint64"
-                mutable:
-                  default: true
-                  type: boolean
-          additionalProperties: false
+      - type: object
+        required:
+        - MovePackage
+        properties:
+          MovePackage:
+            $ref: '#/components/schemas/ObjectID'
+        additionalProperties: false
+      - type: object
+        required:
+        - ImmOrOwnedMoveObject
+        properties:
+          ImmOrOwnedMoveObject:
+            $ref: '#/components/schemas/ObjectRef'
+        additionalProperties: false
+      - type: object
+        required:
+        - SharedMoveObject
+        properties:
+          SharedMoveObject:
+            type: object
+            required:
+            - id
+            - initial_shared_version
+            properties:
+              id:
+                $ref: '#/components/schemas/ObjectID'
+              initial_shared_version:
+                $ref: '#/components/schemas/BigInt_for_uint64'
+              mutable:
+                default: true
+                type: boolean
+        additionalProperties: false
     TxBytes:
       type: string
       description: BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
     TransactionBlockBytes:
       type: object
       required:
-        - gas
-        - inputObjects
-        - txBytes
+      - gas
+      - inputObjects
+      - txBytes
       properties:
         gas:
           description: the gas objects to be used
           type: array
           items:
-            $ref: "#/components/schemas/ObjectRef"
+            $ref: '#/components/schemas/ObjectRef'
         inputObjects:
           description: objects to be used in this transaction
           type: array
           items:
-            $ref: "#/components/schemas/InputObjectKind"
+            $ref: '#/components/schemas/InputObjectKind'
         txBytes:
-          $ref: "#/components/schemas/TxBytes"
+          $ref: '#/components/schemas/TxBytes'
     ObjectResponseError:
       oneOf:
-        - type: object
-          required:
-            - code
-            - object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - notExists
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - parent_object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - dynamicFieldNotFound
-            parent_object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - digest
-            - object_id
-            - version
-          properties:
-            code:
-              type: string
-              enum:
-                - deleted
-            digest:
-              description: Base64 string representing the object digest
-              allOf:
-                - $ref: "#/components/schemas/Digest"
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-            version:
-              description: Object version.
-              allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
-        - type: object
-          required:
-            - code
-          properties:
-            code:
-              type: string
-              enum:
-                - unknown
-        - type: object
-          required:
-            - code
-            - error
-          properties:
-            code:
-              type: string
-              enum:
-                - displayError
-            error:
-              type: string
+      - type: object
+        required:
+        - code
+        - object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - notExists
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - parent_object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - dynamicFieldNotFound
+          parent_object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - digest
+        - object_id
+        - version
+        properties:
+          code:
+            type: string
+            enum:
+            - deleted
+          digest:
+            description: Base64 string representing the object digest
+            allOf:
+            - $ref: '#/components/schemas/Digest'
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+          version:
+            description: Object version.
+            allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+      - type: object
+        required:
+        - code
+        properties:
+          code:
+            type: string
+            enum:
+            - unknown
+      - type: object
+        required:
+        - code
+        - error
+        properties:
+          code:
+            type: string
+            enum:
+            - displayError
+          error:
+            type: string
     Error:
       type: object
       properties:
@@ -186,8 +186,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -205,17 +205,17 @@ components:
                 description: Request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ObjectResponseError"
+                $ref: '#/components/schemas/ObjectResponseError'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -224,7 +224,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -233,16 +233,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -250,26 +250,35 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: sui-unsafe_requestWithdrawStake
       summary: unsafe_requestWithdrawStake
       description: |
         Withdraw stake from a validator's staking pool.
       x-seo-description: Build a Sui transaction to withdraw a staking delegation from a validator on Sui.
       tags:
-        - unsafe
+      - unsafe
       parameters: []
       requestBody:
         required: true
         content:
           application/json:
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: unsafe_requestWithdrawStake
+              params:
+              - "0x278ae6b78bddb5eea883f3aa128b825ec063fafc5c2efa3e6216a3ea612c3e29"
+              - "0xaef393d0613dcadf7591957e0e211dbcabfc43d1d3bf60a207bac680eb0ac078"
+              - "0x0e0c17899d62db2c55e34a4166ccf43349c4f7820ddb9f1d6e42b336eb4cbb71"
+              - "10000000"
             schema:
               type: object
               required:
-                - id
-                - jsonrpc
-                - method
-                - params
+              - id
+              - jsonrpc
+              - method
+              - params
               properties:
                 id:
                   type: integer
@@ -286,18 +295,18 @@ paths:
                   maxItems: 4
                   items:
                     oneOf:
-                      - title: signer
-                        $ref: "#/components/schemas/SuiAddress"
-                        description: The transaction signer's Sui address
-                      - title: staked_sui
-                        $ref: "#/components/schemas/ObjectID"
-                        description: StakedSui object ID
-                      - title: gas
-                        $ref: "#/components/schemas/ObjectID"
-                        description: Gas object to be used in this transaction, node will pick one from the signer's possession if not provided
-                      - title: gas_budget
-                        $ref: "#/components/schemas/BigInt_for_uint64"
-                        description: The gas budget, the transaction will fail if the gas cost exceed the budget
+                    - title: signer
+                      $ref: '#/components/schemas/SuiAddress'
+                      description: The transaction signer's Sui address
+                    - title: staked_sui
+                      $ref: '#/components/schemas/ObjectID'
+                      description: StakedSui object ID
+                    - title: gas
+                      $ref: '#/components/schemas/ObjectID'
+                      description: Gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+                    - title: gas_budget
+                      $ref: '#/components/schemas/BigInt_for_uint64'
+                      description: The gas budget, the transaction will fail if the gas cost exceed the budget
       responses:
         "200":
           description: Successful Response
@@ -311,14 +320,14 @@ paths:
                   id:
                     type: integer
                   result:
-                    $ref: "#/components/schemas/TransactionBlockBytes"
+                    $ref: '#/components/schemas/TransactionBlockBytes'
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

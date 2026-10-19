@@ -127,6 +127,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_version",
             "web3/web3_clientversion",
@@ -134,7 +135,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -145,11 +147,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -174,6 +179,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -252,6 +258,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_version",
             "web3/web3_clientversion",
@@ -259,7 +266,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -270,11 +278,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -301,6 +312,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -331,7 +343,10 @@
         ]
       },
       "multichainApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "lookupEntities"
+        ]
       }
     },
     "avalanche": {
@@ -353,6 +368,7 @@
             "eth/eth_getbalance",
             "eth/eth_getblockbyhash",
             "eth/eth_getblockbynumber",
+            "eth/eth_getblockreceipts",
             "eth/eth_getblocktransactioncountbyhash",
             "eth/eth_getblocktransactioncountbynumber",
             "eth/eth_getcode",
@@ -383,18 +399,79 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
       "web3DataApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "blockchain/getBlockByHashOrNumber",
+          "blockchain/getBlocksWithinRange",
+          "blockchain/getGasPrice",
+          "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
+          "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
+          "blockchain/getNextNonceByAccount",
+          "blockchain/getTotalTransactionCountByAccount",
+          "blockchain/getTransactionByHash",
+          "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
+          "blockchain/getTransactionsByHashes",
+          "blockchain/getTransactionsInBlock",
+          "blockchain/isContract",
+          "blockchain/searchEvents",
+          "native/getNativeBalanceByAccount",
+          "nft/getNftContractMetadataByContracts",
+          "nft/getNftContractsByAccount",
+          "nft/getNftHoldersByContract",
+          "nft/getNftHoldersByTokenId",
+          "nft/getNftMetadataByContract",
+          "nft/getNftMetadataByTokenIds",
+          "nft/getNftTransfersByAccount",
+          "nft/getNftTransfersByContract",
+          "nft/getNftTransfersByTokenId",
+          "nft/getNftTransfersWithinRange",
+          "nft/getNftsOwnedByAccount",
+          "nft/searchNftContractMetadataByKeyword",
+          "nft/syncNftMetadata",
+          "stats/getAccountStats",
+          "token/getTokenAllowance",
+          "token/getTokenContractMetadataByContracts",
+          "token/getTokenHoldersByContract",
+          "token/getTokenPricesByContracts",
+          "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
+          "token/getTokenTransfersByContract",
+          "token/getTokenTransfersWithinRange",
+          "token/getTokensOwnedByAccount",
+          "token/searchTokenContractMetadataByKeyword"
+        ]
       },
       "webhookApi": {
-        "supported": false
+        "supported": true,
+        "type": "evm",
+        "apis": [
+          "createWebhook",
+          "deleteWebhook",
+          "getWebhook",
+          "getWebhookHistory",
+          "updateWebhook"
+        ]
       },
       "flexibleWebhookApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
       },
       "multichainApi": {
         "supported": false
@@ -590,6 +667,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_listening",
             "net/net_version",
@@ -600,7 +678,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -611,11 +690,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -640,6 +722,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -678,7 +761,38 @@
     },
     "bitcoin": {
       "nodeApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "blockchain/getbestblockhash",
+          "blockchain/getblock",
+          "blockchain/getblockchaininfo",
+          "blockchain/getblockcount",
+          "blockchain/getblockhash",
+          "blockchain/getblockheader",
+          "blockchain/getblockstats",
+          "blockchain/getchaintips",
+          "blockchain/getchaintxstats",
+          "blockchain/getdifficulty",
+          "blockchain/getmempoolancestors",
+          "blockchain/getmempooldescendants",
+          "blockchain/getmempoolentry",
+          "blockchain/getmempoolinfo",
+          "blockchain/getrawmempool",
+          "blockchain/gettxout",
+          "blockchain/gettxoutproof",
+          "blockchain/gettxoutsetinfo",
+          "rawtransactions/combinerawtransaction",
+          "rawtransactions/createrawtransaction",
+          "rawtransactions/decoderawtransaction",
+          "rawtransactions/decodescript",
+          "rawtransactions/getrawtransaction",
+          "rawtransactions/sendrawtransaction",
+          "rawtransactions/testmempoolaccept",
+          "util/estimatesmartfee",
+          "util/getindexinfo",
+          "util/validateaddress",
+          "util/verifymessage"
+        ]
       },
       "web3DataApi": {
         "supported": true,
@@ -778,6 +892,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_listening",
             "net/net_version",
@@ -786,7 +901,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -797,11 +913,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -826,6 +945,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -1021,11 +1141,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -1050,6 +1173,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -1441,6 +1565,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_listening",
             "net/net_version",
@@ -1456,7 +1581,9 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions",
+            "nodit_pendingtransactions"
           ]
         }
       },
@@ -1467,11 +1594,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -1508,6 +1638,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -1555,11 +1686,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -1584,6 +1718,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -1645,6 +1780,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_listening",
             "net/net_version",
@@ -1655,7 +1791,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -1666,11 +1803,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -1695,6 +1835,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -2328,7 +2469,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -2339,11 +2481,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -2368,6 +2513,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -2396,122 +2542,6 @@
           "listFlexibleWebhooks",
           "updateFlexibleWebhook"
         ]
-      },
-      "multichainApi": {
-        "supported": true,
-        "apis": [
-          "lookupEntities"
-        ]
-      }
-    },
-    "luniverse": {
-      "nodeApi": {
-        "supported": true,
-        "evmJsonrpc": {
-          "apis": [
-            "debug/debug_traceblockbyhash",
-            "debug/debug_traceblockbynumber",
-            "debug/debug_tracecall",
-            "debug/debug_tracetransaction",
-            "eth/eth_blocknumber",
-            "eth/eth_call",
-            "eth/eth_chainid",
-            "eth/eth_createaccesslist",
-            "eth/eth_estimategas",
-            "eth/eth_feehistory",
-            "eth/eth_gasprice",
-            "eth/eth_getbalance",
-            "eth/eth_getblockbyhash",
-            "eth/eth_getblockbynumber",
-            "eth/eth_getblocktransactioncountbyhash",
-            "eth/eth_getblocktransactioncountbynumber",
-            "eth/eth_getcode",
-            "eth/eth_getfilterchanges",
-            "eth/eth_getfilterlogs",
-            "eth/eth_getlogs",
-            "eth/eth_getproof",
-            "eth/eth_getstorageat",
-            "eth/eth_gettransactionbyblockhashandindex",
-            "eth/eth_gettransactionbyblocknumberandindex",
-            "eth/eth_gettransactionbyhash",
-            "eth/eth_gettransactioncount",
-            "eth/eth_gettransactionreceipt",
-            "eth/eth_getunclebyblockhashandindex",
-            "eth/eth_getunclebyblocknumberandindex",
-            "eth/eth_getunclecountbyblockhash",
-            "eth/eth_getunclecountbyblocknumber",
-            "eth/eth_maxpriorityfeepergas",
-            "eth/eth_newblockfilter",
-            "eth/eth_newfilter",
-            "eth/eth_newpendingtransactionfilter",
-            "eth/eth_sendrawtransaction",
-            "eth/eth_uninstallfilter",
-            "net/net_listening",
-            "net/net_version",
-            "web3/web3_clientversion",
-            "web3/web3_sha3"
-          ],
-          "websocketApis": [
-            "eth_subscribe",
-            "eth_unsubscribe"
-          ]
-        }
-      },
-      "web3DataApi": {
-        "supported": true,
-        "apis": [
-          "blockchain/getBlockByHashOrNumber",
-          "blockchain/getBlocksWithinRange",
-          "blockchain/getGasPrice",
-          "blockchain/getInternalTransactionsByAccount",
-          "blockchain/getInternalTransactionsByTransactionHash",
-          "blockchain/getNextNonceByAccount",
-          "blockchain/getTotalTransactionCountByAccount",
-          "blockchain/getTransactionByHash",
-          "blockchain/getTransactionsByAccount",
-          "blockchain/getTransactionsByHashes",
-          "blockchain/getTransactionsInBlock",
-          "blockchain/isContract",
-          "blockchain/searchEvents",
-          "native/getNativeBalanceByAccount",
-          "nft/getNftContractMetadataByContracts",
-          "nft/getNftContractsByAccount",
-          "nft/getNftHoldersByContract",
-          "nft/getNftHoldersByTokenId",
-          "nft/getNftMetadataByContract",
-          "nft/getNftMetadataByTokenIds",
-          "nft/getNftTransfersByAccount",
-          "nft/getNftTransfersByContract",
-          "nft/getNftTransfersByTokenId",
-          "nft/getNftTransfersWithinRange",
-          "nft/getNftsOwnedByAccount",
-          "nft/searchNftContractMetadataByKeyword",
-          "nft/syncNftMetadata",
-          "stats/getAccountStats",
-          "stats/getDailyActiveAccountsStats",
-          "stats/getDailyActiveAccountsStatsByContract",
-          "stats/getDailyTransactionsStats",
-          "stats/getDailyTransactionsStatsByContract",
-          "stats/getHourlyActiveAccountsStats",
-          "stats/getHourlyActiveAccountsStatsByContract",
-          "stats/getHourlyTransactionsStats",
-          "stats/getHourlyTransactionsStatsByContract",
-          "token/getTokenAllowance",
-          "token/getTokenContractMetadataByContracts",
-          "token/getTokenHoldersByContract",
-          "token/getTokenPricesByContracts",
-          "token/getTokenTransfersByAccount",
-          "token/getTokenTransfersByContract",
-          "token/getTokenTransfersWithinRange",
-          "token/getTokensOwnedByAccount",
-          "token/searchTokenContractMetadataByKeyword"
-        ]
-      },
-      "webhookApi": {
-        "supported": false
-      },
-      "flexibleWebhookApi": {
-        "supported": false
       },
       "multichainApi": {
         "supported": true,
@@ -2562,6 +2592,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_listening",
             "net/net_version",
@@ -2571,8 +2602,7 @@
         }
       },
       "web3DataApi": {
-        "supported": true,
-        "apis": []
+        "supported": false
       },
       "webhookApi": {
         "supported": false
@@ -2626,6 +2656,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_listening",
             "net/net_version",
@@ -2636,7 +2667,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -2647,11 +2679,14 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
+          "blockchain/getInternalTransactionsWithinRange",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -2676,6 +2711,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -2758,6 +2794,7 @@
             "eth/eth_newfilter",
             "eth/eth_newpendingtransactionfilter",
             "eth/eth_sendrawtransaction",
+            "eth/eth_simulatev1",
             "eth/eth_uninstallfilter",
             "net/net_listening",
             "net/net_version",
@@ -2766,7 +2803,8 @@
           ],
           "websocketApis": [
             "eth_subscribe",
-            "eth_unsubscribe"
+            "eth_unsubscribe",
+            "nodit_minedtransactions"
           ]
         }
       },
@@ -2777,11 +2815,13 @@
           "blockchain/getBlocksWithinRange",
           "blockchain/getGasPrice",
           "blockchain/getInternalTransactionsByAccount",
+          "blockchain/getInternalTransactionsByAccounts",
           "blockchain/getInternalTransactionsByTransactionHash",
           "blockchain/getNextNonceByAccount",
           "blockchain/getTotalTransactionCountByAccount",
           "blockchain/getTransactionByHash",
           "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByAccounts",
           "blockchain/getTransactionsByHashes",
           "blockchain/getTransactionsInBlock",
           "blockchain/isContract",
@@ -2806,6 +2846,7 @@
           "token/getTokenHoldersByContract",
           "token/getTokenPricesByContracts",
           "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByAccounts",
           "token/getTokenTransfersByContract",
           "token/getTokenTransfersWithinRange",
           "token/getTokensOwnedByAccount",
@@ -3177,7 +3218,43 @@
     },
     "tron": {
       "nodeApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "build-transaction/buildtransaction",
+          "eth/eth_accounts",
+          "eth/eth_blocknumber",
+          "eth/eth_call",
+          "eth/eth_chainid",
+          "eth/eth_coinbase",
+          "eth/eth_estimategas",
+          "eth/eth_gasprice",
+          "eth/eth_getbalance",
+          "eth/eth_getblockbyhash",
+          "eth/eth_getblockbynumber",
+          "eth/eth_getblockreceipts",
+          "eth/eth_getblocktransactioncountbyhash",
+          "eth/eth_getblocktransactioncountbynumber",
+          "eth/eth_getcode",
+          "eth/eth_getfilterchanges",
+          "eth/eth_getfilterlogs",
+          "eth/eth_getlogs",
+          "eth/eth_getstorageat",
+          "eth/eth_gettransactionbyblockhashandindex",
+          "eth/eth_gettransactionbyblocknumberandindex",
+          "eth/eth_gettransactionbyhash",
+          "eth/eth_gettransactionreceipt",
+          "eth/eth_getwork",
+          "eth/eth_newblockfilter",
+          "eth/eth_newfilter",
+          "eth/eth_protocolversion",
+          "eth/eth_syncing",
+          "eth/eth_uninstallfilter",
+          "net/net_listening",
+          "net/net_peercount",
+          "net/net_version",
+          "web3/web3_clientversion",
+          "web3/web3_sha3"
+        ]
       },
       "web3DataApi": {
         "supported": true,
@@ -3213,10 +3290,27 @@
         ]
       },
       "webhookApi": {
-        "supported": false
+        "supported": true,
+        "type": "tron",
+        "apis": [
+          "createWebhook",
+          "deleteWebhook",
+          "getWebhook",
+          "getWebhookHistory",
+          "updateWebhook"
+        ]
       },
       "flexibleWebhookApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "createFlexibleWebhook",
+          "deleteFlexibleWebhook",
+          "getFlexibleStreamSchema",
+          "getFlexibleWebhook",
+          "listFlexibleStreams",
+          "listFlexibleWebhooks",
+          "updateFlexibleWebhook"
+        ]
       },
       "multichainApi": {
         "supported": true,
@@ -3276,8 +3370,7 @@
         }
       },
       "web3DataApi": {
-        "supported": true,
-        "apis": []
+        "supported": false
       },
       "webhookApi": {
         "supported": false
@@ -3291,7 +3384,48 @@
     },
     "xrpl": {
       "nodeApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "account/account_channels",
+          "account/account_currencies",
+          "account/account_info",
+          "account/account_lines",
+          "account/account_nfts",
+          "account/account_objects",
+          "account/account_offers",
+          "account/account_tx",
+          "account/gateway_balances",
+          "account/noripple_check",
+          "ledger/ledger",
+          "ledger/ledger_closed",
+          "ledger/ledger_current",
+          "ledger/ledger_data",
+          "ledger/ledger_entry",
+          "path-and-order-book/amm_info",
+          "path-and-order-book/book_changes",
+          "path-and-order-book/book_offers",
+          "path-and-order-book/deposit_authorized",
+          "path-and-order-book/get_aggregate_price",
+          "path-and-order-book/nft_buy_offers",
+          "path-and-order-book/nft_sell_offers",
+          "path-and-order-book/ripple_path_find",
+          "payment-channel/channel_verify",
+          "server-info/feature",
+          "server-info/fee",
+          "server-info/manifest",
+          "server-info/server_definitions",
+          "server-info/server_info",
+          "server-info/server_state",
+          "server-info/version",
+          "transaction/simulate",
+          "transaction/submit",
+          "transaction/submit_multisigned",
+          "transaction/transaction_entry",
+          "transaction/tx",
+          "utility/ping",
+          "utility/random",
+          "vault/vault_info"
+        ]
       },
       "web3DataApi": {
         "supported": true,
@@ -3326,42 +3460,25 @@
     }
   },
   "summary": {
-    "totalChains": 31,
-    "nodeApiChains": 24,
-    "web3DataApiChains": 20,
-    "webhookApiChains": 10,
-    "flexibleWebhookApiChains": 10,
+    "totalChains": 30,
+    "nodeApiChains": 26,
+    "web3DataApiChains": 18,
+    "webhookApiChains": 12,
+    "flexibleWebhookApiChains": 12,
     "multichainApiChains": 17
   },
   "services": {
     "flexible-webhook-api": {
       "apis": {
-        "createFlexibleWebhook": [
-          "aptos-mainnet",
-          "aptos-testnet",
-          "arbitrum-mainnet",
-          "arbitrum-sepolia",
-          "arc-testnet",
-          "base-mainnet",
-          "base-sepolia",
-          "bnb-mainnet",
-          "bnb-testnet",
-          "ethereum-hoodi",
-          "ethereum-mainnet",
-          "ethereum-sepolia",
-          "giwa-sepolia",
-          "kaia-kairos",
-          "kaia-mainnet",
-          "optimism-mainnet",
-          "optimism-sepolia",
-          "polygon-mainnet"
-        ],
         "listFlexibleWebhooks": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3374,14 +3491,18 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
         ],
-        "deleteFlexibleWebhook": [
+        "createFlexibleWebhook": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3394,14 +3515,18 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
         ],
         "getFlexibleWebhook": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3414,14 +3539,18 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
         ],
         "updateFlexibleWebhook": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3434,14 +3563,42 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "deleteFlexibleWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
         ],
         "getFlexibleStreamSchema": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3454,14 +3611,18 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
         ],
         "listFlexibleStreams": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3474,7 +3635,8 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
         ]
       }
     },
@@ -3484,6 +3646,8 @@
           "aptos-mainnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
           "base-mainnet",
           "base-sepolia",
           "bitcoin-mainnet",
@@ -3499,10 +3663,8 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-amoy",
           "polygon-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
@@ -3540,7 +3702,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bitcoin-mainnet",
@@ -3556,7 +3720,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -3566,7 +3729,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3579,7 +3744,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -3595,7 +3759,9 @@
         "blockchain/getGasPrice": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3608,7 +3774,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -3616,7 +3781,9 @@
         "blockchain/getInternalTransactionsByAccount": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3629,16 +3796,17 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
           "tron-mainnet"
         ],
-        "blockchain/getInternalTransactionsByTransactionHash": [
+        "blockchain/getInternalTransactionsByAccounts": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3651,11 +3819,53 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "blockchain/getInternalTransactionsByTransactionHash": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
           "tron-mainnet"
+        ],
+        "blockchain/getInternalTransactionsWithinRange": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia"
         ],
         "blockchain/getLedgerByHashOrIndex": [
           "xrpl-mainnet"
@@ -3666,7 +3876,9 @@
         "blockchain/getNextNonceByAccount": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3679,7 +3891,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -3689,7 +3900,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bitcoin-mainnet",
@@ -3705,7 +3918,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -3717,7 +3929,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3730,7 +3944,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -3750,7 +3963,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bitcoin-mainnet",
@@ -3766,19 +3981,18 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
         ],
-        "blockchain/getTransactionsByHashes": [
-          "aptos-mainnet",
-          "aptos-testnet",
+        "blockchain/getTransactionsByAccounts": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3791,7 +4005,30 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "blockchain/getTransactionsByHashes": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -3812,7 +4049,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3825,7 +4064,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -3842,7 +4080,9 @@
         "blockchain/isContract": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3855,7 +4095,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -3864,7 +4103,9 @@
         "blockchain/searchEvents": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3877,7 +4118,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -3897,7 +4137,9 @@
         "native/getNativeBalanceByAccount": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3910,7 +4152,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -3934,17 +4175,21 @@
           "dogecoin-mainnet"
         ],
         "native/getNativeTransfersByAccount": [
+          "arc-mainnet",
           "arc-testnet",
           "tron-mainnet"
         ],
         "native/getNativeTransfersWithinRange": [
+          "arc-mainnet",
           "arc-testnet",
           "tron-mainnet"
         ],
         "nft/getNftContractMetadataByContracts": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3957,7 +4202,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -3965,7 +4209,9 @@
         "nft/getNftContractsByAccount": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3978,7 +4224,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -3986,7 +4231,9 @@
         "nft/getNftHoldersByContract": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -3999,7 +4246,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4007,7 +4253,9 @@
         "nft/getNftHoldersByTokenId": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4020,7 +4268,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4028,7 +4275,9 @@
         "nft/getNftMetadataByContract": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4041,7 +4290,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4049,7 +4297,9 @@
         "nft/getNftMetadataByTokenIds": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4062,7 +4312,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4070,7 +4319,9 @@
         "nft/getNftTransfersByAccount": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4083,7 +4334,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4091,7 +4341,9 @@
         "nft/getNftTransfersByContract": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4104,7 +4356,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4112,7 +4363,9 @@
         "nft/getNftTransfersByTokenId": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4125,7 +4378,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4133,7 +4385,9 @@
         "nft/getNftTransfersWithinRange": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4146,7 +4400,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4154,7 +4407,9 @@
         "nft/getNftsOwnedByAccount": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4167,7 +4422,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4175,7 +4429,9 @@
         "nft/searchNftContractMetadataByKeyword": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4188,7 +4444,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4196,7 +4451,9 @@
         "nft/syncNftMetadata": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4209,7 +4466,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4219,7 +4475,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4232,43 +4490,34 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
           "tron-mainnet"
         ],
         "stats/getDailyActiveAccountsStats": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "stats/getDailyActiveAccountsStatsByContract": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "stats/getDailyTransactionsStats": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "stats/getDailyTransactionsStatsByContract": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "stats/getHourlyActiveAccountsStats": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "stats/getHourlyActiveAccountsStatsByContract": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "stats/getHourlyTransactionsStats": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "stats/getHourlyTransactionsStatsByContract": [
-          "ethereum-mainnet",
-          "luniverse-mainnet"
+          "ethereum-mainnet"
         ],
         "token/getTokenAccountsByAssetType": [
           "aptos-mainnet",
@@ -4277,7 +4526,9 @@
         "token/getTokenAllowance": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4290,7 +4541,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -4312,7 +4562,9 @@
         "token/getTokenContractMetadataByContracts": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4325,7 +4577,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -4334,7 +4585,9 @@
         "token/getTokenHoldersByContract": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4347,7 +4600,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -4364,7 +4616,9 @@
         "token/getTokenPricesByContracts": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4377,7 +4631,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet"
@@ -4385,7 +4638,9 @@
         "token/getTokenTransfersByAccount": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4398,17 +4653,18 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
         ],
-        "token/getTokenTransfersByContract": [
+        "token/getTokenTransfersByAccounts": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4421,7 +4677,28 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "token/getTokenTransfersByContract": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "chiliz-mainnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "ethereumclassic-mainnet",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -4433,7 +4710,9 @@
         "token/getTokenTransfersWithinRange": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4446,7 +4725,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -4458,7 +4736,9 @@
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4471,7 +4751,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -4480,7 +4759,9 @@
         "token/searchTokenContractMetadataByKeyword": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4493,7 +4774,6 @@
           "giwa-sepolia",
           "kaia-kairos",
           "kaia-mainnet",
-          "luniverse-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
@@ -4503,32 +4783,17 @@
     },
     "webhook-api": {
       "apis": {
-        "createWebhook": [
-          "aptos-mainnet",
-          "aptos-testnet",
-          "arbitrum-mainnet",
-          "arbitrum-sepolia",
-          "arc-testnet",
-          "base-mainnet",
-          "base-sepolia",
-          "bnb-mainnet",
-          "bnb-testnet",
-          "ethereum-hoodi",
-          "ethereum-mainnet",
-          "ethereum-sepolia",
-          "giwa-sepolia",
-          "kaia-kairos",
-          "kaia-mainnet",
-          "optimism-mainnet",
-          "optimism-sepolia",
-          "polygon-mainnet"
-        ],
+        "listAddressSets": [],
+        "createAddressSet": [],
         "getWebhook": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4541,14 +4806,69 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "createWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "getAddressSet": [],
+        "updateAddressSet": [],
+        "deleteAddressSet": [],
+        "updateWebhook": [
+          "aptos-mainnet",
+          "aptos-testnet",
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
         ],
         "deleteWebhook": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4561,14 +4881,17 @@
           "kaia-mainnet",
           "optimism-mainnet",
           "optimism-sepolia",
-          "polygon-mainnet"
+          "polygon-mainnet",
+          "tron-mainnet"
         ],
-        "updateWebhook": [
-          "aptos-mainnet",
-          "aptos-testnet",
+        "downloadAddressSetAddresses": [],
+        "exportAddresses": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",
@@ -4583,12 +4906,62 @@
           "optimism-sepolia",
           "polygon-mainnet"
         ],
+        "getAddressSetImport": [],
         "getWebhookHistory": [
           "aptos-mainnet",
           "aptos-testnet",
           "arbitrum-mainnet",
           "arbitrum-sepolia",
+          "arc-mainnet",
           "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet",
+          "tron-mainnet"
+        ],
+        "importAddressSetAddresses": [],
+        "listAddressSetAddresses": [],
+        "updateAddressSetAddresses": [],
+        "listAddresses": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
+          "base-mainnet",
+          "base-sepolia",
+          "bnb-mainnet",
+          "bnb-testnet",
+          "ethereum-hoodi",
+          "ethereum-mainnet",
+          "ethereum-sepolia",
+          "giwa-sepolia",
+          "kaia-kairos",
+          "kaia-mainnet",
+          "optimism-mainnet",
+          "optimism-sepolia",
+          "polygon-mainnet"
+        ],
+        "updateAddresses": [
+          "arbitrum-mainnet",
+          "arbitrum-sepolia",
+          "arc-mainnet",
+          "arc-testnet",
+          "avalanche-fuji",
+          "avalanche-mainnet",
           "base-mainnet",
           "base-sepolia",
           "bnb-mainnet",

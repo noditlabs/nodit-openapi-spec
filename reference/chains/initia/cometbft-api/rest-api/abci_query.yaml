@@ -3,7 +3,7 @@ info:
   title: Initia - ABCIQuery
   version: 1.0.0
 servers:
-  - url: https://rpc-initia-mainnet.nodit.io
+- url: https://rpc-initia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,37 +18,37 @@ paths:
   /abci_query:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: abci_query
       summary: ABCIQuery
       description: Queries the application with a specific path and data.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: path
-          in: query
-          description: Application request path.
-          schema:
-            type: string
-          example: /store/foo/key
-        - name: data
-          in: query
-          description: Hex-encoded serialized byte data.
-          schema:
-            type: string
-          example: 636f6d6574626674
-        - name: height
-          in: query
-          description: Block height for the query.
-          schema:
-            type: string
-          example: "1"
-        - name: prove
-          in: query
-          description: String boolean indicating whether to include proof.
-          schema:
-            type: string
-          example: "true"
+      - name: path
+        in: query
+        description: Application request path.
+        schema:
+          type: string
+        example: /store/foo/key
+      - name: data
+        in: query
+        description: Hex-encoded serialized byte data.
+        schema:
+          type: string
+        example: 636f6d6574626674
+      - name: height
+        in: query
+        description: Block height for the query.
+        schema:
+          type: string
+        example: "1"
+      - name: prove
+        in: query
+        description: String boolean indicating whether to include proof.
+        schema:
+          type: string
+        example: "true"
       responses:
         "200":
           content:
@@ -57,38 +57,50 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   error:
+                    description: Error information returned when the request fails.
                     type: string
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       response:
+                        description: Response from the ABCI application.
                         type: object
                         additionalProperties: false
                         properties:
                           log:
+                            description: Execution log message.
                             type: string
                           height:
+                            description: Block height the query result refers to.
                             type: string
                           proof:
+                            description: Merkle proof of the query result.
                             type: string
                           key:
+                            description: Queried key (Base64).
                             type: string
                           value:
+                            description: Query result value (Base64).
                             type: string
                           index:
+                            description: Index of the query result.
                             type: string
                           code:
+                            description: Result code. `0` means success; any other value is an error.
                             type: string
               example:
                 jsonrpc: "2.0"

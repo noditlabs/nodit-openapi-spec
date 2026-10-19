@@ -1,0 +1,110 @@
+openapi: 3.1.0
+info:
+  title: Tron - UpdateAsset
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/updateasset:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-updateasset
+      summary: UpdateAsset
+      description: Update basic TRC-10 token information.
+      x-seo-description: Create a transaction that updates TRC-10 token information.
+      tags:
+      - trc10-token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              description: "0x4578616d706c654465736372697074696f6e"
+              url: "0x7777772e6578616d706c652e636f6d"
+              new_limit: 1000000
+              new_public_limit: 100
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Token issuer''s address. (Format: Base58 or Hex)'
+                description:
+                  type: string
+                  description: 'Description of the TRC-10 token. (Default: Hex)'
+                url:
+                  type: string
+                  description: 'URL of the official website. (Default: Hex)'
+                new_limit:
+                  type: integer
+                  description: New free Bandwidth limit for each caller.
+                  format: int32
+                new_public_limit:
+                  type: integer
+                  description: New total free Bandwidth limit for all callers.
+                  format: int32
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: true
+              required:
+              - owner_address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: Token issuer's address.
+                  description:
+                    type: string
+                    description: Description of the TRC-10 token.
+                  url:
+                    type: string
+                    description: URL of the official website.
+                  new_limit:
+                    type: integer
+                    format: int64
+                    description: Bandwidth limit for each individual caller.
+                  new_public_limit:
+                    type: integer
+                    format: int64
+                    description: Total Bandwidth limit for all callers.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

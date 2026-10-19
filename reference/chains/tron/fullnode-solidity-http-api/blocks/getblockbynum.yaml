@@ -1,0 +1,122 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBlockByNum
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getblockbynum:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getblockbynum
+      summary: GetBlockByNum
+      description: Queries whether a specified block is confirmed，If the block can be obtained, the block is confirmed by the network; if the block cannot be obtained, the block is not confirmed by the network
+      x-seo-description: Query a solidified TRON block by its block height.
+      tags:
+      - blocks
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              num: 86720418
+            schema:
+              type: object
+              properties:
+                num:
+                  type: integer
+                  format: int32
+                  description: 'Block number (height). Example: `61815425`'
+                  example: 61815425
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              examples:
+                Example API Call Output:
+                  value: |-
+                    // Example API Call Output
+
+                    {  
+                       "blockID":"00000000000000c82a54a3bbdc956e1ddebc903f29b8daf28505b56f55a3f87d",
+                       "block_header":{  
+                          "raw_data":{  
+                             "number":200,
+                             "txTrieRoot":"0000000000000000000000000000000000000000000000000000000000000000",
+                             "witness_address":"411661f25387370c9cd3a9a5d97e60ca90f4844e7e",
+                             "parentHash":"00000000000000c7c8f27726916dfddca3c1c3481eb01da8a08938263674cea4",
+                             "timestamp":1529892138000
+                          },
+                          "witness_signature":"691e9116963b54ef7eb07692266319b029217e4d4ae8e8cb97e341617460f3822eff149c690aac6f2e0ad27d0af4fa8824d113d7a71c091245f778438ca4bde801"
+                       }
+                    }
+              schema:
+                type: object
+                properties:
+                  blockID:
+                    type: string
+                    description: Block hash.
+                    example: 00000000000000c82a54a3bbdc956e1ddebc903f29b8daf28505b56f55a3f87d
+                  block_header:
+                    type: object
+                    description: Block header information.
+                    properties:
+                      raw_data:
+                        type: object
+                        description: Raw data of the block header.
+                        properties:
+                          number:
+                            type: integer
+                            description: Block number (height).
+                            example: 200
+                            default: 0
+                          txTrieRoot:
+                            type: string
+                            description: Root hash of the transaction Merkle tree.
+                            example: "0000000000000000000000000000000000000000000000000000000000000000"
+                          witness_address:
+                            type: string
+                            description: Address of the Super Representative that produced the block.
+                            example: 411661f25387370c9cd3a9a5d97e60ca90f4844e7e
+                          parentHash:
+                            type: string
+                            description: Hash of the parent block.
+                            example: 00000000000000c7c8f27726916dfddca3c1c3481eb01da8a08938263674cea4
+                          timestamp:
+                            type: integer
+                            description: 'Timestamp. (Unit: millisecond)'
+                            example: 1529892138000
+                            default: 0
+                      witness_signature:
+                        type: string
+                        description: Signature of the Super Representative.
+                        example: 691e9116963b54ef7eb07692266319b029217e4d4ae8e8cb97e341617460f3822eff149c690aac6f2e0ad27d0af4fa8824d113d7a71c091245f778438ca4bde801
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

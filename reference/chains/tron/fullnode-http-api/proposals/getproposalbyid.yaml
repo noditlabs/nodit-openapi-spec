@@ -1,0 +1,96 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetProposalById
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getproposalbyid:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getproposalbyid
+      summary: GetProposalById
+      description: Queries proposal based on ID and returns proposal details.
+      x-seo-description: Query the details of a TRON chain proposal by proposal ID.
+      tags:
+      - proposals
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              id: 1
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int32
+                  description: Unique ID for the chain proposal. For example:`1`.
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - id
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  proposal_id:
+                    type: int64
+                    description: Unique ID for the chain proposal.
+                    format: int64
+                  proposer_address:
+                    type: string
+                    description: Address of the proposal's creator.
+                  parameters:
+                    type: map\<int64, int64>
+                    description: Proposed values for chain parameters, keyed by parameter ID.
+                  expiration_time:
+                    type: integer
+                    format: int64
+                    description: 'Expiration time of the proposal. (Unit: millisecond)'
+                  create_time:
+                    type: int64
+                    description: Account creation timestamp, in milliseconds.
+                    format: int64
+                  approvals:
+                    type: array
+                    items:
+                      type: string
+                    description: List of approver addresses.
+                  state:
+                    type: string
+                    description: 'State of the proposal. (Enum: `PENDING`, `DISAPPROVED`, `APPROVED`, `CANCELED`)state'
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

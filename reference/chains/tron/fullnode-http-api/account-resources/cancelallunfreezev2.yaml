@@ -1,0 +1,78 @@
+openapi: 3.1.0
+info:
+  title: Tron - CancelAllUnfreezeV2
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/cancelallunfreezev2:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-cancelallunfreezev2
+      summary: CancelAllUnfreezeV2
+      description: Cancel unstakings, all unstaked funds still in the waiting period will be re-staked, all unstaked funds that exceeded the 14-day waiting period will be automatically withdrawn to the owner’s account
+      x-seo-description: Create a transaction that cancels all pending TRON unstaking operations.
+      tags:
+      - account-resources
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: "false"
+              required:
+              - owner_address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: 'Transaction initiator address. (Format: Base58 or Hex)'
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

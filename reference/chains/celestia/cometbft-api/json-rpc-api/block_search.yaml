@@ -3,7 +3,7 @@ info:
   title: Celestia - Block Search
   version: 1.0.0
 servers:
-  - url: https://rpc-celestia-mainnet.nodit.io
+- url: https://rpc-celestia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: block_search
       summary: Block Search
       description: Searches for blocks matching the query conditions.
       tags:
-        - json-rpc-api
+      - json-rpc-api
       requestBody:
         required: true
         content:
@@ -32,23 +32,27 @@ paths:
               type: object
               additionalProperties: false
               required:
-                - jsonrpc
-                - id
-                - method
+              - jsonrpc
+              - id
+              - method
               properties:
                 jsonrpc:
+                  description: JSON-RPC protocol version. Always `2.0`.
                   type: string
                   const: "2.0"
                 id:
+                  description: Identifier of the request. Returned unchanged as `id` in the response.
                   type: integer
                 method:
+                  description: Name of the JSON-RPC method to call.
                   type: string
                   const: block_search
                 params:
+                  description: Parameters passed to the method.
                   type: object
                   additionalProperties: false
                   required:
-                    - query
+                  - query
                   properties:
                     query:
                       type: string
@@ -79,189 +83,239 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     required:
-                      - blocks
-                      - total_count
+                    - blocks
+                    - total_count
                     properties:
                       blocks:
+                        description: Blocks matching the search query.
                         type: array
                         items:
                           type: object
                           additionalProperties: false
                           properties:
                             block_id:
+                              description: Block ID (block hash and part set header).
                               type: object
                               additionalProperties: false
                               properties:
                                 hash:
+                                  description: Block hash.
                                   type: string
                                 parts:
+                                  description: Part set header, used when the block is split into parts for gossiping.
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     total:
+                                      description: Total number of block parts.
                                       type: integer
                                     hash:
+                                      description: Merkle root hash of the block parts.
                                       type: string
                             block:
+                              description: The block (header, transactions, evidence, and last commit).
                               type: object
                               additionalProperties: false
                               properties:
                                 header:
+                                  description: Block header.
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     version:
+                                      description: Block and application protocol versions.
                                       type: object
                                       additionalProperties: false
                                       properties:
                                         block:
+                                          description: Block protocol version.
                                           type: string
                                         app:
+                                          description: Application protocol version.
                                           type: string
                                     chain_id:
+                                      description: Chain ID.
                                       type: string
                                     height:
+                                      description: Block height.
                                       type: string
                                     time:
+                                      description: Block time (UTC).
                                       type: string
                                     last_block_id:
+                                      description: Block ID of the previous block.
                                       type: object
                                       additionalProperties: false
                                       properties:
                                         hash:
+                                          description: Block hash.
                                           type: string
                                         parts:
+                                          description: Part set header, used when the block is split into parts for gossiping.
                                           type: object
                                           additionalProperties: false
                                           properties:
                                             total:
+                                              description: Total number of block parts.
                                               type: integer
                                             hash:
+                                              description: Merkle root hash of the block parts.
                                               type: string
                                     last_commit_hash:
+                                      description: Hash of the validators' commit for the previous block.
                                       type: string
                                     data_hash:
+                                      description: Hash of the transactions in the block.
                                       type: string
                                     validators_hash:
+                                      description: Hash of the validator set for the current block.
                                       type: string
                                     next_validators_hash:
+                                      description: Hash of the validator set for the next block.
                                       type: string
                                     consensus_hash:
+                                      description: Hash of the consensus parameters for the current block.
                                       type: string
                                     app_hash:
+                                      description: Application state hash after executing the previous block's transactions.
                                       type: string
                                     last_results_hash:
+                                      description: Root hash of the execution results of the previous block's transactions.
                                       type: string
                                     evidence_hash:
+                                      description: Hash of the evidence included in the block.
                                       type: string
                                     proposer_address:
+                                      description: Address of the validator that proposed the block.
                                       type: string
                                 data:
+                                  description: Transactions included in the block.
                                   type: array
                                   items:
                                     type: string
                                 evidence:
+                                  description: Evidence of Byzantine behavior included in the block.
                                   type: array
                                   items:
                                     type: object
                                 last_commit:
+                                  description: Validators' commit for the previous block.
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     height:
+                                      description: Height of the committed block.
                                       type: integer
                                     round:
+                                      description: Consensus round in which the block was committed.
                                       type: integer
                                     block_id:
+                                      description: ID of the committed block.
                                       type: object
                                       additionalProperties: false
                                       properties:
                                         hash:
+                                          description: Block hash.
                                           type: string
                                         parts:
+                                          description: Part set header, used when the block is split into parts for gossiping.
                                           type: object
                                           additionalProperties: false
                                           properties:
                                             total:
+                                              description: Total number of block parts.
                                               type: integer
                                             hash:
+                                              description: Merkle root hash of the block parts.
                                               type: string
                                     signatures:
+                                      description: Validator signatures, ordered by the validator set.
                                       type: array
                                       items:
                                         type: object
                                         additionalProperties: false
                                         properties:
                                           type:
+                                            description: Vote type.
                                             type: integer
                                           height:
+                                            description: Height of the signed block.
                                             type: string
                                           round:
+                                            description: Consensus round in which the block was committed.
                                             type: integer
                                           timestamp:
+                                            description: Time the signature was made.
                                             type: string
                                           validator_address:
+                                            description: Address of the signing validator.
                                             type: string
                                           validator_index:
+                                            description: Index in the validator set.
                                             type: integer
                                           signature:
+                                            description: Validator signature (Base64).
                                             type: string
                       total_count:
+                        description: Total number of results matching the query.
                         type: integer
               example:
                 jsonrpc: "2.0"
                 id: 1
                 result:
                   blocks:
-                    - block_id:
-                        hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
-                        parts:
-                          total: 1
-                          hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
-                      block:
-                        header:
-                          version:
-                            block: "11"
-                            app: "0"
-                          chain_id: cosmoshub-4
-                          height: "1001"
-                          time: "2019-12-11T16:11:40Z"
-                          last_block_id:
-                            hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
-                            parts:
-                              total: 1
-                              hash: B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3
-                          last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                          data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                          validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
-                          next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
-                          consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
-                          app_hash: 223BF64D4A01074DC523A80E76B9BBC786C791FB0A1893AC5B14866356FCFD6C
-                          last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                          evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                          proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-                        data: []
-                        evidence: []
-                        last_commit:
-                          height: 1000
-                          round: 0
-                          block_id:
-                            hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
-                            parts:
-                              total: 1
-                              hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
-                          signatures: []
+                  - block_id:
+                      hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                      parts:
+                        total: 1
+                        hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
+                    block:
+                      header:
+                        version:
+                          block: "11"
+                          app: "0"
+                        chain_id: cosmoshub-4
+                        height: "1001"
+                        time: '2019-12-11T16:11:40Z'
+                        last_block_id:
+                          hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
+                          parts:
+                            total: 1
+                            hash: B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3
+                        last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                        data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                        validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                        next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                        consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
+                        app_hash: 223BF64D4A01074DC523A80E76B9BBC786C791FB0A1893AC5B14866356FCFD6C
+                        last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                        evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                        proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                      data: []
+                      evidence: []
+                      last_commit:
+                        height: 1000
+                        round: 0
+                        block_id:
+                          hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                          parts:
+                            total: 1
+                            hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
+                        signatures: []
                   total_count: 1

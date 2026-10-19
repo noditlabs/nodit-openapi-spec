@@ -1,16 +1,12 @@
----
-slug: /node-api/accountsubscribe
----
-
 # accountSubscribe
 
-Solana의 accountSubscribe 메서드는 특정 계정의 **lamports** 또는 **데이터 변경**이 발생할 때마다 실시간 알림을 받을 수 있도록 구독을 생성합니다.
+The accountSubscribe method creates a subscription that delivers real-time notifications whenever the **lamports** balance or **data** of a specific account changes.
 
-> 📘 사용 시 참고사항
+> 📘 Usage Notes
 >
-> - 반드시 **WebSocket** 엔드포인트를 통해 호출해야 하며, HTTP는 지원되지 않습니다.
-> - WebSocket 연결이 끊어지면 구독도 자동으로 해제됩니다. 재연결 시 다시 구독을 요청해야 합니다.
-> - CU는 구독한 데이터의 양에 따라 소진되므로, 필요한 데이터만을 구독할 수 있도록 적절한 필터링 옵션 사용을 권장합니다.
+> - This method must be called via a **WebSocket** endpoint. HTTP is not supported.
+> - If the WebSocket connection is dropped, the subscription is automatically cancelled. Re-subscribe after reconnecting.
+> - CU is consumed based on the volume of subscribed data. Use appropriate filtering options to subscribe only to the data you need.
 
 ---
 
@@ -18,16 +14,16 @@ Solana의 accountSubscribe 메서드는 특정 계정의 **lamports** 또는 **�
 
 ### Parameters
 
-구독 요청은 아래의 파라미터를 가집니다.
+The subscription request accepts the following parameters.
 
-| Parameter            | Type              | Required | Description                                                                                                                                                                                                                                                                                                                                                           |
-| -------------------- | ----------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| id                   | integer or string | required | 요청 고유 식별자. 클라이언트가 요청과 응답을 매칭하는데 사용됩니다.                                                                                                                                                                                                                                                                                                   |
-| jsonrpc              | string            | required | JSON-RPC 프로토콜 버전. 항상 "2.0"을 입력합니다.                                                                                                                                                                                                                                                                                                                      |
-| method               | string            | required | 실행할 메서드 이름. 여기서는 "accountSubscribe"를 입력합니다.                                                                                                                                                                                                                                                                                                         |
-| params               | array             | required | 구독할 계정 정보 및 옵션. 첫 번째 요소는 계정 public key, 두 번째는 configuration object 입니다.                                                                                                                                                                                                                                                                      |
-| params[1].commitment | string            | optional | 블록 확정 정도를 지정합니다. <br />- `finalized`: 클러스터의 과반수가 최대 lockout에 도달하여 확정된 가장 최근 블록을 조회합니다. 클러스터가 이 블록을 최종 확정으로 인식합니다. <br />- `confirmed`: 클러스터의 과반수가 투표한 가장 최근 블록을 조회합니다. <br />- `processed`: 노드의 가장 최근 블록을 조회합니다. 이 블록은 여전히 클러스터에 의해 건너뛸 수 있습니다. |
-| params[1].encoding   | string            | optional | 계정 데이터 인코딩 방식. <br />- base58 (느림) <br />- base64 <br />- base64+zstd <br />- jsonParsed (가능한 경우 parser 적용, 그렇지 않으면 바이너리 문자열 반환)                                                                                                                                                                                                            |
+| Parameter            | Type              | Required | Description                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | ----------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id                   | integer or string | required | A unique identifier for the request, used by the client to match requests with responses.                                                                                                                                                                                                                                                                                        |
+| jsonrpc              | string            | required | The JSON-RPC protocol version. Always set to `"2.0"`.                                                                                                                                                                                                                                                                                                                            |
+| method               | string            | required | The name of the method to invoke. Set to `"accountSubscribe"`.                                                                                                                                                                                                                                                                                                                   |
+| params               | array             | required | Account information and options to subscribe to. The first element is the account public key; the second is a configuration object.                                                                                                                                                                                                                                               |
+| params[1].commitment | string            | optional | Specifies the level of block finalization. <br />- `finalized`: Queries the most recent block confirmed as finalized by a supermajority of the cluster at maximum lockout. <br />- `confirmed`: Queries the most recent block voted on by a supermajority of the cluster. <br />- `processed`: Queries the node's most recent block, which may still be skipped by the cluster. |
+| params[1].encoding   | string            | optional | Encoding format for account data. <br />- `base58` (slow) <br />- `base64` <br />- `base64+zstd` <br />- `jsonParsed` (applies a program-specific parser if available; otherwise returns a binary string)                                                                                                                                                                        |
 
 ### Example
 
@@ -52,7 +48,7 @@ Solana의 accountSubscribe 메서드는 특정 계정의 **lamports** 또는 **�
 
 ### Subscription Response
 
-성공적으로 구독이 생성되면 subscription ID가 반환됩니다.
+On success, the server returns a subscription ID.
 
 ```json Response example
 {
@@ -62,17 +58,16 @@ Solana의 accountSubscribe 메서드는 특정 계정의 **lamports** 또는 **�
 }
 ```
 
-이 subscription ID는 `accountUnsubscribe` 메서드 호출 시 필요합니다.
+This subscription ID is required when calling the `accountUnsubscribe` method.
 
 ### Notifications
 
-구독이 활성화되면, 계정 상태가 변경될 때마다 서버에서 알림을 푸시합니다.
-알림 형식은 `getAccountInfo` RPC의 응답과 동일합니다.
+Once the subscription is active, the server pushes a notification each time the account state changes. The notification format matches the response of the `getAccountInfo` RPC method.
 
-**응답 데이터 형식:**
+**Response data format:**
 
-- 응답 데이터는 `encoding` 옵션에 따라 `base58`, `base64`, `base64+zstd`, `jsonParsed` 중 하나로 전달됩니다.
-- `jsonParsed`는 프로그램별 parser를 통해 사람이 읽기 쉬운 형태로 변환하지만, parser가 없는 경우 바이너리 문자열로 반환됩니다.
+- Data is returned in one of the following formats depending on the `encoding` option: `base58`, `base64`, `base64+zstd`, or `jsonParsed`.
+- `jsonParsed` converts the data into a human-readable format using a program-specific parser. If no parser is available, a binary string is returned instead.
 
 #### Base58 Encoding Example
 
@@ -159,18 +154,18 @@ wscat -c wss://api.mainnet-beta.solana.com
 
 ### Receive Notifications
 
-- 최초 응답: subscription ID 반환
-- 이후: 계정 변경 발생 시 "accountNotification" 이벤트 수신
+- Initial response: a subscription ID is returned.
+- Subsequent: an `"accountNotification"` event is received each time the account changes.
 
 ### Unsubscribe
 
-구독을 해제하는 방법은 두 가지가 있습니다:
+There are two ways to cancel a subscription:
 
-1. **연결 종료**: 터미널 창에서 `CTRL+C`를 입력하여 WebSocket 연결을 종료하면 모든 구독이 자동으로 해제됩니다.
+1. **Close the connection**: Press `CTRL+C` in the terminal to close the WebSocket connection. All active subscriptions are automatically cancelled.
 
-2. **특정 구독 해제**: accountUnsubscribe를 사용하여 연결을 유지한 채 특정 구독만 해제할 수 있습니다.
+2. **Cancel a specific subscription**: Use `accountUnsubscribe` to cancel a specific subscription while keeping the connection open.
 
-구독 해제 요청:
+Unsubscribe request:
 
 ```json unsubscribe example
 {
@@ -181,7 +176,7 @@ wscat -c wss://api.mainnet-beta.solana.com
 }
 ```
 
-구독 해제 후 응답:
+Response after unsubscribing:
 
 ```json unsubscribe success
 {

@@ -3,8 +3,8 @@ info:
   title: Sui - suix_resolveNameServiceNames
   version: 1.0.0
 servers:
-  - url: https://sui-mainnet.nodit.io
-    description: Sui Mainnet
+- url: https://sui-mainnet.nodit.io
+  description: Sui Mainnet
 components:
   securitySchemes:
     api_key:
@@ -21,16 +21,16 @@ components:
       type: string
     SuiAddress:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     ObjectID:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     Page_for_String_and_ObjectID:
-      description: "`next_cursor` points to the last item in the page; Reading with `next_cursor` will start from the next item after `next_cursor` if `next_cursor` is `Some`, otherwise it will start from the first item."
+      description: '`next_cursor` points to the last item in the page; Reading with `next_cursor` will start from the next item after `next_cursor` if `next_cursor` is `Some`, otherwise it will start from the first item.'
       type: object
       required:
-        - data
-        - hasNextPage
+      - data
+      - hasNextPage
       properties:
         data:
           type: array
@@ -39,79 +39,79 @@ components:
         hasNextPage:
           type: boolean
         nextCursor:
-          $ref: "#/components/schemas/ObjectID"
+          $ref: '#/components/schemas/ObjectID'
     Base58:
       type: string
     Digest:
       allOf:
-        - $ref: "#/components/schemas/Base58"
+      - $ref: '#/components/schemas/Base58'
       description: A representation of a 32 byte digest
     BigInt_for_uint64:
       type: string
     ObjectResponseError:
       oneOf:
-        - type: object
-          required:
-            - code
-            - object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - notExists
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - parent_object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - dynamicFieldNotFound
-            parent_object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - digest
-            - object_id
-            - version
-          properties:
-            code:
-              type: string
-              enum:
-                - deleted
-            digest:
-              description: Base64 string representing the object digest
-              allOf:
-                - $ref: "#/components/schemas/Digest"
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-            version:
-              description: Object version.
-              allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
-        - type: object
-          required:
-            - code
-          properties:
-            code:
-              type: string
-              enum:
-                - unknown
-        - type: object
-          required:
-            - code
-            - error
-          properties:
-            code:
-              type: string
-              enum:
-                - displayError
-            error:
-              type: string
+      - type: object
+        required:
+        - code
+        - object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - notExists
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - parent_object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - dynamicFieldNotFound
+          parent_object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - digest
+        - object_id
+        - version
+        properties:
+          code:
+            type: string
+            enum:
+            - deleted
+          digest:
+            description: Base64 string representing the object digest
+            allOf:
+            - $ref: '#/components/schemas/Digest'
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+          version:
+            description: Object version.
+            allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+      - type: object
+        required:
+        - code
+        properties:
+          code:
+            type: string
+            enum:
+            - unknown
+      - type: object
+        required:
+        - code
+        - error
+        properties:
+          code:
+            type: string
+            enum:
+            - displayError
+          error:
+            type: string
     Error:
       type: object
       properties:
@@ -122,8 +122,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -141,17 +141,17 @@ components:
                 description: Request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ObjectResponseError"
+                $ref: '#/components/schemas/ObjectResponseError'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -160,7 +160,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -169,16 +169,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -186,14 +186,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: sui-suix_resolveNameServiceNames
       summary: suix_resolveNameServiceNames
       description: |
         Return the resolved names given address, if multiple names are resolved, the first one is the primary name.
       x-seo-description: Resolve a Sui address to its associated Sui Name Service (SuiNS) domain names.
       tags:
-        - suix
+      - suix
       parameters: []
       requestBody:
         required: true
@@ -202,10 +202,10 @@ paths:
             schema:
               type: object
               required:
-                - id
-                - jsonrpc
-                - method
-                - params
+              - id
+              - jsonrpc
+              - method
+              - params
               properties:
                 id:
                   type: integer
@@ -222,23 +222,23 @@ paths:
                   maxItems: 3
                   items:
                     oneOf:
-                      - title: address
-                        $ref: "#/components/schemas/SuiAddress"
-                        description: The address to resolve
-                      - title: cursor
-                        $ref: "#/components/schemas/ObjectID"
-                        description: Optional paging cursor
-                      - title: limit
-                        type: integer
-                        description: Maximum number of items per page
+                    - title: address
+                      $ref: '#/components/schemas/SuiAddress'
+                      description: The address to resolve
+                    - title: cursor
+                      $ref: '#/components/schemas/ObjectID'
+                      description: Optional paging cursor
+                    - title: limit
+                      type: integer
+                      description: Maximum number of items per page
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: suix_resolveNameServiceNames
                 params:
-                  - "0x5cd6fa76ed1d18f05f15e35075252ddec4fb83621d55952d9172fcfcb72feae2"
-                  - "0xd22bbb46f892c42d9ec0ae4de93e02c75973a51c17180798237326a58694a2cf"
-                  - 3
+                - "0x5cd6fa76ed1d18f05f15e35075252ddec4fb83621d55952d9172fcfcb72feae2"
+                - "0xd22bbb46f892c42d9ec0ae4de93e02c75973a51c17180798237326a58694a2cf"
+                - 3
       responses:
         "200":
           description: Successful Response
@@ -252,22 +252,22 @@ paths:
                   id:
                     type: integer
                   result:
-                    $ref: "#/components/schemas/Page_for_String_and_ObjectID"
+                    $ref: '#/components/schemas/Page_for_String_and_ObjectID'
               example:
                 jsonrpc: "2.0"
                 result:
                   data:
-                    - example.sui
+                  - example.sui
                   nextCursor: "0xd22bbb46f892c42d9ec0ae4de93e02c75973a51c17180798237326a58694a2cf"
                   hasNextPage: false
                 id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

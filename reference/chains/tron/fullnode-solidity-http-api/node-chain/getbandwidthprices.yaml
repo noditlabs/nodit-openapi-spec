@@ -1,0 +1,44 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBandwidthPrices
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getbandwidthprices:
+    get:
+      security:
+      - api_key: []
+      operationId: tron-getbandwidthprices
+      summary: GetBandwidthPrices
+      description: Query historical bandwidth unit price (Confirmed state)
+      x-seo-description: Query the historical unit price of TRON Bandwidth.
+      tags:
+      - node-chain
+      parameters: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prices:
+                    type: string
+                    description: All historical bandwidth price information. Each price change is separated by a comma, in the format `timestamp:price`, where the timestamp is in milliseconds and the price is in sun.
+                    example: 0:10,1606240800000:40,1613044800000:140,1627279200000:1000

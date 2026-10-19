@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Hippo - Tx
+  title: Hippo Protocol - Tx
   version: 1.0.0
 servers:
-  - url: https://rpc-hippo-mainnet.nodit.io
+- url: https://rpc-hippo-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,26 +18,26 @@ paths:
   /tx:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: tx
       summary: Tx
       description: Retrieves a specific transaction by its hash.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: hash
-          in: query
-          required: true
-          description: Transaction hash to query.
-          schema:
-            type: string
-          example: "0xD70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED"
-        - name: prove
-          in: query
-          description: String boolean indicating whether to include proof.
-          schema:
-            type: string
-          example: "true"
+      - name: hash
+        in: query
+        required: true
+        description: Transaction hash to query.
+        schema:
+          type: string
+        example: "0xD70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED"
+      - name: prove
+        in: query
+        description: String boolean indicating whether to include proof.
+        schema:
+          type: string
+        example: "true"
       responses:
         "200":
           content:
@@ -46,48 +46,63 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       hash:
+                        description: Transaction hash.
                         type: string
                       height:
+                        description: Block height.
                         type: string
                       index:
+                        description: Index of the transaction within the block.
                         type: integer
                       tx_result:
+                        description: Transaction execution result.
                         type: object
                         additionalProperties: false
                         properties:
                           log:
+                            description: Execution log message.
                             type: string
                           gas_wanted:
+                            description: Gas limit requested by the transaction.
                             type: string
                           gas_used:
+                            description: Gas actually used.
                             type: string
                           tags:
+                            description: Tags recorded during transaction execution.
                             type: array
                             items:
                               type: object
                               additionalProperties: false
                               properties:
                                 key:
+                                  description: Tag key.
                                   type: string
                                 value:
+                                  description: Tag value.
                                   type: string
                                 index:
+                                  description: Whether the tag is indexed.
                                   type: boolean
                       tx:
+                        description: Raw transaction (Base64).
                         type: string
               example:
                 jsonrpc: "2.0"
@@ -97,11 +112,11 @@ paths:
                   height: "1000"
                   index: 0
                   tx_result:
-                    log: "[]"
+                    log: '[]'
                     gas_wanted: "200000"
                     gas_used: "123456"
                     tags:
-                      - key: action
-                        value: send
-                        index: true
+                    - key: action
+                      value: send
+                      index: true
                   tx: a/encoded_tx/c

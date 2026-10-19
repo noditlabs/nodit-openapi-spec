@@ -1,0 +1,66 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetPaginatedProposalList
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getpaginatedproposallist:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getpaginatedproposallist
+      summary: GetPaginatedProposalList
+      description: List chain parameter proposals with pagination.
+      x-seo-description: List TRON chain parameter proposals with pagination.
+      tags:
+      - proposals
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              offset: 0
+              limit: 10
+            schema:
+              type: object
+              properties:
+                offset:
+                  type: integer
+                  description: 'Starting position for pagination. Must be ≥ 0. (Default: 0)'
+                  example: 0
+                limit:
+                  type: integer
+                  description: 'The number of results to return per page. Must be greater than 0 and cannot exceed 1000. (Default: 50)'
+                  example: 10
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  proposals:
+                    type: array
+                    description: Proposal list. For parameters of each proposal, please refer to [GetProposalById](https://developers.tron.network/reference/getproposalbyid).
+                    items:
+                      type: object
+                      description: Chain proposal info. See [GetProposalById](https://developers.tron.network/reference/getproposalbyid) for full structure.

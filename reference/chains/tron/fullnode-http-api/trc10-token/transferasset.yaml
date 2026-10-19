@@ -1,0 +1,110 @@
+openapi: 3.1.0
+info:
+  title: Tron - TransferAsset
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/transferasset:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-transferasset
+      summary: TransferAsset
+      description: Transfer TRC-10 token.
+      x-seo-description: Create a transaction that transfers a TRC-10 token.
+      tags:
+      - trc10-token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              to_address: TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1
+              asset_name: "1002000"
+              amount: 100
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                to_address:
+                  type: string
+                  description: 'Recipient address (Format: Base58 or Hex; Default: Hex). Example: `TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1`'
+                  example: TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1
+                asset_name:
+                  type: string
+                  description: 'ID of the TRC-10 token (Format: Base58 or Hex; Default: Hex). Example: `31303030303031`'
+                  example: "31303030303031"
+                amount:
+                  type: integer
+                  default: null
+                  format: int64
+                  description: 'Amount of TRX to transfer. (Unit: sun). Example: `1`'
+                  example: 1
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                extra_data:
+                  type: string
+                  description: 'Notes on the transaction. (Format: Hex)'
+              required:
+              - amount
+              - asset_name
+              - to_address
+              - owner_address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                  asset_name:
+                    type: string
+                    description: TRC-10 Token ID.
+                  to_address:
+                    type: string
+                    description: Recipient address.
+                  amount:
+                    type: integer
+                    format: int64
+                    description: Amount of TRC-10 token to transfer.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

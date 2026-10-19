@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: CronosPOS - Blockchain
+  title: Cronos POS - Blockchain
   version: 1.0.0
 servers:
-  - url: https://rpc-cronospos-mainnet.nodit.io
+- url: https://rpc-cronospos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: blockchain
       summary: Blockchain
       description: Retrieves a list of block headers in descending order. The number of results may be limited.
       tags:
-        - json-rpc-api
+      - json-rpc-api
       requestBody:
         required: true
         content:
@@ -32,19 +32,23 @@ paths:
               type: object
               additionalProperties: false
               required:
-                - jsonrpc
-                - id
-                - method
+              - jsonrpc
+              - id
+              - method
               properties:
                 jsonrpc:
+                  description: JSON-RPC protocol version. Always `2.0`.
                   type: string
                   const: "2.0"
                 id:
+                  description: Identifier of the request. Returned unchanged as `id` in the response.
                   type: integer
                 method:
+                  description: Name of the JSON-RPC method to call.
                   type: string
                   const: blockchain
                 params:
+                  description: Parameters passed to the method.
                   type: object
                   additionalProperties: false
                   properties:
@@ -69,94 +73,127 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       last_height:
+                        description: Latest block height on the node.
                         type: string
                       block_metas:
+                        description: List of block metadata.
                         type: array
                         items:
                           type: object
                           additionalProperties: false
                           properties:
                             block_id:
+                              description: Block ID (block hash and part set header).
                               type: object
                               additionalProperties: false
                               properties:
                                 hash:
+                                  description: Block hash.
                                   type: string
                                 parts:
+                                  description: Part set header, used when the block is split into parts for gossiping.
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     total:
+                                      description: Total number of block parts.
                                       type: integer
                                     hash:
+                                      description: Merkle root hash of the block parts.
                                       type: string
                             block_size:
+                              description: Block size in bytes.
                               type: integer
                             header:
+                              description: Block header.
                               type: object
                               additionalProperties: false
                               properties:
                                 version:
+                                  description: Block and application protocol versions.
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     block:
+                                      description: Block protocol version.
                                       type: string
                                     app:
+                                      description: Application protocol version.
                                       type: string
                                 chain_id:
+                                  description: Chain ID.
                                   type: string
                                 height:
+                                  description: Block height.
                                   type: string
                                 time:
+                                  description: Block time (UTC).
                                   type: string
                                 last_block_id:
+                                  description: Block ID of the previous block.
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     hash:
+                                      description: Block hash.
                                       type: string
                                     parts:
+                                      description: Part set header, used when the block is split into parts for gossiping.
                                       type: object
                                       additionalProperties: false
                                       properties:
                                         total:
+                                          description: Total number of block parts.
                                           type: integer
                                         hash:
+                                          description: Merkle root hash of the block parts.
                                           type: string
                                 last_commit_hash:
+                                  description: Hash of the validators' commit for the previous block.
                                   type: string
                                 data_hash:
+                                  description: Hash of the transactions in the block.
                                   type: string
                                 validators_hash:
+                                  description: Hash of the validator set for the current block.
                                   type: string
                                 next_validators_hash:
+                                  description: Hash of the validator set for the next block.
                                   type: string
                                 consensus_hash:
+                                  description: Hash of the consensus parameters for the current block.
                                   type: string
                                 app_hash:
+                                  description: Application state hash after executing the previous block's transactions.
                                   type: string
                                 last_results_hash:
+                                  description: Root hash of the execution results of the previous block's transactions.
                                   type: string
                                 evidence_hash:
+                                  description: Hash of the evidence included in the block.
                                   type: string
                                 proposer_address:
+                                  description: Address of the validator that proposed the block.
                                   type: string
                             num_txs:
+                              description: Number of transactions in the block.
                               type: string
               example:
                 jsonrpc: "2.0"
@@ -164,59 +201,59 @@ paths:
                 result:
                   last_height: "12345678"
                   block_metas:
-                    - block_id:
-                        hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
-                        parts:
-                          total: 1
-                          hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
-                      block_size: 1024
-                      header:
-                        version:
-                          block: "11"
-                          app: "0"
-                        chain_id: cosmoshub-4
-                        height: "2"
-                        time: "2019-12-11T16:11:40Z"
-                        last_block_id:
-                          hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
-                          parts:
-                            total: 1
-                            hash: B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3
-                        last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
-                        next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
-                        consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
-                        app_hash: 21DFF0C4F53168D5C82D99B1E76D4C5A62AE7D7A3B1C40D7E6F8A9B0C1D2E3F4
-                        last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-                      num_txs: "0"
-                    - block_id:
+                  - block_id:
+                      hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
+                      parts:
+                        total: 1
+                        hash: 1A79E57CC6A3D49E5E9E6A9D2B5F2D5A0A3B7E8C1D2E3F4A5B6C7D8E9F0A1B2C
+                    block_size: 1024
+                    header:
+                      version:
+                        block: "11"
+                        app: "0"
+                      chain_id: cosmoshub-4
+                      height: "2"
+                      time: '2019-12-11T16:11:40Z'
+                      last_block_id:
                         hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
                         parts:
                           total: 1
                           hash: B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3
-                      block_size: 512
-                      header:
-                        version:
-                          block: "11"
-                          app: "0"
-                        chain_id: cosmoshub-4
-                        height: "1"
-                        time: "2019-12-11T16:11:34Z"
-                        last_block_id:
+                      last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
+                      app_hash: 21DFF0C4F53168D5C82D99B1E76D4C5A62AE7D7A3B1C40D7E6F8A9B0C1D2E3F4
+                      last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                    num_txs: "0"
+                  - block_id:
+                      hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
+                      parts:
+                        total: 1
+                        hash: B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2C3
+                    block_size: 512
+                    header:
+                      version:
+                        block: "11"
+                        app: "0"
+                      chain_id: cosmoshub-4
+                      height: "1"
+                      time: '2019-12-11T16:11:34Z'
+                      last_block_id:
+                        hash: ""
+                        parts:
+                          total: 0
                           hash: ""
-                          parts:
-                            total: 0
-                            hash: ""
-                        last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
-                        next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
-                        consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
-                        app_hash: ""
-                        last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-                        proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-                      num_txs: "0"
+                      last_commit_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      data_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      next_validators_hash: 8B4640A28F07F7F4D9D5C7F4A7A2FBE8E1E5C3A1D2B3C4D5E6F7A8B9C0D1E2F3
+                      consensus_hash: 048091BC7DDC283F77BFBF91D73C44DA58C3DF8A9CBC867405D8B7F3DAADA22F
+                      app_hash: ""
+                      last_results_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      evidence_hash: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+                      proposer_address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                    num_txs: "0"

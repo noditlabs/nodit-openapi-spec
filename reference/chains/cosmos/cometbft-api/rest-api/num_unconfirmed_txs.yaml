@@ -3,7 +3,7 @@ info:
   title: Cosmos - NumUnconfirmedTxs
   version: 1.0.0
 servers:
-  - url: https://rpc-cosmos-mainnet.nodit.io
+- url: https://rpc-cosmos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /num_unconfirmed_txs:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: num_unconfirmed_txs
       summary: NumUnconfirmedTxs
       description: Retrieves the count and total size of unconfirmed transactions.
       tags:
-        - rest-api
+      - rest-api
       responses:
         "200":
           content:
@@ -32,24 +32,30 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       n_txs:
+                        description: Number of transactions in this response.
                         type: string
                       total:
+                        description: Total number of transactions in the mempool.
                         type: string
                       total_bytes:
+                        description: Total size of mempool transactions in bytes.
                         type: string
               example:
                 jsonrpc: "2.0"

@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: Sui - GetCoinInfo
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.StateService/GetCoinInfo:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-GetCoinInfo
+      summary: GetCoinInfo
+      description: |
+        Retrieves the metadata and treasury information for the specified coin type.
+      x-seo-description: 지정한 코인 타입의 메타데이터와 트레저리 정보를 조회합니다.
+      x-grpc-method: sui.rpc.v2.StateService/GetCoinInfo
+      x-proto: sui/rpc/v2/state_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.StateService
+        method: GetCoinInfo
+        streaming: unary
+        proto: sui/rpc/v2/state_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - StateService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                coin_type:
+                  type: string
+                  description: The coin type to request information about.
+            example:
+              coin_type: 0x2::sui::SUI
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coin_type:
+                    type: string
+                    description: ' Required. The coin type.'
+                  metadata:
+                    type: object
+                    description: This field will be populated with information about this coin type's `0x2::coin::CoinMetadata` if it exists and has not been wrapped.
+                    properties:
+                      id:
+                        type: string
+                        description: CoinMetadata or Currency ObjectId.
+                      decimals:
+                        type: integer
+                        description: Number of decimal places.
+                      name:
+                        type: string
+                        description: Token name.
+                      symbol:
+                        type: string
+                        description: Token symbol.
+                      description:
+                        type: string
+                        description: Description of the coin.
+                      icon_url:
+                        type: string
+                        description: Logo/icon URL.
+                      metadata_cap_id:
+                        type: string
+                        description: MetadataCap ObjectId.
+                      metadata_cap_state:
+                        type: string
+                        description: State of the metadata cap.
+                  treasury:
+                    type: object
+                    description: This field will be populated with information about this coin type's `0x2::coin::TreasuryCap` if it exists and has not been wrapped.
+                    properties:
+                      id:
+                        type: string
+                        description: TreasuryCap ObjectId.
+                      total_supply:
+                        type: integer
+                        description: Total supply of the coin.
+                      supply_state:
+                        type: string
+                        description: State of the supply.
+                  regulated_metadata:
+                    type: object
+                    description: If this coin type is a regulated coin, this field will be populated with information from its Currency object in the CoinRegistry, or from its `0x2::coin::RegulatedCoinMetadata` object for coins not yet migrated. If the coin is not known to be regulated, only the `coin_regulated_state` field will be populated.
+                    properties:
+                      id:
+                        type: string
+                        description: RegulatedCoinMetadata ObjectId.
+                      coin_metadata_object:
+                        type: string
+                        description: CoinMetadata or CoinData ID.
+                      deny_cap_object:
+                        type: string
+                        description: DenyCap ID.
+                      allow_global_pause:
+                        type: boolean
+                        description: Whether global pause is allowed.
+                      variant:
+                        type: integer
+                        description: Variant of the regulated metadata.
+                      coin_regulated_state:
+                        type: string
+                        description: Regulated state of the coin.
+              example:
+                coin_type: 0x2::sui::SUI
+                metadata: {}
+                treasury: {}
+                regulated_metadata: {}

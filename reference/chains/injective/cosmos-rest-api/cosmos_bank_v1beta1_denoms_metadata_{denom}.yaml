@@ -3,7 +3,7 @@ info:
   title: Injective - cosmos_bank_v1beta1_denoms_metadata_{denom}
   version: 1.0.0
 servers:
-  - url: https://rest-injective-mainnet.nodit.io
+- url: https://rest-injective-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: DenomMetadata queries the client metadata of a given coin denomination.
       operationId: cosmos_bank_v1beta1_denoms_metadata_{denom}
       tags:
-        - bank
+      - bank
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -33,8 +33,10 @@ paths:
                     type: object
                     properties:
                       description:
+                        description: Token description.
                         type: string
                       denom_units:
+                        description: Display units of the token, with their exponents.
                         type: array
                         items:
                           type: object
@@ -52,6 +54,7 @@ paths:
                                 (e.g. with a base_denom of uatom, one can create a DenomUnit of 'atom' with
                                 exponent = 6, thus: 1 atom = 10^6 uatom).
                             aliases:
+                              description: Aliases of this unit.
                               type: array
                               items:
                                 type: string
@@ -69,8 +72,9 @@ paths:
                           display indicates the suggested denom that should be
                           displayed in clients.
                       name:
+                        description: Token name.
                         type: string
-                        title: "name defines the name of the token (eg: Cosmos Atom)"
+                        title: 'name defines the name of the token (eg: Cosmos Atom)'
                       symbol:
                         type: string
                         description: Token symbol primarily displayed on exchanges (e.g., ATOM). May be the same as display.
@@ -89,7 +93,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -111,12 +115,12 @@ paths:
                           type: string
                           format: byte
       parameters:
-        - name: denom
-          description: denom is the coin denom to query the metadata for.
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: denom
+        description: denom is the coin denom to query the metadata for.
+        in: path
+        required: true
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/bank/v1beta1/denoms_metadata/{denom}

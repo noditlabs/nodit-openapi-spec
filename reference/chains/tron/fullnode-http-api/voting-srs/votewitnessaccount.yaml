@@ -1,0 +1,102 @@
+openapi: 3.1.0
+info:
+  title: Tron - VoteWitnessAccount
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/votewitnessaccount:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-votewitnessaccount
+      summary: VoteWitnessAccount
+      description: Vote for super representatives
+      x-seo-description: Create a transaction that votes for TRON Super Representatives.
+      tags:
+      - voting-srs
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              votes:
+              - vote_address: TJvaAeFb8Lykt9RQcVyyTFN2iDvGMuyD4M
+                vote_count: 1
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                votes:
+                  type: array
+                  description: List of `vote` objects, each containing an SR address (`vote_address`) and vote count (`vote_count`).
+                  items:
+                    properties:
+                      vote_address:
+                        type: string
+                        default: ""
+                        description: an SR address, for example, TUtzEvZRqVoNr4ifVyGTnVcyDUpWsrXkJ3.
+                      vote_count:
+                        type: integer
+                        default: 0
+                        format: int32
+                        description: vote count must be greater than 0.
+                    type: object
+                    required:
+                    - vote_address
+                    - vote_count
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - owner_address
+              - votes
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                  votes:
+                    type: Vote[]
+                    description: List of `Vote` objects, each containing `vote_address` (SR address) and `vote_count` (number of votes).
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
