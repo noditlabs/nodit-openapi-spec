@@ -394,14 +394,6 @@ components:
         minimum: 1
         maximum: 100
         default: 10
-    SigningKey:
-      signingKey:
-        type: string
-        nullable: true
-        description: |
-          The signing key used to authenticate Flexible Webhook notifications. After receiving a notification, use this key to verify its validity.
-
-          The signing key is automatically generated when the Flexible Webhook is created and is only available in the creation response. 
   schemas:
     DeleteResponse:
       type: object
@@ -840,8 +832,23 @@ paths:
           - hoodi
           default: mainnet
         description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-      - $ref: '#/components/parameters/Page'
-      - $ref: '#/components/parameters/Rpp'
+      - name: page
+        in: query
+        required: false
+        description: Page number to retrieve. Starts from 1.
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: rpp
+        in: query
+        required: false
+        description: Number of results per page. Minimum 1, maximum 100. Defaults to 10.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
       responses:
         "200":
           description: Webhook list
@@ -906,7 +913,13 @@ paths:
           - hoodi
           default: mainnet
         description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-      - $ref: '#/components/parameters/SubscriptionId'
+      - name: subscriptionId
+        in: path
+        required: true
+        description: The unique ID that identifies a Webhook subscription.
+        schema:
+          type: string
+          example: "9193601422344750850"
       responses:
         "200":
           description: Deleted
@@ -973,7 +986,13 @@ paths:
           - hoodi
           default: mainnet
         description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-      - $ref: '#/components/parameters/SubscriptionId'
+      - name: subscriptionId
+        in: path
+        required: true
+        description: The unique ID that identifies a Webhook subscription.
+        schema:
+          type: string
+          example: "9193601422344750850"
       responses:
         "200":
           description: Webhook details
@@ -1037,7 +1056,13 @@ paths:
           - hoodi
           default: mainnet
         description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-      - $ref: '#/components/parameters/SubscriptionId'
+      - name: subscriptionId
+        in: path
+        required: true
+        description: The unique ID that identifies a Webhook subscription.
+        schema:
+          type: string
+          example: "9193601422344750850"
       requestBody:
         required: true
         content:
@@ -1111,7 +1136,13 @@ paths:
           - hoodi
           default: mainnet
         description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-      - $ref: '#/components/parameters/StreamId'
+      - name: streamId
+        in: path
+        required: true
+        description: The unique ID that identifies a Stream.
+        schema:
+          type: string
+          example: "77"
       responses:
         "200":
           description: Stream schema
@@ -1176,8 +1207,23 @@ paths:
           - hoodi
           default: mainnet
         description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
-      - $ref: '#/components/parameters/Page'
-      - $ref: '#/components/parameters/Rpp'
+      - name: page
+        in: query
+        required: false
+        description: Page number to retrieve. Starts from 1.
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: rpp
+        in: query
+        required: false
+        description: Number of results per page. Minimum 1, maximum 100. Defaults to 10.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
       responses:
         "200":
           description: Stream list
