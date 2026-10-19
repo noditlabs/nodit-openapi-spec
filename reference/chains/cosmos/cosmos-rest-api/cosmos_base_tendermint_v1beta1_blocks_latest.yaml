@@ -3,7 +3,7 @@ info:
   title: Cosmos - cosmos_base_tendermint_v1beta1_blocks_latest
   version: 1.0.0
 servers:
-  - url: https://rest-cosmos-mainnet.nodit.io
+- url: https://rest-cosmos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,34 +20,40 @@ paths:
       description: GetLatestBlock returns the latest block.
       operationId: cosmos_base_tendermint_v1beta1_blocks_latest
       tags:
-        - base
+      - base
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
                   block_id:
+                    description: Block ID (block hash and part set header).
                     type: object
                     properties:
                       hash:
+                        description: Block hash.
                         type: string
                         format: byte
                       part_set_header:
+                        description: Part set header, used when the block is split into parts for gossiping.
                         type: object
                         properties:
                           total:
+                            description: Total number of block parts.
                             type: integer
                             format: int64
                           hash:
+                            description: Merkle root hash of the block parts.
                             type: string
                             format: byte
                         title: PartsetHeader
                     title: BlockID
                   block:
-                    title: "Deprecated: please use `sdk_block` instead"
+                    description: The block (header, transactions, evidence, and last commit).
+                    title: 'Deprecated: please use `sdk_block` instead'
                     type: object
                     properties:
                       header:
@@ -58,9 +64,11 @@ paths:
                             type: object
                             properties:
                               block:
+                                description: Block protocol version.
                                 type: string
                                 format: uint64
                               app:
+                                description: Application protocol version.
                                 type: string
                                 format: uint64
                             description: |-
@@ -68,62 +76,80 @@ paths:
                               including all blockchain data structures and the rules of the application's
                               state transition machine.
                           chain_id:
+                            description: Chain ID.
                             type: string
                           height:
+                            description: Block height.
                             type: string
                             format: int64
                           time:
+                            description: Block time (UTC).
                             type: string
                             format: date-time
                           last_block_id:
+                            description: Block ID of the previous block.
                             type: object
                             properties:
                               hash:
+                                description: Block hash.
                                 type: string
                                 format: byte
                               part_set_header:
+                                description: Part set header, used when the block is split into parts for gossiping.
                                 type: object
                                 properties:
                                   total:
+                                    description: Total number of block parts.
                                     type: integer
                                     format: int64
                                   hash:
+                                    description: Merkle root hash of the block parts.
                                     type: string
                                     format: byte
                                 title: PartsetHeader
                             title: BlockID
                           last_commit_hash:
+                            description: Hash of the validators' commit for the previous block.
                             type: string
                             format: byte
                             title: hashes of block data
                           data_hash:
+                            description: Hash of the transactions in the block.
                             type: string
                             format: byte
                           validators_hash:
+                            description: Hash of the validator set for the current block.
                             type: string
                             format: byte
                             title: hashes from the app output from the prev block
                           next_validators_hash:
+                            description: Hash of the validator set for the next block.
                             type: string
                             format: byte
                           consensus_hash:
+                            description: Hash of the consensus parameters for the current block.
                             type: string
                             format: byte
                           app_hash:
+                            description: Application state hash after executing the previous block's transactions.
                             type: string
                             format: byte
                           last_results_hash:
+                            description: Root hash of the execution results of the previous block's transactions.
                             type: string
                             format: byte
                           evidence_hash:
+                            description: Hash of the evidence included in the block.
                             type: string
                             format: byte
                             title: consensus info
                           proposer_address:
+                            description: Address of the validator that proposed the block.
                             type: string
                             format: byte
                         description: Header defines the structure of a block header.
                       data:
+                        description: Transactions included in the block.
                         type: object
                         properties:
                           txs:
@@ -137,9 +163,11 @@ paths:
                               This means that block.AppHash does not include these txs.
                         title: Data contains the set of transactions included in the block
                       evidence:
+                        description: Evidence of Byzantine behavior included in the block.
                         type: object
                         properties:
                           evidence:
+                            description: Evidence of Byzantine behavior included in the block.
                             type: array
                             items:
                               type: object
@@ -153,10 +181,10 @@ paths:
                                         type:
                                           type: string
                                           enum:
-                                            - SIGNED_MSG_TYPE_UNKNOWN
-                                            - SIGNED_MSG_TYPE_PREVOTE
-                                            - SIGNED_MSG_TYPE_PRECOMMIT
-                                            - SIGNED_MSG_TYPE_PROPOSAL
+                                          - SIGNED_MSG_TYPE_UNKNOWN
+                                          - SIGNED_MSG_TYPE_PREVOTE
+                                          - SIGNED_MSG_TYPE_PRECOMMIT
+                                          - SIGNED_MSG_TYPE_PROPOSAL
                                           default: SIGNED_MSG_TYPE_UNKNOWN
                                           description: |-
                                             SignedMsgType is a type of signed message in the consensus.
@@ -164,35 +192,45 @@ paths:
                                              - SIGNED_MSG_TYPE_PREVOTE: Votes
                                              - SIGNED_MSG_TYPE_PROPOSAL: Proposals
                                         height:
+                                          description: Height of the voted block.
                                           type: string
                                           format: int64
                                         round:
+                                          description: Voting round.
                                           type: integer
                                           format: int32
                                         block_id:
+                                          description: ID of the voted block.
                                           type: object
                                           properties:
                                             hash:
+                                              description: Block hash.
                                               type: string
                                               format: byte
                                             part_set_header:
+                                              description: Part set header, used when the block is split into parts for gossiping.
                                               type: object
                                               properties:
                                                 total:
+                                                  description: Total number of block parts.
                                                   type: integer
                                                   format: int64
                                                 hash:
+                                                  description: Merkle root hash of the block parts.
                                                   type: string
                                                   format: byte
                                               title: PartsetHeader
                                           title: BlockID
                                         timestamp:
+                                          description: Vote time.
                                           type: string
                                           format: date-time
                                         validator_address:
+                                          description: Address of the signing validator.
                                           type: string
                                           format: byte
                                         validator_index:
+                                          description: Index in the validator set.
                                           type: integer
                                           format: int32
                                         signature:
@@ -216,10 +254,10 @@ paths:
                                         type:
                                           type: string
                                           enum:
-                                            - SIGNED_MSG_TYPE_UNKNOWN
-                                            - SIGNED_MSG_TYPE_PREVOTE
-                                            - SIGNED_MSG_TYPE_PRECOMMIT
-                                            - SIGNED_MSG_TYPE_PROPOSAL
+                                          - SIGNED_MSG_TYPE_UNKNOWN
+                                          - SIGNED_MSG_TYPE_PREVOTE
+                                          - SIGNED_MSG_TYPE_PRECOMMIT
+                                          - SIGNED_MSG_TYPE_PROPOSAL
                                           default: SIGNED_MSG_TYPE_UNKNOWN
                                           description: |-
                                             SignedMsgType is a type of signed message in the consensus.
@@ -227,35 +265,45 @@ paths:
                                              - SIGNED_MSG_TYPE_PREVOTE: Votes
                                              - SIGNED_MSG_TYPE_PROPOSAL: Proposals
                                         height:
+                                          description: Height of the voted block.
                                           type: string
                                           format: int64
                                         round:
+                                          description: Voting round.
                                           type: integer
                                           format: int32
                                         block_id:
+                                          description: ID of the voted block.
                                           type: object
                                           properties:
                                             hash:
+                                              description: Block hash.
                                               type: string
                                               format: byte
                                             part_set_header:
+                                              description: Part set header, used when the block is split into parts for gossiping.
                                               type: object
                                               properties:
                                                 total:
+                                                  description: Total number of block parts.
                                                   type: integer
                                                   format: int64
                                                 hash:
+                                                  description: Merkle root hash of the block parts.
                                                   type: string
                                                   format: byte
                                               title: PartsetHeader
                                           title: BlockID
                                         timestamp:
+                                          description: Vote time.
                                           type: string
                                           format: date-time
                                         validator_address:
+                                          description: Address of the signing validator.
                                           type: string
                                           format: byte
                                         validator_index:
+                                          description: Index in the validator set.
                                           type: integer
                                           format: int32
                                         signature:
@@ -274,12 +322,15 @@ paths:
                                           description: Vote extension signature of the validator that participated in block consensus. Valid only for precommit messages.
                                       description: Validator's prevote or precommit vote for consensus.
                                     total_voting_power:
+                                      description: Total voting power at the time of the violation.
                                       type: string
                                       format: int64
                                     validator_power:
+                                      description: Validator voting power at the time of the violation.
                                       type: string
                                       format: int64
                                     timestamp:
+                                      description: Time at which the violation occurred.
                                       type: string
                                       format: date-time
                                   description: Evidence that a validator signed two conflicting votes.
@@ -287,9 +338,11 @@ paths:
                                   type: object
                                   properties:
                                     conflicting_block:
+                                      description: Block that conflicts with the trusted block.
                                       type: object
                                       properties:
                                         signed_header:
+                                          description: Signed header (header and commit).
                                           type: object
                                           properties:
                                             header:
@@ -300,9 +353,11 @@ paths:
                                                   type: object
                                                   properties:
                                                     block:
+                                                      description: Block protocol version.
                                                       type: string
                                                       format: uint64
                                                     app:
+                                                      description: Application protocol version.
                                                       type: string
                                                       format: uint64
                                                   description: |-
@@ -310,58 +365,75 @@ paths:
                                                     including all blockchain data structures and the rules of the application's
                                                     state transition machine.
                                                 chain_id:
+                                                  description: Chain ID.
                                                   type: string
                                                 height:
+                                                  description: Block height.
                                                   type: string
                                                   format: int64
                                                 time:
+                                                  description: Block time (UTC).
                                                   type: string
                                                   format: date-time
                                                 last_block_id:
+                                                  description: Block ID of the previous block.
                                                   type: object
                                                   properties:
                                                     hash:
+                                                      description: Block hash.
                                                       type: string
                                                       format: byte
                                                     part_set_header:
+                                                      description: Part set header, used when the block is split into parts for gossiping.
                                                       type: object
                                                       properties:
                                                         total:
+                                                          description: Total number of block parts.
                                                           type: integer
                                                           format: int64
                                                         hash:
+                                                          description: Merkle root hash of the block parts.
                                                           type: string
                                                           format: byte
                                                       title: PartsetHeader
                                                   title: BlockID
                                                 last_commit_hash:
+                                                  description: Hash of the validators' commit for the previous block.
                                                   type: string
                                                   format: byte
                                                   title: hashes of block data
                                                 data_hash:
+                                                  description: Hash of the transactions in the block.
                                                   type: string
                                                   format: byte
                                                 validators_hash:
+                                                  description: Hash of the validator set for the current block.
                                                   type: string
                                                   format: byte
                                                   title: hashes from the app output from the prev block
                                                 next_validators_hash:
+                                                  description: Hash of the validator set for the next block.
                                                   type: string
                                                   format: byte
                                                 consensus_hash:
+                                                  description: Hash of the consensus parameters for the current block.
                                                   type: string
                                                   format: byte
                                                 app_hash:
+                                                  description: Application state hash after executing the previous block's transactions.
                                                   type: string
                                                   format: byte
                                                 last_results_hash:
+                                                  description: Root hash of the execution results of the previous block's transactions.
                                                   type: string
                                                   format: byte
                                                 evidence_hash:
+                                                  description: Hash of the evidence included in the block.
                                                   type: string
                                                   format: byte
                                                   title: consensus info
                                                 proposer_address:
+                                                  description: Address of the validator that proposed the block.
                                                   type: string
                                                   format: byte
                                               description: Header defines the structure of a block header.
@@ -369,136 +441,174 @@ paths:
                                               type: object
                                               properties:
                                                 height:
+                                                  description: Height of the committed block.
                                                   type: string
                                                   format: int64
                                                 round:
+                                                  description: Consensus round in which the block was committed.
                                                   type: integer
                                                   format: int32
                                                 block_id:
+                                                  description: ID of the committed block.
                                                   type: object
                                                   properties:
                                                     hash:
+                                                      description: Block hash.
                                                       type: string
                                                       format: byte
                                                     part_set_header:
+                                                      description: Part set header, used when the block is split into parts for gossiping.
                                                       type: object
                                                       properties:
                                                         total:
+                                                          description: Total number of block parts.
                                                           type: integer
                                                           format: int64
                                                         hash:
+                                                          description: Merkle root hash of the block parts.
                                                           type: string
                                                           format: byte
                                                       title: PartsetHeader
                                                   title: BlockID
                                                 signatures:
+                                                  description: Validator signatures, ordered by the validator set.
                                                   type: array
                                                   items:
                                                     type: object
                                                     properties:
                                                       block_id_flag:
+                                                        description: 'Validator vote status: `1` absent, `2` voted for this block, `3` voted nil.'
                                                         type: string
                                                         enum:
-                                                          - BLOCK_ID_FLAG_UNKNOWN
-                                                          - BLOCK_ID_FLAG_ABSENT
-                                                          - BLOCK_ID_FLAG_COMMIT
-                                                          - BLOCK_ID_FLAG_NIL
+                                                        - BLOCK_ID_FLAG_UNKNOWN
+                                                        - BLOCK_ID_FLAG_ABSENT
+                                                        - BLOCK_ID_FLAG_COMMIT
+                                                        - BLOCK_ID_FLAG_NIL
                                                         default: BLOCK_ID_FLAG_UNKNOWN
                                                         title: BlockIdFlag indicates which BlockID the signature is for
                                                       validator_address:
+                                                        description: Address of the signing validator.
                                                         type: string
                                                         format: byte
                                                       timestamp:
+                                                        description: Time the signature was made.
                                                         type: string
                                                         format: date-time
                                                       signature:
+                                                        description: Validator signature (Base64).
                                                         type: string
                                                         format: byte
                                                     description: CommitSig is a part of the Vote included in a Commit.
                                               description: Contains evidence that the block was committed by the validator set.
                                         validator_set:
+                                          description: Validator set.
                                           type: object
                                           properties:
                                             validators:
+                                              description: List of validators.
                                               type: array
                                               items:
                                                 type: object
                                                 properties:
                                                   address:
+                                                    description: Validator address.
                                                     type: string
                                                     format: byte
                                                   pub_key:
+                                                    description: Validator public key.
                                                     type: object
                                                     properties:
                                                       ed25519:
+                                                        description: Ed25519 public key (Base64).
                                                         type: string
                                                         format: byte
                                                       secp256k1:
+                                                        description: Secp256k1 public key (Base64).
                                                         type: string
                                                         format: byte
                                                     title: PublicKey defines the keys available for use with Validators
                                                   voting_power:
+                                                    description: Voting power of the validator.
                                                     type: string
                                                     format: int64
                                                   proposer_priority:
+                                                    description: Proposer priority.
                                                     type: string
                                                     format: int64
                                             proposer:
+                                              description: Block proposer at this height.
                                               type: object
                                               properties:
                                                 address:
+                                                  description: Address of the proposing validator.
                                                   type: string
                                                   format: byte
                                                 pub_key:
+                                                  description: Validator public key.
                                                   type: object
                                                   properties:
                                                     ed25519:
+                                                      description: Ed25519 public key (Base64).
                                                       type: string
                                                       format: byte
                                                     secp256k1:
+                                                      description: Secp256k1 public key (Base64).
                                                       type: string
                                                       format: byte
                                                   title: PublicKey defines the keys available for use with Validators
                                                 voting_power:
+                                                  description: Voting power of the validator.
                                                   type: string
                                                   format: int64
                                                 proposer_priority:
+                                                  description: Proposer priority.
                                                   type: string
                                                   format: int64
                                             total_voting_power:
+                                              description: Total voting power at the time of the violation.
                                               type: string
                                               format: int64
                                     common_height:
+                                      description: Last height shared by the conflicting and trusted blocks.
                                       type: string
                                       format: int64
                                     byzantine_validators:
+                                      description: Validators that took part in the attack.
                                       type: array
                                       items:
                                         type: object
                                         properties:
                                           address:
+                                            description: Validator address.
                                             type: string
                                             format: byte
                                           pub_key:
+                                            description: Validator public key.
                                             type: object
                                             properties:
                                               ed25519:
+                                                description: Ed25519 public key (Base64).
                                                 type: string
                                                 format: byte
                                               secp256k1:
+                                                description: Secp256k1 public key (Base64).
                                                 type: string
                                                 format: byte
                                             title: PublicKey defines the keys available for use with Validators
                                           voting_power:
+                                            description: Voting power of the validator.
                                             type: string
                                             format: int64
                                           proposer_priority:
+                                            description: Proposer priority.
                                             type: string
                                             format: int64
                                     total_voting_power:
+                                      description: Total voting power at the time of the violation.
                                       type: string
                                       format: int64
                                     timestamp:
+                                      description: Time at which the violation occurred.
                                       type: string
                                       format: date-time
                                   description: Evidence that the validator set attempted to mislead a light client.
@@ -506,49 +616,61 @@ paths:
                         type: object
                         properties:
                           height:
+                            description: Height of the committed block.
                             type: string
                             format: int64
                           round:
+                            description: Consensus round in which the block was committed.
                             type: integer
                             format: int32
                           block_id:
+                            description: ID of the committed block.
                             type: object
                             properties:
                               hash:
+                                description: Block hash.
                                 type: string
                                 format: byte
                               part_set_header:
+                                description: Part set header, used when the block is split into parts for gossiping.
                                 type: object
                                 properties:
                                   total:
+                                    description: Total number of block parts.
                                     type: integer
                                     format: int64
                                   hash:
+                                    description: Merkle root hash of the block parts.
                                     type: string
                                     format: byte
                                 title: PartsetHeader
                             title: BlockID
                           signatures:
+                            description: Validator signatures, ordered by the validator set.
                             type: array
                             items:
                               type: object
                               properties:
                                 block_id_flag:
+                                  description: 'Validator vote status: `1` absent, `2` voted for this block, `3` voted nil.'
                                   type: string
                                   enum:
-                                    - BLOCK_ID_FLAG_UNKNOWN
-                                    - BLOCK_ID_FLAG_ABSENT
-                                    - BLOCK_ID_FLAG_COMMIT
-                                    - BLOCK_ID_FLAG_NIL
+                                  - BLOCK_ID_FLAG_UNKNOWN
+                                  - BLOCK_ID_FLAG_ABSENT
+                                  - BLOCK_ID_FLAG_COMMIT
+                                  - BLOCK_ID_FLAG_NIL
                                   default: BLOCK_ID_FLAG_UNKNOWN
                                   title: BlockIdFlag indicates which BlockID the signature is for
                                 validator_address:
+                                  description: Address of the signing validator.
                                   type: string
                                   format: byte
                                 timestamp:
+                                  description: Time the signature was made.
                                   type: string
                                   format: date-time
                                 signature:
+                                  description: Validator signature (Base64).
                                   type: string
                                   format: byte
                               description: CommitSig is a part of the Vote included in a Commit.
@@ -564,9 +686,11 @@ paths:
                             type: object
                             properties:
                               block:
+                                description: Block protocol version.
                                 type: string
                                 format: uint64
                               app:
+                                description: Application protocol version.
                                 type: string
                                 format: uint64
                             description: |-
@@ -574,54 +698,70 @@ paths:
                               including all blockchain data structures and the rules of the application's
                               state transition machine.
                           chain_id:
+                            description: Chain ID.
                             type: string
                           height:
+                            description: Block height.
                             type: string
                             format: int64
                           time:
+                            description: Block time (UTC).
                             type: string
                             format: date-time
                           last_block_id:
+                            description: Block ID of the previous block.
                             type: object
                             properties:
                               hash:
+                                description: Block hash.
                                 type: string
                                 format: byte
                               part_set_header:
+                                description: Part set header, used when the block is split into parts for gossiping.
                                 type: object
                                 properties:
                                   total:
+                                    description: Total number of block parts.
                                     type: integer
                                     format: int64
                                   hash:
+                                    description: Merkle root hash of the block parts.
                                     type: string
                                     format: byte
                                 title: PartsetHeader
                             title: BlockID
                           last_commit_hash:
+                            description: Hash of the validators' commit for the previous block.
                             type: string
                             format: byte
                             title: hashes of block data
                           data_hash:
+                            description: Hash of the transactions in the block.
                             type: string
                             format: byte
                           validators_hash:
+                            description: Hash of the validator set for the current block.
                             type: string
                             format: byte
                             title: hashes from the app output from the prev block
                           next_validators_hash:
+                            description: Hash of the validator set for the next block.
                             type: string
                             format: byte
                           consensus_hash:
+                            description: Hash of the consensus parameters for the current block.
                             type: string
                             format: byte
                           app_hash:
+                            description: Application state hash after executing the previous block's transactions.
                             type: string
                             format: byte
                           last_results_hash:
+                            description: Root hash of the execution results of the previous block's transactions.
                             type: string
                             format: byte
                           evidence_hash:
+                            description: Hash of the evidence included in the block.
                             type: string
                             format: byte
                             title: consensus info
@@ -633,6 +773,7 @@ paths:
                               for better UX.
                         description: Header defines the structure of a Tendermint block header.
                       data:
+                        description: Transactions included in the block.
                         type: object
                         properties:
                           txs:
@@ -646,9 +787,11 @@ paths:
                               This means that block.AppHash does not include these txs.
                         title: Data contains the set of transactions included in the block
                       evidence:
+                        description: Evidence of Byzantine behavior included in the block.
                         type: object
                         properties:
                           evidence:
+                            description: Evidence of Byzantine behavior included in the block.
                             type: array
                             items:
                               type: object
@@ -662,10 +805,10 @@ paths:
                                         type:
                                           type: string
                                           enum:
-                                            - SIGNED_MSG_TYPE_UNKNOWN
-                                            - SIGNED_MSG_TYPE_PREVOTE
-                                            - SIGNED_MSG_TYPE_PRECOMMIT
-                                            - SIGNED_MSG_TYPE_PROPOSAL
+                                          - SIGNED_MSG_TYPE_UNKNOWN
+                                          - SIGNED_MSG_TYPE_PREVOTE
+                                          - SIGNED_MSG_TYPE_PRECOMMIT
+                                          - SIGNED_MSG_TYPE_PROPOSAL
                                           default: SIGNED_MSG_TYPE_UNKNOWN
                                           description: |-
                                             SignedMsgType is a type of signed message in the consensus.
@@ -673,35 +816,45 @@ paths:
                                              - SIGNED_MSG_TYPE_PREVOTE: Votes
                                              - SIGNED_MSG_TYPE_PROPOSAL: Proposals
                                         height:
+                                          description: Height of the voted block.
                                           type: string
                                           format: int64
                                         round:
+                                          description: Voting round.
                                           type: integer
                                           format: int32
                                         block_id:
+                                          description: ID of the voted block.
                                           type: object
                                           properties:
                                             hash:
+                                              description: Block hash.
                                               type: string
                                               format: byte
                                             part_set_header:
+                                              description: Part set header, used when the block is split into parts for gossiping.
                                               type: object
                                               properties:
                                                 total:
+                                                  description: Total number of block parts.
                                                   type: integer
                                                   format: int64
                                                 hash:
+                                                  description: Merkle root hash of the block parts.
                                                   type: string
                                                   format: byte
                                               title: PartsetHeader
                                           title: BlockID
                                         timestamp:
+                                          description: Vote time.
                                           type: string
                                           format: date-time
                                         validator_address:
+                                          description: Address of the signing validator.
                                           type: string
                                           format: byte
                                         validator_index:
+                                          description: Index in the validator set.
                                           type: integer
                                           format: int32
                                         signature:
@@ -725,10 +878,10 @@ paths:
                                         type:
                                           type: string
                                           enum:
-                                            - SIGNED_MSG_TYPE_UNKNOWN
-                                            - SIGNED_MSG_TYPE_PREVOTE
-                                            - SIGNED_MSG_TYPE_PRECOMMIT
-                                            - SIGNED_MSG_TYPE_PROPOSAL
+                                          - SIGNED_MSG_TYPE_UNKNOWN
+                                          - SIGNED_MSG_TYPE_PREVOTE
+                                          - SIGNED_MSG_TYPE_PRECOMMIT
+                                          - SIGNED_MSG_TYPE_PROPOSAL
                                           default: SIGNED_MSG_TYPE_UNKNOWN
                                           description: |-
                                             SignedMsgType is a type of signed message in the consensus.
@@ -736,35 +889,45 @@ paths:
                                              - SIGNED_MSG_TYPE_PREVOTE: Votes
                                              - SIGNED_MSG_TYPE_PROPOSAL: Proposals
                                         height:
+                                          description: Height of the voted block.
                                           type: string
                                           format: int64
                                         round:
+                                          description: Voting round.
                                           type: integer
                                           format: int32
                                         block_id:
+                                          description: ID of the voted block.
                                           type: object
                                           properties:
                                             hash:
+                                              description: Block hash.
                                               type: string
                                               format: byte
                                             part_set_header:
+                                              description: Part set header, used when the block is split into parts for gossiping.
                                               type: object
                                               properties:
                                                 total:
+                                                  description: Total number of block parts.
                                                   type: integer
                                                   format: int64
                                                 hash:
+                                                  description: Merkle root hash of the block parts.
                                                   type: string
                                                   format: byte
                                               title: PartsetHeader
                                           title: BlockID
                                         timestamp:
+                                          description: Vote time.
                                           type: string
                                           format: date-time
                                         validator_address:
+                                          description: Address of the signing validator.
                                           type: string
                                           format: byte
                                         validator_index:
+                                          description: Index in the validator set.
                                           type: integer
                                           format: int32
                                         signature:
@@ -783,12 +946,15 @@ paths:
                                           description: Vote extension signature of the validator that participated in block consensus. Valid only for precommit messages.
                                       description: Validator's prevote or precommit vote for consensus.
                                     total_voting_power:
+                                      description: Total voting power at the time of the violation.
                                       type: string
                                       format: int64
                                     validator_power:
+                                      description: Validator voting power at the time of the violation.
                                       type: string
                                       format: int64
                                     timestamp:
+                                      description: Time at which the violation occurred.
                                       type: string
                                       format: date-time
                                   description: Evidence that a validator signed two conflicting votes.
@@ -796,9 +962,11 @@ paths:
                                   type: object
                                   properties:
                                     conflicting_block:
+                                      description: Block that conflicts with the trusted block.
                                       type: object
                                       properties:
                                         signed_header:
+                                          description: Signed header (header and commit).
                                           type: object
                                           properties:
                                             header:
@@ -809,9 +977,11 @@ paths:
                                                   type: object
                                                   properties:
                                                     block:
+                                                      description: Block protocol version.
                                                       type: string
                                                       format: uint64
                                                     app:
+                                                      description: Application protocol version.
                                                       type: string
                                                       format: uint64
                                                   description: |-
@@ -819,58 +989,75 @@ paths:
                                                     including all blockchain data structures and the rules of the application's
                                                     state transition machine.
                                                 chain_id:
+                                                  description: Chain ID.
                                                   type: string
                                                 height:
+                                                  description: Block height.
                                                   type: string
                                                   format: int64
                                                 time:
+                                                  description: Block time (UTC).
                                                   type: string
                                                   format: date-time
                                                 last_block_id:
+                                                  description: Block ID of the previous block.
                                                   type: object
                                                   properties:
                                                     hash:
+                                                      description: Block hash.
                                                       type: string
                                                       format: byte
                                                     part_set_header:
+                                                      description: Part set header, used when the block is split into parts for gossiping.
                                                       type: object
                                                       properties:
                                                         total:
+                                                          description: Total number of block parts.
                                                           type: integer
                                                           format: int64
                                                         hash:
+                                                          description: Merkle root hash of the block parts.
                                                           type: string
                                                           format: byte
                                                       title: PartsetHeader
                                                   title: BlockID
                                                 last_commit_hash:
+                                                  description: Hash of the validators' commit for the previous block.
                                                   type: string
                                                   format: byte
                                                   title: hashes of block data
                                                 data_hash:
+                                                  description: Hash of the transactions in the block.
                                                   type: string
                                                   format: byte
                                                 validators_hash:
+                                                  description: Hash of the validator set for the current block.
                                                   type: string
                                                   format: byte
                                                   title: hashes from the app output from the prev block
                                                 next_validators_hash:
+                                                  description: Hash of the validator set for the next block.
                                                   type: string
                                                   format: byte
                                                 consensus_hash:
+                                                  description: Hash of the consensus parameters for the current block.
                                                   type: string
                                                   format: byte
                                                 app_hash:
+                                                  description: Application state hash after executing the previous block's transactions.
                                                   type: string
                                                   format: byte
                                                 last_results_hash:
+                                                  description: Root hash of the execution results of the previous block's transactions.
                                                   type: string
                                                   format: byte
                                                 evidence_hash:
+                                                  description: Hash of the evidence included in the block.
                                                   type: string
                                                   format: byte
                                                   title: consensus info
                                                 proposer_address:
+                                                  description: Address of the validator that proposed the block.
                                                   type: string
                                                   format: byte
                                               description: Header defines the structure of a block header.
@@ -878,136 +1065,174 @@ paths:
                                               type: object
                                               properties:
                                                 height:
+                                                  description: Height of the committed block.
                                                   type: string
                                                   format: int64
                                                 round:
+                                                  description: Consensus round in which the block was committed.
                                                   type: integer
                                                   format: int32
                                                 block_id:
+                                                  description: ID of the committed block.
                                                   type: object
                                                   properties:
                                                     hash:
+                                                      description: Block hash.
                                                       type: string
                                                       format: byte
                                                     part_set_header:
+                                                      description: Part set header, used when the block is split into parts for gossiping.
                                                       type: object
                                                       properties:
                                                         total:
+                                                          description: Total number of block parts.
                                                           type: integer
                                                           format: int64
                                                         hash:
+                                                          description: Merkle root hash of the block parts.
                                                           type: string
                                                           format: byte
                                                       title: PartsetHeader
                                                   title: BlockID
                                                 signatures:
+                                                  description: Validator signatures, ordered by the validator set.
                                                   type: array
                                                   items:
                                                     type: object
                                                     properties:
                                                       block_id_flag:
+                                                        description: 'Validator vote status: `1` absent, `2` voted for this block, `3` voted nil.'
                                                         type: string
                                                         enum:
-                                                          - BLOCK_ID_FLAG_UNKNOWN
-                                                          - BLOCK_ID_FLAG_ABSENT
-                                                          - BLOCK_ID_FLAG_COMMIT
-                                                          - BLOCK_ID_FLAG_NIL
+                                                        - BLOCK_ID_FLAG_UNKNOWN
+                                                        - BLOCK_ID_FLAG_ABSENT
+                                                        - BLOCK_ID_FLAG_COMMIT
+                                                        - BLOCK_ID_FLAG_NIL
                                                         default: BLOCK_ID_FLAG_UNKNOWN
                                                         title: BlockIdFlag indicates which BlockID the signature is for
                                                       validator_address:
+                                                        description: Address of the signing validator.
                                                         type: string
                                                         format: byte
                                                       timestamp:
+                                                        description: Time the signature was made.
                                                         type: string
                                                         format: date-time
                                                       signature:
+                                                        description: Validator signature (Base64).
                                                         type: string
                                                         format: byte
                                                     description: CommitSig is a part of the Vote included in a Commit.
                                               description: Contains evidence that the block was committed by the validator set.
                                         validator_set:
+                                          description: Validator set.
                                           type: object
                                           properties:
                                             validators:
+                                              description: List of validators.
                                               type: array
                                               items:
                                                 type: object
                                                 properties:
                                                   address:
+                                                    description: Validator address.
                                                     type: string
                                                     format: byte
                                                   pub_key:
+                                                    description: Validator public key.
                                                     type: object
                                                     properties:
                                                       ed25519:
+                                                        description: Ed25519 public key (Base64).
                                                         type: string
                                                         format: byte
                                                       secp256k1:
+                                                        description: Secp256k1 public key (Base64).
                                                         type: string
                                                         format: byte
                                                     title: PublicKey defines the keys available for use with Validators
                                                   voting_power:
+                                                    description: Voting power of the validator.
                                                     type: string
                                                     format: int64
                                                   proposer_priority:
+                                                    description: Proposer priority.
                                                     type: string
                                                     format: int64
                                             proposer:
+                                              description: Block proposer at this height.
                                               type: object
                                               properties:
                                                 address:
+                                                  description: Address of the proposing validator.
                                                   type: string
                                                   format: byte
                                                 pub_key:
+                                                  description: Validator public key.
                                                   type: object
                                                   properties:
                                                     ed25519:
+                                                      description: Ed25519 public key (Base64).
                                                       type: string
                                                       format: byte
                                                     secp256k1:
+                                                      description: Secp256k1 public key (Base64).
                                                       type: string
                                                       format: byte
                                                   title: PublicKey defines the keys available for use with Validators
                                                 voting_power:
+                                                  description: Voting power of the validator.
                                                   type: string
                                                   format: int64
                                                 proposer_priority:
+                                                  description: Proposer priority.
                                                   type: string
                                                   format: int64
                                             total_voting_power:
+                                              description: Total voting power at the time of the violation.
                                               type: string
                                               format: int64
                                     common_height:
+                                      description: Last height shared by the conflicting and trusted blocks.
                                       type: string
                                       format: int64
                                     byzantine_validators:
+                                      description: Validators that took part in the attack.
                                       type: array
                                       items:
                                         type: object
                                         properties:
                                           address:
+                                            description: Validator address.
                                             type: string
                                             format: byte
                                           pub_key:
+                                            description: Validator public key.
                                             type: object
                                             properties:
                                               ed25519:
+                                                description: Ed25519 public key (Base64).
                                                 type: string
                                                 format: byte
                                               secp256k1:
+                                                description: Secp256k1 public key (Base64).
                                                 type: string
                                                 format: byte
                                             title: PublicKey defines the keys available for use with Validators
                                           voting_power:
+                                            description: Voting power of the validator.
                                             type: string
                                             format: int64
                                           proposer_priority:
+                                            description: Proposer priority.
                                             type: string
                                             format: int64
                                     total_voting_power:
+                                      description: Total voting power at the time of the violation.
                                       type: string
                                       format: int64
                                     timestamp:
+                                      description: Time at which the violation occurred.
                                       type: string
                                       format: date-time
                                   description: Evidence that the validator set attempted to mislead a light client.
@@ -1015,49 +1240,61 @@ paths:
                         type: object
                         properties:
                           height:
+                            description: Height of the committed block.
                             type: string
                             format: int64
                           round:
+                            description: Consensus round in which the block was committed.
                             type: integer
                             format: int32
                           block_id:
+                            description: ID of the committed block.
                             type: object
                             properties:
                               hash:
+                                description: Block hash.
                                 type: string
                                 format: byte
                               part_set_header:
+                                description: Part set header, used when the block is split into parts for gossiping.
                                 type: object
                                 properties:
                                   total:
+                                    description: Total number of block parts.
                                     type: integer
                                     format: int64
                                   hash:
+                                    description: Merkle root hash of the block parts.
                                     type: string
                                     format: byte
                                 title: PartsetHeader
                             title: BlockID
                           signatures:
+                            description: Validator signatures, ordered by the validator set.
                             type: array
                             items:
                               type: object
                               properties:
                                 block_id_flag:
+                                  description: 'Validator vote status: `1` absent, `2` voted for this block, `3` voted nil.'
                                   type: string
                                   enum:
-                                    - BLOCK_ID_FLAG_UNKNOWN
-                                    - BLOCK_ID_FLAG_ABSENT
-                                    - BLOCK_ID_FLAG_COMMIT
-                                    - BLOCK_ID_FLAG_NIL
+                                  - BLOCK_ID_FLAG_UNKNOWN
+                                  - BLOCK_ID_FLAG_ABSENT
+                                  - BLOCK_ID_FLAG_COMMIT
+                                  - BLOCK_ID_FLAG_NIL
                                   default: BLOCK_ID_FLAG_UNKNOWN
                                   title: BlockIdFlag indicates which BlockID the signature is for
                                 validator_address:
+                                  description: Address of the signing validator.
                                   type: string
                                   format: byte
                                 timestamp:
+                                  description: Time the signature was made.
                                   type: string
                                   format: date-time
                                 signature:
+                                  description: Validator signature (Base64).
                                   type: string
                                   format: byte
                               description: CommitSig is a part of the Vote included in a Commit.
@@ -1069,7 +1306,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -1088,37 +1325,21 @@ paths:
                         type_url:
                           type: string
                           description: |-
-                            A URL/resource name that uniquely identifies the type of the serialized
-                            protocol buffer message. This string must contain at least
-                            one "/" character. The last segment of the URL's path must represent
-                            the fully qualified name of the type (as in
-                            `path/google.protobuf.Duration`). The name should be in a canonical form
-                            (e.g., leading "." is not accepted).
+                            직렬화된 프로토콜 버퍼 메시지의 타입을 고유하게 식별하는 URL/리소스 이름. 이 문자열에는 "/" 문자가 최소 하나 포함되어야 하며, URL 경로의 마지막 세그먼트는 타입의 완전한 이름을 나타내야 합니다 (예: `path/google.protobuf.Duration`). 이름은 표준 형식이어야 합니다 (예: 선행 "."은 허용되지 않음).
 
-                            In practice, teams usually precompile into the binary all types that they
-                            expect it to use in the context of Any. However, for URLs which use the
-                            scheme `http`, `https`, or no scheme, one can optionally set up a type
-                            server that maps type URLs to message definitions as follows:
+                            실제로 팀들은 일반적으로 Any 컨텍스트에서 사용될 것으로 예상하는 모든 타입을 바이너리에 미리 컴파일합니다. 단, `http`, `https` 또는 스킴 없는 URL의 경우 다음과 같이 타입 URL을 메시지 정의에 매핑하는 타입 서버를 선택적으로 설정할 수 있습니다:
 
-                            * If no scheme is provided, `https` is assumed.
-                            * An HTTP GET on the URL must yield a [google.protobuf.Type][]
-                              value in binary format, or produce an error.
-                            * Applications are allowed to cache lookup results based on the
-                              URL, or have them precompiled into a binary to avoid any
-                              lookup. Therefore, binary compatibility needs to be preserved
-                              on changes to types. (Use versioned type names to manage
-                              breaking changes.)
+                            * 스킴이 제공되지 않으면 `https`로 가정합니다.
+                            * URL에 대한 HTTP GET은 바이너리 형식의 [google.protobuf.Type][] 값을 반환하거나 오류를 발생시켜야 합니다.
+                            * 애플리케이션은 URL을 기반으로 조회 결과를 캐시하거나 바이너리에 미리 컴파일하여 조회를 방지할 수 있습니다. 따라서 타입 변경 시 바이너리 호환성을 유지해야 합니다 (버전이 지정된 타입 이름을 사용하여 호환성 변경 관리).
 
-                            Note: this functionality is not currently available in the official
-                            protobuf release, and it is not used for type URLs beginning with
-                            type.googleapis.com.
+                            참고: 이 기능은 현재 공식 protobuf 릴리스에서 사용 불가하며, type.googleapis.com으로 시작하는 타입 URL에는 사용되지 않습니다.
 
-                            Schemes other than `http`, `https` (or the empty scheme) might be
-                            used with implementation specific semantics.
+                            `http`, `https` (또는 빈 스킴) 이외의 스킴은 구현별 의미를 가질 수 있습니다.
                         value:
                           type: string
                           format: byte
-                          description: Must be a valid serialized protocol buffer of the above specified type.
+                          description: 위에 지정된 타입의 유효한 직렬화 프로토콜 버퍼 값이어야 합니다.
                       description: |-
                         `Any` contains an arbitrary serialized protocol buffer message along with a
                         URL that describes the type of the serialized message.
@@ -1206,5 +1427,5 @@ paths:
                               "value": "1.212s"
                             }
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/base/tendermint/v1beta1/blocks/latest

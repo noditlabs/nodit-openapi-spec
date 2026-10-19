@@ -1,0 +1,521 @@
+openapi: 3.1.0
+info:
+  title: World Chain - debug_traceBlockByNumber
+  version: 1.0.0
+servers:
+- url: https://worldchain-mainnet.nodit.io
+  description: World Chain Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    DebugTraceResult:
+      type: object
+      description: Debug trace result object. Structure based on the callTracer returned by debug_traceTransaction.
+      properties:
+        from:
+          type: string
+          description: Caller address
+        gas:
+          type: string
+          description: Gas limit set for the call (hex)
+        gasUsed:
+          type: string
+          description: Actual gas used (hex)
+        to:
+          type: string
+          description: Callee address
+        input:
+          type: string
+          description: Call input data (hex)
+        output:
+          type: string
+          description: Call return data (hex)
+        value:
+          type: string
+          description: Amount of ETH transferred (hex, in wei)
+        type:
+          type: string
+          description: Call type (CALL, CREATE, STATICCALL, etc.)
+        calls:
+          type: array
+          description: List of internal sub-calls
+          items:
+            type: object
+            description: Internal call entry (same structure as DebugTraceResult)
+        error:
+          type: string
+          description: Error message if execution failed
+        revertReason:
+          type: string
+          description: Revert reason if the transaction was reverted
+    DebugTraceResultArray:
+      type: array
+      description: An array of debug trace result objects.
+      items:
+        $ref: '#/components/schemas/DebugTraceResult'
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: worldchain-debug_traceblockbynumber
+      summary: debug_traceBlockByNumber
+      description: |
+        A debugging tool that allows you to trace chain state changes caused by transactions and the history of actual calls for a specific block, by configuring a tracer and using the information it provides.
+
+
+        > 🚧 Getting a 429 error? Check your subscription plan!
+        > 429 errors can occur when you exceed the Throughput limit of your subscription plan.
+        > For example, the Free Trial plan has a limit of 300 CU per second, so calling an API that consumes 350 CU while on the Free Trial plan may result in a 429 error.
+        > Check the CU consumption of the APIs you use on the Compute Unit Costs page, and consider upgrading to a higher plan if you need more Throughput!
+        > 👉 [Go to Compute Unit Costs page](/guides/compute-unit)
+      x-seo-description: Replay and trace all transactions in a block identified by number for debugging purposes.
+      tags:
+      - debug
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              - jsonrpc
+              - method
+              - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: debug_traceBlockByNumber
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                    - title: Block Number or Tag
+                      type: string
+                      pattern: ^0[xX][0-9a-fA-F]+$|^(latest|earliest|pending|safe|finalized)$
+                      description: |
+                        Use either block number or block tag to specify a block.
+
+                        * Block number: Hexadecimal string (e.g. "0x1")
+                        * Block tag: Enum string (e.g. "latest", "earliest", "pending")
+                          * `earliest`: The oldest available block on the chain.
+                          * `finalized`: A recently finalized block that can no longer be changed. Primarily used in proof-of-stake (PoS) blockchains.
+                          * `safe`: A recent block considered safe by the network (immune to reorgs).
+                          * `latest`: The most recent block on the chain (may be subject to reorgs).
+                          * `pending`: The next block to be mined, including pending transactions in the mempool.
+                      example: latest
+                    - title: Trace Option Object
+                      type: object
+                      properties:
+                        tracer:
+                          type: string
+                          enum:
+                          - callTracer
+                          - prestateTracer
+                          example: callTracer
+                          description: |-
+                            A field that specifies the tracer type, set to either "callTracer" or "prestateTracer".
+                            1. `callTracer`: Used to inspect the execution path and results of executed transactions. Provides information such as the call stack, return values, gas consumption, and revert reasons, and can trace the process of function calls and interactions with smart contracts. Depending on the execution option (onlyTopCall), you can trace all nested calls of a specific call.
+                            2. `prestateTracer`: A tool that traces the pre-state before a specific transaction or block is executed. Records account state and contract code before transaction execution, allowing you to analyze state changes before and after execution. prestateTracer is used to trace smart contract state changes and interactions between accounts.
+                        tracerConfig:
+                          type: object
+                          properties:
+                            onlyTopCall:
+                              type: boolean
+                              example: true
+                          description: Object for tracer configuration. Uses the boolean "onlyTopCall" option; when set to true, traces only the main call. When set to false, traces down to the sub-call level.
+                      description: 'Object for trace option configuration. '
+                  example:
+                  - latest
+                  - tracer: callTracer
+                    tracerConfig:
+                      onlyTopCall: true
+                  description: |-
+                    Enter the following parameters as an array with the appropriate types.
+
+                    1. `block number or block tag`: Enter the block number in hexadecimal string format. You can also enter block tags such as "earliest", "latest", or "pending".	
+                    2. `traceOption`: Object for trace option configuration.
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: debug_traceBlockByNumber
+                params:
+                - latest
+                - tracer: callTracer
+                  tracerConfig:
+                    onlyTopCall: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: "1"
+                result:
+                - result:
+                    from: "0x39fa8c5f2793459d6622857e7d9fbb4bd91766d3"
+                    gas: "0x1a6d4"
+                    gasUsed: "0x723c"
+                    to: "0xc083e9947cf02b8ffc7d3090ae9aea72df98fd47"
+                    input: 0x
+                    output: "0x0000000000000000000000000000000000000000000000000000000000000000"
+                    calls:
+                    - from: "0xc083e9947cf02b8ffc7d3090ae9aea72df98fd47"
+                      gas: "0x18c56"
+                      gasUsed: "0x5a4"
+                      to: "0x273930d21e01ee25e4c219b63259d214872220a2"
+                      input: 0x
+                      value: "0x56bc75e2d63100000"
+                      type: CALLCODE
+                    value: "0x56bc75e2d63100000"
+                    type: CALL
+                - result:
+                    from: "0x32be343b94f860124dc4fee278fdcbd38c102d88"
+                    gas: "0x7148"
+                    gasUsed: "0x5208"
+                    to: "0xdf190dc7190dfba737d7777a163445b7fff16133"
+                    input: 0x
+                    value: "0x6113a84987be800"
+                    type: CALL
+              schema:
+                $ref: '#/components/schemas/DebugTraceResultArray'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

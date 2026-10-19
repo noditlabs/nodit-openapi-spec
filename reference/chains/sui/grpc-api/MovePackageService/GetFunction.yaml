@@ -1,0 +1,159 @@
+openapi: 3.1.0
+info:
+  title: Sui - GetFunction
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.MovePackageService/GetFunction:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-GetFunction
+      summary: GetFunction
+      description: |
+        Retrieves the Move function information for the specified package.
+      x-seo-description: 지정한 패키지의 Move 함수 정보를 조회합니다.
+      x-grpc-method: sui.rpc.v2.MovePackageService/GetFunction
+      x-proto: sui/rpc/v2/move_package_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.MovePackageService
+        method: GetFunction
+        streaming: unary
+        proto: sui/rpc/v2/move_package_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - MovePackageService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - package_id
+              - module_name
+              - name
+              properties:
+                package_id:
+                  type: string
+                  description: ' Required. The `storage_id` of the requested package.'
+                module_name:
+                  type: string
+                  description: ' Required. The name of the requested module.'
+                name:
+                  type: string
+                  description: ' Required. The name of the requested function.'
+            example:
+              package_id: "0x0000000000000000000000000000000000000000000000000000000000000001"
+              module_name: example.sui
+              name: example.sui
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  function:
+                    type: object
+                    description: The requested function.
+                    properties:
+                      name:
+                        type: string
+                        description: Name of the function.
+                      visibility:
+                        type: string
+                        description: Visibility (public/private/public(friend)).
+                      is_entry:
+                        type: boolean
+                        description: Whether the function is an entry function.
+                      type_parameters:
+                        type: array
+                        description: Generic type parameters.
+                        items:
+                          type: object
+                          properties:
+                            constraints:
+                              type: array
+                              items:
+                                type: string
+                              description: Ability constraints on the parameter.
+                            is_phantom:
+                              type: boolean
+                              description: Whether the parameter is phantom.
+                      parameters:
+                        type: array
+                        description: Parameter types.
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: object
+                              description: Reference kind, if the type is a reference.
+                            body:
+                              type: object
+                              description: The signature body.
+                              properties:
+                                type:
+                                  type: object
+                                  description: The type.
+                                type_name:
+                                  type: string
+                                  description: Fully qualified datatype name.
+                                type_parameter_instantiation:
+                                  type: array
+                                  items:
+                                    type: object
+                                  description: Instantiation of type parameters.
+                                type_parameter:
+                                  type: integer
+                                  description: Type parameter position.
+                      returns:
+                        type: array
+                        description: Return types.
+                        items:
+                          type: object
+                          properties:
+                            reference:
+                              type: object
+                              description: Reference kind, if the type is a reference.
+                            body:
+                              type: object
+                              description: The signature body.
+                              properties:
+                                type:
+                                  type: object
+                                  description: The type.
+                                type_name:
+                                  type: string
+                                  description: Fully qualified datatype name.
+                                type_parameter_instantiation:
+                                  type: array
+                                  items:
+                                    type: object
+                                  description: Instantiation of type parameters.
+                                type_parameter:
+                                  type: integer
+                                  description: Type parameter position.
+              example:
+                function: {}

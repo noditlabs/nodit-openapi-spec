@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetTransactionReceiptById
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/gettransactionreceiptbyid:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-gettransactionreceiptbyid
+      summary: GetTransactionReceiptById
+      description: Query the resource consumption receipt of a transaction by its transaction ID. The response contains Energy/Bandwidth usage and the execution result.
+      x-seo-description: Query the resource consumption receipt of a TRON transaction by transaction ID.
+      tags:
+      - query-the-network
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: 349ab7e2ba7f10687049d02a8138668d14a88888709aa681f7b32d475b0049d4
+            schema:
+              type: object
+              required:
+              - value
+              properties:
+                value:
+                  type: string
+                  description: 'Transaction ID (hash). Example: `5356f10bd838ba7db012850f2c3e7c02d992eab6a789cf7edb2fbf8dabbef50f`'
+                  example: 5356f10bd838ba7db012850f2c3e7c02d992eab6a789cf7edb2fbf8dabbef50f
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Receipt:
+                    type: object
+                    description: Resource consumption receipt of the transaction.
+                    properties:
+                      energy_usage:
+                        type: integer
+                        format: int64
+                        description: Energy deducted from the caller's own Energy balance.
+                        example: 29280
+                      energy_fee:
+                        type: integer
+                        format: int64
+                        description: 'Fee paid in TRX when the caller''s Energy was insufficient. (Unit: sun)'
+                      origin_energy_usage:
+                        type: integer
+                        format: int64
+                        description: Energy paid by the contract deployer on behalf of the caller.
+                        example: 2615
+                      energy_usage_total:
+                        type: integer
+                        format: int64
+                        description: Total Energy consumed by the transaction.
+                        example: 31895
+                      net_usage:
+                        type: integer
+                        format: int64
+                        description: Bandwidth deducted from the caller's own Bandwidth balance.
+                      net_fee:
+                        type: integer
+                        format: int64
+                        description: 'Fee paid in TRX when the caller''s Bandwidth was insufficient. (Unit: sun)'
+                        example: 345000
+                      result:
+                        type: string
+                        description: Execution result of the smart contract.
+                        example: SUCCESS
+                      energy_penalty_total:
+                        type: integer
+                        format: int64
+                        description: Additional Energy charged by the contract's Energy penalty factor.
+                        example: 17245

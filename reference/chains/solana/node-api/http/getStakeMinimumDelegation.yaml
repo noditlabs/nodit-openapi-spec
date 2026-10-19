@@ -3,10 +3,10 @@ info:
   title: Solana - getStakeMinimumDelegation
   version: 1.0.0
 servers:
-  - url: https://solana-mainnet.nodit.io
-    description: Solana Mainnet
-  - url: https://solana-devnet.nodit.io
-    description: Solana Devnet
+- url: https://solana-mainnet.nodit.io
+  description: Solana Mainnet
+- url: https://solana-devnet.nodit.io
+  description: Solana Devnet
 components:
   securitySchemes:
     api_key:
@@ -26,9 +26,9 @@ components:
         - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
         - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
       enum:
-        - processed
-        - confirmed
-        - finalized
+      - processed
+      - confirmed
+      - finalized
     SuccessfulResponse:
       type: object
       properties:
@@ -59,8 +59,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
     Error:
       type: object
       properties:
@@ -71,8 +71,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -83,24 +83,24 @@ components:
             properties:
               jsonrpc:
                 type: string
-                description: JSON-RPC version
+                description: The JSON-RPC version
                 example: "2.0"
               id:
                 type: integer
-                description: Request ID
+                description: The request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ErrorFromRPC"
+                $ref: '#/components/schemas/ErrorFromRPC'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -109,7 +109,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -118,16 +118,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -135,14 +135,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: solana-getStakeMinimumDelegation
       summary: getStakeMinimumDelegation
       description: |
         Returns the stake minimum delegation, in lamports.
       x-seo-description: Returns the minimum SOL amount required for a stake delegation on the Solana network.
       tags:
-        - http
+      - http
       parameters: []
       requestBody:
         required: true
@@ -151,10 +151,10 @@ paths:
             schema:
               type: object
               required:
-                - jsonrpc
-                - id
-                - method
-                - params
+              - jsonrpc
+              - id
+              - method
+              - params
               properties:
                 jsonrpc:
                   type: string
@@ -177,13 +177,13 @@ paths:
                     type: object
                     properties:
                       commitment:
-                        $ref: "#/components/schemas/Commitment"
+                        $ref: '#/components/schemas/Commitment'
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: getStakeMinimumDelegation
                 params:
-                  - commitment: finalized
+                - commitment: finalized
       responses:
         "200":
           description: Successful Response
@@ -191,18 +191,18 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessfulResponse"
-                  - type: object
-                    properties:
-                      result:
-                        type: object
-                        properties:
-                          context:
-                            $ref: "#/components/schemas/Context"
-                          value:
-                            type: integer
-                            format: uint64
-                            description: The stake minimum delegation, in lamports
+                - $ref: '#/components/schemas/SuccessfulResponse'
+                - type: object
+                  properties:
+                    result:
+                      type: object
+                      properties:
+                        context:
+                          $ref: '#/components/schemas/Context'
+                        value:
+                          type: integer
+                          format: uint64
+                          description: The stake minimum delegation, in lamports
                 example:
                   jsonrpc: "2.0"
                   result:
@@ -211,12 +211,12 @@ paths:
                     value: 1000000000
                   id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

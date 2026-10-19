@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: CronosPOS - cosmos_bank_v1beta1_balances_{address}_by_denom
+  title: Cronos POS - cosmos_bank_v1beta1_balances_{address}_by_denom
   version: 1.0.0
 servers:
-  - url: https://rest-cronospos-mainnet.nodit.io
+- url: https://rest-cronospos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: Balance queries the balance of a single coin for a single account.
       operationId: cosmos_bank_v1beta1_balances_{address}_by_denom
       tags:
-        - bank
+      - bank
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -33,8 +33,10 @@ paths:
                     type: object
                     properties:
                       denom:
+                        description: Token denomination.
                         type: string
                       amount:
+                        description: Amount, as an integer string in the smallest unit.
                         type: string
                     description: |-
                       Coin defines a token with a denomination and an amount.
@@ -45,7 +47,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -67,18 +69,18 @@ paths:
                           type: string
                           format: byte
       parameters:
-        - name: address
-          description: address is the address to query balances for.
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: denom
-          description: denom is the coin denom to query balances for.
-          in: query
-          required: false
-          schema:
-            type: string
+      - name: address
+        description: address is the address to query balances for.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: denom
+        description: denom is the coin denom to query balances for.
+        in: query
+        required: false
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/bank/v1beta1/balances/{address}/by_denom

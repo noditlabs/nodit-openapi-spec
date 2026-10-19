@@ -1,0 +1,576 @@
+openapi: 3.1.0
+info:
+  title: XRPL - ledger
+  version: 1.0.0
+servers:
+- url: https://xrpl-mainnet.nodit.io
+  description: XRP Ledger Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    LedgerContext:
+      type: object
+      description: Common fields that indicate which ledger version the response was derived from.
+      properties:
+        ledger_hash:
+          type: string
+          description: The hash of the ledger version used. Returned when a validated ledger version was queried.
+        ledger_index:
+          type: integer
+          description: The ledger index of the version used. Returned when a validated ledger version was queried.
+        ledger_current_index:
+          type: integer
+          description: The ledger index of the in-progress ledger. Returned when the `current` ledger was queried.
+        validated:
+          type: boolean
+          description: Whether the response was derived from a validated ledger version.
+    LedgerHeader:
+      type: object
+      description: Ledger header information.
+      properties:
+        account_hash:
+          type: string
+          description: The hash of the entire account state information.
+        close_flags:
+          type: integer
+          description: A bit-map of the flags applied when the ledger closed.
+        close_time:
+          type: integer
+          description: The time the ledger closed, in seconds since the Ripple Epoch.
+        close_time_human:
+          type: string
+          description: The time the ledger closed, as a human-readable UTC string.
+        close_time_iso:
+          type: string
+          description: The time the ledger closed, in ISO 8601 format.
+        close_time_resolution:
+          type: integer
+          description: The rounding interval applied to ledger close times, in seconds.
+        closed:
+          type: boolean
+          description: Whether the ledger version is closed.
+        ledger_hash:
+          type: string
+          description: The unique hash that identifies the ledger version.
+        ledger_index:
+          type: string
+          description: The ledger index.
+        parent_close_time:
+          type: integer
+          description: The time the previous ledger closed, in seconds since the Ripple Epoch.
+        parent_hash:
+          type: string
+          description: The hash of the previous ledger version.
+        total_coins:
+          type: string
+          description: The total amount of XRP in the network, in drops.
+        transaction_hash:
+          type: string
+          description: The hash of all transactions included in this ledger version.
+        transactions:
+          type: array
+          description: The list of transactions included in the ledger. Returned when `transactions` is set to `true` in the request.
+          items:
+            description: A transaction hash string or a transaction object.
+    LedgerIndex:
+      description: |
+        Specifies the ledger version to use. Pass a ledger index as an integer, or use one of the shortcut strings below.
+        - `validated`: Uses the most recent ledger version validated by the network.
+        - `closed`: Uses the most recent ledger version the server has closed. It may not be validated.
+        - `current`: Uses the in-progress ledger version the server is currently building.
+      oneOf:
+      - title: Ledger Index
+        type: integer
+        description: The ledger index of the version to use.
+      - title: Shortcut
+        type: string
+        description: A shortcut string that specifies the ledger version to use.
+        enum:
+        - validated
+        - closed
+        - current
+    LedgerResult:
+      allOf:
+      - type: object
+        description: The result of looking up ledger information.
+        properties:
+          ledger:
+            $ref: '#/components/schemas/LedgerHeader'
+          queue_data:
+            type: array
+            description: The list of queued transactions. Returned when `queue` is set to `true` in the request.
+            items:
+              type: object
+              description: Data for a queued transaction.
+              properties:
+                account:
+                  type: string
+                  description: The address of the account that submitted the transaction.
+                tx:
+                  type: object
+                  description: The transaction data.
+                retries_remaining:
+                  type: integer
+                  description: The number of retries remaining.
+                preflight_result:
+                  type: string
+                  description: The result code from preliminary validation.
+                last_result:
+                  type: string
+                  description: The result code from the previous attempt.
+                auth_change:
+                  type: boolean
+                  description: Whether the transaction changes the account's signing authority.
+                fee:
+                  type: string
+                  description: The transaction cost, in drops.
+                fee_level:
+                  type: string
+                  description: The transaction cost expressed in fee levels.
+                max_spend_drops:
+                  type: string
+                  description: The maximum amount this transaction could spend, in drops.
+      - $ref: '#/components/schemas/LedgerContext'
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: xrpl-ledger
+      summary: ledger
+      description: |
+        Returns the ledger header information.
+        Depending on the request options, it can also return the list of transactions in the ledger and the queue data.
+      x-seo-description: Retrieves information about the public ledger, optionally including its transactions.
+      tags:
+      - ledger
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - method
+              - params
+              properties:
+                method:
+                  type: string
+                  example: ledger
+                params:
+                  type: array
+                  description: |-
+                    It contains following parameters as a single object in the `params` array.
+                    1. `ledger_hash`: The hash of the ledger version to use, as a string. (optional)
+                    2. `ledger_index`: The ledger index or a shortcut string. (optional)
+                    3. `transactions`: Whether to also return the transactions in the ledger, as a boolean. (optional, default `false`)
+                    4. `expand`: Whether to return transactions as full JSON, as a boolean. (optional, default `false`)
+                    5. `owner_funds`: Whether to include `owner_funds` in OfferCreate transaction metadata, as a boolean. (optional, default `false`)
+                    6. `binary`: Whether to return the transaction as a hex string, as a boolean. (optional, default `false`)
+                    7. `queue`: Whether to also return the queued transactions, as a boolean. (optional)
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    title: Parameters
+                    type: object
+                    properties:
+                      ledger_hash:
+                        type: string
+                        description: The hash of the ledger version to use. Pass a 32-byte hex string.
+                        example: 17ACB57A0F73B5160713E81FE72B2AC9F6064541004E272BD09F257D57C30C02
+                      ledger_index:
+                        $ref: '#/components/schemas/LedgerIndex'
+                      transactions:
+                        type: boolean
+                        description: Whether to also return the transaction data in the ledger.
+                        example: false
+                      expand:
+                        type: boolean
+                        description: |
+                          Whether to return transactions and account state as full JSON.
+                          When `false`, only the identifiers are returned.
+                        example: false
+                      owner_funds:
+                        type: boolean
+                        description: Whether to include the `owner_funds` field in OfferCreate transaction metadata.
+                        example: false
+                      binary:
+                        type: boolean
+                        description: Whether to return transactions as hex strings.
+                        example: false
+                      queue:
+                        type: boolean
+                        description: |
+                          Whether to also return the queued transactions.
+                          It can be used only when `ledger_index` is set to `current`.
+                        example: false
+                  example:
+                  - ledger_index: validated
+                    transactions: false
+                    expand: false
+                    binary: false
+              example:
+                method: ledger
+                params:
+                - ledger_index: validated
+                  transactions: false
+                  expand: false
+                  binary: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                result:
+                  ledger:
+                    account_hash: 1B3C5D7E9F0A2B4C6D8E0F1A3B5C7D9E0F2A4B6C8D0E1F3A5B7C9D0E2F4A6B8C
+                    close_flags: 0
+                    close_time: 810900000
+                    close_time_human: 2026-Sep-02 04:00:00.000000000 UTC
+                    close_time_iso: '2026-09-02T04:00:00Z'
+                    close_time_resolution: 10
+                    closed: true
+                    ledger_hash: 17ACB57A0F73B5160713E81FE72B2AC9F6064541004E272BD09F257D57C30C02
+                    ledger_index: "98765432"
+                    parent_close_time: 810899996
+                    parent_hash: 2C4E6A8B0D1F3A5C7E9B0D2F4A6C8E0B1D3F5A7C9E0B2D4F6A8C0E1B3D5F7A9C
+                    total_coins: "99987654321098765"
+                    transaction_hash: 3D5F7A9B1C2E4A6C8D0F2B4D6E8A0C1E3F5B7D9A0C2E4F6B8D0A1C3E5F7B9D0A
+                  ledger_hash: 17ACB57A0F73B5160713E81FE72B2AC9F6064541004E272BD09F257D57C30C02
+                  ledger_index: 98765432
+                  validated: true
+              schema:
+                $ref: '#/components/schemas/LedgerResult'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

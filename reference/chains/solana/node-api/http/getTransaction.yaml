@@ -3,10 +3,10 @@ info:
   title: Solana - getTransaction
   version: 1.0.0
 servers:
-  - url: https://solana-mainnet.nodit.io
-    description: Solana Mainnet
-  - url: https://solana-devnet.nodit.io
-    description: Solana Devnet
+- url: https://solana-mainnet.nodit.io
+  description: Solana Mainnet
+- url: https://solana-devnet.nodit.io
+  description: Solana Devnet
 components:
   securitySchemes:
     api_key:
@@ -26,9 +26,9 @@ components:
         - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
         - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
       enum:
-        - processed
-        - confirmed
-        - finalized
+      - processed
+      - confirmed
+      - finalized
     MaxSupportedTransactionVersion:
       type: integer
       default: 0
@@ -39,10 +39,10 @@ components:
     TransactionDetails:
       type: string
       enum:
-        - full
-        - accounts
-        - signatures
-        - none
+      - full
+      - accounts
+      - signatures
+      - none
       default: full
       description: |
         Level of transaction detail to return.
@@ -116,15 +116,15 @@ components:
     TransactionVersion:
       description: Transaction version. Undefined if maxSupportedTransactionVersion is not set in request params.
       oneOf:
-        - type: string
-          enum:
-            - legacy
-        - type: number
+      - type: string
+        enum:
+        - legacy
+      - type: number
     TransactionMeta:
       type: object
       properties:
         err:
-          $ref: "#/components/schemas/Err"
+          $ref: '#/components/schemas/Err'
         fee:
           type: integer
           description: fee this transaction was charged, as u64 integer
@@ -141,17 +141,17 @@ components:
         innerInstructions:
           type: array
           items:
-            $ref: "#/components/schemas/InnerInstruction"
+            $ref: '#/components/schemas/InnerInstruction'
           description: List of inner instructions or null if inner instruction recording was not enabled during this transaction
         preTokenBalances:
           type: array
           items:
-            $ref: "#/components/schemas/TokenBalance"
+            $ref: '#/components/schemas/TokenBalance'
           description: List of token balances from before the transaction was processed or omitted if token balance recording was not yet enabled during this transaction
         postTokenBalances:
           type: array
           items:
-            $ref: "#/components/schemas/TokenBalance"
+            $ref: '#/components/schemas/TokenBalance'
           description: List of token balances from after the transaction was processed or omitted if token balance recording was not yet enabled during this transaction
         logMessages:
           type: array
@@ -177,10 +177,10 @@ components:
               rewardType:
                 type: string
                 enum:
-                  - fee
-                  - rent
-                  - voting
-                  - staking
+                - fee
+                - rent
+                - voting
+                - staking
               commission:
                 type: integer
                 description: vote account commission when the reward was credited, only present for voting and staking rewards
@@ -209,7 +209,7 @@ components:
           type: integer
           description: number of compute units consumed by the transaction
         version:
-          $ref: "#/components/schemas/TransactionVersion"
+          $ref: '#/components/schemas/TransactionVersion'
         signatures:
           type: array
           description: present if "signatures" are requested for transaction details; an array of signatures strings, corresponding to the transaction order in the block
@@ -218,11 +218,11 @@ components:
     Message:
       type: object
       required:
-        - accountKeys
-        - header
-        - recentBlockhash
-        - instructions
-        - addressTableLookups
+      - accountKeys
+      - header
+      - recentBlockhash
+      - instructions
+      - addressTableLookups
       properties:
         accountKeys:
           type: array
@@ -233,9 +233,9 @@ components:
           type: object
           description: Details the account types and signatures required by the transaction.
           required:
-            - numRequiredSignatures
-            - numReadonlySignedAccounts
-            - numReadonlyUnsignedAccounts
+          - numRequiredSignatures
+          - numReadonlySignedAccounts
+          - numReadonlyUnsignedAccounts
           properties:
             numRequiredSignatures:
               type: integer
@@ -254,9 +254,9 @@ components:
           items:
             type: object
             required:
-              - programIdIndex
-              - accounts
-              - data
+            - programIdIndex
+            - accounts
+            - data
             properties:
               programIdIndex:
                 type: integer
@@ -274,9 +274,9 @@ components:
           items:
             type: object
             required:
-              - accountKey
-              - writableIndexes
-              - readonlyIndexes
+            - accountKey
+            - writableIndexes
+            - readonlyIndexes
             properties:
               accountKey:
                 type: string
@@ -294,11 +294,11 @@ components:
     Transaction:
       type: object
       required:
-        - message
-        - signatures
+      - message
+      - signatures
       properties:
         message:
-          $ref: "#/components/schemas/Message"
+          $ref: '#/components/schemas/Message'
         signatures:
           type: array
           description: A list of base-58 encoded signatures applied to the transaction. The list is always of length `message.header.numRequiredSignatures` and not empty. The signature at index `i` corresponds to the public key at index `i` in `message.accountKeys`. The first one is used as the transaction id.
@@ -315,8 +315,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
     Error:
       type: object
       properties:
@@ -327,8 +327,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -339,24 +339,24 @@ components:
             properties:
               jsonrpc:
                 type: string
-                description: JSON-RPC version
+                description: The JSON-RPC version
                 example: "2.0"
               id:
                 type: integer
-                description: Request ID
+                description: The request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ErrorFromRPC"
+                $ref: '#/components/schemas/ErrorFromRPC'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -365,7 +365,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -374,16 +374,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -391,14 +391,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: solana-getTransaction
       summary: getTransaction
       description: |
         Returns transaction details for a confirmed transaction
       x-seo-description: Retrieve detailed transaction data for a confirmed transaction by its signature on Solana.
       tags:
-        - http
+      - http
       parameters: []
       requestBody:
         required: true
@@ -407,10 +407,10 @@ paths:
             schema:
               type: object
               required:
-                - jsonrpc
-                - id
-                - method
-                - params
+              - jsonrpc
+              - id
+              - method
+              - params
               properties:
                 jsonrpc:
                   type: string
@@ -431,27 +431,27 @@ paths:
                     2. ConfigurationObject (`optional`)
                   items:
                     oneOf:
-                      - title: Transaction signature
-                        type: string
-                        description: Transaction signature, as base-58 encoded string
-                      - title: Configuration Object
-                        type: object
-                        properties:
-                          commitment:
-                            $ref: "#/components/schemas/Commitment"
-                          maxSupportedTransactionVersion:
-                            $ref: "#/components/schemas/MaxSupportedTransactionVersion"
-                          transactionDetails:
-                            $ref: "#/components/schemas/TransactionDetails"
+                    - title: Transaction signature
+                      type: string
+                      description: Transaction signature, as base-58 encoded string
+                    - title: Configuration Object
+                      type: object
+                      properties:
+                        commitment:
+                          $ref: '#/components/schemas/Commitment'
+                        maxSupportedTransactionVersion:
+                          $ref: '#/components/schemas/MaxSupportedTransactionVersion'
+                        transactionDetails:
+                          $ref: '#/components/schemas/TransactionDetails'
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: getTransaction
                 params:
-                  - 5Pj5fCupXLUePYn18JkY8SrRaWFiUctuDTRwvUy2ML9yvkENLb1QMYbcBGcBXRrSVDjp7RjUwk9a3rLC6gpvtYpZ
-                  - commitment: confirmed
-                    maxSupportedTransactionVersion: 0
-                    encoding: json
+                - 5Pj5fCupXLUePYn18JkY8SrRaWFiUctuDTRwvUy2ML9yvkENLb1QMYbcBGcBXRrSVDjp7RjUwk9a3rLC6gpvtYpZ
+                - commitment: confirmed
+                  maxSupportedTransactionVersion: 0
+                  encoding: json
       responses:
         "200":
           description: Successful Response
@@ -459,27 +459,27 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessfulResponse"
-                  - type: object
-                    properties:
-                      result:
-                        type: object
-                        properties:
-                          blockTime:
-                            type: integer
-                            description: Estimated production time, as Unix timestamp (seconds since the Unix epoch) of when the transaction was processed. null if not available
-                          meta:
-                            description: Metadata for the transaction processing result.
-                            $ref: "#/components/schemas/TransactionMeta"
-                          slot:
-                            type: integer
-                            description: The slot this transaction was processed in
-                          transaction:
-                            description: Transaction information.
-                            $ref: "#/components/schemas/Transaction"
-                          version:
-                            description: Transaction version. Undefined if maxSupportedTransactionVersion is not set in request params.
-                            $ref: "#/components/schemas/TransactionVersion"
+                - $ref: '#/components/schemas/SuccessfulResponse'
+                - type: object
+                  properties:
+                    result:
+                      type: object
+                      properties:
+                        blockTime:
+                          type: integer
+                          description: Estimated production time, as Unix timestamp (seconds since the Unix epoch) of when the transaction was processed. null if not available
+                        meta:
+                          description: Metadata for the transaction processing result.
+                          $ref: '#/components/schemas/TransactionMeta'
+                        slot:
+                          type: integer
+                          description: The slot this transaction was processed in
+                        transaction:
+                          description: Transaction information.
+                          $ref: '#/components/schemas/Transaction'
+                        version:
+                          description: Transaction version. Undefined if maxSupportedTransactionVersion is not set in request params.
+                          $ref: '#/components/schemas/TransactionVersion'
                 example:
                   jsonrpc: "2.0"
                   result:
@@ -493,17 +493,17 @@ paths:
                         readonly: []
                         writable: []
                       logMessages:
-                        - Program 11111111111111111111111111111111 invoke [1]
-                        - Program 11111111111111111111111111111111 success
+                      - Program 11111111111111111111111111111111 invoke [1]
+                      - Program 11111111111111111111111111111111 success
                       postBalances:
-                        - 989995000
-                        - 10000000
-                        - 1
+                      - 989995000
+                      - 10000000
+                      - 1
                       postTokenBalances: []
                       preBalances:
-                        - 1000000000
-                        - 0
-                        - 1
+                      - 1000000000
+                      - 0
+                      - 1
                       preTokenBalances: []
                       rewards: []
                       status:
@@ -512,32 +512,32 @@ paths:
                     transaction:
                       message:
                         accountKeys:
-                          - 7BvfixZx7Rwywf6EJFgRW6acEQ2FLSFJr4n3kLLVeEes
-                          - 6KtbxYovphtE3eHjPjr2sWwDfgaDwtAn2FcojDyzZWT6
-                          - "11111111111111111111111111111111"
+                        - 7BvfixZx7Rwywf6EJFgRW6acEQ2FLSFJr4n3kLLVeEes
+                        - 6KtbxYovphtE3eHjPjr2sWwDfgaDwtAn2FcojDyzZWT6
+                        - "11111111111111111111111111111111"
                         header:
                           numReadonlySignedAccounts: 0
                           numReadonlyUnsignedAccounts: 1
                           numRequiredSignatures: 1
                         instructions:
-                          - accounts:
-                              - 0
-                              - 1
-                            data: 3Bxs4NN8M2Yn4TLb
-                            programIdIndex: 2
-                            stackHeight: null
+                        - accounts:
+                          - 0
+                          - 1
+                          data: 3Bxs4NN8M2Yn4TLb
+                          programIdIndex: 2
+                          stackHeight: null
                         recentBlockhash: 23dwTHxFhSzqohXhdni5LwpuSRpgN36YvVMCAM2VXQSf
                       signatures:
-                        - 5Pj5fCupXLUePYn18JkY8SrRaWFiUctuDTRwvUy2ML9yvkENLb1QMYbcBGcBXRrSVDjp7RjUwk9a3rLC6gpvtYpZ
+                      - 5Pj5fCupXLUePYn18JkY8SrRaWFiUctuDTRwvUy2ML9yvkENLb1QMYbcBGcBXRrSVDjp7RjUwk9a3rLC6gpvtYpZ
                     version: legacy
                   id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

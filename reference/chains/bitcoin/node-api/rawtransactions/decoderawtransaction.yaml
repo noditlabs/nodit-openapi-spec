@@ -1,0 +1,597 @@
+openapi: 3.1.0
+info:
+  title: Bitcoin - decoderawtransaction
+  version: 1.0.0
+servers:
+- url: https://bitcoin-mainnet.nodit.io
+  description: Bitcoin Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    RawTransaction:
+      type: object
+      description: Decoded transaction object.
+      properties:
+        in_active_chain:
+          type: boolean
+          description: Whether the specified block is in the active chain. Returned only when `blockhash` is provided.
+        hex:
+          type: string
+          description: The serialized transaction, hex-encoded.
+        txid:
+          type: string
+          description: The transaction id.
+        hash:
+          type: string
+          description: The transaction hash. It differs from `txid` for witness transactions.
+        size:
+          type: integer
+          description: The serialized transaction size, in bytes.
+        vsize:
+          type: integer
+          description: The virtual transaction size as defined in BIP 141. It differs from `size` for witness transactions.
+        weight:
+          type: integer
+          description: The transaction weight as defined in BIP 141. The value is between `vsize * 4 - 3` and `vsize * 4`.
+        version:
+          type: integer
+          description: The transaction version.
+        locktime:
+          type: integer
+          description: The lock time that determines when the transaction becomes valid.
+        vin:
+          type: array
+          description: The list of transaction inputs.
+          items:
+            $ref: '#/components/schemas/Vin'
+        vout:
+          type: array
+          description: The list of transaction outputs.
+          items:
+            $ref: '#/components/schemas/Vout'
+        fee:
+          type: number
+          description: |
+            The transaction fee, denominated in BTC.
+            Returned when `verbosity` is 2, and omitted if the block undo data is not available.
+        blockhash:
+          type: string
+          description: The hash of the block containing the transaction.
+        confirmations:
+          type: integer
+          description: The number of confirmations of the transaction.
+        blocktime:
+          type: integer
+          description: The time of the block containing the transaction, expressed in UNIX epoch time.
+        time:
+          type: integer
+          description: Same as `blocktime`.
+    ScriptPubKey:
+      type: object
+      description: The output script (scriptPubKey) that defines the conditions for spending the output.
+      properties:
+        asm:
+          type: string
+          description: Disassembly of the script.
+        desc:
+          type: string
+          description: Inferred descriptor for the script.
+        hex:
+          type: string
+          description: The raw script bytes, hex-encoded.
+        address:
+          type: string
+          description: The Bitcoin address for the script. Returned only when a well-defined address exists.
+        type:
+          type: string
+          description: |
+            The output type.
+            - `nonstandard`: A script that does not match any standard type.
+            - `anchor`: A Pay-to-Anchor (P2A) output.
+            - `pubkey`: An output locked directly by a public key (P2PK).
+            - `pubkeyhash`: An output locked by a public key hash (P2PKH).
+            - `scripthash`: An output locked by a script hash (P2SH).
+            - `multisig`: An output that requires multiple signatures.
+            - `nulldata`: An output that only records data via OP_RETURN.
+            - `witness_v0_keyhash`: A SegWit v0 public key hash output (P2WPKH).
+            - `witness_v0_scripthash`: A SegWit v0 script hash output (P2WSH).
+            - `witness_v1_taproot`: A Taproot output (P2TR).
+            - `witness_unknown`: An output with an unknown witness version.
+          example: witness_v0_keyhash
+    ScriptSig:
+      type: object
+      description: The signature script (scriptSig) that unlocks the output referenced by the input.
+      properties:
+        asm:
+          type: string
+          description: Disassembly of the script.
+        hex:
+          type: string
+          description: The script, hex-encoded.
+    Vin:
+      type: object
+      description: A transaction input.
+      properties:
+        coinbase:
+          type: string
+          description: The coinbase value of the input. Returned only for coinbase inputs.
+        txid:
+          type: string
+          description: The id of the previous transaction referenced by this input. Returned only for non-coinbase inputs.
+        vout:
+          type: integer
+          description: The output index of the previous transaction referenced by this input. Returned only for non-coinbase inputs.
+        scriptSig:
+          $ref: '#/components/schemas/ScriptSig'
+        txinwitness:
+          type: array
+          description: The hex-encoded witness data. Returned only for SegWit inputs.
+          items:
+            type: string
+            description: A witness stack item.
+        prevout:
+          type: object
+          description: |
+            The previous output spent by this input.
+            It is returned when `verbosity` is 2 for `getrawtransaction` or 3 for `getblock`,
+            and omitted if the block undo data is not available.
+          properties:
+            generated:
+              type: boolean
+              description: Whether the output was generated by a coinbase transaction.
+            height:
+              type: integer
+              description: The height of the block containing the previous output.
+            value:
+              type: number
+              description: The value of the previous output, denominated in BTC.
+            scriptPubKey:
+              $ref: '#/components/schemas/ScriptPubKey'
+        sequence:
+          type: integer
+          description: The script sequence number of the input.
+          example: 4294967295
+    Vout:
+      type: object
+      description: A transaction output.
+      properties:
+        value:
+          type: number
+          description: The value of the output, denominated in BTC.
+          example: 0.0125
+        n:
+          type: integer
+          description: The index of the output within the transaction.
+          example: 0
+        scriptPubKey:
+          $ref: '#/components/schemas/ScriptPubKey'
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: bitcoin-decoderawtransaction
+      summary: decoderawtransaction
+      description: |
+        Decodes a serialized, hex-encoded transaction and returns it as a JSON object.
+        Use it to inspect the structure of a transaction without submitting it to the node.
+      x-seo-description: Decodes a serialized, hex-encoded transaction into a JSON object.
+      tags:
+      - rawtransactions
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              - jsonrpc
+              - method
+              - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: decoderawtransaction
+                params:
+                  type: array
+                  description: |-
+                    It contains following parameters in order:
+                    1. `hexstring`: The transaction to decode, as a hex string. (required)
+                    2. `iswitness`: Whether the given string is a serialized witness transaction, as a boolean. (optional)
+                  items:
+                    oneOf:
+                    - title: Hexstring
+                      type: string
+                      description: The hex string of the transaction to decode.
+                      example: 020000000001011a8b0e3d5f9c2b7a4e6d8f1c3b5a79685746352413020100ffffffff
+                    - title: Iswitness
+                      type: boolean
+                      description: |
+                        Whether the given string is a serialized witness transaction.
+                        Heuristic tests are used when omitted; `true` attempts witness deserialization only, and `false` non-witness deserialization only.
+                      example: true
+                  example:
+                  - 020000000001011a8b0e3d5f9c2b7a4e6d8f1c3b5a79685746352413020100ffffffff
+                  - true
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: decoderawtransaction
+                params:
+                - 020000000001011a8b0e3d5f9c2b7a4e6d8f1c3b5a79685746352413020100ffffffff
+                - true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  txid: 4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b
+                  hash: 9b0fc92260312ce44e74ef369f5c66bbb85848f2eddd5a7a1cde251e54ccfdd5
+                  size: 225
+                  vsize: 144
+                  weight: 573
+                  version: 2
+                  locktime: 0
+                  vin:
+                  - txid: 3a1b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b
+                    vout: 1
+                    scriptSig:
+                      asm: ""
+                      hex: ""
+                    txinwitness:
+                    - 3044022012ab34cd56ef78901234567890abcdef1234567890abcdef1234567890abcdef0220
+                    sequence: 4294967295
+                  vout:
+                  - value: 0.0125
+                    n: 0
+                    scriptPubKey:
+                      asm: 0 3123f9ba48c9a80f4e7f7ea6a7d5028a9c0018a2
+                      desc: addr(bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh)#8rvxaqzk
+                      hex: 00143123f9ba48c9a80f4e7f7ea6a7d5028a9c0018a2
+                      address: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+                      type: witness_v0_keyhash
+              schema:
+                $ref: '#/components/schemas/RawTransaction'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

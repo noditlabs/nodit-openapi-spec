@@ -1,0 +1,520 @@
+openapi: 3.1.0
+info:
+  title: Tron - eth_getLogs
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    FilterOptions:
+      type: object
+      description: |
+        The filter object that specifies the log query conditions.
+        When `blockHash` is used, `fromBlock` and `toBlock` must not be specified together.
+      properties:
+        fromBlock:
+          type: string
+          description: |
+            The block to start searching from. Pass a hexadecimal block number or the `latest`, `earliest` or `finalized` tag.
+            `pending` and `safe` are not supported. When omitted, `latest` is applied.
+          example: "0x3e8a920"
+        toBlock:
+          type: string
+          description: |
+            The block to stop searching at. It accepts the same tags as `fromBlock`, and `latest` is applied when omitted.
+          example: "0x3e8a984"
+        address:
+          description: |
+            The contract address that emitted the logs. Pass a single address or an array of addresses.
+            By default the array allows up to 1,000 entries; exceeding that returns a `-32602` error.
+          oneOf:
+          - title: Single Address
+            type: string
+            description: The contract address.
+          - title: Address Array
+            type: array
+            description: The list of contract addresses.
+            items:
+              type: string
+              description: The contract address.
+        topics:
+          type: array
+          description: |
+            The list of topics to query. Their order is significant, and up to 4 positions can be specified.
+            Each position may contain `null` (matches any value) or an array for OR conditions, and
+            by default each position allows up to 1,000 OR candidates.
+          items:
+            description: A 32-byte topic value, `null`, or an array of OR conditions.
+        blockHash:
+          type: string
+          description: |
+            A 32-byte block hash that restricts the query to a single block.
+            When this value is given, `fromBlock` and `toBlock` must not be specified together.
+    Log:
+      type: object
+      description: An event log object.
+      properties:
+        address:
+          type: string
+          description: The address of the contract that emitted the log.
+        topics:
+          type: array
+          description: The list of log topics. The first entry is the event signature hash.
+          items:
+            type: string
+            description: A 32-byte topic value.
+        data:
+          type: string
+          description: The ABI-encoded data for the non-indexed event arguments.
+        blockNumber:
+          type: string
+          description: The number of the block containing the log.
+        blockHash:
+          type: string
+          description: The hash of the block containing the log.
+        blockTimestamp:
+          type: string
+          description: |
+            The creation time of the block containing the log, in UNIX epoch seconds, hex-encoded.
+            It is returned on GreatVoyage-v4.8.2 and later, and may be omitted on gateways that have not been upgraded yet.
+        transactionHash:
+          type: string
+          description: The hash of the transaction that emitted the log.
+        transactionIndex:
+          type: string
+          description: The transaction index within the block.
+        logIndex:
+          type: string
+          description: The log index within the block.
+        removed:
+          type: boolean
+          description: Whether the log was removed by a chain reorganization.
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-eth_getlogs
+      summary: eth_getLogs
+      description: |
+        Returns all event logs that match the given conditions.
+
+        > 📘 On GreatVoyage-v4.8.2 and later, each log includes `blockTimestamp`.
+        > On gateways that have not been upgraded yet, this field may be omitted.
+        >
+        > By default the queryable block range is limited to 5,000 blocks, configured by the node's `node.jsonrpc.maxBlockRange`
+        > setting. The `address` array allows up to 1,000 entries, and `topics` allows up to 4 positions.
+      x-seo-description: Returns all logs matching the given filter object on TRON.
+      tags:
+      - eth
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              - jsonrpc
+              - method
+              - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: eth_getLogs
+                params:
+                  type: array
+                  description: |-
+                    It contains following parameter in order:
+                    1. `filterOptions`: The log query conditions, as an object. (required)
+                  items:
+                    oneOf:
+                    - title: Filter Options
+                      $ref: '#/components/schemas/FilterOptions'
+                  example:
+                  - address: "0x42a1e39aefa49290f2b3f9ed688d7cecf86cd6e0"
+                    fromBlock: "0x3e8a920"
+                    toBlock: "0x3e8a984"
+                    topics:
+                    - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                    - "0x0000000000000000000000001975fbea3496424a88de2a147d76baa34a3d1b93"
+                    - "0x000000000000000000000000c3abfbceb364febe625662a9af6add366df58f81"
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: eth_getLogs
+                params:
+                - address: "0x42a1e39aefa49290f2b3f9ed688d7cecf86cd6e0"
+                  fromBlock: "0x3e8a920"
+                  toBlock: "0x3e8a984"
+                  topics:
+                  - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                  - "0x0000000000000000000000001975fbea3496424a88de2a147d76baa34a3d1b93"
+                  - "0x000000000000000000000000c3abfbceb364febe625662a9af6add366df58f81"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                - address: "0x42a1e39aefa49290f2b3f9ed688d7cecf86cd6e0"
+                  blockHash: "0x0000000003e8a947c68442f90bb271d2f7b1b8bb86f6a78a1d4f2d53ab92d81d"
+                  blockNumber: "0x3e8a947"
+                  blockTimestamp: "0x6a26903f"
+                  data: "0x0000000000000000000000000000000000000000000000000000000000736201"
+                  logIndex: "0x0"
+                  removed: false
+                  topics:
+                  - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                  - "0x0000000000000000000000001975fbea3496424a88de2a147d76baa34a3d1b93"
+                  - "0x000000000000000000000000c3abfbceb364febe625662a9af6add366df58f81"
+                  transactionHash: "0xba60eb123d557f6b9ffefae573499b9d65ee15430a55b24cb28ef4ab2118f814"
+                  transactionIndex: "0x1"
+              schema:
+                type: array
+                description: The list of event logs that match the query.
+                items:
+                  $ref: '#/components/schemas/Log'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

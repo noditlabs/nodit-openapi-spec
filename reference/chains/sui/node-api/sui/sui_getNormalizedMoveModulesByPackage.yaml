@@ -3,8 +3,8 @@ info:
   title: Sui - sui_getNormalizedMoveModulesByPackage
   version: 1.0.0
 servers:
-  - url: https://sui-mainnet.nodit.io
-    description: Sui Mainnet
+- url: https://sui-mainnet.nodit.io
+  description: Sui Mainnet
 components:
   securitySchemes:
     api_key:
@@ -21,126 +21,126 @@ components:
       type: string
     ObjectID:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     SuiMoveAbility:
       type: string
       enum:
-        - Copy
-        - Drop
-        - Store
-        - Key
+      - Copy
+      - Drop
+      - Store
+      - Key
     SuiMoveAbilitySet:
       type: object
       required:
-        - abilities
+      - abilities
       properties:
         abilities:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveAbility"
+            $ref: '#/components/schemas/SuiMoveAbility'
     SuiMoveStructTypeParameter:
       type: object
       required:
-        - constraints
-        - isPhantom
+      - constraints
+      - isPhantom
       properties:
         constraints:
-          $ref: "#/components/schemas/SuiMoveAbilitySet"
+          $ref: '#/components/schemas/SuiMoveAbilitySet'
         isPhantom:
           type: boolean
     SuiMoveNormalizedType:
       oneOf:
-        - type: string
-          enum:
-            - Bool
-            - U8
-            - U16
-            - U32
-            - U64
-            - U128
-            - U256
-            - Address
-            - Signer
-        - type: object
-          required:
-            - Struct
-          properties:
-            Struct:
-              type: object
-              required:
-                - address
-                - module
-                - name
-                - typeArguments
-              properties:
-                address:
-                  type: string
-                module:
-                  type: string
-                name:
-                  type: string
-                typeArguments:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/SuiMoveNormalizedType"
-          additionalProperties: false
-        - type: object
-          required:
-            - Vector
-          properties:
-            Vector:
-              $ref: "#/components/schemas/SuiMoveNormalizedType"
-          additionalProperties: false
-        - type: object
-          required:
-            - TypeParameter
-          properties:
-            TypeParameter:
-              type: integer
-              format: uint16
-              minimum: 0
-          additionalProperties: false
-        - type: object
-          required:
-            - Reference
-          properties:
-            Reference:
-              $ref: "#/components/schemas/SuiMoveNormalizedType"
-          additionalProperties: false
-        - type: object
-          required:
-            - MutableReference
-          properties:
-            MutableReference:
-              $ref: "#/components/schemas/SuiMoveNormalizedType"
-          additionalProperties: false
+      - type: string
+        enum:
+        - Bool
+        - U8
+        - U16
+        - U32
+        - U64
+        - U128
+        - U256
+        - Address
+        - Signer
+      - type: object
+        required:
+        - Struct
+        properties:
+          Struct:
+            type: object
+            required:
+            - address
+            - module
+            - name
+            - typeArguments
+            properties:
+              address:
+                type: string
+              module:
+                type: string
+              name:
+                type: string
+              typeArguments:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuiMoveNormalizedType'
+        additionalProperties: false
+      - type: object
+        required:
+        - Vector
+        properties:
+          Vector:
+            $ref: '#/components/schemas/SuiMoveNormalizedType'
+        additionalProperties: false
+      - type: object
+        required:
+        - TypeParameter
+        properties:
+          TypeParameter:
+            type: integer
+            format: uint16
+            minimum: 0
+        additionalProperties: false
+      - type: object
+        required:
+        - Reference
+        properties:
+          Reference:
+            $ref: '#/components/schemas/SuiMoveNormalizedType'
+        additionalProperties: false
+      - type: object
+        required:
+        - MutableReference
+        properties:
+          MutableReference:
+            $ref: '#/components/schemas/SuiMoveNormalizedType'
+        additionalProperties: false
     SuiMoveNormalizedField:
       type: object
       required:
-        - name
-        - type
+      - name
+      - type
       properties:
         name:
           type: string
         type:
-          $ref: "#/components/schemas/SuiMoveNormalizedType"
+          $ref: '#/components/schemas/SuiMoveNormalizedType'
     SuiMoveNormalizedEnum:
       type: object
       required:
-        - abilities
-        - typeParameters
-        - variants
+      - abilities
+      - typeParameters
+      - variants
       properties:
         abilities:
-          $ref: "#/components/schemas/SuiMoveAbilitySet"
+          $ref: '#/components/schemas/SuiMoveAbilitySet'
         typeParameters:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveStructTypeParameter"
+            $ref: '#/components/schemas/SuiMoveStructTypeParameter'
         variantDeclarationOrder:
           type:
-            - array
-            - "null"
+          - array
+          - "null"
           items:
             type: string
         variants:
@@ -148,43 +148,43 @@ components:
           additionalProperties:
             type: array
             items:
-              $ref: "#/components/schemas/SuiMoveNormalizedField"
+              $ref: '#/components/schemas/SuiMoveNormalizedField'
     SuiMoveVisibility:
       type: string
       enum:
-        - Private
-        - Public
-        - Friend
+      - Private
+      - Public
+      - Friend
     SuiMoveNormalizedFunction:
       type: object
       required:
-        - isEntry
-        - parameters
-        - return
-        - typeParameters
-        - visibility
+      - isEntry
+      - parameters
+      - return
+      - typeParameters
+      - visibility
       properties:
         isEntry:
           type: boolean
         parameters:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveNormalizedType"
+            $ref: '#/components/schemas/SuiMoveNormalizedType'
         return:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveNormalizedType"
+            $ref: '#/components/schemas/SuiMoveNormalizedType'
         typeParameters:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveAbilitySet"
+            $ref: '#/components/schemas/SuiMoveAbilitySet'
         visibility:
-          $ref: "#/components/schemas/SuiMoveVisibility"
+          $ref: '#/components/schemas/SuiMoveVisibility'
     SuiMoveModuleId:
       type: object
       required:
-        - address
-        - name
+      - address
+      - name
       properties:
         address:
           type: string
@@ -193,40 +193,40 @@ components:
     SuiMoveNormalizedStruct:
       type: object
       required:
-        - abilities
-        - fields
-        - typeParameters
+      - abilities
+      - fields
+      - typeParameters
       properties:
         abilities:
-          $ref: "#/components/schemas/SuiMoveAbilitySet"
+          $ref: '#/components/schemas/SuiMoveAbilitySet'
         fields:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveNormalizedField"
+            $ref: '#/components/schemas/SuiMoveNormalizedField'
         typeParameters:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveStructTypeParameter"
+            $ref: '#/components/schemas/SuiMoveStructTypeParameter'
     SuiMoveNormalizedModule:
       type: object
       required:
-        - address
-        - exposedFunctions
-        - fileFormatVersion
-        - friends
-        - name
-        - structs
+      - address
+      - exposedFunctions
+      - fileFormatVersion
+      - friends
+      - name
+      - structs
       properties:
         address:
           type: string
         enums:
           type: object
           additionalProperties:
-            $ref: "#/components/schemas/SuiMoveNormalizedEnum"
+            $ref: '#/components/schemas/SuiMoveNormalizedEnum'
         exposedFunctions:
           type: object
           additionalProperties:
-            $ref: "#/components/schemas/SuiMoveNormalizedFunction"
+            $ref: '#/components/schemas/SuiMoveNormalizedFunction'
         fileFormatVersion:
           type: integer
           format: uint32
@@ -234,85 +234,85 @@ components:
         friends:
           type: array
           items:
-            $ref: "#/components/schemas/SuiMoveModuleId"
+            $ref: '#/components/schemas/SuiMoveModuleId'
         name:
           type: string
         structs:
           type: object
           additionalProperties:
-            $ref: "#/components/schemas/SuiMoveNormalizedStruct"
+            $ref: '#/components/schemas/SuiMoveNormalizedStruct'
     Base58:
       type: string
     Digest:
       allOf:
-        - $ref: "#/components/schemas/Base58"
+      - $ref: '#/components/schemas/Base58'
       description: A representation of a 32 byte digest
     BigInt_for_uint64:
       type: string
     ObjectResponseError:
       oneOf:
-        - type: object
-          required:
-            - code
-            - object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - notExists
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - parent_object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - dynamicFieldNotFound
-            parent_object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - digest
-            - object_id
-            - version
-          properties:
-            code:
-              type: string
-              enum:
-                - deleted
-            digest:
-              description: Base64 string representing the object digest
-              allOf:
-                - $ref: "#/components/schemas/Digest"
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-            version:
-              description: Object version.
-              allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
-        - type: object
-          required:
-            - code
-          properties:
-            code:
-              type: string
-              enum:
-                - unknown
-        - type: object
-          required:
-            - code
-            - error
-          properties:
-            code:
-              type: string
-              enum:
-                - displayError
-            error:
-              type: string
+      - type: object
+        required:
+        - code
+        - object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - notExists
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - parent_object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - dynamicFieldNotFound
+          parent_object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - digest
+        - object_id
+        - version
+        properties:
+          code:
+            type: string
+            enum:
+            - deleted
+          digest:
+            description: Base64 string representing the object digest
+            allOf:
+            - $ref: '#/components/schemas/Digest'
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+          version:
+            description: Object version.
+            allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+      - type: object
+        required:
+        - code
+        properties:
+          code:
+            type: string
+            enum:
+            - unknown
+      - type: object
+        required:
+        - code
+        - error
+        properties:
+          code:
+            type: string
+            enum:
+            - displayError
+          error:
+            type: string
     Error:
       type: object
       properties:
@@ -323,8 +323,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -342,17 +342,17 @@ components:
                 description: Request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ObjectResponseError"
+                $ref: '#/components/schemas/ObjectResponseError'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -361,7 +361,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -370,16 +370,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -387,14 +387,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: sui-sui_getNormalizedMoveModulesByPackage
       summary: sui_getNormalizedMoveModulesByPackage
       description: |
         Return structured representations of all modules in the given package
       x-seo-description: Retrieve normalized definitions of all Move modules in a specific Sui package.
       tags:
-        - sui
+      - sui
       parameters: []
       requestBody:
         required: true
@@ -403,10 +403,10 @@ paths:
             schema:
               type: object
               required:
-                - id
-                - jsonrpc
-                - method
-                - params
+              - id
+              - jsonrpc
+              - method
+              - params
               properties:
                 id:
                   type: integer
@@ -423,15 +423,15 @@ paths:
                   maxItems: 1
                   items:
                     oneOf:
-                      - title: package
-                        $ref: "#/components/schemas/ObjectID"
-                        description: The package ID
+                    - title: package
+                      $ref: '#/components/schemas/ObjectID'
+                      description: The package ID
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: sui_getNormalizedMoveModulesByPackage
                 params:
-                  - "0x61630d3505f8905a0f4d42c6ff39a78a6ba2b28f68a3299ec3417bbabc6717dc"
+                - "0x61630d3505f8905a0f4d42c6ff39a78a6ba2b28f68a3299ec3417bbabc6717dc"
       responses:
         "200":
           description: Successful Response
@@ -447,7 +447,7 @@ paths:
                   result:
                     type: object
                     additionalProperties:
-                      $ref: "#/components/schemas/SuiMoveNormalizedModule"
+                      $ref: '#/components/schemas/SuiMoveNormalizedModule'
               example:
                 jsonrpc: "2.0"
                 result:
@@ -459,12 +459,12 @@ paths:
                   exposedFunctions: {}
                 id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

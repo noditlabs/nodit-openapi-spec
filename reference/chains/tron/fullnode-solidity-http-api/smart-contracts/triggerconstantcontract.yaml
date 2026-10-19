@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: Tron - TriggerConstantContract
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/triggerconstantcontract:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-triggerconstantcontract
+      summary: TriggerConstantContract
+      description: Invoke the readonly function (modified by the `view` or `pure` modifier) of a contract for contract data query; or Invoke the non-readonly function of a  contract for predicting whether the transaction can be successfully executed or estimating the energy consumption.  (Confirmed state)
+      x-seo-description: Call a read-only TRON contract function against solidified state.
+      tags:
+      - smart-contracts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              contract_address: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+              function_selector: balanceOf(address)
+              parameter: 00000000000000000000000098927ffb9f554dc4a453c64b2e553a02d6df514b
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                contract_address:
+                  type: string
+                  description: |-
+                    Contract address. (Format: Base58 or Hex).
+                    Example: `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs`
+                  example: TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs
+                function_selector:
+                  type: string
+                  description: |-
+                    Function selector.
+                    Example: `balanceOf(address)`
+                  example: balanceOf(address)
+                parameter:
+                  type: string
+                  description: |-
+                    ABI-encoded function parameters (Hex String).
+                    Example: `000000000000000000000000a614f803b6fd780986a42c78ec9c7f77e6ded13c`
+                  example: 000000000000000000000000a614f803b6fd780986a42c78ec9c7f77e6ded13c
+                data:
+                  type: string
+                  description: This field transmits the necessary data for smart contract interaction, including the function being called and its parameters. You may choose to use the `data` field, which contains the complete ABI-encoded information, or use the `function_selector` and `parameter` fields separately. Note that if both `data` and `function_selector` are present, the system will prioritize using the `function_selector` and `parameter` fields for the contract interaction.
+                call_value:
+                  type: integer
+                  format: int64
+                  description: 'Amount of TRX transferred into the contract. (Unit: sun)'
+                call_token_value:
+                  type: integer
+                  format: int64
+                  description: Amount of TRC-10 token transferred into the contract.
+                token_id:
+                  type: integer
+                  format: int64
+                  description: TRC-10 token id
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: true
+              required:
+              - owner_address
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: |-
+                    {
+                      "result":{"result":true},
+                      // constant_result should be parsed by corresponding ABI
+                      "constant_result":["000000000000000000000000000000000000000000000000000009a1832a6361"]
+                     // ...
+                    }
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    description: Run result, for detailed parameter definition, refer to [EstimateEnergy](https://developers.tron.network/reference/estimateenergy)
+                    properties:
+                      result:
+                        type: boolean
+                        description: Whether the call succeeded.
+                        example: true
+                        default: true
+                  constant_result:
+                    type: array
+                    description: List of results from a constant contract call.
+                    items:
+                      type: string
+                      example: 000000000000000000000000000000000000000000000000000009a1832a6361
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

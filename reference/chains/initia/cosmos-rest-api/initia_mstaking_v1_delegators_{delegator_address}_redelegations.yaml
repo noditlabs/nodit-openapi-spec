@@ -3,7 +3,7 @@ info:
   title: Initia - initia_mstaking_v1_delegators_{delegator_address}_redelegations
   version: 1.0.0
 servers:
-  - url: https://rest-initia-mainnet.nodit.io
+- url: https://rest-initia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,14 +20,14 @@ paths:
       description: Returns all redelegations for the given delegator.
       operationId: initia_mstaking_v1_delegators_{delegator_address}_redelegations
       tags:
-        - mstaking
+      - mstaking
       responses:
         "200":
           description: Successful Response
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -41,21 +41,21 @@ paths:
                     items:
                       type: object
       parameters:
-        - name: delegator_address
-          description: Delegator address (bech32).
-          in: path
-          required: true
-          example: init1qx02ephfxq6vp3eku8p36mful0xxk8cq74jw8p
-          schema:
-            type: string
-        - name: pagination.limit
-          description: Maximum number of results to return per page.
-          in: query
-          required: false
-          example: "10"
-          schema:
-            type: string
-            format: uint64
+      - name: delegator_address
+        description: Delegator address (bech32).
+        in: path
+        required: true
+        example: init1qx02ephfxq6vp3eku8p36mful0xxk8cq74jw8p
+        schema:
+          type: string
+      - name: pagination.limit
+        description: Maximum number of results to return per page.
+        in: query
+        required: false
+        example: "10"
+        schema:
+          type: string
+          format: uint64
       security:
-        - api_key: []
+      - api_key: []
       summary: /initia/mstaking/v1/delegators/{delegator_address}/redelegations

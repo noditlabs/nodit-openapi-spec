@@ -1,0 +1,104 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetTransactionInfoById
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/gettransactioninfobyid:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-gettransactioninfobyid
+      summary: GetTransactionInfoById
+      description: Query the transaction fee, block height by transaction id. (Confirmed state)
+      x-seo-description: Query a solidified TRON transaction receipt by transaction ID.
+      tags:
+      - transactions
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: 349ab7e2ba7f10687049d02a8138668d14a88888709aa681f7b32d475b0049d4
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: 'Transaction ID (hash). Example: `bd32eef7469d57011a092c59c745cab1e49c501e9f0ac15c580656f9ead1e319 `'
+                  example: bd32eef7469d57011a092c59c745cab1e49c501e9f0ac15c580656f9ead1e319
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: |-
+                    {
+                      "id": "d0807adb3c5412aa150787b944c96ee898c997debdc27e2f6a643c771edb5933",
+                      "fee": 2790,
+                      "blockNumber": 5467102,
+                      "blockTimeStamp": 1546455621000,
+                      "contractResult": [
+                        ""
+                      ],
+                      "receipt": {
+                        "net_fee": 2790
+                      }
+                    }
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Transaction ID (hash).
+                    example: d0807adb3c5412aa150787b944c96ee898c997debdc27e2f6a643c771edb5933
+                  fee:
+                    type: integer
+                    description: 'Total fee charged for the transaction. (Unit: sun)'
+                    example: 2790
+                    default: 0
+                  blockNumber:
+                    type: integer
+                    description: Number of the block containing the transaction.
+                    example: 5467102
+                    default: 0
+                  blockTimeStamp:
+                    type: integer
+                    description: 'Timestamp of the block containing the transaction. (Unit: millisecond)'
+                    example: 1546455621000
+                    default: 0
+                  contractResult:
+                    type: array
+                    description: Contract execution result. Contains the ABI-encoded return value as a hex string.
+                    items:
+                      type: string
+                      example: ""
+                  receipt:
+                    type: object
+                    description: Resource consumption receipt of the transaction.
+                    properties:
+                      net_fee:
+                        type: integer
+                        description: 'Fee paid in TRX when the caller''s Bandwidth was insufficient. (Unit: sun)'
+                        example: 2790
+                        default: 0

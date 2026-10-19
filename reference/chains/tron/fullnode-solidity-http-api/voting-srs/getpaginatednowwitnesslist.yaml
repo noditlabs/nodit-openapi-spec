@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetPaginatedNowWitnessList
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getpaginatednowwitnesslist:
+    get:
+      security:
+      - api_key: []
+      operationId: tron-getpaginatednowwitnesslist
+      summary: GetPaginatedNowWitnessList
+      description: This API retrieves the real-time vote counts of all Super Representatives (SRs) in the current epoch, sorted in descending order, and returns a paginated list within the specified range. (Confirmed state)
+      x-seo-description: List TRON Super Representatives with pagination, sorted by vote count.
+      tags:
+      - voting-srs
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+          format: int64
+        required: true
+        description: 'Starting position for pagination. Must be ≥ 0. (Default: 0). Example: `5` returns results starting from the 6th item.'
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          format: int64
+        required: false
+        description: 'The number of results to return per page. Must be greater than 0 and cannot exceed 1000. (Default: 50). Example: `10`'
+      - in: query
+        name: visible
+        schema:
+          type: boolean
+        description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Paginated list of current witnesses (solidity).
+                properties:
+                  witnesses:
+                    type: array
+                    description: List of Super Representatives (SRs).
+                    items:
+                      type: object
+                      description: Witness object. See [ListWitnesses](https://developers.tron.network/reference/listwitnesses) for full structure.
+              examples:
+                Result:
+                  value: '{}'

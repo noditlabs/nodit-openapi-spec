@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: Tron - CreateAssetIssue
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/createassetissue:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-createassetissue
+      summary: CreateAssetIssue
+      description: Issues a TRC-10 token. An account can only issue a TRC-10 token once.
+      x-seo-description: Create a transaction that issues a new TRC-10 token.
+      tags:
+      - trc10-token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              name: "0x6173736574497373756531353330383934333132313538"
+              abbr: "0x6162627231353330383934333132313538"
+              total_supply: 4321
+              trx_num: 1
+              num: 1
+              precision: 0
+              start_time: 1790899200000
+              end_time: 1822435200000
+              description: "0x4578616d706c654465736372697074696f6e"
+              url: "0x7777772e6578616d706c652e636f6d"
+              free_asset_net_limit: 10000
+              public_free_asset_net_limit: 10000
+              frozen_supply:
+                frozen_amount: 1
+                frozen_days: 2
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Token issuer''s address. (Format: Base58 or Hex)'
+                name:
+                  type: string
+                  description: 'Token name (Default: Hex). Example: `0x6173736574497373756531353330383934333132313538`'
+                  example: "0x6173736574497373756531353330383934333132313538"
+                abbr:
+                  type: string
+                  description: 'Token''s abbreviation or symbol. Example: `0x6162627231353330383934333132313538`'
+                  example: "0x6162627231353330383934333132313538"
+                total_supply:
+                  type: integer
+                  description: Total supply of the TRC-10 token.
+                  format: int64
+                trx_num:
+                  type: integer
+                  description: 'Defines the price ratio as `trx_num / num`. (Unit of ''trx_num'': sun)'
+                  format: int64
+                num:
+                  type: integer
+                  description: 'Defines the price ratio as `trx_num / num`. (Unit of ''trx_num'': sun)'
+                  format: int64
+                start_time:
+                  type: integer
+                  description: 'ICO start time. (Unit: millisecond)'
+                  format: int64
+                end_time:
+                  type: integer
+                  description: 'ICO End time. (Unit: millisecond)'
+                  format: int64
+                description:
+                  type: string
+                  description: 'Description of the TRC-10 token (Default: Hex). Example: `0x4578616d706c654465736372697074696f6e`'
+                  example: "0x4578616d706c654465736372697074696f6e"
+                url:
+                  type: string
+                  description: 'URL of the official website (Default: Hex). Example: `0x7777772e6578616d706c652e636f6d`'
+                  example: "0x7777772e6578616d706c652e636f6d"
+                free_asset_net_limit:
+                  type: integer
+                  description: Free Bandwidth limit for TRC-10 token transfers.
+                  format: int64
+                public_free_asset_net_limit:
+                  type: integer
+                  description: Total public free Bandwidth limit for a TRC-10 token.
+                  format: int64
+                frozen_supply:
+                  type: string
+                  description: 'List of frozen supply objects for the TRC-10 token. Example: `{"frozen_amount":1,"frozen_days":2}`'
+                  format: json
+                  example: '{"frozen_amount":1,"frozen_days":2}'
+                precision:
+                  type: integer
+                  format: int32
+                  description: Token precision (number of decimal places).
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+              required:
+              - owner_address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: Token issuer's address.
+              examples:
+                Result:
+                  value: '{}'

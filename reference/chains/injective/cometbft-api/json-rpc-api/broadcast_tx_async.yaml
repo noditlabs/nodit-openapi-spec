@@ -3,7 +3,7 @@ info:
   title: Injective - BroadCastTxAsync
   version: 1.0.0
 servers:
-  - url: https://rpc-injective-mainnet.nodit.io
+- url: https://rpc-injective-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: broadcast_tx_async
       summary: BroadCastTxAsync
       description: Broadcasts a transaction asynchronously and returns immediately. Does not wait for CheckTx or DeliverTx results.
       tags:
-        - json-rpc-api
+      - json-rpc-api
       requestBody:
         required: true
         content:
@@ -32,23 +32,27 @@ paths:
               type: object
               additionalProperties: false
               required:
-                - jsonrpc
-                - id
-                - method
+              - jsonrpc
+              - id
+              - method
               properties:
                 jsonrpc:
+                  description: JSON-RPC protocol version. Always `2.0`.
                   type: string
                   const: "2.0"
                 id:
+                  description: Identifier of the request. Returned unchanged as `id` in the response.
                   type: integer
                 method:
+                  description: Name of the JSON-RPC method to call.
                   type: string
                   const: broadcast_tx_async
                 params:
+                  description: Parameters passed to the method.
                   type: object
                   additionalProperties: false
                   required:
-                    - tx
+                  - tx
                   properties:
                     tx:
                       type: string
@@ -67,30 +71,39 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   error:
+                    description: Error information returned when the request fails.
                     type: string
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       code:
+                        description: CheckTx result code. Always `0` because the call is asynchronous; it does not reflect the actual check.
                         type: string
                       data:
+                        description: Data returned by CheckTx.
                         type: string
                       log:
+                        description: Execution log message.
                         type: string
                       codespace:
+                        description: Namespace of the result code.
                         type: string
                       hash:
+                        description: Transaction hash.
                         type: string
               example:
                 jsonrpc: "2.0"

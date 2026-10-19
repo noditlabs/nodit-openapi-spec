@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetNowBlock
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getnowblock:
+    get:
+      security:
+      - api_key: []
+      operationId: tron-getnowblock
+      summary: GetNowBlock
+      description: Query the latest solidified block, which is the height baseline for final-state reads.
+      x-seo-description: Query the latest solidified block on the TRON network.
+      tags:
+      - blocks
+      parameters:
+      - in: query
+        name: visible
+        schema:
+          type: boolean
+        description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              examples:
+                Example API Call Output:
+                  value: |-
+                    // Example API Call Output
+
+                    {  
+                       "blockID":"00000000000080f82038aa301eda07eb27906589dd849d1c9ba5d84af94cf038",
+                       "block_header":{  
+                          "raw_data":{  
+                             "number":33016,
+                             "txTrieRoot":"0000000000000000000000000000000000000000000000000000000000000000",
+                             "witness_address":"41928c9af0651632157ef27a2cf17ca72c575a4d21",
+                             "parentHash":"00000000000080f7b502cb572e67f3ad8e75558c0cd64f54cc7c0697f08000a0",
+                             "version":3,
+                             "timestamp":1536713433000
+                          },
+                          "witness_signature":"917101db1a7f9252fa3fef139acc07153876b0a4a46e57a235f9b1578bb6da2f12d1a4bc09350e3c5b609353876ffdd581bd903ce31304e42066e363853cf77d00"
+                       }
+                    }
+              schema:
+                type: object
+                properties:
+                  blockID:
+                    type: string
+                    description: Block hash.
+                    example: 00000000000080f82038aa301eda07eb27906589dd849d1c9ba5d84af94cf038
+                  block_header:
+                    type: object
+                    description: Block header information.
+                    properties:
+                      raw_data:
+                        type: object
+                        description: Raw data of the block header.
+                        properties:
+                          number:
+                            type: integer
+                            description: Block number (height).
+                            example: 33016
+                            default: 0
+                          txTrieRoot:
+                            type: string
+                            description: Root hash of the transaction Merkle tree.
+                            example: "0000000000000000000000000000000000000000000000000000000000000000"
+                          witness_address:
+                            type: string
+                            description: Address of the Super Representative that produced the block.
+                            example: 41928c9af0651632157ef27a2cf17ca72c575a4d21
+                          parentHash:
+                            type: string
+                            description: Hash of the parent block.
+                            example: 00000000000080f7b502cb572e67f3ad8e75558c0cd64f54cc7c0697f08000a0
+                          version:
+                            type: integer
+                            description: Protocol version number.
+                            example: 3
+                            default: 0
+                          timestamp:
+                            type: integer
+                            description: 'Timestamp. (Unit: millisecond)'
+                            example: 1536713433000
+                            default: 0
+                      witness_signature:
+                        type: string
+                        description: Signature of the Super Representative.
+                        example: 917101db1a7f9252fa3fef139acc07153876b0a4a46e57a235f9b1578bb6da2f12d1a4bc09350e3c5b609353876ffdd581bd903ce31304e42066e363853cf77d00
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

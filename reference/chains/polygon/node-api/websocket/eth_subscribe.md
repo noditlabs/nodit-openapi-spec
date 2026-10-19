@@ -1,41 +1,38 @@
----
-id: eth_subscribe
-title: eth_subscribe
-sidebar_label: eth_subscribe
-slug: /node-api/eth_subscribe
----
+Use this API to create a subscription for specific events: `newHeads`, `logs`, or `newPendingTransactions`.
 
-이 API를 사용하여 특정 이벤트(newHeads, logs, newPendingTransactions)에 대한 구독을 생성할 수 있습니다.
+Nodit also provides additional subscription types, documented on the following separate pages.
 
-:::info 사용 시 참고사항
-- 연결할 때 반드시 wss endpoint를 사용해야 하며, https는 지원되지 않습니다.
-- WebSocket 연결이 끊기면 자동으로 구독이 해지될 수 있습니다. 연결이 끊긴 경우, 다시 구독을 요청하여 연결해야 합니다.
-- CU는 구독한 데이터의 양에 따라 소진되므로, 필요한 데이터만을 구독할 수 있도록 적절한 필터링 옵션 사용을 권장합니다.
-:::
+- [nodit_minedTransactions](/chains/polygon/rpc-api/nodit_minedtransactions)
 
-## 1.Request Parameters
+> info Usage Notes
+> - You must use a `wss` endpoint when connecting. HTTPS is not supported.
+> - If the WebSocket connection drops, subscriptions may be cancelled automatically. Re-subscribe after reconnecting.
+> - Compute Unit (CU) consumption scales with the volume of subscribed data. Use appropriate filtering options to subscribe only to the data you need.
+>
 
-모든 구독 요청은 아래의 공통 파라미터를 가집니다.
+## 1. Request Parameters
 
-| Parameter | Type              | Required | Description                                                                                                                                                                                         |
-| --------- | ----------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| id        | integer or string | required | 각 요청에 대한 고유 식별자입니다. 클라이언트가 요청과 서버의 응답이 일치하도록 매칭하는 데 사용됩니다. 일반적으로 숫자나 문자열로 표현됩니다.                                                       |
-| jsonrpc   | string            | required | JSON-RPC 프로토콜의 버전을 나타냅니다. 해당 네트워크에서 사용되는 버전은 "2.0"이므로 항상 이 값을 사용합니다.                                                                                       |
-| method    | string            | required | 실행하고자 하는 특정 JSON-RPC 메서드 이름을 지정합니다. 여기서는 "eth_subscribe"를 입력합니다.                                                                                                      |
-| params    | array             | required | 실행에 필요한 인자를 배열 형태로 전달합니다. "eth_subscribe"에서는 newHeads, logs, 그리고 newPendingTransactions 중 하나의 구독 타입을 입력하고, 각 구독 타입에 따라 필요한 정보를 함께 입력합니다. |
+All subscription requests share the following common parameters.
 
-params에 전달되는 구독 타입에 따라 전달되는 인자가 다릅니다. 아래는 구독 타입에 따라 전달되는 인자들에 대한 설명입니다.
+| Parameter | Type              | Required | Description                                                                                                                                                                              |
+| --------- | ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id        | integer or string | required | A unique identifier for each request. Used by the client to match requests with server responses. Typically expressed as a number or string.                                             |
+| jsonrpc   | string            | required | Specifies the JSON-RPC protocol version. The version used on this network is `"2.0"` — always use this value.                                                                            |
+| method    | string            | required | The name of the JSON-RPC method to invoke. Enter `"eth_subscribe"` here.                                                                                                                 |
+| params    | array             | required | Arguments required for execution, passed as an array. For `eth_subscribe`, provide one of the subscription types — `newHeads`, `logs`, or `newPendingTransactions` — along with any additional arguments required for that type. |
+
+The arguments passed in `params` vary depending on the subscription type. The following sections describe the arguments for each type.
 
 ### Subscription Type
 
 #### `newHeads`
 
-이 이벤트를 구독하면 새로운 블록이 생성될 때마다 해당 블록의 헤더 정보가 실시간으로 전송됩니다.
-아래표는 params 배열 안에 입력해야하는 인자에 대한 상세 정보를 나타냅니다.
+Subscribing to this event streams the block header of each new block in real time as it is produced.
+The table below describes the arguments by their position in the `params` array. `params` is a positional array, so enter only the values in order, without key names.
 
-| Argument          | Type   | Required | Description                                                        |
-| ----------------- | ------ | -------- | ------------------------------------------------------------------ |
-| subscription_type | string | required | 구독할 이벤트 타입을 지정합니다. 여기서는 "newHeads"를 입력합니다. |
+| Position | Type | Required | Description |
+| --- | --- | --- | --- |
+| `params[0]` | string | required | The event type to subscribe to. Enter `"newHeads"` here. |
 
 ```json newHeads example
 {
@@ -48,15 +45,20 @@ params에 전달되는 구독 타입에 따라 전달되는 인자가 다릅니�
 
 #### `logs`
 
-이 이벤트를 구독하면 특정 로그가 발생할 때마다 정보가 실시간으로 전송됩니다. 사용자는 address와 topics 필드를 이용해 특정 스마트 계약 주소와 관련된 이벤트를 필터링할 수 있습니다. 예를 들어, ERC-20 또는 ERC-721 토큰 전송과 같은 이벤트에 대한 로그를 구독할 수 있습니다. 빈 필터링 옵션을 입력할 경우 모든 로그가 반환되므로, 반드시 필요한 필터링 옵션을 지정하는 것이 권장됩니다.
-아래표는 params 배열 안에 입력해야하는 인자에 대한 상세 정보를 나타냅니다.
+Subscribing to this event streams matching log data in real time whenever a relevant log is emitted. Use the `address` and `topics` fields to filter events associated with specific smart contract addresses — for example, ERC-20 or ERC-721 token transfer events. If you provide an empty filter object, all logs are returned. Specifying the necessary filter options is strongly recommended.
+The table below describes the arguments by their position in the `params` array. `params` is a positional array, so enter only the values in order, without key names.
 
-| Argument                 | Type   | Required | Description                                                                                                                                                                     |
-| ------------------------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| subscription_type        | string | required | 구독할 이벤트 타입을 지정합니다. 여기서는 "logs"를 입력합니다.                                                                                                                  |
-| filtering_option         | object | required | 로그를 필터링할 옵션(address, topics)을 지정합니다. 만약 빈 객체를 입력한다면, 발생하는 모든 로그를 반환합니다. 사용 목적에 따라 원하는 필터링 옵션을 지정하는 것을 권장합니다. |
-| filtering_option.address | string | optional | 특정 주소를 필터링합니다.                                                                                                                                                       |
-| filtering_option.topics  | array  | optional | 필터링할 토픽을 배열의 형태로 입력합니다.                                                                                                                                       |
+| Position | Type | Required | Description |
+| --- | --- | --- | --- |
+| `params[0]` | string | required | The event type to subscribe to. Enter `"logs"` here. |
+| `params[1]` | object | required | Filtering options (`address`, `topics`) for log events. If an empty object is provided, all logs are returned. Specify the filtering options appropriate for your use case. See the table below for the available fields. |
+
+The fields of the `params[1]` filter option object are as follows.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `address` | string | optional | Filters logs by a specific contract address. |
+| `topics` | array | optional | Filters logs by topic. Provide topics as an array. |
 
 ```json logs example
 {
@@ -77,13 +79,13 @@ params에 전달되는 구독 타입에 따라 전달되는 인자가 다릅니�
 
 #### `newPendingTransactions`
 
-이 이벤트를 구독하면 새로운 트랜잭션이 네트워크에 제출 되었을 때, 해당 트랜잭션의 정보를 실시간으로 전송됩니다.
-아래표는 params 배열 안에 입력해야하는 인자에 대한 상세 정보를 나타냅니다.
+Subscribing to this event streams transaction data in real time whenever a new transaction is submitted to the network.
+The table below describes the arguments by their position in the `params` array. `params` is a positional array, so enter only the values in order, without key names.
 
-| Argument          | Type    | Required | Description                                                                                                                                                                            |
-| ----------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| subscription_type | string  | required | 구독할 이벤트 타입을 지정합니다. 여기서는 "newPendingTransactions"를 입력합니다.                                                                                                       |
-| flag              | boolean | optional | 트랜잭션 데이터의 포함 여부를 지정합니다. true면 전체 트랜잭션 데이터를 반환하며, false면 트랜잭션 해시만 반환합니다. 지정하지 않는 경우, false로 설정되어 트랜잭션 해시만 반환합니다. |
+| Position | Type | Required | Description |
+| --- | --- | --- | --- |
+| `params[0]` | string | required | The event type to subscribe to. Enter `"newPendingTransactions"` here. |
+| `params[1]` | boolean | optional | Specifies whether to include full transaction data. `true` returns the full transaction object; `false` returns only the transaction hash. Defaults to `false` if not specified. |
 
 ```json newPendingTransactions
 {
@@ -96,7 +98,7 @@ params에 전달되는 구독 타입에 따라 전달되는 인자가 다릅니�
 
 ## 2. Response
 
-위의 파라미터들을 이용하여 구독을 생성하면, 이벤트가 발생할 때마다 아래와 같은 응답을 얻을 수 있습니다.
+Once a subscription is created with the parameters above, the following response is delivered each time an event occurs.
 
 ```json newHeads
 {
@@ -184,24 +186,22 @@ params에 전달되는 구독 타입에 따라 전달되는 인자가 다릅니�
 }
 ```
 
-## 3. How to use
+## 3. How to Use
 
-이 API는 WebSocket기반 API로, WebSocket 통신을 위한 도구를 사용하여 구독할 수 있습니다.
-이 예제에서 사용된 WebSocket 클라이언트 도구로 wscat을 사용했으며, WebSocket 서버에 쉽게 연결하여 데이터를 송수신할 수 있게 해줍니다.
+This is a WebSocket-based API. You can subscribe to events using any tool that supports WebSocket communication. The examples in this guide use `wscat`, a WebSocket client that lets you easily connect to a WebSocket server and send or receive data.
 
-### 3.1. Connect to Websocket channel
+### 3.1. Connect to WebSocket Channel
 
-터미널 창을 열어 아래의 커맨드를 입력합니다.
-이 때, 구독하고자 하는 프로토콜과 네트워크를 지정하고, 콘솔에서 생성한 프로젝트의 API를 입력해야 합니다.
+Open a terminal and run the command below. Specify the protocol and network you want to subscribe to, and provide the API key for the project you created in the console.
 
 ```sh wscat
 # Set protocol, network and your api key in the URL to connect (e.g., wss://ethereum-mainnet.nodit.io/FwG...)
 wscat -c wss://{protocol}-{network}.nodit.io/{your_api_key}
 ```
 
-### 3.2. Subscribe a specific event
+### 3.2. Subscribe to a Specific Event
 
-Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트를 구독합니다.
+Once the WebSocket connection is established, subscribe to the event you want using one of the examples below.
 
 ```json newHeads
 { "jsonrpc": "2.0", "id": 1, "method": "eth_subscribe", "params": ["newHeads"] }
@@ -233,9 +233,9 @@ Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트
 }
 ```
 
-### 3.3. Listen subscription
+### 3.3. Listen to Subscription Events
 
-가장 첫 응답에는 subscription ID를 반환합니다.
+The first response returns the subscription ID.
 
 ```json first response example
 {
@@ -245,7 +245,7 @@ Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트
 }
 ```
 
-그 이후부터는 이벤트가 발생할 때마다 구독타입에 맞는 결과를 반환합니다.
+Subsequent responses are delivered each time an event occurs, returning results matching the subscription type.
 
 ```json event response example
 {
@@ -262,8 +262,8 @@ Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트
 
 ### 3.4. Unsubscribe
 
-터미널 창에서 `CTRL+C` 를 입력하여 연결을 종료하면, 구독이 해제됩니다.
-혹은 eth_unsubscribe 를 사용하여, 연결을 유지한채 구독을 해제할 수 있습니다. 아래의 예시와 같이 채널에 연결된 subscription ID를 params에 입력하여 전송하면 해당 구독이 해제됩니다.
+Press `CTRL+C` in the terminal to close the connection and cancel all subscriptions.
+Alternatively, use `eth_unsubscribe` to cancel a subscription while keeping the connection open. Pass the subscription ID associated with the channel in `params` as shown in the example below.
 
 ```json unsubscribe example
 {
@@ -274,7 +274,7 @@ Websocket 연결이 완료되었다면, 아래의 예시 중 원하는 이벤트
 }
 ```
 
-만약 정상적으로 구독 해제되었다면 아래의 응답을 받을 수 있습니다.
+If the subscription is successfully cancelled, you receive the following response.
 
 ```json unsubscribe successful response example
 {

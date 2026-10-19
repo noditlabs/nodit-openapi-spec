@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetApprovedList
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getapprovedlist:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getapprovedlist
+      summary: GetApprovedList
+      description: Query the account address list which signed the transaction.
+      x-seo-description: Query the list of account addresses that signed a TRON transaction.
+      tags:
+      - query-the-network
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              signature:
+              - 2a3743f40d53a124c1597256b155bf286bd8874afe6997ec0a7e63405dea78cd914d9aa9adb8f84dc8d1ef4b1827dd9e8960a40a4ad11e619d06e9601e8b27c000
+              raw_data:
+                contract:
+                - parameter:
+                    value:
+                      amount: 1000000
+                      owner_address: 411320a6fb4dcd4ff8e91392a8cb98378633cf7dd8
+                      to_address: 414c8967080d86f3d0e1352a42f9213c7b9dd03b0f
+                    type_url: type.googleapis.com/protocol.TransferContract
+                  type: TransferContract
+                ref_block_bytes: f69b
+                ref_block_hash: 7d4a3b02495f2320
+                expiration: 1762502739000
+                timestamp: 1762502681856
+            schema:
+              type: object
+              required:
+              - signature
+              - raw_data
+              properties:
+                signature:
+                  type: array
+                  description: |-
+                    The signature list of transaction. Example: `[ "50a252d1ffd1cf902fe4f7a3986697adf26a37c8193a86ce9ccc76adf5c05d26166c5e90d470a13708c48a76a766d2b2c68ffd733451ff1315040fb526e7ccde1b" ]`. Please note that when testing on this page, please enter the signature string directly into each input field. For example:
+                    `50a252d1ffd1cf902fe4f7a3986697adf26a37c8193a86ce9ccc76adf5c05d26166c5e90d470a13708c48a76a766d2b2c68ffd733451ff1315040fb526e7ccde1b`
+                  items:
+                    type: string
+                raw_data:
+                  type: string
+                  description: 'The transaction''s `raw_data`.  Example: `{ "data": "74657374", "contract": [ { "parameter": { "value": { "resource": "ENERGY", "frozen_balance": 5000000, "owner_address": "TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM"}, "type_url": "type.googleapis.com/protocol.FreezeBalanceV2Contract" }, "type": "FreezeBalanceV2Contract"}], "ref_block_bytes": "dd1a", "ref_block_hash": "51a43e706d9ac33a", "expiration": 1767844938000, "timestamp": 1767844878000 }`'
+                  format: json
+                  example: '{ "data": "74657374", "contract": [ { "parameter": { "value": { "resource": "ENERGY", "frozen_balance": 5000000, "owner_address": "TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM"}, "type_url": "type.googleapis.com/protocol.FreezeBalanceV2Contract" }, "type": "FreezeBalanceV2Contract"}], "ref_block_bytes": "dd1a", "ref_block_hash": "51a43e706d9ac33a", "expiration": 1767844938000, "timestamp": 1767844878000 }'
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    description: The parsing result. Returns an error code and message if parsing fails.
+                  approved_list:
+                    type: array
+                    items:
+                      type: string
+                    description: List of account addresses that have signed the transaction.
+                  transaction:
+                    type: object
+                    description: Transaction information.
+                    properties: {}
+              examples:
+                Example API Call Output:
+                  value: ""

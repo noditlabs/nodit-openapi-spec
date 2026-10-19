@@ -1,0 +1,519 @@
+openapi: 3.1.0
+info:
+  title: Sui - GetEpoch
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.LedgerService/GetEpoch:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-GetEpoch
+      summary: GetEpoch
+      description: |
+        Retrieves the information of the specified epoch. Returns the current epoch if no epoch is specified.
+      x-seo-description: 지정한 에포크의 정보를 조회합니다. 에포크를 지정하지 않으면 현재 에포크를 반환합니다.
+      x-grpc-method: sui.rpc.v2.LedgerService/GetEpoch
+      x-proto: sui/rpc/v2/ledger_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.LedgerService
+        method: GetEpoch
+        streaming: unary
+        proto: sui/rpc/v2/ledger_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - LedgerService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                epoch:
+                  type: integer
+                  description: The requested epoch. If no epoch is provided, the current epoch will be returned.
+                read_mask:
+                  type: object
+                  description: Mask specifying which fields to read. If no mask is specified, defaults to `epoch`.
+                  properties:
+                    paths:
+                      type: array
+                      items:
+                        type: string
+                      description: The set of field mask paths (e.g. "object_id", "version", "digest").
+            example:
+              epoch: 100
+              read_mask:
+                paths: []
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  epoch:
+                    type: object
+                    description: The requested epoch.
+                    properties:
+                      epoch:
+                        type: integer
+                        description: Epoch number.
+                      committee:
+                        type: object
+                        description: Validator committee for the epoch.
+                        properties:
+                          epoch:
+                            type: integer
+                            description: The epoch where this committee governs.
+                          members:
+                            type: array
+                            description: The committee members.
+                            items:
+                              type: object
+                              properties:
+                                public_key:
+                                  type: string
+                                  description: The 96-byte Bls12381 public key for this validator.
+                                weight:
+                                  type: integer
+                                  description: Voting weight this validator possesses.
+                      system_state:
+                        type: object
+                        description: Snapshot of the system state.
+                        properties:
+                          version:
+                            type: integer
+                            description: Version of the data structure.
+                          epoch:
+                            type: integer
+                            description: Current epoch.
+                          protocol_version:
+                            type: integer
+                            description: Current protocol version.
+                          validators:
+                            type: object
+                            description: The validator set.
+                            properties:
+                              total_stake:
+                                type: integer
+                                description: Total stake across the set.
+                              active_validators:
+                                type: array
+                                description: Currently active validators.
+                                items:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                      description: Human-readable name.
+                                    address:
+                                      type: string
+                                      description: Sui address of the validator.
+                                    description:
+                                      type: string
+                                      description: Description of the validator.
+                                    image_url:
+                                      type: string
+                                      description: Image URL.
+                                    project_url:
+                                      type: string
+                                      description: Project URL.
+                                    protocol_public_key:
+                                      type: string
+                                      description: Protocol public key.
+                                    proof_of_possession:
+                                      type: string
+                                      description: Proof of possession.
+                                    network_public_key:
+                                      type: string
+                                      description: Network public key.
+                                    worker_public_key:
+                                      type: string
+                                      description: Worker public key.
+                                    network_address:
+                                      type: string
+                                      description: Network address.
+                                    p2p_address:
+                                      type: string
+                                      description: P2P address.
+                                    primary_address:
+                                      type: string
+                                      description: Primary address.
+                                    worker_address:
+                                      type: string
+                                      description: Worker address.
+                                    next_epoch_protocol_public_key:
+                                      type: string
+                                      description: Next-epoch protocol public key.
+                                    next_epoch_proof_of_possession:
+                                      type: string
+                                      description: Next-epoch proof of possession.
+                                    next_epoch_network_public_key:
+                                      type: string
+                                      description: Next-epoch network public key.
+                                    next_epoch_worker_public_key:
+                                      type: string
+                                      description: Next-epoch worker public key.
+                                    next_epoch_network_address:
+                                      type: string
+                                      description: Next-epoch network address.
+                                    next_epoch_p2p_address:
+                                      type: string
+                                      description: Next-epoch P2P address.
+                                    next_epoch_primary_address:
+                                      type: string
+                                      description: Next-epoch primary address.
+                                    next_epoch_worker_address:
+                                      type: string
+                                      description: Next-epoch worker address.
+                                    metadata_extra_fields:
+                                      type: object
+                                      description: Additional metadata fields.
+                                      properties:
+                                        id:
+                                          type: string
+                                          description: UID of the Table or Bag.
+                                        size:
+                                          type: integer
+                                          description: Number of key-value pairs.
+                                    voting_power:
+                                      type: integer
+                                      description: Voting power of the validator.
+                                    operation_cap_id:
+                                      type: string
+                                      description: Operation capability ObjectId.
+                                    gas_price:
+                                      type: integer
+                                      description: Gas price set by the validator.
+                                    staking_pool:
+                                      type: object
+                                      description: The validator's staking pool.
+                                      properties:
+                                        id:
+                                          type: string
+                                          description: UID of the staking pool.
+                                        activation_epoch:
+                                          type: integer
+                                          description: Epoch at which the pool was activated.
+                                        deactivation_epoch:
+                                          type: integer
+                                          description: Epoch at which the pool was deactivated.
+                                        sui_balance:
+                                          type: integer
+                                          description: Total SUI in the pool.
+                                        rewards_pool:
+                                          type: integer
+                                          description: Rewards pool balance.
+                                        pool_token_balance:
+                                          type: integer
+                                          description: Pool token balance.
+                                        exchange_rates:
+                                          type: object
+                                          description: Exchange rate table.
+                                          properties:
+                                            id:
+                                              type: string
+                                              description: UID of the Table or Bag.
+                                            size:
+                                              type: integer
+                                              description: Number of key-value pairs.
+                                        pending_stake:
+                                          type: integer
+                                          description: Pending stake to be added.
+                                        pending_total_sui_withdraw:
+                                          type: integer
+                                          description: Pending total SUI to withdraw.
+                                        pending_pool_token_withdraw:
+                                          type: integer
+                                          description: Pending pool tokens to withdraw.
+                                        extra_fields:
+                                          type: object
+                                          description: Additional extensible fields.
+                                          properties:
+                                            id:
+                                              type: string
+                                              description: UID of the Table or Bag.
+                                            size:
+                                              type: integer
+                                              description: Number of key-value pairs.
+                                    commission_rate:
+                                      type: integer
+                                      description: Commission rate in basis points.
+                                    next_epoch_stake:
+                                      type: integer
+                                      description: Stake for the next epoch.
+                                    next_epoch_gas_price:
+                                      type: integer
+                                      description: Gas price for the next epoch.
+                                    next_epoch_commission_rate:
+                                      type: integer
+                                      description: Commission rate for the next epoch.
+                                    extra_fields:
+                                      type: object
+                                      description: Additional extensible fields.
+                                      properties:
+                                        id:
+                                          type: string
+                                          description: UID of the Table or Bag.
+                                        size:
+                                          type: integer
+                                          description: Number of key-value pairs.
+                              pending_active_validators:
+                                type: object
+                                description: Validators pending activation.
+                                properties:
+                                  id:
+                                    type: string
+                                    description: UID of the Table or Bag.
+                                  size:
+                                    type: integer
+                                    description: Number of key-value pairs.
+                              pending_removals:
+                                type: array
+                                items:
+                                  type: integer
+                                description: Indices of validators pending removal.
+                              staking_pool_mappings:
+                                type: object
+                                description: Mapping of staking pools.
+                                properties:
+                                  id:
+                                    type: string
+                                    description: UID of the Table or Bag.
+                                  size:
+                                    type: integer
+                                    description: Number of key-value pairs.
+                              inactive_validators:
+                                type: object
+                                description: Inactive validators.
+                                properties:
+                                  id:
+                                    type: string
+                                    description: UID of the Table or Bag.
+                                  size:
+                                    type: integer
+                                    description: Number of key-value pairs.
+                              validator_candidates:
+                                type: object
+                                description: Validator candidates.
+                                properties:
+                                  id:
+                                    type: string
+                                    description: UID of the Table or Bag.
+                                  size:
+                                    type: integer
+                                    description: Number of key-value pairs.
+                              at_risk_validators:
+                                type: array
+                                description: At-risk validators.
+                                items:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                      description: Address of the at-risk validator.
+                                    value:
+                                      type: integer
+                                      description: Number of epochs at risk.
+                              extra_fields:
+                                type: object
+                                description: Additional extensible fields.
+                                properties:
+                                  id:
+                                    type: string
+                                    description: UID of the Table or Bag.
+                                  size:
+                                    type: integer
+                                    description: Number of key-value pairs.
+                          storage_fund:
+                            type: object
+                            description: The storage fund.
+                            properties:
+                              total_object_storage_rebates:
+                                type: integer
+                                description: Total object storage rebates.
+                              non_refundable_balance:
+                                type: integer
+                                description: Non-refundable balance.
+                          parameters:
+                            type: object
+                            description: System parameters.
+                            properties:
+                              epoch_duration_ms:
+                                type: integer
+                                description: Epoch duration in milliseconds.
+                              stake_subsidy_start_epoch:
+                                type: integer
+                                description: Epoch at which stake subsidy starts.
+                              min_validator_count:
+                                type: integer
+                                description: Minimum number of validators.
+                              max_validator_count:
+                                type: integer
+                                description: Maximum number of validators.
+                              min_validator_joining_stake:
+                                type: integer
+                                description: Deprecated. Minimum stake required to join.
+                              validator_low_stake_threshold:
+                                type: integer
+                                description: Deprecated. Low stake threshold.
+                              validator_very_low_stake_threshold:
+                                type: integer
+                                description: Deprecated. Very low stake threshold.
+                              validator_low_stake_grace_period:
+                                type: integer
+                                description: Grace period for low-stake validators.
+                              extra_fields:
+                                type: object
+                                description: Additional extensible fields.
+                                properties:
+                                  id:
+                                    type: string
+                                    description: UID of the Table or Bag.
+                                  size:
+                                    type: integer
+                                    description: Number of key-value pairs.
+                          reference_gas_price:
+                            type: integer
+                            description: Reference gas price.
+                          validator_report_records:
+                            type: array
+                            description: Validator report records.
+                            items:
+                              type: object
+                              properties:
+                                reported:
+                                  type: string
+                                  description: Address of the reported validator.
+                                reporters:
+                                  type: array
+                                  items:
+                                    type: string
+                                  description: Addresses of the reporting validators.
+                          stake_subsidy:
+                            type: object
+                            description: Stake subsidy information.
+                            properties:
+                              balance:
+                                type: integer
+                                description: Reserved SUI balance for subsidies.
+                              distribution_counter:
+                                type: integer
+                                description: Number of distributions made.
+                              current_distribution_amount:
+                                type: integer
+                                description: Current distribution amount.
+                              stake_subsidy_period_length:
+                                type: integer
+                                description: Length of a subsidy period.
+                              stake_subsidy_decrease_rate:
+                                type: integer
+                                description: Decrease rate in basis points.
+                              extra_fields:
+                                type: object
+                                description: Additional extensible fields.
+                                properties:
+                                  id:
+                                    type: string
+                                    description: UID of the Table or Bag.
+                                  size:
+                                    type: integer
+                                    description: Number of key-value pairs.
+                          safe_mode:
+                            type: boolean
+                            description: Whether the system is in safe mode.
+                          safe_mode_storage_rewards:
+                            type: integer
+                            description: Storage rewards accrued in safe mode.
+                          safe_mode_computation_rewards:
+                            type: integer
+                            description: Computation rewards accrued in safe mode.
+                          safe_mode_storage_rebates:
+                            type: integer
+                            description: Storage rebates accrued in safe mode.
+                          safe_mode_non_refundable_storage_fee:
+                            type: integer
+                            description: Non-refundable storage fee accrued in safe mode.
+                          epoch_start_timestamp_ms:
+                            type: integer
+                            description: Epoch start timestamp in milliseconds.
+                          extra_fields:
+                            type: object
+                            description: Additional extensible fields.
+                            properties:
+                              id:
+                                type: string
+                                description: UID of the Table or Bag.
+                              size:
+                                type: integer
+                                description: Number of key-value pairs.
+                      first_checkpoint:
+                        type: integer
+                        description: First checkpoint of the epoch.
+                      last_checkpoint:
+                        type: integer
+                        description: Last checkpoint of the epoch.
+                      start:
+                        type: string
+                        description: Start timestamp of the epoch.
+                      end:
+                        type: string
+                        description: End timestamp of the epoch.
+                      reference_gas_price:
+                        type: integer
+                        description: Reference gas price, denominated in MIST.
+                      protocol_config:
+                        type: object
+                        description: Protocol configuration for the epoch.
+                        properties:
+                          protocol_version:
+                            type: integer
+                            description: Protocol version.
+                          feature_flags:
+                            type: array
+                            description: Feature flag toggles.
+                            items:
+                              type: object
+                              properties:
+                                key:
+                                  type: string
+                                  description: Flag name.
+                                value:
+                                  type: boolean
+                                  description: Whether the flag is enabled.
+                          attributes:
+                            type: array
+                            description: Configuration attributes.
+                            items:
+                              type: object
+                              properties:
+                                key:
+                                  type: string
+                                  description: Attribute key.
+                                value:
+                                  type: string
+                                  description: Attribute value.
+              example:
+                epoch: {}

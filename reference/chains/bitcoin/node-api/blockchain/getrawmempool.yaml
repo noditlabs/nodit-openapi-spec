@@ -1,0 +1,519 @@
+openapi: 3.1.0
+info:
+  title: Bitcoin - getrawmempool
+  version: 1.0.0
+servers:
+- url: https://bitcoin-mainnet.nodit.io
+  description: Bitcoin Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    MempoolEntry:
+      type: object
+      description: Detailed mempool data for a transaction.
+      properties:
+        vsize:
+          type: integer
+          description: The virtual transaction size as defined in BIP 141.
+        weight:
+          type: integer
+          description: The transaction weight as defined in BIP 141.
+        time:
+          type: integer
+          description: The local time the transaction entered the pool, expressed in UNIX epoch time.
+        height:
+          type: integer
+          description: The block height when the transaction entered the pool.
+        descendantcount:
+          type: integer
+          description: The number of in-mempool descendant transactions, including this one.
+        descendantsize:
+          type: integer
+          description: The total virtual size of in-mempool descendants, including this one.
+        ancestorcount:
+          type: integer
+          description: The number of in-mempool ancestor transactions, including this one.
+        ancestorsize:
+          type: integer
+          description: The total virtual size of in-mempool ancestors, including this one.
+        wtxid:
+          type: string
+          description: The hash of the serialized transaction, including witness data.
+        fees:
+          type: object
+          description: Detailed transaction fee data. All values are denominated in BTC.
+          properties:
+            base:
+              type: number
+              description: The transaction fee.
+            modified:
+              type: number
+              description: The transaction fee with fee deltas used for mining priority.
+            ancestor:
+              type: number
+              description: The transaction fees of in-mempool ancestors with fee deltas used for mining priority.
+            descendant:
+              type: number
+              description: The transaction fees of in-mempool descendants with fee deltas used for mining priority.
+        depends:
+          type: array
+          description: The list of unconfirmed parent transaction ids used as inputs for this transaction.
+          items:
+            type: string
+            description: An unconfirmed parent transaction id.
+        spentby:
+          type: array
+          description: The list of unconfirmed child transaction ids spending outputs from this transaction.
+          items:
+            type: string
+            description: An unconfirmed child transaction id.
+        bip125-replaceable:
+          type: boolean
+          description: Whether this transaction signals BIP 125 replaceability. This field is deprecated.
+        unbroadcast:
+          type: boolean
+          description: Whether this transaction is currently unbroadcast.
+    MempoolEntryMap:
+      type: object
+      x-map-key-label: transaction id
+      description: An object keyed by transaction id whose values contain detailed mempool data.
+      additionalProperties:
+        $ref: '#/components/schemas/MempoolEntry'
+    RawMempool:
+      description: |
+        The list of transactions in the mempool. The response format depends on the request parameters.
+        - When `verbose` is `false`: an array of transaction ids
+        - When `verbose` is `false` and `mempool_sequence` is `true`: an object containing `txids` and `mempool_sequence`
+        - When `verbose` is `true`: an object keyed by transaction id with detailed data
+      oneOf:
+      - title: Transaction ID Array
+        type: array
+        description: An array of transaction ids. Returned when `verbose` is `false`.
+        items:
+          type: string
+          description: A transaction id in the mempool.
+      - title: Transaction ID Array With Sequence
+        type: object
+        description: Returned when `verbose` is `false` and `mempool_sequence` is `true`.
+        properties:
+          txids:
+            type: array
+            description: The list of transaction ids in the mempool.
+            items:
+              type: string
+              description: The transaction id.
+          mempool_sequence:
+            type: integer
+            description: The mempool sequence value.
+      - title: Mempool Entry Map
+        $ref: '#/components/schemas/MempoolEntryMap'
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: bitcoin-getrawmempool
+      summary: getrawmempool
+      description: |
+        Returns all transactions waiting in the memory pool.
+
+        Set `verbose` to `true` to return an object keyed by transaction id with detailed mempool data.
+        When `verbose` is `false` and `mempool_sequence` is set to `true`,
+        the list of transaction ids is returned together with the mempool sequence number.
+      x-seo-description: Returns all transaction ids in the memory pool, optionally with detailed mempool data.
+      tags:
+      - blockchain
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              - jsonrpc
+              - method
+              - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: getrawmempool
+                params:
+                  type: array
+                  description: |-
+                    It contains following parameters in order:
+                    1. `verbose`: The response format, as a boolean. (optional, default `false`)
+                    2. `mempool_sequence`: Whether to return the mempool sequence number, as a boolean. (optional, default `false`)
+                  items:
+                    oneOf:
+                    - title: Verbose
+                      type: boolean
+                      description: Whether to return a detailed object. When `false`, an array of transaction ids is returned.
+                      example: false
+                    - title: Mempool Sequence
+                      type: boolean
+                      description: |
+                        Whether to return the mempool sequence number.
+                        It can be used only when `verbose` is `false`.
+                      example: false
+                  example:
+                  - false
+                  - false
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: getrawmempool
+                params:
+                - false
+                - false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                - 4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b
+                - 9b0fc92260312ce44e74ef369f5c66bbb85848f2eddd5a7a1cde251e54ccfdd5
+              schema:
+                $ref: '#/components/schemas/RawMempool'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

@@ -3,7 +3,7 @@ info:
   title: Initia - initia_mstaking_v1_validators_{validator_address}_delegations_{delegator_address}_unbonding_delegation
   version: 1.0.0
 servers:
-  - url: https://rest-initia-mainnet.nodit.io
+- url: https://rest-initia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,14 +20,14 @@ paths:
       description: Returns unbonding delegation information between the given validator and delegator.
       operationId: initia_mstaking_v1_validators_{validator_address}_delegations_{delegator_address}_unbonding_delegation
       tags:
-        - mstaking
+      - mstaking
       responses:
         "200":
           description: Successful Response
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -41,20 +41,20 @@ paths:
                     items:
                       type: object
       parameters:
-        - name: validator_address
-          description: Validator operator address (bech32).
-          in: path
-          required: true
-          example: initvaloper19pfxxechkzye2a3rujg62mu6ymz3n55zd89jq8
-          schema:
-            type: string
-        - name: delegator_address
-          description: Delegator address (bech32).
-          in: path
-          required: true
-          example: init10vwsvfqep42uca2r07lx87cr0gx0jrd4dqxn5e
-          schema:
-            type: string
+      - name: validator_address
+        description: Validator operator address (bech32).
+        in: path
+        required: true
+        example: initvaloper19pfxxechkzye2a3rujg62mu6ymz3n55zd89jq8
+        schema:
+          type: string
+      - name: delegator_address
+        description: Delegator address (bech32).
+        in: path
+        required: true
+        example: init10vwsvfqep42uca2r07lx87cr0gx0jrd4dqxn5e
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /initia/mstaking/v1/validators/{validator_address}/delegations/{delegator_address}/unbonding_delegation

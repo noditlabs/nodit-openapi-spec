@@ -3,7 +3,7 @@ info:
   title: Injective - Status
   version: 1.0.0
 servers:
-  - url: https://rpc-injective-mainnet.nodit.io
+- url: https://rpc-injective-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: status
       summary: Status
       description: Retrieves the CometBFT status, including node information, public key, latest block hash, app hash, block height, and time.
       tags:
-        - json-rpc-api
+      - json-rpc-api
       requestBody:
         required: true
         content:
@@ -32,16 +32,19 @@ paths:
               type: object
               additionalProperties: false
               required:
-                - jsonrpc
-                - id
-                - method
+              - jsonrpc
+              - id
+              - method
               properties:
                 jsonrpc:
+                  description: JSON-RPC protocol version. Always `2.0`.
                   type: string
                   const: "2.0"
                 id:
+                  description: Identifier of the request. Returned unchanged as `id` in the response.
                   type: integer
                 method:
+                  description: Name of the JSON-RPC method to call.
                   type: string
                   const: status
             example:
@@ -56,90 +59,123 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       node_info:
+                        description: Node information.
                         type: object
                         additionalProperties: false
                         properties:
                           protocol_version:
+                            description: Protocol versions.
                             type: object
                             additionalProperties: false
                             properties:
                               p2p:
+                                description: P2P protocol version.
                                 type: string
                               block:
+                                description: Block protocol version.
                                 type: string
                               app:
+                                description: Application protocol version.
                                 type: string
                           id:
+                            description: Node ID, an authenticated identifier derived from the node's public key.
                             type: string
                           listen_addr:
+                            description: Address accepting incoming P2P connections.
                             type: string
                           network:
+                            description: Network (chain ID) the node belongs to.
                             type: string
                           version:
+                            description: Node software version.
                             type: string
                           channels:
+                            description: P2P channels the node supports (hex).
                             type: string
                           moniker:
+                            description: Node name (moniker).
                             type: string
                           other:
+                            description: Other node information.
                             type: object
                             additionalProperties: false
                             properties:
                               tx_index:
+                                description: Whether transaction indexing is enabled (`on` or `off`).
                                 type: string
                               rpc_address:
+                                description: RPC server address.
                                 type: string
                       sync_info:
+                        description: Block sync status.
                         type: object
                         additionalProperties: false
                         properties:
                           latest_block_hash:
+                            description: Hash of the latest block.
                             type: string
                           latest_app_hash:
+                            description: Application state hash as of the latest block.
                             type: string
                           latest_block_height:
+                            description: Height of the latest block.
                             type: string
                           latest_block_time:
+                            description: Time of the latest block.
                             type: string
                           earliest_block_hash:
+                            description: Hash of the earliest block stored on the node.
                             type: string
                           earliest_app_hash:
+                            description: Application state hash as of the earliest stored block.
                             type: string
                           earliest_block_height:
+                            description: Height of the earliest block stored on the node.
                             type: string
                           earliest_block_time:
+                            description: Time of the earliest block stored on the node.
                             type: string
                           catching_up:
+                            description: '`true` if the node is still catching up (syncing).'
                             type: boolean
                       validator_info:
+                        description: Validator information of this node.
                         type: object
                         additionalProperties: false
                         properties:
                           address:
+                            description: Validator address.
                             type: string
                           pub_key:
+                            description: Validator public key.
                             type: object
                             additionalProperties: false
                             properties:
                               type:
+                                description: Public key type (for example, `tendermint/PubKeyEd25519`).
                                 type: string
                               value:
+                                description: Public key value (Base64).
                                 type: string
                           voting_power:
+                            description: Voting power of the validator.
                             type: string
               example:
                 jsonrpc: "2.0"
@@ -163,11 +199,11 @@ paths:
                     latest_block_hash: D70952032620CC4E2737EB8AC379806359D8E0B17B0488F627997A0B043ABDED
                     latest_app_hash: 21DFF0C4F53168D5C82D99B1E76D4C5A62AE7D7A3B1C40D7E6F8A9B0C1D2E3F4
                     latest_block_height: "12345678"
-                    latest_block_time: "2024-01-15T12:00:00Z"
+                    latest_block_time: '2024-01-15T12:00:00Z'
                     earliest_block_hash: A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8E9F0A1B2
                     earliest_app_hash: ""
                     earliest_block_height: "1"
-                    earliest_block_time: "2019-12-11T16:11:34Z"
+                    earliest_block_time: '2019-12-11T16:11:34Z'
                     catching_up: false
                   validator_info:
                     address: B00A6323737F321EB0B8D59C6FD497A14B60938A

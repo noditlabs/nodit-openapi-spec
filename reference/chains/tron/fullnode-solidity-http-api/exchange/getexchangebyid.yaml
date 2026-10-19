@@ -1,0 +1,83 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetExchangeById
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getexchangebyid:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getexchangebyid
+      summary: GetExchangeById
+      description: Query an exchange pair by its exchange ID. (Confirmed state)
+      x-seo-description: Query a TRON exchange pair by its exchange ID.
+      tags:
+      - exchange
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              id: 1
+            schema:
+              type: object
+              required:
+              - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  description: 'Unique ID of the exchange pair. Example: `1`'
+                  example: 1
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exchange_id:
+                    type: integer
+                    format: int64
+                    description: Unique ID of the exchange pair.
+                  creator_address:
+                    type: string
+                    description: Address of the account that created the exchange.
+                  create_time:
+                    type: integer
+                    format: int64
+                    description: 'Timestamp when the exchange was created. (Unit: millisecond)'
+                  first_token_id:
+                    type: string
+                    description: ID of the first token. TRX is represented as `_`.
+                  first_token_balance:
+                    type: integer
+                    format: int64
+                    description: Balance of the first token held by the exchange.
+                  second_token_id:
+                    type: string
+                    description: ID of the second token. TRX is represented as `_`.
+                  second_token_balance:
+                    type: integer
+                    format: int64
+                    description: Balance of the second token held by the exchange.

@@ -3,8 +3,8 @@ info:
   title: Sui - suix_subscribeTransaction
   version: 1.0.0
 servers:
-  - url: https://sui-mainnet.nodit.io
-    description: Sui Mainnet
+- url: https://sui-mainnet.nodit.io
+  description: Sui Mainnet
 components:
   securitySchemes:
     api_key:
@@ -23,211 +23,211 @@ components:
       type: string
     ObjectID:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     SuiAddress:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     TransactionFilter:
       oneOf:
-        - description: CURRENTLY NOT SUPPORTED. Query by checkpoint.
-          type: object
-          required:
-            - Checkpoint
-          properties:
-            Checkpoint:
-              $ref: "#/components/schemas/BigInt_for_uint64"
-          additionalProperties: false
-        - description: Query by move function.
-          type: object
-          required:
-            - MoveFunction
-          properties:
-            MoveFunction:
-              type: object
-              required:
-                - package
-              properties:
-                function:
-                  type:
-                    - string
-                    - "null"
-                module:
-                  type:
-                    - string
-                    - "null"
-                package:
-                  $ref: "#/components/schemas/ObjectID"
-          additionalProperties: false
-        - description: Query by input object.
-          type: object
-          required:
-            - InputObject
-          properties:
-            InputObject:
-              $ref: "#/components/schemas/ObjectID"
-          additionalProperties: false
-        - description: Query by changed object, including created, mutated and unwrapped objects.
-          type: object
-          required:
-            - ChangedObject
-          properties:
-            ChangedObject:
-              $ref: "#/components/schemas/ObjectID"
-          additionalProperties: false
-        - description: Query for transactions that touch this object.
-          type: object
-          required:
-            - AffectedObject
-          properties:
-            AffectedObject:
-              $ref: "#/components/schemas/ObjectID"
-          additionalProperties: false
-        - description: Query by sender address.
-          type: object
-          required:
-            - FromAddress
-          properties:
-            FromAddress:
-              $ref: "#/components/schemas/SuiAddress"
-          additionalProperties: false
-        - description: Query by recipient address.
-          type: object
-          required:
-            - ToAddress
-          properties:
-            ToAddress:
-              $ref: "#/components/schemas/SuiAddress"
-          additionalProperties: false
-        - description: Query by sender and recipient address.
-          type: object
-          required:
-            - FromAndToAddress
-          properties:
-            FromAndToAddress:
-              type: object
-              required:
-                - from
-                - to
-              properties:
-                from:
-                  $ref: "#/components/schemas/SuiAddress"
-                to:
-                  $ref: "#/components/schemas/SuiAddress"
-          additionalProperties: false
-        - description: CURRENTLY NOT SUPPORTED. Query txs that have a given address as sender or recipient.
-          type: object
-          required:
-            - FromOrToAddress
-          properties:
-            FromOrToAddress:
-              type: object
-              required:
-                - addr
-              properties:
-                addr:
-                  $ref: "#/components/schemas/SuiAddress"
-          additionalProperties: false
-        - description: Query by transaction kind
-          type: object
-          required:
-            - TransactionKind
-          properties:
-            TransactionKind:
+      - description: CURRENTLY NOT SUPPORTED. Query by checkpoint.
+        type: object
+        required:
+        - Checkpoint
+        properties:
+          Checkpoint:
+            $ref: '#/components/schemas/BigInt_for_uint64'
+        additionalProperties: false
+      - description: Query by move function.
+        type: object
+        required:
+        - MoveFunction
+        properties:
+          MoveFunction:
+            type: object
+            required:
+            - package
+            properties:
+              function:
+                type:
+                - string
+                - "null"
+              module:
+                type:
+                - string
+                - "null"
+              package:
+                $ref: '#/components/schemas/ObjectID'
+        additionalProperties: false
+      - description: Query by input object.
+        type: object
+        required:
+        - InputObject
+        properties:
+          InputObject:
+            $ref: '#/components/schemas/ObjectID'
+        additionalProperties: false
+      - description: Query by changed object, including created, mutated and unwrapped objects.
+        type: object
+        required:
+        - ChangedObject
+        properties:
+          ChangedObject:
+            $ref: '#/components/schemas/ObjectID'
+        additionalProperties: false
+      - description: Query for transactions that touch this object.
+        type: object
+        required:
+        - AffectedObject
+        properties:
+          AffectedObject:
+            $ref: '#/components/schemas/ObjectID'
+        additionalProperties: false
+      - description: Query by sender address.
+        type: object
+        required:
+        - FromAddress
+        properties:
+          FromAddress:
+            $ref: '#/components/schemas/SuiAddress'
+        additionalProperties: false
+      - description: Query by recipient address.
+        type: object
+        required:
+        - ToAddress
+        properties:
+          ToAddress:
+            $ref: '#/components/schemas/SuiAddress'
+        additionalProperties: false
+      - description: Query by sender and recipient address.
+        type: object
+        required:
+        - FromAndToAddress
+        properties:
+          FromAndToAddress:
+            type: object
+            required:
+            - from
+            - to
+            properties:
+              from:
+                $ref: '#/components/schemas/SuiAddress'
+              to:
+                $ref: '#/components/schemas/SuiAddress'
+        additionalProperties: false
+      - description: CURRENTLY NOT SUPPORTED. Query txs that have a given address as sender or recipient.
+        type: object
+        required:
+        - FromOrToAddress
+        properties:
+          FromOrToAddress:
+            type: object
+            required:
+            - addr
+            properties:
+              addr:
+                $ref: '#/components/schemas/SuiAddress'
+        additionalProperties: false
+      - description: Query by transaction kind
+        type: object
+        required:
+        - TransactionKind
+        properties:
+          TransactionKind:
+            type: string
+        additionalProperties: false
+      - description: Query transactions of any given kind in the input.
+        type: object
+        required:
+        - TransactionKindIn
+        properties:
+          TransactionKindIn:
+            type: array
+            items:
               type: string
-          additionalProperties: false
-        - description: Query transactions of any given kind in the input.
-          type: object
-          required:
-            - TransactionKindIn
-          properties:
-            TransactionKindIn:
-              type: array
-              items:
-                type: string
-          additionalProperties: false
+        additionalProperties: false
     SuiMoveAbort:
       type: object
       properties:
         error_code:
           type:
-            - integer
-            - "null"
+          - integer
+          - "null"
           format: uint64
           minimum: 0
         function:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
         line:
           type:
-            - integer
-            - "null"
+          - integer
+          - "null"
           format: uint16
           minimum: 0
         module_id:
           type:
-            - string
-            - "null"
+          - string
+          - "null"
     Owner:
       oneOf:
-        - description: Object is exclusively owned by a single address, and is mutable.
-          type: object
-          required:
-            - AddressOwner
-          properties:
-            AddressOwner:
-              $ref: "#/components/schemas/SuiAddress"
-          additionalProperties: false
-        - description: Object is exclusively owned by a single object, and is mutable. The object ID is converted to SuiAddress as SuiAddress is universal.
-          type: object
-          required:
-            - ObjectOwner
-          properties:
-            ObjectOwner:
-              $ref: "#/components/schemas/SuiAddress"
-          additionalProperties: false
-        - description: Object is shared, can be used by any address, and is mutable.
-          type: object
-          required:
-            - Shared
-          properties:
-            Shared:
-              type: object
-              required:
-                - initial_shared_version
-              properties:
-                initial_shared_version:
-                  description: The version at which the object became shared
-                  allOf:
-                    - $ref: "#/components/schemas/BigInt_for_uint64"
-          additionalProperties: false
-        - description: Object is immutable, and hence ownership doesn't matter.
-          type: string
-          enum:
-            - Immutable
-        - description: Object is exclusively owned by a single address and sequenced via consensus.
-          type: object
-          required:
-            - ConsensusAddressOwner
-          properties:
-            ConsensusAddressOwner:
-              type: object
-              required:
-                - owner
-                - start_version
-              properties:
-                owner:
-                  $ref: "#/components/schemas/SuiAddress"
-                start_version:
-                  description: The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes.
-                  allOf:
-                    - $ref: "#/components/schemas/BigInt_for_uint64"
-          additionalProperties: false
+      - description: Object is exclusively owned by a single address, and is mutable.
+        type: object
+        required:
+        - AddressOwner
+        properties:
+          AddressOwner:
+            $ref: '#/components/schemas/SuiAddress'
+        additionalProperties: false
+      - description: Object is exclusively owned by a single object, and is mutable. The object ID is converted to SuiAddress as SuiAddress is universal.
+        type: object
+        required:
+        - ObjectOwner
+        properties:
+          ObjectOwner:
+            $ref: '#/components/schemas/SuiAddress'
+        additionalProperties: false
+      - description: Object is shared, can be used by any address, and is mutable.
+        type: object
+        required:
+        - Shared
+        properties:
+          Shared:
+            type: object
+            required:
+            - initial_shared_version
+            properties:
+              initial_shared_version:
+                description: The version at which the object became shared
+                allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+        additionalProperties: false
+      - description: Object is immutable, and hence ownership doesn't matter.
+        type: string
+        enum:
+        - Immutable
+      - description: Object is exclusively owned by a single address and sequenced via consensus.
+        type: object
+        required:
+        - ConsensusAddressOwner
+        properties:
+          ConsensusAddressOwner:
+            type: object
+            required:
+            - owner
+            - start_version
+            properties:
+              owner:
+                $ref: '#/components/schemas/SuiAddress'
+              start_version:
+                description: The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes.
+                allOf:
+                - $ref: '#/components/schemas/BigInt_for_uint64'
+        additionalProperties: false
     Base58:
       type: string
     Digest:
       allOf:
-        - $ref: "#/components/schemas/Base58"
+      - $ref: '#/components/schemas/Base58'
       description: A representation of a 32 byte digest
     SequenceNumber:
       type: integer
@@ -236,35 +236,35 @@ components:
     ObjectRef:
       type: object
       required:
-        - digest
-        - objectId
-        - version
+      - digest
+      - objectId
+      - version
       properties:
         digest:
           description: Base64 string representing the object digest
           allOf:
-            - $ref: "#/components/schemas/Digest"
+          - $ref: '#/components/schemas/Digest'
         objectId:
           description: Hex code as string representing the object id
           allOf:
-            - $ref: "#/components/schemas/ObjectID"
+          - $ref: '#/components/schemas/ObjectID'
         version:
           description: Object version.
           allOf:
-            - $ref: "#/components/schemas/SequenceNumber"
+          - $ref: '#/components/schemas/SequenceNumber'
     OwnedObjectRef:
       type: object
       required:
-        - owner
-        - reference
+      - owner
+      - reference
       properties:
         owner:
-          $ref: "#/components/schemas/Owner"
+          $ref: '#/components/schemas/Owner'
         reference:
-          $ref: "#/components/schemas/ObjectRef"
+          $ref: '#/components/schemas/ObjectRef'
     TransactionDigest:
       allOf:
-        - $ref: "#/components/schemas/Digest"
+      - $ref: '#/components/schemas/Digest'
       description: A transaction will have a (unique) digest.
     GasCostSummary:
       description: |
@@ -278,207 +278,207 @@ components:
         Objects deleted, including the older versions of objects mutated, have the storage field on the objects added up to a pool of "potential rebate". This rebate then is reduced by the "nonrefundable rate" such that: `potential_rebate(storage cost of deleted/mutated objects) = storage_rebate + non_refundable_storage_fee`
       type: object
       required:
-        - computationCost
-        - nonRefundableStorageFee
-        - storageCost
-        - storageRebate
+      - computationCost
+      - nonRefundableStorageFee
+      - storageCost
+      - storageRebate
       properties:
         computationCost:
           description: Cost of computation/execution
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+          - $ref: '#/components/schemas/BigInt_for_uint64'
         nonRefundableStorageFee:
           description: The fee for the rebate. The portion of the storage rebate kept by the system.
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+          - $ref: '#/components/schemas/BigInt_for_uint64'
         storageCost:
           description: Storage cost, it's the sum of all storage cost for all objects created or mutated.
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+          - $ref: '#/components/schemas/BigInt_for_uint64'
         storageRebate:
           description: The amount of storage cost refunded to the user for all objects deleted or mutated in the transaction.
           allOf:
-            - $ref: "#/components/schemas/BigInt_for_uint64"
+          - $ref: '#/components/schemas/BigInt_for_uint64'
     TransactionBlockEffectsModifiedAtVersions:
       type: object
       required:
-        - objectId
-        - sequenceNumber
+      - objectId
+      - sequenceNumber
       properties:
         objectId:
-          $ref: "#/components/schemas/ObjectID"
+          $ref: '#/components/schemas/ObjectID'
         sequenceNumber:
-          $ref: "#/components/schemas/SequenceNumber"
+          $ref: '#/components/schemas/SequenceNumber'
     ExecutionStatus:
       oneOf:
-        - type: object
-          required:
-            - status
-          properties:
-            status:
-              type: string
-              enum:
-                - success
-        - type: object
-          required:
-            - error
-            - status
-          properties:
-            error:
-              type: string
-            status:
-              type: string
-              enum:
-                - failure
+      - type: object
+        required:
+        - status
+        properties:
+          status:
+            type: string
+            enum:
+            - success
+      - type: object
+        required:
+        - error
+        - status
+        properties:
+          error:
+            type: string
+          status:
+            type: string
+            enum:
+            - failure
     TransactionBlockEffects:
       oneOf:
-        - description: The response from processing a transaction or a certified transaction
-          type: object
-          required:
-            - executedEpoch
-            - gasObject
-            - gasUsed
-            - messageVersion
-            - status
-            - transactionDigest
-          properties:
-            abortError:
-              description: The abort error populated if the transaction failed with an abort code.
-              $ref: "#/components/schemas/SuiMoveAbort"
-            created:
-              description: ObjectRef and owner of new objects created.
-              type: array
-              items:
-                $ref: "#/components/schemas/OwnedObjectRef"
-            deleted:
-              description: Object Refs of objects now deleted (the old refs).
-              type: array
-              items:
-                $ref: "#/components/schemas/ObjectRef"
-            dependencies:
-              description: The set of transaction digests this transaction depends on.
-              type: array
-              items:
-                $ref: "#/components/schemas/TransactionDigest"
-            eventsDigest:
-              description: The digest of the events emitted during execution, can be None if the transaction does not emit any event.
-              $ref: "#/components/schemas/Digest"
-            executedEpoch:
-              description: The epoch when this transaction was executed.
-              allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
-            gasObject:
-              description: The updated gas object reference. Have a dedicated field for convenient access. It's also included in mutated.
-              allOf:
-                - $ref: "#/components/schemas/OwnedObjectRef"
-            gasUsed:
-              $ref: "#/components/schemas/GasCostSummary"
-            messageVersion:
-              type: string
-              enum:
-                - v1
-            modifiedAtVersions:
-              description: The version that every modified (mutated or deleted) object had before it was modified by this transaction.
-              type: array
-              items:
-                $ref: "#/components/schemas/TransactionBlockEffectsModifiedAtVersions"
-            mutated:
-              description: ObjectRef and owner of mutated objects, including gas object.
-              type: array
-              items:
-                $ref: "#/components/schemas/OwnedObjectRef"
-            sharedObjects:
-              description: The object references of the shared objects used in this transaction. Empty if no shared objects were used.
-              type: array
-              items:
-                $ref: "#/components/schemas/ObjectRef"
-            status:
-              description: The status of the execution
-              allOf:
-                - $ref: "#/components/schemas/ExecutionStatus"
-            transactionDigest:
-              description: The transaction digest
-              allOf:
-                - $ref: "#/components/schemas/TransactionDigest"
-            unwrapped:
-              description: ObjectRef and owner of objects that are unwrapped in this transaction. Unwrapped objects are objects that were wrapped into other objects in the past, and just got extracted out.
-              type: array
-              items:
-                $ref: "#/components/schemas/OwnedObjectRef"
-            unwrappedThenDeleted:
-              description: Object refs of objects previously wrapped in other objects but now deleted.
-              type: array
-              items:
-                $ref: "#/components/schemas/ObjectRef"
-            wrapped:
-              description: Object refs of objects now wrapped in other objects.
-              type: array
-              items:
-                $ref: "#/components/schemas/ObjectRef"
+      - description: The response from processing a transaction or a certified transaction
+        type: object
+        required:
+        - executedEpoch
+        - gasObject
+        - gasUsed
+        - messageVersion
+        - status
+        - transactionDigest
+        properties:
+          abortError:
+            description: The abort error populated if the transaction failed with an abort code.
+            $ref: '#/components/schemas/SuiMoveAbort'
+          created:
+            description: ObjectRef and owner of new objects created.
+            type: array
+            items:
+              $ref: '#/components/schemas/OwnedObjectRef'
+          deleted:
+            description: Object Refs of objects now deleted (the old refs).
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectRef'
+          dependencies:
+            description: The set of transaction digests this transaction depends on.
+            type: array
+            items:
+              $ref: '#/components/schemas/TransactionDigest'
+          eventsDigest:
+            description: The digest of the events emitted during execution, can be None if the transaction does not emit any event.
+            $ref: '#/components/schemas/Digest'
+          executedEpoch:
+            description: The epoch when this transaction was executed.
+            allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+          gasObject:
+            description: The updated gas object reference. Have a dedicated field for convenient access. It's also included in mutated.
+            allOf:
+            - $ref: '#/components/schemas/OwnedObjectRef'
+          gasUsed:
+            $ref: '#/components/schemas/GasCostSummary'
+          messageVersion:
+            type: string
+            enum:
+            - v1
+          modifiedAtVersions:
+            description: The version that every modified (mutated or deleted) object had before it was modified by this transaction.
+            type: array
+            items:
+              $ref: '#/components/schemas/TransactionBlockEffectsModifiedAtVersions'
+          mutated:
+            description: ObjectRef and owner of mutated objects, including gas object.
+            type: array
+            items:
+              $ref: '#/components/schemas/OwnedObjectRef'
+          sharedObjects:
+            description: The object references of the shared objects used in this transaction. Empty if no shared objects were used.
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectRef'
+          status:
+            description: The status of the execution
+            allOf:
+            - $ref: '#/components/schemas/ExecutionStatus'
+          transactionDigest:
+            description: The transaction digest
+            allOf:
+            - $ref: '#/components/schemas/TransactionDigest'
+          unwrapped:
+            description: ObjectRef and owner of objects that are unwrapped in this transaction. Unwrapped objects are objects that were wrapped into other objects in the past, and just got extracted out.
+            type: array
+            items:
+              $ref: '#/components/schemas/OwnedObjectRef'
+          unwrappedThenDeleted:
+            description: Object refs of objects previously wrapped in other objects but now deleted.
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectRef'
+          wrapped:
+            description: Object refs of objects now wrapped in other objects.
+            type: array
+            items:
+              $ref: '#/components/schemas/ObjectRef'
     ObjectResponseError:
       oneOf:
-        - type: object
-          required:
-            - code
-            - object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - notExists
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - parent_object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - dynamicFieldNotFound
-            parent_object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - digest
-            - object_id
-            - version
-          properties:
-            code:
-              type: string
-              enum:
-                - deleted
-            digest:
-              description: Base64 string representing the object digest
-              allOf:
-                - $ref: "#/components/schemas/Digest"
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-            version:
-              description: Object version.
-              allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
-        - type: object
-          required:
-            - code
-          properties:
-            code:
-              type: string
-              enum:
-                - unknown
-        - type: object
-          required:
-            - code
-            - error
-          properties:
-            code:
-              type: string
-              enum:
-                - displayError
-            error:
-              type: string
+      - type: object
+        required:
+        - code
+        - object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - notExists
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - parent_object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - dynamicFieldNotFound
+          parent_object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - digest
+        - object_id
+        - version
+        properties:
+          code:
+            type: string
+            enum:
+            - deleted
+          digest:
+            description: Base64 string representing the object digest
+            allOf:
+            - $ref: '#/components/schemas/Digest'
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+          version:
+            description: Object version.
+            allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+      - type: object
+        required:
+        - code
+        properties:
+          code:
+            type: string
+            enum:
+            - unknown
+      - type: object
+        required:
+        - code
+        - error
+        properties:
+          code:
+            type: string
+            enum:
+            - displayError
+          error:
+            type: string
     Error:
       type: object
       properties:
@@ -489,8 +489,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -508,17 +508,17 @@ components:
                 description: Request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ObjectResponseError"
+                $ref: '#/components/schemas/ObjectResponseError'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -527,7 +527,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -536,16 +536,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -553,14 +553,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: sui-suix_subscribeTransaction
       summary: suix_subscribeTransaction
       description: |
         Subscribe to a stream of Sui transaction effects
       x-seo-description: Subscribe to real-time Sui transaction notifications matching specified filters via WebSocket.
       tags:
-        - suix
+      - suix
       parameters: []
       requestBody:
         required: true
@@ -569,10 +569,10 @@ paths:
             schema:
               type: object
               required:
-                - id
-                - jsonrpc
-                - method
-                - params
+              - id
+              - jsonrpc
+              - method
+              - params
               properties:
                 id:
                   type: integer
@@ -589,9 +589,9 @@ paths:
                   maxItems: 1
                   items:
                     oneOf:
-                      - title: filter
-                        $ref: "#/components/schemas/TransactionFilter"
-                        description: The filter criteria for the transaction stream
+                    - title: filter
+                      $ref: '#/components/schemas/TransactionFilter'
+                      description: The filter criteria for the transaction stream
       responses:
         "200":
           description: Successful Response
@@ -605,14 +605,14 @@ paths:
                   id:
                     type: integer
                   result:
-                    $ref: "#/components/schemas/TransactionBlockEffects"
+                    $ref: '#/components/schemas/TransactionBlockEffects'
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

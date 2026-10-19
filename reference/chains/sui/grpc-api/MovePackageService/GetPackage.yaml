@@ -1,0 +1,318 @@
+openapi: 3.1.0
+info:
+  title: Sui - GetPackage
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.MovePackageService/GetPackage:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-GetPackage
+      summary: GetPackage
+      description: |
+        Retrieves the Move package information for the specified package ID.
+      x-seo-description: 지정한 패키지 ID의 Move 패키지 정보를 조회합니다.
+      x-grpc-method: sui.rpc.v2.MovePackageService/GetPackage
+      x-proto: sui/rpc/v2/move_package_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.MovePackageService
+        method: GetPackage
+        streaming: unary
+        proto: sui/rpc/v2/move_package_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - MovePackageService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - package_id
+              properties:
+                package_id:
+                  type: string
+                  description: ' Required. The `storage_id` of the requested package.'
+            example:
+              package_id: "0x0000000000000000000000000000000000000000000000000000000000000001"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  package:
+                    type: object
+                    description: The requested package.
+                    properties:
+                      storage_id:
+                        type: string
+                        description: Package ObjectId (storage ID).
+                      original_id:
+                        type: string
+                        description: ID of the first published version.
+                      version:
+                        type: integer
+                        description: Version of the package.
+                      modules:
+                        type: array
+                        description: Modules in the package.
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the module.
+                            contents:
+                              type: string
+                              description: Serialized bytecode.
+                            datatypes:
+                              type: array
+                              description: Datatypes defined in the module.
+                              items:
+                                type: object
+                                properties:
+                                  type_name:
+                                    type: string
+                                    description: Fully qualified type name.
+                                  defining_id:
+                                    type: string
+                                    description: Package storage ID that defines the type.
+                                  module:
+                                    type: string
+                                    description: Module name.
+                                  name:
+                                    type: string
+                                    description: Datatype name.
+                                  abilities:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: Abilities of the datatype.
+                                  type_parameters:
+                                    type: array
+                                    description: Generic type parameters.
+                                    items:
+                                      type: object
+                                      properties:
+                                        constraints:
+                                          type: array
+                                          items:
+                                            type: string
+                                          description: Ability constraints on the parameter.
+                                        is_phantom:
+                                          type: boolean
+                                          description: Whether the parameter is phantom.
+                                  kind:
+                                    type: string
+                                    description: Whether it is a struct or enum.
+                                  fields:
+                                    type: array
+                                    description: Fields of the datatype.
+                                    items:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                          description: Name of the field.
+                                        position:
+                                          type: integer
+                                          description: Position in definition order.
+                                        type:
+                                          type: object
+                                          description: Type of the field.
+                                          properties:
+                                            type:
+                                              type: object
+                                              description: The type.
+                                            type_name:
+                                              type: string
+                                              description: Fully qualified datatype name.
+                                            type_parameter_instantiation:
+                                              type: array
+                                              items:
+                                                type: object
+                                              description: Instantiation of type parameters.
+                                            type_parameter:
+                                              type: integer
+                                              description: Type parameter position.
+                                  variants:
+                                    type: array
+                                    description: Variants if the datatype is an enum.
+                                    items:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                          description: Name of the variant.
+                                        position:
+                                          type: integer
+                                          description: Position in definition order.
+                                        fields:
+                                          type: array
+                                          description: Fields of the variant.
+                                          items:
+                                            type: object
+                                            properties:
+                                              name:
+                                                type: string
+                                                description: Name of the field.
+                                              position:
+                                                type: integer
+                                                description: Position in definition order.
+                                              type:
+                                                type: object
+                                                description: Type of the field.
+                                                properties:
+                                                  type:
+                                                    type: object
+                                                    description: The type.
+                                                  type_name:
+                                                    type: string
+                                                    description: Fully qualified datatype name.
+                                                  type_parameter_instantiation:
+                                                    type: array
+                                                    items:
+                                                      type: object
+                                                    description: Instantiation of type parameters.
+                                                  type_parameter:
+                                                    type: integer
+                                                    description: Type parameter position.
+                            functions:
+                              type: array
+                              description: Functions defined in the module.
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                    description: Name of the function.
+                                  visibility:
+                                    type: string
+                                    description: Visibility (public/private/public(friend)).
+                                  is_entry:
+                                    type: boolean
+                                    description: Whether the function is an entry function.
+                                  type_parameters:
+                                    type: array
+                                    description: Generic type parameters.
+                                    items:
+                                      type: object
+                                      properties:
+                                        constraints:
+                                          type: array
+                                          items:
+                                            type: string
+                                          description: Ability constraints on the parameter.
+                                        is_phantom:
+                                          type: boolean
+                                          description: Whether the parameter is phantom.
+                                  parameters:
+                                    type: array
+                                    description: Parameter types.
+                                    items:
+                                      type: object
+                                      properties:
+                                        reference:
+                                          type: object
+                                          description: Reference kind, if the type is a reference.
+                                        body:
+                                          type: object
+                                          description: The signature body.
+                                          properties:
+                                            type:
+                                              type: object
+                                              description: The type.
+                                            type_name:
+                                              type: string
+                                              description: Fully qualified datatype name.
+                                            type_parameter_instantiation:
+                                              type: array
+                                              items:
+                                                type: object
+                                              description: Instantiation of type parameters.
+                                            type_parameter:
+                                              type: integer
+                                              description: Type parameter position.
+                                  returns:
+                                    type: array
+                                    description: Return types.
+                                    items:
+                                      type: object
+                                      properties:
+                                        reference:
+                                          type: object
+                                          description: Reference kind, if the type is a reference.
+                                        body:
+                                          type: object
+                                          description: The signature body.
+                                          properties:
+                                            type:
+                                              type: object
+                                              description: The type.
+                                            type_name:
+                                              type: string
+                                              description: Fully qualified datatype name.
+                                            type_parameter_instantiation:
+                                              type: array
+                                              items:
+                                                type: object
+                                              description: Instantiation of type parameters.
+                                            type_parameter:
+                                              type: integer
+                                              description: Type parameter position.
+                      type_origins:
+                        type: array
+                        description: Type origins for the package's types.
+                        items:
+                          type: object
+                          properties:
+                            module_name:
+                              type: string
+                              description: Name of the defining module.
+                            datatype_name:
+                              type: string
+                              description: Name of the datatype.
+                            package_id:
+                              type: string
+                              description: Package ID where the type originated.
+                      linkage:
+                        type: array
+                        description: Transitive dependencies (linkage table).
+                        items:
+                          type: object
+                          properties:
+                            original_id:
+                              type: string
+                              description: Original package ID.
+                            upgraded_id:
+                              type: string
+                              description: Upgraded package ID.
+                            upgraded_version:
+                              type: integer
+                              description: Upgraded package version.
+              example:
+                package: {}

@@ -1,0 +1,76 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetReward
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getReward:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getReward
+      summary: GetReward
+      description: Get the rewards that a SR or a user has not yet withdrawn. (Confirmed state)
+      x-seo-description: Query the unwithdrawn voting rewards of a TRON account.
+      tags:
+      - voting-srs
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              visible: true
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: 'Account address. (Format: Base58 or Hex). Example: `TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM`'
+                  example: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: true
+              required:
+              - address
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reward:
+                    type: integer
+                    format: int64
+                    description: 'Voting rewards, the amount of rewards that can be withdrawn by the account. (Unit: `sun`)'
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

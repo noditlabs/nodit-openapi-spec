@@ -3,7 +3,7 @@ info:
   title: Celestia - Validators
   version: 1.0.0
 servers:
-  - url: https://rpc-celestia-mainnet.nodit.io
+- url: https://rpc-celestia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,31 +18,31 @@ paths:
   /validators:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: validators
       summary: Validators
       description: Retrieves the validator list at the specified block height.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: height
-          in: query
-          description: Block height to query validators.
-          schema:
-            type: string
-          example: "1"
-        - name: page
-          in: query
-          description: Page number.
-          schema:
-            type: string
-          example: "1"
-        - name: per_page
-          in: query
-          description: Number of items per page.
-          schema:
-            type: string
-          example: "20"
+      - name: height
+        in: query
+        description: Block height to query validators.
+        schema:
+          type: string
+        example: "1"
+      - name: page
+        in: query
+        description: Page number.
+        schema:
+          type: string
+        example: "1"
+      - name: per_page
+        in: query
+        description: Number of items per page.
+        schema:
+          type: string
+        example: "20"
       responses:
         "200":
           content:
@@ -51,44 +51,57 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       block_height:
+                        description: Block height the result refers to.
                         type: string
                       validators:
+                        description: List of validators.
                         type: array
                         items:
                           type: object
                           additionalProperties: false
                           properties:
                             address:
+                              description: Validator address.
                               type: string
                             pub_key:
+                              description: Validator public key.
                               type: object
                               additionalProperties: false
                               properties:
                                 type:
+                                  description: Public key type (for example, `tendermint/PubKeyEd25519`).
                                   type: string
                                 value:
+                                  description: Public key value (Base64).
                                   type: string
                             voting_power:
+                              description: Voting power of the validator.
                               type: string
                             proposer_priority:
+                              description: Proposer priority.
                               type: string
                       count:
+                        description: Number of validators in this response.
                         type: string
                       total:
+                        description: Total number of validators.
                         type: string
               example:
                 jsonrpc: "2.0"
@@ -96,11 +109,11 @@ paths:
                 result:
                   block_height: "1"
                   validators:
-                    - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
-                      pub_key:
-                        type: tendermint/PubKeyEd25519
-                        value: oX8HyvloaslMOq50t0UjM5WkxaB3VJFQ/E3AYkM/GKE=
-                      voting_power: "1000000"
-                      proposer_priority: "0"
+                  - address: B00A6323737F321EB0B8D59C6FD497A14B60938A
+                    pub_key:
+                      type: tendermint/PubKeyEd25519
+                      value: oX8HyvloaslMOq50t0UjM5WkxaB3VJFQ/E3AYkM/GKE=
+                    voting_power: "1000000"
+                    proposer_priority: "0"
                   count: "1"
                   total: "1"

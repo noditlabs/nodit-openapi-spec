@@ -1,0 +1,89 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetDelegatedResourceV2
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getdelegatedresourcev2:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getdelegatedresourcev2
+      summary: GetDelegatedResourceV2
+      description: '[Stake 2.0] Returns the resource delegations from a specific address to a target address (solidified state).'
+      x-seo-description: Query solidified Stake 2.0 resource share delegations between two TRON accounts.
+      tags:
+      - account-resources
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              fromAddress: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              toAddress: TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1
+              visible: true
+            schema:
+              type: object
+              properties:
+                fromAddress:
+                  type: string
+                  description: 'Delegator account address (format: Base58 or Hex). Example:  `TZ4UXDV5ZhNW7fb2AMSbgfAEZ7hWsnYS2g`'
+                  example: TZ4UXDV5ZhNW7fb2AMSbgfAEZ7hWsnYS2g
+                toAddress:
+                  type: string
+                  description: 'Recipient account address (format: Base58 or Hex). Example: `TJmmqjb1DK9TTZbQXzRQ2AuA94z4gKAPFh`'
+                  example: TJmmqjb1DK9TTZbQXzRQ2AuA94z4gKAPFh
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: false
+              required:
+              - fromAddress
+      responses:
+        "200":
+          description: Successful response. (solidified state)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from:
+                    type: string
+                    description: Delegate account address.
+                  to:
+                    type: string
+                    description: Resource recipient address.
+                  frozen_balance_for_bandwidth:
+                    type: integer
+                    format: int64
+                    description: 'Amount of TRX staked for Bandwidth delegated from the `from` address to the `to` address. (Unit: sun)'
+                  frozen_balance_for_energy:
+                    type: integer
+                    format: int64
+                    description: 'Amount of TRX staked for Energy delegated from the `from` address to the `to` address. (Unit: sun)'
+                  expire_time_for_bandwidth:
+                    type: integer
+                    format: int64
+                    description: 'Timestamp when the Bandwidth delegation lock expires. (Unit: millisecond)'
+                  expire_time_for_energy:
+                    type: integer
+                    format: int64
+                    description: 'Timestamp when the energy delegation lock expires. (Unit: millisecond)'
+              examples:
+                Result:
+                  value: '{}'

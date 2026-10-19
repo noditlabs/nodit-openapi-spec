@@ -3,7 +3,7 @@ info:
   title: Celestia - cosmos_distribution_v1beta1_community_pool
   version: 1.0.0
 servers:
-  - url: https://rest-celestia-mainnet.nodit.io
+- url: https://rest-celestia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: CommunityPool queries the community pool coins.
       operationId: cosmos_distribution_v1beta1_community_pool
       tags:
-        - distribution
+      - distribution
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -35,8 +35,10 @@ paths:
                       type: object
                       properties:
                         denom:
+                          description: Token denomination.
                           type: string
                         amount:
+                          description: Amount, as an integer string in the smallest unit.
                           type: string
                       description: |-
                         DecCoin defines a token with a denomination and a decimal amount.
@@ -50,7 +52,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -72,5 +74,5 @@ paths:
                           type: string
                           format: byte
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/distribution/v1beta1/community_pool

@@ -3,7 +3,7 @@ info:
   title: Babylon - Health
   version: 1.0.0
 servers:
-  - url: https://rpc-babylon-mainnet.nodit.io
+- url: https://rpc-babylon-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /health:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: health
       summary: Health
       description: Retrieves the node's heartbeat status.
       tags:
-        - rest-api
+      - rest-api
       responses:
         "200":
           content:
@@ -32,16 +32,19 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
               example:

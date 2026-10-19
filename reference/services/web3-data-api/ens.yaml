@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Web3 Data API
+  title: Data API
   version: 1.0.0
 servers:
-  - url: https://web3.nodit.io/v1
-    description: Web3 Data API
+- url: https://web3.nodit.io/v1
+  description: Data API
 components:
   securitySchemes:
     api_key:
@@ -26,35 +26,35 @@ components:
               code:
                 type: string
                 enum:
-                  - MISSING_REQUIRED_PARAMETER
-                  - INVALID_PARAMETER
-                  - WRONG_RANGE_PARAMETER
-                  - DEPRECATED_OPERATION
+                - MISSING_REQUIRED_PARAMETER
+                - INVALID_PARAMETER
+                - WRONG_RANGE_PARAMETER
+                - DEPRECATED_OPERATION
                 description: Code to identify the cause of the bad request
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the invalid parameter
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             MISSING_REQUIRED_PARAMETER:
-              summary: When a required parameter is missing
+              summary: A required parameter is missing
               value:
                 code: MISSING_REQUIRED_PARAMETER
-                message: "Missing required parameter: { PARAMETER_NAME }"
+                message: 'Missing required parameter: { PARAMETER_NAME }'
             INVALID_PARAMETER:
-              summary: When an invalid value is provided for a parameter
+              summary: A parameter has an invalid value
               value:
                 code: INVALID_PARAMETER
-                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+                message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }'
             WRONG_RANGE_PARAMETER:
-              summary: When a value outside the query range is provided
+              summary: A value is outside the allowed range
               value:
                 code: WRONG_RANGE_PARAMETER
-                message: "Wrong range parameter: { PARAMETER_NAME }"
+                message: 'Wrong range parameter: { PARAMETER_NAME }'
             DEPRECATED_OPERATION:
-              summary: When a deprecated API is requested
+              summary: The requested API is no longer supported
               value:
                 code: DEPRECATED_OPERATION
                 message: This operation has been deprecated
@@ -68,26 +68,26 @@ components:
               code:
                 type: string
                 enum:
-                  - NO_AUTHENTICATION_FOUND
-                  - AUTHENTICATION_FAILED
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
                 description: Code to identify the cause of authentication failure
               message:
                 type: string
                 description: Detailed message including the cause of authentication failure
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             NO_AUTHENTICATION_FOUND:
-              summary: When authentication credentials are not included
+              summary: The request does not include authentication (API Key)
               value:
                 code: NO_AUTHENTICATION_FOUND
-                message: No authentication found
+                message: No authentication found.
             AUTHENTICATION_FAILED:
-              summary: When authentication credentials are mismatched or invalid
+              summary: The authentication (API Key) is invalid
               value:
                 code: AUTHENTICATION_FAILED
-                message: Authentication failed
+                message: Authentication failed.
     "403":
       description: Forbidden
       content:
@@ -98,17 +98,17 @@ components:
               code:
                 type: string
                 enum:
-                  - PERMISSION_DENIED
+                - PERMISSION_DENIED
                 description: Code indicating permission denied
               message:
                 type: string
                 description: Detailed message including information about the denied resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             PERMISSION_DENIED:
-              summary: When accessing an unauthorized resource
+              summary: The request accesses a resource it is not authorized for
               value:
                 code: PERMISSION_DENIED
                 message: Permission denied
@@ -122,32 +122,32 @@ components:
               code:
                 type: string
                 enum:
-                  - WRONG_ENDPOINT
-                  - NOT_SUPPORTED_CHAIN
-                  - RESOURCE_NOT_FOUND
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
                 description: Code to identify the cause of the resource not found
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the resource not found
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             WRONG_ENDPOINT:
-              summary: When requesting a non-existent API path
+              summary: The requested API path does not exist
               value:
                 code: WRONG_ENDPOINT
                 message: Wrong endpoint
             NOT_SUPPORTED_CHAIN:
-              summary: When requesting an unsupported chain
+              summary: The requested chain is not supported
               value:
                 code: NOT_SUPPORTED_CHAIN
                 message: Not supported chain
             RESOURCE_NOT_FOUND:
-              summary: When requesting a resource that does not exist on the server
+              summary: The requested resource does not exist
               value:
                 code: RESOURCE_NOT_FOUND
-                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
     "405":
       description: Method Not Allowed
       content:
@@ -158,17 +158,17 @@ components:
               code:
                 type: string
                 enum:
-                  - METHOD_NOT_ALLOWED
+                - METHOD_NOT_ALLOWED
                 description: Code indicating a disallowed HTTP method
               message:
                 type: string
                 description: Detailed message about the disallowed HTTP method
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             METHOD_NOT_ALLOWED:
-              summary: When requesting with an unsupported HTTP method
+              summary: The request uses an unsupported HTTP method
               value:
                 code: METHOD_NOT_ALLOWED
                 message: Method not allowed
@@ -182,17 +182,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TIMEOUT
+                - TIMEOUT
                 description: Code indicating request timeout
               message:
                 type: string
                 description: Detailed message including the cause of the timeout
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TIMEOUT:
-              summary: When processing is not completed within the specified time
+              summary: Processing did not finish within the time limit
               value:
                 code: TIMEOUT
                 message: Request timeout
@@ -206,23 +206,23 @@ components:
               code:
                 type: string
                 enum:
-                  - RESOURCE_ALREADY_EXISTS
-                  - REJECTED
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
                 description: Code to identify the cause of the request conflict
               message:
                 type: string
                 description: Detailed message including information about the conflicting resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             RESOURCE_ALREADY_EXISTS:
-              summary: When attempting to create a resource that already exists
+              summary: The request tries to create a resource that already exists
               value:
                 code: RESOURCE_ALREADY_EXISTS
                 message: Resource already exists
             REJECTED:
-              summary: When the request is rejected by the server
+              summary: The server rejected the request
               value:
                 code: REJECTED
                 message: Request rejected
@@ -236,17 +236,17 @@ components:
               code:
                 type: string
                 enum:
-                  - CONTENTS_TOO_LARGE
+                - CONTENTS_TOO_LARGE
                 description: Code indicating payload size exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed payload size
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             CONTENTS_TOO_LARGE:
-              summary: When the payload exceeds the server's maximum limit
+              summary: The payload exceeds the server's maximum size
               value:
                 code: CONTENTS_TOO_LARGE
                 message: Contents too large
@@ -260,17 +260,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_LONG_URI
+                - TOO_LONG_URI
                 description: Code indicating URI length exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed URI length
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_LONG_URI:
-              summary: When the request URI exceeds the server's maximum length
+              summary: The request URI exceeds the server's maximum length
               value:
                 code: TOO_LONG_URI
                 message: URI too long
@@ -284,23 +284,23 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_MANY_REQUESTS
-                  - EXCEEDED_QUOTA_LIMIT
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
                 description: Code identifying the cause of the request limit exceeded
               message:
                 type: string
                 description: Detailed message including the exceeded limit type and allowed threshold
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_MANY_REQUESTS:
-              summary: When the rate limit is exceeded
+              summary: The rate limit was exceeded
               value:
                 code: TOO_MANY_REQUESTS
                 message: Too many requests
             EXCEEDED_QUOTA_LIMIT:
-              summary: When the quota limit is exceeded
+              summary: The quota limit was exceeded
               value:
                 code: EXCEEDED_QUOTA_LIMIT
                 message: Exceeded quota limit
@@ -314,23 +314,23 @@ components:
               code:
                 type: string
                 enum:
-                  - INTERNAL_SERVER_ERROR
-                  - INTERRUPTED
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
                 description: Code to identify the cause of the internal server error
               message:
                 type: string
                 description: Detailed message including the cause of the server error
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             INTERNAL_SERVER_ERROR:
-              summary: When an internal server error occurs
+              summary: An internal server error occurred
               value:
                 code: INTERNAL_SERVER_ERROR
                 message: Internal server error
             INTERRUPTED:
-              summary: When processing fails temporarily due to server load
+              summary: Processing failed temporarily due to server load
               value:
                 code: INTERRUPTED
                 message: Request interrupted
@@ -344,17 +344,17 @@ components:
               code:
                 type: string
                 enum:
-                  - UNAVAILABLE
+                - UNAVAILABLE
                 description: Code indicating service unavailability
               message:
                 type: string
                 description: Detailed message including the cause of the service outage
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             UNAVAILABLE:
-              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
               value:
                 code: UNAVAILABLE
                 message: Service unavailable
@@ -362,7 +362,7 @@ paths:
   /{chain}/{network}/ens/getAddressByEnsName:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: getAddressByEnsName
       summary: Get Address By ENS Name
       description: |+
@@ -375,26 +375,26 @@ paths:
 
       x-seo-description: Resolve an ENS (Ethereum Name Service) domain name to its corresponding wallet address.
       tags:
-        - ENS API
+      - ENS API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - ethereum
-            default: ethereum
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - mainnet
-            default: mainnet
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ethereum
+          default: ethereum
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
       requestBody:
         required: true
         content:
@@ -403,12 +403,14 @@ paths:
               title: Ethereum
               type: object
               required:
-                - name
+              - name
               properties:
                 name:
                   type: string
                   description: Enter the ENS domain name.
                   default: vitalik.eth
+              example:
+                name: vitalik.eth
       responses:
         "200":
           description: Successful Response
@@ -427,33 +429,33 @@ paths:
                     type: string
                     description: Indicates the expiry date of the ENS domain. If domain renewal or new registration does not occur after the expiry date, the previous expiry date is returned.
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
   /{chain}/{network}/ens/getEnsNameByAddress:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: getEnsNameByAddress
       summary: Get ENS Name By Address
       description: |+
@@ -471,26 +473,26 @@ paths:
 
       x-seo-description: Reverse-resolve a wallet address to its primary ENS (Ethereum Name Service) domain name.
       tags:
-        - ENS API
+      - ENS API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - ethereum
-            default: ethereum
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - mainnet
-            default: mainnet
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ethereum
+          default: ethereum
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
       requestBody:
         required: true
         content:
@@ -499,13 +501,15 @@ paths:
               title: Ethereum
               type: object
               required:
-                - address
+              - address
               properties:
                 address:
                   type: string
                   description: Parameter specifying the account address to query. Can be entered as a 40-character hexadecimal string starting with 0x.
                   pattern: ^0[xX][0-9a-fA-F]{40}$
                   example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              example:
+                address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
       responses:
         "200":
           description: Successful Response
@@ -523,58 +527,66 @@ paths:
                     type: string
                     description: Indicates the expiry date of the ENS domain. If domain renewal or new registration does not occur after the expiry date, the previous expiry date is returned.
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
   /{chain}/{network}/ens/getEnsRecordByName:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: getEnsRecordByName
       summary: Get ENS Record By Name
-      description: "Retrieves ENS domain information by entering the ENS domain name.\n\t\t\n\n> 🚧 Please verify the network when using!\n>\n> This API is supported only on Ethereum Mainnet and cannot be used on other networks. Please verify the network when using.\n\n\n"
+      description: |+
+        Retrieves ENS domain information by entering the ENS domain name.
+        		
+
+        > 🚧 Please verify the network when using!
+        >
+        > This API is supported only on Ethereum Mainnet and cannot be used on other networks. Please verify the network when using.
+
+
       x-seo-description: Retrieve full ENS record details for a specific domain name, including resolver and records.
       tags:
-        - ENS API
+      - ENS API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - ethereum
-            default: ethereum
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - mainnet
-            default: mainnet
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ethereum
+          default: ethereum
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
       requestBody:
         required: true
         content:
@@ -583,12 +595,14 @@ paths:
               title: Ethereum
               type: object
               required:
-                - name
+              - name
               properties:
                 name:
                   type: string
                   description: Enter the ENS domain name.
                   default: vitalik.eth
+              example:
+                name: vitalik.eth
       responses:
         "200":
           description: Successful Response
@@ -596,60 +610,178 @@ paths:
             application/json:
               schema:
                 title: Ethereum
-                $ref: "#/paths/~1{chain}~1{network}~1ens~1getEnsRecordsByAccount/post/responses/200/content/application~1json/schema/allOf/1/properties/items/items"
+                type: object
+                required:
+                - name
+                - isMigrated
+                - isPrimaryName
+                - node
+                - labelName
+                - labelHash
+                - ownerAddress
+                - resolver
+                - registration
+                - nameWrapper
+                example:
+                  resolver:
+                    contentHash: ipfs://bafybeidy7lrjeghrpsg3z7i5yrpfekyo6d3jetv6qofgtixsjumdthetw4
+                    text:
+                      avatar: https://example.com/images/avatar.png
+                      description: This is an example ENS domain for demonstration purposes.
+                      display: Example.Nodit.eth
+                      email: contact@example.com
+                      keywords: example, ENS, Ethereum, blockchain
+                      mail: 1234 Example Street, Example City, EX 12345, Country
+                      notice: This domain is used for educational purposes only.
+                      location: Toronto, Canada
+                      phone: "+14165550000"
+                      url: https://example.com
+                properties:
+                  name:
+                    type: string
+                    description: A field representing the name of the ENS domain.
+                  isMigrated:
+                    type: boolean
+                    description: A field indicating whether the ENS domain has been migrated to the latest version. If true, the domain has been migrated to the latest version; if false, the domain has not been migrated. Migration status is important for domain management and compatibility.
+                  isPrimaryName:
+                    type: boolean
+                    description: A field indicating whether the ENS domain is the Primary Name. In the ENS structure, multiple domains can be linked to a single address, and the primary domain is called the Primary Name. If true, the domain is registered as Primary Name; if false, it indicates a non-Primary domain.
+                  node:
+                    type: string
+                    description: A field representing the unique identifier of the ENS domain, which is a hash value generated by the namehash algorithm. For example, if the domain name is example.nodit.eth, the node value is generated as namehash('example.nodit.eth'). Provided as a 64-character hexadecimal string prefixed with 0x.
+                  labelName:
+                    type: string
+                    description: A field representing the lowest-level label of the domain name. For example, for example.nodit.eth, labelName is 'example'.
+                  labelHash:
+                    type: string
+                    description: 'A field representing the hash value of the lowest-level label of the domain name. For example, for example.nodit.eth, labelHash is generated as keccak256(''example''). Provided as a 64-character hexadecimal string prefixed with 0x. <br/> <strong style=''color: red;''>*</strong> For wrapped domains, the address shown in ownerAddress may be the wrapping contract address. Please refer to the wrappedOwnerAddress field to verify the actual owner address.'
+                  ownerAddress:
+                    type: string
+                    description: 'A field representing the owner address of the ENS domain. Provided as a 40-character hexadecimal string prefixed with 0x. <br/> <strong style=''color: red;''>*</strong> The owner address indicates the owner of the domain and may differ from the address the domain is linked to. For asset transfers, please refer to resolvedAddress in the resolver field.'
+                  resolver:
+                    type: object
+                    description: A field representing the Resolver information of the domain.
+                    required:
+                    - contractAddress
+                    - resolvedAddress
+                    - contentHash
+                    - text
+                    properties:
+                      contractAddress:
+                        type: string
+                        description: A field representing the Resolver contract address of the domain. Provided as a 40-character hexadecimal string prefixed with 0x.
+                      resolvedAddress:
+                        type: string
+                        description: 'A field representing the address the domain is linked to. Provided as a 40-character hexadecimal string prefixed with 0x. <br/> <strong style=''color: red;''>*</strong> resolvedAddress may differ from the owner address. Please refer to the ownerAddress field to verify the actual owner address of the domain.'
+                      contentHash:
+                        type: string
+                        description: A field representing the content hash of the domain. Stores various forms of content hash including IPFS hashes in ERC-1577 format. This field provides the decoded result.
+                        example: ipfs://bafybeidy7lrjeghrpsg3z7i5yrpfekyo6d3jetv6qofgtixsjumdthetw4
+                      text:
+                        type: object
+                        description: 'A field representing the text record information of the domain. Text records are fields that can store various information about the domain; ENS domain owners can store any desired information. <br/> <strong style=''color: red;''>*</strong> Different text records may exist for each domain. If no text record exists, this field is provided as an empty object.'
+                        example:
+                          avatar: https://example.com/images/avatar.png
+                          description: This is an example ENS domain for demonstration purposes.
+                          display: Example.Nodit.eth
+                          email: contact@example.com
+                          keywords: example, ENS, Ethereum, blockchain
+                          mail: 1234 Example Street, Example City, EX 12345, Country
+                          notice: This domain is used for educational purposes only.
+                          location: Toronto, Canada
+                          phone: "+14165550000"
+                          url: https://example.com
+                  registration:
+                    type: object
+                    description: A field representing the registration information of the domain.
+                    required:
+                    - registrantAddress
+                    - registrationDate
+                    - expiryDate
+                    - cost
+                    properties:
+                      registrantAddress:
+                        type: string
+                        description: A field representing the address that registered the domain. Provided as a 40-character hexadecimal string prefixed with 0x.
+                      registrationDate:
+                        type: string
+                        description: A field representing the registration date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
+                      expiryDate:
+                        type: string
+                        description: A field representing the expiry date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
+                      cost:
+                        type: string
+                        description: A field representing the registration cost of the domain in Wei. Provided in decimal string format.
+                  nameWrapper:
+                    type: object
+                    description: A field representing the wrapped domain information. For wrapped domains, the ownerAddress field displays the wrapping contract address. Please refer to the wrappedOwnerAddress field to verify the actual owner address.
+                    properties:
+                      contractAddress:
+                        type: string
+                        description: A field representing the wrapping contract address of the domain. Provided as a 40-character hexadecimal string prefixed with 0x. If the domain is not wrapped, this field is provided as null.
+                      wrappedOwnerAddress:
+                        type: string
+                        description: A field representing the owner address of the wrapped domain. Provided as a 40-character hexadecimal string prefixed with 0x. If the domain is not wrapped, this field is provided as null.
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'
   /{chain}/{network}/ens/getEnsRecordsByAccount:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: getEnsRecordsByAccount
       summary: Get ENS Records By Account
-      description: "Retrieves ENS domain information by entering the ENS domain owner address or the address that the domain points to. \nownerAddress indicates the ENS domain owner address, and resolvedAddress indicates the address that the ENS domain points to.\n\t\t\n\n> 🚧 Please verify the network when using!\n>\n> This API is supported only on Ethereum Mainnet and cannot be used on other networks. Please verify the network when using.\n"
+      description: |
+        Retrieves ENS domain information by entering the ENS domain owner address or the address that the domain points to. 
+        ownerAddress indicates the ENS domain owner address, and resolvedAddress indicates the address that the ENS domain points to.
+        		
+
+        > 🚧 Please verify the network when using!
+        >
+        > This API is supported only on Ethereum Mainnet and cannot be used on other networks. Please verify the network when using.
       x-seo-description: Fetch all ENS (Ethereum Name Service) records associated with a specific account address.
       tags:
-        - ENS API
+      - ENS API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - ethereum
-            default: ethereum
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - mainnet
-            default: mainnet
-          description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - ethereum
+          default: ethereum
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
       requestBody:
         required: true
         content:
@@ -657,50 +789,54 @@ paths:
             schema:
               title: Ethereum
               allOf:
-                - oneOf:
-                    - title: owner Address
-                      required:
-                        - ownerAddress
-                      type: object
-                      properties:
-                        ownerAddress:
-                          type: string
-                          description: Enter the ENS domain owner address. A 40-character hexadecimal string starting with 0x. Either ownerAddress or resolvedAddress must be specified.
-                          pattern: ^0x[0-9a-fA-F]{40}$
-                          example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                    - title: resolved Address
-                      required:
-                        - resolvedAddress
-                      type: object
-                      properties:
-                        resolvedAddress:
-                          type: string
-                          description: Enter the address that the ENS domain points to. A 40-character hexadecimal string starting with 0x. Either ownerAddress or resolvedAddress must be specified.
-                          pattern: ^0x[0-9a-fA-F]{40}$
-                          example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-                - type: object
+              - oneOf:
+                - title: owner Address
+                  required:
+                  - ownerAddress
+                  type: object
                   properties:
-                    page:
-                      type: integer
-                      description: |-
-                        The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
-
-                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
-                      pattern: ^(?:[1-9][0-9]?|100)$
-                    rpp:
-                      type: integer
-                      description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
-                      pattern: ^(?:[1-9][0-9]{0,2}?|100)$
-                    cursor:
+                    ownerAddress:
                       type: string
-                      description: |-
-                        The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+                      description: Enter the ENS domain owner address. A 40-character hexadecimal string starting with 0x. Either ownerAddress or resolvedAddress must be specified.
+                      pattern: ^0x[0-9a-fA-F]{40}$
+                      example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                - title: resolved Address
+                  required:
+                  - resolvedAddress
+                  type: object
+                  properties:
+                    resolvedAddress:
+                      type: string
+                      description: Enter the address that the ENS domain points to. A 40-character hexadecimal string starting with 0x. Either ownerAddress or resolvedAddress must be specified.
+                      pattern: ^0x[0-9a-fA-F]{40}$
+                      example: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+              - type: object
+                properties:
+                  page:
+                    type: integer
+                    description: |-
+                      The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
 
-                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
-                    withCount:
-                      type: boolean
-                      description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
-                      default: false
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    pattern: ^(?:[1-9][0-9]?|100)$
+                  rpp:
+                    type: integer
+                    description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                    pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                  cursor:
+                    type: string
+                    description: |-
+                      The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                  withCount:
+                    type: boolean
+                    description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                    default: false
+              example:
+                ownerAddress: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+                page: 1
+                rpp: 10
       responses:
         "200":
           description: Successful Response
@@ -709,163 +845,163 @@ paths:
               schema:
                 title: Ethereum
                 allOf:
-                  - type: object
-                    required:
-                      - items
-                    properties:
-                      page:
-                        type: integer
-                        description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
-                      rpp:
-                        type: integer
-                        description: Field representing the number of results per page specified in the rpp parameter.
-                      cursor:
-                        type: string
-                        description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
-                      count:
-                        type: integer
-                        description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    page:
+                      type: integer
+                      description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                    rpp:
+                      type: integer
+                      description: Field representing the number of results per page specified in the rpp parameter.
+                    cursor:
+                      type: string
+                      description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                    count:
+                      type: integer
+                      description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                    items:
+                      type: array
+                      description: Field representing the list of queried data.
+                - type: object
+                  properties:
+                    items:
+                      type: array
                       items:
-                        type: array
-                        description: Field representing the list of queried data.
-                  - type: object
-                    properties:
-                      items:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                            - name
-                            - isMigrated
-                            - isPrimaryName
-                            - node
-                            - labelName
-                            - labelHash
-                            - ownerAddress
-                            - resolver
-                            - registration
-                            - nameWrapper
-                          example:
-                            resolver:
-                              contentHash: ipfs://bafybeidy7lrjeghrpsg3z7i5yrpfekyo6d3jetv6qofgtixsjumdthetw4
+                        type: object
+                        required:
+                        - name
+                        - isMigrated
+                        - isPrimaryName
+                        - node
+                        - labelName
+                        - labelHash
+                        - ownerAddress
+                        - resolver
+                        - registration
+                        - nameWrapper
+                        example:
+                          resolver:
+                            contentHash: ipfs://bafybeidy7lrjeghrpsg3z7i5yrpfekyo6d3jetv6qofgtixsjumdthetw4
+                            text:
+                              avatar: https://example.com/images/avatar.png
+                              description: This is an example ENS domain for demonstration purposes.
+                              display: Example.Nodit.eth
+                              email: contact@example.com
+                              keywords: example, ENS, Ethereum, blockchain
+                              mail: 1234 Example Street, Example City, EX 12345, Country
+                              notice: This domain is used for educational purposes only.
+                              location: Toronto, Canada
+                              phone: "+14165550000"
+                              url: https://example.com
+                        properties:
+                          name:
+                            type: string
+                            description: A field representing the name of the ENS domain.
+                          isMigrated:
+                            type: boolean
+                            description: A field indicating whether the ENS domain has been migrated to the latest version. If true, the domain has been migrated to the latest version; if false, the domain has not been migrated. Migration status is important for domain management and compatibility.
+                          isPrimaryName:
+                            type: boolean
+                            description: A field indicating whether the ENS domain is the Primary Name. In the ENS structure, multiple domains can be linked to a single address, and the primary domain is called the Primary Name. If true, the domain is registered as Primary Name; if false, it indicates a non-Primary domain.
+                          node:
+                            type: string
+                            description: A field representing the unique identifier of the ENS domain, which is a hash value generated by the namehash algorithm. For example, if the domain name is example.nodit.eth, the node value is generated as namehash('example.nodit.eth'). Provided as a 64-character hexadecimal string prefixed with 0x.
+                          labelName:
+                            type: string
+                            description: A field representing the lowest-level label of the domain name. For example, for example.nodit.eth, labelName is 'example'.
+                          labelHash:
+                            type: string
+                            description: 'A field representing the hash value of the lowest-level label of the domain name. For example, for example.nodit.eth, labelHash is generated as keccak256(''example''). Provided as a 64-character hexadecimal string prefixed with 0x. <br/> <strong style=''color: red;''>*</strong> For wrapped domains, the address shown in ownerAddress may be the wrapping contract address. Please refer to the wrappedOwnerAddress field to verify the actual owner address.'
+                          ownerAddress:
+                            type: string
+                            description: 'A field representing the owner address of the ENS domain. Provided as a 40-character hexadecimal string prefixed with 0x. <br/> <strong style=''color: red;''>*</strong> The owner address indicates the owner of the domain and may differ from the address the domain is linked to. For asset transfers, please refer to resolvedAddress in the resolver field.'
+                          resolver:
+                            type: object
+                            description: A field representing the Resolver information of the domain.
+                            required:
+                            - contractAddress
+                            - resolvedAddress
+                            - contentHash
+                            - text
+                            properties:
+                              contractAddress:
+                                type: string
+                                description: A field representing the Resolver contract address of the domain. Provided as a 40-character hexadecimal string prefixed with 0x.
+                              resolvedAddress:
+                                type: string
+                                description: 'A field representing the address the domain is linked to. Provided as a 40-character hexadecimal string prefixed with 0x. <br/> <strong style=''color: red;''>*</strong> resolvedAddress may differ from the owner address. Please refer to the ownerAddress field to verify the actual owner address of the domain.'
+                              contentHash:
+                                type: string
+                                description: A field representing the content hash of the domain. Stores various forms of content hash including IPFS hashes in ERC-1577 format. This field provides the decoded result.
+                                example: ipfs://bafybeidy7lrjeghrpsg3z7i5yrpfekyo6d3jetv6qofgtixsjumdthetw4
                               text:
-                                avatar: https://example.com/images/avatar.png
-                                description: This is an example ENS domain for demonstration purposes.
-                                display: Example.Nodit.eth
-                                email: contact@example.com
-                                keywords: example, ENS, Ethereum, blockchain
-                                mail: 1234 Example Street, Example City, EX 12345, Country
-                                notice: This domain is used for educational purposes only.
-                                location: Toronto, Canada
-                                phone: "+14165550000"
-                                url: https://example.com
-                          properties:
-                            name:
-                              type: string
-                              description: A field representing the name of the ENS domain.
-                            isMigrated:
-                              type: boolean
-                              description: A field indicating whether the ENS domain has been migrated to the latest version. If true, the domain has been migrated to the latest version; if false, the domain has not been migrated. Migration status is important for domain management and compatibility.
-                            isPrimaryName:
-                              type: boolean
-                              description: A field indicating whether the ENS domain is the Primary Name. In the ENS structure, multiple domains can be linked to a single address, and the primary domain is called the Primary Name. If true, the domain is registered as Primary Name; if false, it indicates a non-Primary domain.
-                            node:
-                              type: string
-                              description: A field representing the unique identifier of the ENS domain, which is a hash value generated by the namehash algorithm. For example, if the domain name is example.nodit.eth, the node value is generated as namehash('example.nodit.eth'). Provided as a 64-character hexadecimal string prefixed with 0x.
-                            labelName:
-                              type: string
-                              description: A field representing the lowest-level label of the domain name. For example, for example.nodit.eth, labelName is 'example'.
-                            labelHash:
-                              type: string
-                              description: "A field representing the hash value of the lowest-level label of the domain name. For example, for example.nodit.eth, labelHash is generated as keccak256('example'). Provided as a 64-character hexadecimal string prefixed with 0x. <br/> <strong style='color: red;'>*</strong> For wrapped domains, the address shown in ownerAddress may be the wrapping contract address. Please refer to the wrappedOwnerAddress field to verify the actual owner address."
-                            ownerAddress:
-                              type: string
-                              description: "A field representing the owner address of the ENS domain. Provided as a 40-character hexadecimal string prefixed with 0x. <br/> <strong style='color: red;'>*</strong> The owner address indicates the owner of the domain and may differ from the address the domain is linked to. For asset transfers, please refer to resolvedAddress in the resolver field."
-                            resolver:
-                              type: object
-                              description: A field representing the Resolver information of the domain.
-                              required:
-                                - contractAddress
-                                - resolvedAddress
-                                - contentHash
-                                - text
-                              properties:
-                                contractAddress:
-                                  type: string
-                                  description: A field representing the Resolver contract address of the domain. Provided as a 40-character hexadecimal string prefixed with 0x.
-                                resolvedAddress:
-                                  type: string
-                                  description: "A field representing the address the domain is linked to. Provided as a 40-character hexadecimal string prefixed with 0x. <br/> <strong style='color: red;'>*</strong> resolvedAddress may differ from the owner address. Please refer to the ownerAddress field to verify the actual owner address of the domain."
-                                contentHash:
-                                  type: string
-                                  description: A field representing the content hash of the domain. Stores various forms of content hash including IPFS hashes in ERC-1577 format. This field provides the decoded result.
-                                  example: ipfs://bafybeidy7lrjeghrpsg3z7i5yrpfekyo6d3jetv6qofgtixsjumdthetw4
-                                text:
-                                  type: object
-                                  description: "A field representing the text record information of the domain. Text records are fields that can store various information about the domain; ENS domain owners can store any desired information. <br/> <strong style='color: red;'>*</strong> Different text records may exist for each domain. If no text record exists, this field is provided as an empty object."
-                                  example:
-                                    avatar: https://example.com/images/avatar.png
-                                    description: This is an example ENS domain for demonstration purposes.
-                                    display: Example.Nodit.eth
-                                    email: contact@example.com
-                                    keywords: example, ENS, Ethereum, blockchain
-                                    mail: 1234 Example Street, Example City, EX 12345, Country
-                                    notice: This domain is used for educational purposes only.
-                                    location: Toronto, Canada
-                                    phone: "+14165550000"
-                                    url: https://example.com
-                            registration:
-                              type: object
-                              description: A field representing the registration information of the domain.
-                              required:
-                                - registrantAddress
-                                - registrationDate
-                                - expiryDate
-                                - cost
-                              properties:
-                                registrantAddress:
-                                  type: string
-                                  description: A field representing the address that registered the domain. Provided as a 40-character hexadecimal string prefixed with 0x.
-                                registrationDate:
-                                  type: string
-                                  description: A field representing the registration date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
-                                expiryDate:
-                                  type: string
-                                  description: A field representing the expiry date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
-                                cost:
-                                  type: string
-                                  description: A field representing the registration cost of the domain in Wei. Provided in decimal string format.
-                            nameWrapper:
-                              type: object
-                              description: A field representing the wrapped domain information. For wrapped domains, the ownerAddress field displays the wrapping contract address. Please refer to the wrappedOwnerAddress field to verify the actual owner address.
-                              properties:
-                                contractAddress:
-                                  type: string
-                                  description: A field representing the wrapping contract address of the domain. Provided as a 40-character hexadecimal string prefixed with 0x. If the domain is not wrapped, this field is provided as null.
-                                wrappedOwnerAddress:
-                                  type: string
-                                  description: A field representing the owner address of the wrapped domain. Provided as a 40-character hexadecimal string prefixed with 0x. If the domain is not wrapped, this field is provided as null.
+                                type: object
+                                description: 'A field representing the text record information of the domain. Text records are fields that can store various information about the domain; ENS domain owners can store any desired information. <br/> <strong style=''color: red;''>*</strong> Different text records may exist for each domain. If no text record exists, this field is provided as an empty object.'
+                                example:
+                                  avatar: https://example.com/images/avatar.png
+                                  description: This is an example ENS domain for demonstration purposes.
+                                  display: Example.Nodit.eth
+                                  email: contact@example.com
+                                  keywords: example, ENS, Ethereum, blockchain
+                                  mail: 1234 Example Street, Example City, EX 12345, Country
+                                  notice: This domain is used for educational purposes only.
+                                  location: Toronto, Canada
+                                  phone: "+14165550000"
+                                  url: https://example.com
+                          registration:
+                            type: object
+                            description: A field representing the registration information of the domain.
+                            required:
+                            - registrantAddress
+                            - registrationDate
+                            - expiryDate
+                            - cost
+                            properties:
+                              registrantAddress:
+                                type: string
+                                description: A field representing the address that registered the domain. Provided as a 40-character hexadecimal string prefixed with 0x.
+                              registrationDate:
+                                type: string
+                                description: A field representing the registration date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
+                              expiryDate:
+                                type: string
+                                description: A field representing the expiry date of the domain. Provided in ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}).
+                              cost:
+                                type: string
+                                description: A field representing the registration cost of the domain in Wei. Provided in decimal string format.
+                          nameWrapper:
+                            type: object
+                            description: A field representing the wrapped domain information. For wrapped domains, the ownerAddress field displays the wrapping contract address. Please refer to the wrappedOwnerAddress field to verify the actual owner address.
+                            properties:
+                              contractAddress:
+                                type: string
+                                description: A field representing the wrapping contract address of the domain. Provided as a 40-character hexadecimal string prefixed with 0x. If the domain is not wrapped, this field is provided as null.
+                              wrappedOwnerAddress:
+                                type: string
+                                description: A field representing the owner address of the wrapped domain. Provided as a 40-character hexadecimal string prefixed with 0x. If the domain is not wrapped, this field is provided as null.
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'

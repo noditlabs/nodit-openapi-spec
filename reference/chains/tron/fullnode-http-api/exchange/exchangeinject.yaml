@@ -1,0 +1,94 @@
+openapi: 3.1.0
+info:
+  title: Tron - ExchangeInject
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/exchangeinject:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-exchangeinject
+      summary: ExchangeInject
+      description: Create a transaction that injects more tokens into an exchange pair. Only the exchange creator can execute it, and both tokens are injected proportionally.
+      x-seo-description: Create a transaction that injects tokens into a TRON exchange pair.
+      tags:
+      - exchange
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              exchange_id: 1
+              token_id: _
+              quant: 100
+              visible: true
+            schema:
+              type: object
+              required:
+              - owner_address
+              - exchange_id
+              - token_id
+              - quant
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                  example: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                exchange_id:
+                  type: integer
+                  format: int64
+                  description: 'Unique ID of the exchange pair. Example: `1`'
+                  example: 1
+                token_id:
+                  type: string
+                  description: 'Token ID. Use `_` for TRX. (Format: hex or plain string)'
+                  example: _
+                quant:
+                  type: integer
+                  format: int64
+                  description: Amount of the token to inject or withdraw. TRX amounts are in sun.
+                  example: 100
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Unsigned (or signed) transaction object ready for signing / broadcasting.
+                properties:
+                  txID:
+                    type: string
+                    description: Transaction ID (hash).
+                  raw_data:
+                    type: object
+                    description: The transaction `raw_data` (contract, ref_block_*, expiration, etc.).
+                  raw_data_hex:
+                    type: string
+                    description: Hex-encoded protobuf of `raw_data`.
+                  visible:
+                    type: boolean
+                    description: Echoes back the `visible` value given in the request.

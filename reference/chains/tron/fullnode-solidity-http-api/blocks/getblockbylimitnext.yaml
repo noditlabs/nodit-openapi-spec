@@ -1,0 +1,79 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBlockByLimitNext
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getblockbylimitnext:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getblockbylimitnext
+      summary: GetBlockByLimitNext
+      description: Returns the list of Block Objects included in the 'Block Height' range specified. (Confirmed state)
+      x-seo-description: Retrieve solidified TRON blocks within a given block height range.
+      tags:
+      - blocks
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              startNum: 86720413
+              endNum: 86720418
+            schema:
+              type: object
+              properties:
+                startNum:
+                  type: integer
+                  description: 'Starting block height (inclusive). Example: `1`'
+                  format: int32
+                  example: 1
+                endNum:
+                  type: integer
+                  description: 'Ending block height (exclusive). Example: `5`'
+                  format: int32
+                  example: 5
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: array
+                description: List of Block objects (solidified) between startNum (inclusive) and endNum (exclusive).
+                items:
+                  type: object
+                  description: TRON block object. See [/wallet/getblock](https://developers.tron.network/reference/getblock-1) for full structure.
+                  properties: {}
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

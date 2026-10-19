@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Base - Web3 Data API
+  title: Base - Data API
   version: 1.0.0
 servers:
-  - url: https://web3.nodit.io/v1
-    description: Web3 Data API
+- url: https://web3.nodit.io/v1
+  description: Data API
 components:
   securitySchemes:
     api_key:
@@ -26,35 +26,35 @@ components:
               code:
                 type: string
                 enum:
-                  - MISSING_REQUIRED_PARAMETER
-                  - INVALID_PARAMETER
-                  - WRONG_RANGE_PARAMETER
-                  - DEPRECATED_OPERATION
+                - MISSING_REQUIRED_PARAMETER
+                - INVALID_PARAMETER
+                - WRONG_RANGE_PARAMETER
+                - DEPRECATED_OPERATION
                 description: Code to identify the cause of the bad request
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the invalid parameter
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             MISSING_REQUIRED_PARAMETER:
-              summary: When a required parameter is missing
+              summary: A required parameter is missing
               value:
                 code: MISSING_REQUIRED_PARAMETER
-                message: "Missing required parameter: { PARAMETER_NAME }"
+                message: 'Missing required parameter: { PARAMETER_NAME }'
             INVALID_PARAMETER:
-              summary: When an invalid value is provided for a parameter
+              summary: A parameter has an invalid value
               value:
                 code: INVALID_PARAMETER
-                message: "Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }"
+                message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }'
             WRONG_RANGE_PARAMETER:
-              summary: When a value outside the query range is provided
+              summary: A value is outside the allowed range
               value:
                 code: WRONG_RANGE_PARAMETER
-                message: "Wrong range parameter: { PARAMETER_NAME }"
+                message: 'Wrong range parameter: { PARAMETER_NAME }'
             DEPRECATED_OPERATION:
-              summary: When a deprecated API is requested
+              summary: The requested API is no longer supported
               value:
                 code: DEPRECATED_OPERATION
                 message: This operation has been deprecated
@@ -68,26 +68,26 @@ components:
               code:
                 type: string
                 enum:
-                  - NO_AUTHENTICATION_FOUND
-                  - AUTHENTICATION_FAILED
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
                 description: Code to identify the cause of authentication failure
               message:
                 type: string
                 description: Detailed message including the cause of authentication failure
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             NO_AUTHENTICATION_FOUND:
-              summary: When authentication credentials are not included
+              summary: The request does not include authentication (API Key)
               value:
                 code: NO_AUTHENTICATION_FOUND
-                message: No authentication found
+                message: No authentication found.
             AUTHENTICATION_FAILED:
-              summary: When authentication credentials are mismatched or invalid
+              summary: The authentication (API Key) is invalid
               value:
                 code: AUTHENTICATION_FAILED
-                message: Authentication failed
+                message: Authentication failed.
     "403":
       description: Forbidden
       content:
@@ -98,17 +98,17 @@ components:
               code:
                 type: string
                 enum:
-                  - PERMISSION_DENIED
+                - PERMISSION_DENIED
                 description: Code indicating permission denied
               message:
                 type: string
                 description: Detailed message including information about the denied resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             PERMISSION_DENIED:
-              summary: When accessing an unauthorized resource
+              summary: The request accesses a resource it is not authorized for
               value:
                 code: PERMISSION_DENIED
                 message: Permission denied
@@ -122,32 +122,32 @@ components:
               code:
                 type: string
                 enum:
-                  - WRONG_ENDPOINT
-                  - NOT_SUPPORTED_CHAIN
-                  - RESOURCE_NOT_FOUND
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
                 description: Code to identify the cause of the resource not found
               message:
                 type: string
                 description: Detailed message including the name, value, etc. of the resource not found
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             WRONG_ENDPOINT:
-              summary: When requesting a non-existent API path
+              summary: The requested API path does not exist
               value:
                 code: WRONG_ENDPOINT
                 message: Wrong endpoint
             NOT_SUPPORTED_CHAIN:
-              summary: When requesting an unsupported chain
+              summary: The requested chain is not supported
               value:
                 code: NOT_SUPPORTED_CHAIN
                 message: Not supported chain
             RESOURCE_NOT_FOUND:
-              summary: When requesting a resource that does not exist on the server
+              summary: The requested resource does not exist
               value:
                 code: RESOURCE_NOT_FOUND
-                message: "Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }"
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
     "405":
       description: Method Not Allowed
       content:
@@ -158,17 +158,17 @@ components:
               code:
                 type: string
                 enum:
-                  - METHOD_NOT_ALLOWED
+                - METHOD_NOT_ALLOWED
                 description: Code indicating a disallowed HTTP method
               message:
                 type: string
                 description: Detailed message about the disallowed HTTP method
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             METHOD_NOT_ALLOWED:
-              summary: When requesting with an unsupported HTTP method
+              summary: The request uses an unsupported HTTP method
               value:
                 code: METHOD_NOT_ALLOWED
                 message: Method not allowed
@@ -182,17 +182,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TIMEOUT
+                - TIMEOUT
                 description: Code indicating request timeout
               message:
                 type: string
                 description: Detailed message including the cause of the timeout
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TIMEOUT:
-              summary: When processing is not completed within the specified time
+              summary: Processing did not finish within the time limit
               value:
                 code: TIMEOUT
                 message: Request timeout
@@ -206,23 +206,23 @@ components:
               code:
                 type: string
                 enum:
-                  - RESOURCE_ALREADY_EXISTS
-                  - REJECTED
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
                 description: Code to identify the cause of the request conflict
               message:
                 type: string
                 description: Detailed message including information about the conflicting resource
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             RESOURCE_ALREADY_EXISTS:
-              summary: When attempting to create a resource that already exists
+              summary: The request tries to create a resource that already exists
               value:
                 code: RESOURCE_ALREADY_EXISTS
                 message: Resource already exists
             REJECTED:
-              summary: When the request is rejected by the server
+              summary: The server rejected the request
               value:
                 code: REJECTED
                 message: Request rejected
@@ -236,17 +236,17 @@ components:
               code:
                 type: string
                 enum:
-                  - CONTENTS_TOO_LARGE
+                - CONTENTS_TOO_LARGE
                 description: Code indicating payload size exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed payload size
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             CONTENTS_TOO_LARGE:
-              summary: When the payload exceeds the server's maximum limit
+              summary: The payload exceeds the server's maximum size
               value:
                 code: CONTENTS_TOO_LARGE
                 message: Contents too large
@@ -260,17 +260,17 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_LONG_URI
+                - TOO_LONG_URI
                 description: Code indicating URI length exceeded
               message:
                 type: string
                 description: Detailed message including the maximum allowed URI length
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_LONG_URI:
-              summary: When the request URI exceeds the server's maximum length
+              summary: The request URI exceeds the server's maximum length
               value:
                 code: TOO_LONG_URI
                 message: URI too long
@@ -284,23 +284,23 @@ components:
               code:
                 type: string
                 enum:
-                  - TOO_MANY_REQUESTS
-                  - EXCEEDED_QUOTA_LIMIT
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
                 description: Code identifying the cause of the request limit exceeded
               message:
                 type: string
                 description: Detailed message including the exceeded limit type and allowed threshold
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             TOO_MANY_REQUESTS:
-              summary: When the rate limit is exceeded
+              summary: The rate limit was exceeded
               value:
                 code: TOO_MANY_REQUESTS
                 message: Too many requests
             EXCEEDED_QUOTA_LIMIT:
-              summary: When the quota limit is exceeded
+              summary: The quota limit was exceeded
               value:
                 code: EXCEEDED_QUOTA_LIMIT
                 message: Exceeded quota limit
@@ -314,23 +314,23 @@ components:
               code:
                 type: string
                 enum:
-                  - INTERNAL_SERVER_ERROR
-                  - INTERRUPTED
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
                 description: Code to identify the cause of the internal server error
               message:
                 type: string
                 description: Detailed message including the cause of the server error
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             INTERNAL_SERVER_ERROR:
-              summary: When an internal server error occurs
+              summary: An internal server error occurred
               value:
                 code: INTERNAL_SERVER_ERROR
                 message: Internal server error
             INTERRUPTED:
-              summary: When processing fails temporarily due to server load
+              summary: Processing failed temporarily due to server load
               value:
                 code: INTERRUPTED
                 message: Request interrupted
@@ -344,17 +344,17 @@ components:
               code:
                 type: string
                 enum:
-                  - UNAVAILABLE
+                - UNAVAILABLE
                 description: Code indicating service unavailability
               message:
                 type: string
                 description: Detailed message including the cause of the service outage
             required:
-              - code
-              - message
+            - code
+            - message
           examples:
             UNAVAILABLE:
-              summary: When the service is unavailable due to infrastructure downtime or upgrade
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
               value:
                 code: UNAVAILABLE
                 message: Service unavailable
@@ -362,7 +362,7 @@ paths:
   /{chain}/{network}/stats/getAccountStats:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: base-getAccountStats
       summary: Get Account Stats
       description: |+
@@ -370,27 +370,27 @@ paths:
 
       x-seo-description: Retrieve aggregated activity statistics for a specific account, including transaction and token data.
       tags:
-        - Statistics API
+      - Statistics API
       parameters:
-        - name: chain
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - base
-            default: base
-          description: Parameter to specify the target chain for the query.
-        - name: network
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - mainnet
-              - sepolia
-            default: mainnet
-          description: Parameter to specify the network of the target chain.
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - base
+          default: base
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          - sepolia
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
       requestBody:
         required: true
         content:
@@ -398,7 +398,7 @@ paths:
             schema:
               type: object
               required:
-                - address
+              - address
               properties:
                 address:
                   type: string
@@ -414,16 +414,16 @@ paths:
               schema:
                 type: object
                 required:
-                  - transactionCounts
-                  - transferCounts
-                  - assets
+                - transactionCounts
+                - transferCounts
+                - assets
                 properties:
                   transactionCounts:
                     type: object
                     description: An object containing transaction count information associated with the queried address.
                     required:
-                      - external
-                      - internal
+                    - external
+                    - internal
                     properties:
                       external:
                         type: number
@@ -435,8 +435,8 @@ paths:
                     type: object
                     description: An object containing transfer event count information associated with the queried address.
                     required:
-                      - tokens
-                      - nfts
+                    - tokens
+                    - nfts
                     properties:
                       tokens:
                         type: number
@@ -448,9 +448,9 @@ paths:
                     type: object
                     description: An object containing asset information owned by the queried address.
                     required:
-                      - tokens
-                      - nfts
-                      - nftContracts
+                    - tokens
+                    - nfts
+                    - nftContracts
                     properties:
                       tokens:
                         type: number
@@ -462,26 +462,26 @@ paths:
                         type: number
                         description: The number of NFT contract types (ERC721, ERC1155) owned by the queried address.
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "405":
-          $ref: "#/components/responses/405"
+          $ref: '#/components/responses/405'
         "408":
-          $ref: "#/components/responses/408"
+          $ref: '#/components/responses/408'
         "409":
-          $ref: "#/components/responses/409"
+          $ref: '#/components/responses/409'
         "413":
-          $ref: "#/components/responses/413"
+          $ref: '#/components/responses/413'
         "414":
-          $ref: "#/components/responses/414"
+          $ref: '#/components/responses/414'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'
         "500":
-          $ref: "#/components/responses/500"
+          $ref: '#/components/responses/500'
         "503":
-          $ref: "#/components/responses/503"
+          $ref: '#/components/responses/503'

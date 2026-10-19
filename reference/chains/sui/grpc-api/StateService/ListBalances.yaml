@@ -1,0 +1,98 @@
+openapi: 3.1.0
+info:
+  title: Sui - ListBalances
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.StateService/ListBalances:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-ListBalances
+      summary: ListBalances
+      description: |
+        Retrieves the list of balances for all coin types held by the specified address.
+      x-seo-description: 지정한 주소가 보유한 모든 코인 타입별 잔액 목록을 조회합니다.
+      x-grpc-method: sui.rpc.v2.StateService/ListBalances
+      x-proto: sui/rpc/v2/state_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.StateService
+        method: ListBalances
+        streaming: unary
+        proto: sui/rpc/v2/state_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - StateService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - owner
+              properties:
+                owner:
+                  type: string
+                  description: ' Required. The owner''s Sui address.'
+                page_size:
+                  type: integer
+                  description: The maximum number of balance entries to return. The service may return fewer than this value. If unspecified, at most `50` entries will be returned. The maximum value is `1000`; values above `1000` will be coerced to `1000`.
+                page_token:
+                  type: string
+                  description: A page token, received from a previous `ListBalances` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListBalances` must match the call that provided the page token.
+            example:
+              owner: ""
+              page_size: 50
+              page_token: ""
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balances:
+                    type: array
+                    description: The list of coin types and their respective balances.
+                    items:
+                      type: object
+                      properties:
+                        coin_type:
+                          type: string
+                          description: Coin type.
+                        balance:
+                          type: integer
+                          description: Total balance.
+                        address_balance:
+                          type: integer
+                          description: Address balance portion.
+                        coin_balance:
+                          type: integer
+                          description: Coin<T> balance portion.
+                  next_page_token:
+                    type: string
+                    description: A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no subsequent pages.
+              example:
+                balances: []
+                next_page_token: ""

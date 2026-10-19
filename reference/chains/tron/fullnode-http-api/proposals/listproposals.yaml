@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: Tron - ListProposals
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/listproposals:
+    get:
+      security:
+      - api_key: []
+      operationId: tron-listproposals
+      summary: ListProposals
+      description: List all proposals.
+      x-seo-description: List all TRON chain parameter proposals.
+      tags:
+      - proposals
+      parameters:
+      - in: query
+        name: visible
+        schema:
+          type: boolean
+        description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  proposals:
+                    type: array
+                    items:
+                      type: object
+                      description: Chain proposal info. See [GetProposalById](https://developers.tron.network/reference/getproposalbyid) for full structure.
+                      properties: {}
+                    description: Proposal list. For parameters of each proposal, please refer to [GetProposalById](https://developers.tron.network/reference/getproposalbyid).
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

@@ -1,0 +1,903 @@
+openapi: 3.1.0
+info:
+  title: Base - eth_simulateV1
+  version: 1.0.0
+servers:
+- url: https://base-mainnet.nodit.io
+  description: Base Mainnet
+- url: https://base-sepolia.nodit.io
+  description: Base Sepolia
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    Log:
+      type: object
+      description: An event log object containing information about events emitted during transaction execution.
+      properties:
+        address:
+          type: string
+          description: The address of the contract that emitted this log
+        topics:
+          type: array
+          description: Array of event signature hash and indexed parameters (up to 4 entries)
+          items:
+            type: string
+        data:
+          type: string
+          description: Non-indexed event parameter data (hex encoded)
+        blockNumber:
+          type: string
+          description: Block number containing this log (hex)
+        transactionHash:
+          type: string
+          description: Hash of the transaction that created this log
+        transactionIndex:
+          type: string
+          description: Transaction position index within the block (hex)
+        blockHash:
+          type: string
+          description: Hash of the block containing this log
+        logIndex:
+          type: string
+          description: Log position index within the block (hex)
+        removed:
+          type: boolean
+          description: True if the log was removed due to a chain reorganization
+    SimulateBlockResult:
+      type: object
+      description: Simulated block object returned by eth_simulateV1. In addition to the standard block fields, it includes the results of the calls executed in that block (`calls`).
+      properties:
+        baseFeePerGas:
+          type: string
+          description: Base fee per gas of the simulated block (EIP-1559, hex wei)
+        blobGasUsed:
+          type: string
+          description: Amount of blob gas used in the block (EIP-4844, hex)
+        difficulty:
+          type: string
+          description: Block difficulty (hex)
+        excessBlobGas:
+          type: string
+          description: Amount of blob gas used above the target (EIP-4844, hex)
+        extraData:
+          type: string
+          description: Arbitrary data included in the block (hex)
+        gasLimit:
+          type: string
+          description: Maximum total gas allowed in this block (hex)
+        gasUsed:
+          type: string
+          description: Total gas used by all transactions in this block (hex)
+        hash:
+          type: string
+          description: Hash of the simulated block
+        logsBloom:
+          type: string
+          description: Bloom filter for event log search (2048 bits, hex)
+        miner:
+          type: string
+          description: Block miner address. Can be changed with `blockOverrides.feeRecipient`.
+        mixHash:
+          type: string
+          description: Mix hash of the block
+        nonce:
+          type: string
+          description: Block nonce (hex)
+        number:
+          type: string
+          description: Simulated block number (hex)
+        parentBeaconBlockRoot:
+          type: string
+          description: Root hash of the parent beacon block (EIP-4788)
+        parentHash:
+          type: string
+          description: Hash of the parent block
+        receiptsRoot:
+          type: string
+          description: Root hash of the transaction receipts trie
+        sha3Uncles:
+          type: string
+          description: SHA3 hash of the uncles list
+        size:
+          type: string
+          description: Block size in bytes (hex)
+        stateRoot:
+          type: string
+          description: Root hash of the state trie
+        timestamp:
+          type: string
+          description: Block creation time (Unix timestamp, hex). Can be changed with `blockOverrides.time`.
+        transactions:
+          description: List of transactions included in the block. Returns an array of full transaction objects when `returnFullTransactions` is set to `true`, and an array of transaction hashes otherwise.
+          oneOf:
+          - type: array
+            items:
+              type: string
+            description: Array of transaction hashes (returnFullTransactions=false)
+          - type: array
+            items:
+              $ref: '#/components/schemas/Transaction'
+            description: Array of full transaction objects (returnFullTransactions=true)
+        transactionsRoot:
+          type: string
+          description: Root hash of the transactions trie
+        uncles:
+          type: array
+          description: Array of uncle block hashes
+          items:
+            type: string
+        withdrawals:
+          type: array
+          description: Validator withdrawal list (EIP-4895)
+          items:
+            type: object
+            properties:
+              index:
+                type: string
+                description: Withdrawal index (hex)
+              validatorIndex:
+                type: string
+                description: Validator index (hex)
+              address:
+                type: string
+                description: Withdrawal recipient address
+              amount:
+                type: string
+                description: Withdrawal amount (in Gwei, hex)
+        withdrawalsRoot:
+          type: string
+          description: Root hash of the withdrawals trie (EIP-4895)
+        calls:
+          type: array
+          description: Results of the calls executed in this block. Returned in the same order as the `calls` array in the request.
+          items:
+            $ref: '#/components/schemas/SimulateCallResult'
+    SimulateBlockResultArray:
+      type: array
+      description: Array of simulated block objects returned by eth_simulateV1. Returned in the same order as the `blockStateCalls` array in the request; when block numbers are skipped, the skipped blocks are included as well.
+      items:
+        $ref: '#/components/schemas/SimulateBlockResult'
+    SimulateCallResult:
+      type: object
+      description: Result object for an individual call executed during an eth_simulateV1 simulation.
+      properties:
+        status:
+          type: string
+          description: Execution status of the call. Returns `0x1` on success and `0x0` on failure (including reverts).
+        returnData:
+          type: string
+          description: Data returned by the call (hex). Contains the revert data when the call fails.
+        gasUsed:
+          type: string
+          description: Amount of gas used to execute the call (hex)
+        maxUsedGas:
+          type: string
+          description: Maximum gas used during execution before refunds are applied (hex)
+        logs:
+          type: array
+          description: Event logs emitted during the call. When `traceTransfers` is set to `true`, native token transfers are also included as ERC-20 Transfer events (address `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`).
+          items:
+            $ref: '#/components/schemas/Log'
+        error:
+          type: object
+          description: Error object returned only when the call fails.
+          properties:
+            code:
+              type: integer
+              description: Error code. Returns `3` when the call reverted, or `-32015` on a VM execution error.
+            message:
+              type: string
+              description: Error message
+            data:
+              type: string
+              description: Additional error data such as the revert reason (hex). May not be provided depending on the client.
+    Transaction:
+      type: object
+      description: An EVM transaction object containing details of a transaction included in a block.
+      properties:
+        blockHash:
+          type: string
+          nullable: true
+          description: Hash of the block containing this transaction. Null for pending transactions
+        blockNumber:
+          type: string
+          nullable: true
+          description: Block number containing this transaction (hex). Null for pending transactions
+        from:
+          type: string
+          description: Sender address of the transaction
+        gas:
+          type: string
+          description: Gas limit set for the transaction (hex)
+        gasPrice:
+          type: string
+          description: Gas price (hex, in wei)
+        maxPriorityFeePerGas:
+          type: string
+          description: Maximum priority fee per gas (EIP-1559, hex)
+        maxFeePerGas:
+          type: string
+          description: Maximum fee per gas (EIP-1559, hex)
+        hash:
+          type: string
+          description: Transaction hash
+        input:
+          type: string
+          description: Transaction input data (hex)
+        nonce:
+          type: string
+          description: Number of transactions sent by the sender prior to this one (hex)
+        to:
+          type: string
+          nullable: true
+          description: Recipient address. Null for contract creation transactions
+        transactionIndex:
+          type: string
+          nullable: true
+          description: Transaction position index within the block (hex). Null for pending transactions
+        value:
+          type: string
+          description: Amount of ETH transferred (hex, in wei)
+        type:
+          type: string
+          description: Transaction type (0x0=Legacy, 0x1=EIP-2930, 0x2=EIP-1559)
+        accessList:
+          type: array
+          description: EIP-2930 access list (type 0x1 and 0x2)
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+                description: Contract address to be accessed
+              storageKeys:
+                type: array
+                items:
+                  type: string
+                description: Storage keys to be accessed
+        chainId:
+          type: string
+          description: Chain ID of the network this transaction belongs to (hex)
+        v:
+          type: string
+          description: ECDSA signature v value
+        r:
+          type: string
+          description: ECDSA signature r value
+        s:
+          type: string
+          description: ECDSA signature s value
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: base-eth_simulatev1
+      summary: eth_simulateV1
+      description: |-
+        Simulates the execution of multiple transactions across one or more blocks without broadcasting them to the network. Similar to `eth_call`, but lets you run a sequence of calls with the block context (block number, timestamp, base fee, and so on) and account state overridden with arbitrary values. Use it to debug smart contract interactions, estimate gas usage, or validate bundled transactions.
+
+        > 🚧 Taking a long time to respond? Response time depends on the size of the simulation!
+        >
+        > The more blocks and calls included in `blockStateCalls`, the longer the response takes. Keep the number of simulated blocks and calls to a minimum if you need a fast response.
+      x-seo-description: Simulate multiple transactions across one or more blocks with state and block overrides, without broadcasting them to the network.
+      tags:
+      - eth
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              - jsonrpc
+              - method
+              - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: eth_simulateV1
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                    - title: Simulation Payload
+                      type: object
+                      required:
+                      - blockStateCalls
+                      properties:
+                        blockStateCalls:
+                          type: array
+                          description: Array of block definitions to simulate. Up to 256 blocks can be specified, and each block is executed sequentially.
+                          items:
+                            type: object
+                            properties:
+                              blockOverrides:
+                                type: object
+                                description: Overrides the block context used for the simulation.
+                                properties:
+                                  number:
+                                    type: string
+                                    description: The block number to simulate, as a hex string. Block numbers must increase; skipped block numbers are included in the response as empty blocks.
+                                  time:
+                                    type: string
+                                    description: The block timestamp as a hex string.
+                                  gasLimit:
+                                    type: string
+                                    description: The block gas limit as a hex string.
+                                  feeRecipient:
+                                    type: string
+                                    description: The address that receives the fees, as a string.
+                                  prevRandao:
+                                    type: string
+                                    description: The `PREVRANDAO` value of the block, as a hex string.
+                                  baseFeePerGas:
+                                    type: string
+                                    description: The base fee per gas of the block, as a hex string.
+                                    example: "0x9"
+                                  blobBaseFee:
+                                    type: string
+                                    description: The blob base fee of the block, as a hex string.
+                                  withdrawals:
+                                    type: array
+                                    description: List of validator withdrawals to include in the block. (EIP-4895)
+                                    items:
+                                      type: object
+                                      properties:
+                                        index:
+                                          type: string
+                                          description: Withdrawal index (hex)
+                                        validatorIndex:
+                                          type: string
+                                          description: Validator index (hex)
+                                        address:
+                                          type: string
+                                          description: Withdrawal recipient address
+                                        amount:
+                                          type: string
+                                          description: Withdrawal amount in Gwei (hex)
+                              stateOverrides:
+                                type: object
+                                x-map-key-label: address
+                                description: |-
+                                  Overrides account state with arbitrary values for the duration of the simulation only, without changing on-chain state. Each key is a target address, and its value can contain the following fields.
+                                  * `balance`: A hex string that overrides the account balance.
+                                  * `nonce`: A hex string that overrides the account nonce.
+                                  * `code`: Fake EVM bytecode to inject into the account, as a hex string.
+                                  * `state`: A set of key-value pairs that replaces the entire account storage. Each key and value is a hex string.
+                                  * `stateDiff`: A set of key-value pairs that overrides individual account storage slots. Similar to `state`, but used when only specific slots should be changed.
+                                  * `movePrecompileToAddress`: Moves the precompile at this address to another address. It is applied before the `code` override, and the behavior is client-specific when the target is not a precompile.
+
+                                  `state` and `stateDiff` are mutually exclusive — specify only one of them per account.
+                                additionalProperties:
+                                  type: object
+                                  properties:
+                                    balance:
+                                      type: string
+                                      description: Account balance to override (hex)
+                                    nonce:
+                                      type: string
+                                      description: Account nonce to override (hex)
+                                    code:
+                                      type: string
+                                      description: EVM bytecode to inject into the account (hex)
+                                    state:
+                                      type: object
+                                      description: Key-value pairs that replace the entire account storage
+                                      additionalProperties:
+                                        type: string
+                                    stateDiff:
+                                      type: object
+                                      description: Key-value pairs that override individual account storage slots
+                                      additionalProperties:
+                                        type: string
+                                    movePrecompileToAddress:
+                                      type: string
+                                      description: Target address to move the precompile to
+                                example:
+                                  "0xc000000000000000000000000000000000000000":
+                                    balance: "0x4a817c420"
+                              calls:
+                                type: array
+                                description: Array of call objects to execute sequentially in this block.
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      description: The transaction type as a hex string. Defaults to `0x2` (EIP-1559).
+                                    from:
+                                      type: string
+                                      description: The transaction sender (from) address as a string.
+                                    to:
+                                      type: string
+                                      description: The transaction recipient (to) address as a string. Can be omitted when deploying a contract.
+                                    gas:
+                                      type: string
+                                      description: The gas limit allocated to this call, as a hex string.
+                                    gasPrice:
+                                      type: string
+                                      description: The price per gas unit, as a hex string. (Legacy transactions)
+                                    maxFeePerGas:
+                                      type: string
+                                      description: The maximum fee per gas you are willing to pay, as a hex string. (EIP-1559)
+                                    maxPriorityFeePerGas:
+                                      type: string
+                                      description: The maximum priority fee per gas paid to the validator, as a hex string. (EIP-1559)
+                                    maxFeePerBlobGas:
+                                      type: string
+                                      description: The maximum fee per blob gas you are willing to pay, as a hex string. Defaults to `0x0`. (EIP-4844)
+                                    blobVersionedHashes:
+                                      type: array
+                                      description: Versioned hashes of the blobs. Defaults to an empty array. (EIP-4844)
+                                      items:
+                                        type: string
+                                    nonce:
+                                      type: string
+                                      description: The transaction nonce as a hex string.
+                                    value:
+                                      type: string
+                                      description: The value of the transaction.
+                                    input:
+                                      type: string
+                                      description: The hashed method signature of the transaction to execute. You can find it in the ABI. It can also be provided in the `data` field.
+                                    accessList:
+                                      type: array
+                                      description: List of addresses and storage keys the transaction accesses during execution. (EIP-2930)
+                                      items:
+                                        type: object
+                                        properties:
+                                          address:
+                                            type: string
+                                            description: Contract address to be accessed
+                                          storageKeys:
+                                            type: array
+                                            description: Storage keys to be accessed
+                                            items:
+                                              type: string
+                        traceTransfers:
+                          type: boolean
+                          description: When set to `true`, native token transfers are included in the response `logs` as ERC-20 Transfer events. Defaults to `false`.
+                          example: true
+                        validation:
+                          type: boolean
+                          description: When set to `true`, EVM validation rules (balance, nonce, fees, and so on) are applied except for signature checks, making the simulation closer to a real transaction. Defaults to `false`.
+                          example: true
+                        returnFullTransactions:
+                          type: boolean
+                          description: When set to `true`, the `transactions` field in the response returns full transaction objects instead of transaction hashes. Defaults to `false`.
+                      description: |-
+                        An object containing the simulation configuration. It can contain the following fields.
+                        * `blockStateCalls`: Array of block definitions to simulate. (required, up to 256) Each item can contain `blockOverrides`, `stateOverrides`, and `calls`.
+                        * `traceTransfers`: Whether to include native token transfers in the logs as ERC-20 Transfer events.
+                        * `validation`: Whether to apply EVM validation rules except for signature checks.
+                        * `returnFullTransactions`: Whether to include full transaction objects in the response.
+                    - title: Block Number or Hash or Tag
+                      type: string
+                      pattern: ^0[xX][0-9a-fA-F]+$|^0[xX][0-9a-fA-F]{64}$|^(latest|earliest|pending|safe|finalized)$
+                      description: |
+                        Use one of block hash, block number, or block tag to specify a block.
+                        * Block number: hex string (ex. "0x1")
+                        * Block hash: 64-character hex string (ex. "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
+                        * Block tag: enum string (ex. "latest", "earliest", "pending")
+                          * `earliest`: The oldest available block on the chain.
+                          * `finalized`: A recently finalized block that can no longer be changed. Primarily used in proof-of-stake (PoS) blockchains.
+                          * `safe`: A recent block considered safe by the network (immune to reorgs).
+                          * `latest`: The most recent block on the chain (may be subject to reorgs).
+                          * `pending`: The next block to be mined, including pending transactions in the mempool.
+                      example: latest
+                  example:
+                  - blockStateCalls:
+                    - blockOverrides:
+                        baseFeePerGas: "0x9"
+                      stateOverrides:
+                        "0xc000000000000000000000000000000000000000":
+                          balance: "0x4a817c420"
+                      calls:
+                      - from: "0xc000000000000000000000000000000000000000"
+                        to: "0xc000000000000000000000000000000000000001"
+                        maxFeePerGas: "0xf"
+                        value: "0x1"
+                    traceTransfers: true
+                    validation: true
+                  - latest
+                  description: |-
+                    Enter the following parameters as an array according to their types.
+                    1. `simulation payload` - The block and call definitions to simulate (`blockStateCalls`) and the simulation options (`traceTransfers`, `validation`, `returnFullTransactions`).
+                    2. `block identifier` - The parent block used as the base of the simulation. You can enter a block number, block hash, or block tag. Defaults to `latest` when omitted.
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: eth_simulateV1
+                params:
+                - blockStateCalls:
+                  - blockOverrides:
+                      baseFeePerGas: "0x9"
+                    stateOverrides:
+                      "0xc000000000000000000000000000000000000000":
+                        balance: "0x4a817c420"
+                    calls:
+                    - from: "0xc000000000000000000000000000000000000000"
+                      to: "0xc000000000000000000000000000000000000001"
+                      maxFeePerGas: "0xf"
+                      value: "0x1"
+                  traceTransfers: true
+                  validation: true
+                - latest
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                - baseFeePerGas: "0x9"
+                  blobGasUsed: "0x0"
+                  calls:
+                  - returnData: 0x
+                    logs:
+                    - address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+                      topics:
+                      - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                      - "0x000000000000000000000000c000000000000000000000000000000000000000"
+                      - "0x000000000000000000000000c000000000000000000000000000000000000001"
+                      data: "0x0000000000000000000000000000000000000000000000000000000000000001"
+                      blockNumber: "0x14f2b4b"
+                      transactionHash: "0x87c1eb6a0b1a2f4a5b1e7c7fbf16a6f9ee1b3d6d1e19b4a8ca31b2f1a4b6b8a1"
+                      transactionIndex: "0x0"
+                      blockHash: "0x920189344ddf2bfadb7c8cf4362b8e8c18bfb021a5f6630f84d17460ca05f58c"
+                      logIndex: "0x0"
+                      removed: false
+                    gasUsed: "0x5208"
+                    status: "0x1"
+                  gasLimit: "0x4c4b40"
+                  gasUsed: "0x5208"
+                  hash: "0x920189344ddf2bfadb7c8cf4362b8e8c18bfb021a5f6630f84d17460ca05f58c"
+                  number: "0x14f2b4b"
+                  parentHash: "0x1e1b1cc0a1a1f1e6b6f6bbecdc3a1c1b1a0b7c9c8d8e9f0a1b2c3d4e5f607180"
+                  timestamp: "0x6821b0a0"
+                  transactions:
+                  - "0x87c1eb6a0b1a2f4a5b1e7c7fbf16a6f9ee1b3d6d1e19b4a8ca31b2f1a4b6b8a1"
+              schema:
+                $ref: '#/components/schemas/SimulateBlockResultArray'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

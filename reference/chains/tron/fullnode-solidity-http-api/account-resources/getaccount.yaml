@@ -1,0 +1,553 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetAccount
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getaccount:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getaccount
+      summary: GetAccount
+      description: Query information about an account, including TRX balance, TRC-10 balances, stake information and vote information and permissions etc. (Confirmed state)
+      x-seo-description: Query a TRON account's solidified balance, holdings and stake state.
+      tags:
+      - account-resources
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              visible: true
+            schema:
+              type: object
+              required:
+              - address
+              properties:
+                address:
+                  type: string
+                  description: 'Account address. (Format: Base58 or Hex). Example: `TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM`'
+                  example: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: Account details. Many fields are conditional — only present when the relevant feature is in use (e.g. `frozen[]` only for Stake 1.0 stakers; `asset_issued_ID` only if the account issued a TRC-10).
+          content:
+            application/json:
+              schema:
+                type: object
+                description: TRON account state — TRX balance, TRC-10 holdings, stake (1.0 + 2.0) state, votes, and permissions. Many fields are conditional and only appear when relevant (e.g. asset_issued_name only if the account issued a TRC-10).
+                properties:
+                  account_name:
+                    type: string
+                    description: Account name. (Can be modified **once** via [wallet/updateaccount](https://developers.tron.network/reference/updateaccount)).
+                  address:
+                    type: string
+                    description: Account address. Base58 if `visible=true` on the request, hex (21 bytes including the 0x41 prefix) otherwise.
+                  type:
+                    type: string
+                    enum:
+                    - Normal
+                    - AssetIssue
+                    - Contract
+                    description: Account type. `Normal` is default and omitted; `AssetIssue` is a TRC-10 issuer; `Contract` is a smart-contract account.
+                  create_time:
+                    type: int64
+                    description: Account creation timestamp, in milliseconds.
+                    format: int64
+                  balance:
+                    type: integer
+                    format: int64
+                    description: TRX balance, in sun (1 TRX = 1,000,000 sun).
+                  account_id:
+                    type: string
+                    description: Account ID (custom identifier set by the account holder).
+                  frozen:
+                    type: array
+                    description: '**Stake 1.0** — TRX staked for Bandwidth. Legacy; new staking uses `frozenV2`.'
+                    items:
+                      type: object
+                      description: '**Stake 1.0** frozen-balance entry. Legacy — new code should use `FreezeV2`.'
+                      properties:
+                        frozen_balance:
+                          type: integer
+                          format: int64
+                          description: Amount of TRX staked, in sun.
+                        expire_time:
+                          type: integer
+                          format: int64
+                          description: Timestamp (ms) when the unstake operation becomes available.
+                  delegated_frozen_balance_for_bandwidth:
+                    type: integer
+                    format: int64
+                    description: '**Stake 1.0** — total TRX this account has staked to delegate Bandwidth to others, in sun.'
+                  acquired_delegated_frozen_balance_for_bandwidth:
+                    type: integer
+                    format: int64
+                    description: '**Stake 1.0** — total TRX delegated to this account from others for Bandwidth, in sun.'
+                  frozenV2:
+                    type: array
+                    description: '**Stake 2.0** — list of self-staked TRX entries by resource type (BANDWIDTH / ENERGY / TRON_POWER). Excludes delegated TRX. Each resource type appears at most once.'
+                    items:
+                      type: object
+                      description: '**Stake 2.0** self-staked TRX entry. Each resource type (BANDWIDTH / ENERGY / TRON_POWER) appears at most once per account in the `frozenV2` array.'
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - BANDWIDTH
+                          - ENERGY
+                          - TRON_POWER
+                          description: Resource type. `BANDWIDTH` is the default and **omitted from JSON when it would be the value**; `ENERGY` and `TRON_POWER` appear explicitly.
+                        amount:
+                          type: integer
+                          format: int64
+                          description: Self-staked TRX amount for this resource, in sun. Omitted from JSON when 0.
+                  unfrozenV2:
+                    type: array
+                    description: 'List of unstaking operations. Each item contains: `type` (resource type); `unfreeze_amount` (amount of TRX unstaked), and `unfreeze_expire_time` (start timestamp when the unstaked TRX can be withdrawn; unit: ms). (For **Stake 2.0**)'
+                    items:
+                      type: object
+                      description: '**Stake 2.0** pending unstake operation. The TRX becomes withdrawable at `unfreeze_expire_time`.'
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - BANDWIDTH
+                          - ENERGY
+                          - TRON_POWER
+                          description: Resource type being unstaked. `BANDWIDTH` is default and omitted.
+                        unfreeze_amount:
+                          type: integer
+                          format: int64
+                          description: Amount of TRX being unstaked, in sun.
+                        unfreeze_expire_time:
+                          type: integer
+                          format: int64
+                          description: 'Timestamp (ms) when the unstaked TRX can be withdrawn via `wallet/withdrawexpireunfreeze`. Wait period = chain param #70 `getUnfreezeDelayDays` (default 14 days on Mainnet).'
+                  delegated_frozenV2_balance_for_bandwidth:
+                    type: integer
+                    format: int64
+                    description: '**Stake 2.0** — total TRX this account has staked to delegate Bandwidth to others, in sun.'
+                  acquired_delegated_frozenV2_balance_for_bandwidth:
+                    type: integer
+                    format: int64
+                    description: '**Stake 2.0** — total TRX delegated to this account from others for Bandwidth, in sun.'
+                  net_usage:
+                    type: integer
+                    format: int64
+                    description: Amount of staked Bandwidth used by the account.
+                  free_net_usage:
+                    type: integer
+                    format: int64
+                    description: Amount of free Bandwidth used (per-account daily 600 free Bandwidth allowance).
+                  net_window_size:
+                    type: integer
+                    format: int64
+                    description: Duration, in blocks, for staked Bandwidth to fully recover. Has decimal precision of 3 if `net_window_optimized` is true, otherwise 0.
+                  net_window_optimized:
+                    type: boolean
+                    description: Whether the Bandwidth recovery window optimization is enabled.
+                  latest_consume_time:
+                    type: integer
+                    format: int64
+                    description: Timestamp (ms) of the last time the account consumed staked Bandwidth.
+                  latest_consume_free_time:
+                    type: integer
+                    format: int64
+                    description: Timestamp (ms) of the last time the account consumed free Bandwidth.
+                  account_resource:
+                    type: object
+                    description: Energy resource state for the account. (Bandwidth resource state is on the parent Account directly.)
+                    properties:
+                      frozen_balance_for_energy:
+                        allOf:
+                        - type: object
+                          description: '**Stake 1.0** frozen-balance entry. Legacy — new code should use `FreezeV2`.'
+                          properties:
+                            frozen_balance:
+                              type: integer
+                              format: int64
+                              description: Amount of TRX staked, in sun.
+                            expire_time:
+                              type: integer
+                              format: int64
+                              description: Timestamp (ms) when the unstake operation becomes available.
+                        description: '**Stake 1.0** — self-staked TRX for Energy.'
+                      delegated_frozen_balance_for_energy:
+                        type: integer
+                        format: int64
+                        description: '**Stake 1.0** — TRX this account staked to delegate Energy to others, in sun.'
+                      acquired_delegated_frozen_balance_for_energy:
+                        type: integer
+                        format: int64
+                        description: '**Stake 1.0** — TRX delegated to this account from others for Energy, in sun.'
+                      delegated_frozenV2_balance_for_energy:
+                        type: integer
+                        format: int64
+                        description: '**Stake 2.0** — TRX this account staked to delegate Energy to others, in sun.'
+                      acquired_delegated_frozenV2_balance_for_energy:
+                        type: integer
+                        format: int64
+                        description: '**Stake 2.0** — TRX delegated to this account from others for Energy, in sun.'
+                      energy_usage:
+                        type: integer
+                        format: int64
+                        description: Amount of Energy used by the account.
+                      latest_consume_time_for_energy:
+                        type: integer
+                        format: int64
+                        description: Timestamp (ms) of the last time the account consumed staked Energy.
+                      energy_window_size:
+                        type: integer
+                        format: int64
+                        description: Duration in blocks for Energy to fully recover. Has decimal precision of 3 if `energy_window_optimized` is true, otherwise 0.
+                      energy_window_optimized:
+                        type: boolean
+                        description: Whether the Energy recovery window optimization is enabled.
+                  votes:
+                    type: Vote[]
+                    description: List of `Vote` objects, each containing `vote_address` (SR address) and `vote_count` (number of votes).
+                  latest_opration_time:
+                    type: integer
+                    format: int64
+                    description: 'Timestamp (ms) of the account''s last operation. **Note**: field name is `latest_opration_time` (missing ''e'') — this is the actual protocol spelling; do not rename to ''operation''.'
+                  is_witness:
+                    type: boolean
+                    description: Whether the account is a Super Representative (SR), Partner, or Candidate.
+                  allowance:
+                    type: integer
+                    format: int64
+                    description: Amount of withdrawable SR / voter rewards, in sun.
+                  latest_withdraw_time:
+                    type: integer
+                    format: int64
+                    description: Timestamp (ms) of the account's last reward withdrawal. Withdrawals are restricted to once per 24 hours.
+                  owner_permission:
+                    allOf:
+                    - type: object
+                      description: Account permission descriptor. TRON accounts have Owner (always), optional Witness (SR only), and up to 8 Active permissions. See [Account Permission Management](https://developers.tron.network/docs/multi-signature).
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - Owner
+                          - Witness
+                          - Active
+                          description: Permission type. `Owner` is the default and may be omitted in JSON.
+                        id:
+                          type: integer
+                          description: Permission ID. 0 = Owner (omitted in JSON), 1 = Witness, 2-8 = Active.
+                        permission_name:
+                          type: string
+                          description: Human-readable permission name (e.g. `owner`, `active`, `witness`).
+                        threshold:
+                          type: integer
+                          format: int64
+                          description: Sum of signature weights required to authorize an operation under this permission.
+                        operations:
+                          type: string
+                          description: 32-byte (64 hex characters) bitmap restricting which contract types this permission can sign. Bit N corresponds to `ContractType` enum value N (see Tron.proto). **Only present on Active permissions** — Owner and Witness can sign anything within their scope.
+                        parent_id:
+                          type: integer
+                          description: Parent permission ID. Typically 0 (Owner) for non-Owner permissions.
+                        keys:
+                          type: array
+                          description: List of (address, weight) pairs whose signatures can authorize this permission.
+                          items:
+                            type: object
+                            description: A (address, weight) pair within a Permission.
+                            properties:
+                              address:
+                                type: string
+                                description: Signer address (Base58 if `visible=true`, hex otherwise).
+                              weight:
+                                type: integer
+                                format: int64
+                                description: Signature weight contributed by this key. Sum of weights of signers must meet the Permission's threshold.
+                    description: Owner permission. Controls account ownership transfer and permission updates. Always present.
+                  witness_permission:
+                    allOf:
+                    - type: object
+                      description: Account permission descriptor. TRON accounts have Owner (always), optional Witness (SR only), and up to 8 Active permissions. See [Account Permission Management](https://developers.tron.network/docs/multi-signature).
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - Owner
+                          - Witness
+                          - Active
+                          description: Permission type. `Owner` is the default and may be omitted in JSON.
+                        id:
+                          type: integer
+                          description: Permission ID. 0 = Owner (omitted in JSON), 1 = Witness, 2-8 = Active.
+                        permission_name:
+                          type: string
+                          description: Human-readable permission name (e.g. `owner`, `active`, `witness`).
+                        threshold:
+                          type: integer
+                          format: int64
+                          description: Sum of signature weights required to authorize an operation under this permission.
+                        operations:
+                          type: string
+                          description: 32-byte (64 hex characters) bitmap restricting which contract types this permission can sign. Bit N corresponds to `ContractType` enum value N (see Tron.proto). **Only present on Active permissions** — Owner and Witness can sign anything within their scope.
+                        parent_id:
+                          type: integer
+                          description: Parent permission ID. Typically 0 (Owner) for non-Owner permissions.
+                        keys:
+                          type: array
+                          description: List of (address, weight) pairs whose signatures can authorize this permission.
+                          items:
+                            type: object
+                            description: A (address, weight) pair within a Permission.
+                            properties:
+                              address:
+                                type: string
+                                description: Signer address (Base58 if `visible=true`, hex otherwise).
+                              weight:
+                                type: integer
+                                format: int64
+                                description: Signature weight contributed by this key. Sum of weights of signers must meet the Permission's threshold.
+                    description: Witness permission. Only present for SR accounts; controls block signing.
+                  active_permission:
+                    type: array
+                    description: Active permissions (up to 8 per account). Each restricts which contract types it can authorize via the `operations` bitmap.
+                    items:
+                      type: object
+                      description: Account permission descriptor. TRON accounts have Owner (always), optional Witness (SR only), and up to 8 Active permissions. See [Account Permission Management](https://developers.tron.network/docs/multi-signature).
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - Owner
+                          - Witness
+                          - Active
+                          description: Permission type. `Owner` is the default and may be omitted in JSON.
+                        id:
+                          type: integer
+                          description: Permission ID. 0 = Owner (omitted in JSON), 1 = Witness, 2-8 = Active.
+                        permission_name:
+                          type: string
+                          description: Human-readable permission name (e.g. `owner`, `active`, `witness`).
+                        threshold:
+                          type: integer
+                          format: int64
+                          description: Sum of signature weights required to authorize an operation under this permission.
+                        operations:
+                          type: string
+                          description: 32-byte (64 hex characters) bitmap restricting which contract types this permission can sign. Bit N corresponds to `ContractType` enum value N (see Tron.proto). **Only present on Active permissions** — Owner and Witness can sign anything within their scope.
+                        parent_id:
+                          type: integer
+                          description: Parent permission ID. Typically 0 (Owner) for non-Owner permissions.
+                        keys:
+                          type: array
+                          description: List of (address, weight) pairs whose signatures can authorize this permission.
+                          items:
+                            type: object
+                            description: A (address, weight) pair within a Permission.
+                            properties:
+                              address:
+                                type: string
+                                description: Signer address (Base58 if `visible=true`, hex otherwise).
+                              weight:
+                                type: integer
+                                format: int64
+                                description: Signature weight contributed by this key. Sum of weights of signers must meet the Permission's threshold.
+                  asset:
+                    type: array
+                    description: TRC-10 token balances keyed by token name. **Deprecated** — use `assetV2` ([TIP-382](https://github.com/tronprotocol/tips/blob/master/tip-382.md)). Map serialized as array of `{key, value}`.
+                    items:
+                      type: object
+                      description: Map entry. TRON's HTTP API serializes protobuf `map<string, int64>` as an array of `{key, value}` objects (rather than a JSON object with dynamic keys).
+                      properties:
+                        key:
+                          type: string
+                          description: TRC-10 token name.
+                        value:
+                          type: integer
+                          description: Balance of the token.
+                          format: int64
+                  assetV2:
+                    type: array
+                    description: TRC-10 token balances keyed by Token ID. Replaces `asset` to support same-name tokens ([TIP-382](https://github.com/tronprotocol/tips/blob/master/tip-382.md)). Map serialized as array of `{key, value}`.
+                    items:
+                      type: object
+                      description: Map entry. TRON's HTTP API serializes protobuf `map<string, int64>` as an array of `{key, value}` objects (rather than a JSON object with dynamic keys).
+                      properties:
+                        key:
+                          type: string
+                          description: TRC-10 Token ID.
+                        value:
+                          type: integer
+                          description: Balance of the token.
+                          format: int64
+                  asset_issued_name:
+                    type: string
+                    description: Name of the TRC-10 token issued by this account (only if it issued one — accounts can issue at most one TRC-10).
+                  asset_issued_ID:
+                    type: string
+                    description: Token ID of the TRC-10 issued by this account (only if it issued one).
+                  free_asset_net_usage:
+                    type: array
+                    description: Free Bandwidth consumed for TRC-10 transfers, keyed by TRC-10 token name. **Deprecated** — use V2.
+                    items:
+                      type: object
+                      description: Map entry. TRON's HTTP API serializes protobuf `map<string, int64>` as an array of `{key, value}` objects (rather than a JSON object with dynamic keys).
+                      properties:
+                        key:
+                          type: string
+                          description: TRC-10 token name.
+                        value:
+                          type: integer
+                          description: Free Bandwidth consumed for transfers of the token.
+                          format: int64
+                  free_asset_net_usageV2:
+                    type: array
+                    description: Free Bandwidth consumed for TRC-10 transfers, keyed by TRC-10 Token ID.
+                    items:
+                      type: object
+                      description: Map entry. TRON's HTTP API serializes protobuf `map<string, int64>` as an array of `{key, value}` objects (rather than a JSON object with dynamic keys).
+                      properties:
+                        key:
+                          type: string
+                          description: TRC-10 Token ID.
+                        value:
+                          type: integer
+                          description: Free Bandwidth consumed for transfers of the token.
+                          format: int64
+                  latest_asset_operation_time:
+                    type: array
+                    description: Timestamp (ms) of last asset operation, keyed by TRC-10 token name. **Deprecated** — use V2.
+                    items:
+                      type: object
+                      description: Map entry. TRON's HTTP API serializes protobuf `map<string, int64>` as an array of `{key, value}` objects (rather than a JSON object with dynamic keys).
+                      properties:
+                        key:
+                          type: string
+                          description: TRC-10 token name.
+                        value:
+                          type: integer
+                          description: 'Timestamp of the last operation for the token. (Unit: millisecond)'
+                          format: int64
+                  latest_asset_operation_timeV2:
+                    type: array
+                    description: Timestamp (ms) of last asset operation, keyed by TRC-10 Token ID.
+                    items:
+                      type: object
+                      description: Map entry. TRON's HTTP API serializes protobuf `map<string, int64>` as an array of `{key, value}` objects (rather than a JSON object with dynamic keys).
+                      properties:
+                        key:
+                          type: string
+                          description: TRC-10 Token ID.
+                        value:
+                          type: integer
+                          description: 'Timestamp of the last operation for the token. (Unit: millisecond)'
+                          format: int64
+                  asset_optimized:
+                    type: boolean
+                    description: Whether asset-storage optimization is enabled for this account.
+              examples:
+                Result:
+                  value: |-
+                    {
+                      "address": "TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM",
+                      "balance": 1750447480,
+                      "create_time": 1619598471000,
+                      "latest_opration_time": 1776410580000,
+                      "asset_issued_name": "Vitrc10",
+                      "latest_consume_time": 1776410580000,
+                      "latest_consume_free_time": 1776409401000,
+                      "net_window_size": 28800000,
+                      "net_window_optimized": true,
+                      "account_resource": {
+                        "latest_consume_time_for_energy": 1718353407000,
+                        "energy_window_size": 28800000,
+                        "acquired_delegated_frozenV2_balance_for_energy": 145000000,
+                        "energy_window_optimized": true
+                      },
+                      "owner_permission": {
+                        "permission_name": "owner",
+                        "threshold": 1,
+                        "keys": [
+                          {
+                            "address": "TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM",
+                            "weight": 1
+                          }
+                        ]
+                      },
+                      "active_permission": [
+                        {
+                          "type": "Active",
+                          "id": 2,
+                          "permission_name": "active",
+                          "threshold": 2,
+                          "operations": "77ff0fc0027ec30f000000000000000000000000000000000000000000000000",
+                          "keys": [
+                            {
+                              "address": "TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM",
+                              "weight": 1
+                            },
+                            {
+                              "address": "TFuFTXmkSmL4ow9iSctapSwfcMRUJA86UU",
+                              "weight": 1
+                            }
+                          ]
+                        }
+                      ],
+                      "frozenV2": [
+                        {
+                          "amount": 44907000000
+                        },
+                        {
+                          "type": "ENERGY",
+                          "amount": 5000000
+                        },
+                        {
+                          "type": "TRON_POWER"
+                        }
+                      ],
+                      "delegated_frozenV2_balance_for_bandwidth": 93000000,
+                      "assetV2": [
+                        {
+                          "key": "1000745",
+                          "value": 99900
+                        }
+                      ],
+                      "asset_issued_ID": "1000745",
+                      "free_asset_net_usageV2": [
+                        {
+                          "key": "1000745",
+                          "value": 0
+                        }
+                      ],
+                      "asset_optimized": true
+                    }
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

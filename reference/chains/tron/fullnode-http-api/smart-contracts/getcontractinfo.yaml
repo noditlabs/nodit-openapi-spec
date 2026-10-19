@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetContractInfo
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getcontractinfo:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getcontractinfo
+      summary: GetContractInfo
+      description: Queries a contract's information from the blockchain. The difference from the `wallet/getcontract` interface is that this interface returns not only the `bytecode` but also the `runtime bytecode` of the contract. Compared with `bytecode`, `runtime bytecode` does not contain constructor and constructor parameter information.
+      x-seo-description: Query a TRON smart contract's runtime bytecode and resource state.
+      tags:
+      - smart-contracts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+              visible: true
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: |-
+                    Contract address (format: Base58 or Hex).
+                    Example: `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs`
+                  example: TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: true
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  runtimecode:
+                    type: string
+                    description: Runtime bytecode of the contract.
+                  smart_contract:
+                    type: object
+                    description: Smart contract object. See [GetContract](https://developers.tron.network/reference/wallet-getcontract) for fields.
+                    properties: {}
+                  contract_state:
+                    type: object
+                    description: State of the contract. See [Resource model APIs](https://developers.tron.network/docs/resource-model#apis) for details.
+                    properties:
+                      energy_usage:
+                        type: integer
+                        format: int64
+                        description: Total basic energy usage of the contract in the current maintenance cycle.
+                      energy_factor:
+                        type: integer
+                        format: int64
+                        description: Energy factor of the contract.
+                      update_cycle:
+                        type: integer
+                        format: int64
+                        description: Current maintenance cycle number.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

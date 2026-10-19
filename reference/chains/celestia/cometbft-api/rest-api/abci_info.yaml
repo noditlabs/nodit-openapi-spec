@@ -3,7 +3,7 @@ info:
   title: Celestia - ABCIInfo
   version: 1.0.0
 servers:
-  - url: https://rpc-celestia-mainnet.nodit.io
+- url: https://rpc-celestia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /abci_info:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: abci_info
       summary: ABCIInfo
       description: Retrieves basic information about the ABCI application.
       tags:
-        - rest-api
+      - rest-api
       responses:
         "200":
           content:
@@ -32,28 +32,35 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       response:
+                        description: Response from the ABCI application.
                         type: object
                         additionalProperties: false
                         properties:
                           data:
+                            description: Application information string.
                             type: string
                           version:
+                            description: Application software version.
                             type: string
                           app_version:
+                            description: Application protocol version.
                             type: string
               example:
                 jsonrpc: "2.0"

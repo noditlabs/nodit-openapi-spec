@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBlockByLatestNum
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getblockbylatestnum:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getblockbylatestnum
+      summary: GetBlockByLatestNum
+      description: Retrieves a list of the most recent blocks. Starting from the latest solidified block, the method returns the specified number (num) of blocks in descending order of height.
+      x-seo-description: Retrieve the most recent solidified TRON blocks as a list.
+      tags:
+      - blocks
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              num: 5
+            schema:
+              type: object
+              required:
+              - num
+              properties:
+                num:
+                  type: integer
+                  format: int32
+                  description: 'Number of most recent blocks to retrieve. Example: `5`'
+                  example: 5
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                type: array
+                description: List of Block objects (solidified), most recent first.
+                items:
+                  type: object
+                  description: TRON block object. See [/wallet/getblock](https://developers.tron.network/reference/getblock-1) for full structure.
+                  properties: {}
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

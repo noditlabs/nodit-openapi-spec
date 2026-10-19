@@ -3,10 +3,10 @@ info:
   title: Solana - getMultipleAccounts
   version: 1.0.0
 servers:
-  - url: https://solana-mainnet.nodit.io
-    description: Solana Mainnet
-  - url: https://solana-devnet.nodit.io
-    description: Solana Devnet
+- url: https://solana-mainnet.nodit.io
+  description: Solana Mainnet
+- url: https://solana-devnet.nodit.io
+  description: Solana Devnet
 components:
   securitySchemes:
     api_key:
@@ -26,9 +26,9 @@ components:
         - confirmed - the node will query the most recent block that has been voted on by supermajority of the cluster.
         - processed - the node will query its most recent block. Note that the block may still be skipped by the cluster.
       enum:
-        - processed
-        - confirmed
-        - finalized
+      - processed
+      - confirmed
+      - finalized
     MinContextSlot:
       type: string
       description: The minimum slot that the request can be evaluated at.
@@ -46,10 +46,10 @@ components:
     Encoding:
       type: string
       enum:
-        - base58
-        - base64
-        - base64+zstd
-        - jsonParsed
+      - base58
+      - base64
+      - base64+zstd
+      - jsonParsed
       description: |
         Encoding format for the returned Account data
 
@@ -92,7 +92,7 @@ components:
           type: boolean
           description: Boolean indicating if the account contains a program (and is strictly read-only)
         lamports:
-          $ref: "#/components/schemas/Lamports"
+          $ref: '#/components/schemas/Lamports'
         owner:
           type: string
           description: Base-58 encoded Pubkey of the program this account has been assigned to
@@ -115,8 +115,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
     Error:
       type: object
       properties:
@@ -127,8 +127,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -139,24 +139,24 @@ components:
             properties:
               jsonrpc:
                 type: string
-                description: JSON-RPC version
+                description: The JSON-RPC version
                 example: "2.0"
               id:
                 type: integer
-                description: Request ID
+                description: The request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ErrorFromRPC"
+                $ref: '#/components/schemas/ErrorFromRPC'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -165,7 +165,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -174,16 +174,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -191,14 +191,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: solana-getMultipleAccounts
       summary: getMultipleAccounts
       description: |
         Returns the account information for a list of Pubkeys.
       x-seo-description: Retrieve account information for multiple Solana addresses in a single RPC request.
       tags:
-        - http
+      - http
       parameters: []
       requestBody:
         required: true
@@ -207,10 +207,10 @@ paths:
             schema:
               type: object
               required:
-                - jsonrpc
-                - id
-                - method
-                - params
+              - jsonrpc
+              - id
+              - method
+              - params
               properties:
                 jsonrpc:
                   type: string
@@ -231,31 +231,31 @@ paths:
                     2. ConfigurationObject (`optional`)
                   items:
                     oneOf:
-                      - title: Pubkeys
-                        type: array
-                        description: An array of Pubkeys to query, as base-58 encoded strings (up to a maximum of 100)
-                        items:
-                          type: string
-                      - title: Configuration Object
-                        type: object
-                        properties:
-                          commitment:
-                            $ref: "#/components/schemas/Commitment"
-                          minContextSlot:
-                            $ref: "#/components/schemas/MinContextSlot"
-                          dataSlice:
-                            $ref: "#/components/schemas/DataSlice"
-                          encoding:
-                            $ref: "#/components/schemas/Encoding"
+                    - title: Pubkeys
+                      type: array
+                      description: An array of Pubkeys to query, as base-58 encoded strings (up to a maximum of 100)
+                      items:
+                        type: string
+                    - title: Configuration Object
+                      type: object
+                      properties:
+                        commitment:
+                          $ref: '#/components/schemas/Commitment'
+                        minContextSlot:
+                          $ref: '#/components/schemas/MinContextSlot'
+                        dataSlice:
+                          $ref: '#/components/schemas/DataSlice'
+                        encoding:
+                          $ref: '#/components/schemas/Encoding'
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: getMultipleAccounts
                 params:
-                  - - vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg
-                    - 4fYNw3dojWmQ4dXtSGE9epjRGy9pFSx62YypT7avPYvA
-                  - encoding: base58
-                    commitment: finalized
+                - - vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg
+                  - 4fYNw3dojWmQ4dXtSGE9epjRGy9pFSx62YypT7avPYvA
+                - encoding: base58
+                  commitment: finalized
       responses:
         "200":
           description: Successful Response
@@ -263,18 +263,18 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/SuccessfulResponse"
-                  - type: object
-                    properties:
-                      result:
-                        type: object
-                        properties:
-                          context:
-                            $ref: "#/components/schemas/Context"
-                          value:
-                            type: array
-                            items:
-                              $ref: "#/components/schemas/Account"
+                - $ref: '#/components/schemas/SuccessfulResponse'
+                - type: object
+                  properties:
+                    result:
+                      type: object
+                      properties:
+                        context:
+                          $ref: '#/components/schemas/Context'
+                        value:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Account'
                 example:
                   jsonrpc: "2.0"
                   result:
@@ -282,30 +282,30 @@ paths:
                       apiVersion: 2.0.15
                       slot: 341197247
                     value:
-                      - data:
-                          - ""
-                          - base58
-                        executable: false
-                        lamports: 88849814690250
-                        owner: "11111111111111111111111111111111"
-                        rentEpoch: 18446744073709552000
-                        space: 0
-                      - data:
-                          - ""
-                          - base58
-                        executable: false
-                        lamports: 998763433
-                        owner: 2WRuhE4GJFoE23DYzp2ij6ZnuQ8p9mJeU6gDgfsjR4or
-                        rentEpoch: 18446744073709552000
-                        space: 0
+                    - data:
+                      - ""
+                      - base58
+                      executable: false
+                      lamports: 88849814690250
+                      owner: "11111111111111111111111111111111"
+                      rentEpoch: 18446744073709552000
+                      space: 0
+                    - data:
+                      - ""
+                      - base58
+                      executable: false
+                      lamports: 998763433
+                      owner: 2WRuhE4GJFoE23DYzp2ij6ZnuQ8p9mJeU6gDgfsjR4or
+                      rentEpoch: 18446744073709552000
+                      space: 0
                   id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

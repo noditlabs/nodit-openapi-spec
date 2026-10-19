@@ -1,0 +1,151 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetBlockBalance
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/getblockbalance:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getblockbalance
+      summary: GetBlockBalance
+      description: 'Get all balance change operations in a block.(Note: At present, the interface data can only be queried through the following official nodes 13.228.119.63 & 18.139.193.235&18.141.79.38 &18.139.248.26)'
+      x-seo-description: Query all balance change operations recorded in a TRON block.
+      tags:
+      - query-the-network
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              hash: 00000000052b3fa2d0034a3cd2b4d64daf8d4ebf4e72e8d262cc47e9592b2453
+              number: 86720418
+              visible: true
+            schema:
+              type: object
+              properties:
+                hash:
+                  type: string
+                  description: 'Block hash (ID). Example: `0000000003dba95c7f05cedf1ba32cd64b6baa082a7870f533b4451703e432ab `'
+                  example: 0000000003dba95c7f05cedf1ba32cd64b6baa082a7870f533b4451703e432ab
+                number:
+                  type: integer
+                  format: int32
+                  description: 'Block number. The block hash and block number must be consistent, referring to the same block. Example: `64727388`'
+                  example: 64727388
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - hash
+              - number
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: int64
+                    description: 'Timestamp. (Unit: millisecond)'
+                    format: int64
+                  block_identifier:
+                    type: object
+                    properties:
+                      hash:
+                        type: string
+                        description: Block hash.
+                      number:
+                        type: integer
+                        format: int64
+                        description: Block number.
+                  transaction_balance_trace:
+                    type: array
+                    items:
+                      type: object
+                      description: Transaction balance change trace, returned by getblockbalance per-tx.
+                      properties: {}
+                    description: List of transaction information with balance changes.
+                  transaction_identifier:
+                    type: string
+                    description: Transaction ID (hash).
+                  operation:
+                    type: array
+                    items:
+                      type: object
+                      description: Internal balance operation within a transaction.
+                      properties: {}
+                    description: List of balance change operations in this transaction, including sender deductions, receiver additions, and resource fee burns (Bandwidth/Energy). Each item contains `operation_identifier` (index), `address` (affected address), and `amount` (balance change).
+                  type:
+                    type: string
+                    description: Transaction type.
+                  status:
+                    type: string
+                    description: Transaction result status.
+              examples:
+                Result:
+                  value: |-
+                    {
+                        "block_identifier": {
+                            "hash": "000000000000dc2a3731e28a75b49ac1379bcc425afc95f6ab3916689fbb0189",
+                            "number": 56362
+                        },
+                        "timestamp": 1530060672000,
+                        "transaction_balance_trace": [
+                            {
+                                "transaction_identifier": "e6cabb1833cd1f795eed39d8dd7689eaa70e5bb217611766c74c7aa9feea80df",
+                                "operation": [
+                                    {
+                                        "operation_identifier": 0,
+                                        "address": "TPttBLmFuykRi83y9HxDoEWxTQw6CCcQ4p",
+                                        "amount": -100000
+                                    },
+                                    {
+                                        "operation_identifier": 1,
+                                        "address": "TLsV52sRDL79HXGGm9yzwKibb6BeruhUzy",
+                                        "amount": 100000
+                                    },
+                                    {
+                                        "operation_identifier": 2,
+                                        "address": "TPttBLmFuykRi83y9HxDoEWxTQw6CCcQ4p",
+                                        "amount": -10000000
+                                    },
+                                    {
+                                        "operation_identifier": 3,
+                                        "address": "TMrysg7DbwR1M8xqhpaPdVCHCuWFhw7uk1",
+                                        "amount": 10000000
+                                    }
+                                ],
+                                "type": "TransferContract",
+                                "status": "SUCCESS"
+                            }
+                        ]
+                    }
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

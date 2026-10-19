@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  title: Tron - BroadcastHex
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/broadcasthex:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-broadcasthex
+      summary: BroadcastHex
+      description: Broadcasts a signed, protocol buffer-encoded transaction hex string to the network.
+      x-seo-description: Broadcast a signed, protobuf-encoded TRON transaction hex string.
+      tags:
+      - transactions
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              transaction: 0A8A010A0202DB2208C89D4811359A28004098A4E0A6B52D5A730802126F0A32747970652E676F6F676C65617069732E636F6D2F70726F746F636F6C2E5472616E736665724173736574436F6E747261637412390A07313030303030311215415A523B449890854C8FC460AB602DF9F31FE4293F1A15416B0580DA195542DDABE288FEC436C7D5AF769D24206412418BF3F2E492ED443607910EA9EF0A7EF79728DAAAAC0EE2BA6CB87DA38366DF9AC4ADE54B2912C1DEB0EE6666B86A07A6C7DF68F1F9DA171EEE6A370B3CA9CBBB00
+            schema:
+              type: object
+              required:
+              - transaction
+              properties:
+                transaction:
+                  type: string
+                  description: |-
+                    Transaction object. See [here](https://developers.tron.network/docs/tron-protocol-transaction) for details. (Format: Hex).
+                    e.g., 0A8A010A0202DB2208C89D4811359A28004098A4E0A6B52D5A730802126F0A32747970652E676F6F676C65617069732E636F6D2F70726F746F636F6C2E5472616E736665724173736574436F6E747261637412390A07313030303030311215415A523B449890854C8FC460AB602DF9F31FE4293F1A15416B0580DA195542DDABE288FEC436C7D5AF769D24206412418BF3F2E492ED443607910EA9EF0A7EF79728DAAAAC0EE2BA6CB87DA38366DF9AC4ADE54B2912C1DEB0EE6666B86A07A6C7DF68F1F9DA171EEE6A370B3CA9CBBB00
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '`result`':
+                    type: boolean
+                    description: Whether the broadcast was successful. `true` - successful; `false` - failed. (Field omitted in result).
+                  '`txid`':
+                    type: string
+                    description: The transaction hash.
+                  '`code`':
+                    type: string
+                    description: Error code indicating the result.
+                  '`message`':
+                    type: string
+                    description: Detailed error information.
+                  '`transaction`':
+                    type: object
+                    description: The transaction object. Refer to the [Transaction](https://developers.tron.network/docs/tron-protocol-transaction)  chapter for details.
+                    properties: {}
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

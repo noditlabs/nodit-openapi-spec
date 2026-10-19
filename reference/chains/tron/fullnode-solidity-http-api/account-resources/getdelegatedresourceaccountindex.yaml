@@ -1,0 +1,83 @@
+openapi: 3.1.0
+info:
+  title: Tron - GetDelegatedResourceAccountIndex
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /walletsolidity/getdelegatedresourceaccountindex:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-getdelegatedresourceaccountindex
+      summary: GetDelegatedResourceAccountIndex
+      description: Query the resource delegation during stake 2.0 by an account. i.e. list all addresses that have delegated resources to an account. (Confirmed state)
+      x-seo-description: Query the solidified Stake 1.0 resource delegation index of a TRON account.
+      tags:
+      - account-resources
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              value: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              visible: true
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: 'The queried account address. (Format: Base58 or Hex)'
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - value
+      responses:
+        "200":
+          description: Successful response. (solidified state)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  account:
+                    type: string
+                    description: Account address.
+                  fromAccounts:
+                    type: array
+                    items:
+                      type: string
+                    description: List of account addresses that delegate resources to this account.
+                  toAccounts:
+                    type: array
+                    items:
+                      type: string
+                    description: List of account addresses that receive resources delegated by this account.
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

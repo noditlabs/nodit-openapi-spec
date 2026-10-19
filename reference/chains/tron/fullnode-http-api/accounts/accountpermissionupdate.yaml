@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: Tron - AccountPermissionUpdate
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/accountpermissionupdate:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-accountpermissionupdate
+      summary: AccountPermissionUpdate
+      description: Update the account's permission.
+      x-seo-description: Create a transaction that updates a TRON account's multi-signature permissions.
+      tags:
+      - accounts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              owner:
+                type: 0
+                permission_name: owner
+                threshold: 1
+                keys:
+                - address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                  weight: 1
+              actives:
+              - type: 2
+                permission_name: active0
+                threshold: 2
+                operations: 7fff1fc0037e0000000000000000000000000000000000000000000000000000
+                keys:
+                - address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+                  weight: 1
+                - address: TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1
+                  weight: 1
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                actives:
+                  type: string
+                  description: "List of active permissions for the account. Example: `[{ \t\"type\": 2, \t\"permission_name\": \"active0\", \t\"threshold\": 2, \t\"operations\": \"7fff1fc0037e0000000000000000000000000000000000000000000000000000\", \t\"keys\": [{ \t\t\"address\": \"TJZuV6A9QRdtVeJBvewCF9fLF2qnRSEv3y\", \t\t\"weight\": 1 \t}, { \t\t\"address\": \"TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1\", \t\t\"weight\": 1 \t}] }]`"
+                  format: json
+                  example: "[{ \t\"type\": 2, \t\"permission_name\": \"active0\", \t\"threshold\": 2, \t\"operations\": \"7fff1fc0037e0000000000000000000000000000000000000000000000000000\", \t\"keys\": [{ \t\t\"address\": \"TJZuV6A9QRdtVeJBvewCF9fLF2qnRSEv3y\", \t\t\"weight\": 1 \t}, { \t\t\"address\": \"TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1\", \t\t\"weight\": 1 \t}] }]"
+                owner:
+                  type: string
+                  description: "Owner permission object of the account. Example: `{ \t\"type\": 0, \t\"permission_name\": \"owner\", \t\"threshold\":1, \t\"keys\": [{ \t\t\"address\": \"TJZuV6A9QRdtVeJBvewCF9fLF2qnRSEv3y\", \t\t\"weight\": 1 \t}] }`"
+                  format: json
+                  example: "{ \t\"type\": 0, \t\"permission_name\": \"owner\", \t\"threshold\":1, \t\"keys\": [{ \t\t\"address\": \"TJZuV6A9QRdtVeJBvewCF9fLF2qnRSEv3y\", \t\t\"weight\": 1 \t}] }"
+                witness:
+                  type: string
+                  description: |-
+                    Witness permission object (for Super Representatives). Example: `{"type": 1,
+                    "permission_name": "witness",
+                        "threshold": 1,
+                        "keys": [{ "address": "TJZuV6A9QRdtVeJBvewCF9fLF2qnRSEv3y",  "weight": 1 }]}`
+                  format: json
+                  example: |-
+                    {"type": 1,
+                    "permission_name": "witness",
+                        "threshold": 1,
+                        "keys": [{ "address": "TJZuV6A9QRdtVeJBvewCF9fLF2qnRSEv3y",  "weight": 1 }]}
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+              required:
+              - owner_address
+              - owner
+              - actives
+      responses:
+        "200":
+          description: Unsigned (or signed) transaction object ready for signing / broadcasting.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: TRON transaction object. See [wallet-gettransactionbyid](https://developers.tron.network/reference/wallet-gettransactionbyid) for full structure.
+                properties: {}
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

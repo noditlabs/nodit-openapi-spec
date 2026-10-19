@@ -1,0 +1,103 @@
+openapi: 3.1.0
+info:
+  title: Tron - CreateTransaction
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/createtransaction:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-createtransaction
+      summary: CreateTransaction
+      description: Creates a TRX transfer transaction. If the recipient account (to_address) does not exist, it will be automatically activated.
+      x-seo-description: Create an unsigned TRX transfer transaction.
+      tags:
+      - transactions
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              to_address: TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1
+              amount: 1000000
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                to_address:
+                  type: string
+                  description: 'Recipient address. (Format: Base58 or Hex). Example: `4198927FFB9F554DC4A453C64B2E553A02D6DF514B`'
+                  example: 4198927FFB9F554DC4A453C64B2E553A02D6DF514B
+                amount:
+                  type: integer
+                  description: |-
+                    Amount of TRX to transfer. (Unit: sun).
+                    e.g., 1000
+                  default: "-1"
+                  format: int64
+                Permission_id:
+                  type: integer
+                  description: Optional. Permission ID used for multi-signature account operations. Defaults to the owner permission (0) if unspecified.
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+                  default: "false"
+                extra_data:
+                  type: string
+                  description: Remarks or notes for the transaction, in Hex format.
+              required:
+              - owner_address
+              - to_address
+              - amount
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                  to_address:
+                    type: string
+                    description: Recipient address.
+                  amount:
+                    type: integer
+                    format: int64
+                    description: 'Amount of TRX to transfer. (Unit: sun, 1 TRX = 1,000,000 sun).'
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

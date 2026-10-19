@@ -1,0 +1,556 @@
+openapi: 3.1.0
+info:
+  title: Avalanche - eth_getBlockReceipts
+  version: 1.0.0
+servers:
+- url: https://avalanche-mainnet.nodit.io
+  description: Avalanche Mainnet
+- url: https://avalanche-fuji.nodit.io
+  description: Avalanche Fuji
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    Log:
+      type: object
+      description: An event log object containing information about events emitted during transaction execution.
+      properties:
+        address:
+          type: string
+          description: The address of the contract that emitted this log
+        topics:
+          type: array
+          description: Array of event signature hash and indexed parameters (up to 4 entries)
+          items:
+            type: string
+        data:
+          type: string
+          description: Non-indexed event parameter data (hex encoded)
+        blockNumber:
+          type: string
+          description: Block number containing this log (hex)
+        transactionHash:
+          type: string
+          description: Hash of the transaction that created this log
+        transactionIndex:
+          type: string
+          description: Transaction position index within the block (hex)
+        blockHash:
+          type: string
+          description: Hash of the block containing this log
+        logIndex:
+          type: string
+          description: Log position index within the block (hex)
+        removed:
+          type: boolean
+          description: True if the log was removed due to a chain reorganization
+    TransactionReceipt:
+      type: object
+      description: A transaction receipt object. Available only after the transaction has been included in a block.
+      properties:
+        blockHash:
+          type: string
+          description: Hash of the block containing this transaction
+        blockNumber:
+          type: string
+          description: Block number containing this transaction (hex)
+        contractAddress:
+          type: string
+          nullable: true
+          description: Contract address created if this was a contract creation transaction, otherwise null
+        cumulativeGasUsed:
+          type: string
+          description: Total gas used in the block up to and including this transaction (hex)
+        effectiveGasPrice:
+          type: string
+          description: Actual gas price paid (hex, in wei)
+        from:
+          type: string
+          description: Sender address of the transaction
+        gasUsed:
+          type: string
+          description: Gas used by this specific transaction (hex)
+        logs:
+          type: array
+          description: List of event logs emitted during transaction execution
+          items:
+            $ref: '#/components/schemas/Log'
+        logsBloom:
+          type: string
+          description: Bloom filter for event log search (2048 bits, hex)
+        status:
+          type: string
+          description: Transaction execution result (0x1=success, 0x0=failure)
+        to:
+          type: string
+          nullable: true
+          description: Recipient address. Null for contract creation transactions
+        transactionHash:
+          type: string
+          description: Transaction hash
+        transactionIndex:
+          type: string
+          description: Transaction position index within the block (hex)
+        type:
+          type: string
+          description: Transaction type (0x0=Legacy, 0x1=EIP-2930, 0x2=EIP-1559)
+    TransactionReceiptArray:
+      type: array
+      description: An array of transaction receipt objects.
+      items:
+        $ref: '#/components/schemas/TransactionReceipt'
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: avalanche-eth_getblockreceipts
+      summary: eth_getBlockReceipts
+      description: |
+        Returns all transaction receipts for the block specified by block hash or identifier.
+        					
+
+        > 🚧 Response taking too long? Response time may increase with the number of transactions in the block!
+        >
+        > eth_getBlockReceipts fetches all transaction receipts for a block at once. Response time can increase when the block has many transactions or complex execution results.
+        >
+        > For faster responses, consider:
+        >
+        > - Use eth_getTransactionReceipt to fetch individual transaction receipts when only specific transactions are needed.
+      x-seo-description: Fetch all transaction receipts for a specific block.
+      tags:
+      - eth
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id
+              - jsonrpc
+              - method
+              - params
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                method:
+                  type: string
+                  example: eth_getBlockReceipts
+                params:
+                  type: array
+                  items:
+                    oneOf:
+                    - title: Block Number or Hash or Tag
+                      type: string
+                      pattern: ^0[xX][0-9a-fA-F]+$|^0[xX][0-9a-fA-F]{64}$|^(latest|earliest|pending|safe|finalized)$
+                      description: |
+                        Use one of block hash, block number, or block tag to specify a block.
+                        * Block number: hex string (ex. "0x1")
+                        * Block hash: 64-character hex string (ex. "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
+                        * Block tag: enum string (ex. "latest", "earliest", "pending")
+                          * `earliest`: The oldest available block on the chain.
+                          * `finalized`: A recently finalized block that can no longer be changed. Primarily used in proof-of-stake (PoS) blockchains.
+                          * `safe`: A recent block considered safe by the network (immune to reorgs).
+                          * `latest`: The most recent block on the chain (may be subject to reorgs).
+                          * `pending`: The next block to be mined, including pending transactions in the mempool.
+                      example: latest
+                  example:
+                  - latest
+                  description: |-
+                    Pass the following parameters as an array with the appropriate types.
+                    1. `block identifier` - Block number, block hash, or block tag.
+                    	- Block number: hex string (ex. "0x1")
+                    	- Block hash: 64-character hex string (ex. "0x39008d07edf93c03bb9d1cfc80598fcf63f441ec86e9de3733fa6a484980ca48")]
+                    	- Block tag: enum string (ex. "latest", "earliest", "pending")
+              example:
+                id: 1
+                jsonrpc: "2.0"
+                method: eth_getBlockReceipts
+                params:
+                - latest
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                - blockHash: "0xf30beb3b775df15a6260eabffcb36829d5f9ced5a9c7ea2ca05be9164851d2a9"
+                  blockNumber: "0x1076fc6"
+                  contractAddress: null
+                  cumulativeGasUsed: "0x32b59"
+                  effectiveGasPrice: "0x99a077c25"
+                  from: "0xd99b5603addd1306b56e9fcc001ebe65956d1e31"
+                  gasUsed: "0x32b59"
+                  logs:
+                  - address: "0x000000000022d473030f116ddee9f6b43ac78ba3"
+                    topics:
+                    - "0xc6a377bfc4eb120024a8ac08eef205be16b817020812c73223e81d1bdb9708ec"
+                    - "0x000000000000000000000000d99b5603addd1306b56e9fcc001ebe65956d1e31"
+                    - "0x0000000000000000000000000d58df0929b6baf8ed231f3fa672f0e5dcd665f7"
+                    - "0x000000000000000000000000ef1c6e67703c7bd7107eed8303fbe6ec2554bf6b"
+                    data: "0x000000000000000000000000ffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000648995c20000000000000000000000000000000000000000000000000000000000000000"
+                    blockNumber: "0x1076fc6"
+                    transactionHash: "0xe9bb07a140494db1d6f0a02f95e0804e520db1fd80bc541d95d4711e20e76e20"
+                    transactionIndex: "0x0"
+                    blockHash: "0xf30beb3b775df15a6260eabffcb36829d5f9ced5a9c7ea2ca05be9164851d2a9"
+                    logIndex: "0x0"
+                    removed: false
+                  - address: "0x0d58df0929b6baf8ed231f3fa672f0e5dcd665f7"
+                    topics:
+                    - "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+                    - "0x000000000000000000000000d99b5603addd1306b56e9fcc001ebe65956d1e31"
+                    - "0x0000000000000000000000003bcfd7f139a4286a37aabff1cbde1447e90a6d57"
+                    data: "0x0000000000000000000000000000000000000000000000656357415e66f0de16"
+                    blockNumber: "0x1076fc6"
+                    transactionHash: "0xe9bb07a140494db1d6f0a02f95e0804e520db1fd80bc541d95d4711e20e76e20"
+                    transactionIndex: "0x0"
+                    blockHash: "0xf30beb3b775df15a6260eabffcb36829d5f9ced5a9c7ea2ca05be9164851d2a9"
+                    logIndex: "0x1"
+                    removed: false
+                  logsBloom: "0x00210000000000000000000080000000000000000000000020001000000000000000020000000000800000000000000002014000880000000000000000280000000000000000000000004008000000201800000000400800000000000008040200000000000000000000000000000000400000000000040000000010000000000000004020000000000000000000000000000000000000080000004000001000020800000000000000000000000000000400000000000000400000100000000000000002000000000000000000000000400000000000001000000002000000000010200000000000000000000000000000000000000000000000000080000400"
+                  status: "0x1"
+                  to: "0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b"
+                  transactionHash: "0xe9bb07a140494db1d6f0a02f95e0804e520db1fd80bc541d95d4711e20e76e20"
+                  transactionIndex: "0x0"
+                  type: "0x2"
+              schema:
+                $ref: '#/components/schemas/TransactionReceiptArray'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

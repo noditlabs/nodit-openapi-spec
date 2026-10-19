@@ -1,0 +1,575 @@
+openapi: 3.1.0
+info:
+  title: XRPL - vault_info
+  version: 1.0.0
+servers:
+- url: https://xrpl-mainnet.nodit.io
+  description: XRP Ledger Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    LedgerContext:
+      type: object
+      description: Common fields that indicate which ledger version the response was derived from.
+      properties:
+        ledger_hash:
+          type: string
+          description: The hash of the ledger version used. Returned when a validated ledger version was queried.
+        ledger_index:
+          type: integer
+          description: The ledger index of the version used. Returned when a validated ledger version was queried.
+        ledger_current_index:
+          type: integer
+          description: The ledger index of the in-progress ledger. Returned when the `current` ledger was queried.
+        validated:
+          type: boolean
+          description: Whether the response was derived from a validated ledger version.
+    LedgerIndex:
+      description: |
+        Specifies the ledger version to use. Pass a ledger index as an integer, or use one of the shortcut strings below.
+        - `validated`: Uses the most recent ledger version validated by the network.
+        - `closed`: Uses the most recent ledger version the server has closed. It may not be validated.
+        - `current`: Uses the in-progress ledger version the server is currently building.
+      oneOf:
+      - title: Ledger Index
+        type: integer
+        description: The ledger index of the version to use.
+      - title: Shortcut
+        type: string
+        description: A shortcut string that specifies the ledger version to use.
+        enum:
+        - validated
+        - closed
+        - current
+    VaultInfoResult:
+      allOf:
+      - type: object
+        description: The result of looking up a vault.
+        properties:
+          vault:
+            type: object
+            description: Detailed vault information.
+            properties:
+              Account:
+                type: string
+                description: The pseudo-account address of the vault.
+              Asset:
+                type: object
+                description: Information about the asset the vault handles.
+                properties:
+                  currency:
+                    type: string
+                    description: The currency code. Omitted for MPTs.
+                  issuer:
+                    type: string
+                    description: The address of the asset issuer. Omitted for XRP and MPTs.
+                  mpt_issuance_id:
+                    type: string
+                    description: The MPT identifier. Omitted for XRP and trust line tokens.
+              AssetsAvailable:
+                type: string
+                description: The amount of assets available in the vault.
+              AssetsMaximum:
+                type: string
+                description: The maximum amount of assets the vault can hold. A value of 0 means there is no cap.
+              AssetsTotal:
+                type: string
+                description: The total amount of assets in the vault.
+              Flags:
+                type: integer
+                description: A bit-map of flags set on the vault.
+              LossUnrealized:
+                type: string
+                description: The amount of loss that has not been realized yet.
+              ShareMPTID:
+                type: string
+                description: The identifier of the MPTokenIssuance that represents the vault shares.
+              WithdrawalPolicy:
+                type: string
+                description: The withdrawal policy of the vault.
+              Scale:
+                type: integer
+                description: |
+                  The number of decimal places used to calculate shares.
+                  For trust line tokens it is between 0 and 18; for XRP and MPTs it is fixed at 0.
+              index:
+                type: string
+                description: The ID that identifies the vault ledger entry.
+              shares:
+                type: object
+                description: Issuance information for the vault shares.
+                properties:
+                  DomainID:
+                    type: string
+                    description: The ID of the permissioned domain the shares belong to. Omitted for public vaults.
+                  Flags:
+                    type: integer
+                    description: A bit-map of flags set on the share issuance.
+                  Issuer:
+                    type: string
+                    description: The address of the share issuer. It is the same as the vault's pseudo-account.
+                  LedgerEntryType:
+                    type: string
+                    description: The ledger entry type. Always returns `MPTokenIssuance`.
+                  OutstandingAmount:
+                    type: string
+                    description: The total amount of shares issued.
+                  OwnerNode:
+                    type: string
+                    description: The reference page in the owner directory.
+                  PreviousTxnID:
+                    type: string
+                    description: The ID of the transaction that most recently modified this entry.
+                  PreviousTxnLgrSeq:
+                    type: integer
+                    description: The ledger index of the ledger containing the transaction that most recently modified this entry.
+                  Sequence:
+                    type: integer
+                    description: The sequence number of the transaction that created the shares.
+                  AssetScale:
+                    type: integer
+                    description: The number of decimal places used to calculate shares.
+                  mpt_issuance_id:
+                    type: string
+                    description: The MPT identifier. It is the same as the vault's `ShareMPTID`.
+                  index:
+                    type: string
+                    description: The ID that identifies the share ledger entry.
+      - $ref: '#/components/schemas/LedgerContext'
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: xrpl-vault_info
+      summary: vault_info
+      description: |
+        Returns information about a vault.
+        It lets you check the vault's asset composition, its owner and the details of the issued shares.
+
+        > 📘 This method is available on rippled 3.1.0 and later.
+      x-seo-description: Retrieves information about a vault, its assets, and details on issued shares.
+      tags:
+      - vault
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - method
+              - params
+              properties:
+                method:
+                  type: string
+                  example: vault_info
+                params:
+                  type: array
+                  description: |-
+                    It contains following parameters as a single object in the `params` array.
+                    Provide either `vault_id`, or both `owner` and `seq`.
+                    1. `vault_id`: The ID of the vault ledger entry, as a string.
+                    2. `owner`: The account address of the vault owner, as a string.
+                    3. `seq`: The sequence number of the transaction that created the vault, as an integer.
+                    - `ledger_hash`: The hash of the ledger version to use, as a string. (optional)
+                    - `ledger_index`: The ledger index or a shortcut string. (optional)
+                  minItems: 1
+                  maxItems: 1
+                  items:
+                    title: Parameters
+                    type: object
+                    properties:
+                      vault_id:
+                        type: string
+                        description: The ID of a Vault ledger entry.
+                      owner:
+                        type: string
+                        description: The account address of the vault owner. Pass it together with `seq`.
+                        example: r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59
+                      seq:
+                        type: integer
+                        description: The sequence number of the transaction that created the vault. Pass it together with `owner`.
+                        example: 42
+                      ledger_hash:
+                        type: string
+                        description: The hash of the ledger version to use. Pass a 32-byte hex string.
+                      ledger_index:
+                        $ref: '#/components/schemas/LedgerIndex'
+                  example:
+                  - owner: r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59
+                    seq: 42
+              example:
+                method: vault_info
+                params:
+                - owner: r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59
+                  seq: 42
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                result:
+                  ledger_hash: 17ACB57A0F73B5160713E81FE72B2AC9F6064541004E272BD09F257D57C30C02
+                  ledger_index: 98765432
+                  validated: true
+                  vault:
+                    Account: rE54zDvgnghAoPopCgvtiqWNq3dU5y836S
+                    Asset:
+                      currency: XRP
+                    AssetsAvailable: "5000000000"
+                    AssetsMaximum: "0"
+                    AssetsTotal: "5000000000"
+                    Flags: 0
+                    LossUnrealized: "0"
+                    Scale: 0
+                    ShareMPTID: 0000002A5F7A9C0E2D4F6B8A0C1E3D5F7A9B0C2E
+                    WithdrawalPolicy: vaultStrategyFirstComeFirstServe
+                    index: 0E1B3D5F7A9C0E2D4F6B8A0C1E3D5F7A9B0C2E4D6F8A0B1C3E5D7F9A0B2C4E6D
+                    shares:
+                      AssetScale: 0
+                      Flags: 0
+                      Issuer: rE54zDvgnghAoPopCgvtiqWNq3dU5y836S
+                      LedgerEntryType: MPTokenIssuance
+                      OutstandingAmount: "5000000000"
+                      OwnerNode: "0"
+                      PreviousTxnID: 1B3D5F7A9C0E2D4F6B8A0C1E3D5F7A9B0C2E4D6F8A0B1C3E5D7F9A0B2C4E6D8F
+                      PreviousTxnLgrSeq: 98765000
+                      Sequence: 42
+                      index: 2C4E6A8B0D1F3A5C7E9B0D2F4A6C8E0B1D3F5A7C9E0B2D4F6A8C0E1B3D5F7A9C
+                      mpt_issuance_id: 0000002A5F7A9C0E2D4F6B8A0C1E3D5F7A9B0C2E
+              schema:
+                $ref: '#/components/schemas/VaultInfoResult'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

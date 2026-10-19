@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Hippo - cosmos_tx_v1beta1_txs_{hash}
+  title: Hippo Protocol - cosmos_tx_v1beta1_txs_{hash}
   version: 1.0.0
 servers:
-  - url: https://rest-hippo-mainnet.nodit.io
+- url: https://rest-hippo-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,18 +20,975 @@ paths:
       description: GetTx fetches a tx by hash.
       operationId: cosmos_tx_v1beta1_txs_{hash}
       tags:
-        - tx
+      - tx
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
-                $ref: "#/components/schemas/cosmos.tx.v1beta1.GetTxResponse"
+                type: object
+                description: GetTxResponse is the response type for the Service.GetTx method.
+                properties:
+                  tx:
+                    type: object
+                    description: Tx is the standard type used for broadcasting transactions.
+                    properties:
+                      body:
+                        type: object
+                        description: TxBody is the body of a transaction that all signers sign over.
+                        properties:
+                          messages:
+                            type: array
+                            description: |-
+                              messages is a list of messages to be executed. The required signers of
+                              those messages define the number and order of elements in AuthInfo's
+                              signer_infos and Tx's signatures. Each required signer address is added to
+                              the list only the first time it occurs.
+                              By convention, the first required signer (usually from the first message)
+                              is referred to as the primary signer and pays the fee for the whole
+                              transaction.
+                            items:
+                              type: object
+                              description: |-
+                                `Any` contains an arbitrary serialized protocol buffer message along with a
+                                URL that describes the type of the serialized message.
+
+                                Protobuf library provides support to pack/unpack Any values in the form
+                                of utility functions or additional generated methods of the Any type.
+
+                                Example 1: Pack and unpack a message in C++.
+
+                                    Foo foo = ...;
+                                    Any any;
+                                    any.PackFrom(foo);
+                                    ...
+                                    if (any.UnpackTo(&foo)) {
+                                      ...
+                                    }
+
+                                Example 2: Pack and unpack a message in Java.
+
+                                    Foo foo = ...;
+                                    Any any = Any.pack(foo);
+                                    ...
+                                    if (any.is(Foo.class)) {
+                                      foo = any.unpack(Foo.class);
+                                    }
+                                    // or ...
+                                    if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                                      foo = any.unpack(Foo.getDefaultInstance());
+                                    }
+
+                                Example 3: Pack and unpack a message in Python.
+
+                                    foo = Foo(...)
+                                    any = Any()
+                                    any.Pack(foo)
+                                    ...
+                                    if any.Is(Foo.DESCRIPTOR):
+                                      any.Unpack(foo)
+                                      ...
+
+                                Example 4: Pack and unpack a message in Go
+
+                                     foo := &pb.Foo{...}
+                                     any, err := anypb.New(foo)
+                                     if err != nil {
+                                       ...
+                                     }
+                                     ...
+                                     foo := &pb.Foo{}
+                                     if err := any.UnmarshalTo(foo); err != nil {
+                                       ...
+                                     }
+
+                                The pack methods provided by protobuf library will by default use
+                                'type.googleapis.com/full.type.name' as the type URL and the unpack
+                                methods only use the fully qualified type name after the last '/'
+                                in the type URL, for example "foo.bar.com/x/y.z" will yield type
+                                name "y.z".
+
+                                JSON
+
+                                The JSON representation of an `Any` value uses the regular
+                                representation of the deserialized, embedded message, with an
+                                additional field `@type` which contains the type URL. Example:
+
+                                    package google.profile;
+                                    message Person {
+                                      string first_name = 1;
+                                      string last_name = 2;
+                                    }
+
+                                    {
+                                      "@type": "type.googleapis.com/google.profile.Person",
+                                      "firstName": <string>,
+                                      "lastName": <string>
+                                    }
+
+                                If the embedded message type is well-known and has a custom JSON
+                                representation, that representation will be embedded adding a field
+                                `value` which holds the custom JSON in addition to the `@type`
+                                field. Example (for message [google.protobuf.Duration][]):
+
+                                    {
+                                      "@type": "type.googleapis.com/google.protobuf.Duration",
+                                      "value": "1.212s"
+                                    }
+                              properties:
+                                type_url:
+                                  type: string
+                                  description: |-
+                                    A URL/resource name that uniquely identifies the type of the serialized
+                                    protocol buffer message. This string must contain at least
+                                    one "/" character. The last segment of the URL's path must represent
+                                    the fully qualified name of the type (as in
+                                    `path/google.protobuf.Duration`). The name should be in a canonical form
+                                    (e.g., leading "." is not accepted).
+
+                                    In practice, teams usually precompile into the binary all types that they
+                                    expect it to use in the context of Any. However, for URLs which use the
+                                    scheme `http`, `https`, or no scheme, one can optionally set up a type
+                                    server that maps type URLs to message definitions as follows:
+
+                                    * If no scheme is provided, `https` is assumed.
+                                    * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+                                      value in binary format, or produce an error.
+                                    * Applications are allowed to cache lookup results based on the
+                                      URL, or have them precompiled into a binary to avoid any
+                                      lookup. Therefore, binary compatibility needs to be preserved
+                                      on changes to types. (Use versioned type names to manage
+                                      breaking changes.)
+
+                                    Note: this functionality is not currently available in the official
+                                    protobuf release, and it is not used for type URLs beginning with
+                                    type.googleapis.com.
+
+                                    Schemes other than `http`, `https` (or the empty scheme) might be
+                                    used with implementation specific semantics.
+                                value:
+                                  type: string
+                                  description: Must be a valid serialized protocol buffer of the above specified type.
+                                  format: byte
+                          memo:
+                            type: string
+                            description: |-
+                              memo is any arbitrary note/comment to be added to the transaction.
+                              WARNING: in clients, any publicly exposed text should not be called memo,
+                              but should be called `note` instead (see https://github.com/cosmos/cosmos-sdk/issues/9122).
+                          timeout_height:
+                            type: string
+                            format: uint64
+                            title: |-
+                              timeout is the block height after which this transaction will not
+                              be processed by the chain
+                          extension_options:
+                            type: array
+                            title: |-
+                              extension_options are arbitrary options that can be added by chains
+                              when the default options are not sufficient. If any of these are present
+                              and can't be handled, the transaction will be rejected
+                            items:
+                              type: object
+                              description: |-
+                                `Any` contains an arbitrary serialized protocol buffer message along with a
+                                URL that describes the type of the serialized message.
+
+                                Protobuf library provides support to pack/unpack Any values in the form
+                                of utility functions or additional generated methods of the Any type.
+
+                                Example 1: Pack and unpack a message in C++.
+
+                                    Foo foo = ...;
+                                    Any any;
+                                    any.PackFrom(foo);
+                                    ...
+                                    if (any.UnpackTo(&foo)) {
+                                      ...
+                                    }
+
+                                Example 2: Pack and unpack a message in Java.
+
+                                    Foo foo = ...;
+                                    Any any = Any.pack(foo);
+                                    ...
+                                    if (any.is(Foo.class)) {
+                                      foo = any.unpack(Foo.class);
+                                    }
+                                    // or ...
+                                    if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                                      foo = any.unpack(Foo.getDefaultInstance());
+                                    }
+
+                                Example 3: Pack and unpack a message in Python.
+
+                                    foo = Foo(...)
+                                    any = Any()
+                                    any.Pack(foo)
+                                    ...
+                                    if any.Is(Foo.DESCRIPTOR):
+                                      any.Unpack(foo)
+                                      ...
+
+                                Example 4: Pack and unpack a message in Go
+
+                                     foo := &pb.Foo{...}
+                                     any, err := anypb.New(foo)
+                                     if err != nil {
+                                       ...
+                                     }
+                                     ...
+                                     foo := &pb.Foo{}
+                                     if err := any.UnmarshalTo(foo); err != nil {
+                                       ...
+                                     }
+
+                                The pack methods provided by protobuf library will by default use
+                                'type.googleapis.com/full.type.name' as the type URL and the unpack
+                                methods only use the fully qualified type name after the last '/'
+                                in the type URL, for example "foo.bar.com/x/y.z" will yield type
+                                name "y.z".
+
+                                JSON
+
+                                The JSON representation of an `Any` value uses the regular
+                                representation of the deserialized, embedded message, with an
+                                additional field `@type` which contains the type URL. Example:
+
+                                    package google.profile;
+                                    message Person {
+                                      string first_name = 1;
+                                      string last_name = 2;
+                                    }
+
+                                    {
+                                      "@type": "type.googleapis.com/google.profile.Person",
+                                      "firstName": <string>,
+                                      "lastName": <string>
+                                    }
+
+                                If the embedded message type is well-known and has a custom JSON
+                                representation, that representation will be embedded adding a field
+                                `value` which holds the custom JSON in addition to the `@type`
+                                field. Example (for message [google.protobuf.Duration][]):
+
+                                    {
+                                      "@type": "type.googleapis.com/google.protobuf.Duration",
+                                      "value": "1.212s"
+                                    }
+                              properties:
+                                type_url:
+                                  type: string
+                                  description: |-
+                                    A URL/resource name that uniquely identifies the type of the serialized
+                                    protocol buffer message. This string must contain at least
+                                    one "/" character. The last segment of the URL's path must represent
+                                    the fully qualified name of the type (as in
+                                    `path/google.protobuf.Duration`). The name should be in a canonical form
+                                    (e.g., leading "." is not accepted).
+
+                                    In practice, teams usually precompile into the binary all types that they
+                                    expect it to use in the context of Any. However, for URLs which use the
+                                    scheme `http`, `https`, or no scheme, one can optionally set up a type
+                                    server that maps type URLs to message definitions as follows:
+
+                                    * If no scheme is provided, `https` is assumed.
+                                    * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+                                      value in binary format, or produce an error.
+                                    * Applications are allowed to cache lookup results based on the
+                                      URL, or have them precompiled into a binary to avoid any
+                                      lookup. Therefore, binary compatibility needs to be preserved
+                                      on changes to types. (Use versioned type names to manage
+                                      breaking changes.)
+
+                                    Note: this functionality is not currently available in the official
+                                    protobuf release, and it is not used for type URLs beginning with
+                                    type.googleapis.com.
+
+                                    Schemes other than `http`, `https` (or the empty scheme) might be
+                                    used with implementation specific semantics.
+                                value:
+                                  type: string
+                                  description: Must be a valid serialized protocol buffer of the above specified type.
+                                  format: byte
+                          non_critical_extension_options:
+                            type: array
+                            title: |-
+                              extension_options are arbitrary options that can be added by chains
+                              when the default options are not sufficient. If any of these are present
+                              and can't be handled, they will be ignored
+                            items:
+                              type: object
+                              description: |-
+                                `Any` contains an arbitrary serialized protocol buffer message along with a
+                                URL that describes the type of the serialized message.
+
+                                Protobuf library provides support to pack/unpack Any values in the form
+                                of utility functions or additional generated methods of the Any type.
+
+                                Example 1: Pack and unpack a message in C++.
+
+                                    Foo foo = ...;
+                                    Any any;
+                                    any.PackFrom(foo);
+                                    ...
+                                    if (any.UnpackTo(&foo)) {
+                                      ...
+                                    }
+
+                                Example 2: Pack and unpack a message in Java.
+
+                                    Foo foo = ...;
+                                    Any any = Any.pack(foo);
+                                    ...
+                                    if (any.is(Foo.class)) {
+                                      foo = any.unpack(Foo.class);
+                                    }
+                                    // or ...
+                                    if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                                      foo = any.unpack(Foo.getDefaultInstance());
+                                    }
+
+                                Example 3: Pack and unpack a message in Python.
+
+                                    foo = Foo(...)
+                                    any = Any()
+                                    any.Pack(foo)
+                                    ...
+                                    if any.Is(Foo.DESCRIPTOR):
+                                      any.Unpack(foo)
+                                      ...
+
+                                Example 4: Pack and unpack a message in Go
+
+                                     foo := &pb.Foo{...}
+                                     any, err := anypb.New(foo)
+                                     if err != nil {
+                                       ...
+                                     }
+                                     ...
+                                     foo := &pb.Foo{}
+                                     if err := any.UnmarshalTo(foo); err != nil {
+                                       ...
+                                     }
+
+                                The pack methods provided by protobuf library will by default use
+                                'type.googleapis.com/full.type.name' as the type URL and the unpack
+                                methods only use the fully qualified type name after the last '/'
+                                in the type URL, for example "foo.bar.com/x/y.z" will yield type
+                                name "y.z".
+
+                                JSON
+
+                                The JSON representation of an `Any` value uses the regular
+                                representation of the deserialized, embedded message, with an
+                                additional field `@type` which contains the type URL. Example:
+
+                                    package google.profile;
+                                    message Person {
+                                      string first_name = 1;
+                                      string last_name = 2;
+                                    }
+
+                                    {
+                                      "@type": "type.googleapis.com/google.profile.Person",
+                                      "firstName": <string>,
+                                      "lastName": <string>
+                                    }
+
+                                If the embedded message type is well-known and has a custom JSON
+                                representation, that representation will be embedded adding a field
+                                `value` which holds the custom JSON in addition to the `@type`
+                                field. Example (for message [google.protobuf.Duration][]):
+
+                                    {
+                                      "@type": "type.googleapis.com/google.protobuf.Duration",
+                                      "value": "1.212s"
+                                    }
+                              properties:
+                                type_url:
+                                  type: string
+                                  description: |-
+                                    A URL/resource name that uniquely identifies the type of the serialized
+                                    protocol buffer message. This string must contain at least
+                                    one "/" character. The last segment of the URL's path must represent
+                                    the fully qualified name of the type (as in
+                                    `path/google.protobuf.Duration`). The name should be in a canonical form
+                                    (e.g., leading "." is not accepted).
+
+                                    In practice, teams usually precompile into the binary all types that they
+                                    expect it to use in the context of Any. However, for URLs which use the
+                                    scheme `http`, `https`, or no scheme, one can optionally set up a type
+                                    server that maps type URLs to message definitions as follows:
+
+                                    * If no scheme is provided, `https` is assumed.
+                                    * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+                                      value in binary format, or produce an error.
+                                    * Applications are allowed to cache lookup results based on the
+                                      URL, or have them precompiled into a binary to avoid any
+                                      lookup. Therefore, binary compatibility needs to be preserved
+                                      on changes to types. (Use versioned type names to manage
+                                      breaking changes.)
+
+                                    Note: this functionality is not currently available in the official
+                                    protobuf release, and it is not used for type URLs beginning with
+                                    type.googleapis.com.
+
+                                    Schemes other than `http`, `https` (or the empty scheme) might be
+                                    used with implementation specific semantics.
+                                value:
+                                  type: string
+                                  description: Must be a valid serialized protocol buffer of the above specified type.
+                                  format: byte
+                        title: body is the processable content of the transaction
+                      auth_info:
+                        type: object
+                        description: |-
+                          AuthInfo describes the fee and signer modes that are used to sign a
+                          transaction.
+                        properties:
+                          signer_infos:
+                            type: array
+                            description: |-
+                              signer_infos defines the signing modes for the required signers. The number
+                              and order of elements must match the required signers from TxBody's
+                              messages. The first element is the primary signer and the one which pays
+                              the fee.
+                            items:
+                              type: object
+                              description: |-
+                                SignerInfo describes the public key and signing mode of a single top-level
+                                signer.
+                              properties:
+                                public_key:
+                                  type: object
+                                  description: |-
+                                    `Any` contains an arbitrary serialized protocol buffer message along with a
+                                    URL that describes the type of the serialized message.
+
+                                    Protobuf library provides support to pack/unpack Any values in the form
+                                    of utility functions or additional generated methods of the Any type.
+
+                                    Example 1: Pack and unpack a message in C++.
+
+                                        Foo foo = ...;
+                                        Any any;
+                                        any.PackFrom(foo);
+                                        ...
+                                        if (any.UnpackTo(&foo)) {
+                                          ...
+                                        }
+
+                                    Example 2: Pack and unpack a message in Java.
+
+                                        Foo foo = ...;
+                                        Any any = Any.pack(foo);
+                                        ...
+                                        if (any.is(Foo.class)) {
+                                          foo = any.unpack(Foo.class);
+                                        }
+                                        // or ...
+                                        if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                                          foo = any.unpack(Foo.getDefaultInstance());
+                                        }
+
+                                    Example 3: Pack and unpack a message in Python.
+
+                                        foo = Foo(...)
+                                        any = Any()
+                                        any.Pack(foo)
+                                        ...
+                                        if any.Is(Foo.DESCRIPTOR):
+                                          any.Unpack(foo)
+                                          ...
+
+                                    Example 4: Pack and unpack a message in Go
+
+                                         foo := &pb.Foo{...}
+                                         any, err := anypb.New(foo)
+                                         if err != nil {
+                                           ...
+                                         }
+                                         ...
+                                         foo := &pb.Foo{}
+                                         if err := any.UnmarshalTo(foo); err != nil {
+                                           ...
+                                         }
+
+                                    The pack methods provided by protobuf library will by default use
+                                    'type.googleapis.com/full.type.name' as the type URL and the unpack
+                                    methods only use the fully qualified type name after the last '/'
+                                    in the type URL, for example "foo.bar.com/x/y.z" will yield type
+                                    name "y.z".
+
+                                    JSON
+
+                                    The JSON representation of an `Any` value uses the regular
+                                    representation of the deserialized, embedded message, with an
+                                    additional field `@type` which contains the type URL. Example:
+
+                                        package google.profile;
+                                        message Person {
+                                          string first_name = 1;
+                                          string last_name = 2;
+                                        }
+
+                                        {
+                                          "@type": "type.googleapis.com/google.profile.Person",
+                                          "firstName": <string>,
+                                          "lastName": <string>
+                                        }
+
+                                    If the embedded message type is well-known and has a custom JSON
+                                    representation, that representation will be embedded adding a field
+                                    `value` which holds the custom JSON in addition to the `@type`
+                                    field. Example (for message [google.protobuf.Duration][]):
+
+                                        {
+                                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                                          "value": "1.212s"
+                                        }
+                                  properties:
+                                    type_url:
+                                      type: string
+                                      description: |-
+                                        A URL/resource name that uniquely identifies the type of the serialized
+                                        protocol buffer message. This string must contain at least
+                                        one "/" character. The last segment of the URL's path must represent
+                                        the fully qualified name of the type (as in
+                                        `path/google.protobuf.Duration`). The name should be in a canonical form
+                                        (e.g., leading "." is not accepted).
+
+                                        In practice, teams usually precompile into the binary all types that they
+                                        expect it to use in the context of Any. However, for URLs which use the
+                                        scheme `http`, `https`, or no scheme, one can optionally set up a type
+                                        server that maps type URLs to message definitions as follows:
+
+                                        * If no scheme is provided, `https` is assumed.
+                                        * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+                                          value in binary format, or produce an error.
+                                        * Applications are allowed to cache lookup results based on the
+                                          URL, or have them precompiled into a binary to avoid any
+                                          lookup. Therefore, binary compatibility needs to be preserved
+                                          on changes to types. (Use versioned type names to manage
+                                          breaking changes.)
+
+                                        Note: this functionality is not currently available in the official
+                                        protobuf release, and it is not used for type URLs beginning with
+                                        type.googleapis.com.
+
+                                        Schemes other than `http`, `https` (or the empty scheme) might be
+                                        used with implementation specific semantics.
+                                    value:
+                                      type: string
+                                      description: Must be a valid serialized protocol buffer of the above specified type.
+                                      format: byte
+                                mode_info:
+                                  type: object
+                                  description: ModeInfo describes the signing mode of a single or nested multisig signer.
+                                  properties:
+                                    single:
+                                      type: object
+                                      properties:
+                                        mode:
+                                          type: string
+                                          description: |-
+                                            SignMode represents a signing mode with its own security guarantees.
+
+                                            This enum should be considered a registry of all known sign modes
+                                            in the Cosmos ecosystem. Apps are not expected to support all known
+                                            sign modes. Apps that would like to support custom  sign modes are
+                                            encouraged to open a small PR against this file to add a new case
+                                            to this SignMode enum describing their sign mode so that different
+                                            apps have a consistent version of this enum.
+
+                                             - SIGN_MODE_UNSPECIFIED: SIGN_MODE_UNSPECIFIED specifies an unknown signing mode and will be
+                                            rejected.
+                                             - SIGN_MODE_DIRECT: SIGN_MODE_DIRECT specifies a signing mode which uses SignDoc and is
+                                            verified with raw bytes from Tx.
+                                             - SIGN_MODE_TEXTUAL: SIGN_MODE_TEXTUAL is a future signing mode that will verify some
+                                            human-readable textual representation on top of the binary representation
+                                            from SIGN_MODE_DIRECT.
+
+                                            Since: cosmos-sdk 0.50
+                                             - SIGN_MODE_DIRECT_AUX: SIGN_MODE_DIRECT_AUX specifies a signing mode which uses
+                                            SignDocDirectAux. As opposed to SIGN_MODE_DIRECT, this sign mode does not
+                                            require signers signing over other signers' `signer_info`.
+
+                                            Since: cosmos-sdk 0.46
+                                             - SIGN_MODE_LEGACY_AMINO_JSON: SIGN_MODE_LEGACY_AMINO_JSON is a backwards compatibility mode which uses
+                                            Amino JSON and will be removed in the future.
+                                             - SIGN_MODE_EIP_191: SIGN_MODE_EIP_191 specifies the sign mode for EIP 191 signing on the Cosmos
+                                            SDK. Ref: https://eips.ethereum.org/EIPS/eip-191
+
+                                            Currently, SIGN_MODE_EIP_191 is registered as a SignMode enum variant,
+                                            but is not implemented on the SDK by default. To enable EIP-191, you need
+                                            to pass a custom `TxConfig` that has an implementation of
+                                            `SignModeHandler` for EIP-191. The SDK may decide to fully support
+                                            EIP-191 in the future.
+
+                                            Since: cosmos-sdk 0.45.2
+                                          title: mode is the signing mode of the single signer
+                                          default: SIGN_MODE_UNSPECIFIED
+                                          enum:
+                                          - SIGN_MODE_UNSPECIFIED
+                                          - SIGN_MODE_DIRECT
+                                          - SIGN_MODE_TEXTUAL
+                                          - SIGN_MODE_DIRECT_AUX
+                                          - SIGN_MODE_LEGACY_AMINO_JSON
+                                          - SIGN_MODE_EIP_191
+                                      title: single represents a single signer
+                                    multi:
+                                      type: object
+                                      properties:
+                                        bitarray:
+                                          type: object
+                                          description: |-
+                                            CompactBitArray is an implementation of a space efficient bit array.
+                                            This is used to ensure that the encoded data takes up a minimal amount of
+                                            space after proto encoding.
+                                            This is not thread safe, and is not intended for concurrent usage.
+                                          properties:
+                                            extra_bits_stored:
+                                              type: integer
+                                              format: int64
+                                            elems:
+                                              type: string
+                                              format: byte
+                                          title: bitarray specifies which keys within the multisig are signing
+                                        mode_infos:
+                                          type: array
+                                          title: |-
+                                            mode_infos is the corresponding modes of the signers of the multisig
+                                            which could include nested multisig public keys
+                                          items:
+                                            type: object
+                                      title: Multi is the mode info for a multisig public key
+                                sequence:
+                                  type: string
+                                  description: |-
+                                    sequence is the sequence of the account, which describes the
+                                    number of committed transactions signed by a given address. It is used to
+                                    prevent replay attacks.
+                                  format: uint64
+                          fee:
+                            type: object
+                            description: |-
+                              Fee is the fee and gas limit for the transaction. The first signer is the
+                              primary signer and the one which pays the fee. The fee can be calculated
+                              based on the cost of evaluating the body and doing signature verification
+                              of the signers. This can be estimated via simulation.
+                            properties:
+                              amount:
+                                type: array
+                                title: amount is the amount of coins to be paid as a fee
+                                items:
+                                  type: object
+                                  description: |-
+                                    Coin defines a token with a denomination and an amount.
+
+                                    NOTE: The amount field is an Int which implements the custom method
+                                    signatures required by gogoproto.
+                                  properties:
+                                    denom:
+                                      type: string
+                                    amount:
+                                      type: string
+                              gas_limit:
+                                type: string
+                                format: uint64
+                                title: |-
+                                  gas_limit is the maximum gas that can be used in transaction processing
+                                  before an out of gas error occurs
+                              payer:
+                                type: string
+                                description: |-
+                                  if unset, the first signer is responsible for paying the fees. If set, the specified account must pay the fees.
+                                  the payer must be a tx signer (and thus have signed this field in AuthInfo).
+                                  setting this field does *not* change the ordering of required signers for the transaction.
+                              granter:
+                                type: string
+                                title: |-
+                                  if set, the fee payer (either the first signer or the value of the payer field) requests that a fee grant be used
+                                  to pay fees instead of the fee payer's own balance. If an appropriate fee grant does not exist or the chain does
+                                  not support fee grants, this will fail
+                          tip:
+                            type: object
+                            description: |-
+                              Tip is the optional tip used for transactions fees paid in another denom.
+
+                              This field is ignored if the chain didn't enable tips, i.e. didn't add the
+                              `TipDecorator` in its posthandler.
+
+                              Since: cosmos-sdk 0.46
+                            properties:
+                              amount:
+                                type: array
+                                title: amount is the amount of the tip
+                                items:
+                                  type: object
+                                  description: |-
+                                    Coin defines a token with a denomination and an amount.
+
+                                    NOTE: The amount field is an Int which implements the custom method
+                                    signatures required by gogoproto.
+                                  properties:
+                                    denom:
+                                      type: string
+                                    amount:
+                                      type: string
+                              tipper:
+                                type: string
+                                title: tipper is the address of the account paying for the tip
+                      signatures:
+                        type: array
+                        description: |-
+                          signatures is a list of signatures that matches the length and order of
+                          AuthInfo's signer_infos to allow connecting signature meta information like
+                          public key and signing mode by position.
+                        items:
+                          type: string
+                          format: byte
+                  tx_response:
+                    type: object
+                    description: |-
+                      TxResponse defines a structure containing relevant tx data and metadata. The
+                      tags are stringified and the log is JSON decoded.
+                    properties:
+                      height:
+                        type: string
+                        format: int64
+                        title: The block height
+                      txhash:
+                        type: string
+                        description: The transaction hash.
+                      codespace:
+                        type: string
+                        title: Namespace for the Code
+                      code:
+                        type: integer
+                        description: Response code.
+                        format: int64
+                      data:
+                        type: string
+                        description: Result bytes, if any.
+                      raw_log:
+                        type: string
+                        description: |-
+                          The output of the application's logger (raw string). May be
+                          non-deterministic.
+                      logs:
+                        type: array
+                        description: The output of the application's logger (typed). May be non-deterministic.
+                        items:
+                          type: object
+                          description: ABCIMessageLog defines a structure containing an indexed tx ABCI message log.
+                          properties:
+                            msg_index:
+                              type: integer
+                              format: int64
+                            log:
+                              type: string
+                            events:
+                              type: array
+                              description: |-
+                                Events contains a slice of Event objects that were emitted during some
+                                execution.
+                              items:
+                                type: object
+                                description: |-
+                                  StringEvent defines en Event object wrapper where all the attributes
+                                  contain key/value pairs that are strings instead of raw bytes.
+                                properties:
+                                  type:
+                                    type: string
+                                  attributes:
+                                    type: array
+                                    items:
+                                      type: object
+                                      description: |-
+                                        Attribute defines an attribute wrapper where the key and value are
+                                        strings instead of raw bytes.
+                                      properties:
+                                        key:
+                                          type: string
+                                        value:
+                                          type: string
+                      info:
+                        type: string
+                        description: Additional information. May be non-deterministic.
+                      gas_wanted:
+                        type: string
+                        description: Amount of gas requested for transaction.
+                        format: int64
+                      gas_used:
+                        type: string
+                        description: Amount of gas consumed by transaction.
+                        format: int64
+                      tx:
+                        type: object
+                        description: |-
+                          `Any` contains an arbitrary serialized protocol buffer message along with a
+                          URL that describes the type of the serialized message.
+
+                          Protobuf library provides support to pack/unpack Any values in the form
+                          of utility functions or additional generated methods of the Any type.
+
+                          Example 1: Pack and unpack a message in C++.
+
+                              Foo foo = ...;
+                              Any any;
+                              any.PackFrom(foo);
+                              ...
+                              if (any.UnpackTo(&foo)) {
+                                ...
+                              }
+
+                          Example 2: Pack and unpack a message in Java.
+
+                              Foo foo = ...;
+                              Any any = Any.pack(foo);
+                              ...
+                              if (any.is(Foo.class)) {
+                                foo = any.unpack(Foo.class);
+                              }
+                              // or ...
+                              if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                                foo = any.unpack(Foo.getDefaultInstance());
+                              }
+
+                          Example 3: Pack and unpack a message in Python.
+
+                              foo = Foo(...)
+                              any = Any()
+                              any.Pack(foo)
+                              ...
+                              if any.Is(Foo.DESCRIPTOR):
+                                any.Unpack(foo)
+                                ...
+
+                          Example 4: Pack and unpack a message in Go
+
+                               foo := &pb.Foo{...}
+                               any, err := anypb.New(foo)
+                               if err != nil {
+                                 ...
+                               }
+                               ...
+                               foo := &pb.Foo{}
+                               if err := any.UnmarshalTo(foo); err != nil {
+                                 ...
+                               }
+
+                          The pack methods provided by protobuf library will by default use
+                          'type.googleapis.com/full.type.name' as the type URL and the unpack
+                          methods only use the fully qualified type name after the last '/'
+                          in the type URL, for example "foo.bar.com/x/y.z" will yield type
+                          name "y.z".
+
+                          JSON
+
+                          The JSON representation of an `Any` value uses the regular
+                          representation of the deserialized, embedded message, with an
+                          additional field `@type` which contains the type URL. Example:
+
+                              package google.profile;
+                              message Person {
+                                string first_name = 1;
+                                string last_name = 2;
+                              }
+
+                              {
+                                "@type": "type.googleapis.com/google.profile.Person",
+                                "firstName": <string>,
+                                "lastName": <string>
+                              }
+
+                          If the embedded message type is well-known and has a custom JSON
+                          representation, that representation will be embedded adding a field
+                          `value` which holds the custom JSON in addition to the `@type`
+                          field. Example (for message [google.protobuf.Duration][]):
+
+                              {
+                                "@type": "type.googleapis.com/google.protobuf.Duration",
+                                "value": "1.212s"
+                              }
+                        properties:
+                          type_url:
+                            type: string
+                            description: |-
+                              A URL/resource name that uniquely identifies the type of the serialized
+                              protocol buffer message. This string must contain at least
+                              one "/" character. The last segment of the URL's path must represent
+                              the fully qualified name of the type (as in
+                              `path/google.protobuf.Duration`). The name should be in a canonical form
+                              (e.g., leading "." is not accepted).
+
+                              In practice, teams usually precompile into the binary all types that they
+                              expect it to use in the context of Any. However, for URLs which use the
+                              scheme `http`, `https`, or no scheme, one can optionally set up a type
+                              server that maps type URLs to message definitions as follows:
+
+                              * If no scheme is provided, `https` is assumed.
+                              * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+                                value in binary format, or produce an error.
+                              * Applications are allowed to cache lookup results based on the
+                                URL, or have them precompiled into a binary to avoid any
+                                lookup. Therefore, binary compatibility needs to be preserved
+                                on changes to types. (Use versioned type names to manage
+                                breaking changes.)
+
+                              Note: this functionality is not currently available in the official
+                              protobuf release, and it is not used for type URLs beginning with
+                              type.googleapis.com.
+
+                              Schemes other than `http`, `https` (or the empty scheme) might be
+                              used with implementation specific semantics.
+                          value:
+                            type: string
+                            description: Must be a valid serialized protocol buffer of the above specified type.
+                            format: byte
+                      timestamp:
+                        type: string
+                        description: |-
+                          Time of the previous block. For heights > 1, it's the weighted median of
+                          the timestamps of the valid votes in the block.LastCommit. For height == 1,
+                          it's genesis time.
+                      events:
+                        type: array
+                        description: |-
+                          Events defines all the events emitted by processing a transaction. Note,
+                          these events include those emitted by processing all the messages and those
+                          emitted from the ante. Whereas Logs contains the events, with
+                          additional metadata, emitted only by processing the messages.
+
+                          Since: cosmos-sdk 0.42.11, 0.44.5, 0.45
+                        items:
+                          type: object
+                          description: |-
+                            Event allows application developers to attach additional information to
+                            ResponseFinalizeBlock and ResponseCheckTx.
+                            Later, transactions may be queried using these events.
+                          properties:
+                            type:
+                              type: string
+                            attributes:
+                              type: array
+                              items:
+                                type: object
+                                description: EventAttribute is a single key-value pair, associated with an event.
+                                properties:
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                  index:
+                                    type: boolean
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -50,37 +1007,21 @@ paths:
                         type_url:
                           type: string
                           description: |-
-                            A URL/resource name that uniquely identifies the type of the serialized
-                            protocol buffer message. This string must contain at least
-                            one "/" character. The last segment of the URL's path must represent
-                            the fully qualified name of the type (as in
-                            `path/google.protobuf.Duration`). The name should be in a canonical form
-                            (e.g., leading "." is not accepted).
+                            직렬화된 프로토콜 버퍼 메시지의 타입을 고유하게 식별하는 URL/리소스 이름. 이 문자열에는 "/" 문자가 최소 하나 포함되어야 하며, URL 경로의 마지막 세그먼트는 타입의 완전한 이름을 나타내야 합니다 (예: `path/google.protobuf.Duration`). 이름은 표준 형식이어야 합니다 (예: 선행 "."은 허용되지 않음).
 
-                            In practice, teams usually precompile into the binary all types that they
-                            expect it to use in the context of Any. However, for URLs which use the
-                            scheme `http`, `https`, or no scheme, one can optionally set up a type
-                            server that maps type URLs to message definitions as follows:
+                            실제로 팀들은 일반적으로 Any 컨텍스트에서 사용될 것으로 예상하는 모든 타입을 바이너리에 미리 컴파일합니다. 단, `http`, `https` 또는 스킴 없는 URL의 경우 다음과 같이 타입 URL을 메시지 정의에 매핑하는 타입 서버를 선택적으로 설정할 수 있습니다:
 
-                            * If no scheme is provided, `https` is assumed.
-                            * An HTTP GET on the URL must yield a [google.protobuf.Type][]
-                              value in binary format, or produce an error.
-                            * Applications are allowed to cache lookup results based on the
-                              URL, or have them precompiled into a binary to avoid any
-                              lookup. Therefore, binary compatibility needs to be preserved
-                              on changes to types. (Use versioned type names to manage
-                              breaking changes.)
+                            * 스킴이 제공되지 않으면 `https`로 가정합니다.
+                            * URL에 대한 HTTP GET은 바이너리 형식의 [google.protobuf.Type][] 값을 반환하거나 오류를 발생시켜야 합니다.
+                            * 애플리케이션은 URL을 기반으로 조회 결과를 캐시하거나 바이너리에 미리 컴파일하여 조회를 방지할 수 있습니다. 따라서 타입 변경 시 바이너리 호환성을 유지해야 합니다 (버전이 지정된 타입 이름을 사용하여 호환성 변경 관리).
 
-                            Note: this functionality is not currently available in the official
-                            protobuf release, and it is not used for type URLs beginning with
-                            type.googleapis.com.
+                            참고: 이 기능은 현재 공식 protobuf 릴리스에서 사용 불가하며, type.googleapis.com으로 시작하는 타입 URL에는 사용되지 않습니다.
 
-                            Schemes other than `http`, `https` (or the empty scheme) might be
-                            used with implementation specific semantics.
+                            `http`, `https` (또는 빈 스킴) 이외의 스킴은 구현별 의미를 가질 수 있습니다.
                         value:
                           type: string
                           format: byte
-                          description: Must be a valid serialized protocol buffer of the above specified type.
+                          description: 위에 지정된 타입의 유효한 직렬화 프로토콜 버퍼 값이어야 합니다.
                       description: |-
                         `Any` contains an arbitrary serialized protocol buffer message along with a
                         URL that describes the type of the serialized message.
@@ -168,12 +1109,12 @@ paths:
                               "value": "1.212s"
                             }
       parameters:
-        - name: hash
-          description: hash is the tx hash to query, encoded as a hex string.
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: hash
+        description: hash is the tx hash to query, encoded as a hex string.
+        in: path
+        required: true
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/tx/v1beta1/txs/{hash}

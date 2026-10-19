@@ -3,7 +3,7 @@ info:
   title: Injective - GenesisChunked
   version: 1.0.0
 servers:
-  - url: https://rpc-injective-mainnet.nodit.io
+- url: https://rpc-injective-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,20 +18,20 @@ paths:
   /genesis_chunked:
     get:
       security:
-        - api_key: []
+      - api_key: []
       operationId: genesis_chunked
       summary: GenesisChunked
       description: Retrieves a large genesis document in chunks.
       tags:
-        - rest-api
+      - rest-api
       parameters:
-        - name: chunk
-          in: query
-          required: true
-          description: Chunk index to retrieve.
-          schema:
-            type: integer
-          example: 0
+      - name: chunk
+        in: query
+        required: true
+        description: Chunk index to retrieve.
+        schema:
+          type: integer
+        example: 0
       responses:
         "200":
           content:
@@ -40,24 +40,30 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       chunk:
+                        description: Chunk number (zero-based).
                         type: integer
                       total:
+                        description: Total number of chunks.
                         type: integer
                       data:
+                        description: Genesis chunk data (Base64).
                         type: string
               example:
                 jsonrpc: "2.0"

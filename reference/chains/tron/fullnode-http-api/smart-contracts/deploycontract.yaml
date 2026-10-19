@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: Tron - DeployContract
+  version: 1.0.0
+servers:
+- url: https://tron-mainnet.nodit.io
+  description: Tron Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  parameters: {}
+  schemas: {}
+  responses: {}
+paths:
+  /wallet/deploycontract:
+    post:
+      security:
+      - api_key: []
+      operationId: tron-deploycontract
+      summary: DeployContract
+      description: Deploys a contract. Returns TransactionExtention, which contains an unsigned transaction.
+      x-seo-description: Create a transaction that deploys a TRON smart contract.
+      tags:
+      - smart-contracts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              owner_address: TUoHaVjx7n5xz8LwPRDckgFrDWhMhuSuJM
+              name: SimpleStorage
+              abi: '[{"inputs":[{"name":"key","type":"uint256"},{"name":"value","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"key","type":"uint256"}],"name":"get","outputs":[{"name":"value","type":"uint256"}],"stateMutability":"view","type":"function"}]'
+              bytecode: 608060405234801561001057600080fd5b5060de8061001f6000396000f30060806040526004361060485763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416631ab06ee58114604d5780639507d39a146067575b600080fd5b348015605857600080fd5b506065600435602435608e565b005b348015607257600080fd5b50607c60043560a0565b60408051918252519081900360200190f35b60009182526020829052604090912055565b600090815260208190526040902054905600a165627a7a72305820fdfe832221d60dd582b4526afa20518b98c2e1cb0054653053a844cf265b25040029
+              fee_limit: 1000000000
+              call_value: 0
+              consume_user_resource_percent: 100
+              origin_energy_limit: 10000000
+              visible: true
+            schema:
+              type: object
+              properties:
+                owner_address:
+                  type: string
+                  description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                abi:
+                  type: string
+                  description: |-
+                    Smart contract ABI.
+                    Example: `"[{"constant":false,"inputs":[{"name":"key","type":"uint256"},{"name":"value","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"key","type":"uint256"}],"name":"get","outputs":[{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]"`
+                  format: json
+                  example: '"[{"constant":false,"inputs":[{"name":"key","type":"uint256"},{"name":"value","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"key","type":"uint256"}],"name":"get","outputs":[{"name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]"'
+                bytecode:
+                  type: string
+                  description: |-
+                    Bytecode of the smart contract.
+                    Example: `608060405234801561001057600080fd5b5060de8061001f6000396000f30060806040526004361060485763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416631ab06ee58114604d5780639507d39a146067575b600080fd5b348015605857600080fd5b506065600435602435608e565b005b348015607257600080fd5b50607c60043560a0565b60408051918252519081900360200190f35b60009182526020829052604090912055565b600090815260208190526040902054905600a165627a7a72305820fdfe832221d60dd582b4526afa20518b98c2e1cb0054653053a844cf265b25040029`
+                  example: 608060405234801561001057600080fd5b5060de8061001f6000396000f30060806040526004361060485763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416631ab06ee58114604d5780639507d39a146067575b600080fd5b348015605857600080fd5b506065600435602435608e565b005b348015607257600080fd5b50607c60043560a0565b60408051918252519081900360200190f35b60009182526020829052604090912055565b600090815260208190526040902054905600a165627a7a72305820fdfe832221d60dd582b4526afa20518b98c2e1cb0054653053a844cf265b25040029
+                fee_limit:
+                  type: integer
+                  description: 'Maximum TRX (in sun) the caller agrees to pay for transaction fees. (Unit: sun). Example: `1000000000` (1,000 TRX)'
+                  format: int32
+                parameter:
+                  type: string
+                  description: The parameters passed to the contract's constructor function.(ABI-encoded format)
+                origin_energy_limit:
+                  type: integer
+                  description: 'Maximum Energy the contract deployer is willing to subsidize per call. Must be > 0; typical value: 1,000,000–10,000,000. Example: `100000000`'
+                  format: int32
+                  example: 100000000
+                name:
+                  type: string
+                  description: Contract name
+                call_value:
+                  type: integer
+                  description: 'Amount of TRX transferred into the contract at deployment. (Unit: sun)'
+                  format: int64
+                consume_user_resource_percent:
+                  type: integer
+                  description: 'Percentage of Energy paid by the contract caller (vs. the deployer). Range: 0–100. Default: 0 (deployer pays all). Example: `10` (caller pays 10%, deployer pays 90%).'
+                  format: int32
+                visible:
+                  type: boolean
+                  description: 'Optional. Set to `true` to format addresses in Base58; set to `false` for hex format. (Default: `false`)'
+              required:
+              - owner_address
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  owner_address:
+                    type: string
+                    description: 'Transaction initiator address. (Format: Base58 or Hex)'
+                  new_contract:
+                    type: object
+                    description: Data of the deployed smart contract. See [GetContract](https://developers.tron.network/reference/wallet-getcontract) for fields.
+                    properties: {}
+                  call_token_value:
+                    type: int64
+                    description: Amount of TRC-10 token transferred into the contract.
+                    format: int64
+                  token_id:
+                    type: integer
+                    format: int64
+                    description: TRC-10 token id
+              examples:
+                Result:
+                  value: '{}'
+        "400":
+          description: "400"
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}

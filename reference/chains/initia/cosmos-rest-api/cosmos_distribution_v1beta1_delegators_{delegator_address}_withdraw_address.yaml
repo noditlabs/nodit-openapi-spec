@@ -3,7 +3,7 @@ info:
   title: Initia - cosmos_distribution_v1beta1_delegators_{delegator_address}_withdraw_address
   version: 1.0.0
 servers:
-  - url: https://rest-initia-mainnet.nodit.io
+- url: https://rest-initia-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: DelegatorWithdrawAddress queries withdraw address of a delegator.
       operationId: cosmos_distribution_v1beta1_delegators_{delegator_address}_withdraw_address
       tags:
-        - distribution
+      - distribution
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -38,7 +38,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -60,12 +60,12 @@ paths:
                           type: string
                           format: byte
       parameters:
-        - name: delegator_address
-          description: delegator_addr defines the delegator address to query for.
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: delegator_address
+        description: delegator_addr defines the delegator address to query for.
+        in: path
+        required: true
+        schema:
+          type: string
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/distribution/v1beta1/delegators/{delegator_address}/withdraw_address

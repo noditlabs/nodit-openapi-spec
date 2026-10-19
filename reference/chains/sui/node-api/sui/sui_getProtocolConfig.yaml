@@ -3,8 +3,8 @@ info:
   title: Sui - sui_getProtocolConfig
   version: 1.0.0
 servers:
-  - url: https://sui-mainnet.nodit.io
-    description: Sui Mainnet
+- url: https://sui-mainnet.nodit.io
+  description: Sui Mainnet
 components:
   securitySchemes:
     api_key:
@@ -24,140 +24,140 @@ components:
       type: string
     ProtocolConfigValue:
       oneOf:
-        - type: object
-          required:
-            - u16
-          properties:
-            u16:
-              $ref: "#/components/schemas/BigInt_for_uint16"
-          additionalProperties: false
-        - type: object
-          required:
-            - u32
-          properties:
-            u32:
-              $ref: "#/components/schemas/BigInt_for_uint32"
-          additionalProperties: false
-        - type: object
-          required:
-            - u64
-          properties:
-            u64:
-              $ref: "#/components/schemas/BigInt_for_uint64"
-          additionalProperties: false
-        - type: object
-          required:
-            - f64
-          properties:
-            f64:
-              type: string
-          additionalProperties: false
-        - type: object
-          required:
-            - bool
-          properties:
-            bool:
-              type: string
-          additionalProperties: false
+      - type: object
+        required:
+        - u16
+        properties:
+          u16:
+            $ref: '#/components/schemas/BigInt_for_uint16'
+        additionalProperties: false
+      - type: object
+        required:
+        - u32
+        properties:
+          u32:
+            $ref: '#/components/schemas/BigInt_for_uint32'
+        additionalProperties: false
+      - type: object
+        required:
+        - u64
+        properties:
+          u64:
+            $ref: '#/components/schemas/BigInt_for_uint64'
+        additionalProperties: false
+      - type: object
+        required:
+        - f64
+        properties:
+          f64:
+            type: string
+        additionalProperties: false
+      - type: object
+        required:
+        - bool
+        properties:
+          bool:
+            type: string
+        additionalProperties: false
     ProtocolConfig:
       type: object
       required:
-        - attributes
-        - featureFlags
-        - maxSupportedProtocolVersion
-        - minSupportedProtocolVersion
-        - protocolVersion
+      - attributes
+      - featureFlags
+      - maxSupportedProtocolVersion
+      - minSupportedProtocolVersion
+      - protocolVersion
       properties:
         attributes:
           type: object
           additionalProperties:
-            $ref: "#/components/schemas/ProtocolConfigValue"
+            $ref: '#/components/schemas/ProtocolConfigValue'
         featureFlags:
           type: object
           additionalProperties:
             type: boolean
         maxSupportedProtocolVersion:
-          $ref: "#/components/schemas/BigInt_for_uint64"
+          $ref: '#/components/schemas/BigInt_for_uint64'
         minSupportedProtocolVersion:
-          $ref: "#/components/schemas/BigInt_for_uint64"
+          $ref: '#/components/schemas/BigInt_for_uint64'
         protocolVersion:
-          $ref: "#/components/schemas/BigInt_for_uint64"
+          $ref: '#/components/schemas/BigInt_for_uint64'
     Hex:
       description: Hex string encoding.
       type: string
     ObjectID:
       allOf:
-        - $ref: "#/components/schemas/Hex"
+      - $ref: '#/components/schemas/Hex'
     Base58:
       type: string
     Digest:
       allOf:
-        - $ref: "#/components/schemas/Base58"
+      - $ref: '#/components/schemas/Base58'
       description: A representation of a 32 byte digest
     ObjectResponseError:
       oneOf:
-        - type: object
-          required:
-            - code
-            - object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - notExists
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - parent_object_id
-          properties:
-            code:
-              type: string
-              enum:
-                - dynamicFieldNotFound
-            parent_object_id:
-              $ref: "#/components/schemas/ObjectID"
-        - type: object
-          required:
-            - code
-            - digest
-            - object_id
-            - version
-          properties:
-            code:
-              type: string
-              enum:
-                - deleted
-            digest:
-              description: Base64 string representing the object digest
-              allOf:
-                - $ref: "#/components/schemas/Digest"
-            object_id:
-              $ref: "#/components/schemas/ObjectID"
-            version:
-              description: Object version.
-              allOf:
-                - $ref: "#/components/schemas/BigInt_for_uint64"
-        - type: object
-          required:
-            - code
-          properties:
-            code:
-              type: string
-              enum:
-                - unknown
-        - type: object
-          required:
-            - code
-            - error
-          properties:
-            code:
-              type: string
-              enum:
-                - displayError
-            error:
-              type: string
+      - type: object
+        required:
+        - code
+        - object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - notExists
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - parent_object_id
+        properties:
+          code:
+            type: string
+            enum:
+            - dynamicFieldNotFound
+          parent_object_id:
+            $ref: '#/components/schemas/ObjectID'
+      - type: object
+        required:
+        - code
+        - digest
+        - object_id
+        - version
+        properties:
+          code:
+            type: string
+            enum:
+            - deleted
+          digest:
+            description: Base64 string representing the object digest
+            allOf:
+            - $ref: '#/components/schemas/Digest'
+          object_id:
+            $ref: '#/components/schemas/ObjectID'
+          version:
+            description: Object version.
+            allOf:
+            - $ref: '#/components/schemas/BigInt_for_uint64'
+      - type: object
+        required:
+        - code
+        properties:
+          code:
+            type: string
+            enum:
+            - unknown
+      - type: object
+        required:
+        - code
+        - error
+        properties:
+          code:
+            type: string
+            enum:
+            - displayError
+          error:
+            type: string
     Error:
       type: object
       properties:
@@ -168,8 +168,8 @@ components:
           type: string
           description: Returns a detailed message explaining the cause of the error.
       required:
-        - code
-        - message
+      - code
+      - message
   responses:
     "400":
       description: Bad Request
@@ -187,17 +187,17 @@ components:
                 description: Request ID
                 example: 1
               error:
-                $ref: "#/components/schemas/ObjectResponseError"
+                $ref: '#/components/schemas/ObjectResponseError'
             required:
-              - jsonrpc
-              - id
-              - error
+            - jsonrpc
+            - id
+            - error
     "401":
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: AUTHENTICATION_FAILED
               message: Authentication failed
@@ -206,7 +206,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: PERMISSION_DENIED
               message: Permission denied
@@ -215,16 +215,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: RESOURCE_NOT_FOUND
-              message: "Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }"
+              message: 'Resource not found: { RESOURCE1_NAME = RESOURCE1_VALUE, RESOURCE2_NAME = RESOURCE2_VALUE, ... }'
     "429":
       description: Too Many Requests
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
             example:
               code: TOO_MANY_REQUESTS
               message: Too many requests
@@ -232,14 +232,14 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: sui-sui_getProtocolConfig
       summary: sui_getProtocolConfig
       description: |
         Return the protocol config table for the given version number. If the version number is not specified, If none is specified, the node uses the version of the latest epoch it has processed.
       x-seo-description: Returns the current protocol configuration and feature flags for the Sui network.
       tags:
-        - sui
+      - sui
       parameters: []
       requestBody:
         required: true
@@ -248,10 +248,10 @@ paths:
             schema:
               type: object
               required:
-                - id
-                - jsonrpc
-                - method
-                - params
+              - id
+              - jsonrpc
+              - method
+              - params
               properties:
                 id:
                   type: integer
@@ -268,15 +268,15 @@ paths:
                   maxItems: 1
                   items:
                     oneOf:
-                      - title: version
-                        $ref: "#/components/schemas/BigInt_for_uint64"
-                        description: An optional protocol version specifier. If omitted, the latest protocol config table for the node will be returned.
+                    - title: version
+                      $ref: '#/components/schemas/BigInt_for_uint64'
+                      description: An optional protocol version specifier. If omitted, the latest protocol config table for the node will be returned.
               example:
                 jsonrpc: "2.0"
                 id: 1
                 method: sui_getProtocolConfig
                 params:
-                  - 6
+                - 6
       responses:
         "200":
           description: Successful Response
@@ -290,7 +290,7 @@ paths:
                   id:
                     type: integer
                   result:
-                    $ref: "#/components/schemas/ProtocolConfig"
+                    $ref: '#/components/schemas/ProtocolConfig'
               example:
                 jsonrpc: "2.0"
                 result:
@@ -851,12 +851,12 @@ paths:
                     vector_swap_base_cost: null
                 id: 1
         "400":
-          $ref: "#/components/responses/400"
+          $ref: '#/components/responses/400'
         "401":
-          $ref: "#/components/responses/401"
+          $ref: '#/components/responses/401'
         "403":
-          $ref: "#/components/responses/403"
+          $ref: '#/components/responses/403'
         "404":
-          $ref: "#/components/responses/404"
+          $ref: '#/components/responses/404'
         "429":
-          $ref: "#/components/responses/429"
+          $ref: '#/components/responses/429'

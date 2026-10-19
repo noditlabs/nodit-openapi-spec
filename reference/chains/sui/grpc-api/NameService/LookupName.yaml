@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: Sui - LookupName
+  version: 1.0.0
+servers:
+- url: https://sui-mainnet.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /sui.rpc.v2.NameService/LookupName:
+    post:
+      security:
+      - api_key: []
+      operationId: sui-grpc-LookupName
+      summary: LookupName
+      description: |
+        Looks up a SuiNS name and returns the associated record.
+      x-seo-description: SuiNS 이름을 조회하여 연결된 레코드를 반환합니다.
+      x-grpc-method: sui.rpc.v2.NameService/LookupName
+      x-proto: sui/rpc/v2/name_service.proto
+      x-protocol: grpc
+      x-grpc:
+        service: sui.rpc.v2.NameService
+        method: LookupName
+        streaming: unary
+        proto: sui/rpc/v2/name_service.proto
+        transports:
+        - grpc
+        - grpc-web
+        protoRepo: https://github.com/MystenLabs/sui-apis/tree/main/proto
+      x-hide-try-it: true
+      tags:
+      - NameService
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: ' Required. The SuiNS name to lookup. Supports both `@name` and `name.sui` formats.'
+            example:
+              name: example.sui
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    description: The record for the requested name.
+                    properties:
+                      id:
+                        type: string
+                        description: Record ID.
+                      name:
+                        type: string
+                        description: SuiNS name.
+                      registration_nft_id:
+                        type: string
+                        description: RegistrationNFT ID.
+                      expiration_timestamp:
+                        type: string
+                        description: Expiration timestamp.
+                      target_address:
+                        type: string
+                        description: Resolved target address.
+                      data:
+                        type: array
+                        description: Additional data entries.
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              type: string
+                              description: Entry key.
+                            value:
+                              type: string
+                              description: Entry value.
+              example:
+                record: {}

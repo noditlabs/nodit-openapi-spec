@@ -3,7 +3,7 @@ info:
   title: Cosmos - Block
   version: 1.0.0
 servers:
-  - url: https://rpc-cosmos-mainnet.nodit.io
+- url: https://rpc-cosmos-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -18,12 +18,12 @@ paths:
   /:
     post:
       security:
-        - api_key: []
+      - api_key: []
       operationId: block
       summary: Block
       description: Retrieves the block at the specified height. Returns the latest block if height is omitted.
       tags:
-        - json-rpc-api
+      - json-rpc-api
       requestBody:
         required: true
         content:
@@ -32,19 +32,23 @@ paths:
               type: object
               additionalProperties: false
               required:
-                - jsonrpc
-                - id
-                - method
+              - jsonrpc
+              - id
+              - method
               properties:
                 jsonrpc:
+                  description: JSON-RPC protocol version. Always `2.0`.
                   type: string
                   const: "2.0"
                 id:
+                  description: Identifier of the request. Returned unchanged as `id` in the response.
                   type: integer
                 method:
+                  description: Name of the JSON-RPC method to call.
                   type: string
                   const: block
                 params:
+                  description: Parameters passed to the method.
                   type: object
                   additionalProperties: false
                   properties:
@@ -65,186 +69,249 @@ paths:
                 type: object
                 additionalProperties: false
                 required:
-                  - jsonrpc
-                  - id
-                  - result
+                - jsonrpc
+                - id
+                - result
                 properties:
                   jsonrpc:
+                    description: JSON-RPC protocol version. Always `2.0`.
                     type: string
                     const: "2.0"
                   id:
+                    description: The request ID, echoed back unchanged.
                     type: integer
                   result:
+                    description: Result of the method call.
                     type: object
                     additionalProperties: false
                     properties:
                       block_id:
+                        description: Block ID (block hash and part set header).
                         type: object
                         additionalProperties: false
                         properties:
                           hash:
+                            description: Block hash.
                             type: string
                           parts:
+                            description: Part set header, used when the block is split into parts for gossiping.
                             type: object
                             additionalProperties: false
                             properties:
                               total:
+                                description: Total number of block parts.
                                 type: integer
                               hash:
+                                description: Merkle root hash of the block parts.
                                 type: string
                       block:
+                        description: The block (header, transactions, evidence, and last commit).
                         type: object
                         additionalProperties: false
                         properties:
                           header:
+                            description: Block header.
                             type: object
                             additionalProperties: false
                             properties:
                               version:
+                                description: Block and application protocol versions.
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   block:
+                                    description: Block protocol version.
                                     type: string
                                   app:
+                                    description: Application protocol version.
                                     type: string
                               chain_id:
+                                description: Chain ID.
                                 type: string
                               height:
+                                description: Block height.
                                 type: string
                               time:
+                                description: Block time (UTC).
                                 type: string
                               last_block_id:
+                                description: Block ID of the previous block.
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   hash:
+                                    description: Block hash.
                                     type: string
                                   parts:
+                                    description: Part set header, used when the block is split into parts for gossiping.
                                     type: object
                                     additionalProperties: false
                                     properties:
                                       total:
+                                        description: Total number of block parts.
                                         type: integer
                                       hash:
+                                        description: Merkle root hash of the block parts.
                                         type: string
                               last_commit_hash:
+                                description: Hash of the validators' commit for the previous block.
                                 type: string
                               data_hash:
+                                description: Hash of the transactions in the block.
                                 type: string
                               validators_hash:
+                                description: Hash of the validator set for the current block.
                                 type: string
                               next_validators_hash:
+                                description: Hash of the validator set for the next block.
                                 type: string
                               consensus_hash:
+                                description: Hash of the consensus parameters for the current block.
                                 type: string
                               app_hash:
+                                description: Application state hash after executing the previous block's transactions.
                                 type: string
                               last_results_hash:
+                                description: Root hash of the execution results of the previous block's transactions.
                                 type: string
                               evidence_hash:
+                                description: Hash of the evidence included in the block.
                                 type: string
                               proposer_address:
+                                description: Address of the validator that proposed the block.
                                 type: string
                           data:
+                            description: Transactions included in the block.
                             type: array
                             items:
                               type: string
                           evidence:
+                            description: Evidence of Byzantine behavior included in the block.
                             type: array
                             items:
                               type: object
                               additionalProperties: false
                               properties:
                                 type:
+                                  description: Evidence type.
                                   oneOf:
-                                    - type: string
-                                    - type: integer
+                                  - type: string
+                                  - type: integer
                                 height:
+                                  description: Height at which the violation occurred.
                                   oneOf:
-                                    - type: integer
-                                    - type: string
+                                  - type: integer
+                                  - type: string
                                 time:
+                                  description: Time at which the violation occurred.
                                   oneOf:
-                                    - type: integer
-                                    - type: string
+                                  - type: integer
+                                  - type: string
                                 total_voting_power:
+                                  description: Total voting power at the time of the violation.
                                   oneOf:
-                                    - type: integer
-                                    - type: string
+                                  - type: integer
+                                  - type: string
                                 validator:
+                                  description: The offending validator.
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     pub_key:
+                                      description: Validator public key.
                                       type: object
                                       additionalProperties: false
                                       properties:
                                         type:
+                                          description: Public key type (for example, `tendermint/PubKeyEd25519`).
                                           type: string
                                         value:
+                                          description: Public key value (Base64).
                                           type: string
                                     voting_power:
+                                      description: Voting power of the validator.
                                       oneOf:
-                                        - type: integer
-                                        - type: string
+                                      - type: integer
+                                      - type: string
                                     address:
+                                      description: Validator address.
                                       type: string
                           last_commit:
+                            description: Validators' commit for the previous block.
                             type: object
                             additionalProperties: false
                             properties:
                               height:
+                                description: Height of the committed block.
                                 type: integer
                               round:
+                                description: Consensus round in which the block was committed.
                                 type: integer
                               block_id:
+                                description: ID of the committed block.
                                 type: object
                                 additionalProperties: false
                                 properties:
                                   hash:
+                                    description: Block hash.
                                     type: string
                                   parts:
+                                    description: Part set header, used when the block is split into parts for gossiping.
                                     type: object
                                     additionalProperties: false
                                     properties:
                                       total:
+                                        description: Total number of block parts.
                                         type: integer
                                       hash:
+                                        description: Merkle root hash of the block parts.
                                         type: string
                               signatures:
+                                description: Validator signatures, ordered by the validator set.
                                 type: array
                                 items:
                                   type: object
                                   additionalProperties: false
                                   properties:
                                     type:
+                                      description: Vote type.
                                       type: integer
                                     height:
+                                      description: Height of the signed block.
                                       type: string
                                     round:
+                                      description: Consensus round in which the block was committed.
                                       type: integer
                                     block_id:
+                                      description: ID of the signed block.
                                       type: object
                                       additionalProperties: false
                                       properties:
                                         hash:
+                                          description: Block hash.
                                           type: string
                                         parts:
+                                          description: Part set header, used when the block is split into parts for gossiping.
                                           type: object
                                           additionalProperties: false
                                           properties:
                                             total:
+                                              description: Total number of block parts.
                                               type: integer
                                             hash:
+                                              description: Merkle root hash of the block parts.
                                               type: string
                                     timestamp:
+                                      description: Time the signature was made.
                                       type: string
                                     validator_address:
+                                      description: Address of the signing validator.
                                       type: string
                                     validator_index:
+                                      description: Index in the validator set.
                                       type: integer
                                     signature:
+                                      description: Validator signature (Base64).
                                       type: string
               example:
                 jsonrpc: "2.0"
@@ -262,7 +329,7 @@ paths:
                         app: "0"
                       chain_id: cosmoshub-4
                       height: "1"
-                      time: "2019-12-11T16:11:34Z"
+                      time: '2019-12-11T16:11:34Z'
                       last_block_id:
                         hash: ""
                         parts:

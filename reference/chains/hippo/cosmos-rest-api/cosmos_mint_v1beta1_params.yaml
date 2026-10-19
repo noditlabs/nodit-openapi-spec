@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Hippo - cosmos_mint_v1beta1_params
+  title: Hippo Protocol - cosmos_mint_v1beta1_params
   version: 1.0.0
 servers:
-  - url: https://rest-hippo-mainnet.nodit.io
+- url: https://rest-hippo-mainnet.nodit.io
 components:
   securitySchemes:
     api_key:
@@ -20,12 +20,12 @@ paths:
       description: Params returns the total set of minting parameters.
       operationId: cosmos_mint_v1beta1_params
       tags:
-        - mint
+      - mint
       responses:
         "200":
           description: Successful Response
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -34,21 +34,27 @@ paths:
                     type: object
                     properties:
                       mint_denom:
+                        description: Denomination of newly minted tokens.
                         type: string
                         title: type of coin to mint
                       inflation_rate_change:
+                        description: Maximum annual change in the inflation rate.
                         type: string
                         title: maximum annual change in inflation rate
                       inflation_max:
+                        description: Maximum inflation rate.
                         type: string
                         title: maximum inflation rate
                       inflation_min:
+                        description: Minimum inflation rate.
                         type: string
                         title: minimum inflation rate
                       goal_bonded:
+                        description: Target bonded ratio. Inflation rises when the actual bonded ratio is below this.
                         type: string
                         title: goal of percent bonded atoms
                       blocks_per_year:
+                        description: Expected number of blocks per year.
                         type: string
                         format: uint64
                         title: expected blocks per year
@@ -56,7 +62,7 @@ paths:
         default:
           description: An unexpected error response.
           content:
-            "*/*":
+            '*/*':
               schema:
                 type: object
                 properties:
@@ -78,5 +84,5 @@ paths:
                           type: string
                           format: byte
       security:
-        - api_key: []
+      - api_key: []
       summary: /cosmos/mint/v1beta1/params
