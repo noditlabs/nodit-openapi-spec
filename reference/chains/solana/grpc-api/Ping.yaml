@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+  title: Solana - Ping
+  version: 1.0.0
+servers:
+- url: https://solana-mainnet.grpc.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /geyser.Geyser/Ping:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-grpc-Ping
+      summary: Ping
+      description: |
+        Checks connectivity to the gRPC server. It echoes back the requested `count`, so you can use it to verify the connection and measure round-trip latency.
+      x-seo-description: gRPC 서버와의 연결 상태를 확인합니다. 요청한 `count` 값을 그대로 돌려주므로 연결 확인과 왕복 지연 시간 측정에 사용할 수 있습니다.
+      x-grpc-method: geyser.Geyser/Ping
+      x-proto: geyser.proto
+      x-protocol: grpc
+      x-grpc:
+        service: geyser.Geyser
+        method: Ping
+        streaming: unary
+        proto: geyser.proto
+        protoRepo: https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto
+        responseType: PongResponse
+      x-hide-try-it: true
+      tags:
+      - Geyser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                count:
+                  type: integer
+                  format: int32
+                  description: Value echoed back in the response.
+            example:
+              count: 1
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: The `count` value from the request.
+              example:
+                count: 1

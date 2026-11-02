@@ -1,0 +1,309 @@
+openapi: 3.1.0
+info:
+  title: Near - view_code
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccountId:
+      type: string
+      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
+      example: wrap.near
+    CryptoHash:
+      type: string
+      description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
+      example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    BlockId:
+      description: |-
+        Specifies the block to query by block height (integer) or block hash (base58 string).
+        Cannot be used together with `finality`.
+      oneOf:
+      - title: Block Height
+        type: integer
+        example: 220785385
+      - title: Block Hash
+        type: string
+        example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    Finality:
+      type: string
+      description: |-
+        Specifies the block finality. Cannot be used together with `block_id`.
+        - `optimistic`: the latest block the node has received (may be reorganized)
+        - `near-final`: a Doomslug-final block (not reverted in most cases)
+        - `final`: a fully finalized block
+      enum:
+      - optimistic
+      - near-final
+      - final
+      example: final
+    BlockHeight:
+      type: integer
+      description: Block height.
+      example: 220785385
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-query_view_code
+      summary: view_code
+      description: |
+        Returns the contract code (WASM binary) deployed to an account, encoded in base64, together with its code hash.
+
+        Call the `query` method with `request_type: "view_code"`. Querying an account with no deployed contract returns the `NO_CONTRACT_CODE` error, and querying an account that does not exist returns the `UNKNOWN_ACCOUNT` error.
+      x-seo-description: Download the WASM contract code deployed to a NEAR account, encoded in base64, together with its code hash using the query method (view_code).
+      tags:
+      - accounts-contracts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: query
+                params:
+                  type: object
+                  description: Query parameters. Specify the point in time with either `finality` or `block_id`.
+                  required:
+                  - request_type
+                  - account_id
+                  properties:
+                    request_type:
+                      type: string
+                      description: Query type. Fixed to `view_code` for contract code lookups.
+                      enum:
+                      - view_code
+                      example: view_code
+                    finality:
+                      $ref: '#/components/schemas/Finality'
+                    block_id:
+                      $ref: '#/components/schemas/BlockId'
+                    account_id:
+                      $ref: '#/components/schemas/AccountId'
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: query
+                params:
+                  request_type: view_code
+                  finality: final
+                  account_id: wrap.near
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                result:
+                  code_base64: AGFzbQEAAAABoQRFYAF/AGAAAX9gBn9+fn5+fgF+YAN/fn4BfmADf35+AGACf34AYAR/fn5+AX5gAn9+
+                  hash: DL2f5xmZ44cQRP6vBMt94rvseH5d5KKnAGis2WkTAsh1
+                  block_height: 220785379
+                  block_hash: 7yuDzQwsyNry3QpW5XuMG5bi1vmidBX5SYi5GjvnsvTn
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: object
+                    properties:
+                      code_base64:
+                        type: string
+                        description: The entire contract WASM binary encoded in base64. The WASM can be up to about 4 MiB, and the base64 string is about 1.33 times longer. The example shows only the beginning.
+                      hash:
+                        type: string
+                        description: Hash of the contract code (base58). Same value as `code_hash` in the `view_account` response.
+                      block_height:
+                        $ref: '#/components/schemas/BlockHeight'
+                      block_hash:
+                        $ref: '#/components/schemas/CryptoHash'
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'

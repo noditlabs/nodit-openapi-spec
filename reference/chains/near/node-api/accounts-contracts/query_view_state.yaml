@@ -1,0 +1,350 @@
+openapi: 3.1.0
+info:
+  title: Near - view_state
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccountId:
+      type: string
+      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
+      example: wrap.near
+    CryptoHash:
+      type: string
+      description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
+      example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    BlockId:
+      description: |-
+        Specifies the block to query by block height (integer) or block hash (base58 string).
+        Cannot be used together with `finality`.
+      oneOf:
+      - title: Block Height
+        type: integer
+        example: 220785385
+      - title: Block Hash
+        type: string
+        example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    Finality:
+      type: string
+      description: |-
+        Specifies the block finality. Cannot be used together with `block_id`.
+        - `optimistic`: the latest block the node has received (may be reorganized)
+        - `near-final`: a Doomslug-final block (not reverted in most cases)
+        - `final`: a fully finalized block
+      enum:
+      - optimistic
+      - near-final
+      - final
+      example: final
+    BlockHeight:
+      type: integer
+      description: Block height.
+      example: 220785385
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-query_view_state
+      summary: view_state
+      description: |
+        Returns the key-value pairs stored in a contract's storage, encoded in base64. Only keys starting with the prefix given in `prefix_base64` are returned; pass an empty string (`""`) to return the entire state.
+
+        Call the `query` method with `request_type: "view_state"`. For large state, set how many entries to receive at once with `limit`, then pass the `last_key` from the response as `after_key_base64` in the next request to continue. `include_proof` cannot be combined with `after_key_base64` or `limit`; specifying them together returns `REQUEST_VALIDATION_ERROR` (`PARSE_ERROR`).
+
+        By default, RPC nodes return at most 50 kB of state. Querying state larger than this limit without pagination returns the `TOO_LARGE_CONTRACT_STATE` error (for example, requesting `wrap.near` with `prefix_base64: ""`). Querying an account that does not exist returns the `UNKNOWN_ACCOUNT` error.
+      x-seo-description: Read a NEAR contract's raw key-value storage by base64 key prefix, with optional pagination and Merkle proofs, using the query method (view_state).
+      tags:
+      - accounts-contracts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: query
+                params:
+                  type: object
+                  description: Query parameters. Specify the point in time with either `finality` or `block_id`.
+                  required:
+                  - request_type
+                  - account_id
+                  - prefix_base64
+                  properties:
+                    request_type:
+                      type: string
+                      description: Query type. Fixed to `view_state` for contract state lookups.
+                      enum:
+                      - view_state
+                      example: view_state
+                    finality:
+                      $ref: '#/components/schemas/Finality'
+                    block_id:
+                      $ref: '#/components/schemas/BlockId'
+                    account_id:
+                      $ref: '#/components/schemas/AccountId'
+                    prefix_base64:
+                      type: string
+                      description: Prefix of the keys to look up (base64). An empty string (`""`) targets all keys.
+                      example: ""
+                    after_key_base64:
+                      type: string
+                      description: Resume listing after this key (exclusive). Pass the `last_key` from the previous response; it must start with `prefix_base64`. Cannot be combined with `include_proof`.
+                      example: YQIAAAB0Zw==
+                    limit:
+                      type: integer
+                      minimum: 1
+                      description: Maximum number of key-value pairs to return in one page. Cannot be combined with `include_proof`.
+                      example: 2
+                    include_proof:
+                      type: boolean
+                      default: false
+                      description: If `true`, also returns inclusion proofs (`proof`) for the state entries. Defaults to `false`; cannot be combined with `after_key_base64` or `limit`.
+                      example: false
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: query
+                params:
+                  request_type: view_state
+                  finality: final
+                  account_id: wrap.near
+                  prefix_base64: ""
+                  limit: 2
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                result:
+                  values:
+                  - key: U1RBVEU=
+                    value: AQAAAGFi02nsoIeYQcnjCmHEAQAAfQAAAAAAAAA=
+                  - key: YQIAAAB0Zw==
+                    value: AADAzLBGtbosOQAAAAAAAA==
+                  last_key: YQIAAAB0Zw==
+                  block_height: 220877592
+                  block_hash: 9W8m4p7dcURdJbgRUuWUdLfPwo3jHQ7vZud4EiwxmSs2
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: object
+                    properties:
+                      values:
+                        type: array
+                        description: Key-value pairs matching the condition. An empty array if no key matches or the state is empty.
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              type: string
+                              description: Storage key (base64)
+                            value:
+                              type: string
+                              description: Storage value (base64). The value format follows the serialization chosen by the contract (Borsh, JSON, etc.).
+                      last_key:
+                        type: string
+                        description: Key (base64) to pass as `after_key_base64` to fetch the next page. Present only when entries remain; absent on the last page.
+                      proof:
+                        type: array
+                        description: 'Inclusion proofs for the state entries (array of base64 strings). Present only when requested with `include_proof: true`.'
+                        items:
+                          type: string
+                      block_height:
+                        $ref: '#/components/schemas/BlockHeight'
+                      block_hash:
+                        $ref: '#/components/schemas/CryptoHash'
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'

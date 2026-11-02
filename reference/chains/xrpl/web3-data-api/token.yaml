@@ -654,9 +654,9 @@ paths:
       operationId: xrpl-getTokenTransfersByAccount
       summary: Get Token Transfers by Account
       description: |+
-        Retrieves the list of ERC20 token transfers sent or received by a specific address. Results include token contract metadata and the transferred token amount.
+        Retrieves the list of token transfers sent or received by a specific address. Results include the transferred token's information and amount.
 
-      x-seo-description: Get a paginated list of ERC20 token transfers sent or received by a specific account address.
+      x-seo-description: Get a paginated list of token transfers sent or received by a specific account address.
       tags:
       - Token API
       parameters:
@@ -1219,12 +1219,12 @@ paths:
       operationId: xrpl-getTokenTransfersWithinRange
       summary: Get Token Transfers Within Range
       description: |
-        Retrieves the list of ERC20 token transfers that occurred during a specific period. Results include token contract metadata and the transferred token amount.
+        Retrieves the list of token transfers that occurred during a specific period. Results include the transferred token's information and amount.
 
 
         > 📘 Period setting tip
         > If the specified period is long, response time may increase. For faster responses, it is recommended to set only the necessary period.
-      x-seo-description: Get all ERC20 token transfers that occurred within a specified block number or time range.
+      x-seo-description: Get all token transfers that occurred within a specified block, slot, or time range.
       tags:
       - Token API
       parameters:

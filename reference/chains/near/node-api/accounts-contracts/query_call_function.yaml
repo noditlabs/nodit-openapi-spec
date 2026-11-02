@@ -1,0 +1,468 @@
+openapi: 3.1.0
+info:
+  title: Near - call_function
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccountId:
+      type: string
+      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
+      example: wrap.near
+    CryptoHash:
+      type: string
+      description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
+      example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    BlockId:
+      description: |-
+        Specifies the block to query by block height (integer) or block hash (base58 string).
+        Cannot be used together with `finality`.
+      oneOf:
+      - title: Block Height
+        type: integer
+        example: 220785385
+      - title: Block Hash
+        type: string
+        example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    Finality:
+      type: string
+      description: |-
+        Specifies the block finality. Cannot be used together with `block_id`.
+        - `optimistic`: the latest block the node has received (may be reorganized)
+        - `near-final`: a Doomslug-final block (not reverted in most cases)
+        - `final`: a fully finalized block
+      enum:
+      - optimistic
+      - near-final
+      - final
+      example: final
+    BlockHeight:
+      type: integer
+      description: Block height.
+      example: 220785385
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-query_call_function
+      summary: call_function
+      description: |
+        Executes a contract's view method in read-only mode and returns its return value as a byte array and the logs emitted during execution as an array of strings. Because it does not change state, no transaction, signature, or gas fee is required.
+
+        Call the `query` method with `request_type: "call_function"`. Pass the method arguments as a JSON string encoded in base64 in `args_base64`. For a method without arguments, pass `e30=`, which is `{}` encoded in base64. The returned `result` is an array of the bytes returned by the contract (usually UTF-8 JSON); convert the bytes to a UTF-8 string and parse it as JSON to get the original value. Decoding the `result` in the example yields `{"spec":"ft-1.0.0","name":"Wrapped NEAR fungible token","symbol":"wNEAR","icon":null,"reference":null,"reference_hash":null,"decimals":24}`.
+
+        Calling an account that does not exist returns the `UNKNOWN_ACCOUNT` error. If the method does not exist, no contract is deployed, or execution panics, the response carries the failure reason as a string in `result.error` instead of an RPC error (for example, `wasm execution failed with error: MethodResolveError(MethodNotFound)`).
+      x-seo-description: Call a read-only view method of a NEAR smart contract with base64-encoded arguments and get its return value as bytes plus logs using the query method (call_function).
+      tags:
+      - accounts-contracts
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: query
+                params:
+                  type: object
+                  description: Query parameters. Specify the point in time with either `finality` or `block_id`.
+                  required:
+                  - request_type
+                  - account_id
+                  - method_name
+                  - args_base64
+                  properties:
+                    request_type:
+                      type: string
+                      description: Query type. Fixed to `call_function` for calling a contract view method.
+                      enum:
+                      - call_function
+                      example: call_function
+                    finality:
+                      $ref: '#/components/schemas/Finality'
+                    block_id:
+                      $ref: '#/components/schemas/BlockId'
+                    account_id:
+                      $ref: '#/components/schemas/AccountId'
+                    method_name:
+                      type: string
+                      description: Name of the contract method to call
+                      example: ft_metadata
+                    args_base64:
+                      type: string
+                      description: Method arguments (a JSON string encoded in base64). If there are no arguments, pass `e30=`, which is `{}` encoded in base64.
+                      example: e30=
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: query
+                params:
+                  request_type: call_function
+                  finality: final
+                  account_id: wrap.near
+                  method_name: ft_metadata
+                  args_base64: e30=
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                result:
+                  result:
+                  - 123
+                  - 34
+                  - 115
+                  - 112
+                  - 101
+                  - 99
+                  - 34
+                  - 58
+                  - 34
+                  - 102
+                  - 116
+                  - 45
+                  - 49
+                  - 46
+                  - 48
+                  - 46
+                  - 48
+                  - 34
+                  - 44
+                  - 34
+                  - 110
+                  - 97
+                  - 109
+                  - 101
+                  - 34
+                  - 58
+                  - 34
+                  - 87
+                  - 114
+                  - 97
+                  - 112
+                  - 112
+                  - 101
+                  - 100
+                  - 32
+                  - 78
+                  - 69
+                  - 65
+                  - 82
+                  - 32
+                  - 102
+                  - 117
+                  - 110
+                  - 103
+                  - 105
+                  - 98
+                  - 108
+                  - 101
+                  - 32
+                  - 116
+                  - 111
+                  - 107
+                  - 101
+                  - 110
+                  - 34
+                  - 44
+                  - 34
+                  - 115
+                  - 121
+                  - 109
+                  - 98
+                  - 111
+                  - 108
+                  - 34
+                  - 58
+                  - 34
+                  - 119
+                  - 78
+                  - 69
+                  - 65
+                  - 82
+                  - 34
+                  - 44
+                  - 34
+                  - 105
+                  - 99
+                  - 111
+                  - 110
+                  - 34
+                  - 58
+                  - 110
+                  - 117
+                  - 108
+                  - 108
+                  - 44
+                  - 34
+                  - 114
+                  - 101
+                  - 102
+                  - 101
+                  - 114
+                  - 101
+                  - 110
+                  - 99
+                  - 101
+                  - 34
+                  - 58
+                  - 110
+                  - 117
+                  - 108
+                  - 108
+                  - 44
+                  - 34
+                  - 114
+                  - 101
+                  - 102
+                  - 101
+                  - 114
+                  - 101
+                  - 110
+                  - 99
+                  - 101
+                  - 95
+                  - 104
+                  - 97
+                  - 115
+                  - 104
+                  - 34
+                  - 58
+                  - 110
+                  - 117
+                  - 108
+                  - 108
+                  - 44
+                  - 34
+                  - 100
+                  - 101
+                  - 99
+                  - 105
+                  - 109
+                  - 97
+                  - 108
+                  - 115
+                  - 34
+                  - 58
+                  - 50
+                  - 52
+                  - 125
+                  logs: []
+                  block_height: 220785391
+                  block_hash: FnRy8hpd2ESrs23uQ6vQrTQ8KRWrYsiq7Qv2UHDC8sRW
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: object
+                    properties:
+                      result:
+                        type: array
+                        description: Byte array of the method's return value (each element is an integer from 0 to 255). Convert the bytes to a UTF-8 string, then parse it as JSON. Methods without a return value return an empty array.
+                        items:
+                          type: integer
+                      logs:
+                        type: array
+                        description: Logs emitted by the contract during execution. An empty array if there are no logs.
+                        items:
+                          type: string
+                      error:
+                        type: string
+                        description: Failure reason when contract execution fails (for example, method not found, no contract, or panic). Present only on failure, in which case the `result` field is absent.
+                      block_height:
+                        $ref: '#/components/schemas/BlockHeight'
+                      block_hash:
+                        $ref: '#/components/schemas/CryptoHash'
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'

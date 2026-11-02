@@ -796,6 +796,9 @@ paths:
                   currency:
                     type: string
                     description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                    enum:
+                    - USD
+                    - KRW
                     default: USD
             example:
               contractAddresses:
@@ -842,7 +845,7 @@ paths:
                         description: A field representing when the data was last updated. Provided in ISO 8601 format.
                       listings:
                         type: array
-                        description: A field representing the list of exchanges where the token is listed.
+                        description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                         items:
                           type: string
                           description: A field representing the name of the exchange.
@@ -929,9 +932,9 @@ paths:
       operationId: bnb-getTokenTransfersByAccount
       summary: Get Token Transfers by Account
       description: |+
-        Retrieves the list of ERC20 token transfers sent or received by a specific address. Results include token contract metadata and the transferred token amount.
+        Retrieves the list of token transfers sent or received by a specific address. Results include the transferred token's information and amount.
 
-      x-seo-description: Get a paginated list of ERC20 token transfers sent or received by a specific account address.
+      x-seo-description: Get a paginated list of token transfers sent or received by a specific account address.
       tags:
       - Token API
       parameters:
@@ -2003,12 +2006,12 @@ paths:
       operationId: bnb-getTokenTransfersWithinRange
       summary: Get Token Transfers Within Range
       description: |
-        Retrieves the list of ERC20 token transfers that occurred during a specific period. Results include token contract metadata and the transferred token amount.
+        Retrieves the list of token transfers that occurred during a specific period. Results include the transferred token's information and amount.
 
 
         > 📘 Period setting tip
         > If the specified period is long, response time may increase. For faster responses, it is recommended to set only the necessary period.
-      x-seo-description: Get all ERC20 token transfers that occurred within a specified block number or time range.
+      x-seo-description: Get all token transfers that occurred within a specified block, slot, or time range.
       tags:
       - Token API
       parameters:

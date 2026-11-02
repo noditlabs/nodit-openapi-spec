@@ -1,0 +1,579 @@
+openapi: 3.1.0
+info:
+  title: Near - block
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    BlockId:
+      description: |-
+        Specifies the block to query by block height (integer) or block hash (base58 string).
+        Cannot be used together with `finality`.
+      oneOf:
+      - title: Block Height
+        type: integer
+        example: 220785385
+      - title: Block Hash
+        type: string
+        example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    Finality:
+      type: string
+      description: |-
+        Specifies the block finality. Cannot be used together with `block_id`.
+        - `optimistic`: the latest block the node has received (may be reorganized)
+        - `near-final`: a Doomslug-final block (not reverted in most cases)
+        - `final`: a fully finalized block
+      enum:
+      - optimistic
+      - near-final
+      - final
+      example: final
+    BlockHeight:
+      type: integer
+      description: Block height.
+      example: 220785385
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-block
+      summary: block
+      description: |
+        Returns the block header, the block producer account, and the list of chunk headers included in the block.
+
+        Use `finality` to get the latest block, or `block_id` (block height or block hash) to get a specific block. The two cannot be used together. If the block cannot be found, the `UNKNOWN_BLOCK` error is returned; if the node is still syncing, the `NOT_SYNCED_YET` error is returned. Transactions live in chunks, so call the `chunk` method with `chunks[].chunk_hash` to get them.
+      x-seo-description: Get NEAR block details, including the header, block producer, and chunk headers, by finality, block height, or block hash with the block method.
+      tags:
+      - blocks
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: block
+                params:
+                  type: object
+                  description: Specifies the block to query. Set exactly one of `finality`, `block_id`, or `sync_checkpoint`.
+                  properties:
+                    finality:
+                      $ref: '#/components/schemas/Finality'
+                    block_id:
+                      $ref: '#/components/schemas/BlockId'
+                    sync_checkpoint:
+                      type: string
+                      description: Block selector. `genesis` returns the genesis block; `earliest_available` returns the oldest block the node holds.
+                      enum:
+                      - genesis
+                      - earliest_available
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: block
+                params:
+                  finality: final
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                result:
+                  author: staked.poolv1.near
+                  chunks:
+                  - balance_burnt: "0"
+                    bandwidth_requests:
+                      V1:
+                        requests: []
+                    chunk_hash: Bwb7e4kc3EazNa2UNS18LGwpCUNtKCebcMwEDckqVAuW
+                    congestion_info:
+                      allowed_shard: 12
+                      buffered_receipts_gas: "0"
+                      delayed_receipts_gas: "0"
+                      receipt_bytes: 0
+                    encoded_length: 526
+                    encoded_merkle_root: 3PtDhuYvav6hrN9GGu5wVPx7p3KptKaCX99YzdjvuKbj
+                    gas_limit: 1000000000000000
+                    gas_used: 0
+                    height_created: 220785299
+                    height_included: 220785299
+                    outcome_root: "11111111111111111111111111111111"
+                    outgoing_receipts_root: GkXFM5VkSNfBLbDv8igetxFxFj9f3pcsnjKC37w1CzCA
+                    prev_block_hash: EchVfdovVaSQLUp4p5hXg9mxRow7VyfA1w5Ax5ev3iV2
+                    prev_state_root: 8PiaWyhACTaqbPe8LPeYAtPFgZjrLv6JsRg64cNRWAPe
+                    proposed_split: null
+                    rent_paid: "0"
+                    shard_id: 10
+                    signature: ed25519:4R3aGDYqfSVE1x8SZr7rhjqCPEVHfdCvdDJem6K5evttEEYNgb3V3WvAYQ2BENAZ5SZdVXe62zfFqewxPCLcaZCH
+                    tx_root: BG1meqDgUX7erusU7UN5YH5q6UKrJccqftT9jrTdyb2L
+                    validator_proposals: []
+                    validator_reward: "0"
+                  header:
+                    approvals:
+                    - ed25519:5pArAaaPNqRtpADvoPj1H4TgjCbZBE39zBNtBwxjhcv7eV3HshPYWjt7HXEcBJdgM8ixm2BUSu8uM2qtyaiECyHR
+                    - null
+                    - ed25519:4L6tc96TFgZizbbrvJwR3qSQmW6Ausyk885AauEVyTiL3yyjxPDhdkUDcXVd1USKM8RQvhD1EDH7i3Q7fxd3t7NF
+                    block_body_hash: J41ZLCseK6js1ASgFhUn25BZKxjcun1WzUG4e78D7qdj
+                    block_merkle_root: 52caYEBuLZAyi1cc989o7XMjxpYuN3bwZPazH86e8JmF
+                    block_ordinal: 210502101
+                    challenges_result: []
+                    challenges_root: "11111111111111111111111111111111"
+                    chunk_endorsements:
+                    - - 255
+                      - 255
+                      - 255
+                      - 255
+                      - 255
+                      - 239
+                      - 255
+                      - 255
+                      - 255
+                      - 255
+                      - 31
+                    - - 191
+                      - 255
+                      - 255
+                      - 251
+                      - 255
+                      - 255
+                      - 255
+                      - 255
+                      - 255
+                      - 255
+                      - 255
+                    chunk_headers_root: BLRC86rr3T4RTjU2ERBJ8fRwgDbXs2mjsniSQxnY5Aep
+                    chunk_mask:
+                    - true
+                    - true
+                    - true
+                    - true
+                    - true
+                    - true
+                    - true
+                    - true
+                    - true
+                    - true
+                    chunk_receipts_root: DZbVK4k3FWohzvvTjnqMcjXXJLe71WxdJ8yoed5ZT2Ps
+                    chunk_tx_root: HowTjCgDSH1vWSN5pMjAaUkeirp921G32cVCUz5MCv9d
+                    chunks_included: 10
+                    epoch_id: 8nD4ksRUJxEvy6E1MW3ySPrLjMq3CQsyXV7cFWvygF84
+                    epoch_sync_data_hash: null
+                    gas_price: "100000000"
+                    hash: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+                    height: 220785299
+                    last_ds_final_block: EchVfdovVaSQLUp4p5hXg9mxRow7VyfA1w5Ax5ev3iV2
+                    last_final_block: GGZKxKARnwakArG6pH4fWdeoUiufLZubRkTKow7NvGsc
+                    latest_protocol_version: 86
+                    next_bp_hash: BGT48bNJCiuCRVZ3LTc19KxdCpbPWLD4diVyojZPHUv
+                    next_epoch_id: 5nSkRGUryuexhDhM5dijPqLANjDojGJuzaB1euBZd9L4
+                    outcome_root: 2JDJZw5jBFSUVEL2EqTXMuBYFE5oxjogkf8ido9o9P3Y
+                    prev_hash: EchVfdovVaSQLUp4p5hXg9mxRow7VyfA1w5Ax5ev3iV2
+                    prev_height: 220785298
+                    prev_state_root: 8QuW2NoHrz8Kq3FFL6bAKHnDqm7JEZMbtQrteHz2VdE4
+                    random_value: Xry2MVhrWuABJPV4imyDrNtAy7fuvjt5nMnUh1BhECN
+                    rent_paid: "0"
+                    shard_split: null
+                    signature: ed25519:5X6StERGxnp981b6vaESU7zKCKq4cKuNp1eiK5HNVNgGuhittVwoRRxpFzMGkWGUunmxg6xkg14dvzrcz8EQTjAx
+                    timestamp: 1792488886653358989
+                    timestamp_nanosec: "1792488886653358989"
+                    total_supply: "1309454919110724559340264222147072"
+                    validator_proposals: []
+                    validator_reward: "0"
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: object
+                    properties:
+                      author:
+                        type: string
+                        description: Account ID of the validator that produced the block
+                      header:
+                        type: object
+                        description: Block header
+                        properties:
+                          height:
+                            $ref: '#/components/schemas/BlockHeight'
+                          prev_height:
+                            type: integer
+                            description: Previous block height
+                          hash:
+                            type: string
+                            description: Block hash (base58)
+                          prev_hash:
+                            type: string
+                            description: Previous block hash (base58)
+                          epoch_id:
+                            type: string
+                            description: Epoch ID of the block (base58)
+                          next_epoch_id:
+                            type: string
+                            description: Next epoch ID (base58)
+                          prev_state_root:
+                            type: string
+                            description: Previous state root (base58)
+                          chunk_receipts_root:
+                            type: string
+                            description: Merkle root of chunk receipts (base58)
+                          chunk_headers_root:
+                            type: string
+                            description: Merkle root of chunk headers (base58)
+                          chunk_tx_root:
+                            type: string
+                            description: Merkle root of chunk transactions (base58)
+                          outcome_root:
+                            type: string
+                            description: Merkle root of execution outcomes (base58)
+                          chunks_included:
+                            type: integer
+                            description: Number of new chunks included in this block
+                          chunk_mask:
+                            type: array
+                            description: Per shard, in shard order, whether this block includes a new chunk (`true` included, `false` missing)
+                            items:
+                              type: boolean
+                          challenges_root:
+                            type: string
+                            description: Merkle root of challenges (base58)
+                          challenges_result:
+                            type: array
+                            description: List of slashed validators
+                            items:
+                              type: object
+                          timestamp:
+                            type: integer
+                            description: Block timestamp (Unix nanoseconds). Legacy numeric value; use `timestamp_nanosec` instead.
+                          timestamp_nanosec:
+                            type: string
+                            description: Block timestamp (Unix nanoseconds, decimal string)
+                          random_value:
+                            type: string
+                            description: Random value of the block (base58)
+                          validator_proposals:
+                            type: array
+                            description: Validator stake changes proposed in this block
+                            items:
+                              type: object
+                          gas_price:
+                            type: string
+                            description: Gas price of this block (yoctoNEAR, decimal string)
+                          block_ordinal:
+                            type: integer
+                            description: Ordinal of this block since genesis. Heights without a block are not counted.
+                          total_supply:
+                            type: string
+                            description: Total NEAR supply (yoctoNEAR, decimal string)
+                          last_final_block:
+                            type: string
+                            description: Hash of the last fully final block (base58)
+                          last_ds_final_block:
+                            type: string
+                            description: Hash of the last Doomslug-final block (base58)
+                          next_bp_hash:
+                            type: string
+                            description: Hash of the next epoch's block producer set (base58)
+                          block_merkle_root:
+                            type: string
+                            description: Merkle root of all block hashes from genesis up to the previous block (base58)
+                          block_body_hash:
+                            type: string
+                            description: Block body hash (base58)
+                          epoch_sync_data_hash:
+                            type: string
+                            description: Epoch sync data hash. `null` when not applicable.
+                            nullable: true
+                          approvals:
+                            type: array
+                            description: Validator signatures approving this block. Positions of validators that did not approve are `null`.
+                            items:
+                              type: string
+                              nullable: true
+                          chunk_endorsements:
+                            type: array
+                            description: Per chunk, a bitmap (byte array) of validator endorsements
+                            items:
+                              type: array
+                              items:
+                                type: integer
+                          signature:
+                            type: string
+                            description: Signature of the block producer
+                          latest_protocol_version:
+                            type: integer
+                            description: Latest protocol version supported by the block producer
+                          shard_split:
+                            type: array
+                            description: Shard split info during resharding, `[shard ID, boundary account ID]`. `null` when not applicable.
+                            nullable: true
+                            items: {}
+                          rent_paid:
+                            type: string
+                            description: Deprecated field; always `"0"`.
+                          validator_reward:
+                            type: string
+                            description: Deprecated field; always `"0"`.
+                      chunks:
+                        type: array
+                        description: Chunk headers in the block (one per shard)
+                        items:
+                          type: object
+                          properties:
+                            chunk_hash:
+                              type: string
+                              description: Chunk hash (base58)
+                            prev_block_hash:
+                              type: string
+                              description: Previous block hash (base58)
+                            outcome_root:
+                              type: string
+                              description: Merkle root of this chunk's execution outcomes (base58)
+                            prev_state_root:
+                              type: string
+                              description: Shard state root before the chunk is applied (base58)
+                            encoded_merkle_root:
+                              type: string
+                              description: Merkle root of the encoded chunk data (base58)
+                            encoded_length:
+                              type: integer
+                              description: Size of the encoded chunk data (bytes)
+                            height_created:
+                              type: integer
+                              description: Block height at which the chunk was created
+                            height_included:
+                              type: integer
+                              description: Block height at which the chunk was included
+                            shard_id:
+                              type: integer
+                              description: ID of the shard the chunk belongs to
+                            gas_used:
+                              type: integer
+                              description: Gas used in the chunk
+                            gas_limit:
+                              type: integer
+                              description: Gas limit of the chunk
+                            balance_burnt:
+                              type: string
+                              description: Amount burnt in the chunk (yoctoNEAR, decimal string)
+                            outgoing_receipts_root:
+                              type: string
+                              description: Merkle root of receipts sent to other shards (base58)
+                            tx_root:
+                              type: string
+                              description: Merkle root of the transactions in the chunk (base58)
+                            validator_proposals:
+                              type: array
+                              description: Validator stake changes proposed in the chunk
+                              items:
+                                type: object
+                            congestion_info:
+                              type: object
+                              description: Shard congestion info. Total gas of delayed and buffered receipts (`delayed_receipts_gas`, `buffered_receipts_gas`), receipt size (`receipt_bytes`), and the allowed shard (`allowed_shard`).
+                            bandwidth_requests:
+                              type: object
+                              description: Bandwidth this shard requests for sending to other shards
+                            proposed_split:
+                              type: object
+                              description: Shard split proposed for dynamic resharding. `null` when there is no proposal.
+                              nullable: true
+                            signature:
+                              type: string
+                              description: Signature of the chunk producer
+                            rent_paid:
+                              type: string
+                              description: Deprecated field; always `"0"`.
+                            validator_reward:
+                              type: string
+                              description: Deprecated field; always `"0"`.
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'

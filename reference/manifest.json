@@ -2614,6 +2614,51 @@
         "supported": false
       }
     },
+    "near": {
+      "nodeApi": {
+        "supported": true,
+        "apis": [
+          "access-keys/query_view_access_key",
+          "access-keys/query_view_access_key_list",
+          "access-keys/query_view_gas_key_nonces",
+          "accounts-contracts/query_call_function",
+          "accounts-contracts/query_view_account",
+          "accounts-contracts/query_view_code",
+          "accounts-contracts/query_view_global_contract_code",
+          "accounts-contracts/query_view_global_contract_code_by_account_id",
+          "accounts-contracts/query_view_state",
+          "blocks/block",
+          "blocks/block_effects",
+          "blocks/chunk",
+          "changes/changes_account_changes",
+          "changes/changes_all_access_key_changes",
+          "changes/changes_contract_code_changes",
+          "changes/changes_data_changes",
+          "changes/changes_single_access_key_changes",
+          "network/health",
+          "network/status",
+          "network/validators",
+          "protocol/gas_price",
+          "protocol/genesis_config",
+          "transactions/broadcast_tx_async",
+          "transactions/broadcast_tx_commit",
+          "transactions/send_tx",
+          "transactions/tx"
+        ]
+      },
+      "web3DataApi": {
+        "supported": false
+      },
+      "webhookApi": {
+        "supported": false
+      },
+      "flexibleWebhookApi": {
+        "supported": false
+      },
+      "multichainApi": {
+        "supported": false
+      }
+    },
     "optimism": {
       "nodeApi": {
         "supported": true,
@@ -3129,7 +3174,21 @@
         ]
       },
       "web3DataApi": {
-        "supported": false
+        "supported": true,
+        "apis": [
+          "blockchain/getTotalTransactionCountByAccount",
+          "blockchain/getTransactionByHash",
+          "blockchain/getTransactionSummariesByAccount",
+          "blockchain/getTransactionSummariesInSlot",
+          "blockchain/getTransactionsByAccount",
+          "blockchain/getTransactionsByHashes",
+          "blockchain/getTransactionsInSlot",
+          "blockchain/isMintAddress",
+          "token/getTokenMetadataByMintAddresses",
+          "token/getTokenTransfersByAccount",
+          "token/getTokenTransfersByMintAddress",
+          "token/getTokenTransfersWithinRange"
+        ]
       },
       "webhookApi": {
         "supported": false
@@ -3460,9 +3519,9 @@
     }
   },
   "summary": {
-    "totalChains": 30,
-    "nodeApiChains": 26,
-    "web3DataApiChains": 18,
+    "totalChains": 31,
+    "nodeApiChains": 27,
+    "web3DataApiChains": 19,
     "webhookApiChains": 12,
     "flexibleWebhookApiChains": 12,
     "multichainApiChains": 17
@@ -3921,6 +3980,7 @@
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
+          "solana-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
         ],
@@ -3947,6 +4007,7 @@
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
+          "solana-mainnet",
           "xrpl-mainnet"
         ],
         "blockchain/getTransactionByTransactionId": [
@@ -3957,6 +4018,12 @@
         "blockchain/getTransactionByVersion": [
           "aptos-mainnet",
           "aptos-testnet"
+        ],
+        "blockchain/getTransactionSummariesByAccount": [
+          "solana-mainnet"
+        ],
+        "blockchain/getTransactionSummariesInSlot": [
+          "solana-mainnet"
         ],
         "blockchain/getTransactionsByAccount": [
           "aptos-mainnet",
@@ -3984,6 +4051,7 @@
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
+          "solana-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
         ],
@@ -4032,6 +4100,7 @@
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
+          "solana-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
         ],
@@ -4072,6 +4141,9 @@
         "blockchain/getTransactionsInLedger": [
           "xrpl-mainnet"
         ],
+        "blockchain/getTransactionsInSlot": [
+          "solana-mainnet"
+        ],
         "blockchain/getUnspentTransactionOutputsByAccount": [
           "bitcoin-mainnet",
           "bitcoincash-mainnet",
@@ -4099,6 +4171,9 @@
           "optimism-sepolia",
           "polygon-mainnet",
           "tron-mainnet"
+        ],
+        "blockchain/isMintAddress": [
+          "solana-mainnet"
         ],
         "blockchain/searchEvents": [
           "arbitrum-mainnet",
@@ -4609,6 +4684,9 @@
           "aptos-mainnet",
           "aptos-testnet"
         ],
+        "token/getTokenMetadataByMintAddresses": [
+          "solana-mainnet"
+        ],
         "token/getTokenPairByAssetType": [
           "aptos-mainnet",
           "aptos-testnet"
@@ -4656,6 +4734,7 @@
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
+          "solana-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
         ],
@@ -4707,6 +4786,9 @@
         "token/getTokenTransfersByCurrencyAndIssuer": [
           "xrpl-mainnet"
         ],
+        "token/getTokenTransfersByMintAddress": [
+          "solana-mainnet"
+        ],
         "token/getTokenTransfersWithinRange": [
           "arbitrum-mainnet",
           "arbitrum-sepolia",
@@ -4728,6 +4810,7 @@
           "optimism-mainnet",
           "optimism-sepolia",
           "polygon-mainnet",
+          "solana-mainnet",
           "tron-mainnet",
           "xrpl-mainnet"
         ],

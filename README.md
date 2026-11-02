@@ -18,7 +18,7 @@ reference/
 │       ├── cosmos-rest-api/   # Cosmos SDK REST (Cosmos-based chains)
 │       ├── fullnode-http-api/ # Tron FullNode HTTP API
 │       ├── fullnode-solidity-http-api/  # Tron FullNode Solidity HTTP API
-│       ├── grpc-api/          # Sui gRPC API
+│       ├── grpc-api/          # gRPC API (Solana, Sui)
 │       ├── web3-data-api/     # Indexed Web3 Data API endpoints
 │       ├── webhook-api/       # Webhook subscription endpoints
 │       └── flexible-webhook-api/  # Flexible Webhook (stream-based) endpoints
@@ -39,11 +39,12 @@ Specs are grouped by chain, then by API surface. The internal layout of the Node
 | ------------ | ---------------------- |
 | EVM chains   | `node-api/{debug,eth,net,web3,websocket}/` plus chain namespaces: `trace/` (Ethereum), `bor/` (Polygon), `op-stack/` (OP Stack chains), `kaia/` and `klay/` (Kaia). `websocket/` holds Markdown pages for `eth_subscribe`, `eth_unsubscribe` and the Nodit subscription types. |
 | Aptos        | `node-api/{accounts,blocks,events,general,tables,transactions,view}/` |
-| Solana       | `node-api/{http,websocket}/` — HTTP RPC methods as YAML, subscribe/unsubscribe methods as Markdown under `websocket/`. |
+| Solana       | `node-api/{http,websocket}/` — HTTP RPC methods as YAML, subscribe/unsubscribe methods as Markdown under `websocket/`; `grpc-api/<Service>/` for the gRPC API. |
 | Sui          | `node-api/{sui,suix,unsafe}/`, and `grpc-api/<Service>/` for the gRPC API. |
 | Tron         | `node-api/{build-transaction,eth,net,web3}/` (JSON-RPC), `fullnode-http-api/` and `fullnode-solidity-http-api/`. |
 | XRPL         | `node-api/{account,ledger,path-and-order-book,payment-channel,server-info,transaction,utility,vault}/` |
 | Bitcoin      | `node-api/{blockchain,rawtransactions,util}/` |
+| NEAR         | `node-api/{access-keys,accounts-contracts,blocks,changes,network,protocol,transactions}/` |
 | Cosmos-based | `cometbft-api/{json-rpc-api,rest-api}/` and `cosmos-rest-api/` at the chain root (Injective and Sei additionally have an EVM-style `node-api/`). |
 
 `web3-data-api/`, `webhook-api/`, and `flexible-webhook-api/` use a flat resource grouping (e.g. `blockchain.yaml`, `native.yaml`, `nft.yaml`, `token.yaml`, `stats.yaml`, `ens.yaml`, `asset.yaml`, `webhook.yaml`, `flexible-webhook.yaml`). The exact set of files depends on what each chain supports.
@@ -74,7 +75,7 @@ A machine-readable index describing, for every chain, which API surfaces are sup
     }
   },
   "summary": {
-    "totalChains": 30, "nodeApiChains": 26, "web3DataApiChains": 18,
+    "totalChains": 31, "nodeApiChains": 27, "web3DataApiChains": 19,
     "webhookApiChains": 12, "flexibleWebhookApiChains": 12, "multichainApiChains": 17
   },
   "services": {
@@ -90,7 +91,7 @@ Notes:
 - `web3DataApi.apis` entries are `<section file>/<operation>`; the section file is `web3-data-api/<section>.yaml`.
 - `webhookApi.type` tells which webhook spec shape applies (`evm`, `aptos` or `tron`).
 - `services.<service>.apis` maps each API (`<section>/<operation>` for `web3-data-api`, the file name for `multichain-api`, the operationId otherwise) to the chain-networks it supports. Chain-independent APIs (the Webhook Address Set APIs) map to `[]`.
-- Tron `fullnode-http-api/`, `fullnode-solidity-http-api/` and Sui `grpc-api/` have no manifest key; their files are in `reference/` for other readers.
+- Tron `fullnode-http-api/`, `fullnode-solidity-http-api/` and the Solana and Sui `grpc-api/` have no manifest key; their files are in `reference/` for other readers.
 
 ## How `reference/` is produced
 
@@ -114,7 +115,7 @@ pip install -r scripts/requirements.txt
 
 ## Supported chains
 
-The matrix below mirrors the `supported` flags in `manifest.json` (30 chains total: 26 Node API, 18 Web3 Data API, 12 Webhook API, 12 Flexible Webhook API, 17 Multichain API).
+The matrix below mirrors the `supported` flags in `manifest.json` (31 chains total: 27 Node API, 19 Web3 Data API, 12 Webhook API, 12 Flexible Webhook API, 17 Multichain API).
 
 | Chain            | Node API | Web3 Data API | Webhook API | Flexible Webhook API | Multichain API |
 | ---------------- | :------: | :-----------: | :---------: | :------------------: | :------------: |
@@ -140,10 +141,11 @@ The matrix below mirrors the `supported` flags in `manifest.json` (30 chains tot
 | Injective        | ✓        |               |             |                      |                |
 | Kaia             | ✓        | ✓             | ✓           | ✓                    | ✓              |
 | Metal            | ✓        |               |             |                      |                |
+| NEAR             | ✓        |               |             |                      |                |
 | Optimism         | ✓        | ✓             | ✓           | ✓                    | ✓              |
 | Polygon          | ✓        | ✓             | ✓           | ✓                    | ✓              |
 | Sei              | ✓        |               |             |                      |                |
-| Solana           | ✓        |               |             |                      |                |
+| Solana           | ✓        | ✓             |             |                      |                |
 | Sui              | ✓        |               |             |                      |                |
 | Tron             | ✓        | ✓             | ✓           | ✓                    | ✓              |
 | World Chain      | ✓        |               |             |                      |                |

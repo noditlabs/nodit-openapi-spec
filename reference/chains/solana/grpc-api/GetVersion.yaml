@@ -1,0 +1,61 @@
+openapi: 3.1.0
+info:
+  title: Solana - GetVersion
+  version: 1.0.0
+servers:
+- url: https://solana-mainnet.grpc.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /geyser.Geyser/GetVersion:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-grpc-GetVersion
+      summary: GetVersion
+      description: |
+        Retrieves version information for the Yellowstone gRPC plugin. Nodit answers this request directly without forwarding it to a node, and returns an empty string in the `version` field. Use `Ping` to check the connection.
+      x-seo-description: Yellowstone gRPC 플러그인의 버전 정보를 조회하는 메서드입니다. Nodit은 `version` 필드에 빈 문자열을 반환합니다.
+      x-grpc-method: geyser.Geyser/GetVersion
+      x-proto: geyser.proto
+      x-protocol: grpc
+      x-grpc:
+        service: geyser.Geyser
+        method: GetVersion
+        streaming: unary
+        proto: geyser.proto
+        protoRepo: https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto
+      x-hide-try-it: true
+      tags:
+      - Geyser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    description: Version information string. Nodit returns an empty string (`""`).
+              example:
+                version: ""

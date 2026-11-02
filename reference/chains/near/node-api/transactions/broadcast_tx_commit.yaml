@@ -1,0 +1,461 @@
+openapi: 3.1.0
+info:
+  title: Near - broadcast_tx_commit
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccountId:
+      type: string
+      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
+      example: wrap.near
+    PublicKey:
+      type: string
+      description: Base58-encoded public key prefixed with `ed25519:` or `secp256k1:`.
+      example: ed25519:168vdqFUxij2yvsxYgAGoykJMX7tgrPKVCH484A8nHP
+    CryptoHash:
+      type: string
+      description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
+      example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-broadcast_tx_commit
+      summary: broadcast_tx_commit
+      description: |
+        Sends a signed transaction to the network, waits until all non-refund receipts have executed, and returns the execution result.
+
+        NEAR marks this method as deprecated. It is equivalent to `send_tx` with `wait_until: "EXECUTED_OPTIMISTIC"`; `send_tx` is recommended for new implementations. Send the parameters as a `{ "signed_tx_base64": … }` object; an array holding only the signed transaction string (`["…"]`) is also accepted. `wait_until` is ignored if provided. The node waits up to 10 seconds and returns `TIMEOUT_ERROR` if execution does not complete in time; in that case, query the status again with the `tx` method. A transaction that fails validation returns `INVALID_TRANSACTION`, and malformed base64 or borsh data returns `PARSE_ERROR`.
+      x-seo-description: Broadcast a signed NEAR transaction with broadcast_tx_commit and wait until its non-refund receipts execute, then return the execution outcome.
+      tags:
+      - transactions
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: broadcast_tx_commit
+                params:
+                  type: object
+                  description: Specifies the transaction to send.
+                  required:
+                  - signed_tx_base64
+                  properties:
+                    signed_tx_base64:
+                      type: string
+                      description: A borsh-serialized `SignedTransaction`, encoded in base64.
+                      example: QAAAADc4MWY4NzM0MTEyYzhlYjk3OTU4OGVjODUzODI5ZmVmNjZmOWU2ZjZhODBlOTg2OTc2ZmEyYmY4MDlkNWFkNDMAeB+HNBEsjrl5WI7IU4Kf72b55vaoDphpdvor+AnVrUMBU6K348gAAEAAAAAzMGQ2MjA1Yjg5ZTAyZDJjMzRhZGUxNjVhZTk3MDVmOGQ5ZTgwZDBlMzA0MDYxY2IxMGI4ZTU2YzhlNzAzZjYyvu07kVkCPg4EXK924R29YyEvUBYvKvTIB8mri0er3EwBAAAAAwAAII+tMHr3w1+lAAAAAAAAvS+JY93baTzDI2gRbUR5+KbUAbgdDORq8SnghPxAnMsaUtxGkCL4v/Z77uoc83OQdP8Oord4onDZwctNWoRZAQ==
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: broadcast_tx_commit
+                params:
+                  signed_tx_base64: QAAAADc4MWY4NzM0MTEyYzhlYjk3OTU4OGVjODUzODI5ZmVmNjZmOWU2ZjZhODBlOTg2OTc2ZmEyYmY4MDlkNWFkNDMAeB+HNBEsjrl5WI7IU4Kf72b55vaoDphpdvor+AnVrUMBU6K348gAAEAAAAAzMGQ2MjA1Yjg5ZTAyZDJjMzRhZGUxNjVhZTk3MDVmOGQ5ZTgwZDBlMzA0MDYxY2IxMGI4ZTU2YzhlNzAzZjYyvu07kVkCPg4EXK924R29YyEvUBYvKvTIB8mri0er3EwBAAAAAwAAII+tMHr3w1+lAAAAAAAAvS+JY93baTzDI2gRbUR5+KbUAbgdDORq8SnghPxAnMsaUtxGkCL4v/Z77uoc83OQdP8Oord4onDZwctNWoRZAQ==
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                result:
+                  final_execution_status: FINAL
+                  receipts_outcome:
+                  - block_hash: 9kDsSeN7GLaoQ8i1fuhsVGKyFvt4YvabVebWQKVRXJRN
+                    id: 7cvSrFHKDqxk1EQFJteiwxCpZPn3KZFeLyTypi5KGZVv
+                    outcome:
+                      executor_id: 30d6205b89e02d2c34ade165ae9705f8d9e80d0e304061cb10b8e56c8e703f62
+                      gas_burnt: 7524947687500
+                      logs: []
+                      metadata:
+                        contracts:
+                        - null
+                        gas_profile: []
+                        version: 4
+                      receipt_ids:
+                      - FLCZ8X2Mw8edPNmuwY4rcJFCbcnVNZp5VkjBwVn6crWU
+                      status:
+                        SuccessValue: ""
+                      tokens_burnt: "752494768750000000000"
+                    proof:
+                    - direction: Right
+                      hash: KuwgraUiXXuu2fGshuAEsYPDgynXTA8znaR4SXrJ7hc
+                    - direction: Right
+                      hash: 6eYmhTJ2e9fsoarqnpys6EaQxEW9wjowLebC1tiYjtpc
+                    - direction: Left
+                      hash: 9wqb16VZ58sUiFtcdfvdrPjb6pWkVJ9ngBxhz2Knqzvv
+                  - block_hash: GhXNYjDjDCisttgT27zpnefH8dTFmHaDKagb7Mpyrj4k
+                    id: FLCZ8X2Mw8edPNmuwY4rcJFCbcnVNZp5VkjBwVn6crWU
+                    outcome:
+                      executor_id: 781f8734112c8eb979588ec853829fef66f9e6f6a80e986976fa2bf809d5ad43
+                      gas_burnt: 7524947687500
+                      logs: []
+                      metadata:
+                        contracts:
+                        - null
+                        gas_profile: []
+                        version: 4
+                      receipt_ids: []
+                      status:
+                        SuccessValue: ""
+                      tokens_burnt: "0"
+                    proof: []
+                  status:
+                    SuccessValue: ""
+                  transaction:
+                    actions:
+                    - Transfer:
+                        deposit: "199925000000000000000000000"
+                    hash: 4QzusrLJXqUogS4vipyH6XoJ5BRe6tC3HKakhvBnfAE8
+                    nonce: 220880364000001
+                    priority_fee: 0
+                    public_key: ed25519:95uoq1sPqzGrDBuaBC5yhdMVxRjzApzye1TxUXYtce5Y
+                    receiver_id: 30d6205b89e02d2c34ade165ae9705f8d9e80d0e304061cb10b8e56c8e703f62
+                    signature: ed25519:4nP65CapWRZncS2GZZH1xRHMLWMFpqAmbh6dp9CDeYLi66Q6BSJdq3aNiyw7FVJ1Z5GxRsoxJQi9GnVonxoovcNk
+                    signer_id: 781f8734112c8eb979588ec853829fef66f9e6f6a80e986976fa2bf809d5ad43
+                  transaction_outcome:
+                    block_hash: C7oQgS7MX2az6jkyxxMTquYbQ96EaApmFTv7GGXGghnp
+                    id: 4QzusrLJXqUogS4vipyH6XoJ5BRe6tC3HKakhvBnfAE8
+                    outcome:
+                      executor_id: 781f8734112c8eb979588ec853829fef66f9e6f6a80e986976fa2bf809d5ad43
+                      gas_burnt: 824947687500
+                      logs: []
+                      metadata:
+                        gas_profile: null
+                        version: 1
+                      receipt_ids:
+                      - 7cvSrFHKDqxk1EQFJteiwxCpZPn3KZFeLyTypi5KGZVv
+                      status:
+                        SuccessReceiptId: 7cvSrFHKDqxk1EQFJteiwxCpZPn3KZFeLyTypi5KGZVv
+                      tokens_burnt: "82494768750000000000"
+                    proof:
+                    - direction: Right
+                      hash: 2DarZgjQirbu8YyUbo9ZGP2mJybpB8J2ta6d7w3Dh6Q8
+                    - direction: Right
+                      hash: 7WV8KXuj4rpge63CEsJZan39L5zM1gpD1jxZZ5GSqGLM
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: object
+                    properties:
+                      final_execution_status:
+                        type: string
+                        description: The execution milestone the transaction has reached. Values have the same meaning as the `wait_until` request parameter.
+                        enum:
+                        - NONE
+                        - INCLUDED
+                        - EXECUTED_OPTIMISTIC
+                        - INCLUDED_FINAL
+                        - EXECUTED
+                        - FINAL
+                      status:
+                        type: object
+                        description: The final execution result of the transaction. On success it contains `SuccessValue` (the base64-encoded return value, or an empty string if nothing is returned); on failure it contains `Failure` (an object describing the cause). It is the string `NotStarted` if the transaction has not yet been converted to a receipt, and `Started` while execution is in progress.
+                      transaction:
+                        type: object
+                        description: The signed transaction as submitted.
+                        properties:
+                          signer_id:
+                            $ref: '#/components/schemas/AccountId'
+                          public_key:
+                            $ref: '#/components/schemas/PublicKey'
+                          nonce:
+                            type: integer
+                            description: The nonce of the access key used for signing.
+                          receiver_id:
+                            $ref: '#/components/schemas/AccountId'
+                          actions:
+                            type: array
+                            description: The actions in the transaction. Each item is an object keyed by the action name, or a string such as `CreateAccount`. The action name is one of `CreateAccount`, `DeployContract`, `FunctionCall`, `Transfer`, `Stake`, `AddKey`, `DeleteKey`, `DeleteAccount`, `Delegate`, `DelegateV2`, `DeployGlobalContract`, `DeployGlobalContractByAccountId`, `UseGlobalContract`, `UseGlobalContractByAccountId`, `DeterministicStateInit`, `TransferToGasKey`, `WithdrawFromGasKey`, `UniversalStateInit`.
+                            items:
+                              type: object
+                          priority_fee:
+                            type: integer
+                            description: Deprecated; retained for backward compatibility.
+                          signature:
+                            type: string
+                            description: Transaction signature (base58 with an `ed25519:` or `secp256k1:` prefix)
+                          hash:
+                            $ref: '#/components/schemas/CryptoHash'
+                      transaction_outcome:
+                        type: object
+                        properties:
+                          id:
+                            $ref: '#/components/schemas/CryptoHash'
+                          block_hash:
+                            $ref: '#/components/schemas/CryptoHash'
+                          outcome:
+                            type: object
+                            description: The execution outcome of the transaction.
+                            properties:
+                              executor_id:
+                                type: string
+                                description: 'The account ID where execution took place: `signer_id` for a transaction, the receiver account for a receipt.'
+                              gas_burnt:
+                                type: integer
+                                description: The amount of gas burnt by the execution.
+                              tokens_burnt:
+                                type: string
+                                description: The amount of tokens burnt for the gas used (yoctoNEAR, decimal string)
+                              logs:
+                                type: array
+                                description: Logs emitted during execution. NEP standard events are JSON strings prefixed with `EVENT_JSON:`.
+                                items:
+                                  type: string
+                              receipt_ids:
+                                type: array
+                                description: IDs of the receipts generated by this execution.
+                                items:
+                                  $ref: '#/components/schemas/CryptoHash'
+                              status:
+                                type: object
+                                description: Execution status. On success it contains `SuccessValue` (the base64-encoded return value) or `SuccessReceiptId` (the ID of the generated receipt); on failure it contains `Failure` (an object describing the cause). It is the string `Unknown` when the result is not known.
+                              metadata:
+                                type: object
+                                description: 'Versioned execution metadata. Contains `version`, `gas_profile` (gas used per cost item), and `contracts` (version 4 and later: for each action, the contract attached to the receiver account just before the action ran).'
+                          proof:
+                            type: array
+                            description: The Merkle path that verifies the outcome against the block's outcome root. Each item has a `hash` and a `direction` (`Left` or `Right`).
+                            items:
+                              type: object
+                        description: The execution outcome of the transaction itself. The transaction is converted to the first receipt, and `id` is the transaction hash.
+                      receipts_outcome:
+                        type: array
+                        description: Execution outcomes of the receipts that followed from the transaction. Each item's `id` is a receipt ID, and the structure is the same as `transaction_outcome`.
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              $ref: '#/components/schemas/CryptoHash'
+                            block_hash:
+                              $ref: '#/components/schemas/CryptoHash'
+                            outcome:
+                              type: object
+                              description: The execution outcome of the receipt.
+                              properties:
+                                executor_id:
+                                  type: string
+                                  description: 'The account ID where execution took place: `signer_id` for a transaction, the receiver account for a receipt.'
+                                gas_burnt:
+                                  type: integer
+                                  description: The amount of gas burnt by the execution.
+                                tokens_burnt:
+                                  type: string
+                                  description: The amount of tokens burnt for the gas used (yoctoNEAR, decimal string)
+                                logs:
+                                  type: array
+                                  description: Logs emitted during execution. NEP standard events are JSON strings prefixed with `EVENT_JSON:`.
+                                  items:
+                                    type: string
+                                receipt_ids:
+                                  type: array
+                                  description: IDs of the receipts generated by this execution.
+                                  items:
+                                    $ref: '#/components/schemas/CryptoHash'
+                                status:
+                                  type: object
+                                  description: Execution status. On success it contains `SuccessValue` (the base64-encoded return value) or `SuccessReceiptId` (the ID of the generated receipt); on failure it contains `Failure` (an object describing the cause). It is the string `Unknown` when the result is not known.
+                                metadata:
+                                  type: object
+                                  description: 'Versioned execution metadata. Contains `version`, `gas_profile` (gas used per cost item), and `contracts` (version 4 and later: for each action, the contract attached to the receiver account just before the action ran).'
+                            proof:
+                              type: array
+                              description: The Merkle path that verifies the outcome against the block's outcome root. Each item has a `hash` and a `direction` (`Left` or `Right`).
+                              items:
+                                type: object
+                          description: The execution outcome of a single receipt.
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'

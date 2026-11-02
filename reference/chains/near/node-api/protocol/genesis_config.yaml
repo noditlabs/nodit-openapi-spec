@@ -1,0 +1,457 @@
+openapi: 3.1.0
+info:
+  title: Near - genesis_config
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccountId:
+      type: string
+      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
+      example: wrap.near
+    PublicKey:
+      type: string
+      description: Base58-encoded public key prefixed with `ed25519:` or `secp256k1:`.
+      example: ed25519:168vdqFUxij2yvsxYgAGoykJMX7tgrPKVCH484A8nHP
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-genesis_config
+      summary: genesis_config
+      description: |
+        Returns the genesis configuration set when the network launched. It includes the chain ID, genesis time and block height, epoch length, gas price bounds, total supply, validator seats and kickout thresholds, and the initial validators.
+
+        This method takes no parameters; send an empty array `[]` as `params`. The response reflects values at genesis; current values changed by later protocol upgrades are not reflected in the genesis configuration.
+      x-seo-description: 'Get the NEAR genesis configuration with genesis_config: chain ID, genesis time and height, epoch length, gas price bounds, total supply, and initial validators.'
+      tags:
+      - protocol
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: genesis_config
+                params:
+                  type: array
+                  description: No parameters. Send an empty array `[]`.
+                  items: {}
+                  maxItems: 0
+                  example: []
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: genesis_config
+                params: []
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                result:
+                  block_producer_kickout_threshold: 90
+                  chain_id: mainnet
+                  chunk_producer_assignment_changes_limit: 5
+                  chunk_producer_kickout_threshold: 90
+                  chunk_validator_only_kickout_threshold: 80
+                  dynamic_resharding: false
+                  epoch_length: 43200
+                  fishermen_threshold: "340282366920938463463374607431768211455"
+                  gas_limit: 1000000000000000
+                  gas_price_adjustment_rate:
+                  - 1
+                  - 100
+                  genesis_height: 9820210
+                  genesis_time: '2020-07-21T16:55:51.591948Z'
+                  max_gas_price: "10000000000000000000000"
+                  max_inflation_rate:
+                  - 0
+                  - 1
+                  max_kickout_stake_perc: 100
+                  min_gas_price: "1000000000"
+                  minimum_stake_divisor: 10
+                  minimum_stake_ratio:
+                  - 1
+                  - 6250
+                  minimum_validators_per_shard: 1
+                  num_block_producer_seats: 100
+                  num_blocks_per_year: 31536000
+                  num_chunk_producer_seats: 100
+                  num_chunk_validator_seats: 300
+                  online_max_threshold:
+                  - 99
+                  - 100
+                  online_min_threshold:
+                  - 90
+                  - 100
+                  protocol_reward_rate:
+                  - 0
+                  - 1
+                  protocol_treasury_account: treasury.near
+                  protocol_upgrade_stake_threshold:
+                  - 4
+                  - 5
+                  protocol_version: 29
+                  shard_layout:
+                    V2:
+                      boundary_accounts: []
+                      id_to_index_map:
+                        "0": 0
+                      index_to_id_map:
+                        "0": 0
+                      shard_ids:
+                      - 0
+                      shards_parent_map: null
+                      shards_split_map: null
+                      version: 0
+                  shuffle_shard_assignment_for_chunk_producers: false
+                  target_validator_mandates_per_shard: 68
+                  total_supply: "999999999792372916156395166000000"
+                  transaction_validity_period: 86400
+                  use_production_config: false
+                  validators:
+                  - account_id: nfvalidator1.near
+                    amount: "50000000000000000000000000000"
+                    public_key: ed25519:14pWWRutZtGFKX4B8q89KVFaUWY1Cqu1JcqYXhCDeFh1
+                  - account_id: nfvalidator2.near
+                    amount: "50000000000000000000000000000"
+                    public_key: ed25519:BwZk4bkYJxo79P2vSRw2uk1nfiqEfVkHvr5p8eVsqASC
+                  - account_id: nfvalidator3.near
+                    amount: "50000000000000000000000000000"
+                    public_key: ed25519:DMz11tmPvhdqpi7CzP2JULeeSE8SxYRD8pys5nKke4FS
+                  - account_id: nfvalidator4.near
+                    amount: "50000000000000000000000000000"
+                    public_key: ed25519:Fi3CQDHJoviKazVR27YmfFzWcFnvmoPBKEDd9ouq5Tjx
+                id: dontcare
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: object
+                    properties:
+                      chain_id:
+                        type: string
+                        description: Chain ID.
+                      genesis_time:
+                        type: string
+                        description: Official start time of the blockchain (ISO 8601, UTC).
+                      genesis_height:
+                        type: integer
+                        description: Height of the genesis block.
+                      protocol_version:
+                        type: integer
+                        description: Protocol version used at genesis.
+                      epoch_length:
+                        type: integer
+                        description: Epoch length in blocks.
+                      num_blocks_per_year:
+                        type: integer
+                        description: Expected number of blocks per year.
+                      transaction_validity_period:
+                        type: integer
+                        description: Number of blocks after its reference block for which a transaction stays valid.
+                      gas_limit:
+                        type: integer
+                        description: Initial gas limit.
+                      min_gas_price:
+                        type: string
+                        description: Minimum gas price, which is also the initial gas price (yoctoNEAR, decimal string).
+                      max_gas_price:
+                        type: string
+                        description: Maximum gas price (yoctoNEAR, decimal string).
+                      gas_price_adjustment_rate:
+                        type: array
+                        description: Gas price adjustment rate as `[numerator, denominator]`.
+                        items:
+                          type: integer
+                      total_supply:
+                        type: string
+                        description: Total token supply at genesis (yoctoNEAR, decimal string).
+                      max_inflation_rate:
+                        type: array
+                        description: Maximum inflation applied to the total supply each epoch, as `[numerator, denominator]`.
+                        items:
+                          type: integer
+                      protocol_reward_rate:
+                        type: array
+                        description: Share of rewards going to the protocol treasury, as `[numerator, denominator]`.
+                        items:
+                          type: integer
+                      protocol_treasury_account:
+                        type: string
+                        description: Protocol treasury account.
+                      protocol_upgrade_stake_threshold:
+                        type: array
+                        description: Share of stake that must signal readiness for a protocol upgrade, as `[numerator, denominator]`.
+                        items:
+                          type: integer
+                      num_block_producer_seats:
+                        type: integer
+                        description: Number of block producer seats at genesis.
+                      num_chunk_producer_seats:
+                        type: integer
+                        description: Number of chunk producer seats.
+                      num_chunk_validator_seats:
+                        type: integer
+                        description: Number of chunk validator seats.
+                      block_producer_kickout_threshold:
+                        type: integer
+                        description: Kickout threshold for block producers (0–100).
+                      chunk_producer_kickout_threshold:
+                        type: integer
+                        description: Kickout threshold for chunk producers (0–100).
+                      chunk_validator_only_kickout_threshold:
+                        type: integer
+                        description: Kickout threshold for nodes that are only chunk validators (0–100).
+                      max_kickout_stake_perc:
+                        type: integer
+                        description: Maximum percentage of validator stake that can be kicked out (%).
+                      online_min_threshold:
+                        type: array
+                        description: Online threshold below which a validator receives no reward, as `[numerator, denominator]`.
+                        items:
+                          type: integer
+                      online_max_threshold:
+                        type: array
+                        description: Online threshold above which a validator receives the full reward, as `[numerator, denominator]`.
+                        items:
+                          type: integer
+                      minimum_stake_divisor:
+                        type: integer
+                        description: Minimum stake = last seat price ÷ this value.
+                      minimum_stake_ratio:
+                        type: array
+                        description: The lowest stake ratio a block producer can have, as `[numerator, denominator]`.
+                        items:
+                          type: integer
+                      minimum_validators_per_shard:
+                        type: integer
+                        description: Minimum number of validators required per shard.
+                      target_validator_mandates_per_shard:
+                        type: integer
+                        description: Target number of chunk validator mandates per shard.
+                      chunk_producer_assignment_changes_limit:
+                        type: integer
+                        description: Upper limit on shard changes allowed in chunk producer assignments.
+                      shuffle_shard_assignment_for_chunk_producers:
+                        type: boolean
+                        description: If `true`, chunk producer shard assignments are shuffled each epoch.
+                      fishermen_threshold:
+                        type: string
+                        description: Fishermen stake threshold (yoctoNEAR, decimal string).
+                      dynamic_resharding:
+                        type: boolean
+                        description: Whether dynamic resharding is enabled.
+                      shard_layout:
+                        type: object
+                        description: How accounts are split into shards (shard layout). Keyed by version (e.g. `V2`), it contains the shard IDs and boundary accounts.
+                      use_production_config:
+                        type: boolean
+                        description: Flag used for testing purposes.
+                      validators:
+                        type: array
+                        description: Initial validators.
+                        items:
+                          type: object
+                          properties:
+                            account_id:
+                              $ref: '#/components/schemas/AccountId'
+                            public_key:
+                              $ref: '#/components/schemas/PublicKey'
+                            amount:
+                              type: string
+                              description: Staked amount (yoctoNEAR, decimal string)
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
