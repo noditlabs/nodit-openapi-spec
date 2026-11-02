@@ -4891,6 +4891,121 @@ paths:
           $ref: '#/components/responses/500'
         "503":
           $ref: '#/components/responses/503'
+  /{chain}/{network}/token/getTokenMetadataByMintAddresses:
+    post:
+      security:
+      - api_key: []
+      operationId: getTokenMetadataByMintAddresses
+      summary: Get Token Metadata by MintAddresses
+      description: |
+        Retrieves the metadata of one or more tokens by their MintAddresses.
+      x-seo-description: Get the metadata of one or more tokens by their MintAddresses on Solana.
+      tags:
+      - Token API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: Solana
+              type: object
+              required:
+              - mintAddresses
+              properties:
+                mintAddresses:
+                  type: array
+                  description: Parameter specifying the list of token MintAddresses to query. Each MintAddress must be entered as a 32–44 character Base58-encoded string, and up to 1,000 MintAddresses can be entered.
+                  maxItems: 1000
+                  items:
+                    type: string
+                    pattern: ^[1-9A-HJ-NP-Za-km-z]{32,44}$
+                  example:
+                  - Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB
+                  - So11111111111111111111111111111111111111112
+              example:
+                mintAddresses:
+                - Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB
+                - So11111111111111111111111111111111111111112
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Solana
+                type: array
+                items:
+                  type: object
+                  required:
+                  - programId
+                  - address
+                  - decimals
+                  - name
+                  - symbol
+                  properties:
+                    programId:
+                      type: string
+                      description: A field representing the address of the program that executed the metadata. (e.g. SPL Token Program, Metaplex Token Metadata Program)
+                      example: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+                    address:
+                      type: string
+                      description: A field representing the MintAddress of the token to which the metadata is linked.
+                      example: Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB
+                    decimals:
+                      type: integer
+                      description: A field representing the number of decimal places of the token. When interpreting supply or balance, convert with amount / 10^decimals.
+                      example: 6
+                    name:
+                      type: string
+                      description: A field representing the display name of the token.
+                      example: Tether USDt
+                    symbol:
+                      type: string
+                      description: A field representing the symbol (ticker) of the token.
+                      example: USDT
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
   /{chain}/{network}/token/getTokenPairByAssetType:
     post:
       security:
@@ -5118,6 +5233,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5145,6 +5263,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5172,6 +5293,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5199,6 +5323,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5226,6 +5353,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5253,6 +5383,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5280,6 +5413,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5307,6 +5443,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5334,6 +5473,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5361,6 +5503,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5388,6 +5533,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5415,6 +5563,9 @@ paths:
                     currency:
                       type: string
                       description: Parameter for selecting the currency unit for Token Price queries. Supports USD and KRW. Default is USD.
+                      enum:
+                      - USD
+                      - KRW
                       default: USD
                 example:
                   contractAddresses:
@@ -5466,7 +5617,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -5560,7 +5711,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -5654,7 +5805,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -5748,7 +5899,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -5842,7 +5993,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -5936,7 +6087,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -6030,7 +6181,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -6124,7 +6275,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -6218,7 +6369,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -6312,7 +6463,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -6406,7 +6557,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -6500,7 +6651,7 @@ paths:
                           description: A field representing when the data was last updated. Provided in ISO 8601 format.
                         listings:
                           type: array
-                          description: A field representing the list of exchanges where the token is listed.
+                          description: A field representing the list of exchanges where the token is listed. If the token is not listed on any exchange, an empty array ([]) is returned.
                           items:
                             type: string
                             description: A field representing the name of the exchange.
@@ -6587,9 +6738,9 @@ paths:
       operationId: getTokenTransfersByAccount
       summary: Get Token Transfers by Account
       description: |+
-        Retrieves the list of ERC20 token transfers sent or received by a specific address. Results include token contract metadata and the transferred token amount.
+        Retrieves the list of token transfers sent or received by a specific address. Results include the transferred token's information and amount.
 
-      x-seo-description: Get a paginated list of ERC20 token transfers sent or received by a specific account address.
+      x-seo-description: Get a paginated list of token transfers sent or received by a specific account address.
       tags:
       - Token API
       parameters:
@@ -6613,6 +6764,7 @@ paths:
           - polygon
           - tron
           - xrpl
+          - solana
           default: ethereum
         description: Parameter to specify the target chain for the query.
       - name: network
@@ -6666,6 +6818,8 @@ paths:
             tron:
             - mainnet
             xrpl:
+            - mainnet
+            solana:
             - mainnet
       requestBody:
         required: true
@@ -8496,6 +8650,124 @@ paths:
                   fromDate: '2026-01-01T00:00:00Z'
                   toDate: '2026-02-01T00:00:00Z'
                   page: 1
+                  rpp: 10
+              - title: Solana
+                x-variant-of:
+                  param: chain
+                  value: solana
+                allOf:
+                - type: object
+                  required:
+                  - accountAddress
+                  properties:
+                    accountAddress:
+                      type: string
+                      description: Parameter specifying the account address to query. The account address must be entered as a 32–44 character Base58-encoded string.
+                      pattern: ^[1-9A-HJ-NP-Za-km-z]{32,44}$
+                      example: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+                    relation:
+                      type: string
+                      description: |-
+                        Parameter for filtering only the data where the queried account address belongs to from or to.
+
+                        Three options are available: from, to, and both. The default value is both.
+                        - from: Returns results where assets were sent out from the queried address.
+                        - to: Returns results where assets were received into the queried address.
+                        - both: Returns all results associated with the queried address.
+                      enum:
+                      - from
+                      - to
+                      - both
+                      pattern: from|to|both
+                      default: both
+                    fromSlot:
+                      type: string
+                      description: |
+                        Parameter specifying the start point of the query. You can enter one of the following formats:
+                        - slot height: Enter the slot number as a decimal string.
+                        - slot tag: Use "earliest" to specify the first slot.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                        Notes:
+                        - This field cannot be used together with fromDate and toDate.
+                        - If only fromSlot is provided without toSlot, results are queried from that slot to the latest slot.
+                        - toSlot value cannot be less than fromSlot value.
+                        - If fromSlot and toSlot have the same value, only that slot is queried.
+                        - "latest" cannot be entered for fromSlot.
+                      pattern: ^[0-9]+$|earliest
+                    toSlot:
+                      type: string
+                      description: |-
+                        Parameter specifying the end point of the query. You can enter one of the following formats:
+                        - slot height: Enter the slot number as a decimal string.
+                        - slot tag: Use "latest" to specify the latest slot.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                        Notes:
+                        - This field cannot be used together with fromDate and toDate.
+                        - If only toSlot is provided without fromSlot, results are queried from the first stored slot to that slot.
+                        - toSlot value cannot be less than fromSlot value.
+                        - If fromSlot and toSlot have the same value, only that slot is queried.
+                        - "earliest" cannot be entered for toSlot.
+                      pattern: ^[0-9]+$|latest
+                    fromDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the start date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                        Notes:
+                        - This field cannot be used together with fromSlot and toSlot.
+                        - If only fromDate is provided without toDate, results are queried from that date to the latest slot.
+                        - fromDate must be equal to or earlier than toDate.
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                    toDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the end date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                        Notes:
+                        - This field cannot be used together with fromSlot and toSlot.
+                        - If only toDate is provided without fromDate, results are queried from the first stored slot to that date.
+                        - toDate must be equal to or later than fromDate.
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                - type: object
+                  properties:
+                    page:
+                      type: integer
+                      description: |-
+                        The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                      pattern: ^(?:[1-9][0-9]?|100)$
+                    rpp:
+                      type: integer
+                      description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                      pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                    cursor:
+                      type: string
+                      description: |-
+                        The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    withCount:
+                      type: boolean
+                      description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                      default: false
+                - type: object
+                  properties:
+                    withZeroValue:
+                      type: boolean
+                      description: Parameter specifying whether to include results with value 0 in the response. Set to true for faster responses.
+                      default: false
+                example:
+                  accountAddress: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+                  relation: both
                   rpp: 10
       responses:
         "200":
@@ -10830,6 +11102,146 @@ paths:
                               type: string
                               description: Returns the asset amount as a string. The amount format varies by currency. For \"XRP\", the value is in standard XRP units where 1 XRP equals 1,000,000 drops. IOU assets are expressed based on the precision defined by the issuer.
                               example: "100.5"
+                - title: Solana
+                  x-variant-of:
+                    param: chain
+                    value: solana
+                  allOf:
+                  - type: object
+                    required:
+                    - range
+                    - items
+                    properties:
+                      page:
+                        type: integer
+                        description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                      rpp:
+                        type: integer
+                        description: Field representing the number of results per page specified in the rpp parameter.
+                      cursor:
+                        type: string
+                        description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                      count:
+                        type: integer
+                        description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                      range:
+                        type: object
+                        description: A field representing the range actually applied to the query. The same kind of values as the range parameters used in the request is returned. Requests made with dates return fromDate and toDate, and requests made with slots return fromSlot and toSlot; the two kinds are never mixed. If all range parameters are omitted, the last 30 days are applied as the default range and fromDate and toDate are returned. Slot values are always returned as slot numbers, even when a tag (latest, earliest) is entered in the request.
+                        properties:
+                          fromDate:
+                            type: string
+                            description: A field representing the start of the query in date mode. Returned in ISO 8601 format.
+                            example: '2026-09-29T09:40:23.000Z'
+                          toDate:
+                            type: string
+                            description: A field representing the end of the query in date mode. Returned in ISO 8601 format.
+                            example: '2026-10-29T09:40:21.000Z'
+                          fromSlot:
+                            type: integer
+                            description: A field representing the start slot number of the query in slot mode.
+                            example: 462000000
+                          toSlot:
+                            type: integer
+                            description: A field representing the end slot number of the query in slot mode.
+                            example: 462833902
+                        example:
+                          fromDate: '2026-09-29T09:40:23.000Z'
+                          toDate: '2026-10-29T09:40:21.000Z'
+                      items:
+                        type: array
+                        description: Field representing the list of queried data.
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - slotHeight
+                          - blockHeight
+                          - blockTimestamp
+                          - transactionSignature
+                          - transactionIndex
+                          - instructionIndex
+                          - subInstructionIndex
+                          - programId
+                          - instructionType
+                          - mintAddress
+                          - from
+                          - fromTokenAccount
+                          - to
+                          - toTokenAccount
+                          - value
+                          - decimals
+                          properties:
+                            slotHeight:
+                              type: integer
+                              description: A field representing the slot number in which the token transfer is included.
+                              example: 235157119
+                            blockHeight:
+                              type: integer
+                              description: A field representing the block height to which the slot is mapped.
+                              example: 214567890
+                            blockTimestamp:
+                              type: integer
+                              description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                              example: 1746479684
+                            transactionSignature:
+                              type: string
+                              description: A field representing the signature of the transaction in which the token transfer occurred. It is Base58-encoded.
+                              example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                            transactionIndex:
+                              type: integer
+                              description: A field representing the order of the transaction within the same slot.
+                              example: 7
+                            instructionIndex:
+                              type: integer
+                              description: A field representing the index of the top-level instruction within the transaction. (0-based)
+                              example: 2
+                            subInstructionIndex:
+                              type: integer
+                              description: A field representing the index of the inner (sub) instruction that occurred via CPI, etc. It is 0 for a top-level instruction. (0-based)
+                              example: 0
+                            batchIndex:
+                              type: integer
+                              description: Field indicating the order of an individual transfer executed within a P-token batch instruction. Included only for transfers executed by a P-token batch instruction. (0-based)
+                              example: 0
+                            programId:
+                              type: string
+                              description: A field representing the ID of the SPL Token program that executed the transfer. It is Base58-encoded.
+                              example: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+                            instructionType:
+                              type: string
+                              description: A field representing the type of the token program instruction. This API returns only the types that correspond to token movements. (e.g. transfer, transferChecked)
+                              example: transfer
+                            mintAddress:
+                              type: string
+                              description: A field representing the MintAddress of the transferred SPL token. For SOL, "So11111111111111111111111111111111111111111" is returned.
+                              example: So11111111111111111111111111111111111111112
+                            from:
+                              type: string
+                              description: A field representing the sender's (owner) wallet address. It is the owner of fromTokenAccount.
+                              example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                            fromTokenAccount:
+                              type: string
+                              description: A field representing the address of the sending Token Account from which the actual token balance was deducted. For SOL, an empty string ("") is returned.
+                              example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                            to:
+                              type: string
+                              description: A field representing the recipient's (owner) wallet address. It is the owner of toTokenAccount.
+                              example: HUNMbn6FnUDoFmrATKUkq3GjSRjWX4ytkX4nvP7XNYfH
+                            toTokenAccount:
+                              type: string
+                              description: A field representing the address of the receiving Token Account whose actual token balance increased. For SOL, an empty string ("") is returned.
+                              example: 9qkU8bqgYwR3c6qS9m4X2C1xL7oQ7kL8U7s7o7h7j7k7
+                            value:
+                              type: string
+                              description: A field representing the amount of the transferred token as a raw integer string. The actual amount is calculated as value / 10^decimals.
+                              example: "100000"
+                            decimals:
+                              type: integer
+                              description: A field representing the number of decimal places of the token.
+                              example: 6
         "400":
           $ref: '#/components/responses/400'
         "401":
@@ -18760,6 +19172,308 @@ paths:
           $ref: '#/components/responses/500'
         "503":
           $ref: '#/components/responses/503'
+  /{chain}/{network}/token/getTokenTransfersByMintAddress:
+    post:
+      security:
+      - api_key: []
+      operationId: getTokenTransfersByMintAddress
+      summary: Get Token Transfers By MintAddress
+      description: |
+        Retrieves the list of transfers of a specific token based on its MintAddress.
+        Enter `So11111111111111111111111111111111111111111` as mintAddress to query transfers of the native token (SOL). The MintAddress of Wrapped SOL is `So11111111111111111111111111111111111111112`.
+      x-seo-description: Get a paginated list of token transfers for a specific token MintAddress on Solana.
+      tags:
+      - Token API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain. Supported networks may vary depending on the chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: Solana
+              allOf:
+              - type: object
+                required:
+                - mintAddress
+                properties:
+                  mintAddress:
+                    type: string
+                    description: Parameter specifying the MintAddress of the token to query. The MintAddress must be entered as a 32–44 character Base58-encoded string.
+                    pattern: ^[1-9A-HJ-NP-Za-km-z]{32,44}$
+                    example: So11111111111111111111111111111111111111112
+                  fromSlot:
+                    type: string
+                    description: |
+                      Parameter specifying the start point of the query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "earliest" to specify the first slot.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                      Notes:
+                      - This field cannot be used together with fromDate and toDate.
+                      - If only fromSlot is provided without toSlot, results are queried from that slot to the latest slot.
+                      - toSlot value cannot be less than fromSlot value.
+                      - If fromSlot and toSlot have the same value, only that slot is queried.
+                      - "latest" cannot be entered for fromSlot.
+                    pattern: ^[0-9]+$|earliest
+                  toSlot:
+                    type: string
+                    description: |-
+                      Parameter specifying the end point of the query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "latest" to specify the latest slot.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                      Notes:
+                      - This field cannot be used together with fromDate and toDate.
+                      - If only toSlot is provided without fromSlot, results are queried from the first stored slot to that slot.
+                      - toSlot value cannot be less than fromSlot value.
+                      - If fromSlot and toSlot have the same value, only that slot is queried.
+                      - "earliest" cannot be entered for toSlot.
+                    pattern: ^[0-9]+$|latest
+                  fromDate:
+                    type: string
+                    description: |-
+                      Parameter specifying the start date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                      Notes:
+                      - This field cannot be used together with fromSlot and toSlot.
+                      - If only fromDate is provided without toDate, results are queried from that date to the latest slot.
+                      - fromDate must be equal to or earlier than toDate.
+                    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                  toDate:
+                    type: string
+                    description: |-
+                      Parameter specifying the end date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                      Notes:
+                      - This field cannot be used together with fromSlot and toSlot.
+                      - If only toDate is provided without fromDate, results are queried from the first stored slot to that date.
+                      - toDate must be equal to or later than fromDate.
+                    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+              - type: object
+                properties:
+                  page:
+                    type: integer
+                    description: |-
+                      The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    pattern: ^(?:[1-9][0-9]?|100)$
+                  rpp:
+                    type: integer
+                    description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                    pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                  cursor:
+                    type: string
+                    description: |-
+                      The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                  withCount:
+                    type: boolean
+                    description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                    default: false
+              - type: object
+                properties:
+                  withZeroValue:
+                    type: boolean
+                    description: Parameter specifying whether to include results with value 0 in the response. Set to true for faster responses.
+                    default: false
+              example:
+                mintAddress: So11111111111111111111111111111111111111112
+                rpp: 10
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                title: Solana
+                allOf:
+                - type: object
+                  required:
+                  - range
+                  - items
+                  properties:
+                    page:
+                      type: integer
+                      description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                    rpp:
+                      type: integer
+                      description: Field representing the number of results per page specified in the rpp parameter.
+                    cursor:
+                      type: string
+                      description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                    count:
+                      type: integer
+                      description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                    range:
+                      type: object
+                      description: A field representing the range actually applied to the query. The same kind of values as the range parameters used in the request is returned. Requests made with dates return fromDate and toDate, and requests made with slots return fromSlot and toSlot; the two kinds are never mixed. If all range parameters are omitted, the last 30 days are applied as the default range and fromDate and toDate are returned. Slot values are always returned as slot numbers, even when a tag (latest, earliest) is entered in the request.
+                      properties:
+                        fromDate:
+                          type: string
+                          description: A field representing the start of the query in date mode. Returned in ISO 8601 format.
+                          example: '2026-09-29T09:40:23.000Z'
+                        toDate:
+                          type: string
+                          description: A field representing the end of the query in date mode. Returned in ISO 8601 format.
+                          example: '2026-10-29T09:40:21.000Z'
+                        fromSlot:
+                          type: integer
+                          description: A field representing the start slot number of the query in slot mode.
+                          example: 462000000
+                        toSlot:
+                          type: integer
+                          description: A field representing the end slot number of the query in slot mode.
+                          example: 462833902
+                      example:
+                        fromDate: '2026-09-29T09:40:23.000Z'
+                        toDate: '2026-10-29T09:40:21.000Z'
+                    items:
+                      type: array
+                      description: Field representing the list of queried data.
+                - type: object
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - slotHeight
+                        - blockHeight
+                        - blockTimestamp
+                        - transactionSignature
+                        - transactionIndex
+                        - instructionIndex
+                        - subInstructionIndex
+                        - programId
+                        - instructionType
+                        - mintAddress
+                        - from
+                        - fromTokenAccount
+                        - to
+                        - toTokenAccount
+                        - value
+                        - decimals
+                        properties:
+                          slotHeight:
+                            type: integer
+                            description: A field representing the slot number in which the token transfer is included.
+                            example: 235157119
+                          blockHeight:
+                            type: integer
+                            description: A field representing the block height to which the slot is mapped.
+                            example: 214567890
+                          blockTimestamp:
+                            type: integer
+                            description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                            example: 1746479684
+                          transactionSignature:
+                            type: string
+                            description: A field representing the signature of the transaction in which the token transfer occurred. It is Base58-encoded.
+                            example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                          transactionIndex:
+                            type: integer
+                            description: A field representing the order of the transaction within the same slot.
+                            example: 7
+                          instructionIndex:
+                            type: integer
+                            description: A field representing the index of the top-level instruction within the transaction. (0-based)
+                            example: 2
+                          subInstructionIndex:
+                            type: integer
+                            description: A field representing the index of the inner (sub) instruction that occurred via CPI, etc. It is 0 for a top-level instruction. (0-based)
+                            example: 0
+                          batchIndex:
+                            type: integer
+                            description: Field indicating the order of an individual transfer executed within a P-token batch instruction. Included only for transfers executed by a P-token batch instruction. (0-based)
+                            example: 0
+                          programId:
+                            type: string
+                            description: A field representing the ID of the SPL Token program that executed the transfer. It is Base58-encoded.
+                            example: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+                          instructionType:
+                            type: string
+                            description: A field representing the type of the token program instruction. This API returns only the types that correspond to token movements. (e.g. transfer, transferChecked)
+                            example: transfer
+                          mintAddress:
+                            type: string
+                            description: A field representing the MintAddress of the transferred SPL token. For SOL, "So11111111111111111111111111111111111111111" is returned.
+                            example: So11111111111111111111111111111111111111112
+                          from:
+                            type: string
+                            description: A field representing the sender's (owner) wallet address. It is the owner of fromTokenAccount.
+                            example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                          fromTokenAccount:
+                            type: string
+                            description: A field representing the address of the sending Token Account from which the actual token balance was deducted. For SOL, an empty string ("") is returned.
+                            example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                          to:
+                            type: string
+                            description: A field representing the recipient's (owner) wallet address. It is the owner of toTokenAccount.
+                            example: HUNMbn6FnUDoFmrATKUkq3GjSRjWX4ytkX4nvP7XNYfH
+                          toTokenAccount:
+                            type: string
+                            description: A field representing the address of the receiving Token Account whose actual token balance increased. For SOL, an empty string ("") is returned.
+                            example: 9qkU8bqgYwR3c6qS9m4X2C1xL7oQ7kL8U7s7o7h7j7k7
+                          value:
+                            type: string
+                            description: A field representing the amount of the transferred token as a raw integer string. The actual amount is calculated as value / 10^decimals.
+                            example: "100000"
+                          decimals:
+                            type: integer
+                            description: A field representing the number of decimal places of the token.
+                            example: 6
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
   /{chain}/{network}/token/getTokenTransfersWithinRange:
     post:
       security:
@@ -18767,12 +19481,12 @@ paths:
       operationId: getTokenTransfersWithinRange
       summary: Get Token Transfers Within Range
       description: |
-        Retrieves the list of ERC20 token transfers that occurred during a specific period. Results include token contract metadata and the transferred token amount.
+        Retrieves the list of token transfers that occurred during a specific period. Results include the transferred token's information and amount.
 
 
         > 📘 Period setting tip
         > If the specified period is long, response time may increase. For faster responses, it is recommended to set only the necessary period.
-      x-seo-description: Get all ERC20 token transfers that occurred within a specified block number or time range.
+      x-seo-description: Get all token transfers that occurred within a specified block, slot, or time range.
       tags:
       - Token API
       parameters:
@@ -18796,6 +19510,7 @@ paths:
           - polygon
           - tron
           - xrpl
+          - solana
           default: ethereum
         description: Parameter to specify the target chain for the query.
       - name: network
@@ -18849,6 +19564,8 @@ paths:
             tron:
             - mainnet
             xrpl:
+            - mainnet
+            solana:
             - mainnet
       requestBody:
         required: true
@@ -20284,6 +21001,100 @@ paths:
                   fromDate: '2026-01-01T00:00:00Z'
                   toDate: '2026-02-01T00:00:00Z'
                   page: 1
+                  rpp: 10
+              - title: Solana
+                x-variant-of:
+                  param: chain
+                  value: solana
+                allOf:
+                - type: object
+                  properties:
+                    fromSlot:
+                      type: string
+                      description: |
+                        Parameter specifying the start point of the query. You can enter one of the following formats:
+                        - slot height: Enter the slot number as a decimal string.
+                        - slot tag: Use "earliest" to specify the first slot.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                        Notes:
+                        - This field cannot be used together with fromDate and toDate.
+                        - If only fromSlot is provided without toSlot, results are queried from that slot to the latest slot.
+                        - toSlot value cannot be less than fromSlot value.
+                        - If fromSlot and toSlot have the same value, only that slot is queried.
+                        - "latest" cannot be entered for fromSlot.
+                      pattern: ^[0-9]+$|earliest
+                    toSlot:
+                      type: string
+                      description: |-
+                        Parameter specifying the end point of the query. You can enter one of the following formats:
+                        - slot height: Enter the slot number as a decimal string.
+                        - slot tag: Use "latest" to specify the latest slot.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                        Notes:
+                        - This field cannot be used together with fromDate and toDate.
+                        - If only toSlot is provided without fromSlot, results are queried from the first stored slot to that slot.
+                        - toSlot value cannot be less than fromSlot value.
+                        - If fromSlot and toSlot have the same value, only that slot is queried.
+                        - "earliest" cannot be entered for toSlot.
+                      pattern: ^[0-9]+$|latest
+                    fromDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the start date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                        Notes:
+                        - This field cannot be used together with fromSlot and toSlot.
+                        - If only fromDate is provided without toDate, results are queried from that date to the latest slot.
+                        - fromDate must be equal to or earlier than toDate.
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                    toDate:
+                      type: string
+                      description: |-
+                        Parameter specifying the end date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                        If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                        Notes:
+                        - This field cannot be used together with fromSlot and toSlot.
+                        - If only toDate is provided without fromDate, results are queried from the first stored slot to that date.
+                        - toDate must be equal to or later than fromDate.
+                      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                - type: object
+                  properties:
+                    page:
+                      type: integer
+                      description: |-
+                        The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                      pattern: ^(?:[1-9][0-9]?|100)$
+                    rpp:
+                      type: integer
+                      description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                      pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                    cursor:
+                      type: string
+                      description: |-
+                        The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                        The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    withCount:
+                      type: boolean
+                      description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                      default: false
+                - type: object
+                  properties:
+                    withZeroValue:
+                      type: boolean
+                      description: Parameter specifying whether to include results with value 0 in the response. Set to true for faster responses.
+                      default: false
+                example:
                   rpp: 10
       responses:
         "200":
@@ -22618,6 +23429,146 @@ paths:
                               type: string
                               description: Returns the asset amount as a string. The amount format varies by currency. For \"XRP\", the value is in standard XRP units where 1 XRP equals 1,000,000 drops. IOU assets are expressed based on the precision defined by the issuer.
                               example: "100.5"
+                - title: Solana
+                  x-variant-of:
+                    param: chain
+                    value: solana
+                  allOf:
+                  - type: object
+                    required:
+                    - range
+                    - items
+                    properties:
+                      page:
+                        type: integer
+                        description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                      rpp:
+                        type: integer
+                        description: Field representing the number of results per page specified in the rpp parameter.
+                      cursor:
+                        type: string
+                        description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                      count:
+                        type: integer
+                        description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                      range:
+                        type: object
+                        description: A field representing the range actually applied to the query. The same kind of values as the range parameters used in the request is returned. Requests made with dates return fromDate and toDate, and requests made with slots return fromSlot and toSlot; the two kinds are never mixed. If all range parameters are omitted, the last 30 days are applied as the default range and fromDate and toDate are returned. Slot values are always returned as slot numbers, even when a tag (latest, earliest) is entered in the request.
+                        properties:
+                          fromDate:
+                            type: string
+                            description: A field representing the start of the query in date mode. Returned in ISO 8601 format.
+                            example: '2026-09-29T09:40:23.000Z'
+                          toDate:
+                            type: string
+                            description: A field representing the end of the query in date mode. Returned in ISO 8601 format.
+                            example: '2026-10-29T09:40:21.000Z'
+                          fromSlot:
+                            type: integer
+                            description: A field representing the start slot number of the query in slot mode.
+                            example: 462000000
+                          toSlot:
+                            type: integer
+                            description: A field representing the end slot number of the query in slot mode.
+                            example: 462833902
+                        example:
+                          fromDate: '2026-09-29T09:40:23.000Z'
+                          toDate: '2026-10-29T09:40:21.000Z'
+                      items:
+                        type: array
+                        description: Field representing the list of queried data.
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - slotHeight
+                          - blockHeight
+                          - blockTimestamp
+                          - transactionSignature
+                          - transactionIndex
+                          - instructionIndex
+                          - subInstructionIndex
+                          - programId
+                          - instructionType
+                          - mintAddress
+                          - from
+                          - fromTokenAccount
+                          - to
+                          - toTokenAccount
+                          - value
+                          - decimals
+                          properties:
+                            slotHeight:
+                              type: integer
+                              description: A field representing the slot number in which the token transfer is included.
+                              example: 235157119
+                            blockHeight:
+                              type: integer
+                              description: A field representing the block height to which the slot is mapped.
+                              example: 214567890
+                            blockTimestamp:
+                              type: integer
+                              description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                              example: 1746479684
+                            transactionSignature:
+                              type: string
+                              description: A field representing the signature of the transaction in which the token transfer occurred. It is Base58-encoded.
+                              example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                            transactionIndex:
+                              type: integer
+                              description: A field representing the order of the transaction within the same slot.
+                              example: 7
+                            instructionIndex:
+                              type: integer
+                              description: A field representing the index of the top-level instruction within the transaction. (0-based)
+                              example: 2
+                            subInstructionIndex:
+                              type: integer
+                              description: A field representing the index of the inner (sub) instruction that occurred via CPI, etc. It is 0 for a top-level instruction. (0-based)
+                              example: 0
+                            batchIndex:
+                              type: integer
+                              description: Field indicating the order of an individual transfer executed within a P-token batch instruction. Included only for transfers executed by a P-token batch instruction. (0-based)
+                              example: 0
+                            programId:
+                              type: string
+                              description: A field representing the ID of the SPL Token program that executed the transfer. It is Base58-encoded.
+                              example: TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+                            instructionType:
+                              type: string
+                              description: A field representing the type of the token program instruction. This API returns only the types that correspond to token movements. (e.g. transfer, transferChecked)
+                              example: transfer
+                            mintAddress:
+                              type: string
+                              description: A field representing the MintAddress of the transferred SPL token. For SOL, "So11111111111111111111111111111111111111111" is returned.
+                              example: So11111111111111111111111111111111111111112
+                            from:
+                              type: string
+                              description: A field representing the sender's (owner) wallet address. It is the owner of fromTokenAccount.
+                              example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                            fromTokenAccount:
+                              type: string
+                              description: A field representing the address of the sending Token Account from which the actual token balance was deducted. For SOL, an empty string ("") is returned.
+                              example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                            to:
+                              type: string
+                              description: A field representing the recipient's (owner) wallet address. It is the owner of toTokenAccount.
+                              example: HUNMbn6FnUDoFmrATKUkq3GjSRjWX4ytkX4nvP7XNYfH
+                            toTokenAccount:
+                              type: string
+                              description: A field representing the address of the receiving Token Account whose actual token balance increased. For SOL, an empty string ("") is returned.
+                              example: 9qkU8bqgYwR3c6qS9m4X2C1xL7oQ7kL8U7s7o7h7j7k7
+                            value:
+                              type: string
+                              description: A field representing the amount of the transferred token as a raw integer string. The actual amount is calculated as value / 10^decimals.
+                              example: "100000"
+                            decimals:
+                              type: integer
+                              description: A field representing the number of decimal places of the token.
+                              example: 6
         "400":
           $ref: '#/components/responses/400'
         "401":

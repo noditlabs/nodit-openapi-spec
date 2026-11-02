@@ -1,0 +1,2571 @@
+openapi: 3.1.0
+info:
+  title: Solana - Data API
+  version: 1.0.0
+servers:
+- url: https://web3.nodit.io/v1
+  description: Data API
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - MISSING_REQUIRED_PARAMETER
+                - INVALID_PARAMETER
+                - WRONG_RANGE_PARAMETER
+                - DEPRECATED_OPERATION
+                description: Code to identify the cause of the bad request
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the invalid parameter
+            required:
+            - code
+            - message
+          examples:
+            MISSING_REQUIRED_PARAMETER:
+              summary: A required parameter is missing
+              value:
+                code: MISSING_REQUIRED_PARAMETER
+                message: 'Missing required parameter: { PARAMETER_NAME }'
+            INVALID_PARAMETER:
+              summary: A parameter has an invalid value
+              value:
+                code: INVALID_PARAMETER
+                message: 'Invalid parameter: { PARAMETER1_NAME = PARAMETER1_VALUE }'
+            WRONG_RANGE_PARAMETER:
+              summary: A value is outside the allowed range
+              value:
+                code: WRONG_RANGE_PARAMETER
+                message: 'Wrong range parameter: { PARAMETER_NAME }'
+            DEPRECATED_OPERATION:
+              summary: The requested API is no longer supported
+              value:
+                code: DEPRECATED_OPERATION
+                message: This operation has been deprecated
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - WRONG_ENDPOINT
+                - NOT_SUPPORTED_CHAIN
+                - RESOURCE_NOT_FOUND
+                description: Code to identify the cause of the resource not found
+              message:
+                type: string
+                description: Detailed message including the name, value, etc. of the resource not found
+            required:
+            - code
+            - message
+          examples:
+            WRONG_ENDPOINT:
+              summary: The requested API path does not exist
+              value:
+                code: WRONG_ENDPOINT
+                message: Wrong endpoint
+            NOT_SUPPORTED_CHAIN:
+              summary: The requested chain is not supported
+              value:
+                code: NOT_SUPPORTED_CHAIN
+                message: Not supported chain
+            RESOURCE_NOT_FOUND:
+              summary: The requested resource does not exist
+              value:
+                code: RESOURCE_NOT_FOUND
+                message: 'Resource not found: { RESOURCE_NAME = RESOURCE_VALUE }'
+    "405":
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - METHOD_NOT_ALLOWED
+                description: Code indicating a disallowed HTTP method
+              message:
+                type: string
+                description: Detailed message about the disallowed HTTP method
+            required:
+            - code
+            - message
+          examples:
+            METHOD_NOT_ALLOWED:
+              summary: The request uses an unsupported HTTP method
+              value:
+                code: METHOD_NOT_ALLOWED
+                message: Method not allowed
+    "408":
+      description: Request Timeout
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TIMEOUT
+                description: Code indicating request timeout
+              message:
+                type: string
+                description: Detailed message including the cause of the timeout
+            required:
+            - code
+            - message
+          examples:
+            TIMEOUT:
+              summary: Processing did not finish within the time limit
+              value:
+                code: TIMEOUT
+                message: Request timeout
+    "409":
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - RESOURCE_ALREADY_EXISTS
+                - REJECTED
+                description: Code to identify the cause of the request conflict
+              message:
+                type: string
+                description: Detailed message including information about the conflicting resource
+            required:
+            - code
+            - message
+          examples:
+            RESOURCE_ALREADY_EXISTS:
+              summary: The request tries to create a resource that already exists
+              value:
+                code: RESOURCE_ALREADY_EXISTS
+                message: Resource already exists
+            REJECTED:
+              summary: The server rejected the request
+              value:
+                code: REJECTED
+                message: Request rejected
+    "413":
+      description: Payload Too Large
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - CONTENTS_TOO_LARGE
+                description: Code indicating payload size exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed payload size
+            required:
+            - code
+            - message
+          examples:
+            CONTENTS_TOO_LARGE:
+              summary: The payload exceeds the server's maximum size
+              value:
+                code: CONTENTS_TOO_LARGE
+                message: Contents too large
+    "414":
+      description: URI Too Long
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_LONG_URI
+                description: Code indicating URI length exceeded
+              message:
+                type: string
+                description: Detailed message including the maximum allowed URI length
+            required:
+            - code
+            - message
+          examples:
+            TOO_LONG_URI:
+              summary: The request URI exceeds the server's maximum length
+              value:
+                code: TOO_LONG_URI
+                message: URI too long
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+    "503":
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - UNAVAILABLE
+                description: Code indicating service unavailability
+              message:
+                type: string
+                description: Detailed message including the cause of the service outage
+            required:
+            - code
+            - message
+          examples:
+            UNAVAILABLE:
+              summary: The service is unavailable due to infrastructure downtime or an upgrade
+              value:
+                code: UNAVAILABLE
+                message: Service unavailable
+paths:
+  /{chain}/{network}/blockchain/getTotalTransactionCountByAccount:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-getTotalTransactionCountByAccount
+      summary: Get Total Transaction Count By Account
+      description: |
+        Retrieves the total number of transactions associated with a specific address.
+      x-seo-description: Retrieve the total number of transactions sent or received by a specific account address.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - accountAddress
+              properties:
+                accountAddress:
+                  type: string
+                  description: Parameter specifying the account address to query. The account address must be entered as a 32–44 character Base58-encoded string.
+                  pattern: ^[1-9A-HJ-NP-Za-km-z]{32,44}$
+                  example: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+            example:
+              accountAddress: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - transactionCount
+                properties:
+                  transactionCount:
+                    type: integer
+                    description: A field representing the total number of transactions associated with the queried address.
+                    example: 1293
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
+  /{chain}/{network}/blockchain/getTransactionByHash:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-getTransactionByHash
+      summary: Get Transaction By Hash
+      description: |
+        Retrieves the details of a specific transaction by its hash. On Solana, a transaction hash has the same meaning as the transaction signature.
+      x-seo-description: Fetch detailed transaction data including status, gas, and logs by its transaction hash.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - transactionHash
+              properties:
+                transactionHash:
+                  type: string
+                  description: Parameter specifying the hash of the transaction to query. On Solana, a transaction hash has the same meaning as the transaction signature, and must be entered as a Base58-encoded string (typically 87–88 characters).
+                  example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                withBalanceChanges:
+                  type: boolean
+                  description: |-
+                    Parameter specifying whether to include the balanceChanges field in the response.
+
+                    - balanceChanges is a field that contains the balance changes of the Native token (SOL) and Token.
+                    - Setting this parameter to true may slow down the response.
+                  default: false
+                withInstructions:
+                  type: boolean
+                  description: |-
+                    Parameter specifying whether to include the instructions field in the response.
+
+                    - instructions is a field that contains the list of instructions in the transaction.
+                    - When this parameter is set to true, instructions are included in the response.
+                    - instructions are not provided for failed transactions (status "failed").
+                  default: false
+            example:
+              transactionHash: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+              withBalanceChanges: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - slotHeight
+                - blockHeight
+                - blockTimestamp
+                - transactionIndex
+                - signature
+                - signatures
+                - logMessages
+                - requiredSignatures
+                - readonlySignedAccounts
+                - readonlyUnsignedAccounts
+                - fee
+                - recentBlockHash
+                - version
+                - signers
+                - status
+                properties:
+                  slotHeight:
+                    type: integer
+                    description: A field representing the slot number in which the transaction is included. On Solana, a slot corresponds to the block unit of other chains.
+                    example: 235157119
+                  blockHeight:
+                    type: integer
+                    description: A field representing the block height to which the slot is mapped.
+                    example: 214567890
+                  blockTimestamp:
+                    type: integer
+                    description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                    example: 1746479684
+                  transactionIndex:
+                    type: integer
+                    description: A field representing the order of the transaction within the same slot.
+                    example: 7
+                  signature:
+                    type: string
+                    description: A field representing the representative signature of the transaction. It is usually the first signature and is Base58-encoded.
+                    example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                  signatures:
+                    type: array
+                    description: A field representing the list of all signatures included in the transaction. There may be two or more in a multisig or versioned transaction.
+                    items:
+                      type: string
+                    example:
+                    - 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                  instructions:
+                    type: array
+                    description: |-
+                      A field representing the list of instructions included in the transaction. This field is only included in the response when the withInstructions parameter is set to true.
+
+                      Instructions are not provided for failed transactions (status "failed").
+                    items:
+                      type: object
+                      required:
+                      - instructionIndex
+                      - executionIndex
+                      - programId
+                      - accounts
+                      - data
+                      properties:
+                        instructionIndex:
+                          type: integer
+                          description: Field indicating the index of the instruction within the transaction. (0-based)
+                          example: 0
+                        subInstructionIndex:
+                          type: integer
+                          description: Field indicating the index of an inner (sub) instruction generated by CPI or similar.
+                          example: 0
+                        executionIndex:
+                          type: integer
+                          description: Field indicating the order in which the instruction was executed within the transaction.
+                          example: 0
+                        programId:
+                          type: string
+                          description: Field indicating the ID of the program that executed the instruction. Base58-encoded.
+                          example: "11111111111111111111111111111111"
+                        accounts:
+                          type: array
+                          description: Field indicating the list of public keys of the accounts used by the instruction. Each public key is Base58-encoded.
+                          items:
+                            type: string
+                          example:
+                          - DsTrM688cmzj7jkC8Nw6B7ngYhCqDqqMGtgHQhKCBYm
+                          - VdhaA49Uy2Vb8h4RzxcsfdnjNPbbvNTBCowUU32k6Wi
+                        data:
+                          type: string
+                          description: Field indicating the instruction data. Base58-encoded.
+                          example: 3Bxs4HjPduGCo42T
+                        stackHeight:
+                          type: integer
+                          description: Field indicating the stack depth of the instruction.
+                          example: 1
+                  logMessages:
+                    type: array
+                    description: A field representing the list of log messages left by programs during transaction execution.
+                    items:
+                      type: string
+                    example:
+                    - Program 11111111111111111111111111111111 invoke [1]
+                    - Program 11111111111111111111111111111111 success
+                  requiredSignatures:
+                    type: integer
+                    description: A field representing the number of accounts that must sign the transaction. (numRequiredSignatures)
+                    example: 1
+                  readonlySignedAccounts:
+                    type: integer
+                    description: A field representing the number of readonly accounts among the signing accounts. (numReadonlySignedAccounts)
+                    example: 0
+                  readonlyUnsignedAccounts:
+                    type: integer
+                    description: A field representing the number of readonly accounts among the non-signing accounts. (numReadonlyUnsignedAccounts)
+                    example: 3
+                  computeUnitsConsumed:
+                    type: integer
+                    description: A field representing the Compute Units (CU) actually consumed by the transaction.
+                    example: 6842
+                  costUnits:
+                    type: integer
+                    description: A field representing the cost units of the transaction processing cost.
+                    example: 6842
+                  fee:
+                    type: integer
+                    description: A field representing the transaction fee in lamports. It may be charged regardless of success or failure.
+                    example: 5000
+                  recentBlockHash:
+                    type: string
+                    description: A field representing the recent blockhash referenced by the transaction. It is used for replay prevention and validity verification.
+                    example: mfcyqEXB3DnHXki6KjjmZck6YjmZLvpAByy2fj4nh6B
+                  version:
+                    type: string
+                    description: A field representing the version of the transaction. It has one of the values "legacy", "0", or "1".
+                    example: legacy
+                  transactionConfig:
+                    type: object
+                    description: A field representing the compute budget configuration set on the transaction. It is provided only for SIMD-0385 v1 transactions and is not included in the response for legacy and v0 transactions. Each sub-field can be null, and null and 0 have different meanings. If the transaction does not set the corresponding item, null is returned.
+                    properties:
+                      priorityFee:
+                        type: string
+                        description: A field representing the total priority fee set on the transaction, in lamports. It has a value within the u64 range and is returned as a string to avoid loss of precision. SetComputeUnitPrice on legacy and v0 transactions is denominated in micro-lamports per compute unit, so its unit differs from this field. In addition, the compute unit price of legacy and v0 transactions is not a transaction field and can only be obtained by decoding the instruction data.
+                        nullable: true
+                        example: "100000"
+                      computeUnitLimit:
+                        type: integer
+                        nullable: true
+                        description: A field representing the compute unit limit set on the transaction. It has a value within the u32 range.
+                        example: 200000
+                      loadedAccountsDataSizeLimit:
+                        type: integer
+                        nullable: true
+                        description: A field representing the total size limit of the account data loaded by the transaction, in bytes. It has a value within the u32 range.
+                        example: 65536
+                      heapSize:
+                        type: integer
+                        nullable: true
+                        description: A field representing the size of the heap memory used for dynamic allocation while the program runs inside the VM, in bytes. It has a value within the u32 range and is a multiple of 1KiB between 32KiB and 256KiB.
+                        example: 32768
+                  signers:
+                    type: array
+                    description: A field representing the list of account addresses that signed the transaction.
+                    items:
+                      type: string
+                    example:
+                    - 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                  status:
+                    type: string
+                    description: A field representing the processing status of the transaction. "success" is returned when processed normally, and "failed" is returned when it fails.
+                    example: success
+                  errorMessage:
+                    type: string
+                    description: A field representing the error summary string when the transaction fails. It is a human-readable conversion of the Solana TransactionError.
+                    example: 'custom program error: 0x1'
+                  balanceChanges:
+                    type: array
+                    description: A field representing the details of SOL and SPL token balance changes that occurred in the transaction. This field is only included in the response when the withBalanceChanges parameter is set to true.
+                    items:
+                      type: object
+                      required:
+                      - programId
+                      - ownerAddress
+                      - tokenAccount
+                      - mintAddress
+                      - changeValue
+                      - previousBalance
+                      - finalBalance
+                      - decimals
+                      properties:
+                        programId:
+                          type: string
+                          description: A field representing the address of the program that caused the balance change. (e.g. System Program)
+                          example: "11111111111111111111111111111111"
+                        ownerAddress:
+                          type: string
+                          description: A field representing the address of the account (owner) where the balance change occurred.
+                          example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                        tokenAccount:
+                          type: string
+                          description: A field representing the address of the SPL token account where the balance change occurred. For a SOL balance change, an empty string ("") is returned.
+                          example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                        mintAddress:
+                          type: string
+                          description: A field representing the MintAddress of the SPL token subject to the balance change. For a SOL balance change, "So11111111111111111111111111111111111111111" is returned.
+                          example: So11111111111111111111111111111111111111112
+                        changeValue:
+                          type: string
+                          description: A field representing the amount of the balance change. A negative value indicates an outflow, and a positive value indicates an inflow. For SOL, it is expressed in lamports.
+                          example: "-5000"
+                        previousBalance:
+                          type: string
+                          description: A field representing the balance immediately before the change. For SOL, it is expressed in lamports.
+                          example: "1000000000"
+                        finalBalance:
+                          type: string
+                          description: A field representing the balance immediately after the change. For SOL, it is expressed in lamports.
+                          example: "999995000"
+                        decimals:
+                          type: integer
+                          description: A field representing the number of decimal places of the token. For SOL, it is 9.
+                          example: 6
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
+  /{chain}/{network}/blockchain/getTransactionSummariesByAccount:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-getTransactionSummariesByAccount
+      summary: Get Transaction Summaries By Account
+      description: |
+        Retrieves the list of transaction summaries associated with a specific account. A summary includes only the key fields from the full transaction details.
+      x-seo-description: Get a paginated list of transaction summaries associated with a specific account address on Solana.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - type: object
+                required:
+                - accountAddress
+                properties:
+                  accountAddress:
+                    type: string
+                    description: Parameter specifying the account address to query. The account address must be entered as a 32–44 character Base58-encoded string.
+                    pattern: ^[1-9A-HJ-NP-Za-km-z]{32,44}$
+                    example: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+                  relation:
+                    type: string
+                    description: |-
+                      Parameter for filtering only the transactions where the queried account address belongs to from or to.
+
+                      Three options are available: from, to, and both. The default value is both.
+                      - from: Returns transactions where the queried address is a signer or its balance decreased.
+                      - to: Returns transactions where the balance of the queried address increased.
+                      - both: Returns all transactions that match either the from or the to condition.
+                    enum:
+                    - from
+                    - to
+                    - both
+                    pattern: from|to|both
+                    default: both
+                  fromSlot:
+                    type: string
+                    description: |
+                      Parameter specifying the start point of the query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "earliest" to specify the first slot.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                      Notes:
+                      - This field cannot be used together with fromDate and toDate.
+                      - If only fromSlot is provided without toSlot, results are queried from that slot to the latest slot.
+                      - toSlot value cannot be less than fromSlot value.
+                      - If fromSlot and toSlot have the same value, only that slot is queried.
+                      - "latest" cannot be entered for fromSlot.
+                    pattern: ^[0-9]+$|earliest
+                  toSlot:
+                    type: string
+                    description: |-
+                      Parameter specifying the end point of the query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "latest" to specify the latest slot.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                      Notes:
+                      - This field cannot be used together with fromDate and toDate.
+                      - If only toSlot is provided without fromSlot, results are queried from the first stored slot to that slot.
+                      - toSlot value cannot be less than fromSlot value.
+                      - If fromSlot and toSlot have the same value, only that slot is queried.
+                      - "earliest" cannot be entered for toSlot.
+                    pattern: ^[0-9]+$|latest
+                  fromDate:
+                    type: string
+                    description: |-
+                      Parameter specifying the start date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                      Notes:
+                      - This field cannot be used together with fromSlot and toSlot.
+                      - If only fromDate is provided without toDate, results are queried from that date to the latest slot.
+                      - fromDate must be equal to or earlier than toDate.
+                    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                  toDate:
+                    type: string
+                    description: |-
+                      Parameter specifying the end date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                      Notes:
+                      - This field cannot be used together with fromSlot and toSlot.
+                      - If only toDate is provided without fromDate, results are queried from the first stored slot to that date.
+                      - toDate must be equal to or later than fromDate.
+                    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+              - type: object
+                properties:
+                  page:
+                    type: integer
+                    description: |-
+                      The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    pattern: ^(?:[1-9][0-9]?|100)$
+                  rpp:
+                    type: integer
+                    description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                    pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                  cursor:
+                    type: string
+                    description: |-
+                      The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                  withCount:
+                    type: boolean
+                    description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                    default: false
+              - type: object
+                properties:
+                  withBalanceChanges:
+                    type: boolean
+                    description: |-
+                      Parameter specifying whether to include the balanceChanges field in the response.
+
+                      - balanceChanges is a field that contains the balance changes of the Native token (SOL) and Token.
+                      - Setting this parameter to true may slow down the response.
+                    default: false
+            example:
+              accountAddress: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+              relation: both
+              rpp: 10
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - range
+                  - items
+                  properties:
+                    page:
+                      type: integer
+                      description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                    rpp:
+                      type: integer
+                      description: Field representing the number of results per page specified in the rpp parameter.
+                    cursor:
+                      type: string
+                      description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                    count:
+                      type: integer
+                      description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                    range:
+                      type: object
+                      description: A field representing the range actually applied to the query. The same kind of values as the range parameters used in the request is returned. Requests made with dates return fromDate and toDate, and requests made with slots return fromSlot and toSlot; the two kinds are never mixed. If all range parameters are omitted, the last 30 days are applied as the default range and fromDate and toDate are returned. Slot values are always returned as slot numbers, even when a tag (latest, earliest) is entered in the request.
+                      properties:
+                        fromDate:
+                          type: string
+                          description: A field representing the start of the query in date mode. Returned in ISO 8601 format.
+                          example: '2026-09-29T09:40:23.000Z'
+                        toDate:
+                          type: string
+                          description: A field representing the end of the query in date mode. Returned in ISO 8601 format.
+                          example: '2026-10-29T09:40:21.000Z'
+                        fromSlot:
+                          type: integer
+                          description: A field representing the start slot number of the query in slot mode.
+                          example: 462000000
+                        toSlot:
+                          type: integer
+                          description: A field representing the end slot number of the query in slot mode.
+                          example: 462833902
+                      example:
+                        fromDate: '2026-09-29T09:40:23.000Z'
+                        toDate: '2026-10-29T09:40:21.000Z'
+                    items:
+                      type: array
+                      description: Field representing the list of queried data.
+                - type: object
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - slotHeight
+                        - blockTimestamp
+                        - transactionIndex
+                        - signature
+                        - fee
+                        - version
+                        - signers
+                        - status
+                        properties:
+                          slotHeight:
+                            type: integer
+                            description: A field representing the slot number in which the transaction is included. On Solana, a slot corresponds to the block unit of other chains.
+                            example: 235157119
+                          blockHeight:
+                            type: integer
+                            description: A field representing the block height to which the slot is mapped.
+                            example: 214567890
+                          blockTimestamp:
+                            type: integer
+                            description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                            example: 1746479684
+                          transactionIndex:
+                            type: integer
+                            description: A field representing the order of the transaction within the same slot.
+                            example: 7
+                          signature:
+                            type: string
+                            description: A field representing the representative signature of the transaction. It is usually the first signature and is Base58-encoded.
+                            example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                          computeUnitsConsumed:
+                            type: integer
+                            description: A field representing the Compute Units (CU) actually consumed by the transaction.
+                            example: 6842
+                          costUnits:
+                            type: integer
+                            description: A field representing the cost units of the transaction processing cost.
+                            example: 6842
+                          fee:
+                            type: integer
+                            description: A field representing the transaction fee in lamports. It may be charged regardless of success or failure.
+                            example: 5000
+                          version:
+                            type: string
+                            description: A field representing the version of the transaction. It has one of the values "legacy", "0", or "1".
+                            example: legacy
+                          signers:
+                            type: array
+                            description: A field representing the list of account addresses that signed the transaction.
+                            items:
+                              type: string
+                            example:
+                            - 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                          status:
+                            type: string
+                            description: A field representing the processing status of the transaction. "success" is returned when processed normally, and "failed" is returned when it fails.
+                            example: success
+                          errorMessage:
+                            type: string
+                            description: A field representing the error summary string when the transaction fails. It is a human-readable conversion of the Solana TransactionError.
+                            example: 'custom program error: 0x1'
+                          balanceChanges:
+                            type: array
+                            description: A field representing the details of SOL and SPL token balance changes that occurred in the transaction. This field is only included in the response when the withBalanceChanges parameter is set to true.
+                            items:
+                              type: object
+                              required:
+                              - programId
+                              - ownerAddress
+                              - tokenAccount
+                              - mintAddress
+                              - changeValue
+                              - previousBalance
+                              - finalBalance
+                              - decimals
+                              properties:
+                                programId:
+                                  type: string
+                                  description: A field representing the address of the program that caused the balance change. (e.g. System Program)
+                                  example: "11111111111111111111111111111111"
+                                ownerAddress:
+                                  type: string
+                                  description: A field representing the address of the account (owner) where the balance change occurred.
+                                  example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                                tokenAccount:
+                                  type: string
+                                  description: A field representing the address of the SPL token account where the balance change occurred. For a SOL balance change, an empty string ("") is returned.
+                                  example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                                mintAddress:
+                                  type: string
+                                  description: A field representing the MintAddress of the SPL token subject to the balance change. For a SOL balance change, "So11111111111111111111111111111111111111111" is returned.
+                                  example: So11111111111111111111111111111111111111112
+                                changeValue:
+                                  type: string
+                                  description: A field representing the amount of the balance change. A negative value indicates an outflow, and a positive value indicates an inflow. For SOL, it is expressed in lamports.
+                                  example: "-5000"
+                                previousBalance:
+                                  type: string
+                                  description: A field representing the balance immediately before the change. For SOL, it is expressed in lamports.
+                                  example: "1000000000"
+                                finalBalance:
+                                  type: string
+                                  description: A field representing the balance immediately after the change. For SOL, it is expressed in lamports.
+                                  example: "999995000"
+                                decimals:
+                                  type: integer
+                                  description: A field representing the number of decimal places of the token. For SOL, it is 9.
+                                  example: 6
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
+  /{chain}/{network}/blockchain/getTransactionSummariesInSlot:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-getTransactionSummariesInSlot
+      summary: Get Transaction Summaries In Slot
+      description: |
+        Retrieves the list of transaction summaries included in a specific slot. A summary includes only the key fields from the full transaction details.
+      x-seo-description: Get a paginated list of transaction summaries included in a specific slot on Solana.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - type: object
+                required:
+                - slot
+                properties:
+                  slot:
+                    type: string
+                    description: |-
+                      Parameter specifying the slot to query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "earliest" or "latest" to specify the first slot or the latest slot.
+                    pattern: ^[0-9]+$|latest|earliest
+                    default: latest
+              - type: object
+                properties:
+                  page:
+                    type: integer
+                    description: |-
+                      The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    pattern: ^(?:[1-9][0-9]?|100)$
+                  rpp:
+                    type: integer
+                    description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                    pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                  cursor:
+                    type: string
+                    description: |-
+                      The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                  withCount:
+                    type: boolean
+                    description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                    default: false
+              - type: object
+                properties:
+                  withBalanceChanges:
+                    type: boolean
+                    description: |-
+                      Parameter specifying whether to include the balanceChanges field in the response.
+
+                      - balanceChanges is a field that contains the balance changes of the Native token (SOL) and Token.
+                      - Setting this parameter to true may slow down the response.
+                    default: false
+            example:
+              slot: "18611600"
+              rpp: 10
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    page:
+                      type: integer
+                      description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                    rpp:
+                      type: integer
+                      description: Field representing the number of results per page specified in the rpp parameter.
+                    cursor:
+                      type: string
+                      description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                    count:
+                      type: integer
+                      description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                    items:
+                      type: array
+                      description: Field representing the list of queried data.
+                - type: object
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - slotHeight
+                        - blockTimestamp
+                        - transactionIndex
+                        - signature
+                        - fee
+                        - version
+                        - signers
+                        - status
+                        properties:
+                          slotHeight:
+                            type: integer
+                            description: A field representing the slot number in which the transaction is included. On Solana, a slot corresponds to the block unit of other chains.
+                            example: 235157119
+                          blockHeight:
+                            type: integer
+                            description: A field representing the block height to which the slot is mapped.
+                            example: 214567890
+                          blockTimestamp:
+                            type: integer
+                            description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                            example: 1746479684
+                          transactionIndex:
+                            type: integer
+                            description: A field representing the order of the transaction within the same slot.
+                            example: 7
+                          signature:
+                            type: string
+                            description: A field representing the representative signature of the transaction. It is usually the first signature and is Base58-encoded.
+                            example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                          computeUnitsConsumed:
+                            type: integer
+                            description: A field representing the Compute Units (CU) actually consumed by the transaction.
+                            example: 6842
+                          costUnits:
+                            type: integer
+                            description: A field representing the cost units of the transaction processing cost.
+                            example: 6842
+                          fee:
+                            type: integer
+                            description: A field representing the transaction fee in lamports. It may be charged regardless of success or failure.
+                            example: 5000
+                          version:
+                            type: string
+                            description: A field representing the version of the transaction. It has one of the values "legacy", "0", or "1".
+                            example: legacy
+                          signers:
+                            type: array
+                            description: A field representing the list of account addresses that signed the transaction.
+                            items:
+                              type: string
+                            example:
+                            - 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                          status:
+                            type: string
+                            description: A field representing the processing status of the transaction. "success" is returned when processed normally, and "failed" is returned when it fails.
+                            example: success
+                          errorMessage:
+                            type: string
+                            description: A field representing the error summary string when the transaction fails. It is a human-readable conversion of the Solana TransactionError.
+                            example: 'custom program error: 0x1'
+                          balanceChanges:
+                            type: array
+                            description: A field representing the details of SOL and SPL token balance changes that occurred in the transaction. This field is only included in the response when the withBalanceChanges parameter is set to true.
+                            items:
+                              type: object
+                              required:
+                              - programId
+                              - ownerAddress
+                              - tokenAccount
+                              - mintAddress
+                              - changeValue
+                              - previousBalance
+                              - finalBalance
+                              - decimals
+                              properties:
+                                programId:
+                                  type: string
+                                  description: A field representing the address of the program that caused the balance change. (e.g. System Program)
+                                  example: "11111111111111111111111111111111"
+                                ownerAddress:
+                                  type: string
+                                  description: A field representing the address of the account (owner) where the balance change occurred.
+                                  example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                                tokenAccount:
+                                  type: string
+                                  description: A field representing the address of the SPL token account where the balance change occurred. For a SOL balance change, an empty string ("") is returned.
+                                  example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                                mintAddress:
+                                  type: string
+                                  description: A field representing the MintAddress of the SPL token subject to the balance change. For a SOL balance change, "So11111111111111111111111111111111111111111" is returned.
+                                  example: So11111111111111111111111111111111111111112
+                                changeValue:
+                                  type: string
+                                  description: A field representing the amount of the balance change. A negative value indicates an outflow, and a positive value indicates an inflow. For SOL, it is expressed in lamports.
+                                  example: "-5000"
+                                previousBalance:
+                                  type: string
+                                  description: A field representing the balance immediately before the change. For SOL, it is expressed in lamports.
+                                  example: "1000000000"
+                                finalBalance:
+                                  type: string
+                                  description: A field representing the balance immediately after the change. For SOL, it is expressed in lamports.
+                                  example: "999995000"
+                                decimals:
+                                  type: integer
+                                  description: A field representing the number of decimal places of the token. For SOL, it is 9.
+                                  example: 6
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
+  /{chain}/{network}/blockchain/getTransactionsByAccount:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-getTransactionsByAccount
+      summary: Get Transactions By Account
+      description: |
+        Retrieves the list of transactions sent or received by a specific account.
+      x-seo-description: Get a paginated list of all transactions associated with a specific account address.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - type: object
+                required:
+                - accountAddress
+                properties:
+                  accountAddress:
+                    type: string
+                    description: Parameter specifying the account address to query. The account address must be entered as a 32–44 character Base58-encoded string.
+                    pattern: ^[1-9A-HJ-NP-Za-km-z]{32,44}$
+                    example: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+                  relation:
+                    type: string
+                    description: |-
+                      Parameter for filtering only the transactions where the queried account address belongs to from or to.
+
+                      Three options are available: from, to, and both. The default value is both.
+                      - from: Returns transactions where the queried address is a signer or its balance decreased.
+                      - to: Returns transactions where the balance of the queried address increased.
+                      - both: Returns all transactions that match either the from or the to condition.
+                    enum:
+                    - from
+                    - to
+                    - both
+                    pattern: from|to|both
+                    default: both
+                  fromSlot:
+                    type: string
+                    description: |
+                      Parameter specifying the start point of the query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "earliest" to specify the first slot.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                      Notes:
+                      - This field cannot be used together with fromDate and toDate.
+                      - If only fromSlot is provided without toSlot, results are queried from that slot to the latest slot.
+                      - toSlot value cannot be less than fromSlot value.
+                      - If fromSlot and toSlot have the same value, only that slot is queried.
+                      - "latest" cannot be entered for fromSlot.
+                    pattern: ^[0-9]+$|earliest
+                  toSlot:
+                    type: string
+                    description: |-
+                      Parameter specifying the end point of the query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "latest" to specify the latest slot.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned. To query the full history, set fromSlot to "earliest".
+
+                      Notes:
+                      - This field cannot be used together with fromDate and toDate.
+                      - If only toSlot is provided without fromSlot, results are queried from the first stored slot to that slot.
+                      - toSlot value cannot be less than fromSlot value.
+                      - If fromSlot and toSlot have the same value, only that slot is queried.
+                      - "earliest" cannot be entered for toSlot.
+                    pattern: ^[0-9]+$|latest
+                  fromDate:
+                    type: string
+                    description: |-
+                      Parameter specifying the start date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                      Notes:
+                      - This field cannot be used together with fromSlot and toSlot.
+                      - If only fromDate is provided without toDate, results are queried from that date to the latest slot.
+                      - fromDate must be equal to or earlier than toDate.
+                    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+                  toDate:
+                    type: string
+                    description: |-
+                      Parameter specifying the end date of the query. The date must follow the ISO 8601 format (YYYY-MM-DDThh:mm:ss{time zone}) and include seconds.
+
+                      If none of the range parameters (fromSlot, toSlot, fromDate, toDate) are specified, data from the last 30 days is returned.
+
+                      Notes:
+                      - This field cannot be used together with fromSlot and toSlot.
+                      - If only toDate is provided without fromDate, results are queried from the first stored slot to that date.
+                      - toDate must be equal to or later than fromDate.
+                    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$
+              - type: object
+                properties:
+                  page:
+                    type: integer
+                    description: |-
+                      The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    pattern: ^(?:[1-9][0-9]?|100)$
+                  rpp:
+                    type: integer
+                    description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                    pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                  cursor:
+                    type: string
+                    description: |-
+                      The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                  withCount:
+                    type: boolean
+                    description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                    default: false
+              - type: object
+                properties:
+                  withBalanceChanges:
+                    type: boolean
+                    description: |-
+                      Parameter specifying whether to include the balanceChanges field in the response.
+
+                      - balanceChanges is a field that contains the balance changes of the Native token (SOL) and Token.
+                      - Setting this parameter to true may slow down the response.
+                    default: false
+                  withInstructions:
+                    type: boolean
+                    description: |-
+                      Parameter specifying whether to include the instructions field in the response.
+
+                      - instructions is a field that contains the list of instructions in the transaction.
+                      - When this parameter is set to true, instructions are included in the response.
+                      - instructions are not provided for failed transactions (status "failed").
+                    default: false
+            example:
+              accountAddress: 2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm
+              relation: both
+              rpp: 10
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - range
+                  - items
+                  properties:
+                    page:
+                      type: integer
+                      description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                    rpp:
+                      type: integer
+                      description: Field representing the number of results per page specified in the rpp parameter.
+                    cursor:
+                      type: string
+                      description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                    count:
+                      type: integer
+                      description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                    range:
+                      type: object
+                      description: A field representing the range actually applied to the query. The same kind of values as the range parameters used in the request is returned. Requests made with dates return fromDate and toDate, and requests made with slots return fromSlot and toSlot; the two kinds are never mixed. If all range parameters are omitted, the last 30 days are applied as the default range and fromDate and toDate are returned. Slot values are always returned as slot numbers, even when a tag (latest, earliest) is entered in the request.
+                      properties:
+                        fromDate:
+                          type: string
+                          description: A field representing the start of the query in date mode. Returned in ISO 8601 format.
+                          example: '2026-09-29T09:40:23.000Z'
+                        toDate:
+                          type: string
+                          description: A field representing the end of the query in date mode. Returned in ISO 8601 format.
+                          example: '2026-10-29T09:40:21.000Z'
+                        fromSlot:
+                          type: integer
+                          description: A field representing the start slot number of the query in slot mode.
+                          example: 462000000
+                        toSlot:
+                          type: integer
+                          description: A field representing the end slot number of the query in slot mode.
+                          example: 462833902
+                      example:
+                        fromDate: '2026-09-29T09:40:23.000Z'
+                        toDate: '2026-10-29T09:40:21.000Z'
+                    items:
+                      type: array
+                      description: Field representing the list of queried data.
+                - type: object
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - slotHeight
+                        - blockHeight
+                        - blockTimestamp
+                        - transactionIndex
+                        - signature
+                        - signatures
+                        - logMessages
+                        - requiredSignatures
+                        - readonlySignedAccounts
+                        - readonlyUnsignedAccounts
+                        - fee
+                        - recentBlockHash
+                        - version
+                        - signers
+                        - status
+                        properties:
+                          slotHeight:
+                            type: integer
+                            description: A field representing the slot number in which the transaction is included. On Solana, a slot corresponds to the block unit of other chains.
+                            example: 235157119
+                          blockHeight:
+                            type: integer
+                            description: A field representing the block height to which the slot is mapped.
+                            example: 214567890
+                          blockTimestamp:
+                            type: integer
+                            description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                            example: 1746479684
+                          transactionIndex:
+                            type: integer
+                            description: A field representing the order of the transaction within the same slot.
+                            example: 7
+                          signature:
+                            type: string
+                            description: A field representing the representative signature of the transaction. It is usually the first signature and is Base58-encoded.
+                            example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                          signatures:
+                            type: array
+                            description: A field representing the list of all signatures included in the transaction. There may be two or more in a multisig or versioned transaction.
+                            items:
+                              type: string
+                            example:
+                            - 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                          instructions:
+                            type: array
+                            description: |-
+                              A field representing the list of instructions included in the transaction. This field is only included in the response when the withInstructions parameter is set to true.
+
+                              Instructions are not provided for failed transactions (status "failed").
+                            items:
+                              type: object
+                              required:
+                              - instructionIndex
+                              - executionIndex
+                              - programId
+                              - accounts
+                              - data
+                              properties:
+                                instructionIndex:
+                                  type: integer
+                                  description: Field indicating the index of the instruction within the transaction. (0-based)
+                                  example: 0
+                                subInstructionIndex:
+                                  type: integer
+                                  description: Field indicating the index of an inner (sub) instruction generated by CPI or similar.
+                                  example: 0
+                                executionIndex:
+                                  type: integer
+                                  description: Field indicating the order in which the instruction was executed within the transaction.
+                                  example: 0
+                                programId:
+                                  type: string
+                                  description: Field indicating the ID of the program that executed the instruction. Base58-encoded.
+                                  example: "11111111111111111111111111111111"
+                                accounts:
+                                  type: array
+                                  description: Field indicating the list of public keys of the accounts used by the instruction. Each public key is Base58-encoded.
+                                  items:
+                                    type: string
+                                  example:
+                                  - DsTrM688cmzj7jkC8Nw6B7ngYhCqDqqMGtgHQhKCBYm
+                                  - VdhaA49Uy2Vb8h4RzxcsfdnjNPbbvNTBCowUU32k6Wi
+                                data:
+                                  type: string
+                                  description: Field indicating the instruction data. Base58-encoded.
+                                  example: 3Bxs4HjPduGCo42T
+                                stackHeight:
+                                  type: integer
+                                  description: Field indicating the stack depth of the instruction.
+                                  example: 1
+                          logMessages:
+                            type: array
+                            description: A field representing the list of log messages left by programs during transaction execution.
+                            items:
+                              type: string
+                            example:
+                            - Program 11111111111111111111111111111111 invoke [1]
+                            - Program 11111111111111111111111111111111 success
+                          requiredSignatures:
+                            type: integer
+                            description: A field representing the number of accounts that must sign the transaction. (numRequiredSignatures)
+                            example: 1
+                          readonlySignedAccounts:
+                            type: integer
+                            description: A field representing the number of readonly accounts among the signing accounts. (numReadonlySignedAccounts)
+                            example: 0
+                          readonlyUnsignedAccounts:
+                            type: integer
+                            description: A field representing the number of readonly accounts among the non-signing accounts. (numReadonlyUnsignedAccounts)
+                            example: 3
+                          computeUnitsConsumed:
+                            type: integer
+                            description: A field representing the Compute Units (CU) actually consumed by the transaction.
+                            example: 6842
+                          costUnits:
+                            type: integer
+                            description: A field representing the cost units of the transaction processing cost.
+                            example: 6842
+                          fee:
+                            type: integer
+                            description: A field representing the transaction fee in lamports. It may be charged regardless of success or failure.
+                            example: 5000
+                          recentBlockHash:
+                            type: string
+                            description: A field representing the recent blockhash referenced by the transaction. It is used for replay prevention and validity verification.
+                            example: mfcyqEXB3DnHXki6KjjmZck6YjmZLvpAByy2fj4nh6B
+                          version:
+                            type: string
+                            description: A field representing the version of the transaction. It has one of the values "legacy", "0", or "1".
+                            example: legacy
+                          transactionConfig:
+                            type: object
+                            description: A field representing the compute budget configuration set on the transaction. It is provided only for SIMD-0385 v1 transactions and is not included in the response for legacy and v0 transactions. Each sub-field can be null, and null and 0 have different meanings. If the transaction does not set the corresponding item, null is returned.
+                            properties:
+                              priorityFee:
+                                type: string
+                                description: A field representing the total priority fee set on the transaction, in lamports. It has a value within the u64 range and is returned as a string to avoid loss of precision. SetComputeUnitPrice on legacy and v0 transactions is denominated in micro-lamports per compute unit, so its unit differs from this field. In addition, the compute unit price of legacy and v0 transactions is not a transaction field and can only be obtained by decoding the instruction data.
+                                nullable: true
+                                example: "100000"
+                              computeUnitLimit:
+                                type: integer
+                                nullable: true
+                                description: A field representing the compute unit limit set on the transaction. It has a value within the u32 range.
+                                example: 200000
+                              loadedAccountsDataSizeLimit:
+                                type: integer
+                                nullable: true
+                                description: A field representing the total size limit of the account data loaded by the transaction, in bytes. It has a value within the u32 range.
+                                example: 65536
+                              heapSize:
+                                type: integer
+                                nullable: true
+                                description: A field representing the size of the heap memory used for dynamic allocation while the program runs inside the VM, in bytes. It has a value within the u32 range and is a multiple of 1KiB between 32KiB and 256KiB.
+                                example: 32768
+                          signers:
+                            type: array
+                            description: A field representing the list of account addresses that signed the transaction.
+                            items:
+                              type: string
+                            example:
+                            - 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                          status:
+                            type: string
+                            description: A field representing the processing status of the transaction. "success" is returned when processed normally, and "failed" is returned when it fails.
+                            example: success
+                          errorMessage:
+                            type: string
+                            description: A field representing the error summary string when the transaction fails. It is a human-readable conversion of the Solana TransactionError.
+                            example: 'custom program error: 0x1'
+                          balanceChanges:
+                            type: array
+                            description: A field representing the details of SOL and SPL token balance changes that occurred in the transaction. This field is only included in the response when the withBalanceChanges parameter is set to true.
+                            items:
+                              type: object
+                              required:
+                              - programId
+                              - ownerAddress
+                              - tokenAccount
+                              - mintAddress
+                              - changeValue
+                              - previousBalance
+                              - finalBalance
+                              - decimals
+                              properties:
+                                programId:
+                                  type: string
+                                  description: A field representing the address of the program that caused the balance change. (e.g. System Program)
+                                  example: "11111111111111111111111111111111"
+                                ownerAddress:
+                                  type: string
+                                  description: A field representing the address of the account (owner) where the balance change occurred.
+                                  example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                                tokenAccount:
+                                  type: string
+                                  description: A field representing the address of the SPL token account where the balance change occurred. For a SOL balance change, an empty string ("") is returned.
+                                  example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                                mintAddress:
+                                  type: string
+                                  description: A field representing the MintAddress of the SPL token subject to the balance change. For a SOL balance change, "So11111111111111111111111111111111111111111" is returned.
+                                  example: So11111111111111111111111111111111111111112
+                                changeValue:
+                                  type: string
+                                  description: A field representing the amount of the balance change. A negative value indicates an outflow, and a positive value indicates an inflow. For SOL, it is expressed in lamports.
+                                  example: "-5000"
+                                previousBalance:
+                                  type: string
+                                  description: A field representing the balance immediately before the change. For SOL, it is expressed in lamports.
+                                  example: "1000000000"
+                                finalBalance:
+                                  type: string
+                                  description: A field representing the balance immediately after the change. For SOL, it is expressed in lamports.
+                                  example: "999995000"
+                                decimals:
+                                  type: integer
+                                  description: A field representing the number of decimal places of the token. For SOL, it is 9.
+                                  example: 6
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
+  /{chain}/{network}/blockchain/getTransactionsByHashes:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-getTransactionsByHashes
+      summary: Get Transactions By Hashes
+      description: |
+        Retrieves transaction details by multiple transaction hashes. On Solana, a transaction hash has the same meaning as the transaction signature.
+      x-seo-description: Retrieve detailed data for multiple transactions in a single request using their hashes.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - transactionHashes
+              properties:
+                transactionHashes:
+                  type: array
+                  description: Parameter specifying the list of transaction hashes to query. On Solana, a transaction hash has the same meaning as the transaction signature, and each hash must be entered as a Base58-encoded string (typically 87–88 characters). Up to 1,000 hashes can be entered.
+                  maxItems: 1000
+                  items:
+                    type: string
+                  example:
+                  - 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                withBalanceChanges:
+                  type: boolean
+                  description: |-
+                    Parameter specifying whether to include the balanceChanges field in the response.
+
+                    - balanceChanges is a field that contains the balance changes of the Native token (SOL) and Token.
+                    - Setting this parameter to true may slow down the response.
+                  default: false
+                withInstructions:
+                  type: boolean
+                  description: |-
+                    Parameter specifying whether to include the instructions field in the response.
+
+                    - instructions is a field that contains the list of instructions in the transaction.
+                    - When this parameter is set to true, instructions are included in the response.
+                    - instructions are not provided for failed transactions (status "failed").
+                  default: false
+            example:
+              transactionHashes:
+              - 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+              withBalanceChanges: false
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - slotHeight
+                  - blockHeight
+                  - blockTimestamp
+                  - transactionIndex
+                  - signature
+                  - signatures
+                  - logMessages
+                  - requiredSignatures
+                  - readonlySignedAccounts
+                  - readonlyUnsignedAccounts
+                  - fee
+                  - recentBlockHash
+                  - version
+                  - signers
+                  - status
+                  properties:
+                    slotHeight:
+                      type: integer
+                      description: A field representing the slot number in which the transaction is included. On Solana, a slot corresponds to the block unit of other chains.
+                      example: 235157119
+                    blockHeight:
+                      type: integer
+                      description: A field representing the block height to which the slot is mapped.
+                      example: 214567890
+                    blockTimestamp:
+                      type: integer
+                      description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                      example: 1746479684
+                    transactionIndex:
+                      type: integer
+                      description: A field representing the order of the transaction within the same slot.
+                      example: 7
+                    signature:
+                      type: string
+                      description: A field representing the representative signature of the transaction. It is usually the first signature and is Base58-encoded.
+                      example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                    signatures:
+                      type: array
+                      description: A field representing the list of all signatures included in the transaction. There may be two or more in a multisig or versioned transaction.
+                      items:
+                        type: string
+                      example:
+                      - 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                    instructions:
+                      type: array
+                      description: |-
+                        A field representing the list of instructions included in the transaction. This field is only included in the response when the withInstructions parameter is set to true.
+
+                        Instructions are not provided for failed transactions (status "failed").
+                      items:
+                        type: object
+                        required:
+                        - instructionIndex
+                        - executionIndex
+                        - programId
+                        - accounts
+                        - data
+                        properties:
+                          instructionIndex:
+                            type: integer
+                            description: Field indicating the index of the instruction within the transaction. (0-based)
+                            example: 0
+                          subInstructionIndex:
+                            type: integer
+                            description: Field indicating the index of an inner (sub) instruction generated by CPI or similar.
+                            example: 0
+                          executionIndex:
+                            type: integer
+                            description: Field indicating the order in which the instruction was executed within the transaction.
+                            example: 0
+                          programId:
+                            type: string
+                            description: Field indicating the ID of the program that executed the instruction. Base58-encoded.
+                            example: "11111111111111111111111111111111"
+                          accounts:
+                            type: array
+                            description: Field indicating the list of public keys of the accounts used by the instruction. Each public key is Base58-encoded.
+                            items:
+                              type: string
+                            example:
+                            - DsTrM688cmzj7jkC8Nw6B7ngYhCqDqqMGtgHQhKCBYm
+                            - VdhaA49Uy2Vb8h4RzxcsfdnjNPbbvNTBCowUU32k6Wi
+                          data:
+                            type: string
+                            description: Field indicating the instruction data. Base58-encoded.
+                            example: 3Bxs4HjPduGCo42T
+                          stackHeight:
+                            type: integer
+                            description: Field indicating the stack depth of the instruction.
+                            example: 1
+                    logMessages:
+                      type: array
+                      description: A field representing the list of log messages left by programs during transaction execution.
+                      items:
+                        type: string
+                      example:
+                      - Program 11111111111111111111111111111111 invoke [1]
+                      - Program 11111111111111111111111111111111 success
+                    requiredSignatures:
+                      type: integer
+                      description: A field representing the number of accounts that must sign the transaction. (numRequiredSignatures)
+                      example: 1
+                    readonlySignedAccounts:
+                      type: integer
+                      description: A field representing the number of readonly accounts among the signing accounts. (numReadonlySignedAccounts)
+                      example: 0
+                    readonlyUnsignedAccounts:
+                      type: integer
+                      description: A field representing the number of readonly accounts among the non-signing accounts. (numReadonlyUnsignedAccounts)
+                      example: 3
+                    computeUnitsConsumed:
+                      type: integer
+                      description: A field representing the Compute Units (CU) actually consumed by the transaction.
+                      example: 6842
+                    costUnits:
+                      type: integer
+                      description: A field representing the cost units of the transaction processing cost.
+                      example: 6842
+                    fee:
+                      type: integer
+                      description: A field representing the transaction fee in lamports. It may be charged regardless of success or failure.
+                      example: 5000
+                    recentBlockHash:
+                      type: string
+                      description: A field representing the recent blockhash referenced by the transaction. It is used for replay prevention and validity verification.
+                      example: mfcyqEXB3DnHXki6KjjmZck6YjmZLvpAByy2fj4nh6B
+                    version:
+                      type: string
+                      description: A field representing the version of the transaction. It has one of the values "legacy", "0", or "1".
+                      example: legacy
+                    transactionConfig:
+                      type: object
+                      description: A field representing the compute budget configuration set on the transaction. It is provided only for SIMD-0385 v1 transactions and is not included in the response for legacy and v0 transactions. Each sub-field can be null, and null and 0 have different meanings. If the transaction does not set the corresponding item, null is returned.
+                      properties:
+                        priorityFee:
+                          type: string
+                          description: A field representing the total priority fee set on the transaction, in lamports. It has a value within the u64 range and is returned as a string to avoid loss of precision. SetComputeUnitPrice on legacy and v0 transactions is denominated in micro-lamports per compute unit, so its unit differs from this field. In addition, the compute unit price of legacy and v0 transactions is not a transaction field and can only be obtained by decoding the instruction data.
+                          nullable: true
+                          example: "100000"
+                        computeUnitLimit:
+                          type: integer
+                          nullable: true
+                          description: A field representing the compute unit limit set on the transaction. It has a value within the u32 range.
+                          example: 200000
+                        loadedAccountsDataSizeLimit:
+                          type: integer
+                          nullable: true
+                          description: A field representing the total size limit of the account data loaded by the transaction, in bytes. It has a value within the u32 range.
+                          example: 65536
+                        heapSize:
+                          type: integer
+                          nullable: true
+                          description: A field representing the size of the heap memory used for dynamic allocation while the program runs inside the VM, in bytes. It has a value within the u32 range and is a multiple of 1KiB between 32KiB and 256KiB.
+                          example: 32768
+                    signers:
+                      type: array
+                      description: A field representing the list of account addresses that signed the transaction.
+                      items:
+                        type: string
+                      example:
+                      - 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                    status:
+                      type: string
+                      description: A field representing the processing status of the transaction. "success" is returned when processed normally, and "failed" is returned when it fails.
+                      example: success
+                    errorMessage:
+                      type: string
+                      description: A field representing the error summary string when the transaction fails. It is a human-readable conversion of the Solana TransactionError.
+                      example: 'custom program error: 0x1'
+                    balanceChanges:
+                      type: array
+                      description: A field representing the details of SOL and SPL token balance changes that occurred in the transaction. This field is only included in the response when the withBalanceChanges parameter is set to true.
+                      items:
+                        type: object
+                        required:
+                        - programId
+                        - ownerAddress
+                        - tokenAccount
+                        - mintAddress
+                        - changeValue
+                        - previousBalance
+                        - finalBalance
+                        - decimals
+                        properties:
+                          programId:
+                            type: string
+                            description: A field representing the address of the program that caused the balance change. (e.g. System Program)
+                            example: "11111111111111111111111111111111"
+                          ownerAddress:
+                            type: string
+                            description: A field representing the address of the account (owner) where the balance change occurred.
+                            example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                          tokenAccount:
+                            type: string
+                            description: A field representing the address of the SPL token account where the balance change occurred. For a SOL balance change, an empty string ("") is returned.
+                            example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                          mintAddress:
+                            type: string
+                            description: A field representing the MintAddress of the SPL token subject to the balance change. For a SOL balance change, "So11111111111111111111111111111111111111111" is returned.
+                            example: So11111111111111111111111111111111111111112
+                          changeValue:
+                            type: string
+                            description: A field representing the amount of the balance change. A negative value indicates an outflow, and a positive value indicates an inflow. For SOL, it is expressed in lamports.
+                            example: "-5000"
+                          previousBalance:
+                            type: string
+                            description: A field representing the balance immediately before the change. For SOL, it is expressed in lamports.
+                            example: "1000000000"
+                          finalBalance:
+                            type: string
+                            description: A field representing the balance immediately after the change. For SOL, it is expressed in lamports.
+                            example: "999995000"
+                          decimals:
+                            type: integer
+                            description: A field representing the number of decimal places of the token. For SOL, it is 9.
+                            example: 6
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
+  /{chain}/{network}/blockchain/getTransactionsInSlot:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-getTransactionsInSlot
+      summary: Get Transactions In Slot
+      description: |
+        Retrieves the list of transactions included in a specific slot.
+      x-seo-description: Get a paginated list of transactions included in a specific slot on Solana.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - type: object
+                required:
+                - slot
+                properties:
+                  slot:
+                    type: string
+                    description: |-
+                      Parameter specifying the slot to query. You can enter one of the following formats:
+                      - slot height: Enter the slot number as a decimal string.
+                      - slot tag: Use "earliest" or "latest" to specify the first slot or the latest slot.
+                    pattern: ^[0-9]+$|latest|earliest
+                    default: latest
+              - type: object
+                properties:
+                  page:
+                    type: integer
+                    description: |-
+                      The page parameter specifies the data page to query. It accepts values up to 100; for pages exceeding 100, use the cursor pagination method.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                    pattern: ^(?:[1-9][0-9]?|100)$
+                  rpp:
+                    type: integer
+                    description: rpp stands for results per page and specifies the page size. You can specify a number greater than 0 and up to 100.
+                    pattern: ^(?:[1-9][0-9]{0,2}?|100)$
+                  cursor:
+                    type: string
+                    description: |-
+                      The cursor parameter supports pagination and data navigation between pages. Provide the cursor value from the previous page in the next request to load the next page of data.
+
+                      The page and cursor parameters cannot be used together. If both page and cursor are empty, cursor pagination is used.
+                  withCount:
+                    type: boolean
+                    description: Parameter specifying whether to include the count field in the response. The count field indicates the total number of requested data items. When set to true, the count field is included and response speed may be slower.
+                    default: false
+              - type: object
+                properties:
+                  withBalanceChanges:
+                    type: boolean
+                    description: |-
+                      Parameter specifying whether to include the balanceChanges field in the response.
+
+                      - balanceChanges is a field that contains the balance changes of the Native token (SOL) and Token.
+                      - Setting this parameter to true may slow down the response.
+                    default: false
+                  withInstructions:
+                    type: boolean
+                    description: |-
+                      Parameter specifying whether to include the instructions field in the response.
+
+                      - instructions is a field that contains the list of instructions in the transaction.
+                      - When this parameter is set to true, instructions are included in the response.
+                      - instructions are not provided for failed transactions (status "failed").
+                    default: false
+            example:
+              slot: "18611600"
+              rpp: 10
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    page:
+                      type: integer
+                      description: Field representing the page number specified in the page parameter. This field is only included in the response when a value greater than 0 is specified for the page parameter.
+                    rpp:
+                      type: integer
+                      description: Field representing the number of results per page specified in the rpp parameter.
+                    cursor:
+                      type: string
+                      description: A field for cursor pagination. This value must be provided in the next request to load the next page of data.
+                    count:
+                      type: integer
+                      description: Field representing the total count of requested data. This field is only included in the response when true is set for the withCount parameter.
+                    items:
+                      type: array
+                      description: Field representing the list of queried data.
+                - type: object
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - slotHeight
+                        - blockHeight
+                        - blockTimestamp
+                        - transactionIndex
+                        - signature
+                        - signatures
+                        - logMessages
+                        - requiredSignatures
+                        - readonlySignedAccounts
+                        - readonlyUnsignedAccounts
+                        - fee
+                        - recentBlockHash
+                        - version
+                        - signers
+                        - status
+                        properties:
+                          slotHeight:
+                            type: integer
+                            description: A field representing the slot number in which the transaction is included. On Solana, a slot corresponds to the block unit of other chains.
+                            example: 235157119
+                          blockHeight:
+                            type: integer
+                            description: A field representing the block height to which the slot is mapped.
+                            example: 214567890
+                          blockTimestamp:
+                            type: integer
+                            description: A field representing the time the block (slot) was created, as a Unix timestamp (seconds).
+                            example: 1746479684
+                          transactionIndex:
+                            type: integer
+                            description: A field representing the order of the transaction within the same slot.
+                            example: 7
+                          signature:
+                            type: string
+                            description: A field representing the representative signature of the transaction. It is usually the first signature and is Base58-encoded.
+                            example: 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                          signatures:
+                            type: array
+                            description: A field representing the list of all signatures included in the transaction. There may be two or more in a multisig or versioned transaction.
+                            items:
+                              type: string
+                            example:
+                            - 5XXN7L7cMGYTvckcaNeTXxhJgxeT1JTa9auwa2yXCFR1NXzwXrXNAWx4SaAw48S5186VzvXiXVEsWJu1WFR5AAmg
+                          instructions:
+                            type: array
+                            description: |-
+                              A field representing the list of instructions included in the transaction. This field is only included in the response when the withInstructions parameter is set to true.
+
+                              Instructions are not provided for failed transactions (status "failed").
+                            items:
+                              type: object
+                              required:
+                              - instructionIndex
+                              - executionIndex
+                              - programId
+                              - accounts
+                              - data
+                              properties:
+                                instructionIndex:
+                                  type: integer
+                                  description: Field indicating the index of the instruction within the transaction. (0-based)
+                                  example: 0
+                                subInstructionIndex:
+                                  type: integer
+                                  description: Field indicating the index of an inner (sub) instruction generated by CPI or similar.
+                                  example: 0
+                                executionIndex:
+                                  type: integer
+                                  description: Field indicating the order in which the instruction was executed within the transaction.
+                                  example: 0
+                                programId:
+                                  type: string
+                                  description: Field indicating the ID of the program that executed the instruction. Base58-encoded.
+                                  example: "11111111111111111111111111111111"
+                                accounts:
+                                  type: array
+                                  description: Field indicating the list of public keys of the accounts used by the instruction. Each public key is Base58-encoded.
+                                  items:
+                                    type: string
+                                  example:
+                                  - DsTrM688cmzj7jkC8Nw6B7ngYhCqDqqMGtgHQhKCBYm
+                                  - VdhaA49Uy2Vb8h4RzxcsfdnjNPbbvNTBCowUU32k6Wi
+                                data:
+                                  type: string
+                                  description: Field indicating the instruction data. Base58-encoded.
+                                  example: 3Bxs4HjPduGCo42T
+                                stackHeight:
+                                  type: integer
+                                  description: Field indicating the stack depth of the instruction.
+                                  example: 1
+                          logMessages:
+                            type: array
+                            description: A field representing the list of log messages left by programs during transaction execution.
+                            items:
+                              type: string
+                            example:
+                            - Program 11111111111111111111111111111111 invoke [1]
+                            - Program 11111111111111111111111111111111 success
+                          requiredSignatures:
+                            type: integer
+                            description: A field representing the number of accounts that must sign the transaction. (numRequiredSignatures)
+                            example: 1
+                          readonlySignedAccounts:
+                            type: integer
+                            description: A field representing the number of readonly accounts among the signing accounts. (numReadonlySignedAccounts)
+                            example: 0
+                          readonlyUnsignedAccounts:
+                            type: integer
+                            description: A field representing the number of readonly accounts among the non-signing accounts. (numReadonlyUnsignedAccounts)
+                            example: 3
+                          computeUnitsConsumed:
+                            type: integer
+                            description: A field representing the Compute Units (CU) actually consumed by the transaction.
+                            example: 6842
+                          costUnits:
+                            type: integer
+                            description: A field representing the cost units of the transaction processing cost.
+                            example: 6842
+                          fee:
+                            type: integer
+                            description: A field representing the transaction fee in lamports. It may be charged regardless of success or failure.
+                            example: 5000
+                          recentBlockHash:
+                            type: string
+                            description: A field representing the recent blockhash referenced by the transaction. It is used for replay prevention and validity verification.
+                            example: mfcyqEXB3DnHXki6KjjmZck6YjmZLvpAByy2fj4nh6B
+                          version:
+                            type: string
+                            description: A field representing the version of the transaction. It has one of the values "legacy", "0", or "1".
+                            example: legacy
+                          transactionConfig:
+                            type: object
+                            description: A field representing the compute budget configuration set on the transaction. It is provided only for SIMD-0385 v1 transactions and is not included in the response for legacy and v0 transactions. Each sub-field can be null, and null and 0 have different meanings. If the transaction does not set the corresponding item, null is returned.
+                            properties:
+                              priorityFee:
+                                type: string
+                                description: A field representing the total priority fee set on the transaction, in lamports. It has a value within the u64 range and is returned as a string to avoid loss of precision. SetComputeUnitPrice on legacy and v0 transactions is denominated in micro-lamports per compute unit, so its unit differs from this field. In addition, the compute unit price of legacy and v0 transactions is not a transaction field and can only be obtained by decoding the instruction data.
+                                nullable: true
+                                example: "100000"
+                              computeUnitLimit:
+                                type: integer
+                                nullable: true
+                                description: A field representing the compute unit limit set on the transaction. It has a value within the u32 range.
+                                example: 200000
+                              loadedAccountsDataSizeLimit:
+                                type: integer
+                                nullable: true
+                                description: A field representing the total size limit of the account data loaded by the transaction, in bytes. It has a value within the u32 range.
+                                example: 65536
+                              heapSize:
+                                type: integer
+                                nullable: true
+                                description: A field representing the size of the heap memory used for dynamic allocation while the program runs inside the VM, in bytes. It has a value within the u32 range and is a multiple of 1KiB between 32KiB and 256KiB.
+                                example: 32768
+                          signers:
+                            type: array
+                            description: A field representing the list of account addresses that signed the transaction.
+                            items:
+                              type: string
+                            example:
+                            - 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                          status:
+                            type: string
+                            description: A field representing the processing status of the transaction. "success" is returned when processed normally, and "failed" is returned when it fails.
+                            example: success
+                          errorMessage:
+                            type: string
+                            description: A field representing the error summary string when the transaction fails. It is a human-readable conversion of the Solana TransactionError.
+                            example: 'custom program error: 0x1'
+                          balanceChanges:
+                            type: array
+                            description: A field representing the details of SOL and SPL token balance changes that occurred in the transaction. This field is only included in the response when the withBalanceChanges parameter is set to true.
+                            items:
+                              type: object
+                              required:
+                              - programId
+                              - ownerAddress
+                              - tokenAccount
+                              - mintAddress
+                              - changeValue
+                              - previousBalance
+                              - finalBalance
+                              - decimals
+                              properties:
+                                programId:
+                                  type: string
+                                  description: A field representing the address of the program that caused the balance change. (e.g. System Program)
+                                  example: "11111111111111111111111111111111"
+                                ownerAddress:
+                                  type: string
+                                  description: A field representing the address of the account (owner) where the balance change occurred.
+                                  example: 9vNYXEehFV8V1jxzjH7Sv3BBtsYZ92HPKYP1stgNGHJE
+                                tokenAccount:
+                                  type: string
+                                  description: A field representing the address of the SPL token account where the balance change occurred. For a SOL balance change, an empty string ("") is returned.
+                                  example: 7YttLkHDoNj9wyDur5pM1ejNaAvT9X4e3n9mQqZp8y8o
+                                mintAddress:
+                                  type: string
+                                  description: A field representing the MintAddress of the SPL token subject to the balance change. For a SOL balance change, "So11111111111111111111111111111111111111111" is returned.
+                                  example: So11111111111111111111111111111111111111112
+                                changeValue:
+                                  type: string
+                                  description: A field representing the amount of the balance change. A negative value indicates an outflow, and a positive value indicates an inflow. For SOL, it is expressed in lamports.
+                                  example: "-5000"
+                                previousBalance:
+                                  type: string
+                                  description: A field representing the balance immediately before the change. For SOL, it is expressed in lamports.
+                                  example: "1000000000"
+                                finalBalance:
+                                  type: string
+                                  description: A field representing the balance immediately after the change. For SOL, it is expressed in lamports.
+                                  example: "999995000"
+                                decimals:
+                                  type: integer
+                                  description: A field representing the number of decimal places of the token. For SOL, it is 9.
+                                  example: 6
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'
+  /{chain}/{network}/blockchain/isMintAddress:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-isMintAddress
+      summary: Is MintAddress
+      description: |
+        Checks whether the given address is a token MintAddress.
+      x-seo-description: Check whether a given address is a token MintAddress on Solana.
+      tags:
+      - Blockchain API
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - solana
+          default: solana
+        description: Parameter to specify the target chain for the query.
+      - name: network
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - mainnet
+          default: mainnet
+        description: Parameter to specify the network of the target chain.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - address
+              properties:
+                address:
+                  type: string
+                  description: Parameter specifying the address to check whether it is a MintAddress. The address must be a Base58-encoded string of 32–44 characters.
+                  pattern: ^[1-9A-HJ-NP-Za-km-z]{32,44}$
+            example:
+              address: Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - result
+                properties:
+                  result:
+                    type: boolean
+                    description: Returns true if the given address is a MintAddress, and false otherwise.
+                    example: true
+        "400":
+          $ref: '#/components/responses/400'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "404":
+          $ref: '#/components/responses/404'
+        "405":
+          $ref: '#/components/responses/405'
+        "408":
+          $ref: '#/components/responses/408'
+        "409":
+          $ref: '#/components/responses/409'
+        "413":
+          $ref: '#/components/responses/413'
+        "414":
+          $ref: '#/components/responses/414'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
+        "503":
+          $ref: '#/components/responses/503'

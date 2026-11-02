@@ -1,0 +1,1150 @@
+openapi: 3.1.0
+info:
+  title: Solana - Subscribe
+  version: 1.0.0
+servers:
+- url: https://solana-mainnet.grpc.nodit.io:443
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas: {}
+  responses: {}
+paths:
+  /geyser.Geyser/Subscribe:
+    post:
+      security:
+      - api_key: []
+      operationId: solana-grpc-Subscribe
+      summary: Subscribe
+      description: |
+        Streams account, slot, transaction, block, and entry updates in real time according to your filters. Because the stream is bidirectional, you can keep the connection open and send a new `SubscribeRequest` to replace filters or send a `ping`.
+
+        - Fields within a filter are combined with AND, and values within an array with OR. Leaving every field of a filter empty streams all updates of that type.
+        - Sending a new request replaces all existing filters with the filters in the new request.
+        - Some load balancers close idle streams, so reply to the server's `ping` updates with a `ping` request to keep the connection alive.
+        - Set `from_slot` to resume from that slot after a short disconnection. Use `SubscribeReplayInfo` to find the earliest slot available for replay.
+      x-seo-description: 계정·슬롯·트랜잭션·블록·엔트리 업데이트를 필터 조건에 맞춰 실시간으로 스트리밍합니다. 양방향 스트림이라 연결을 유지한 채 새 `SubscribeRequest`를 보내 필터를 교체하거나 `ping`을 보낼 수 있습니다.
+      x-grpc-method: geyser.Geyser/Subscribe
+      x-proto: geyser.proto
+      x-protocol: grpc
+      x-grpc:
+        service: geyser.Geyser
+        method: Subscribe
+        streaming: bidi
+        proto: geyser.proto
+        protoRepo: https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto
+        responseType: SubscribeUpdate
+      x-hide-try-it: true
+      tags:
+      - Geyser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accounts:
+                  type: object
+                  description: Account update filters. You can define multiple filters keyed by label.
+                  properties:
+                    client:
+                      type: object
+                      description: Filter label. Choose any key name (e.g., `client`); updates matching this filter carry the same label in their `filters` field.
+                      properties:
+                        account:
+                          type: array
+                          description: Account addresses to stream updates for (OR).
+                          items:
+                            type: string
+                        owner:
+                          type: array
+                          description: Streams updates for accounts owned by these programs (OR).
+                          items:
+                            type: string
+                        filters:
+                          type: array
+                          description: Account data conditions, combined with AND. Set exactly one of the fields below in each item.
+                          items:
+                            type: object
+                            properties:
+                              memcmp:
+                                type: object
+                                description: Matches accounts whose data equals the given value at the offset.
+                                properties:
+                                  offset:
+                                    type: string
+                                    format: uint64
+                                    description: Byte offset to start comparing at.
+                                  bytes:
+                                    type: string
+                                    description: Value to compare (bytes, base64). Set only one of `bytes`, `base58`, or `base64`.
+                                  base58:
+                                    type: string
+                                    description: Value to compare (Base58 string).
+                                  base64:
+                                    type: string
+                                    description: Value to compare (Base64 string).
+                              datasize:
+                                type: string
+                                format: uint64
+                                description: Matches accounts whose data size in bytes equals this value.
+                              token_account_state:
+                                type: boolean
+                                description: When `true`, matches only valid SPL token accounts.
+                              lamports:
+                                type: object
+                                description: Balance (lamports) comparison. Set only one of `eq`, `ne`, `lt`, or `gt`.
+                                properties:
+                                  eq:
+                                    type: string
+                                    format: uint64
+                                    description: Balance equal to this value.
+                                  ne:
+                                    type: string
+                                    format: uint64
+                                    description: Balance not equal to this value.
+                                  lt:
+                                    type: string
+                                    format: uint64
+                                    description: Balance less than this value.
+                                  gt:
+                                    type: string
+                                    format: uint64
+                                    description: Balance greater than this value.
+                        nonempty_txn_signature:
+                          type: boolean
+                          description: When `true`, streams only account updates caused by a transaction (updates with a `txn_signature`).
+                slots:
+                  type: object
+                  description: Slot update filters.
+                  properties:
+                    client:
+                      type: object
+                      description: Filter label. Choose any key name (e.g., `client`); updates matching this filter carry the same label in their `filters` field.
+                      properties:
+                        filter_by_commitment:
+                          type: boolean
+                          description: When `true`, streams only slot updates that reach the request's `commitment` level. Omit to receive slot updates for every status.
+                        interslot_updates:
+                          type: boolean
+                          description: When `true`, also streams intermediate statuses such as `SLOT_FIRST_SHRED_RECEIVED`, `SLOT_COMPLETED`, `SLOT_CREATED_BANK`, and `SLOT_DEAD`.
+                transactions:
+                  type: object
+                  description: Transaction update filters. Streams full matching transactions (raw transaction and metadata).
+                  properties:
+                    client:
+                      type: object
+                      description: Filter label. Choose any key name (e.g., `client`); updates matching this filter carry the same label in their `filters` field.
+                      properties:
+                        vote:
+                          type: boolean
+                          description: Whether to include vote transactions. `true` streams only vote transactions and `false` excludes them. Omit to receive both.
+                        failed:
+                          type: boolean
+                          description: Whether to include failed transactions. `true` streams only failed transactions and `false` only successful ones. Omit to receive both.
+                        signature:
+                          type: string
+                          description: Streams only the transaction with this signature (Base58).
+                        account_include:
+                          type: array
+                          description: Streams transactions that use any of these addresses (OR).
+                          items:
+                            type: string
+                        account_exclude:
+                          type: array
+                          description: Excludes transactions that use any of these addresses.
+                          items:
+                            type: string
+                        account_required:
+                          type: array
+                          description: Streams only transactions that use all of these addresses (AND).
+                          items:
+                            type: string
+                transactions_status:
+                  type: object
+                  description: Transaction status update filters. Uses the same conditions as `transactions` but streams only the signature and execution result, without the raw transaction.
+                  properties:
+                    client:
+                      type: object
+                      description: Filter label. Choose any key name (e.g., `client`); updates matching this filter carry the same label in their `filters` field.
+                      properties:
+                        vote:
+                          type: boolean
+                          description: Whether to include vote transactions. `true` streams only vote transactions and `false` excludes them. Omit to receive both.
+                        failed:
+                          type: boolean
+                          description: Whether to include failed transactions. `true` streams only failed transactions and `false` only successful ones. Omit to receive both.
+                        signature:
+                          type: string
+                          description: Streams only the transaction with this signature (Base58).
+                        account_include:
+                          type: array
+                          description: Streams transactions that use any of these addresses (OR).
+                          items:
+                            type: string
+                        account_exclude:
+                          type: array
+                          description: Excludes transactions that use any of these addresses.
+                          items:
+                            type: string
+                        account_required:
+                          type: array
+                          description: Streams only transactions that use all of these addresses (AND).
+                          items:
+                            type: string
+                blocks:
+                  type: object
+                  description: Block update filters.
+                  properties:
+                    client:
+                      type: object
+                      description: Filter label. Choose any key name (e.g., `client`); updates matching this filter carry the same label in their `filters` field.
+                      properties:
+                        account_include:
+                          type: array
+                          description: Limits the transactions and accounts included in the block to those that use these addresses (OR).
+                          items:
+                            type: string
+                        include_transactions:
+                          type: boolean
+                          description: Whether to include the block's transactions.
+                        include_accounts:
+                          type: boolean
+                          description: Whether to include the accounts updated in the block.
+                        include_entries:
+                          type: boolean
+                          description: Whether to include the block's entries.
+                blocks_meta:
+                  type: object
+                  description: Block metadata update filters. Streams block information without transactions, accounts, or entries. Takes no conditions (label only).
+                  properties:
+                    client:
+                      type: object
+                      description: Filter label. Choose any key name (e.g., `client`); updates matching this filter carry the same label in their `filters` field.
+                      properties: {}
+                entry:
+                  type: object
+                  description: Entry update filters. Takes no conditions (label only).
+                  properties:
+                    client:
+                      type: object
+                      description: Filter label. Choose any key name (e.g., `client`); updates matching this filter carry the same label in their `filters` field.
+                      properties: {}
+                commitment:
+                  type: string
+                  description: Commitment level for updates. One of `PROCESSED`, `CONFIRMED`, or `FINALIZED`. Defaults to `PROCESSED` when omitted. `CONFIRMED` and `FINALIZED` updates are delivered after reaching that level.
+                  enum:
+                  - PROCESSED
+                  - CONFIRMED
+                  - FINALIZED
+                  example: CONFIRMED
+                accounts_data_slice:
+                  type: array
+                  description: Ranges of account data to receive. When set, the `data` of account updates contains only these ranges, reducing the streamed volume.
+                  items:
+                    type: object
+                    properties:
+                      offset:
+                        type: string
+                        format: uint64
+                        description: Start byte offset of the range.
+                      length:
+                        type: string
+                        format: uint64
+                        description: Length of the range in bytes.
+                ping:
+                  type: object
+                  description: Keepalive ping. A request with this field ignores the other fields and returns a `pong` update with the same `id`.
+                  properties:
+                    id:
+                      type: integer
+                      description: Ping identifier, echoed back in the `pong` update.
+                from_slot:
+                  type: string
+                  format: uint64
+                  description: Replays updates starting from this slot. Use it to recover from short disconnections; replay starts at a slot boundary, so deduplicate updates.
+            example:
+              accounts: {}
+              slots:
+                client:
+                  filter_by_commitment: true
+              transactions:
+                client:
+                  vote: false
+                  failed: false
+                  account_include:
+                  - TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+                  account_exclude: []
+                  account_required: []
+              transactions_status: {}
+              blocks: {}
+              blocks_meta: {}
+              entry: {}
+              commitment: CONFIRMED
+              accounts_data_slice: []
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: An update delivered on the stream. Contains `filters`, `created_at`, and exactly one of the update fields below.
+                properties:
+                  filters:
+                    type: array
+                    description: Labels of the filters that matched this update.
+                    items:
+                      type: string
+                  account:
+                    type: object
+                    description: Account update.
+                    properties:
+                      account:
+                        type: object
+                        description: Account information.
+                        properties:
+                          pubkey:
+                            type: string
+                            description: Account address (base64).
+                          lamports:
+                            type: string
+                            format: uint64
+                            description: Account balance in lamports.
+                          owner:
+                            type: string
+                            description: Address of the program that owns the account (base64).
+                          executable:
+                            type: boolean
+                            description: Whether the account is an executable program.
+                          rent_epoch:
+                            type: string
+                            format: uint64
+                            description: Epoch at which the account next owes rent.
+                          data:
+                            type: string
+                            description: Account data (base64). Contains only the requested ranges when `accounts_data_slice` is set.
+                          write_version:
+                            type: string
+                            format: uint64
+                            description: Write version of the account. Use it to order updates within the same slot.
+                          txn_signature:
+                            type: string
+                            description: Signature of the transaction that modified the account (base64). Absent for startup updates.
+                      slot:
+                        type: string
+                        format: uint64
+                        description: Slot number where the update occurred.
+                      is_startup:
+                        type: boolean
+                        description: Whether the update comes from the startup snapshot.
+                  slot:
+                    type: object
+                    description: Slot status update.
+                    properties:
+                      slot:
+                        type: string
+                        format: uint64
+                        description: Slot number.
+                      parent:
+                        type: string
+                        format: uint64
+                        description: Parent slot number.
+                      status:
+                        type: string
+                        description: Slot status.
+                        enum:
+                        - SLOT_PROCESSED
+                        - SLOT_CONFIRMED
+                        - SLOT_FINALIZED
+                        - SLOT_FIRST_SHRED_RECEIVED
+                        - SLOT_COMPLETED
+                        - SLOT_CREATED_BANK
+                        - SLOT_DEAD
+                      dead_error:
+                        type: string
+                        description: Reason the slot became `SLOT_DEAD`.
+                  transaction:
+                    type: object
+                    description: Transaction update.
+                    properties:
+                      transaction:
+                        type: object
+                        description: Transaction information.
+                        properties:
+                          signature:
+                            type: string
+                            description: Transaction signature (base64).
+                          is_vote:
+                            type: boolean
+                            description: Whether this is a vote transaction.
+                          transaction:
+                            type: object
+                            description: The raw transaction.
+                            properties:
+                              signatures:
+                                type: array
+                                description: List of transaction signatures (base64).
+                                items:
+                                  type: string
+                              message:
+                                type: object
+                                description: Transaction message.
+                                properties:
+                                  header:
+                                    type: object
+                                    description: Message header.
+                                    properties:
+                                      num_required_signatures:
+                                        type: integer
+                                        description: Number of required signatures.
+                                      num_readonly_signed_accounts:
+                                        type: integer
+                                        description: Number of read-only signed accounts.
+                                      num_readonly_unsigned_accounts:
+                                        type: integer
+                                        description: Number of read-only unsigned accounts.
+                                  account_keys:
+                                    type: array
+                                    description: Account addresses referenced by the transaction (base64).
+                                    items:
+                                      type: string
+                                  recent_blockhash:
+                                    type: string
+                                    description: Recent blockhash used by the transaction (base64).
+                                  instructions:
+                                    type: array
+                                    description: List of instructions to execute.
+                                    items:
+                                      type: object
+                                      properties:
+                                        program_id_index:
+                                          type: integer
+                                          description: Index of the program account in `account_keys`.
+                                        accounts:
+                                          type: string
+                                          description: Account indexes used by the instruction (base64).
+                                        data:
+                                          type: string
+                                          description: Instruction data (base64).
+                                  versioned:
+                                    type: boolean
+                                    description: Whether this is a versioned (v0) transaction.
+                                  address_table_lookups:
+                                    type: array
+                                    description: Address lookup table (ALT) references.
+                                    items:
+                                      type: object
+                                      properties:
+                                        account_key:
+                                          type: string
+                                          description: Address lookup table account address (base64).
+                                        writable_indexes:
+                                          type: string
+                                          description: Indexes of addresses loaded as writable (base64).
+                                        readonly_indexes:
+                                          type: string
+                                          description: Indexes of addresses loaded as read-only (base64).
+                          meta:
+                            type: object
+                            description: Transaction execution metadata.
+                            properties:
+                              err:
+                                type: object
+                                description: Execution error. Absent for successful transactions.
+                                properties:
+                                  err:
+                                    type: string
+                                    description: Serialized error value (base64).
+                              fee:
+                                type: string
+                                format: uint64
+                                description: Transaction fee in lamports.
+                              pre_balances:
+                                type: array
+                                description: Account balances in lamports before execution.
+                                items:
+                                  type: string
+                                  format: uint64
+                              post_balances:
+                                type: array
+                                description: Account balances in lamports after execution.
+                                items:
+                                  type: string
+                                  format: uint64
+                              inner_instructions:
+                                type: array
+                                description: Inner instructions executed during program invocation.
+                                items:
+                                  type: object
+                              log_messages:
+                                type: array
+                                description: Program log messages.
+                                items:
+                                  type: string
+                              pre_token_balances:
+                                type: array
+                                description: Token balances before execution.
+                                items:
+                                  type: object
+                                  description: Token balance information.
+                                  properties:
+                                    account_index:
+                                      type: integer
+                                      description: Index of the token account in `account_keys`.
+                                    mint:
+                                      type: string
+                                      description: Mint address of the token.
+                                    ui_token_amount:
+                                      type: object
+                                      description: Token amount adjusted for decimals.
+                                      properties:
+                                        ui_amount:
+                                          type: number
+                                          description: Amount adjusted for decimals.
+                                        decimals:
+                                          type: integer
+                                          description: Number of decimals of the token.
+                                        amount:
+                                          type: string
+                                          description: Raw amount without decimals applied.
+                                        ui_amount_string:
+                                          type: string
+                                          description: String representation of the decimal-adjusted amount.
+                                    owner:
+                                      type: string
+                                      description: Address of the token account owner.
+                                    program_id:
+                                      type: string
+                                      description: Token program ID.
+                              post_token_balances:
+                                type: array
+                                description: Token balances after execution.
+                                items:
+                                  type: object
+                                  description: Token balance information.
+                                  properties:
+                                    account_index:
+                                      type: integer
+                                      description: Index of the token account in `account_keys`.
+                                    mint:
+                                      type: string
+                                      description: Mint address of the token.
+                                    ui_token_amount:
+                                      type: object
+                                      description: Token amount adjusted for decimals.
+                                      properties:
+                                        ui_amount:
+                                          type: number
+                                          description: Amount adjusted for decimals.
+                                        decimals:
+                                          type: integer
+                                          description: Number of decimals of the token.
+                                        amount:
+                                          type: string
+                                          description: Raw amount without decimals applied.
+                                        ui_amount_string:
+                                          type: string
+                                          description: String representation of the decimal-adjusted amount.
+                                    owner:
+                                      type: string
+                                      description: Address of the token account owner.
+                                    program_id:
+                                      type: string
+                                      description: Token program ID.
+                              rewards:
+                                type: array
+                                description: Rewards generated by the transaction.
+                                items:
+                                  type: object
+                                  description: Reward information.
+                                  properties:
+                                    pubkey:
+                                      type: string
+                                      description: Address of the account that received the reward.
+                                    lamports:
+                                      type: string
+                                      format: int64
+                                      description: Reward amount in lamports. Negative values are debits.
+                                    post_balance:
+                                      type: string
+                                      format: uint64
+                                      description: Account balance in lamports after the reward was applied.
+                                    reward_type:
+                                      type: string
+                                      description: Reward type.
+                                      enum:
+                                      - Unspecified
+                                      - Fee
+                                      - Rent
+                                      - Staking
+                                      - Voting
+                                      - DeactivatedStake
+                                      - VATDebit
+                                    commission:
+                                      type: string
+                                      description: Vote account commission (%) when the reward was credited. Present only for Voting and Staking rewards.
+                              loaded_writable_addresses:
+                                type: array
+                                description: Addresses loaded as writable from address lookup tables (base64).
+                                items:
+                                  type: string
+                              loaded_readonly_addresses:
+                                type: array
+                                description: Addresses loaded as read-only from address lookup tables (base64).
+                                items:
+                                  type: string
+                              compute_units_consumed:
+                                type: string
+                                format: uint64
+                                description: Total compute units consumed by the transaction.
+                          index:
+                            type: string
+                            format: uint64
+                            description: Position (index) of the transaction within the block.
+                      slot:
+                        type: string
+                        format: uint64
+                        description: Slot number containing the transaction.
+                  transaction_status:
+                    type: object
+                    description: Transaction status update.
+                    properties:
+                      slot:
+                        type: string
+                        format: uint64
+                        description: Slot number containing the transaction.
+                      signature:
+                        type: string
+                        description: Transaction signature (base64).
+                      is_vote:
+                        type: boolean
+                        description: Whether this is a vote transaction.
+                      index:
+                        type: string
+                        format: uint64
+                        description: Position (index) of the transaction within the block.
+                      err:
+                        type: object
+                        description: Execution error. Absent for successful transactions.
+                        properties:
+                          err:
+                            type: string
+                            description: Serialized error value (base64).
+                  block:
+                    type: object
+                    description: Block update.
+                    properties:
+                      slot:
+                        type: string
+                        format: uint64
+                        description: Slot number of the block.
+                      blockhash:
+                        type: string
+                        description: Blockhash (Base58).
+                      rewards:
+                        type: object
+                        description: Block reward information.
+                        properties:
+                          rewards:
+                            type: array
+                            description: List of rewards.
+                            items:
+                              type: object
+                              description: Reward information.
+                              properties:
+                                pubkey:
+                                  type: string
+                                  description: Address of the account that received the reward.
+                                lamports:
+                                  type: string
+                                  format: int64
+                                  description: Reward amount in lamports. Negative values are debits.
+                                post_balance:
+                                  type: string
+                                  format: uint64
+                                  description: Account balance in lamports after the reward was applied.
+                                reward_type:
+                                  type: string
+                                  description: Reward type.
+                                  enum:
+                                  - Unspecified
+                                  - Fee
+                                  - Rent
+                                  - Staking
+                                  - Voting
+                                  - DeactivatedStake
+                                  - VATDebit
+                                commission:
+                                  type: string
+                                  description: Vote account commission (%) when the reward was credited. Present only for Voting and Staking rewards.
+                      block_time:
+                        type: object
+                        description: Block production time.
+                        properties:
+                          timestamp:
+                            type: string
+                            format: int64
+                            description: Unix timestamp in seconds.
+                      block_height:
+                        type: object
+                        description: Block height.
+                        properties:
+                          block_height:
+                            type: string
+                            format: uint64
+                            description: Block height value.
+                      parent_slot:
+                        type: string
+                        format: uint64
+                        description: Slot number of the parent block.
+                      parent_blockhash:
+                        type: string
+                        description: Blockhash of the parent block (Base58).
+                      executed_transaction_count:
+                        type: string
+                        format: uint64
+                        description: Number of transactions executed in the block.
+                      transactions:
+                        type: array
+                        description: Transactions in the block. Included when `include_transactions` is `true`.
+                        items:
+                          type: object
+                          properties:
+                            signature:
+                              type: string
+                              description: Transaction signature (base64).
+                            is_vote:
+                              type: boolean
+                              description: Whether this is a vote transaction.
+                            transaction:
+                              type: object
+                              description: The raw transaction.
+                              properties:
+                                signatures:
+                                  type: array
+                                  description: List of transaction signatures (base64).
+                                  items:
+                                    type: string
+                                message:
+                                  type: object
+                                  description: Transaction message.
+                                  properties:
+                                    header:
+                                      type: object
+                                      description: Message header.
+                                      properties:
+                                        num_required_signatures:
+                                          type: integer
+                                          description: Number of required signatures.
+                                        num_readonly_signed_accounts:
+                                          type: integer
+                                          description: Number of read-only signed accounts.
+                                        num_readonly_unsigned_accounts:
+                                          type: integer
+                                          description: Number of read-only unsigned accounts.
+                                    account_keys:
+                                      type: array
+                                      description: Account addresses referenced by the transaction (base64).
+                                      items:
+                                        type: string
+                                    recent_blockhash:
+                                      type: string
+                                      description: Recent blockhash used by the transaction (base64).
+                                    instructions:
+                                      type: array
+                                      description: List of instructions to execute.
+                                      items:
+                                        type: object
+                                        properties:
+                                          program_id_index:
+                                            type: integer
+                                            description: Index of the program account in `account_keys`.
+                                          accounts:
+                                            type: string
+                                            description: Account indexes used by the instruction (base64).
+                                          data:
+                                            type: string
+                                            description: Instruction data (base64).
+                                    versioned:
+                                      type: boolean
+                                      description: Whether this is a versioned (v0) transaction.
+                                    address_table_lookups:
+                                      type: array
+                                      description: Address lookup table (ALT) references.
+                                      items:
+                                        type: object
+                                        properties:
+                                          account_key:
+                                            type: string
+                                            description: Address lookup table account address (base64).
+                                          writable_indexes:
+                                            type: string
+                                            description: Indexes of addresses loaded as writable (base64).
+                                          readonly_indexes:
+                                            type: string
+                                            description: Indexes of addresses loaded as read-only (base64).
+                            meta:
+                              type: object
+                              description: Transaction execution metadata.
+                              properties:
+                                err:
+                                  type: object
+                                  description: Execution error. Absent for successful transactions.
+                                  properties:
+                                    err:
+                                      type: string
+                                      description: Serialized error value (base64).
+                                fee:
+                                  type: string
+                                  format: uint64
+                                  description: Transaction fee in lamports.
+                                pre_balances:
+                                  type: array
+                                  description: Account balances in lamports before execution.
+                                  items:
+                                    type: string
+                                    format: uint64
+                                post_balances:
+                                  type: array
+                                  description: Account balances in lamports after execution.
+                                  items:
+                                    type: string
+                                    format: uint64
+                                inner_instructions:
+                                  type: array
+                                  description: Inner instructions executed during program invocation.
+                                  items:
+                                    type: object
+                                log_messages:
+                                  type: array
+                                  description: Program log messages.
+                                  items:
+                                    type: string
+                                pre_token_balances:
+                                  type: array
+                                  description: Token balances before execution.
+                                  items:
+                                    type: object
+                                    description: Token balance information.
+                                    properties:
+                                      account_index:
+                                        type: integer
+                                        description: Index of the token account in `account_keys`.
+                                      mint:
+                                        type: string
+                                        description: Mint address of the token.
+                                      ui_token_amount:
+                                        type: object
+                                        description: Token amount adjusted for decimals.
+                                        properties:
+                                          ui_amount:
+                                            type: number
+                                            description: Amount adjusted for decimals.
+                                          decimals:
+                                            type: integer
+                                            description: Number of decimals of the token.
+                                          amount:
+                                            type: string
+                                            description: Raw amount without decimals applied.
+                                          ui_amount_string:
+                                            type: string
+                                            description: String representation of the decimal-adjusted amount.
+                                      owner:
+                                        type: string
+                                        description: Address of the token account owner.
+                                      program_id:
+                                        type: string
+                                        description: Token program ID.
+                                post_token_balances:
+                                  type: array
+                                  description: Token balances after execution.
+                                  items:
+                                    type: object
+                                    description: Token balance information.
+                                    properties:
+                                      account_index:
+                                        type: integer
+                                        description: Index of the token account in `account_keys`.
+                                      mint:
+                                        type: string
+                                        description: Mint address of the token.
+                                      ui_token_amount:
+                                        type: object
+                                        description: Token amount adjusted for decimals.
+                                        properties:
+                                          ui_amount:
+                                            type: number
+                                            description: Amount adjusted for decimals.
+                                          decimals:
+                                            type: integer
+                                            description: Number of decimals of the token.
+                                          amount:
+                                            type: string
+                                            description: Raw amount without decimals applied.
+                                          ui_amount_string:
+                                            type: string
+                                            description: String representation of the decimal-adjusted amount.
+                                      owner:
+                                        type: string
+                                        description: Address of the token account owner.
+                                      program_id:
+                                        type: string
+                                        description: Token program ID.
+                                rewards:
+                                  type: array
+                                  description: Rewards generated by the transaction.
+                                  items:
+                                    type: object
+                                    description: Reward information.
+                                    properties:
+                                      pubkey:
+                                        type: string
+                                        description: Address of the account that received the reward.
+                                      lamports:
+                                        type: string
+                                        format: int64
+                                        description: Reward amount in lamports. Negative values are debits.
+                                      post_balance:
+                                        type: string
+                                        format: uint64
+                                        description: Account balance in lamports after the reward was applied.
+                                      reward_type:
+                                        type: string
+                                        description: Reward type.
+                                        enum:
+                                        - Unspecified
+                                        - Fee
+                                        - Rent
+                                        - Staking
+                                        - Voting
+                                        - DeactivatedStake
+                                        - VATDebit
+                                      commission:
+                                        type: string
+                                        description: Vote account commission (%) when the reward was credited. Present only for Voting and Staking rewards.
+                                loaded_writable_addresses:
+                                  type: array
+                                  description: Addresses loaded as writable from address lookup tables (base64).
+                                  items:
+                                    type: string
+                                loaded_readonly_addresses:
+                                  type: array
+                                  description: Addresses loaded as read-only from address lookup tables (base64).
+                                  items:
+                                    type: string
+                                compute_units_consumed:
+                                  type: string
+                                  format: uint64
+                                  description: Total compute units consumed by the transaction.
+                            index:
+                              type: string
+                              format: uint64
+                              description: Position (index) of the transaction within the block.
+                      updated_account_count:
+                        type: string
+                        format: uint64
+                        description: Number of accounts updated in the block.
+                      accounts:
+                        type: array
+                        description: Accounts updated in the block. Included when `include_accounts` is `true`.
+                        items:
+                          type: object
+                          properties:
+                            pubkey:
+                              type: string
+                              description: Account address (base64).
+                            lamports:
+                              type: string
+                              format: uint64
+                              description: Account balance in lamports.
+                            owner:
+                              type: string
+                              description: Address of the program that owns the account (base64).
+                            executable:
+                              type: boolean
+                              description: Whether the account is an executable program.
+                            rent_epoch:
+                              type: string
+                              format: uint64
+                              description: Epoch at which the account next owes rent.
+                            data:
+                              type: string
+                              description: Account data (base64). Contains only the requested ranges when `accounts_data_slice` is set.
+                            write_version:
+                              type: string
+                              format: uint64
+                              description: Write version of the account. Use it to order updates within the same slot.
+                            txn_signature:
+                              type: string
+                              description: Signature of the transaction that modified the account (base64). Absent for startup updates.
+                      entries_count:
+                        type: string
+                        format: uint64
+                        description: Number of entries in the block.
+                      entries:
+                        type: array
+                        description: Entries in the block. Included when `include_entries` is `true`.
+                        items:
+                          type: object
+                          properties:
+                            slot:
+                              type: string
+                              format: uint64
+                              description: Slot number the entry belongs to.
+                            index:
+                              type: string
+                              format: uint64
+                              description: Index of the entry within the slot.
+                            num_hashes:
+                              type: string
+                              format: uint64
+                              description: Number of PoH hashes since the previous entry.
+                            hash:
+                              type: string
+                              description: Entry hash (base64).
+                            executed_transaction_count:
+                              type: string
+                              format: uint64
+                              description: Number of transactions executed in the entry.
+                            starting_transaction_index:
+                              type: string
+                              format: uint64
+                              description: Block index of the first transaction in the entry.
+                  block_meta:
+                    type: object
+                    description: Block metadata update.
+                    properties:
+                      slot:
+                        type: string
+                        format: uint64
+                        description: Slot number of the block.
+                      blockhash:
+                        type: string
+                        description: Blockhash (Base58).
+                      rewards:
+                        type: object
+                        description: Block reward information.
+                        properties:
+                          rewards:
+                            type: array
+                            description: List of rewards.
+                            items:
+                              type: object
+                              description: Reward information.
+                              properties:
+                                pubkey:
+                                  type: string
+                                  description: Address of the account that received the reward.
+                                lamports:
+                                  type: string
+                                  format: int64
+                                  description: Reward amount in lamports. Negative values are debits.
+                                post_balance:
+                                  type: string
+                                  format: uint64
+                                  description: Account balance in lamports after the reward was applied.
+                                reward_type:
+                                  type: string
+                                  description: Reward type.
+                                  enum:
+                                  - Unspecified
+                                  - Fee
+                                  - Rent
+                                  - Staking
+                                  - Voting
+                                  - DeactivatedStake
+                                  - VATDebit
+                                commission:
+                                  type: string
+                                  description: Vote account commission (%) when the reward was credited. Present only for Voting and Staking rewards.
+                      block_time:
+                        type: object
+                        description: Block production time.
+                        properties:
+                          timestamp:
+                            type: string
+                            format: int64
+                            description: Unix timestamp in seconds.
+                      block_height:
+                        type: object
+                        description: Block height.
+                        properties:
+                          block_height:
+                            type: string
+                            format: uint64
+                            description: Block height value.
+                      parent_slot:
+                        type: string
+                        format: uint64
+                        description: Slot number of the parent block.
+                      parent_blockhash:
+                        type: string
+                        description: Blockhash of the parent block (Base58).
+                      executed_transaction_count:
+                        type: string
+                        format: uint64
+                        description: Number of transactions executed in the block.
+                      entries_count:
+                        type: string
+                        format: uint64
+                        description: Number of entries in the block.
+                  entry:
+                    type: object
+                    description: Entry update.
+                    properties:
+                      slot:
+                        type: string
+                        format: uint64
+                        description: Slot number the entry belongs to.
+                      index:
+                        type: string
+                        format: uint64
+                        description: Index of the entry within the slot.
+                      num_hashes:
+                        type: string
+                        format: uint64
+                        description: Number of PoH hashes since the previous entry.
+                      hash:
+                        type: string
+                        description: Entry hash (base64).
+                      executed_transaction_count:
+                        type: string
+                        format: uint64
+                        description: Number of transactions executed in the entry.
+                      starting_transaction_index:
+                        type: string
+                        format: uint64
+                        description: Block index of the first transaction in the entry.
+                  ping:
+                    type: object
+                    description: Ping the server sends periodically to keep the connection alive. It has no fields.
+                    properties: {}
+                  pong:
+                    type: object
+                    description: Response to a `ping` request.
+                    properties:
+                      id:
+                        type: integer
+                        description: The `id` from the `ping` request.
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: Time the server created the update (RFC 3339).
+              example:
+                filters:
+                - client
+                slot:
+                  slot: "372215930"
+                  parent: "372215929"
+                  status: SLOT_CONFIRMED
+                created_at: '2026-10-12T01:23:45.678Z'

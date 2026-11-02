@@ -1,0 +1,292 @@
+openapi: 3.1.0
+info:
+  title: Near - broadcast_tx_async
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccountId:
+      type: string
+      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
+      example: wrap.near
+    PublicKey:
+      type: string
+      description: Base58-encoded public key prefixed with `ed25519:` or `secp256k1:`.
+      example: ed25519:168vdqFUxij2yvsxYgAGoykJMX7tgrPKVCH484A8nHP
+    CryptoHash:
+      type: string
+      description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
+      example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    BlockId:
+      description: |-
+        Specifies the block to query by block height (integer) or block hash (base58 string).
+        Cannot be used together with `finality`.
+      oneOf:
+      - title: Block Height
+        type: integer
+        example: 220785385
+      - title: Block Hash
+        type: string
+        example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    Finality:
+      type: string
+      description: |-
+        Specifies the block finality. Cannot be used together with `block_id`.
+        - `optimistic`: the latest block the node has received (may be reorganized)
+        - `near-final`: a Doomslug-final block (not reverted in most cases)
+        - `final`: a fully finalized block
+      enum:
+      - optimistic
+      - near-final
+      - final
+      example: final
+    BlockHeight:
+      type: integer
+      description: Block height.
+      example: 220785385
+    Amount:
+      type: string
+      description: Amount in yoctoNEAR as a decimal string (1 NEAR = 10^24 yoctoNEAR).
+      example: "100000000"
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-broadcast_tx_async
+      summary: broadcast_tx_async
+      description: |
+        Sends a signed transaction to the network and returns the transaction hash immediately, without waiting for execution.
+
+        NEAR marks this method as deprecated. It is equivalent to `send_tx` with `wait_until: "NONE"`; `send_tx` is recommended for new implementations. Send the parameters as a `{ "signed_tx_base64": … }` object; an array holding only the signed transaction string (`["…"]`) is also accepted. `wait_until` is ignored if provided. To check the execution result with the returned hash, call the `tx` method. Malformed base64 or borsh data returns `PARSE_ERROR`.
+      x-seo-description: Broadcast a signed NEAR transaction with broadcast_tx_async and receive its transaction hash immediately without waiting for execution.
+      tags:
+      - transactions
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: broadcast_tx_async
+                params:
+                  type: object
+                  description: Specifies the transaction to send.
+                  required:
+                  - signed_tx_base64
+                  properties:
+                    signed_tx_base64:
+                      type: string
+                      description: A borsh-serialized `SignedTransaction`, encoded in base64.
+                      example: QAAAADc4MWY4NzM0MTEyYzhlYjk3OTU4OGVjODUzODI5ZmVmNjZmOWU2ZjZhODBlOTg2OTc2ZmEyYmY4MDlkNWFkNDMAeB+HNBEsjrl5WI7IU4Kf72b55vaoDphpdvor+AnVrUMBU6K348gAAEAAAAAzMGQ2MjA1Yjg5ZTAyZDJjMzRhZGUxNjVhZTk3MDVmOGQ5ZTgwZDBlMzA0MDYxY2IxMGI4ZTU2YzhlNzAzZjYyvu07kVkCPg4EXK924R29YyEvUBYvKvTIB8mri0er3EwBAAAAAwAAII+tMHr3w1+lAAAAAAAAvS+JY93baTzDI2gRbUR5+KbUAbgdDORq8SnghPxAnMsaUtxGkCL4v/Z77uoc83OQdP8Oord4onDZwctNWoRZAQ==
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: broadcast_tx_async
+                params:
+                  signed_tx_base64: QAAAADc4MWY4NzM0MTEyYzhlYjk3OTU4OGVjODUzODI5ZmVmNjZmOWU2ZjZhODBlOTg2OTc2ZmEyYmY4MDlkNWFkNDMAeB+HNBEsjrl5WI7IU4Kf72b55vaoDphpdvor+AnVrUMBU6K348gAAEAAAAAzMGQ2MjA1Yjg5ZTAyZDJjMzRhZGUxNjVhZTk3MDVmOGQ5ZTgwZDBlMzA0MDYxY2IxMGI4ZTU2YzhlNzAzZjYyvu07kVkCPg4EXK924R29YyEvUBYvKvTIB8mri0er3EwBAAAAAwAAII+tMHr3w1+lAAAAAAAAvS+JY93baTzDI2gRbUR5+KbUAbgdDORq8SnghPxAnMsaUtxGkCL4v/Z77uoc83OQdP8Oord4onDZwctNWoRZAQ==
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                result: 4QzusrLJXqUogS4vipyH6XoJ5BRe6tC3HKakhvBnfAE8
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: string
+                    description: The hash of the sent transaction (base58).
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'

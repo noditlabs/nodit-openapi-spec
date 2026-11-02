@@ -1,0 +1,399 @@
+openapi: 3.1.0
+info:
+  title: Near - data_changes
+  version: 1.0.0
+servers:
+- url: https://near-mainnet.nodit.io
+  description: NEAR Mainnet
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header
+      x-default: nodit-demo
+      description: |
+        The example value `nodit-demo` is for use in the developer documentation only.
+        For real applications or services, please use the API key issued from the Nodit console.
+  schemas:
+    AccountId:
+      type: string
+      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
+      example: wrap.near
+    PublicKey:
+      type: string
+      description: Base58-encoded public key prefixed with `ed25519:` or `secp256k1:`.
+      example: ed25519:168vdqFUxij2yvsxYgAGoykJMX7tgrPKVCH484A8nHP
+    CryptoHash:
+      type: string
+      description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
+      example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    BlockId:
+      description: |-
+        Specifies the block to query by block height (integer) or block hash (base58 string).
+        Cannot be used together with `finality`.
+      oneOf:
+      - title: Block Height
+        type: integer
+        example: 220785385
+      - title: Block Hash
+        type: string
+        example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+    Finality:
+      type: string
+      description: |-
+        Specifies the block finality. Cannot be used together with `block_id`.
+        - `optimistic`: the latest block the node has received (may be reorganized)
+        - `near-final`: a Doomslug-final block (not reverted in most cases)
+        - `final`: a fully finalized block
+      enum:
+      - optimistic
+      - near-final
+      - final
+      example: final
+    BlockHeight:
+      type: integer
+      description: Block height.
+      example: 220785385
+    Amount:
+      type: string
+      description: Amount in yoctoNEAR as a decimal string (1 NEAR = 10^24 yoctoNEAR).
+      example: "100000000"
+    RpcError:
+      type: object
+      description: |-
+        NEAR JSON-RPC error object. Request format errors are returned with HTTP 400, and processing errors with HTTP 200.
+        Use `cause.name` to identify the specific cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `TIMEOUT_ERROR`).
+      properties:
+        name:
+          type: string
+          description: Error class. `REQUEST_VALIDATION_ERROR` (invalid request), `HANDLER_ERROR` (processing error), `INTERNAL_ERROR` (node internal error)
+          enum:
+          - REQUEST_VALIDATION_ERROR
+          - HANDLER_ERROR
+          - INTERNAL_ERROR
+        cause:
+          type: object
+          description: The specific cause of the error.
+          properties:
+            name:
+              type: string
+              description: Name of the error cause (e.g. `UNKNOWN_BLOCK`, `UNKNOWN_ACCOUNT`, `PARSE_ERROR`)
+            info:
+              type: object
+              description: Additional information about the error (block hash, height, account ID, etc.)
+        code:
+          type: integer
+          description: Legacy JSON-RPC error code (e.g. `-32000` server error, `-32700` parse error, `-32601` method not found)
+        message:
+          type: string
+          description: Legacy error message
+        data:
+          type: string
+          description: Legacy error details
+  responses:
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - NO_AUTHENTICATION_FOUND
+                - AUTHENTICATION_FAILED
+                description: Code to identify the cause of authentication failure
+              message:
+                type: string
+                description: Detailed message including the cause of authentication failure
+            required:
+            - code
+            - message
+          examples:
+            NO_AUTHENTICATION_FOUND:
+              summary: The request does not include authentication (API Key)
+              value:
+                code: NO_AUTHENTICATION_FOUND
+                message: No authentication found.
+            AUTHENTICATION_FAILED:
+              summary: The authentication (API Key) is invalid
+              value:
+                code: AUTHENTICATION_FAILED
+                message: Authentication failed.
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - PERMISSION_DENIED
+                description: Code indicating permission denied
+              message:
+                type: string
+                description: Detailed message including information about the denied resource
+            required:
+            - code
+            - message
+          examples:
+            PERMISSION_DENIED:
+              summary: The request accesses a resource it is not authorized for
+              value:
+                code: PERMISSION_DENIED
+                message: Permission denied
+    "429":
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - TOO_MANY_REQUESTS
+                - EXCEEDED_QUOTA_LIMIT
+                description: Code identifying the cause of the request limit exceeded
+              message:
+                type: string
+                description: Detailed message including the exceeded limit type and allowed threshold
+            required:
+            - code
+            - message
+          examples:
+            TOO_MANY_REQUESTS:
+              summary: The rate limit was exceeded
+              value:
+                code: TOO_MANY_REQUESTS
+                message: Too many requests
+            EXCEEDED_QUOTA_LIMIT:
+              summary: The quota limit was exceeded
+              value:
+                code: EXCEEDED_QUOTA_LIMIT
+                message: Exceeded quota limit
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum:
+                - INTERNAL_SERVER_ERROR
+                - INTERRUPTED
+                description: Code to identify the cause of the internal server error
+              message:
+                type: string
+                description: Detailed message including the cause of the server error
+            required:
+            - code
+            - message
+          examples:
+            INTERNAL_SERVER_ERROR:
+              summary: An internal server error occurred
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: Internal server error
+            INTERRUPTED:
+              summary: Processing failed temporarily due to server load
+              value:
+                code: INTERRUPTED
+                message: Request interrupted
+paths:
+  /:
+    post:
+      security:
+      - api_key: []
+      operationId: near-changes_data_changes
+      summary: data_changes
+      description: |
+        Returns, per block, the contract storage (key-value) changes of the given accounts. Keys and values are base64-encoded, and each item includes the cause of the change.
+
+        Call the `changes` method with `changes_type: "data_changes"`. `key_prefix_base64` is required; only changes to keys starting with this prefix are returned. An empty string (`""`) returns changes to all keys. If the same key changes several times in one block, there is one item per change. If the block cannot be found, the `UNKNOWN_BLOCK` error is returned. `EXPERIMENTAL_changes` is the former name of this method.
+      x-seo-description: Track NEAR contract storage changes by base64 key prefix in a block, with old-to-new key-value updates and causes, using the changes method (data_changes).
+      tags:
+      - changes
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - jsonrpc
+              - id
+              - method
+              - params
+              properties:
+                jsonrpc:
+                  type: string
+                  example: "2.0"
+                id:
+                  type: string
+                  description: Request ID. Any string; it is returned unchanged in the response.
+                  example: dontcare
+                method:
+                  type: string
+                  example: changes
+                params:
+                  type: object
+                  description: Query parameters. Specify the block with either `finality` or `block_id`.
+                  required:
+                  - changes_type
+                  - account_ids
+                  - key_prefix_base64
+                  properties:
+                    changes_type:
+                      type: string
+                      description: Change query type. Fixed to `data_changes`.
+                      enum:
+                      - data_changes
+                      example: data_changes
+                    finality:
+                      $ref: '#/components/schemas/Finality'
+                    block_id:
+                      $ref: '#/components/schemas/BlockId'
+                    account_ids:
+                      type: array
+                      description: Account IDs to get changes for
+                      items:
+                        $ref: '#/components/schemas/AccountId'
+                    key_prefix_base64:
+                      type: string
+                      description: Prefix of the storage keys to query (base64). An empty string (`""`) targets all keys.
+                      example: ""
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                method: changes
+                params:
+                  changes_type: data_changes
+                  account_ids:
+                  - wrap.near
+                  key_prefix_base64: ""
+                  block_id: 220785299
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              example:
+                jsonrpc: "2.0"
+                id: dontcare
+                result:
+                  block_hash: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
+                  changes:
+                  - cause:
+                      receipt_hash: Htzihke1wZHo1sK92JGfsWuufG9RKG11MgHMeRCdSsJu
+                      type: receipt_processing
+                    change:
+                      account_id: wrap.near
+                      key_base64: U1RBVEU=
+                      value_base64: AQAAAGGBZB8aVnlQDe4sktDCAQAAfQAAAAAAAAA=
+                    type: data_update
+                  - cause:
+                      receipt_hash: 5eEZtLpUUjRYszYieSmfMCSZ57jmF3NswAFNcw66mEHn
+                      type: receipt_processing
+                    change:
+                      account_id: wrap.near
+                      key_base64: U1RBVEU=
+                      value_base64: AQAAAGGBZB8aVnlQDe4sktDCAQAAfQAAAAAAAAA=
+                    type: data_update
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    description: JSON-RPC version
+                  id:
+                    type: string
+                    description: Request ID
+                  result:
+                    type: object
+                    properties:
+                      block_hash:
+                        type: string
+                        description: Hash of the queried block (base58)
+                      changes:
+                        type: array
+                        description: List of storage changes
+                        items:
+                          type: object
+                          properties:
+                            cause:
+                              type: object
+                              description: Cause of the change
+                              properties:
+                                type:
+                                  type: string
+                                  description: |-
+                                    Cause type
+                                    - `transaction_processing`: transaction processing (includes `tx_hash`)
+                                    - `receipt_processing`: receipt processing (includes `receipt_hash`)
+                                    - `action_receipt_processing_started`: action receipt processing started (includes `receipt_hash`)
+                                    - `action_receipt_gas_reward`: gas reward paid for receipt execution (includes `receipt_hash`)
+                                    - `postponed_receipt`: receipt postponed while waiting for data (includes `receipt_hash`)
+                                    - `updated_delayed_receipts`: delayed receipt queue updated
+                                    - `validator_accounts_update`: validator accounts updated at an epoch change
+                                    - `migration`: protocol migration
+                                    - `initial_state`: genesis initial state
+                                    - `not_writable_to_disk`: change that is not written to disk
+                                    - `bandwidth_scheduler_state_update`: bandwidth scheduler state updated
+                                  enum:
+                                  - transaction_processing
+                                  - receipt_processing
+                                  - action_receipt_processing_started
+                                  - action_receipt_gas_reward
+                                  - postponed_receipt
+                                  - updated_delayed_receipts
+                                  - validator_accounts_update
+                                  - migration
+                                  - initial_state
+                                  - not_writable_to_disk
+                                  - bandwidth_scheduler_state_update
+                                tx_hash:
+                                  type: string
+                                  description: Hash of the causing transaction. Present only when `type` is `transaction_processing`. (base58)
+                                receipt_hash:
+                                  type: string
+                                  description: Hash of the causing receipt. Present only for receipt-related causes. (base58)
+                            type:
+                              type: string
+                              description: |-
+                                Change type
+                                - `data_update`: storage value added or changed
+                                - `data_deletion`: storage key deleted
+                              enum:
+                              - data_update
+                              - data_deletion
+                            change:
+                              type: object
+                              description: The changed storage entry. For `data_deletion`, `value_base64` is absent.
+                              properties:
+                                account_id:
+                                  type: string
+                                  description: Contract account ID
+                                key_base64:
+                                  type: string
+                                  description: Storage key (base64)
+                                value_base64:
+                                  type: string
+                                  description: Value after the change (base64)
+                  error:
+                    $ref: '#/components/schemas/RpcError'
+        "401":
+          $ref: '#/components/responses/401'
+        "403":
+          $ref: '#/components/responses/403'
+        "429":
+          $ref: '#/components/responses/429'
+        "500":
+          $ref: '#/components/responses/500'
