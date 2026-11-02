@@ -28,37 +28,6 @@ components:
       type: string
       description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
       example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
-    BlockId:
-      description: |-
-        Specifies the block to query by block height (integer) or block hash (base58 string).
-        Cannot be used together with `finality`.
-      oneOf:
-      - title: Block Height
-        type: integer
-        example: 220785385
-      - title: Block Hash
-        type: string
-        example: 8EjuQRnAJiWkRmqxfexQFJWXXonuSMbz5AZziJLCWnWS
-    Finality:
-      type: string
-      description: |-
-        Specifies the block finality. Cannot be used together with `block_id`.
-        - `optimistic`: the latest block the node has received (may be reorganized)
-        - `near-final`: a Doomslug-final block (not reverted in most cases)
-        - `final`: a fully finalized block
-      enum:
-      - optimistic
-      - near-final
-      - final
-      example: final
-    BlockHeight:
-      type: integer
-      description: Block height.
-      example: 220785385
-    Amount:
-      type: string
-      description: Amount in yoctoNEAR as a decimal string (1 NEAR = 10^24 yoctoNEAR).
-      example: "100000000"
     RpcError:
       type: object
       description: |-

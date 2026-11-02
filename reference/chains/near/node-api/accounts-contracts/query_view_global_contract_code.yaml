@@ -16,14 +16,6 @@ components:
         The example value `nodit-demo` is for use in the developer documentation only.
         For real applications or services, please use the API key issued from the Nodit console.
   schemas:
-    AccountId:
-      type: string
-      description: NEAR account ID. A human-readable name (e.g. `wrap.near`) or a 64-character hex implicit account ID.
-      example: wrap.near
-    PublicKey:
-      type: string
-      description: Base58-encoded public key prefixed with `ed25519:` or `secp256k1:`.
-      example: ed25519:168vdqFUxij2yvsxYgAGoykJMX7tgrPKVCH484A8nHP
     CryptoHash:
       type: string
       description: Base58-encoded 32-byte hash (block hash, chunk hash, transaction hash, etc.).
@@ -55,10 +47,6 @@ components:
       type: integer
       description: Block height.
       example: 220785385
-    Amount:
-      type: string
-      description: Amount in yoctoNEAR as a decimal string (1 NEAR = 10^24 yoctoNEAR).
-      example: "100000000"
     RpcError:
       type: object
       description: |-

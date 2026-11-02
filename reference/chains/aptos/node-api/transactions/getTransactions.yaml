@@ -18,88 +18,6 @@ components:
         The example value `nodit-demo` is for use in the developer documentation only.
         For real applications or services, please use the API key issued from the Nodit console.
   parameters:
-    Address:
-      name: address
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0[xX]?[0-9a-fA-F]{0,64}$
-        example: "0x1"
-        examples:
-        - "0x1"
-        - "0xf22bede237a07e121b56d91a491eb7bcdfd1f5907926a9e58338f964a01b17fa"
-      description: |
-        The address of the account to retrieve. Account addresses without the hexadecimal prefix can also be queried.
-    AssetType:
-      name: asset_type
-      in: path
-      required: true
-      schema:
-        type: string
-        example: 0x1::aptos_coin::AptosCoin
-        examples:
-        - 0x1::aptos_coin::AptosCoin
-        - "0xa"
-      description: |
-        A parameter used to specify the type of asset to retrieve.
-        The asset type must be provided in one of the following formats:
-        - Coin: Struct-form asset ID (e.g., `0x1::aptos_coin::AptosCoin`)
-        - Fungible Asset: Object address that owns the Token Metadata (e.g., `0xa`)
-    BSCAcceptHeader:
-      in: header
-      name: accept
-      required: false
-      description: |
-        The content type that the client can receive. The API works correctly only when application/x-bcs is specified.
-      schema:
-        type: string
-        example: application/x-bcs
-    BlockHeight:
-      name: block_height
-      in: path
-      required: true
-      schema:
-        type: integer
-        example: 160155267
-      description: The height of the block to query. Starts from 0.
-    CreationNumber:
-      name: creation_number
-      in: path
-      required: true
-      schema:
-        type: integer
-        example: 2
-      description: |
-        The creation number corresponding to the event stream that occurred on the specified account.
-    EventHandle:
-      name: event_handle
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0x[0-9a-zA-Z:_<>]+$
-        example: 0x1::account::Account
-      description: |
-        The name of the event handle struct for querying a specific event handle.
-    FieldName:
-      name: field_name
-      in: path
-      required: true
-      schema:
-        type: string
-        example: coin_register_events
-      description: |
-        The name of the field within the event_handle that specifies the event to query.
-    LedgerVersion:
-      name: ledger_version
-      in: query
-      required: false
-      schema:
-        type: integer
-      description: |
-        The ledger version of the transaction to fetch account state from.
-        If no value is provided, the latest version is used.
     Limit:
       name: limit
       in: query
@@ -109,25 +27,6 @@ components:
       description: |
         The maximum number of account modules to fetch.
         If no value is provided, the default page size is used.
-    ModuleName:
-      name: module_name
-      in: path
-      required: true
-      schema:
-        type: string
-        example: fungible_asset
-      description: |
-        The name of the specific module to query.
-    ResourceType:
-      name: resource_type
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0x[0-9a-zA-Z:_<>]+$
-        example: 0x1::account::Account
-      description: |
-        The type name of the target resource (struct) to retrieve.
     Start:
       name: start
       in: query
@@ -139,32 +38,6 @@ components:
 
         This cursor cannot be arbitrarily generated on the client side. You must first call this endpoint without specifying this query parameter, then use the cursor returned in the X-Aptos-Cursor header of the response.
       example: 0000000000000000000000000000000000000000000000000000000000000000012f0000000000000000000000000000000000000000000000000000000000000000010d7374616b696e675f70726f7879
-    TableHandle:
-      name: table_handle
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0[xX][0-9a-fA-F]{64}|^[0-9a-fA-F]{64}
-        example: "0x7d7561f38ada5eb9066f05c6e80df069208c4de472d6414482016d38448d1a7d"
-      description: A pointer value indicating where the table is stored.
-    Version:
-      name: version
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: |
-        The ledger version of the transaction to query for block information.
-    WithTransactions:
-      name: with_transactions
-      in: query
-      required: false
-      schema:
-        type: boolean
-      description: |
-        If set to true, all transactions within the block are included.
-        If not provided, transactions are not returned.
   schemas:
     Abi:
       type: object
@@ -314,64 +187,6 @@ components:
       - - Points event for user 04344295 - Type impression - Points 3
       - - "1762134251280"
       - batch_impression_1762134251280
-    AuthenticationKey:
-      type: string
-      description: |
-        All byte (Vec) data is expressed as a hex-encoded string starting with 0x, with two hex digits per byte.
-        Unlike the Address type, HexEncodedBytes does not omit any zeros.
-      pattern: ^0[xX]?[0-9a-fA-F]{0,64}$
-      example: "0x88fbd33f54e1126269769780feb24480428179f552e2313fbe571b72e62a1ca1"
-    Block:
-      type: object
-      description: |
-        A block that may or may not contain transactions.
-        When requested, includes the associated transaction information.
-      required:
-      - block_height
-      - block_hash
-      - block_timestamp
-      - first_version
-      - last_version
-      properties:
-        block_height:
-          type: string
-          description: |
-            Represents a 64-bit unsigned integer as a string.
-            Expressed as a string for compatibility with languages such as JavaScript that do not natively support u64 values in JSON.
-        block_hash:
-          type: string
-          description: |
-            A field representing the unique hash identifier of the block.
-        block_timestamp:
-          type: string
-          description: |
-            A field representing when the block was created.
-            Provided as a UNIX timestamp in microseconds, used to track block creation order and timing.
-            The block timestamp is used to guarantee transaction ordering and measure block creation intervals.
-        first_version:
-          type: string
-          description: |
-            A field representing the version number of the first processed transaction among those included in the block.
-            In Aptos, each transaction has a unique version number indicating the overall execution order.
-            first_version and last_version allow you to determine the version range of transactions within the block.
-        last_version:
-          type: string
-          description: |
-            A field representing the version number of the last processed transaction among those included in the block.
-            Together with first_version, defines the version range of transactions within the block, enabling sequential lookup of all transactions in the block.
-        transactions:
-          type: array
-          description: |
-            A list of all transactions included in the block.
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/PendingTransaction'
-            - $ref: '#/components/schemas/UserTransaction'
-            - $ref: '#/components/schemas/StateCheckpointTransaction'
-            - $ref: '#/components/schemas/GenesisTransaction'
-            - $ref: '#/components/schemas/BlockMetadataTransaction'
-            - $ref: '#/components/schemas/BlockEpilogueTransaction'
-            - $ref: '#/components/schemas/ValidatorTransaction'
     BlockEpilogueTransaction:
       title: Block Epilogue Transaction
       type: object
@@ -1460,52 +1275,6 @@ components:
           type: string
           description: |
             A field representing the timestamp of the transaction, used to indicate when the transaction occurred.
-    Transaction:
-      title: Transaction
-      type: object
-      required:
-      - sender
-      - sequence_number
-      - max_gas_amount
-      - gas_unit_price
-      - expiration_timestamp_secs
-      - payload
-      - replay_protection_nonce
-      - signature
-      properties:
-        sender:
-          $ref: '#/components/schemas/Sender'
-        sequence_number:
-          $ref: '#/components/schemas/SequenceNumber'
-        max_gas_amount:
-          $ref: '#/components/schemas/MaxGasAmount'
-        gas_unit_price:
-          $ref: '#/components/schemas/GasUnitPrice'
-        expiration_timestamp_secs:
-          $ref: '#/components/schemas/ExpirationTimestampSecs'
-        payload:
-          type: object
-          description: |
-            A field representing the payload to use when the transaction occurs.
-          oneOf:
-          - $ref: '#/components/schemas/EntryFunctionPayload'
-          - $ref: '#/components/schemas/ScriptPayload'
-          - $ref: '#/components/schemas/ModuleBundlePayload'
-          - $ref: '#/components/schemas/MultisigPayload'
-        replay_protection_nonce:
-          $ref: '#/components/schemas/ReplayProtectionNonce'
-        signature:
-          type: object
-          description: |
-            A field representing the transaction signature.
-            One of Ed25519, MultiEd25519, MultiAgent, FeePayer, Account, or NoAccount can be selected.
-          oneOf:
-          - $ref: '#/components/schemas/Ed25519Signature'
-          - $ref: '#/components/schemas/MultiEd25519Signature'
-          - $ref: '#/components/schemas/MultiAgentSignature'
-          - $ref: '#/components/schemas/FeePayerSignature'
-          - $ref: '#/components/schemas/AccountSignature'
-          - $ref: '#/components/schemas/NoAccountSignature'
     TypeArguments:
       type: array
       description: Field representing the generic type arguments of the Entry function.
@@ -1942,8 +1711,24 @@ paths:
       tags:
       - Transactions
       parameters:
-      - $ref: '#/components/parameters/Limit'
-      - $ref: '#/components/parameters/Start'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: |
+          The maximum number of account modules to fetch.
+          If no value is provided, the default page size is used.
+      - name: start
+        in: query
+        required: false
+        schema:
+          type: string
+        description: |
+          A cursor that specifies the starting position for pagination.
+
+          This cursor cannot be arbitrarily generated on the client side. You must first call this endpoint without specifying this query parameter, then use the cursor returned in the X-Aptos-Cursor header of the response.
+        example: 0000000000000000000000000000000000000000000000000000000000000000012f0000000000000000000000000000000000000000000000000000000000000000010d7374616b696e675f70726f7879
       responses:
         "200":
           description: Successful Response

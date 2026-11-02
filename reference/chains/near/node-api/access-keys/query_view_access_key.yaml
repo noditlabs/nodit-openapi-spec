@@ -55,10 +55,6 @@ components:
       type: integer
       description: Block height.
       example: 220785385
-    Amount:
-      type: string
-      description: Amount in yoctoNEAR as a decimal string (1 NEAR = 10^24 yoctoNEAR).
-      example: "100000000"
     RpcError:
       type: object
       description: |-

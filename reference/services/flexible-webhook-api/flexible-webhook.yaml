@@ -394,14 +394,6 @@ components:
         minimum: 1
         maximum: 100
         default: 10
-    SigningKey:
-      signingKey:
-        type: string
-        nullable: true
-        description: |
-          The signing key used to authenticate Flexible Webhook notifications. After receiving a notification, use this key to verify its validity.
-
-          The signing key is automatically generated when the Flexible Webhook is created and is only available in the creation response. 
   schemas:
     DeleteResponse:
       type: object
